@@ -22,7 +22,7 @@ const ModernSchoolLayout = () => {
   const router = useRouter();
   
   const handleExplorePathways = () => {
-    router.push("/pages/apply-for-admissions");
+    router.push("/pages/admisions");
   };
 
   const whyChooseUs = [
