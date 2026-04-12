@@ -50,6 +50,8 @@ const LoadingSpinner = () => {
             else if (i % 4 === 1) IconComponent = FaBookOpen;
             else if (i % 4 === 2) IconComponent = FaStar;
             else IconComponent = FaGraduationCap;
+            // Make the animation duration much slower (18s to 24s)
+            const slowDuration = 18 + Math.random() * 6;
             return (
               <div
                 key={i}
@@ -57,7 +59,7 @@ const LoadingSpinner = () => {
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  animation: `float-petal ${8 + Math.random() * 6}s ease-in-out infinite`,
+                  animation: `float-petal ${slowDuration}s ease-in-out infinite`,
                   animationDelay: `${i * 0.5}s`,
                   transform: `rotate(${Math.random() * 360}deg)`
                 }}

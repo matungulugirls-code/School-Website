@@ -432,7 +432,7 @@ export default function ModernHero() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setNavigationBlocked(false);
-    }, 2000);
+    }, 4000);
     
     return () => clearTimeout(timer);
   }, []);
