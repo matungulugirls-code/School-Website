@@ -30,7 +30,7 @@ const ModernSchoolLayout = () => {
       title: "Academic Excellence",
       gradient: "from-emerald-600 to-emerald-500",
       description: "Consistently ranked among top-performing girls' schools in Machakos County with impressive KCSE results and university placements.",
-      metrics: "Top Performer Machakos County",
+      metrics: "Good Performer Machakos County",
       icon: <FiAward className="w-4 h-4" />
     },
     {
@@ -63,7 +63,7 @@ const ModernSchoolLayout = () => {
       description: "Matungulu Girls High School maintains outstanding academic performance with consistent high KCSE results. Our dedicated faculty and rigorous curriculum ensure students excel in sciences, humanities, and technical subjects.",
       highlight: "Academic Distinction",
       details: ["Mean Score 8.5+", "University Transition", "Merit Awards", "Science Excellence"],
-      metrics: ["92% KCSE", "150+ Univ", "45 Awards"],
+      metrics: ["KCSE", "10+ Univ", "Awards"],
       icon: <FiAward />
     },
     {

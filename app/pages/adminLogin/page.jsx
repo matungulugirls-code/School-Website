@@ -25,18 +25,13 @@ import {
   ShieldAlert,
   Clock,
   Sparkles,
-  School,
-  BookOpen,
-  GraduationCap,
   Heart,
-  Star,
-  Award,
-  Calendar,
-  Zap,
-  Layers
+  Flower2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
+import Link from 'next/link';
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,8 +39,6 @@ export default function AdminLoginPage() {
   const [isForgotMode, setIsForgotMode] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [rememberDevice, setRememberDevice] = useState(false);
-  const [shuffledItems, setShuffledItems] = useState([]);
-  const [currentBgIndex, setCurrentBgIndex] = useState(0);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -61,6 +54,7 @@ export default function AdminLoginPage() {
   const [verificationReason, setVerificationReason] = useState('');
   const [requiresPasswordAfterVerification, setRequiresPasswordAfterVerification] = useState(false);
   const [passwordAfterVerification, setPasswordAfterVerification] = useState('');
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   // Password Reset Modal
   const [showPasswordResetModal, setShowPasswordResetModal] = useState(false);
@@ -75,56 +69,6 @@ export default function AdminLoginPage() {
       return () => clearTimeout(timer);
     }
   }, [countdown]);
-
-  // Shuffle effect for left panel
-  useEffect(() => {
-    const items = [
-      { icon: <Shield className="w-6 h-6" />, text: "Secure Student Data" },
-      { icon: <Cpu className="w-6 h-6" />, text: "Automated Fee Tracking" },
-      { icon: <Database className="w-6 h-6" />, text: "Daily Cloud Backups" },
-      { icon: <Network className="w-6 h-6" />, text: "Portal Access Control" },
-      { icon: <Users className="w-6 h-6" />, text: "1000+ Students" },
-      { icon: <School className="w-6 h-6" />, text: "Matungulu Girls" },
-      { icon: <BookOpen className="w-6 h-6" />, text: "Digital Library" },
-      { icon: <GraduationCap className="w-6 h-6" />, text: "98% Pass Rate" },
-      { icon: <Heart className="w-6 h-6" />, text: "Mentorship Program" },
-      { icon: <Star className="w-6 h-6" />, text: "Top Performing" },
-      { icon: <Award className="w-6 h-6" />, text: "Academic Excellence" },
-      { icon: <Calendar className="w-6 h-6" />, text: "Events Calendar" },
-      { icon: <Zap className="w-6 h-6" />, text: "Real-time Updates" },
-      { icon: <Layers className="w-6 h-6" />, text: "Smart Analytics" },
-      { icon: <Sparkles className="w-6 h-6" />, text: "AI Predictions" },
-    ];
-
-    // Shuffle function
-    const shuffleArray = (array) => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    };
-
-    // Initial shuffle
-    setShuffledItems(shuffleArray([...items]));
-
-    // Shuffle every 5 seconds
-    const interval = setInterval(() => {
-      setShuffledItems(prev => shuffleArray([...prev]));
-      setCurrentBgIndex(prev => (prev + 1) % 5); // Cycle through background variations
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Background images/variations
-  const backgrounds = [
-    'from-emerald-950 via-emerald-900 to-teal-950',
-    'from-emerald-950 via-teal-900 to-emerald-900',
-    'from-teal-950 via-emerald-900 to-emerald-950',
-    'from-emerald-950 via-emerald-800 to-teal-950',
-    'from-teal-950 via-emerald-900 to-emerald-950',
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -171,475 +115,509 @@ export default function AdminLoginPage() {
 
   class LocalStorageManager {
     static KEYS = {
-      DEVICE_FINGERPRINT: 'device_fingerprint',
-      DEVICE_TOKEN: 'device_token',
-      LOGIN_COUNT: 'login_count',
-      LAST_LOGIN: 'last_login',
-      ADMIN_TOKEN: 'admin_token',
-      ADMIN_USER: 'admin_user',
-      DASHBOARD_ACCESS: 'last_dashboard_access'
+        DEVICE_FINGERPRINT: 'device_fingerprint',
+        DEVICE_TOKEN: 'device_token',
+        LOGIN_COUNT: 'login_count',
+        LAST_LOGIN: 'last_login',
+        ADMIN_TOKEN: 'admin_token',
+        ADMIN_USER: 'admin_user',
+        DASHBOARD_ACCESS: 'last_dashboard_access'
     };
 
     static checkAdminTokenValidity() {
-      try {
-        const token = localStorage.getItem(this.KEYS.ADMIN_TOKEN);
-        
-        if (!token) {
-          return { isValid: false, reason: 'no_token' };
-        }
-        
-        const tokenData = this.parseJwt(token);
-        const currentTime = Math.floor(Date.now() / 1000);
-        
-        if (tokenData.exp && tokenData.exp <= currentTime) {
-          console.log('🔑 Admin token expired');
-          return { isValid: false, reason: 'expired' };
-        }
-        
-        return { isValid: true, expiresAt: new Date(tokenData.exp * 1000) };
-      } catch (error) {
-        console.error('❌ Error checking admin token:', error);
-        return { isValid: false, reason: 'parse_error' };
-      }
-    }
-
-    static base64UrlDecode(str) {
-      str = str.replace(/-/g, '+').replace(/_/g, '/');
-      
-      const pad = str.length % 4;
-      if (pad) {
-        if (pad === 1) {
-          throw new Error('Invalid base64 string');
-        }
-        str += '==='.slice(pad);
-      }
-      
-      return atob(str);
-    }
-
-    static parseJwt(token) {
-      try {
-        const parts = token.split('.');
-        if (parts.length !== 3) {
-          throw new Error('Invalid JWT format');
-        }
-        
-        const payload = parts[1];
-        const decoded = this.base64UrlDecode(payload);
-        return JSON.parse(decoded);
-      } catch (error) {
-        console.error('JWT parsing error:', error);
-        throw error;
-      }
-    }
-
-    static checkVerificationRequirement(forceCheck = false) {
-      try {
-        if (!forceCheck) {
-          const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
-          const storedFingerprint = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
-          const currentFingerprint = DeviceFingerprint.generate();
-          
-          if (deviceToken && storedFingerprint === currentFingerprint.hash) {
-            console.log('✅ Quick check passed - likely valid device');
-            return { 
-              requiresVerification: false,
-              deviceToken: deviceToken,
-              deviceHash: currentFingerprint.hash
-            };
-          }
-        }
-        
-        const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
-        const storedFingerprint = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
-        const currentFingerprint = DeviceFingerprint.generate();
-
-        if (!deviceToken) {
-          console.log('📱 No device token found - NEW DEVICE');
-          return { 
-            requiresVerification: true, 
-            reason: 'new_device',
-            deviceToken: null,
-            deviceHash: currentFingerprint.hash
-          };
-        }
-
         try {
-          let tokenData;
-          
-          if (deviceToken.includes('.')) {
-            tokenData = this.parseJwt(deviceToken);
-          } else {
-            const decodedStr = this.base64UrlDecode(deviceToken);
-            tokenData = JSON.parse(decodedStr);
-          }
-
-          const currentTime = Math.floor(Date.now() / 1000);
-          const tokenExpiry = tokenData.exp;
-          
-          if (!tokenExpiry) {
-            console.log('❌ Token missing expiry');
-            return { 
-              requiresVerification: true, 
-              reason: 'token_invalid',
-              deviceToken: deviceToken,
-              deviceHash: currentFingerprint.hash
-            };
-          }
-
-          if (tokenExpiry <= currentTime) {
-            console.log('⏰ Token expired');
-            return { 
-              requiresVerification: true, 
-              reason: 'token_expired',
-              deviceToken: deviceToken,
-              deviceHash: currentFingerprint.hash
-            };
-          }
-
-          const loginCount = tokenData.loginCount || 0;
-          if (loginCount >= 15) {
-            console.log('🚫 Max login attempts reached:', loginCount);
-            return { 
-              requiresVerification: true, 
-              reason: 'max_logins_reached',
-              deviceToken: deviceToken,
-              loginCount: loginCount,
-              deviceHash: currentFingerprint.hash
-            };
-          }
-
-          if (storedFingerprint !== currentFingerprint.hash) {
-            console.log('⚠️ Device fingerprint mismatch');
-            return { 
-              requiresVerification: true, 
-              reason: 'device_mismatch',
-              deviceToken: deviceToken,
-              deviceHash: currentFingerprint.hash
-            };
-          }
-
-          if (tokenData.deviceHash && tokenData.deviceHash !== currentFingerprint.hash) {
-            console.log('🔐 Token device hash mismatch');
-            return { 
-              requiresVerification: true, 
-              reason: 'token_device_mismatch',
-              deviceToken: deviceToken,
-              deviceHash: currentFingerprint.hash
-            };
-          }
-
-          console.log('✅ Device token is VALID');
-          return { 
-            requiresVerification: false, 
-            deviceToken: deviceToken, 
-            loginCount: loginCount,
-            deviceHash: currentFingerprint.hash 
-          };
-
-        } catch (tokenError) {
-          console.error('❌ Token parsing error:', tokenError);
-          return { 
-            requiresVerification: true, 
-            reason: 'invalid_token_format',
-            deviceToken: deviceToken,
-            deviceHash: currentFingerprint.hash
-          };
-        }
-
-      } catch (error) {
-        console.error('❌ LocalStorage check error:', error);
-        return { 
-          requiresVerification: true, 
-          reason: 'storage_error',
-          deviceToken: null,
-          deviceHash: null
-        };
-      }
-    }
-
-    static storeDeviceData(deviceToken, deviceHash, loginCount) {
-      try {
-        console.log('💾 Storing device data:', {
-          deviceTokenLength: deviceToken ? deviceToken.length : 0,
-          deviceHash: deviceHash.substring(0, 10) + '...',
-          loginCount: loginCount
-        });
-        
-        localStorage.setItem(this.KEYS.DEVICE_TOKEN, deviceToken);
-        localStorage.setItem(this.KEYS.DEVICE_FINGERPRINT, deviceHash);
-        localStorage.setItem(this.KEYS.LAST_LOGIN, new Date().toISOString());
-        localStorage.setItem(this.KEYS.LOGIN_COUNT, loginCount.toString());
-        
-        localStorage.removeItem('requires_verification');
-        
-        console.log('✅ Device data stored successfully');
-      } catch (error) {
-        console.error('❌ Error storing device data:', error);
-      }
-    }
-
-    static storeAuthData(authToken, userData) {
-      try {
-        localStorage.setItem(this.KEYS.ADMIN_TOKEN, authToken);
-        localStorage.setItem(this.KEYS.ADMIN_USER, JSON.stringify(userData));
-        console.log('🔐 Auth data stored');
-      } catch (error) {
-        console.error('❌ Error storing auth data:', error);
-      }
-    }
-
-    static storeDashboardAccess() {
-      try {
-        localStorage.setItem(this.KEYS.DASHBOARD_ACCESS, new Date().toISOString());
-        console.log('📊 Dashboard access timestamp stored');
-      } catch (error) {
-        console.error('❌ Error storing dashboard access:', error);
-      }
-    }
-
-    static getLastDashboardAccess() {
-      try {
-        const timestamp = localStorage.getItem(this.KEYS.DASHBOARD_ACCESS);
-        return timestamp ? new Date(timestamp) : null;
-      } catch (error) {
-        console.error('❌ Error getting dashboard access:', error);
-        return null;
-      }
-    }
-
-    static getAuthData() {
-      try {
-        const token = localStorage.getItem(this.KEYS.ADMIN_TOKEN);
-        const userStr = localStorage.getItem(this.KEYS.ADMIN_USER);
-        const user = userStr ? JSON.parse(userStr) : null;
-        
-        return { token, user };
-      } catch (error) {
-        console.error('❌ Error getting auth data:', error);
-        return { token: null, user: null };
-      }
-    }
-
-    static getDeviceData() {
-      try {
-        const token = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
-        const fingerprint = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
-        const loginCount = parseInt(localStorage.getItem(this.KEYS.LOGIN_COUNT) || '0', 10);
-        const lastLogin = localStorage.getItem(this.KEYS.LAST_LOGIN);
-        
-        return { token, fingerprint, loginCount, lastLogin };
-      } catch (error) {
-        console.error('❌ Error getting device data:', error);
-        return { token: null, fingerprint: null, loginCount: 0, lastLogin: null };
-      }
-    }
-
-    static clearLoginData() {
-      try {
-        localStorage.removeItem(this.KEYS.DEVICE_TOKEN);
-        localStorage.removeItem(this.KEYS.DEVICE_FINGERPRINT);
-        localStorage.removeItem(this.KEYS.LOGIN_COUNT);
-        localStorage.removeItem(this.KEYS.LAST_LOGIN);
-        localStorage.removeItem('requires_verification');
-        console.log('🧹 Cleared all device login data');
-      } catch (error) {
-        console.error('❌ Error clearing login data:', error);
-      }
-    }
-
-    static clearAllAuthData() {
-      try {
-        this.clearLoginData();
-        localStorage.removeItem(this.KEYS.ADMIN_TOKEN);
-        localStorage.removeItem(this.KEYS.ADMIN_USER);
-        localStorage.removeItem(this.KEYS.DASHBOARD_ACCESS);
-        console.log('🧹 Cleared all authentication data');
-      } catch (error) {
-        console.error('❌ Error clearing auth data:', error);
-      }
-    }
-
-    static isAuthenticated() {
-      try {
-        const token = localStorage.getItem(this.KEYS.ADMIN_TOKEN);
-        const userStr = localStorage.getItem(this.KEYS.ADMIN_USER);
-        
-        if (!token || !userStr) {
-          return false;
-        }
-        
-        if (token.includes('.')) {
-          try {
+            const token = localStorage.getItem(this.KEYS.ADMIN_TOKEN);
+            
+            if (!token) {
+                return { isValid: false, reason: 'no_token' };
+            }
+            
             const tokenData = this.parseJwt(token);
             const currentTime = Math.floor(Date.now() / 1000);
             
             if (tokenData.exp && tokenData.exp <= currentTime) {
-              console.log('🔑 Auth token expired');
-              return false;
+                console.log('🔑 Admin token expired');
+                return { isValid: false, reason: 'expired' };
             }
-          } catch (e) {
-            console.warn('Could not parse auth token for expiration check:', e);
-          }
+            
+            return { isValid: true, expiresAt: new Date(tokenData.exp * 1000) };
+        } catch (error) {
+            console.error('Error checking admin token:', error);
+            return { isValid: false, reason: 'parse_error' };
+        }
+    }
+
+    static base64UrlDecode(str) {
+        str = str.replace(/-/g, '+').replace(/_/g, '/');
+        
+        const pad = str.length % 4;
+        if (pad) {
+            if (pad === 1) {
+                throw new Error('Invalid base64 string');
+            }
+            str += '==='.slice(pad);
         }
         
-        return true;
-      } catch (error) {
-        console.error('❌ Error checking authentication:', error);
-        return false;
-      }
+        return atob(str);
+    }
+
+    static parseJwt(token) {
+        try {
+            const parts = token.split('.');
+            if (parts.length !== 3) {
+                throw new Error('Invalid JWT format');
+            }
+            
+            const payload = parts[1];
+            const decoded = this.base64UrlDecode(payload);
+            return JSON.parse(decoded);
+        } catch (error) {
+            console.error('JWT parsing error:', error);
+            throw error;
+        }
+    }
+
+    static checkVerificationRequirement(forceCheck = false) {
+        try {
+            console.log('🔍 Checking verification requirement:', { forceCheck });
+            
+            if (!forceCheck) {
+                const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
+                const storedFingerprint = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
+                const currentFingerprint = DeviceFingerprint.generate();
+                
+                if (deviceToken && storedFingerprint === currentFingerprint.hash) {
+                    console.log('✅ Quick check passed - likely valid device');
+                    return { 
+                        requiresVerification: false,
+                        deviceToken: deviceToken,
+                        deviceHash: currentFingerprint.hash
+                    };
+                }
+            }
+            
+            const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
+            const storedFingerprint = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
+            const currentFingerprint = DeviceFingerprint.generate();
+            
+            console.log('📱 Full device data check:', {
+                hasDeviceToken: !!deviceToken,
+                hasStoredFingerprint: !!storedFingerprint,
+                currentFingerprint: currentFingerprint.hash.substring(0, 10) + '...',
+                storedFingerprint: storedFingerprint ? storedFingerprint.substring(0, 10) + '...' : 'none'
+            });
+
+            if (!deviceToken) {
+                console.log('📱 No device token found - NEW DEVICE');
+                return { 
+                    requiresVerification: true, 
+                    reason: 'new_device',
+                    deviceToken: null,
+                    deviceHash: currentFingerprint.hash
+                };
+            }
+
+            try {
+                let tokenData;
+                
+                if (deviceToken.includes('.')) {
+                    tokenData = this.parseJwt(deviceToken);
+                } else {
+                    const decodedStr = this.base64UrlDecode(deviceToken);
+                    tokenData = JSON.parse(decodedStr);
+                }
+                
+                console.log('🔑 Token data parsed:', {
+                    deviceHash: tokenData.deviceHash ? `${tokenData.deviceHash.substring(0, 10)}...` : 'missing',
+                    loginCount: tokenData.loginCount || 0,
+                    exp: tokenData.exp ? new Date(tokenData.exp * 1000).toLocaleString() : 'missing'
+                });
+
+                const currentTime = Math.floor(Date.now() / 1000);
+                const tokenExpiry = tokenData.exp;
+                
+                if (!tokenExpiry) {
+                    console.log('❌ Token missing expiry');
+                    return { 
+                        requiresVerification: true, 
+                        reason: 'token_invalid',
+                        deviceToken: deviceToken,
+                        deviceHash: currentFingerprint.hash
+                    };
+                }
+
+                if (tokenExpiry <= currentTime) {
+                    console.log('⏰ Token expired');
+                    return { 
+                        requiresVerification: true, 
+                        reason: 'token_expired',
+                        deviceToken: deviceToken,
+                        deviceHash: currentFingerprint.hash
+                    };
+                }
+
+                const loginCount = tokenData.loginCount || 0;
+                if (loginCount >= 15) {
+                    console.log('🚫 Max login attempts reached:', loginCount);
+                    return { 
+                        requiresVerification: true, 
+                        reason: 'max_logins_reached',
+                        deviceToken: deviceToken,
+                        loginCount: loginCount,
+                        deviceHash: currentFingerprint.hash
+                    };
+                }
+
+                if (storedFingerprint !== currentFingerprint.hash) {
+                    console.log('⚠️ Device fingerprint mismatch');
+                    return { 
+                        requiresVerification: true, 
+                        reason: 'device_mismatch',
+                        deviceToken: deviceToken,
+                        deviceHash: currentFingerprint.hash
+                    };
+                }
+
+                if (tokenData.deviceHash && tokenData.deviceHash !== currentFingerprint.hash) {
+                    console.log('🔐 Token device hash mismatch');
+                    return { 
+                        requiresVerification: true, 
+                        reason: 'token_device_mismatch',
+                        deviceToken: deviceToken,
+                        deviceHash: currentFingerprint.hash
+                    };
+                }
+
+                console.log('✅ Device token is VALID');
+                return { 
+                    requiresVerification: false, 
+                    deviceToken: deviceToken, 
+                    loginCount: loginCount,
+                    deviceHash: currentFingerprint.hash 
+                };
+
+            } catch (tokenError) {
+                console.error('❌ Token parsing error:', tokenError);
+                return { 
+                    requiresVerification: true, 
+                    reason: 'invalid_token_format',
+                    deviceToken: deviceToken,
+                    deviceHash: currentFingerprint.hash
+                };
+            }
+
+        } catch (error) {
+            console.error('❌ LocalStorage check error:', error);
+            return { 
+                requiresVerification: true, 
+                reason: 'storage_error',
+                deviceToken: null,
+                deviceHash: null
+            };
+        }
+    }
+
+    static storeDeviceData(deviceToken, deviceHash, loginCount) {
+        try {
+            console.log('💾 Storing device data:', {
+                deviceTokenLength: deviceToken ? deviceToken.length : 0,
+                deviceHash: deviceHash.substring(0, 10) + '...',
+                loginCount: loginCount
+            });
+            
+            localStorage.setItem(this.KEYS.DEVICE_TOKEN, deviceToken);
+            localStorage.setItem(this.KEYS.DEVICE_FINGERPRINT, deviceHash);
+            localStorage.setItem(this.KEYS.LAST_LOGIN, new Date().toISOString());
+            localStorage.setItem(this.KEYS.LOGIN_COUNT, loginCount.toString());
+            
+            localStorage.removeItem('requires_verification');
+            
+            console.log('✅ Device data stored successfully');
+            
+            const storedToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
+            const storedHash = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
+            console.log('🔍 Storage verification:', {
+                tokenStored: !!storedToken,
+                hashStored: !!storedHash,
+                tokenMatches: storedToken === deviceToken
+            });
+            
+        } catch (error) {
+            console.error('❌ Error storing device data:', error);
+        }
+    }
+
+    static storeAuthData(authToken, userData) {
+        try {
+            localStorage.setItem(this.KEYS.ADMIN_TOKEN, authToken);
+            localStorage.setItem(this.KEYS.ADMIN_USER, JSON.stringify(userData));
+            console.log('🔐 Auth data stored');
+        } catch (error) {
+            console.error('❌ Error storing auth data:', error);
+        }
+    }
+
+    static storeDashboardAccess() {
+        try {
+            localStorage.setItem(this.KEYS.DASHBOARD_ACCESS, new Date().toISOString());
+            console.log('📊 Dashboard access timestamp stored');
+        } catch (error) {
+            console.error('❌ Error storing dashboard access:', error);
+        }
+    }
+
+    static getLastDashboardAccess() {
+        try {
+            const timestamp = localStorage.getItem(this.KEYS.DASHBOARD_ACCESS);
+            return timestamp ? new Date(timestamp) : null;
+        } catch (error) {
+            console.error('❌ Error getting dashboard access:', error);
+            return null;
+        }
+    }
+
+    static getAuthData() {
+        try {
+            const token = localStorage.getItem(this.KEYS.ADMIN_TOKEN);
+            const userStr = localStorage.getItem(this.KEYS.ADMIN_USER);
+            const user = userStr ? JSON.parse(userStr) : null;
+            
+            return { token, user };
+        } catch (error) {
+            console.error('❌ Error getting auth data:', error);
+            return { token: null, user: null };
+        }
+    }
+
+    static getDeviceData() {
+        try {
+            const token = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
+            const fingerprint = localStorage.getItem(this.KEYS.DEVICE_FINGERPRINT);
+            const loginCount = parseInt(localStorage.getItem(this.KEYS.LOGIN_COUNT) || '0', 10);
+            const lastLogin = localStorage.getItem(this.KEYS.LAST_LOGIN);
+            
+            return { token, fingerprint, loginCount, lastLogin };
+        } catch (error) {
+            console.error('❌ Error getting device data:', error);
+            return { token: null, fingerprint: null, loginCount: 0, lastLogin: null };
+        }
+    }
+
+    static clearLoginData() {
+        try {
+            localStorage.removeItem(this.KEYS.DEVICE_TOKEN);
+            localStorage.removeItem(this.KEYS.DEVICE_FINGERPRINT);
+            localStorage.removeItem(this.KEYS.LOGIN_COUNT);
+            localStorage.removeItem(this.KEYS.LAST_LOGIN);
+            localStorage.removeItem('requires_verification');
+            console.log('🧹 Cleared all device login data');
+        } catch (error) {
+            console.error('❌ Error clearing login data:', error);
+        }
+    }
+
+    static clearAllAuthData() {
+        try {
+            this.clearLoginData();
+            localStorage.removeItem(this.KEYS.ADMIN_TOKEN);
+            localStorage.removeItem(this.KEYS.ADMIN_USER);
+            localStorage.removeItem(this.KEYS.DASHBOARD_ACCESS);
+            console.log('🧹 Cleared all authentication data');
+        } catch (error) {
+            console.error('❌ Error clearing auth data:', error);
+        }
+    }
+
+    static isAuthenticated() {
+        try {
+            const token = localStorage.getItem(this.KEYS.ADMIN_TOKEN);
+            const userStr = localStorage.getItem(this.KEYS.ADMIN_USER);
+            
+            if (!token || !userStr) {
+                return false;
+            }
+            
+            if (token.includes('.')) {
+                try {
+                    const tokenData = this.parseJwt(token);
+                    const currentTime = Math.floor(Date.now() / 1000);
+                    
+                    if (tokenData.exp && tokenData.exp <= currentTime) {
+                        console.log('🔑 Auth token expired');
+                        return false;
+                    }
+                } catch (e) {
+                    console.warn('Could not parse auth token for expiration check:', e);
+                }
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('❌ Error checking authentication:', error);
+            return false;
+        }
     }
 
     static getUser() {
-      try {
-        const userStr = localStorage.getItem(this.KEYS.ADMIN_USER);
-        if (!userStr) {
-          return null;
+        try {
+            const userStr = localStorage.getItem(this.KEYS.ADMIN_USER);
+            if (!userStr) {
+                return null;
+            }
+            
+            return JSON.parse(userStr);
+        } catch (error) {
+            console.error('❌ Error getting user:', error);
+            return null;
         }
-        
-        return JSON.parse(userStr);
-      } catch (error) {
-        console.error('❌ Error getting user:', error);
-        return null;
-      }
     }
 
     static getToken() {
-      try {
-        return localStorage.getItem(this.KEYS.ADMIN_TOKEN);
-      } catch (error) {
-        console.error('❌ Error getting token:', error);
-        return null;
-      }
+        try {
+            return localStorage.getItem(this.KEYS.ADMIN_TOKEN);
+        } catch (error) {
+            console.error('❌ Error getting token:', error);
+            return null;
+        }
     }
 
     static hasValidDeviceToken() {
-      try {
-        const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
-        if (!deviceToken) {
-          return false;
+        try {
+            const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
+            if (!deviceToken) {
+                return false;
+            }
+            
+            const checkResult = this.checkVerificationRequirement();
+            return !checkResult.requiresVerification;
+        } catch (error) {
+            console.error('❌ Error checking device token:', error);
+            return false;
         }
-        
-        const checkResult = this.checkVerificationRequirement();
-        return !checkResult.requiresVerification;
-      } catch (error) {
-        console.error('❌ Error checking device token:', error);
-        return false;
-      }
     }
 
     static getLoginCount() {
-      try {
-        const count = localStorage.getItem(this.KEYS.LOGIN_COUNT);
-        return count ? parseInt(count, 10) : 0;
-      } catch (error) {
-        console.error('❌ Error getting login count:', error);
-        return 0;
-      }
+        try {
+            const count = localStorage.getItem(this.KEYS.LOGIN_COUNT);
+            return count ? parseInt(count, 10) : 0;
+        } catch (error) {
+            console.error('❌ Error getting login count:', error);
+            return 0;
+        }
     }
 
     static incrementLoginCount() {
-      try {
-        const currentCount = this.getLoginCount();
-        const newCount = currentCount + 1;
-        localStorage.setItem(this.KEYS.LOGIN_COUNT, newCount.toString());
-        
-        const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
-        if (deviceToken) {
-          try {
-            let tokenData;
-            if (deviceToken.includes('.')) {
-              tokenData = this.parseJwt(deviceToken);
-            } else {
-              const decodedStr = this.base64UrlDecode(deviceToken);
-              tokenData = JSON.parse(decodedStr);
+        try {
+            const currentCount = this.getLoginCount();
+            const newCount = currentCount + 1;
+            localStorage.setItem(this.KEYS.LOGIN_COUNT, newCount.toString());
+            
+            const deviceToken = localStorage.getItem(this.KEYS.DEVICE_TOKEN);
+            if (deviceToken) {
+                try {
+                    let tokenData;
+                    if (deviceToken.includes('.')) {
+                        tokenData = this.parseJwt(deviceToken);
+                    } else {
+                        const decodedStr = this.base64UrlDecode(deviceToken);
+                        tokenData = JSON.parse(decodedStr);
+                    }
+                    
+                    tokenData.loginCount = newCount;
+                    
+                    const updatedToken = btoa(JSON.stringify(tokenData));
+                    localStorage.setItem(this.KEYS.DEVICE_TOKEN, updatedToken);
+                    
+                    console.log('📈 Login count incremented to:', newCount);
+                } catch (tokenError) {
+                    console.error('❌ Error updating token login count:', tokenError);
+                }
             }
             
-            tokenData.loginCount = newCount;
-            
-            const updatedToken = btoa(JSON.stringify(tokenData));
-            localStorage.setItem(this.KEYS.DEVICE_TOKEN, updatedToken);
-            
-            console.log('📈 Login count incremented to:', newCount);
-          } catch (tokenError) {
-            console.error('❌ Error updating token login count:', tokenError);
-          }
+            return newCount;
+        } catch (error) {
+            console.error('❌ Error incrementing login count:', error);
+            return 0;
         }
-        
-        return newCount;
-      } catch (error) {
-        console.error('❌ Error incrementing login count:', error);
-        return 0;
-      }
     }
 
     static setRequiresVerification(reason = 'security_check') {
-      try {
-        localStorage.setItem('requires_verification', 'true');
-        localStorage.setItem('verification_reason', reason);
-        console.log('⚠️ Verification required set:', reason);
-      } catch (error) {
-        console.error('❌ Error setting verification requirement:', error);
-      }
+        try {
+            localStorage.setItem('requires_verification', 'true');
+            localStorage.setItem('verification_reason', reason);
+            console.log('⚠️ Verification required set:', reason);
+        } catch (error) {
+            console.error('❌ Error setting verification requirement:', error);
+        }
     }
 
     static clearVerificationFlag() {
-      try {
-        localStorage.removeItem('requires_verification');
-        localStorage.removeItem('verification_reason');
-        console.log('✅ Verification flags cleared');
-      } catch (error) {
-        console.error('❌ Error clearing verification flags:', error);
-      }
+        try {
+            localStorage.removeItem('requires_verification');
+            localStorage.removeItem('verification_reason');
+            console.log('✅ Verification flags cleared');
+        } catch (error) {
+            console.error('❌ Error clearing verification flags:', error);
+        }
     }
 
     static shouldShowVerification() {
-      try {
-        const requiresVerification = localStorage.getItem('requires_verification');
-        const reason = localStorage.getItem('verification_reason');
-        
-        return {
-          requires: requiresVerification === 'true',
-          reason: reason || 'unknown'
-        };
-      } catch (error) {
-        console.error('❌ Error checking verification flag:', error);
-        return { requires: false, reason: 'error' };
-      }
+        try {
+            const requiresVerification = localStorage.getItem('requires_verification');
+            const reason = localStorage.getItem('verification_reason');
+            
+            return {
+                requires: requiresVerification === 'true',
+                reason: reason || 'unknown'
+            };
+        } catch (error) {
+            console.error('❌ Error checking verification flag:', error);
+            return { requires: false, reason: 'error' };
+        }
     }
 
     static debugAllStorage() {
-      try {
-        console.log('📋 === LOCALSTORAGE DEBUG INFO ===');
-        
-        const deviceData = this.getDeviceData();
-        console.log('📱 Device Data:', deviceData);
-        
-        const authData = this.getAuthData();
-        console.log('🔐 Auth Data:', {
-          hasToken: !!authData.token,
-          tokenLength: authData.token ? authData.token.length : 0,
-          user: authData.user ? {
-            id: authData.user.id,
-            name: authData.user.name,
-            email: authData.user.email,
-            role: authData.user.role
-          } : null
-        });
-        
-        console.log('🗂️ All localStorage items:');
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const value = localStorage.getItem(key);
-          console.log(`  ${key}: ${value ? value.substring(0, 50) + (value.length > 50 ? '...' : '') : 'null'}`);
+        try {
+            console.log('📋 === LOCALSTORAGE DEBUG INFO ===');
+            
+            const deviceData = this.getDeviceData();
+            console.log('📱 Device Data:', deviceData);
+            
+            const authData = this.getAuthData();
+            console.log('🔐 Auth Data:', {
+                hasToken: !!authData.token,
+                tokenLength: authData.token ? authData.token.length : 0,
+                user: authData.user ? {
+                    id: authData.user.id,
+                    name: authData.user.name,
+                    email: authData.user.email,
+                    role: authData.user.role
+                } : null
+            });
+            
+            console.log('🗂️ All localStorage items:');
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                console.log(`  ${key}: ${value ? value.substring(0, 50) + (value.length > 50 ? '...' : '') : 'null'}`);
+            }
+            
+            console.log('📋 === END DEBUG INFO ===');
+        } catch (error) {
+            console.error('❌ Error debugging storage:', error);
         }
-        
-        console.log('📋 === END DEBUG INFO ===');
-      } catch (error) {
-        console.error('❌ Error debugging storage:', error);
-      }
     }
   }
+
+  // Terms Modal Functions
+  const openTermsModal = (e) => {
+    e.preventDefault();
+    setShowTermsModal(true);
+  };
+
+  const closeTermsModal = () => {
+    setShowTermsModal(false);
+  };
 
   // Handle verification code input
   const handleVerificationCodeChange = (index, value) => {
@@ -862,7 +840,7 @@ export default function AdminLoginPage() {
 
     setIsLoading(true);
     
-    const loadingToast = toast.loading('Authenticating...');
+    const loadingToast = toast.loading('Checking please wait...');
 
     try {
       const localStorageCheck = LocalStorageManager.checkVerificationRequirement(true);
@@ -1118,7 +1096,6 @@ export default function AdminLoginPage() {
 
   return (
     <>
-      {/* Sonner Toaster */}
       <Toaster
         position={isMobile ? "top-center" : "top-right"}
         expand={false}
@@ -1129,93 +1106,59 @@ export default function AdminLoginPage() {
       {/* Password Reset Modal */}
       {showPasswordResetModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 z-[9999]">
-          <div className="relative w-full max-w-sm bg-white rounded-xl shadow-xl p-6">
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ShieldAlert className="w-6 h-6 text-red-600" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
-                Password Reset Required
-              </h3>
-              <p className="text-slate-600">
-                Multiple incorrect password attempts detected. For security reasons, you must reset your password.
-              </p>
-            </div>
-            
-            <div className="space-y-3">
-              <button
-                onClick={() => {
-                  router.push(resetLink);
-                  setShowPasswordResetModal(false);
-                }}
-                className="w-full py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700"
-              >
-                Reset Password Now
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowPasswordResetModal(false);
-                  setFormData({ email: '', password: '' });
-                }}
-                className="w-full py-3 border border-slate-300 text-slate-700 rounded-lg font-bold hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
+          {/* Modal content */}
         </div>
       )}
 
       {/* Verification Modal */}
       {showVerificationModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md my-auto bg-gradient-to-br from-white to-slate-50 rounded-2xl md:rounded-3xl shadow-2xl border border-white/30 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+        <div className="fixed inset-0 bg-purple-950/80 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md my-auto bg-white rounded-xl md:rounded-2xl shadow-2xl border-2 border-purple-200 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
             
-            <div className="relative p-4 sm:p-6 bg-gradient-to-r from-emerald-600 to-teal-500 text-white shrink-0">
+            <div className="relative p-5 sm:p-6 bg-gradient-to-r from-purple-800 to-pink-700 text-white shrink-0 border-b-4 border-pink-400">
               <button
                 onClick={closeVerificationModal}
-                className="absolute top-2 right-2 p-2 hover:bg-white/10 rounded-xl transition-colors active:scale-90"
+                className="absolute top-3 right-3 p-2 hover:bg-white/10 rounded-lg transition-colors active:scale-90"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-pink-300" />
               </button>
               
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shrink-0">
-                  <ShieldAlert className="w-5 h-5 md:w-6 md:h-6" />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center shrink-0 border border-white/20">
+                  <ShieldCheck className="w-6 h-6 md:w-7 md:h-7 text-pink-300" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-base sm:text-lg font-black truncate">
-                    {requiresPasswordAfterVerification ? 'Enter Password' : 'Security Verification'}
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight uppercase">
+                    {requiresPasswordAfterVerification ? 'Final Access' : 'Identity Check'}
                   </h3>
-                  <p className="text-emerald-100 text-xs mt-0.5 opacity-90 truncate">
-                    {requiresPasswordAfterVerification ? 'Complete your login' : 'Verify identity'}
+                  <p className="text-pink-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
+                    {requiresPasswordAfterVerification ? 'Portal Authorization' : 'Secure Campus Network'}
                   </p>
                 </div>
               </div>
               
-              <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full">
-                <AlertCircle className="w-3 h-3" />
-                <span className="text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase tracking-wider">
-                  {verificationReason?.replace(/_/g, ' ') || 'Action Required'}
+              <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-pink-400 text-purple-950 rounded-md shadow-sm">
+                <AlertCircle className="w-3.5 h-3.5" />
+                <span className="text-[10px] font-black whitespace-nowrap uppercase tracking-tighter">
+                  {verificationReason?.replace(/_/g, ' ') || 'SECURITY PROTOCOL'}
                 </span>
               </div>
             </div>
             
-            <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar">
+            <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar bg-purple-50/30">
               {!requiresPasswordAfterVerification ? (
                 <>
-                  <div className="mb-4 text-center">
-                    <p className="text-slate-600 text-xs sm:text-sm mb-3">
-                      6-digit code sent to:
+                  <div className="mb-6 text-center">
+                    <p className="text-purple-600 text-xs font-bold uppercase tracking-wide mb-3">
+                      Authorization Code Sent To:
                     </p>
-                    <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-3">
-                      <p className="text-emerald-800 font-black text-sm break-all">{verificationEmail}</p>
+                    <div className="bg-white border-2 border-purple-200 rounded-lg p-3 shadow-inner">
+                      <p className="text-purple-900 font-bold text-sm break-all">{verificationEmail}</p>
                     </div>
                   </div>
                   
                   <div className="mb-6">
-                    <div className="grid grid-cols-6 gap-1 sm:gap-2 mb-4">
+                    <div className="grid grid-cols-6 gap-2 mb-5">
                       {verificationCode.map((digit, index) => (
                         <input
                           key={index}
@@ -1226,22 +1169,22 @@ export default function AdminLoginPage() {
                           value={digit}
                           onChange={(e) => handleVerificationCodeChange(index, e.target.value)}
                           onKeyDown={(e) => handleVerificationKeyDown(index, e)}
-                          className="w-full aspect-square text-center text-lg sm:text-xl font-black bg-white border-2 border-slate-200 rounded-lg sm:rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                          className="w-full aspect-square text-center text-xl font-bold bg-white border-2 border-purple-300 rounded-lg focus:border-purple-600 focus:ring-4 focus:ring-purple-600/20 outline-none transition-all text-purple-900"
                           autoFocus={index === 0}
                         />
                       ))}
                     </div>
                     
-                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400">
-                      <Clock className="w-3 h-3" />
-                      <span>Expires: <span className="text-emerald-600 font-mono">{Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}</span></span>
+                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-purple-500 bg-purple-100 py-2 rounded-full">
+                      <Clock className="w-3.5 h-3.5 text-pink-500" />
+                      <span>Expires in: <span className="text-purple-900 font-mono">{Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}</span></span>
                     </div>
                   </div>
                 </>
               ) : (
                 <div className="mb-6">
-                  <p className="text-slate-600 text-sm mb-4 font-medium">
-                    Code verified! Enter password to finish.
+                  <p className="text-purple-800 text-sm mb-4 font-bold">
+                    Identity Confirmed. Enter Portal Password:
                   </p>
                   <div className="relative group">
                     <input
@@ -1249,27 +1192,32 @@ export default function AdminLoginPage() {
                       value={passwordAfterVerification}
                       onChange={(e) => setPasswordAfterVerification(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full p-4 pl-4 pr-12 bg-slate-50 border-2 border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                      className="w-full p-4 pl-5 pr-12 bg-white border-2 border-purple-200 rounded-xl focus:border-purple-600 focus:ring-4 focus:ring-purple-600/20 outline-none transition-all text-purple-900 font-bold"
                       autoFocus
                     />
-                    <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors w-5 h-5" />
+                    <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 group-focus-within:text-purple-600 transition-colors w-5 h-5" />
                   </div>
                 </div>
               )}
               
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <button
                   type="button"
                   onClick={requiresPasswordAfterVerification ? handlePasswordAfterVerification : handleVerifyCode}
                   disabled={verificationLoading || (!requiresPasswordAfterVerification && verificationCode.join('').length !== 6)}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-xl font-black text-sm shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-purple-700 to-pink-600 text-white rounded-xl font-bold text-sm tracking-widest shadow-xl hover:from-purple-800 hover:to-pink-700 active:scale-[0.98] transition-all disabled:bg-slate-300 disabled:from-slate-300 disabled:to-slate-300"
                 >
                   {verificationLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="capitalize text-sm font-medium">Verifying...</span>
+                    </div>
                   ) : (
                     <>
-                      <CheckCircle className="w-4 h-4" />
-                      <span>{requiresPasswordAfterVerification ? 'COMPLETE LOGIN' : 'VERIFY CODE'}</span>
+                      <CheckCircle className="w-4 h-4 text-pink-300" />
+                      <span className="uppercase tracking-widest">
+                        {requiresPasswordAfterVerification ? 'Grant Access' : 'Authorize Device'}
+                      </span>
                     </>
                   )}
                 </button>
@@ -1279,18 +1227,20 @@ export default function AdminLoginPage() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendLoading || countdown > 0}
-                    className="w-full py-3 text-slate-500 font-bold text-xs hover:text-emerald-600 transition-colors disabled:opacity-50"
+                    className="w-full py-2 text-purple-600 font-black text-[10px] uppercase tracking-widest hover:text-pink-600 transition-colors disabled:opacity-30"
                   >
-                    Didn't get a code? <span className="underline">Resend</span>
+                    Didn't receive code? <span className="text-pink-600 underline underline-offset-4">Request New</span>
                   </button>
                 )}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100">
-                <div className="flex gap-3">
-                  <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0" />
-                  <p className="text-[10px] leading-relaxed text-slate-500 font-medium">
-                    This is a secure, encrypted verification. Your session is protected by 256-bit encryption.
+              <div className="mt-8 pt-5 border-t-2 border-dashed border-purple-200">
+                <div className="flex gap-4 items-start">
+                  <div className="p-2 bg-purple-100 rounded-lg">
+                    <ShieldAlert className="w-4 h-4 text-purple-700" />
+                  </div>
+                  <p className="text-[10px] leading-relaxed text-purple-600 font-bold uppercase tracking-tight">
+                    School Security Protocol: This session is encrypted. Unauthorized access attempts are logged and reported to Matungulu ICT Staff.
                   </p>
                 </div>
               </div>
@@ -1299,362 +1249,380 @@ export default function AdminLoginPage() {
         </div>
       )}
 
-      {/* MAIN LOGIN PAGE */}
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 flex items-center justify-center p-3 sm:p-4 md:p-6 font-sans">
-        <div className="max-w-6xl w-full scale-[0.95] bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] shadow-xl sm:shadow-2xl shadow-slate-900/10 border border-white/40 overflow-hidden flex flex-col md:flex-row min-h-[500px] sm:min-h-[600px] md:min-h-[720px]">
-          
-          {/* Left Panel - Shuffle and Background */}
-          <div className={`hidden md:flex md:w-[45%] bg-gradient-to-br ${backgrounds[currentBgIndex]} relative overflow-hidden p-8 md:p-10 flex-col justify-between transition-all duration-1000`}>
-            {/* Animated Background Elements */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 animate-pulse"></div>
+      {/* Terms & Conditions Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 bg-purple-950/80 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
+          <div className="relative w-full max-w-2xl my-auto bg-white rounded-xl md:rounded-2xl shadow-2xl border-2 border-purple-200 overflow-hidden flex flex-col max-h-[90vh]">
             
-            {/* Floating Orbs */}
-            <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl"></div>
-            
-            {/* Grid Pattern */}
-            <div className="absolute inset-0 opacity-10" style={{
-              backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-                                linear-gradient(180deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-              backgroundSize: '40px 40px'
-            }}></div>
-
-            {/* Content */}
-            <div className="relative z-10">
-              <div className="mb-8 flex items-center gap-3">
-                <div className="w-12 h-12 bg-emerald-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-emerald-400/30">
-                  <School className="w-6 h-6 text-emerald-300" />
+            <div className="relative p-5 sm:p-6 bg-gradient-to-r from-purple-800 to-pink-700 text-white shrink-0 border-b-4 border-pink-400">
+              <button
+                onClick={closeTermsModal}
+                className="absolute top-3 right-3 p-2 hover:bg-white/10 rounded-lg transition-colors active:scale-90"
+              >
+                <X className="w-5 h-5 text-pink-300" />
+              </button>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center shrink-0 border border-white/20">
+                  <ShieldAlert className="w-6 h-6 md:w-7 md:h-7 text-pink-300" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-black text-white mb-1 tracking-tight">
-                    Matungulu <span className="text-emerald-300">Girls</span>
-                  </h1>
-                  <p className="text-emerald-200/80 text-xs font-medium">Excellence in Education</p>
-                </div>
-              </div>
-
-              {/* Shuffle Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-8">
-                {shuffledItems.slice(0, 8).map((item, index) => (
-                  <div 
-                    key={index}
-                    className="group p-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:border-emerald-400/30 animate-fade-in"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="text-emerald-300 scale-90">
-                        {item.icon}
-                      </div>
-                      <p className="text-[10px] font-bold text-white/90 tracking-tight">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Refresh Indicator */}
-              <div className="flex items-center gap-2 mb-6 text-emerald-200/60">
-                <RefreshCw className="w-3 h-3 animate-spin-slow" />
-                <span className="text-[10px] font-medium">Live updates every 5s</span>
-              </div>
-
-              {/* Stats Cards */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10">
-                  <div className="text-2xl font-black text-emerald-300">98%</div>
-                  <p className="text-[9px] uppercase tracking-wider text-white/60 font-bold">Pass Rate</p>
-                </div>
-                <div className="text-center p-3 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10">
-                  <div className="text-2xl font-black text-emerald-300">1000+</div>
-                  <p className="text-[9px] uppercase tracking-wider text-white/60 font-bold">Students</p>
-                </div>
-                <div className="text-center p-3 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10">
-                  <div className="text-2xl font-black text-emerald-300">24/7</div>
-                  <p className="text-[9px] uppercase tracking-wider text-white/60 font-bold">Support</p>
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight uppercase">
+                    Terms & Conditions
+                  </h3>
+                  <p className="text-pink-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
+                    Authorized Access Only
+                  </p>
                 </div>
               </div>
             </div>
-
-            {/* Footer */}
-            <div className="relative z-10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                  <span className="text-xs font-bold text-emerald-200/80">System Online</span>
+            
+            <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar bg-purple-50/30">
+              
+              <div className="mb-6 bg-pink-50 border-l-4 border-pink-500 p-4 rounded-r-lg">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-pink-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-black text-pink-900 text-sm uppercase tracking-wide mb-1">
+                      ⚠️ Legal Warning
+                    </h4>
+                    <p className="text-xs sm:text-sm text-pink-800 font-bold leading-relaxed">
+                      Unauthorized access to this system is strictly prohibited and will be treated as a cyber crime under the Computer Misuse and Cybercrimes Act. All access attempts are logged and monitored. Violators will face legal prosecution to the fullest extent of the law.
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Heart className="w-3 h-3 text-emerald-300" />
-                  <span className="text-[10px] text-emerald-200/60">Prayer, Discipline & Hardwork</span>
+              </div>
+              
+              <div className="space-y-4 text-purple-800">
+                <div className="bg-white p-4 rounded-lg border border-purple-200">
+                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <Database className="w-4 h-4 text-pink-600" />
+                    1. Authorized Use
+                  </h5>
+                  <p className="text-xs sm:text-sm leading-relaxed">
+                    This administrative portal is exclusively for authorized Matungulu Girls' High School personnel. Access credentials are personal and non-transferable. Any sharing of credentials constitutes a security breach and will result in immediate revocation of access privileges and potential legal action.
+                  </p>
                 </div>
+                
+                <div className="bg-white p-4 rounded-lg border border-purple-200">
+                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-pink-600" />
+                    2. Data Protection & Privacy
+                  </h5>
+                  <p className="text-xs sm:text-sm leading-relaxed">
+                    All student, staff, and institutional data accessed through this portal is protected under the Data Protection Act. Users are legally obligated to maintain confidentiality and must not disclose, copy, or misuse any information obtained through this system.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg border border-purple-200">
+                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-pink-600" />
+                    3. Monitoring & Logging
+                  </h5>
+                  <p className="text-xs sm:text-sm leading-relaxed">
+                    All activities within this portal are subject to continuous monitoring and logging. These logs are regularly reviewed and may be used as evidence in disciplinary or legal proceedings.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg border border-purple-200">
+                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-pink-600" />
+                    4. Security Obligations
+                  </h5>
+                  <p className="text-xs sm:text-sm leading-relaxed">
+                    Users must ensure their devices meet minimum security standards. Access from public or unsecured networks is prohibited. Users are responsible for immediately reporting any suspected security incidents.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg border border-purple-200">
+                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <Building className="w-4 h-4 text-pink-600" />
+                    5. Institutional Compliance
+                  </h5>
+                  <p className="text-xs sm:text-sm leading-relaxed">
+                    By accessing this portal, you acknowledge your understanding of and compliance with all Matungulu Girls' High School ICT policies and applicable Kenyan laws.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-6 p-4 bg-gradient-to-r from-purple-100 to-pink-100 border border-pink-200 rounded-lg">
+                <p className="text-[10px] sm:text-xs font-black uppercase tracking-wide text-purple-800 text-center">
+                  ⚡ This system is protected by advanced security protocols. 
+                  Unauthorized access attempts trigger immediate alerts.
+                </p>
+              </div>
+            </div>
+            
+            <div className="p-4 sm:p-5 border-t border-purple-200 bg-white shrink-0">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => {
+                    setAgreedToTerms(true);
+                    closeTermsModal();
+                    toast.success('You have accepted the Terms & Conditions');
+                  }}
+                  className="flex-1 bg-gradient-to-r from-purple-700 to-pink-600 text-white py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:from-purple-800 hover:to-pink-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  I Understand & Accept
+                </button>
+                <button
+                  onClick={closeTermsModal}
+                  className="flex-1 bg-purple-100 text-purple-700 py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-purple-200 transition-all active:scale-[0.98]"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Right Panel: Login Interface */}
-          <div className="flex-1 p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16 flex flex-col justify-center bg-white relative">
-            {/* Mobile Header */}
-            <div className="md:hidden flex flex-col items-center mb-6 sm:mb-8">
-              <div className="relative mb-4 sm:mb-6">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg sm:shadow-xl shadow-emerald-500/30">
-                  <ShieldCheck className="text-white w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 sm:w-8 sm:h-8 bg-emerald-500 rounded-full flex items-center justify-center border-3 sm:border-4 border-white">
-                  <Key className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
-                </div>
+      {/* Main Login Page Layout - Matungulu Girls Version */}
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 font-sans flex items-center justify-center">
+        <div className="w-full h-screen grid md:grid-cols-2">
+          
+          {/* Left Panel - Form (Swapped position) */}
+          <div className="min-h-screen bg-white/80 backdrop-blur-sm p-6 sm:p-12 flex flex-col justify-start">
+            <div className="w-full max-w-md mr-0 md:mr-[15%] ml-auto">
+              {/* Mobile Logo */}
+              <div className="md:hidden text-center mb-8">
+                <Image
+                  src="/matungulu.png"
+                  alt="Matungulu Logo"
+                  width={60}
+                  height={60}
+                  className="rounded-full mx-auto mb-4 shadow-sm border-2 border-pink-300"
+                />
               </div>
-              <h2 className="text-lg sm:text-xl font-black text-slate-900 text-center">Matungulu Girls Admin</h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2 text-center">Secure Portal Access</p>
-            </div>
 
-            <div className="max-w-md mx-auto w-full px-2 sm:px-0">
-              <div className="mb-8 sm:mb-10 md:mb-12 text-center md:text-left">
-                <div className="flex items-center gap-3 mb-3 sm:mb-4 justify-center md:justify-start">
-                  <div className="w-2 h-4 sm:h-6 bg-gradient-to-b from-emerald-500 to-teal-400 rounded-full"></div>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-                    {isForgotMode ? "Access Recovery" : "Admin Login"}
-                  </h2>
+              <div className="mb-8 sm:mb-10 text-left">
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="w-5 h-5 text-pink-500" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-pink-600">Empowering Young Women</span>
                 </div>
-                <p className="text-slate-600 font-medium text-sm sm:text-base leading-relaxed text-center md:text-left">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-800 to-pink-600 tracking-tight mb-3">
+                  {isForgotMode ? "Recover Access" : "Welcome Back"}
+                </h2>
+                <p className="text-sm sm:text-base md:text-lg text-purple-700 leading-relaxed">
                   {isForgotMode 
-                    ? "Provide your registered email to receive recovery instructions." 
-                    : "Authenticate with your credentials to access the control dashboard."}
+                    ? "Enter your email address below and we'll send you a secure recovery link." 
+                    : "Please enter your official credentials to access the Matungulu Girls' administrative dashboard."}
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
-                <div className="group">
-                  <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                    <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" />
-                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                      Email Address
-                    </label>
-                  </div>
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                <div>
+                  <label className="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider text-purple-700 mb-2 block">
+                    Email Address
+                  </label>
                   <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 w-5 h-5" />
                     <input 
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      placeholder="admin@matungulugirls.sc.ke"
-                      className="w-full pl-10 sm:pl-12 pr-4 sm:pr-6 py-3 sm:py-4 bg-slate-50 border-2 border-slate-200 rounded-xl sm:rounded-2xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all duration-300 font-medium text-slate-900 placeholder-slate-400 text-sm sm:text-base"
+                      placeholder="admin@matungulu.ac.ke"
+                      className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-purple-50/50 border text-purple-900 font-semibold border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
                     />
-                    <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                 </div>
 
                 {!isForgotMode && (
-                  <div className="group">
-                    <div className="flex justify-between items-center mb-2 sm:mb-3">
-                      <div className="flex items-center gap-2">
-                        <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" />
-                        <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <>
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider text-purple-700">
                           Password
                         </label>
+                        <button 
+                          type="button"
+                          onClick={() => router.push("/pages/forgotpassword")}
+                          className="text-[10px] sm:text-xs md:text-sm font-bold text-pink-600 hover:text-pink-700 hover:underline transition-colors"
+                        >
+                          Forgot password?
+                        </button>
                       </div>
-                      <button 
-                        type="button"
-                        onClick={() => (router.push("/pages/forgotpassword"))}
-                        className="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1"
-                      >
-                        <Key className="w-2 h-2 sm:w-3 sm:h-3" />
-                        <span className="hidden xs:inline">Forgot password</span>
-                        <span className="xs:hidden">Forgot password</span>
-                      </button>
+                      <div className="relative">
+                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 w-5 h-5" />
+                        <input 
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="••••••••"
+                          className="w-full pl-12 pr-12 py-3.5 sm:py-4 text-purple-900 font-semibold bg-purple-50/50 border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
+                        />
+                        <button 
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 hover:text-pink-600 transition-colors p-1"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
-                    <div className="relative">
-                      <input 
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Enter your password"
-                        className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 bg-slate-50 border-2 border-slate-200 rounded-xl sm:rounded-2xl focus:outline-none focus:border-emerald-500 focus:bg-white transition-all duration-300 font-medium text-slate-900 placeholder-slate-400 text-sm sm:text-base"
-                      />
-                      <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 sm:w-5 sm:h-5" />
-                      <button 
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1.5 sm:p-2 hover:bg-slate-100 rounded-lg"
-                      >
-                        {showPassword ? 
-                          <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : 
-                          <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                        }
-                      </button>
-                    </div>
-                  </div>
-                )}
 
-                {!isForgotMode && (
-                  <div className="space-y-4 sm:space-y-6">
-                    <div className="p-3 sm:p-4 md:p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl sm:rounded-2xl border border-emerald-100">
-                      <label className="flex items-start gap-3 sm:gap-4 cursor-pointer group">
-                        <div className="relative flex-shrink-0 mt-0.5">
+                    <div className="space-y-4 pt-2">
+                      <div className="flex items-start justify-between">
+                        <label className="flex items-start gap-3 cursor-pointer group flex-1">
                           <input 
                             type="checkbox" 
                             checked={agreedToTerms}
                             onChange={(e) => setAgreedToTerms(e.target.checked)}
-                            className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer rounded border-2 border-emerald-300 bg-white checked:border-emerald-600 checked:bg-emerald-600 focus:outline-none transition-all"
+                            className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-pink-600 focus:ring-pink-500 transition"
                           />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-slate-800 mb-1">
-                            Terms and Agreement
-                          </p>
-                          <p className="text-xs text-slate-600 leading-relaxed">
-                            I understand this session is monitored, encrypted, and recorded for security auditing.
-                          </p>
-                        </div>
+                          <span className="text-xs sm:text-sm text-purple-700 group-hover:text-purple-900 transition-colors leading-tight">
+                            I agree to the{' '}
+                            <button 
+                              type="button"
+                              onClick={openTermsModal}
+                              className="font-bold text-pink-600 hover:underline"
+                            >
+                              Terms & Conditions
+                            </button>
+                          </span>
+                        </label>
+                      </div>
+                      <label className="flex items-start gap-3 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={rememberDevice}
+                          onChange={(e) => setRememberDevice(e.target.checked)}
+                          className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-pink-600 focus:ring-pink-500 transition"
+                        />
+                        <span className="text-xs sm:text-sm text-purple-700 group-hover:text-purple-900 transition-colors leading-tight">
+                          Keep me logged in on this device
+                        </span>
                       </label>
                     </div>
-
-                    <div className="flex items-center justify-between p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
-                        <div>
-                          <p className="text-xs sm:text-sm font-bold text-slate-800">Remember this device</p>
-                          <p className="text-xs text-slate-500 hidden sm:block">Stay signed in without OTP</p>
-                          <p className="text-xs text-slate-500 sm:hidden">Stay signed in</p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setRememberDevice(!rememberDevice)}
-                        className={`relative inline-flex h-5 w-10 sm:h-6 sm:w-11 items-center rounded-full transition-colors ${
-                          rememberDevice ? 'bg-emerald-600' : 'bg-slate-300'
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-3 w-3 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform ${
-                            rememberDevice ? 'translate-x-5 sm:translate-x-6' : 'translate-x-1'
-                          }`}
-                        />
-                      </button>
-                    </div>
-                  </div>
+                  </>
                 )}
 
                 <button 
                   type="submit"
-                  disabled={isLoading}
-                  className="group relative w-full bg-gradient-to-r from-emerald-600 to-teal-500 text-white py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg sm:shadow-xl shadow-emerald-500/30 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isLoading || (!isForgotMode && !agreedToTerms)}
+                  className="w-full bg-gradient-to-r from-purple-700 to-pink-600 text-white py-4 rounded-xl font-bold text-base sm:text-lg hover:from-purple-800 hover:to-pink-700 active:scale-[0.98] transition-all disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed shadow-lg shadow-pink-200 flex items-center justify-center gap-3 mt-4"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative flex items-center justify-center gap-2 sm:gap-3">
-                    {agreedToTerms ? (
-                      isLoading ? (
-                        <>
-                          <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                          <span className="text-sm sm:text-base">Authenticating...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="text-sm sm:text-base">{isForgotMode ? "Request Access" : "Access Dashboard"}</span>
-                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                        </>
-                      )
-                    ) : (
-                      <span className="text-sm sm:text-base text-slate-300">Please agree to Terms</span>
-                    )}
-                  </div>
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>Verifying...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{isForgotMode ? "Send Reset Link" : "Sign In to Portal"}</span>
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
                 </button>
 
                 {isForgotMode && (
-                  <button 
+                  <button
                     type="button"
                     onClick={() => setIsForgotMode(false)}
-                    className="w-full text-center text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors py-2 sm:py-3"
+                    className="w-full text-center text-xs sm:text-sm font-bold text-purple-600 hover:text-pink-600 transition-colors pt-4"
                   >
-                    ← Return to login
+                    &larr; Return to login
                   </button>
                 )}
               </form>
+            </div>
+          </div>
 
-              <div className="mt-8 sm:mt-12 md:mt-16 pt-4 sm:pt-6 md:pt-8 border-t border-slate-200">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <Globe className="w-3 h-3 sm:w-4 sm:h-4 text-slate-400" />
-                    <p className="text-xs text-slate-500 font-medium text-center sm:text-left">
-                      Matungulu Girls High School
+          {/* Right Panel - Branding (Swapped position with feminine design) */}
+          <div className="relative hidden md:flex flex-col justify-between bg-gradient-to-br from-purple-900 via-pink-900 to-purple-950 text-white px-16 py-20 lg:px-24 overflow-hidden border-l border-white/5">
+            {/* Decorative elements */}
+            <div className="absolute inset-0 overflow-hidden opacity-10">
+              <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-pink-400 blur-3xl"></div>
+              <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-purple-500 blur-3xl"></div>
+            </div>
+            
+            <div className="absolute inset-0 bg-cover bg-center opacity-20 transition-transform duration-100"
+              style={{ backgroundImage: "url('/hero/matungulu-pattern.png')" }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-pink-950/30 to-purple-950/40"></div>
+            
+            <div className="relative z-10 flex flex-col h-full w-full">
+              <div className="mb-auto">
+                <Link href="/" className="flex items-center gap-5 group transition-transform hover:translate-x-1">
+                  <div className="relative p-1 bg-white/10 rounded-full backdrop-blur-xl border border-pink-300/30 shadow-2xl">
+                    <Image
+                      src="/matungulu.png"
+                      alt="Matungulu Logo"
+                      width={64}
+                      height={64}
+                      className="rounded-full"
+                    />
+                    <div className="absolute inset-0 rounded-full bg-pink-500/20 animate-pulse"></div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-black tracking-tighter leading-none uppercase">
+                      Matungulu <span className="text-pink-400">Girls'</span>
+                    </span>
+                    <span className="text-[10px] font-bold tracking-[0.4em] text-pink-300/80 uppercase mt-1">
+                      High School
+                    </span>
+                  </div>
+                </Link>
+              </div>
+
+              <div className="my-auto py-10 sm:py-12 px-4 max-w-md mx-auto text-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6">
+                  <Heart size={14} className="fill-pink-400" />
+                  Authorized Personnel Only
+                </div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight mb-5 sm:mb-6">
+                  Secure{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-200 to-pink-300">
+                    Admin
+                  </span>{" "}
+                  Portal
+                </h1>
+                <p className="text-sm sm:text-md text-pink-50/90 font-medium leading-relaxed max-w-xs sm:max-w-sm mx-auto">
+                  Enter your credentials to securely access Matungulu Girls' administrative system, manage operations, and empower young women through excellence in education.
+                </p>
+                
+                {/* Feature Pills */}
+                <div className="flex flex-wrap justify-center gap-2 mt-6">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-pink-400/30">
+                    <Flower2 className="inline w-3 h-3 mr-1" />
+                    Excellence
+                  </span>
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-purple-200 border border-purple-400/30">
+                    Integrity
+                  </span>
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-pink-400/30">
+                    Leadership
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-8 mb-[5%] border-t border-pink-400/20">
+                <div className="flex flex-col gap-6">
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-300">School Motto</p>
+                    <p className="text-2xl font-black italic tracking-tight text-white drop-shadow-md">
+                      "Empower • Excel • Lead"
                     </p>
                   </div>
-                  <div className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6">
-                    <a href="/pages/OurSchoolpolicies" className="text-xs font-bold text-slate-600 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                      Privacy
-                    </a>
-                    <a href="#" className="text-xs font-bold text-slate-600 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                      Security
-                    </a>
-                    <a href="#" className="text-xs font-bold text-slate-600 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                      Terms
-                    </a>
+                  
+                  <div className="flex items-center justify-between text-[10px] font-bold text-pink-200 tracking-widest uppercase mt-4">
+                    <span>&copy; {new Date().getFullYear()} Matungulu Girls' High</span>
+                    <span className="flex items-center gap-2">
+                      <Server size={10} />
+                      Secure Node: 042
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Status Bar */}
-        <div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 animate-pulse z-50"></div>
-        <div className={`fixed ${isMobile ? 'bottom-2 right-2' : 'bottom-4 right-4'} z-50`}>
-          <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 bg-slate-900/90 backdrop-blur-md rounded-full border border-white/10">
-            <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
-            <span className="text-[10px] sm:text-xs font-bold text-white">Strive to Excell</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Add custom animations */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out forwards;
-        }
-        
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        
-        .animate-spin-slow {
-          animation: spin-slow 3s linear infinite;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 4px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #10b981;
-          border-radius: 4px;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #059669;
-        }
-      `}</style>
+      </main>
     </>
   );
 }
