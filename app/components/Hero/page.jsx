@@ -6,7 +6,7 @@ import {
   Calendar, Play, X, Menu, GraduationCap, 
   Palette, Music, Laptop, Heart, Target, Award
 } from 'lucide-react';
-import { FiFlask } from 'react-icons/fi';
+import { Flask } from 'lucide-react';
 import { 
   GiGraduateCap, 
   GiTrophyCup,
@@ -115,7 +115,7 @@ const heroSlides = [
 const cbcPathways = [
   {
     name: "STEM Pathway",
-    icon: FiFlask,
+    icon: Flask,
     color: "emerald",
     subjects: ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Studies"],
     careers: ["Engineering", "Medicine", "Computer Science", "Research", "Data Science"]
