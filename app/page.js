@@ -139,31 +139,7 @@ const MatunguluGirlsLoadingScreen = () => {
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-300/10 via-rose-300/10 to-emerald-300/10 rounded-full blur-3xl animate-spin-slow"></div>
         
-        {/* Floating Petal/Flower Shapes (replaced with colored icons) */}
-        <div className="absolute inset-0 opacity-40">
-          {[...Array(8)].map((_, i) => {
-            let IconComponent;
-            if (i % 3 === 0) IconComponent = GiFlowerEmblem;
-            else if (i % 3 === 1) IconComponent = GiSparkles;
-            else IconComponent = FaRegStar;
-            return (
-              <div
-                key={i}
-                className="absolute text-2xl"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animation: `float-petal ${8 + Math.random() * 6}s ease-in-out infinite`,
-                  animationDelay: `${i * 0.5}s`,
-                  transform: `rotate(${Math.random() * 360}deg)`,
-                  color: i % 3 === 0 ? '#f472b6' : i % 3 === 1 ? '#fbbf24' : '#10b981'
-                }}
-              >
-                <IconComponent />
-              </div>
-            );
-          })}
-        </div>
+        {/* Removed floating petal/flower shapes for cleaner loading animation */}
 
         {/* Elegant Light Beams */}
         <div className="absolute inset-0 opacity-20">
