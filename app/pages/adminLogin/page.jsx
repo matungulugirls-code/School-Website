@@ -1296,7 +1296,7 @@ export default function AdminLoginPage() {
               <div className="space-y-4 text-purple-800">
                 <div className="bg-white p-4 rounded-lg border border-purple-200">
                   <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
-                    <Database className="w-4 h-4 text-pink-600" />
+                    <Database className="w-4 h-4 text-green-700" />
                     1. Authorized Use
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
@@ -1306,7 +1306,7 @@ export default function AdminLoginPage() {
                 
                 <div className="bg-white p-4 rounded-lg border border-purple-200">
                   <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-pink-600" />
+                    <Shield className="w-4 h-4 text-green-700" />
                     2. Data Protection & Privacy
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
@@ -1316,7 +1316,7 @@ export default function AdminLoginPage() {
                 
                 <div className="bg-white p-4 rounded-lg border border-purple-200">
                   <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-pink-600" />
+                    <Clock className="w-4 h-4 text-green-700" />
                     3. Monitoring & Logging
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
@@ -1326,7 +1326,7 @@ export default function AdminLoginPage() {
                 
                 <div className="bg-white p-4 rounded-lg border border-purple-200">
                   <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-pink-600" />
+                    <Cpu className="w-4 h-4 text-green-700" />
                     4. Security Obligations
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
@@ -1336,7 +1336,7 @@ export default function AdminLoginPage() {
                 
                 <div className="bg-white p-4 rounded-lg border border-purple-200">
                   <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
-                    <Building className="w-4 h-4 text-pink-600" />
+                    <Building className="w-4 h-4 text-green-700" />
                     5. Institutional Compliance
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
@@ -1361,7 +1361,7 @@ export default function AdminLoginPage() {
                     closeTermsModal();
                     toast.success('You have accepted the Terms & Conditions');
                   }}
-                  className="flex-1 bg-gradient-to-r from-purple-700 to-pink-600 text-white py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:from-purple-800 hover:to-pink-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-purple-700 to-green-700 text-white py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:from-purple-800 hover:to-pink-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                 >
                   <CheckCircle className="w-4 h-4" />
                   I Understand & Accept
@@ -1398,10 +1398,10 @@ export default function AdminLoginPage() {
 
               <div className="mb-8 sm:mb-10 text-left">
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-5 h-5 text-pink-500" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-pink-600">Empowering Young Women</span>
+                  <Sparkles className="w-5 h-5 text-green-700" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-green-700">Empowering Young Women</span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-800 to-pink-600 tracking-tight mb-3">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-800 to-green-700 tracking-tight mb-3">
                   {isForgotMode ? "Recover Access" : "Welcome Back"}
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg text-purple-700 leading-relaxed">
@@ -1425,7 +1425,7 @@ export default function AdminLoginPage() {
                       onChange={handleInputChange}
                       required
                       placeholder="admin@matungulu.ac.ke"
-                      className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-purple-50/50 border text-purple-900 font-semibold border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
+                      className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-purple-50/50 border text-purple-900 font-semibold border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-700 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
                     />
                   </div>
                 </div>
@@ -1440,7 +1440,7 @@ export default function AdminLoginPage() {
                         <button 
                           type="button"
                           onClick={() => router.push("/pages/forgotpassword")}
-                          className="text-[10px] sm:text-xs md:text-sm font-bold text-pink-600 hover:text-pink-700 hover:underline transition-colors"
+                          className="text-[10px] sm:text-xs md:text-sm font-bold text-green-700 hover:text-pink-700 hover:underline transition-colors"
                         >
                           Forgot password?
                         </button>
@@ -1454,12 +1454,12 @@ export default function AdminLoginPage() {
                           onChange={handleInputChange}
                           required
                           placeholder="••••••••"
-                          className="w-full pl-12 pr-12 py-3.5 sm:py-4 text-purple-900 font-semibold bg-purple-50/50 border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
+                          className="w-full pl-12 pr-12 py-3.5 sm:py-4 text-purple-900 font-semibold bg-purple-50/50 border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-700 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
                         />
                         <button 
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 hover:text-pink-600 transition-colors p-1"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 hover:text-green-700 transition-colors p-1"
                         >
                           {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
@@ -1473,14 +1473,14 @@ export default function AdminLoginPage() {
                             type="checkbox" 
                             checked={agreedToTerms}
                             onChange={(e) => setAgreedToTerms(e.target.checked)}
-                            className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-pink-600 focus:ring-pink-500 transition"
+                            className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-green-700 focus:ring-green-700 transition"
                           />
                           <span className="text-xs sm:text-sm text-purple-700 group-hover:text-purple-900 transition-colors leading-tight">
                             I agree to the{' '}
                             <button 
                               type="button"
                               onClick={openTermsModal}
-                              className="font-bold text-pink-600 hover:underline"
+                              className="font-bold text-green-700 hover:underline"
                             >
                               Terms & Conditions
                             </button>
@@ -1492,7 +1492,7 @@ export default function AdminLoginPage() {
                           type="checkbox" 
                           checked={rememberDevice}
                           onChange={(e) => setRememberDevice(e.target.checked)}
-                          className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-pink-600 focus:ring-pink-500 transition"
+                          className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-green-700 focus:ring-green-700 transition"
                         />
                         <span className="text-xs sm:text-sm text-purple-700 group-hover:text-purple-900 transition-colors leading-tight">
                           Keep me logged in on this device
@@ -1505,7 +1505,7 @@ export default function AdminLoginPage() {
                 <button 
                   type="submit"
                   disabled={isLoading || (!isForgotMode && !agreedToTerms)}
-                  className="w-full bg-gradient-to-r from-purple-700 to-pink-600 text-white py-4 rounded-xl font-bold text-base sm:text-lg hover:from-purple-800 hover:to-pink-700 active:scale-[0.98] transition-all disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed shadow-lg shadow-pink-200 flex items-center justify-center gap-3 mt-4"
+                  className="w-full bg-gradient-to-r from-purple-700 to-green-700 text-white py-4 rounded-xl font-bold text-base sm:text-lg hover:from-purple-800 hover:to-pink-700 active:scale-[0.98] transition-all disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed shadow-lg shadow-pink-200 flex items-center justify-center gap-3 mt-4"
                 >
                   {isLoading ? (
                     <>
@@ -1524,7 +1524,7 @@ export default function AdminLoginPage() {
                   <button
                     type="button"
                     onClick={() => setIsForgotMode(false)}
-                    className="w-full text-center text-xs sm:text-sm font-bold text-purple-600 hover:text-pink-600 transition-colors pt-4"
+                    className="w-full text-center text-xs sm:text-sm font-bold text-purple-600 hover:text-green-700 transition-colors pt-4"
                   >
                     &larr; Return to login
                   </button>
@@ -1537,7 +1537,7 @@ export default function AdminLoginPage() {
           <div className="relative hidden md:flex flex-col justify-between bg-gradient-to-br from-purple-900 via-pink-900 to-purple-950 text-white px-16 py-20 lg:px-24 overflow-hidden border-l border-white/5">
             {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden opacity-10">
-              <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-pink-400 blur-3xl"></div>
+              <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-green-700 blur-3xl"></div>
               <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-purple-500 blur-3xl"></div>
             </div>
             
@@ -1557,13 +1557,13 @@ export default function AdminLoginPage() {
                       height={64}
                       className="rounded-full"
                     />
-                    <div className="absolute inset-0 rounded-full bg-pink-500/20 animate-pulse"></div>
+                    <div className="absolute inset-0 rounded-full bg-green-700/20 animate-pulse"></div>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-2xl font-black tracking-tighter leading-none uppercase">
                       Matungulu <span className="text-green-600">Girls'</span>
                     </span>
-                    <span className="text-[10px] font-bold tracking-[0.4em] text-pink-400/80 uppercase mt-1">
+                    <span className="text-[10px] font-bold tracking-[0.4em] text-green-700/80 uppercase mt-1">
                       Senior School
                     </span>
                   </div>
@@ -1571,8 +1571,8 @@ export default function AdminLoginPage() {
               </div>
 
               <div className="my-auto py-10 sm:py-12 px-4 max-w-md mx-auto text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6">
-                  <Heart size={14} className="fill-pink-400" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-700/20 border border-green-700/30 text-pink-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6">
+                  <Heart size={14} className="fill-green-700" />
                   Authorized Personnel Only
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight mb-5 sm:mb-6">
@@ -1588,20 +1588,20 @@ export default function AdminLoginPage() {
                 
                 {/* Feature Pills */}
                 <div className="flex flex-wrap justify-center gap-2 mt-6">
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-pink-400/30">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-green-700/30">
                     <Flower2 className="inline w-3 h-3 mr-1" />
                     Excellence
                   </span>
                   <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-purple-200 border border-purple-400/30">
                     Integrity
                   </span>
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-pink-400/30">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-green-700/30">
                     Leadership
                   </span>
                 </div>
               </div>
 
-              <div className="mt-auto pt-8 mb-[5%] border-t border-pink-400/20">
+              <div className="mt-auto pt-8 mb-[5%] border-t border-green-700/20">
                 <div className="flex flex-col gap-6">
                   <div className="space-y-1">
                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-300">School Motto</p>
