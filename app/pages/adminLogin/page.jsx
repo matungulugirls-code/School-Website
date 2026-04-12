@@ -1388,7 +1388,7 @@ export default function AdminLoginPage() {
               {/* Mobile Logo */}
               <div className="md:hidden text-center mb-8">
                 <Image
-                  src="/matungulu.png"
+                  src="/MatG.jpg"
                   alt="Matungulu Logo"
                   width={60}
                   height={60}
