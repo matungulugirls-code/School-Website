@@ -1112,32 +1112,32 @@ export default function AdminLoginPage() {
 
       {/* Verification Modal */}
       {showVerificationModal && (
-        <div className="fixed inset-0 bg-purple-950/80 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md my-auto bg-white rounded-xl md:rounded-2xl shadow-2xl border-2 border-purple-200 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md my-auto bg-white rounded-xl md:rounded-2xl shadow-2xl border-2 border-gray-200 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
             
-            <div className="relative p-5 sm:p-6 bg-gradient-to-r from-purple-800 to-emerald-700 text-white shrink-0 border-b-4 border-emerald-400">
+            <div className="relative p-5 sm:p-6 bg-gradient-to-r from-black to-green-700 text-white shrink-0 border-b-4 border-green-400">
               <button
                 onClick={closeVerificationModal}
                 className="absolute top-3 right-3 p-2 hover:bg-white/10 rounded-lg transition-colors active:scale-90"
               >
-                <X className="w-5 h-5 text-emerald-300" />
+                <X className="w-5 h-5 text-green-300" />
               </button>
               
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center shrink-0 border border-white/20">
-                  <ShieldCheck className="w-6 h-6 md:w-7 md:h-7 text-emerald-300" />
+                  <ShieldCheck className="w-6 h-6 md:w-7 md:h-7 text-green-300" />
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight uppercase">
                     {requiresPasswordAfterVerification ? 'Final Access' : 'Identity Check'}
                   </h3>
-                  <p className="text-emerald-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
+                  <p className="text-green-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
                     {requiresPasswordAfterVerification ? 'Portal Authorization' : 'Secure Campus Network'}
                   </p>
                 </div>
               </div>
               
-              <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-emerald-400 text-purple-950 rounded-md shadow-sm">
+              <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-green-400 text-black rounded-md shadow-sm">
                 <AlertCircle className="w-3.5 h-3.5" />
                 <span className="text-[10px] font-black whitespace-nowrap uppercase tracking-tighter">
                   {verificationReason?.replace(/_/g, ' ') || 'SECURITY PROTOCOL'}
@@ -1145,15 +1145,15 @@ export default function AdminLoginPage() {
               </div>
             </div>
             
-            <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar bg-purple-50/30">
+            <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar bg-gray-50/30">
               {!requiresPasswordAfterVerification ? (
                 <>
                   <div className="mb-6 text-center">
-                    <p className="text-purple-600 text-xs font-bold uppercase tracking-wide mb-3">
+                    <p className="text-gray-600 text-xs font-bold uppercase tracking-wide mb-3">
                       Authorization Code Sent To:
                     </p>
-                    <div className="bg-white border-2 border-purple-200 rounded-lg p-3 shadow-inner">
-                      <p className="text-purple-900 font-bold text-sm break-all">{verificationEmail}</p>
+                    <div className="bg-white border-2 border-gray-200 rounded-lg p-3 shadow-inner">
+                      <p className="text-gray-900 font-bold text-sm break-all">{verificationEmail}</p>
                     </div>
                   </div>
                   
@@ -1169,21 +1169,21 @@ export default function AdminLoginPage() {
                           value={digit}
                           onChange={(e) => handleVerificationCodeChange(index, e.target.value)}
                           onKeyDown={(e) => handleVerificationKeyDown(index, e)}
-                          className="w-full aspect-square text-center text-xl font-bold bg-white border-2 border-purple-300 rounded-lg focus:border-purple-600 focus:ring-4 focus:ring-purple-600/20 outline-none transition-all text-purple-900"
+                          className="w-full aspect-square text-center text-xl font-bold bg-white border-2 border-gray-300 rounded-lg focus:border-black focus:ring-4 focus:ring-black/20 outline-none transition-all text-gray-900"
                           autoFocus={index === 0}
                         />
                       ))}
                     </div>
                     
-                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-purple-500 bg-purple-100 py-2 rounded-full">
-                      <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Expires in: <span className="text-purple-900 font-mono">{Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}</span></span>
+                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-500 bg-gray-100 py-2 rounded-full">
+                      <Clock className="w-3.5 h-3.5 text-green-500" />
+                      <span>Expires in: <span className="text-gray-900 font-mono">{Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}</span></span>
                     </div>
                   </div>
                 </>
               ) : (
                 <div className="mb-6">
-                  <p className="text-purple-800 text-sm mb-4 font-bold">
+                  <p className="text-gray-800 text-sm mb-4 font-bold">
                     Identity Confirmed. Enter Portal Password:
                   </p>
                   <div className="relative group">
@@ -1192,10 +1192,10 @@ export default function AdminLoginPage() {
                       value={passwordAfterVerification}
                       onChange={(e) => setPasswordAfterVerification(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full p-4 pl-5 pr-12 bg-white border-2 border-purple-200 rounded-xl focus:border-purple-600 focus:ring-4 focus:ring-purple-600/20 outline-none transition-all text-purple-900 font-bold"
+                      className="w-full p-4 pl-5 pr-12 bg-white border-2 border-gray-200 rounded-xl focus:border-black focus:ring-4 focus:ring-black/20 outline-none transition-all text-gray-900 font-bold"
                       autoFocus
                     />
-                    <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 group-focus-within:text-purple-600 transition-colors w-5 h-5" />
+                    <Lock className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors w-5 h-5" />
                   </div>
                 </div>
               )}
@@ -1205,7 +1205,7 @@ export default function AdminLoginPage() {
                   type="button"
                   onClick={requiresPasswordAfterVerification ? handlePasswordAfterVerification : handleVerifyCode}
                   disabled={verificationLoading || (!requiresPasswordAfterVerification && verificationCode.join('').length !== 6)}
-                  className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-purple-700 to-emerald-600 text-white rounded-xl font-bold text-sm tracking-widest shadow-xl hover:from-purple-800 hover:to-emerald-700 active:scale-[0.98] transition-all disabled:bg-slate-300 disabled:from-slate-300 disabled:to-slate-300"
+                  className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-black to-green-600 text-white rounded-xl font-bold text-sm tracking-widest shadow-xl hover:from-gray-900 hover:to-green-700 active:scale-[0.98] transition-all disabled:bg-slate-300 disabled:from-slate-300 disabled:to-slate-300"
                 >
                   {verificationLoading ? (
                     <div className="flex items-center gap-2">
@@ -1214,7 +1214,7 @@ export default function AdminLoginPage() {
                     </div>
                   ) : (
                     <>
-                      <CheckCircle className="w-4 h-4 text-emerald-300" />
+                      <CheckCircle className="w-4 h-4 text-green-300" />
                       <span className="uppercase tracking-widest">
                         {requiresPasswordAfterVerification ? 'Grant Access' : 'Authorize Device'}
                       </span>
@@ -1227,19 +1227,19 @@ export default function AdminLoginPage() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendLoading || countdown > 0}
-                    className="w-full py-2 text-purple-600 font-black text-[10px] uppercase tracking-widest hover:text-emerald-600 transition-colors disabled:opacity-30"
+                    className="w-full py-2 text-black font-black text-[10px] uppercase tracking-widest hover:text-green-600 transition-colors disabled:opacity-30"
                   >
-                    Didn't receive code? <span className="text-emerald-600 underline underline-offset-4">Request New</span>
+                    Didn't receive code? <span className="text-green-600 underline underline-offset-4">Request New</span>
                   </button>
                 )}
               </div>
 
-              <div className="mt-8 pt-5 border-t-2 border-dashed border-purple-200">
+              <div className="mt-8 pt-5 border-t-2 border-dashed border-gray-200">
                 <div className="flex gap-4 items-start">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <ShieldAlert className="w-4 h-4 text-purple-700" />
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <ShieldAlert className="w-4 h-4 text-black" />
                   </div>
-                  <p className="text-[10px] leading-relaxed text-purple-600 font-bold uppercase tracking-tight">
+                  <p className="text-[10px] leading-relaxed text-gray-600 font-bold uppercase tracking-tight">
                     School Security Protocol: This session is encrypted. Unauthorized access attempts are logged and reported to Matungulu ICT Staff.
                   </p>
                 </div>
@@ -1251,51 +1251,51 @@ export default function AdminLoginPage() {
 
       {/* Terms & Conditions Modal */}
       {showTermsModal && (
-        <div className="fixed inset-0 bg-purple-950/80 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
-          <div className="relative w-full max-w-2xl my-auto bg-white rounded-xl md:rounded-2xl shadow-2xl border-2 border-purple-200 overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 z-[9999] animate-fade-in overflow-y-auto">
+          <div className="relative w-full max-w-2xl my-auto bg-white rounded-xl md:rounded-2xl shadow-2xl border-2 border-gray-200 overflow-hidden flex flex-col max-h-[90vh]">
             
-            <div className="relative p-5 sm:p-6 bg-gradient-to-r from-purple-800 to-emerald-700 text-white shrink-0 border-b-4 border-emerald-400">
+            <div className="relative p-5 sm:p-6 bg-gradient-to-r from-black to-green-700 text-white shrink-0 border-b-4 border-green-400">
               <button
                 onClick={closeTermsModal}
                 className="absolute top-3 right-3 p-2 hover:bg-white/10 rounded-lg transition-colors active:scale-90"
               >
-                <X className="w-5 h-5 text-emerald-300" />
+                <X className="w-5 h-5 text-green-300" />
               </button>
               
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center shrink-0 border border-white/20">
-                  <ShieldAlert className="w-6 h-6 md:w-7 md:h-7 text-emerald-300" />
+                  <ShieldAlert className="w-6 h-6 md:w-7 md:h-7 text-green-300" />
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-bold tracking-tight uppercase">
                     Terms & Conditions
                   </h3>
-                  <p className="text-emerald-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
+                  <p className="text-green-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
                     Authorized Access Only
                   </p>
                 </div>
               </div>
             </div>
             
-            <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar bg-purple-50/30">
+            <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar bg-gray-50/30">
               
-              <div className="mb-6 bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg">
+              <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
                 <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <AlertCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-black text-emerald-900 text-sm uppercase tracking-wide mb-1">
+                    <h4 className="font-black text-green-900 text-sm uppercase tracking-wide mb-1">
                       ⚠️ Legal Warning
                     </h4>
-                    <p className="text-xs sm:text-sm text-emerald-800 font-bold leading-relaxed">
+                    <p className="text-xs sm:text-sm text-green-800 font-bold leading-relaxed">
                       Unauthorized access to this system is strictly prohibited and will be treated as a cyber crime under the Computer Misuse and Cybercrimes Act. All access attempts are logged and monitored. Violators will face legal prosecution to the fullest extent of the law.
                     </p>
                   </div>
                 </div>
               </div>
               
-              <div className="space-y-4 text-purple-800">
-                <div className="bg-white p-4 rounded-lg border border-purple-200">
-                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+              <div className="space-y-4 text-gray-800">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h5 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
                     <Database className="w-4 h-4 text-green-700" />
                     1. Authorized Use
                   </h5>
@@ -1304,8 +1304,8 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg border border-purple-200">
-                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h5 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-green-700" />
                     2. Data Protection & Privacy
                   </h5>
@@ -1314,8 +1314,8 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg border border-purple-200">
-                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h5 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-green-700" />
                     3. Monitoring & Logging
                   </h5>
@@ -1324,8 +1324,8 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg border border-purple-200">
-                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h5 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
                     <Cpu className="w-4 h-4 text-green-700" />
                     4. Security Obligations
                   </h5>
@@ -1334,8 +1334,8 @@ export default function AdminLoginPage() {
                   </p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg border border-purple-200">
-                  <h5 className="font-black text-purple-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h5 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
                     <Building className="w-4 h-4 text-green-700" />
                     5. Institutional Compliance
                   </h5>
@@ -1345,15 +1345,15 @@ export default function AdminLoginPage() {
                 </div>
               </div>
               
-              <div className="mt-6 p-4 bg-gradient-to-r from-purple-100 to-pink-100 border border-pink-200 rounded-lg">
-                <p className="text-[10px] sm:text-xs font-black uppercase tracking-wide text-purple-800 text-center">
+              <div className="mt-6 p-4 bg-gradient-to-r from-gray-100 to-gray-200 border border-gray-200 rounded-lg">
+                <p className="text-[10px] sm:text-xs font-black uppercase tracking-wide text-gray-800 text-center">
                   ⚡ This system is protected by advanced security protocols. 
                   Unauthorized access attempts trigger immediate alerts.
                 </p>
               </div>
             </div>
             
-            <div className="p-4 sm:p-5 border-t border-purple-200 bg-white shrink-0">
+            <div className="p-4 sm:p-5 border-t border-gray-200 bg-white shrink-0">
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => {
@@ -1361,14 +1361,14 @@ export default function AdminLoginPage() {
                     closeTermsModal();
                     toast.success('You have accepted the Terms & Conditions');
                   }}
-                  className="flex-1 bg-gradient-to-r from-purple-700 to-green-700 text-white py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:from-purple-800 hover:to-pink-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-black to-green-700 text-white py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:from-gray-900 hover:to-green-800 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                 >
                   <CheckCircle className="w-4 h-4" />
                   I Understand & Accept
                 </button>
                 <button
                   onClick={closeTermsModal}
-                  className="flex-1 bg-purple-100 text-purple-700 py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-purple-200 transition-all active:scale-[0.98]"
+                  className="flex-1 bg-gray-100 text-black py-3 px-4 rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-gray-200 transition-all active:scale-[0.98]"
                 >
                   Close
                 </button>
@@ -1379,7 +1379,7 @@ export default function AdminLoginPage() {
       )}
 
       {/* Main Login Page Layout - Matungulu Girls Version */}
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 font-sans flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 font-sans flex items-center justify-center">
         <div className="w-full h-screen grid md:grid-cols-2">
           
           {/* Left Panel - Form (Swapped position) */}
@@ -1392,7 +1392,7 @@ export default function AdminLoginPage() {
                   alt="Matungulu Logo"
                   width={60}
                   height={60}
-                  className="rounded-full mx-auto mb-4 shadow-sm border-2 border-pink-300"
+                  className="rounded-full mx-auto mb-4 shadow-sm border-2 border-gray-300"
                 />
               </div>
 
@@ -1401,10 +1401,10 @@ export default function AdminLoginPage() {
                   <Sparkles className="w-5 h-5 text-green-700" />
                   <span className="text-xs font-bold uppercase tracking-widest text-green-700">Empowering Young Women</span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-800 to-green-700 tracking-tight mb-3">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-black to-green-700 tracking-tight mb-3">
                   {isForgotMode ? "Recover Access" : "Welcome Back"}
                 </h2>
-                <p className="text-sm sm:text-base md:text-lg text-purple-700 leading-relaxed">
+                <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
                   {isForgotMode 
                     ? "Enter your email address below and we'll send you a secure recovery link." 
                     : "Please enter your official credentials to access the Matungulu Girls' administrative dashboard."}
@@ -1413,11 +1413,11 @@ export default function AdminLoginPage() {
 
               <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 <div>
-                  <label className="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider text-purple-700 mb-2 block">
+                  <label className="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider text-gray-700 mb-2 block">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 w-5 h-5" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input 
                       type="email"
                       name="email"
@@ -1425,7 +1425,7 @@ export default function AdminLoginPage() {
                       onChange={handleInputChange}
                       required
                       placeholder="admin@matungulu.ac.ke"
-                      className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-purple-50/50 border text-purple-900 font-semibold border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-700 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
+                      className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-gray-50/50 border text-gray-900 font-semibold border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-700 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
                     />
                   </div>
                 </div>
@@ -1434,19 +1434,19 @@ export default function AdminLoginPage() {
                   <>
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <label className="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider text-purple-700">
+                        <label className="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider text-gray-700">
                           Password
                         </label>
                         <button 
                           type="button"
                           onClick={() => router.push("/pages/forgotpassword")}
-                          className="text-[10px] sm:text-xs md:text-sm font-bold text-blue-700 hover:underline transition-colors"
+                          className="text-[10px] sm:text-xs md:text-sm font-bold text-green-700 hover:underline transition-colors"
                         >
                           Forgot password?
                         </button>
                       </div>
                       <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 w-5 h-5" />
+                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <input 
                           type={showPassword ? "text" : "password"}
                           name="password"
@@ -1454,12 +1454,12 @@ export default function AdminLoginPage() {
                           onChange={handleInputChange}
                           required
                           placeholder="••••••••"
-                          className="w-full pl-12 pr-12 py-3.5 sm:py-4 text-purple-900 font-semibold bg-purple-50/50 border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-700 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
+                          className="w-full pl-12 pr-12 py-3.5 sm:py-4 text-gray-900 font-semibold bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-700 focus:bg-white transition-all shadow-sm text-sm sm:text-base"
                         />
                         <button 
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 hover:text-green-700 transition-colors p-1"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-700 transition-colors p-1"
                         >
                           {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
@@ -1473,9 +1473,9 @@ export default function AdminLoginPage() {
                             type="checkbox" 
                             checked={agreedToTerms}
                             onChange={(e) => setAgreedToTerms(e.target.checked)}
-                            className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-green-700 focus:ring-green-700 transition"
+                            className="mt-0.5 h-5 w-5 cursor-pointer rounded border-gray-300 text-green-700 focus:ring-green-700 transition"
                           />
-                          <span className="text-xs sm:text-sm text-purple-700 group-hover:text-purple-900 transition-colors leading-tight">
+                          <span className="text-xs sm:text-sm text-gray-700 group-hover:text-gray-900 transition-colors leading-tight">
                             I agree to the{' '}
                             <button 
                               type="button"
@@ -1492,9 +1492,9 @@ export default function AdminLoginPage() {
                           type="checkbox" 
                           checked={rememberDevice}
                           onChange={(e) => setRememberDevice(e.target.checked)}
-                          className="mt-0.5 h-5 w-5 cursor-pointer rounded border-purple-300 text-green-700 focus:ring-green-700 transition"
+                          className="mt-0.5 h-5 w-5 cursor-pointer rounded border-gray-300 text-green-700 focus:ring-green-700 transition"
                         />
-                        <span className="text-xs sm:text-sm text-purple-700 group-hover:text-purple-900 transition-colors leading-tight">
+                        <span className="text-xs sm:text-sm text-gray-700 group-hover:text-gray-900 transition-colors leading-tight">
                           Keep me logged in on this device
                         </span>
                       </label>
@@ -1505,7 +1505,7 @@ export default function AdminLoginPage() {
                 <button 
                   type="submit"
                   disabled={isLoading || (!isForgotMode && !agreedToTerms)}
-                  className="w-full bg-gradient-to-r from-purple-700 to-green-700 text-white py-4 rounded-xl font-bold text-base sm:text-lg hover:from-purple-800 hover:to-pink-700 active:scale-[0.98] transition-all disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed shadow-lg shadow-pink-200 flex items-center justify-center gap-3 mt-4"
+                  className="w-full bg-gradient-to-r from-black to-green-700 text-white py-4 rounded-xl font-bold text-base sm:text-lg hover:from-gray-900 hover:to-green-800 active:scale-[0.98] transition-all disabled:from-slate-300 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed shadow-lg shadow-gray-200 flex items-center justify-center gap-3 mt-4"
                 >
                   {isLoading ? (
                     <>
@@ -1524,7 +1524,7 @@ export default function AdminLoginPage() {
                   <button
                     type="button"
                     onClick={() => setIsForgotMode(false)}
-                    className="w-full text-center text-xs sm:text-sm font-bold text-purple-600 hover:text-green-700 transition-colors pt-4"
+                    className="w-full text-center text-xs sm:text-sm font-bold text-gray-600 hover:text-green-700 transition-colors pt-4"
                   >
                     &larr; Return to login
                   </button>
@@ -1534,22 +1534,22 @@ export default function AdminLoginPage() {
           </div>
 
           {/* Right Panel - Branding (Swapped position with feminine design) */}
-          <div className="relative hidden md:flex flex-col justify-between bg-gradient-to-br from-purple-900 via-pink-900 to-purple-950 text-white px-16 py-20 lg:px-24 overflow-hidden border-l border-white/5">
+          <div className="relative hidden md:flex flex-col justify-between bg-gradient-to-br from-black via-gray-900 to-black text-white px-16 py-20 lg:px-24 overflow-hidden border-l border-white/5">
             {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden opacity-10">
               <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-green-700 blur-3xl"></div>
-              <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-purple-500 blur-3xl"></div>
+              <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-gray-500 blur-3xl"></div>
             </div>
             
             <div className="absolute inset-0 bg-cover bg-center opacity-20 transition-transform duration-100"
               style={{ backgroundImage: "url('/hero/MatG.jpg')" }}
             ></div>
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-pink-950/30 to-purple-950/40"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-950/30 to-black/40"></div>
             
             <div className="relative z-10 flex flex-col h-full w-full">
               <div className="mb-auto">
                 <Link href="/" className="flex items-center gap-5 group transition-transform hover:translate-x-1">
-                  <div className="relative p-1 bg-white/10 rounded-full backdrop-blur-xl border border-pink-300/30 shadow-2xl">
+                  <div className="relative p-1 bg-white/10 rounded-full backdrop-blur-xl border border-gray-300/30 shadow-2xl">
                     <Image
                       src="/MatG.jpg"
                       alt="Matungulu Logo"
@@ -1571,31 +1571,31 @@ export default function AdminLoginPage() {
               </div>
 
               <div className="my-auto py-10 sm:py-12 px-4 max-w-md mx-auto text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-700/20 border border-green-700/30 text-pink-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-700/20 border border-green-700/30 text-gray-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6">
                   <Heart size={14} className="fill-green-700" />
                   Authorized Personnel Only
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight mb-5 sm:mb-6">
                   Secure{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-200 to-pink-300">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-300">
                     Admin
                   </span>{" "}
                   Portal
                 </h1>
-                <p className="text-sm sm:text-md text-pink-50/90 font-medium leading-relaxed max-w-xs sm:max-w-sm mx-auto">
+                <p className="text-sm sm:text-md text-gray-100/90 font-medium leading-relaxed max-w-xs sm:max-w-sm mx-auto">
                   Enter your credentials to securely access Matungulu Girls' administrative system, manage operations, and empower young women through excellence in education.
                 </p>
                 
                 {/* Feature Pills */}
                 <div className="flex flex-wrap justify-center gap-2 mt-6">
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-green-700/30">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-gray-200 border border-green-700/30">
                     <Flower2 className="inline w-3 h-3 mr-1" />
                     Excellence
                   </span>
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-purple-200 border border-purple-400/30">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-white border border-white/30">
                     Integrity
                   </span>
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-pink-200 border border-green-700/30">
+                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-gray-200 border border-green-700/30">
                     Leadership
                   </span>
                 </div>
@@ -1604,18 +1604,18 @@ export default function AdminLoginPage() {
               <div className="mt-auto pt-8 mb-[5%] border-t border-green-700/20">
                 <div className="flex flex-col gap-6">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-300">School Motto</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">School Motto</p>
                     <p className="text-2xl font-black italic tracking-tight text-white drop-shadow-md">
                       "Empower • Excel • Lead"
                     </p>
                   </div>
                   
-                  <div className="flex items-center justify-between text-[10px] font-bold text-pink-200 tracking-widest uppercase mt-4">
+                  <div className="flex items-center justify-between text-[10px] font-bold text-gray-200 tracking-widest uppercase mt-4">
                     <span>&copy; {new Date().getFullYear()} Matungulu Girls' High</span>
                     <span className="flex items-center gap-2">
                       <Server size={10} />
-                      Secure Node: 042
-                    </span>
+                      Commited to Excellence              
+                      </span>
                   </div>
                 </div>
               </div>
