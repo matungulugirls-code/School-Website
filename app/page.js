@@ -23,27 +23,18 @@ import {
   FiHeart,
   FiShield,
   FiCheck,
-  FiTarget as FiTargetIcon,
-  FiShield as FiShieldIcon,
-  FiUsers as FiUsersIcon,
-  FiBook as FiBookIcon,
   FiAward,
   FiMap,
-  FiGlobe as FiGlobeIcon,
   FiBookmark,
   FiBarChart2,
-  FiActivity as FiActivityIcon,
   FiChevronLeft,
   FiChevronRight,
   FiChevronUp,
   FiExternalLink,
-  FiLoader 
+  FiLoader,
+  FiAlertCircle,
+  FiPhoneCall 
 } from 'react-icons/fi';
-import { FiAlertCircle, FiPhoneCall } from 'react-icons/fi';
-import Hero from "./components/Hero/page";
-import Why from "./components/why/page";
-import { Trophy, Sparkles, GraduationCap, Target, Users, Globe, BookOpen } from 'lucide-react';
-
 import { 
   IoRocketOutline, 
   IoPeopleOutline,
@@ -65,7 +56,7 @@ import {
   IoBookOutline,
   IoDesktopOutline
 } from 'react-icons/io5';
-import { FaCalendarAlt, FaWhatsapp, FaChalkboardTeacher  } from 'react-icons/fa';
+import { FaCalendarAlt, FaWhatsapp, FaChalkboardTeacher } from 'react-icons/fa';
 import { 
   GiGraduateCap, 
   GiModernCity,
@@ -85,12 +76,293 @@ import {
 } from 'react-icons/gi';
 import { BsArrowRightCircle, BsLightningCharge } from 'react-icons/bs';
 import { TbUsersGroup } from 'react-icons/tb';
+import { Trophy, Sparkles, GraduationCap, Target, Globe, BookOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // External Components
 import ChatBot from './components/chat/page';
 import EnhancedEventsSection from './components/events/page';
 import ModernLeadershipSection from './components/leadership/page';
+import Hero from "./components/Hero/page";
+import Why from "./components/why/page";
+
+// Modern Loading Screen for Matungulu Girls High School
+const MatunguluGirlsLoadingScreen = () => {
+  const [textIndex, setTextIndex] = useState(0);
+  const [glowIntensity, setGlowIntensity] = useState(0);
+  const [progress, setProgress] = useState(0);
+  
+  const schoolName = "MATUNGULU GIRLS' SENIOR";
+  const motto = "Strive to Excel";
+  const established = "EST. 1955 | NATIONAL SCHOOL";
+  const tagline = "Empowering Young Women • Shaping Future Leaders";
+
+  const loadingMessages = [
+    "Preparing Excellence",
+    "Cultivating Leaders",
+    "Inspiring Minds",
+    "Building Character"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % loadingMessages.length);
+    }, 400);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const glowInterval = setInterval(() => {
+      setGlowIntensity((prev) => (prev + 1) % 100);
+    }, 50);
+    return () => clearInterval(glowInterval);
+  }, []);
+
+  useEffect(() => {
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) return 0;
+        return prev + 1;
+      });
+    }, 30);
+    return () => clearInterval(progressInterval);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 bg-gradient-to-br from-rose-50 via-white to-emerald-50 z-50 flex items-center justify-center overflow-hidden">
+      
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-gradient-to-r from-rose-300/20 to-pink-300/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-300/10 via-rose-300/10 to-emerald-300/10 rounded-full blur-3xl animate-spin-slow"></div>
+        
+        {/* Floating Petal/Flower Shapes */}
+        <div className="absolute inset-0 opacity-40">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-2xl"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `float-petal ${8 + Math.random() * 6}s ease-in-out infinite`,
+                animationDelay: `${i * 0.5}s`,
+                transform: `rotate(${Math.random() * 360}deg)`
+              }}
+            >
+              {i % 3 === 0 ? '🌸' : i % 3 === 1 ? '🌺' : '✨'}
+            </div>
+          ))}
+        </div>
+
+        {/* Elegant Light Beams */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent animate-beam"></div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400 to-transparent animate-beam animation-delay-1000"></div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6">
+        
+        {/* Logo Section */}
+        <div className="relative mb-8 md:mb-12">
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-rose-400 via-emerald-400 to-purple-400 rounded-full blur-2xl transition-all duration-300"
+            style={{ 
+              opacity: 0.2 + (glowIntensity / 100) * 0.2,
+              transform: `scale(${1 + (glowIntensity / 100) * 0.15})`
+            }}
+          ></div>
+          
+          <div className="relative w-28 h-28 md:w-36 md:h-36">
+            <div className="absolute -inset-3 border-2 border-dashed border-rose-300/50 rounded-full animate-spin-slow"></div>
+            <div className="absolute -inset-1.5 border border-emerald-300/40 rounded-full animate-pulse"></div>
+            
+            <div className="relative w-full h-full rounded-full bg-gradient-to-br from-rose-500 via-pink-500 to-emerald-500 p-0.5 shadow-2xl">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white/20 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
+                <img 
+                  src="/MatG.jpg" 
+                  alt="Matungulu Girls High School Logo" 
+                  className="w-[85%] h-[85%] object-cover rounded-full relative z-10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* School Name */}
+        <div className="text-center mb-4">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-black tracking-wide text-gray-800">
+            {schoolName.split("'")[0]}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-emerald-600">'</span>
+            {schoolName.split("'")[1]}
+          </h1>
+          
+          <div className="flex items-center justify-center gap-3 my-3">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-rose-300"></div>
+            <div className="w-1.5 h-1.5 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full rotate-45"></div>
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-emerald-300"></div>
+          </div>
+          
+          <p className="text-gray-600 text-[10px] md:text-xs tracking-[0.3em] font-medium">
+            {established}
+          </p>
+        </div>
+
+        {/* Motto */}
+        <div className="text-center mb-6">
+          <p className="text-xl md:text-2xl lg:text-3xl font-serif italic tracking-wide text-gray-700">
+            "{motto}"
+          </p>
+        </div>
+
+        {/* Tagline */}
+        <div className="text-center mb-8">
+          <p className="text-xs md:text-sm text-gray-500 tracking-wider">
+            {tagline}
+          </p>
+        </div>
+
+        {/* Loading Indicator */}
+        <div className="flex flex-col items-center gap-4 w-64">
+          <div className="h-8 flex items-center justify-center">
+            <p className="text-gray-600 text-sm md:text-base font-medium tracking-wide">
+              {loadingMessages[textIndex]}
+              <span className="inline-flex ml-1">
+                <span className="animate-bounce" style={{ animationDelay: '0s' }}>.</span>
+                <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>.</span>
+                <span className="animate-bounce" style={{ animationDelay: '0.4s' }}>.</span>
+              </span>
+            </p>
+          </div>
+
+          <div className="relative w-full h-0.5 bg-gray-200 rounded-full overflow-hidden">
+            <div 
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-400 via-pink-400 to-emerald-400 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 mt-2">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="relative"
+                style={{ animationDelay: `${i * 0.15}s` }}
+              >
+                <div className="w-1.5 h-1.5 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full animate-pulse"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Decorative Bottom Elements */}
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+          <div className="flex items-center gap-6">
+            {['🦅', '🌸', '📚', '✨'].map((emoji, i) => (
+              <span 
+                key={i}
+                className="text-gray-400 text-sm opacity-60"
+                style={{ 
+                  animation: `float-icon ${3 + i}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.3}s`
+                }}
+              >
+                {emoji}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.05); }
+        }
+        
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
+        @keyframes float-petal {
+          0%, 100% { 
+            transform: translateY(0px) translateX(0px) rotate(0deg); 
+            opacity: 0.3; 
+          }
+          25% { 
+            transform: translateY(-20px) translateX(10px) rotate(90deg); 
+            opacity: 0.6; 
+          }
+          50% { 
+            transform: translateY(-40px) translateX(-5px) rotate(180deg); 
+            opacity: 0.4; 
+          }
+          75% { 
+            transform: translateY(-20px) translateX(-15px) rotate(270deg); 
+            opacity: 0.6; 
+          }
+        }
+        
+        @keyframes float-icon {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes beam {
+          0% { transform: translateX(-100%); opacity: 0; }
+          50% { opacity: 0.8; }
+          100% { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(200%); }
+        }
+        
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+        
+        .animate-pulse-slow {
+          animation: pulse-slow 6s ease-in-out infinite;
+        }
+        
+        .animate-spin-slow {
+          animation: spin-slow 30s linear infinite;
+        }
+        
+        .animation-delay-1000 {
+          animation-delay: 1s;
+        }
+        
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        
+        .animate-beam {
+          animation: beam 4s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+        
+        .animate-bounce {
+          animation: bounce 0.6s ease-in-out infinite;
+        }
+      `}</style>
+    </div>
+  );
+};
 
 export default function ModernHero() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -112,87 +384,85 @@ export default function ModernHero() {
   const router = useRouter();
 
   // JSON-LD structured data for SEO
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'School',
-  name: 'Matungulu Girls High School',
-  image: 'https://matungulu-girls.vercel.app/MatG.jpg',
-  description: 'A secondary school committed to academic excellence, integrity, and holistic student development.',
-  address: {
-    '@type': 'PostalAddress',
-    'streetAddress': 'Matungulu, P.O. Box 12345', // Update with actual address
-    'addressLocality': 'Machakos', // Adjust if the specific locality differs
-    'addressRegion': 'Machakos County',
-    'addressCountry': 'KE'
-  },
-  url: 'https://matungulu-girls.vercel.app',
-  telephone: '+254700000000', // Update with the actual school office line
-  sameAs: [
-    'https://facebook.com/matungulugirls',
-    'https://twitter.com/matungulugirls',
-    'https://instagram.com/matungulugirls',
-  ],
-  foundingDate: '1970', // Update with the actual founding year
-  numberOfStudents: '500', // Update with current enrollment
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'Educational Programs',
-    itemListElement: [
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Course',
-          name: 'KCSE Curriculum (Form 1-4)'
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'School',
+    name: 'Matungulu Girls High School',
+    image: 'https://matungulu-girls.vercel.app/MatG.jpg',
+    description: 'A secondary school committed to academic excellence, integrity, and holistic student development.',
+    address: {
+      '@type': 'PostalAddress',
+      'streetAddress': 'Matungulu, P.O. Box 12345',
+      'addressLocality': 'Machakos',
+      'addressRegion': 'Machakos County',
+      'addressCountry': 'KE'
+    },
+    url: 'https://matungulu-girls.vercel.app',
+    telephone: '+254700000000',
+    sameAs: [
+      'https://facebook.com/matungulugirls',
+      'https://twitter.com/matungulugirls',
+      'https://instagram.com/matungulugirls',
+    ],
+    foundingDate: '1955',
+    numberOfStudents: '1200',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Educational Programs',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Course',
+            name: 'KCSE Curriculum (Form 1-4)'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Course',
+            name: 'Extra-Curricular & Sports'
+          }
         }
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Course',
-          name: 'Extra-Curricular & Sports'
-        }
-      }
-    ]
-  }
-};
+      ]
+    }
+  };
 
   // Block automatic navigation on initial load
   useEffect(() => {
     const timer = setTimeout(() => {
       setNavigationBlocked(false);
-      console.log('Navigation unblocked after 2 seconds');
     }, 2000);
     
     return () => clearTimeout(timer);
   }, []);
-
 
   // Enhanced Hero Slides with Modern Design
   const heroSlides = [
     {
       title: "Academic Excellence",
       subtitle: "Redefined Through Innovation",
-      gradient: "from-blue-500 via-cyan-400 to-purple-600",
+      gradient: "from-rose-500 via-pink-400 to-emerald-600",
       description: "At Matungulu Girls High School, we're pioneering a new era of education. With a 94% KCSE success rate and state-of-the-art STEM facilities, we're not just teaching—we're inspiring the next generation of leaders and innovators.",
-      background: "bg-gradient-to-br from-blue-900/90 via-indigo-900/80 to-purple-900/70",
+      background: "bg-gradient-to-br from-rose-900/90 via-pink-900/80 to-emerald-900/70",
       image: "/student.jpg",
       stats: { 
-        students: "400+ Active Learners", 
+        students: "1200+ Active Learners", 
         excellence: "94% KCSE Success", 
-        years: "10+ Years Excellence" 
+        years: "70+ Years Excellence" 
       },
       features: ["Modern STEM Labs", "Digital Library", "Expert Faculty", "Research Programs"],
       cta: "Explore Our Programs",
-      highlightColor: "blue",
+      highlightColor: "rose",
       testimonial: "\"The academic rigor combined with innovative teaching transformed my child's approach to learning.\" - Parent of 2023 Graduate",
       icon: GiGraduateCap
     },
     {
       title: "Holistic Development",
       subtitle: "Nurturing Complete Individuals",
-      gradient: "from-emerald-500 via-teal-400 to-green-600",
+      gradient: "from-emerald-500 via-teal-400 to-rose-600",
       description: "Beyond academics, we cultivate well-rounded individuals through 15+ clubs, competitive sports teams, and comprehensive life skills training. Our balanced approach ensures students develop essential competencies for lifelong success.",
-      background: "bg-gradient-to-br from-emerald-900/90 via-green-900/80 to-teal-900/70",
+      background: "bg-gradient-to-br from-emerald-900/90 via-teal-900/80 to-rose-900/70",
       image: "/im.jpg",
       stats: { 
         teams: "10+ Sports Teams", 
@@ -201,16 +471,16 @@ const jsonLd = {
       },
       features: ["Sports Excellence", "Creative Arts", "Leadership Training", "Community Service"],
       cta: "View Our Facilities",
-      highlightColor: "green",
+      highlightColor: "emerald",
       testimonial: "\"The extracurricular programs helped my child discover their passion for drama and develop crucial leadership skills.\" - Current Parent",
       icon: GiTrophyCup
     },
     {
       title: "Future-Ready Education",
       subtitle: "Preparing for the Digital Age",
-      gradient: "from-cyan-500 via-blue-400 to-indigo-600",
+      gradient: "from-pink-500 via-rose-400 to-emerald-600",
       description: "Experience cutting-edge education with our technology-enhanced smart classrooms, advanced computer labs, and comprehensive digital literacy programs. We prepare students for careers in an increasingly technological world.",
-      background: "bg-gradient-to-br from-cyan-900/90 via-blue-900/80 to-indigo-900/70",
+      background: "bg-gradient-to-br from-pink-900/90 via-rose-900/80 to-emerald-900/70",
       image: "/im2.jpeg",
       stats: { 
         labs: "3 Modern Labs", 
@@ -219,13 +489,13 @@ const jsonLd = {
       },
       features: ["Computer Studies", "Science Innovation", "Career Guidance", "Coding Classes"],
       cta: "Apply Now",
-      highlightColor: "cyan",
+      highlightColor: "pink",
       testimonial: "\"The advanced computer labs gave me skills that directly contributed to securing my university scholarship in Computer Science.\" - 2022 Alumni",
       icon: IoRocketOutline
     }
   ];
 
-  // API Data Fetching - Fixed to avoid async/await in client component
+  // API Data Fetching
   useEffect(() => {
     const fetchAllData = () => {
       try {
@@ -284,7 +554,7 @@ const jsonLd = {
             schoolInfo: null
           });
         }).finally(() => {
-          setTimeout(() => setIsLoading(false), 1000);
+          setTimeout(() => setIsLoading(false), 2000);
         });
 
       } catch (error) {
@@ -294,14 +564,14 @@ const jsonLd = {
           staff: [],
           schoolInfo: null
         });
-        setIsLoading(false);
+        setTimeout(() => setIsLoading(false), 2000);
       }
     };
 
     fetchAllData();
   }, []);
 
-  // Auto-slide for hero carousel with animation
+  // Auto-slide for hero carousel
   useEffect(() => {
     const interval = setInterval(() => {
       setIsAnimating(true);
@@ -329,7 +599,7 @@ const jsonLd = {
     }, 500);
   };
 
-  // School Video API Service - Fixed to avoid async/await
+  // School Video API Service
   const fetchSchoolVideo = useCallback(() => {
     setVideoLoading(true);
     setVideoError(null);
@@ -343,11 +613,6 @@ const jsonLd = {
         if (data.success && data.school) {
           setSchoolData(data.school);
           setVideoError(null);
-          console.log('Video data loaded:', {
-            name: data.school.name,
-            videoType: data.school.videoType,
-            videoTour: data.school.videoTour
-          });
         } else {
           throw new Error(data.message || 'No school data found');
         }
@@ -362,10 +627,8 @@ const jsonLd = {
       });
   }, []);
 
-  // Call this when modal opens
   useEffect(() => {
     if (showVideoModal) {
-      console.log('Fetching video data...');
       fetchSchoolVideo();
     }
   }, [showVideoModal, fetchSchoolVideo]);
@@ -389,12 +652,9 @@ const jsonLd = {
     return null;
   };
 
-  // Navigation handlers - FIXED to prevent automatic navigation
+  // Navigation handlers
   const handleAcademicsClick = useCallback(() => {
-    if (navigationBlocked) {
-      console.log('Navigation blocked (cooling period)');
-      return;
-    }
+    if (navigationBlocked) return;
     router.push('/pages/academics');
   }, [router, navigationBlocked]);
 
@@ -409,177 +669,31 @@ const jsonLd = {
   }, []);
 
   const handleEventClick = useCallback(() => {
-    if (navigationBlocked) {
-      console.log('Navigation blocked (cooling period)');
-      return;
-    }
+    if (navigationBlocked) return;
     router.push('/pages/eventsandnews');
   }, [router, navigationBlocked]);
 
   const handleStaffClick = useCallback(() => {
-    if (navigationBlocked) {
-      console.log('Navigation blocked (cooling period)');
-      return;
-    }
+    if (navigationBlocked) return;
     router.push('/pages/staff');
   }, [router, navigationBlocked]);
 
-  // FIXED: Changed from automatic admissions to manual click only
   const handleAdmissionsClick = useCallback(() => {
-    if (navigationBlocked) {
-      console.log('Navigation blocked (cooling period)');
-      return;
-    }
+    if (navigationBlocked) return;
     router.push('/pages/admissions');
   }, [router, navigationBlocked]);
 
-  // FIXED: Changed from admissions to AboutUs
   const handleContactClick = useCallback(() => {
-    if (navigationBlocked) {
-      console.log('Navigation blocked (cooling period)');
-      return;
-    }
+    if (navigationBlocked) return;
     closeVideoModal();
-    // Navigate to AboutUs instead of admissions
     setTimeout(() => {
       router.push('/pages/AboutUs');
     }, 100);
   }, [router, closeVideoModal, navigationBlocked]);
 
-const LoadingScreen = () => (
-    <div className="fixed inset-0 bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950 z-50 flex flex-col items-center justify-center overflow-hidden">
-      
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(68,187,153,.2)_25%,rgba(68,187,153,.2)_50%,transparent_50%,transparent_75%,rgba(68,187,153,.2)_75%,rgba(68,187,153,.2))] bg-[length:60px_60px] animate-pulse"></div>
-      </div>
-
-      {/* Floating Particles - FIXED opacity */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-emerald-400/40 rounded-full blur-sm"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${4 + Math.random() * 4}s ease-in-out infinite`,
-              animationDelay: `${i * 0.3}s`,
-              boxShadow: '0 0 20px rgba(52, 211, 153, 0.6)'
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Main Content Container - FIXED z-index and opacity */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-4">
-        
-        {/* Animated Logo Circle */}
-        <div className="relative w-24 h-24 md:w-32 md:h-32 mb-6 md:mb-8">
-          
-          {/* Outer rotating ring */}
-          <div className="absolute inset-0 border-3 border-transparent border-t-emerald-400 border-r-teal-400 rounded-full animate-spin" 
-            style={{ animationDuration: '3s' }}>
-          </div>
-          
-          {/* Middle pulsing ring */}
-          <div className="absolute inset-2 md:inset-3 border-2 border-emerald-400/50 rounded-full animate-pulse"></div>
-          
-          {/* Inner static ring */}
-          <div className="absolute inset-4 md:inset-6 border-2 border-teal-400/30 rounded-full"></div>
-          
-          {/* Logo Image Container */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-emerald-900 to-teal-900 rounded-2xl flex items-center justify-center overflow-hidden border-2 border-emerald-400/30 shadow-2xl shadow-emerald-500/20">
-              <img 
-                src="/MatG.jpg" 
-                alt="Matungulu Girls High School Logo" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-        
-        {/* Header Text - FIXED contrast */}
-        <div className="text-center space-y-4 md:space-y-6">
-          <div>
-            <h2 className="text-2xl md:text-4xl font-black text-white mb-3 leading-tight drop-shadow-lg">
-              Matungulu Girls High School
-            </h2>
-            <p className="text-emerald-300 text-base md:text-lg font-semibold drop-shadow-md">
-              Strive to Excel
-            </p>
-          </div>
-          
-          {/* Loading Status Section */}
-          <div className="space-y-4 pt-1">
-            <p className="text-white/90 text-base md:text-lg font-medium drop-shadow-md">
-              Preparing an exceptional learning experience
-            </p>
-            
-          <div className="flex items-center justify-center gap-2">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-3 h-3 bg-gradient-to-r from-emerald-700/95 via-teal-700/95 to-slate-700/95 rounded-full animate-bounce"
-                  style={{ animationDelay: `${i * 0.2}s` }}
-                />
-              ))}
-            </div>
-            
-            <div className="w-48 md:w-64 h-2 bg-white/10 rounded-full overflow-hidden mx-auto">
-              <div className="h-full bg-gradient-to-r from-emerald-600/95 via-teal-600/95 to-slate-600/95 animate-gradient-loading"></div>
-            </div>
-            
-            {/* Loading Text */}
-            <p className="text-emerald-300/80 text-sm md:text-base font-semibold drop-shadow-md">
-              Loading school website...
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Custom animations */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) translateX(0px) rotate(0deg);
-            opacity: 0.3;
-          }
-          50% {
-            transform: translateY(-30px) translateX(15px) rotate(180deg);
-            opacity: 0.6;
-          }
-        }
-
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(0) scaleY(1);
-            opacity: 1;
-          }
-          50% {
-            transform: translateY(-5px) scaleY(1.05); /* Reduced height and scale for a low bounce */
-            opacity: 0.9;
-          }
-        }
-
-        @keyframes loading-progress {
-          0% {
-            width: 0%;
-          }
-          50% {
-            width: 100%;
-          }
-          100% {
-            width: 0%;
-          }
-        }
-      `}</style>
-    </div>
-  );
-
+  // Show loading screen
   if (isLoading) {
-    return <LoadingScreen />;
+    return <MatunguluGirlsLoadingScreen />;
   }
 
   return (
@@ -590,35 +704,36 @@ const LoadingScreen = () => (
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-
       <Hero />
 
-      <section className="py-8  md:py-16 bg-white">
+      <section className="py-8 md:py-16 bg-white">
+        <ModernLeadershipSection />
+      </section>
 
-      <ModernLeadershipSection />
-      </section>
       {/* Modern Achievements & Stats Section */}
-      <section className="py-8  md:py-16 bg-white">
-        <Why/>
+      <section className="py-8 md:py-16 bg-white">
+        <Why />
       </section>
+
       <EnhancedEventsSection 
         events={apiData.events}
         onViewAll={handleEventClick}
         schoolInfo={apiData.schoolInfo}
       />
+
       {showVideoModal && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
           <div className="relative w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl">
             {/* Modal Header */}
             <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-r from-black/80 to-transparent p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-rose-500 to-emerald-500 flex items-center justify-center">
                   <FiPlay className="text-white" />
                 </div>
                 <div>
                   <h4 className="text-white font-bold">Virtual Tour</h4>
                   <p className="text-white/60 text-sm">
-                    {schoolData?.name || 'Loading...'}
+                    {schoolData?.name || 'Matungulu Girls High School'}
                   </p>
                 </div>
               </div>
@@ -634,7 +749,6 @@ const LoadingScreen = () => (
             {/* Video Container */}
             <div className="relative bg-black aspect-video">
               {videoLoading ? (
-                // Loading state
                 <div className="w-full h-full flex flex-col items-center justify-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
                   <p className="text-white">Loading video tour...</p>
@@ -645,13 +759,12 @@ const LoadingScreen = () => (
                   <p className="text-white text-center mb-4">{videoError}</p>
                   <button
                     onClick={fetchSchoolVideo}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                    className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg transition-colors"
                   >
                     Retry Loading
                   </button>
                 </div>
               ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
-                // YouTube Video
                 <iframe
                   src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1&controls=1`}
                   className="w-full h-full"
@@ -660,7 +773,6 @@ const LoadingScreen = () => (
                   title={`${schoolData.name} Virtual Tour`}
                 />
               ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
-                // Local MP4 Video
                 <div className="relative w-full h-full">
                   <video
                     src={schoolData.videoTour}
@@ -670,7 +782,6 @@ const LoadingScreen = () => (
                     title={`${schoolData.name} Virtual Tour`}
                     poster={schoolData?.videoThumbnail}
                   >
-                    {/* Fallback message */}
                     <div className="w-full h-full flex flex-col items-center justify-center p-8">
                       <FiAlertCircle className="text-5xl text-gray-400 mb-4" />
                       <p className="text-white text-center">
@@ -680,7 +791,6 @@ const LoadingScreen = () => (
                   </video>
                 </div>
               ) : (
-                // No video available
                 <div className="w-full h-full flex flex-col items-center justify-center p-8">
                   <FiAlertCircle className="text-5xl text-gray-400 mb-4" />
                   <p className="text-white text-center mb-4">No video tour available</p>
@@ -699,7 +809,7 @@ const LoadingScreen = () => (
                 </div>
                 <button
                   onClick={handleContactClick}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 text-sm sm:text-base bg-gradient-to-br from-amber-900 via-orange-900 to-red-900 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 text-sm sm:text-base bg-gradient-to-r from-rose-600 to-emerald-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={navigationBlocked}
                 >
                   Get To Know Us More
@@ -710,14 +820,6 @@ const LoadingScreen = () => (
         </div>
       )}
 
-      {/* Navigation Blocker Indicator */}
-      {navigationBlocked && (
-        <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium animate-pulse">
-          Navigation Cooling Period...
-        </div>
-      )}
-
-      <ChatBot />
 
       {/* Custom Animations */}
       <style jsx global>{`
