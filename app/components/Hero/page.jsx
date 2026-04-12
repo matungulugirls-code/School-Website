@@ -6,15 +6,15 @@ import {
   Calendar, Play, X, Menu, GraduationCap, 
   Palette, Music, Laptop, Heart, Target, Award
 } from 'lucide-react';
-import { Flask } from 'lucide-react';
+
 import { 
   GiGraduateCap, 
   GiTrophyCup,
-  GiScience,
   GiBookCover,
   GiSoccerBall,
   GiDramaMasks
 } from 'react-icons/gi';
+import { SiGooglecolab } from 'react-icons/si';
 import { IoRocketOutline } from 'react-icons/io5';
 import { FaChalkboardTeacher, FaUsers, FaSchool } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
@@ -115,7 +115,7 @@ const heroSlides = [
 const cbcPathways = [
   {
     name: "STEM Pathway",
-    icon: Flask,
+    icon: SiGooglecolab,
     color: "emerald",
     subjects: ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Studies"],
     careers: ["Engineering", "Medicine", "Computer Science", "Research", "Data Science"]
