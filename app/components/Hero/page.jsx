@@ -519,8 +519,8 @@ National School
           ))}
         </div>
 
-        {/* CBC Pathways Quick View - Always visible on all screens */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 mb-4 max-w-xs xs:max-w-sm sm:max-w-lg md:max-w-3xl mx-auto">
+        {/* CBC Pathways Quick View - Mobile Optimized */}
+        <div className="hidden md:grid grid-cols-3 gap-3 mb-4 max-w-3xl mx-auto">
           {cbcPathways.map((pathway, idx) => {
             const PathwayIcon = pathway.icon;
             return (
