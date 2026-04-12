@@ -3,9 +3,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ChevronLeft, ChevronRight, ArrowRight, ShieldCheck, 
   Globe, Rocket, Trophy, BookOpen, Clock, Users, 
-  Calendar, Play, X, Menu, GraduationCap, Flask, 
+  Calendar, Play, X, Menu, GraduationCap, 
   Palette, Music, Laptop, Heart, Target, Award
 } from 'lucide-react';
+import { FiFlask } from 'react-icons/fi';
 import { 
   GiGraduateCap, 
   GiTrophyCup,
@@ -114,7 +115,7 @@ const heroSlides = [
 const cbcPathways = [
   {
     name: "STEM Pathway",
-    icon: Flask,
+    icon: FiFlask,
     color: "emerald",
     subjects: ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Studies"],
     careers: ["Engineering", "Medicine", "Computer Science", "Research", "Data Science"]
