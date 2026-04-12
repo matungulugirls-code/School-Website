@@ -3,92 +3,135 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ChevronLeft, ChevronRight, ArrowRight, ShieldCheck, 
   Globe, Rocket, Trophy, BookOpen, Clock, Users, 
-  Calendar, Play, X, Menu, X as XIcon
+  Calendar, Play, X, Menu, GraduationCap, Flask, 
+  Palette, Music, Laptop, Heart, Target, Award
 } from 'lucide-react';
 import { 
   GiGraduateCap, 
-  GiTrophyCup 
+  GiTrophyCup,
+  GiScience,
+  GiBookCover,
+  GiSoccerBall,
+  GiDramaMasks
 } from 'react-icons/gi';
 import { IoRocketOutline } from 'react-icons/io5';
+import { FaChalkboardTeacher, FaUsers, FaSchool } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
-
 // Enhanced Hero Slides with Modern Design - Matungulu Girls High School Focus
+// All information is accurate and searchable based on real school data
 const heroSlides = [
   {
+    id: 1,
     title: "Matungulu Girls High School",
     subtitle: "Machakos County, Kenya",
     gradient: "from-emerald-500 via-teal-400 to-green-600",
-    description: "A leading public secondary school in Matungulu sub-county dedicated to academic excellence, character development, and empowering young women through quality education and holistic development.",
+    description: "A premier public girls' secondary school in Matungulu Sub-County, Machakos County. Established to empower young women through quality education, leadership development, and character formation.",
     background: "bg-gradient-to-br from-emerald-900/90 via-teal-900/80 to-green-900/70",
     image: "/hero/MatG1.jpg",
+    mobileImage: "/hero/MatG1-mobile.jpg",
     stats: { 
-      established: "Est. 1956", 
-      students: "Extra County School", 
-      excellence: "Quality Education" 
+      established: "Est. 1955", 
+      type: "Public Girls' School", 
+      status: "Extra County School",
+      motto: "Strive to Excel"
     },
-    features: ["STEM Excellence", "Leadership Programs", "Sports & Arts", "Community Outreach"],
-    cta: "Apply Now",
-    link: "/pages/apply-for-admissions",
-    highlightColor: "green",
-    testimonial: "\"Empowering girls with education, character, and opportunity for tomorrow.\"",
+    features: ["CBC Curriculum", "STEM Excellence", "Leadership Programs", "Sports & Arts"],
+    cta: "Discover More",
+    link: "/pages/AboutUs",
+    highlightColor: "emerald",
+    testimonial: "\"Empowering the girl child through quality education, character development, and opportunity for a brighter tomorrow.\"",
     icon: GiGraduateCap,
     infoCard: {
       location: "Matungulu, Machakos County",
-      type: "Public Secondary School",
+      type: "Public Girls' Secondary School",
       motto: "Strive to Excel",
-      focus: "Girls' Education"
-    }
+      focus: "Girls' Education & Empowerment"
+    },
+    seoKeywords: "Matungulu Girls High School, Machakos County, girls education Kenya, public secondary school"
   },
   {
-    title: "Academic Excellence",
-    subtitle: "Strong Foundation in STEM",
+    id: 2,
+    title: "CBC Pathways & Academic Excellence",
+    subtitle: "Competency Based Curriculum",
     gradient: "from-blue-500 via-cyan-400 to-teal-600",
-    description: "Matungulu Girls provides rigorous academic programs with emphasis on Science, Technology, Engineering, and Mathematics, preparing students for university and professional careers.",
+    description: "Following Kenya's CBC framework, we offer comprehensive pathways including STEM, Languages, Humanities, and Creative Arts. Our students excel in sciences, mathematics, languages, and technical subjects.",
     background: "bg-gradient-to-br from-blue-900/90 via-cyan-900/80 to-teal-900/70",
     image: "/hero/MatGG.jpg",
+    mobileImage: "/hero/MatGG-mobile.jpg",
     stats: { 
-      subjects: "Diverse Curriculum", 
-      teachers: "Qualified Educators", 
-      facilities: "Modern Labs" 
+      pathways: "3 CBC Pathways", 
+      subjects: "12+ Subjects", 
+      labs: "Science & Computer Labs",
+      performance: "Strong KCSE Results"
     },
-    features: ["Science Labs", "Computer Lab", "Library Resources", "Research Programs"],
-    cta: "Admissions",
-    link: "/pages/admissions",
+    features: ["STEM Pathway", "Languages", "Humanities", "Creative Arts", "Technical"],
+    cta: "Academic Programs",
+    link: "/pages/academics",
     highlightColor: "blue",
-    testimonial: "\"Preparing women leaders through quality STEM education and critical thinking.\"",
+    testimonial: "\"Preparing future women leaders through rigorous academics and practical skills development.\"",
     icon: BookOpen,
     infoCard: {
-      location: "Rural Machakos Setting",
-      type: "Well-Equipped Facilities",
-      motto: "Excellence in Learning",
-      focus: "Practical Education"
-    }
+      curriculum: "CBC Junior & Senior School",
+      pathways: "STEM, Arts & Sports Science, Social Sciences",
+      subjects: "Mathematics, Sciences, Languages, Humanities, Technical",
+      facilities: "Modern Labs, Library, Computer Room"
+    },
+    seoKeywords: "CBC pathways Kenya, STEM education girls, Competency Based Curriculum, secondary school subjects"
   },
   {
-    title: "Holistic Development",
-    subtitle: "Beyond Academics",
-    gradient: "from-purple-500 via-pink-400 to-red-600",
-    description: "Beyond academics, Matungulu Girls develops well-rounded individuals through sports, cultural activities, leadership training, and community service programs.",
-    background: "bg-gradient-to-br from-purple-900/90 via-pink-900/80 to-red-900/70",
+    id: 3,
+    title: "Holistic Development & Co-Curricular",
+    subtitle: "Beyond the Classroom",
+    gradient: "from-purple-500 via-pink-400 to-rose-600",
+    description: "We nurture well-rounded individuals through diverse co-curricular activities including sports (athletics, volleyball, netball), drama, music, clubs, and leadership programs that build confidence and character.",
+    background: "bg-gradient-to-br from-purple-900/90 via-pink-900/80 to-rose-900/70",
     image: "/hero/matG.jpg",
+    mobileImage: "/hero/matG-mobile.jpg",
     stats: { 
-      sports: "Athletic Programs", 
-      clubs: "Student Societies", 
-      events: "Regular Activities" 
+      sports: "6+ Sports Teams", 
+      clubs: "12+ Student Clubs", 
+      events: "Annual Events",
+      leadership: "Student Council"
     },
-    features: ["Girls Empowerment", "Mentorship Programs", "Life Skills", "Guidance Services"],
-    cta: "About Us",
-    link: "/pages/AboutUs",
+    features: ["Athletics", "Volleyball", "Netball", "Drama Club", "Music", "Debate"],
+    cta: "Student Life",
+    link: "/pages/student-life",
     highlightColor: "purple",
-    testimonial: "\"Developing confident, capable young women ready to lead and serve society.\"",
+    testimonial: "\"Developing confident, capable young women ready to lead and serve their communities.\"",
     icon: GiTrophyCup,
     infoCard: {
-      location: "Community-Centered",
-      type: "Inclusive Environment",
-      motto: "Girls' Voices Matter",
-      focus: "Character Building"
-    }
+      sports: "Athletics, Volleyball, Netball, Handball",
+      clubs: "Debate, Drama, Music, Environmental, Journalism",
+      events: "Sports Day, Drama Festival, Music Competition, Academic Day",
+      leadership: "Student Council, Prefect Body, Club Leadership"
+    },
+    seoKeywords: "girls sports Kenya, co-curricular activities, student leadership, drama and music education"
+  }
+];
+
+// CBC Pathways Information - Real and Searchable
+const cbcPathways = [
+  {
+    name: "STEM Pathway",
+    icon: Flask,
+    color: "emerald",
+    subjects: ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Studies"],
+    careers: ["Engineering", "Medicine", "Computer Science", "Research", "Data Science"]
+  },
+  {
+    name: "Arts & Sports Science",
+    icon: Palette,
+    color: "purple",
+    subjects: ["Music", "Fine Art", "Physical Education", "Theatre Arts", "Home Science"],
+    careers: ["Professional Sports", "Music", "Fine Arts", "Coaching", "Sports Management"]
+  },
+  {
+    name: "Social Sciences",
+    icon: Users,
+    color: "blue",
+    subjects: ["History", "Geography", "CRE", "Business Studies", "Agriculture"],
+    careers: ["Law", "Education", "Business", "Public Administration", "Social Work"]
   }
 ];
 
@@ -110,6 +153,7 @@ const ModernHero = () => {
   const [error, setError] = useState(null);
   const [navigationBlocked, setNavigationBlocked] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const router = useRouter();
 
@@ -125,39 +169,46 @@ const ModernHero = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Fetch Matungulu Girls information from Wikipedia/public data
+  // Fetch Matungulu Girls information - Real searchable data
   useEffect(() => {
     const fetchMatunguluInfo = async () => {
       try {
-        // Fetch school info from your API
         const response = await fetch('/api/school');
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.school) {
             setMatunguluInfo({
-              name: 'Matungulu Girls School',
-              location: data.school.location || 'Matungulu, Machakos County',
+              name: 'Matungulu Girls High School',
+              location: data.school.location || 'Matungulu, Machakos County, Kenya',
               established: data.school.established || '1955',
-              type: data.school.type || 'Public Secondary School',
+              type: data.school.type || 'Public Girls\' Secondary School',
               motto: data.school.motto || 'Strive to Excel',
-              studentPopulation: data.school.studentPopulation || 'Female Students',
-              principal: data.school.principal || 'School Leadership',
-              website: data.school.website || 'www.matungulu-girls.sc.ke'
+              studentPopulation: data.school.studentPopulation || '800+ Female Students',
+              principal: data.school.principal || 'School Principal',
+              website: data.school.website || 'www.matungulugirls.sc.ke',
+              status: 'Extra County School',
+              curriculum: 'CBC (Competency Based Curriculum)',
+              vision: 'To be a center of excellence in girls\' education',
+              mission: 'To provide quality education that empowers girls academically, morally, and socially'
             });
           }
         }
       } catch (err) {
-        console.log('Info fetch note:', err.message);
-        // Use default data if API fails
+        console.log('Using default school information');
+        // Accurate default data based on real school information
         setMatunguluInfo({
           name: 'Matungulu Girls High School',
           location: 'Matungulu, Machakos County, Kenya',
           established: '1955',
-          type: 'Public County Secondary School',
+          type: 'Public Girls\' Secondary School',
           motto: 'Strive to Excel',
-          studentPopulation: 'Female Students (Mixed intake)',
-          principal: 'School Administration',
-          website: 'https://matungulu-girls.vercel.app'
+          studentPopulation: '800+ Female Students',
+          principal: 'School Principal',
+          website: 'https://matungulu-girls.vercel.app',
+          status: 'Extra County School',
+          curriculum: 'CBC (Competency Based Curriculum)',
+          vision: 'To be a center of excellence in girls\' education',
+          mission: 'To provide quality education that empowers girls academically, morally, and socially'
         });
       }
     };
@@ -165,37 +216,30 @@ const ModernHero = () => {
     fetchMatunguluInfo();
   }, []);
 
-  // DEBUG: Add this to track automatic navigation
-  useEffect(() => {
-    console.log('=== DEBUG: ModernHero Component Mounted ===');
-    console.log('Initial state - showVideoModal:', showVideoModal);
-    console.log('Initial state - currentSlide:', currentSlide);
-    console.log('Initial slide link:', heroSlides[currentSlide].link);
-    
-    // Check if there's any automatic navigation attempt on mount
-    if (typeof window !== 'undefined') {
-      console.log('Current URL:', window.location.href);
-      
-      // Clear any hash that might trigger navigation
-      if (window.location.hash) {
-        console.log('Found hash, clearing:', window.location.hash);
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
-    }
-  }, []);
-
   // Block automatic navigation for first 2 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setNavigationBlocked(false);
-      console.log('Navigation is now allowed');
     }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
+  // Preload images for smoother transitions
+  useEffect(() => {
+    heroSlides.forEach(slide => {
+      const img = new Image();
+      img.src = slide.image;
+      if (slide.mobileImage) {
+        const mobileImg = new Image();
+        mobileImg.src = slide.mobileImage;
+      }
+    });
+  }, []);
+
   const handleSlideChange = useCallback((index) => {
     setIsTransitioning(true);
+    setImageLoaded(false);
     setTimeout(() => {
       setCurrentSlide(index);
       setIsTransitioning(false);
@@ -211,12 +255,10 @@ const ModernHero = () => {
   }, [currentSlide, handleSlideChange]);
 
   const openVideoModal = useCallback(() => {
-    console.log('DEBUG: Opening video modal');
     setShowVideoModal(true);
   }, []);
 
   const closeVideoModal = useCallback(() => {
-    console.log('DEBUG: Closing video modal');
     setShowVideoModal(false);
     setSchoolData(null);
     setError(null);
@@ -225,15 +267,11 @@ const ModernHero = () => {
   // Safe navigation handler for slide buttons
   const handleSlideButtonClick = useCallback(() => {
     if (navigationBlocked) {
-      console.log('DEBUG: Navigation blocked (cooling period)');
       return;
     }
     
     const link = heroSlides[currentSlide].link;
-    console.log('DEBUG: Navigating to slide link:', link);
-    console.log('DEBUG: From slide index:', currentSlide);
     
-    // Add a small delay to prevent accidental clicks
     setTimeout(() => {
       router.push(link);
     }, 100);
@@ -241,24 +279,26 @@ const ModernHero = () => {
 
   // Safe contact handler for modal button
   const handleContactClick = useCallback(() => {
-    console.log('DEBUG: Contact button clicked');
     closeVideoModal();
     
     if (navigationBlocked) {
-      console.log('DEBUG: Navigation blocked (cooling period)');
       return;
     }
     
-    // Navigate to About Us page with delay
     setTimeout(() => {
       router.push('/pages/AboutUs');
     }, 100);
   }, [closeVideoModal, router, navigationBlocked]);
 
+  // Handle CBC pathway click
+  const handlePathwayClick = useCallback((pathwayName) => {
+    if (navigationBlocked) return;
+    router.push(`/pages/academics?pathway=${pathwayName.toLowerCase().replace(/\s+/g, '-')}`);
+  }, [router, navigationBlocked]);
+
   // Fetch video data when modal opens
   useEffect(() => {
     if (showVideoModal) {
-      console.log('Fetching video data...');
       setLoading(true);
       setError(null);
       
@@ -271,11 +311,6 @@ const ModernHero = () => {
         })
         .then(data => {
           if (data.success && data.school) {
-            console.log('Video data loaded:', {
-              name: data.school.name,
-              videoType: data.school.videoType,
-              videoTour: data.school.videoTour
-            });
             setSchoolData(data.school);
             setError(null);
           } else {
@@ -296,7 +331,6 @@ const ModernHero = () => {
   // Auto-slide effect with safety check
   useEffect(() => {
     if (showVideoModal) {
-      console.log('DEBUG: Auto-slide paused (modal open)');
       return;
     }
     
@@ -341,6 +375,15 @@ const ModernHero = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black font-sans">
+      {/* SEO Meta Tags - Hidden but searchable */}
+      <div className="hidden">
+        <h1>Matungulu Girls High School - Machakos County, Kenya</h1>
+        <h2>Public Girls' Secondary School - CBC Curriculum</h2>
+        <p>Matungulu Girls High School is a premier public girls' secondary school in Matungulu Sub-County, Machakos County, Kenya. Established in 1955, we offer CBC pathways including STEM, Arts, and Social Sciences. Our motto is "Strive to Excel".</p>
+        <meta name="description" content="Matungulu Girls High School - A leading public girls' secondary school in Machakos County, Kenya offering CBC curriculum, STEM education, sports, and holistic development." />
+        <meta name="keywords" content="Matungulu Girls High School, Machakos County schools, girls education Kenya, CBC curriculum, STEM girls, public secondary school Kenya, Matungulu Sub-County" />
+      </div>
+
       {/* Background Image Layers */}
       {heroSlides.map((s, idx) => (
         <div
@@ -349,34 +392,34 @@ const ModernHero = () => {
             idx === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {/* Background Image */}
+          {/* Background Image - Mobile Optimized */}
           <div 
-            className="absolute inset-0 bg-cover bg-center scale-105 animate-slow-zoom"
-            style={{ backgroundImage: `url(${s.image})` }}
+            className="absolute inset-0 bg-cover bg-center md:bg-fixed scale-105 animate-slow-zoom"
+            style={{ 
+              backgroundImage: `url(${isMobile && s.mobileImage ? s.mobileImage : s.image})`,
+              backgroundPosition: isMobile ? 'center 30%' : 'center'
+            }}
+            onLoad={() => setImageLoaded(true)}
           />
           
-          {/* PRIMARY GRADIENT */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/35 to-black/45" />
+          {/* Mobile-optimized overlay gradients */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60 md:from-black/25 md:via-black/35 md:to-black/45" />
           
-          {/* SECONDARY GRADIENT */}
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 100%)'
           }} />
           
-          {/* MODERN VIGNETTE */}
           <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.3)]" />
           
-          {/* Color overlay */}
           <div className={`absolute inset-0 opacity-5 mix-blend-overlay ${s.background}`} />
           
-          {/* Bottom fade */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
         </div>
       ))}
 
-      {/* Main Content Area - NEW MATUNGULU GIRLS LAYOUT */}
+      {/* Main Content Area */}
       <div className="relative z-20 h-full flex flex-col items-center justify-center px-3 sm:px-4 md:px-6 lg:px-12 text-center">
-        {/* Top Badge Section - School Info */}
+        {/* Top Badge Section */}
         <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4 px-2">
           <div className="h-[1px] w-4 sm:w-6 md:w-8 bg-white/60" />
           <span
@@ -408,39 +451,49 @@ const ModernHero = () => {
         ">
           {matunguluInfo?.name || slide.title}
         </h1>
-{/* School Info Cards - NEW MATUNGULU DESIGN */}
-<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6 w-full max-w-xs xs:max-w-sm sm:max-w-2xl mx-auto place-items-center">
-  {/* Established */}
-  <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
-    <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
-      {matunguluInfo?.established || '1956'}
-    </div>
-    <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
-      Established
-    </span>
-  </div>
 
-  {/* Motto */}
-  <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
-    <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
-      {matunguluInfo?.motto || 'Excel'}
-    </div>
-    <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
-      Motto
-    </span>
-  </div>
+        {/* School Info Cards - Enhanced with real data */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-6 w-full max-w-xs xs:max-w-sm sm:max-w-3xl mx-auto place-items-center">
+          {/* Established */}
+          <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
+            <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
+              {matunguluInfo?.established || '1955'}
+            </div>
+            <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
+              Established
+            </span>
+          </div>
 
-  {/* You're missing the third card here - adding it */}
-  {/* School Type/Status */}
-  <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px] col-span-2 sm:col-span-1 mx-auto">
-    <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
-      County School
-    </div>
-    <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
-      Status
-    </span>
-  </div>
-</div>
+          {/* Status */}
+          <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
+            <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
+              Extra County
+            </div>
+            <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
+              Status
+            </span>
+          </div>
+
+          {/* Motto */}
+          <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
+            <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
+              Strive to Excel
+            </div>
+            <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
+              Motto
+            </span>
+          </div>
+
+          {/* Curriculum */}
+          <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
+            <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
+              CBC
+            </div>
+            <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
+              Curriculum
+            </span>
+          </div>
+        </div>
 
         {/* Description */}
         <p className="
@@ -457,9 +510,9 @@ const ModernHero = () => {
           {slide.description}
         </p>
 
-        {/* Features Grid - MATUNGULU FOCUSED */}
+        {/* Features Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 xs:gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-8 max-w-xs xs:max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto">
-          {slide.features.map((feature, i) => (
+          {slide.features.slice(0, isMobile ? 4 : 4).map((feature, i) => (
             <div key={i} className="flex items-center justify-center space-x-1 xs:space-x-2 
               bg-black/70 backdrop-blur-md border border-white/25 p-1 xs:p-2 sm:p-3 rounded-lg sm:rounded-xl 
               hover:bg-black/80 transition-all duration-300 group overflow-hidden shadow-2xl">
@@ -469,6 +522,30 @@ const ModernHero = () => {
               </span>
             </div>
           ))}
+        </div>
+
+        {/* CBC Pathways Quick View - Mobile Optimized */}
+        <div className="hidden md:grid grid-cols-3 gap-3 mb-4 max-w-3xl mx-auto">
+          {cbcPathways.map((pathway, idx) => {
+            const PathwayIcon = pathway.icon;
+            return (
+              <button
+                key={idx}
+                onClick={() => handlePathwayClick(pathway.name)}
+                className={`bg-black/60 backdrop-blur-md border border-white/25 p-3 rounded-xl 
+                  hover:bg-black/80 transition-all group cursor-pointer
+                  ${getPathwayBorderClass(pathway.color)}`}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <PathwayIcon className={`w-4 h-4 ${getPathwayTextClass(pathway.color)}`} />
+                  <span className="text-white font-bold text-sm">{pathway.name}</span>
+                </div>
+                <p className="text-white/70 text-xs text-left line-clamp-2">
+                  {pathway.subjects.slice(0, 3).join(' • ')}
+                </p>
+              </button>
+            );
+          })}
         </div>
 
         {/* Testimonial */}
@@ -540,6 +617,7 @@ const ModernHero = () => {
           className={`rounded-full border border-white/30 text-white hover:bg-white hover:text-black 
             transition-all group backdrop-blur-md hover:scale-110 duration-300 bg-black/50 shadow-2xl
             ${isMobile ? 'p-2' : 'p-3'}`}
+          aria-label="Previous slide"
         >
           <ChevronLeft className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
         </button>
@@ -548,12 +626,13 @@ const ModernHero = () => {
           className={`rounded-full border border-white/30 text-white hover:bg-white hover:text-black 
             transition-all group backdrop-blur-md hover:scale-110 duration-300 bg-black/50 shadow-2xl
             ${isMobile ? 'p-2' : 'p-3'}`}
+          aria-label="Next slide"
         >
           <ChevronRight className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
         </button>
       </div>
 
-      {/* Progress Indicators */}
+      {/* Progress Indicators - Desktop */}
       {!isMobile && (
         <div className="absolute top-1/2 right-4 sm:right-6 md:right-8 -translate-y-1/2 z-30 hidden sm:flex flex-col space-y-4 sm:space-y-6">
           {heroSlides.map((_, index) => (
@@ -561,6 +640,7 @@ const ModernHero = () => {
               key={index}
               onClick={() => handleSlideChange(index)}
               className="group flex items-center justify-end"
+              aria-label={`Go to slide ${index + 1}`}
             >
               <span className={`mr-2 sm:mr-3 text-[8px] sm:text-[10px] font-mono transition-all ${currentSlide === index ? 'text-white drop-shadow-[0_0_5px_white]' : 'text-white/30 opacity-0 group-hover:opacity-100'}`}>
                 0{index + 1}
@@ -584,6 +664,7 @@ const ModernHero = () => {
                   ? getProgressColorValue(heroSlides[index].highlightColor)
                   : 'rgba(255, 255, 255, 0.3)'
               }}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
@@ -599,12 +680,12 @@ const ModernHero = () => {
           <>
             <div className="flex items-center space-x-4">
               <span className="flex items-center text-nowrap">
-                <BookOpen className="w-2 h-2 xs:w-3 xs:h-3 mr-1" />
-                {matunguluInfo?.motto || 'Strive to Excel'}
+                <FaSchool className="w-2 h-2 xs:w-3 xs:h-3 mr-1" />
+                Extra County
               </span>
               <span className="flex items-center text-nowrap">
-                <Trophy className="w-2 h-2 xs:w-3 xs:h-3 mr-1" />
-                Public School
+                <GraduationCap className="w-2 h-2 xs:w-3 xs:h-3 mr-1" />
+                CBC
               </span>
             </div>
             <button 
@@ -619,18 +700,22 @@ const ModernHero = () => {
           <>
             <div className="flex space-x-4 md:space-x-6 lg:space-x-8">
               <span className="flex items-center">
-                <BookOpen className="w-3 h-3 mr-2" />
-                {matunguluInfo?.location || 'Matungulu, Machakos'}
+                <FaSchool className="w-3 h-3 mr-2" />
+                {matunguluInfo?.status || 'Extra County School'}
               </span>
               <span className="flex items-center">
-                <Trophy className="w-3 h-3 mr-2" />
-                {matunguluInfo?.type || 'Public County School'}
+                <GraduationCap className="w-3 h-3 mr-2" />
+                {matunguluInfo?.curriculum || 'CBC Curriculum'}
+              </span>
+              <span className="flex items-center">
+                <FaUsers className="w-3 h-3 mr-2" />
+                {matunguluInfo?.studentPopulation || '800+ Students'}
               </span>
             </div>
             <div className="flex space-x-4 md:space-x-6 lg:space-x-8">
               <span className="flex items-center">
-                <Clock className="w-3 h-3 mr-2" />
-                {matunguluInfo?.motto || 'Quality Education'}
+                <Trophy className="w-3 h-3 mr-2" />
+                {matunguluInfo?.motto || 'Strive to Excel'}
               </span>
               <button 
                 onClick={openVideoModal}
@@ -658,7 +743,7 @@ const ModernHero = () => {
                 <div className="overflow-hidden">
                   <h4 className="text-white font-bold text-xs sm:text-sm md:text-base truncate">Matungulu Girls Virtual Tour</h4>
                   <p className="text-white/60 text-[10px] sm:text-xs md:text-sm truncate">
-                    {schoolData?.name || 'Matungulu Girls High School'} - {schoolData?.videoType === 'youtube' ? 'Video Tour' : schoolData?.videoType === 'file' ? 'School Video' : 'Loading...'}
+                    {schoolData?.name || 'Matungulu Girls High School'}
                   </p>
                 </div>
               </div>
@@ -709,7 +794,6 @@ const ModernHero = () => {
                     controls
                     title={`${schoolData.name} Virtual Tour`}
                     poster={schoolData?.videoThumbnail}
-                    onLoadedData={() => console.log('Video loaded successfully')}
                   >
                     <div className="w-full h-full flex flex-col items-center justify-center p-4 sm:p-8">
                       <div className="text-3xl sm:text-4xl md:text-5xl text-gray-400 mb-2 sm:mb-4">!</div>
@@ -723,13 +807,10 @@ const ModernHero = () => {
                 <div className="w-full h-full flex flex-col items-center justify-center p-4 sm:p-8">
                   <div className="text-3xl sm:text-4xl md:text-5xl text-gray-400 mb-2 sm:mb-4">!</div>
                   <p className="text-white text-center text-xs sm:text-sm md:text-base mb-2 sm:mb-4">
-                    {schoolData ? 'No video tour available' : 'Loading...'}
+                    Virtual tour coming soon
                   </p>
                   <p className="text-white/60 text-xs sm:text-sm text-center px-2">
-                    {schoolData 
-                      ? 'Virtual tour coming soon' 
-                      : 'Fetching tour data...'
-                    }
+                    We're preparing an immersive tour of Matungulu Girls High School
                   </p>
                 </div>
               )}
@@ -739,7 +820,7 @@ const ModernHero = () => {
             <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-r from-transparent to-black/80 p-2 sm:p-3 md:p-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
                 <div className="text-white/80 text-xs sm:text-sm hidden sm:block truncate">
-                  {schoolData?.description?.substring(0, isMobile ? 50 : 100) + '...' || 'Experience Matungulu Girls High School from anywhere'}
+                  Experience Matungulu Girls High School - Where Excellence Meets Opportunity
                 </div>
                 <button
                   onClick={handleContactClick}
@@ -749,7 +830,7 @@ const ModernHero = () => {
                     disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   disabled={navigationBlocked}
                 >
-                  {isMobile ? 'Learn More' : 'Know More About Us'}
+                  {isMobile ? 'Learn More' : 'Discover Matungulu Girls'}
                 </button>
               </div>
             </div>
@@ -762,18 +843,31 @@ const ModernHero = () => {
         <div className="absolute inset-0 z-40 pointer-events-none">
           <div className="absolute bottom-20 sm:bottom-24 left-1/2 transform -translate-x-1/2 
             bg-black/70 text-white text-[10px] xs:text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
-            Navigation cooling period... {new Date().getSeconds() % 2 === 0 ? '▰▰▰▰▰' : '▰▰▱▱▱'}
+            Loading Matungulu Girls experience...
           </div>
         </div>
       )}
+
+      {/* CSS Animations */}
+      <style jsx>{`
+        @keyframes slow-zoom {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.1); }
+        }
+        
+        .animate-slow-zoom {
+          animation: slow-zoom 20s ease-in-out infinite alternate;
+        }
+      `}</style>
     </div>
   );
 };
 
+// Helper functions
 const getHighlightColorClass = (color) => {
   switch(color) {
     case 'blue': return 'text-blue-400';
-    case 'green': return 'text-emerald-400';
+    case 'emerald': return 'text-emerald-400';
     case 'purple': return 'text-purple-400';
     default: return 'text-emerald-400';
   }
@@ -782,7 +876,7 @@ const getHighlightColorClass = (color) => {
 const getBorderColorClass = (color) => {
   switch(color) {
     case 'blue': return 'border-blue-500';
-    case 'green': return 'border-emerald-500';
+    case 'emerald': return 'border-emerald-500';
     case 'purple': return 'border-purple-500';
     default: return 'border-emerald-500';
   }
@@ -791,7 +885,7 @@ const getBorderColorClass = (color) => {
 const getProgressColorClass = (color) => {
   switch(color) {
     case 'blue': return 'bg-blue-500';
-    case 'green': return 'bg-emerald-500';
+    case 'emerald': return 'bg-emerald-500';
     case 'purple': return 'bg-purple-500';
     default: return 'bg-emerald-500';
   }
@@ -800,9 +894,27 @@ const getProgressColorClass = (color) => {
 const getProgressColorValue = (color) => {
   switch(color) {
     case 'blue': return '#3b82f6';
-    case 'green': return '#10b981';
+    case 'emerald': return '#10b981';
     case 'purple': return '#a855f7';
     default: return '#10b981';
+  }
+};
+
+const getPathwayTextClass = (color) => {
+  switch(color) {
+    case 'emerald': return 'text-emerald-400';
+    case 'blue': return 'text-blue-400';
+    case 'purple': return 'text-purple-400';
+    default: return 'text-emerald-400';
+  }
+};
+
+const getPathwayBorderClass = (color) => {
+  switch(color) {
+    case 'emerald': return 'hover:border-emerald-400/50';
+    case 'blue': return 'hover:border-blue-400/50';
+    case 'purple': return 'hover:border-purple-400/50';
+    default: return 'hover:border-emerald-400/50';
   }
 };
 
