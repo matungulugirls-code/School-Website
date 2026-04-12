@@ -196,7 +196,7 @@ const ModernHero = () => {
         console.log('Using default school information');
         // Accurate default data based on real school information
         setMatunguluInfo({
-          name: 'Matungulu Girls High School',
+          name: 'Matungulu Girls Senior School',
           location: 'Matungulu, Machakos County, Kenya',
           established: '1955',
           type: 'Public Girls\' Senior School',
@@ -204,7 +204,7 @@ const ModernHero = () => {
           studentPopulation: '1400+ Female Students',
           principal: 'School Principal',
           website: 'https://matungulu-girls.vercel.app',
-          status: 'Extra County School',
+          status: 'National School',
           curriculum: 'CBC (Competency Based Curriculum)',
           vision: 'To be a center of excellence in girls\' education',
           mission: 'To provide quality education that empowers girls academically, morally, and socially'
@@ -462,7 +462,7 @@ const ModernHero = () => {
           {/* Status */}
           <div className="bg-black/70 backdrop-blur-md border border-white/25 p-2 sm:p-3 rounded-lg hover:bg-black/80 transition-all shadow-lg w-full flex flex-col items-center justify-center min-h-[80px] sm:min-h-[100px]">
             <div className={`text-sm sm:text-lg font-bold ${getHighlightColorClass(slide.highlightColor)} drop-shadow-md text-center w-full truncate px-1`}>
-              Extra County
+National School
             </div>
             <span className="text-white/95 text-[8px] xs:text-xs uppercase tracking-wider font-semibold text-center w-full">
               Status
@@ -676,7 +676,7 @@ const ModernHero = () => {
             <div className="flex items-center space-x-4">
               <span className="flex items-center text-nowrap">
                 <FaSchool className="w-2 h-2 xs:w-3 xs:h-3 mr-1" />
-                Extra County
+National School
               </span>
               <span className="flex items-center text-nowrap">
                 <GraduationCap className="w-2 h-2 xs:w-3 xs:h-3 mr-1" />
@@ -696,7 +696,7 @@ const ModernHero = () => {
             <div className="flex space-x-4 md:space-x-6 lg:space-x-8">
               <span className="flex items-center">
                 <FaSchool className="w-3 h-3 mr-2" />
-                {matunguluInfo?.status || 'Extra County School'}
+                {matunguluInfo?.status || 'National School'}
               </span>
               <span className="flex items-center">
                 <GraduationCap className="w-3 h-3 mr-2" />
