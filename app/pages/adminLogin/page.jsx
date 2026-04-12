@@ -1440,7 +1440,7 @@ export default function AdminLoginPage() {
                         <button 
                           type="button"
                           onClick={() => router.push("/pages/forgotpassword")}
-                          className="text-[10px] sm:text-xs md:text-sm font-bold text-green-700 hover:text-pink-700 hover:underline transition-colors"
+                          className="text-[10px] sm:text-xs md:text-sm font-bold text-blue-700 hover:underline transition-colors"
                         >
                           Forgot password?
                         </button>
