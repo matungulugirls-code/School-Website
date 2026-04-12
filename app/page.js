@@ -35,6 +35,8 @@ import {
   FiAlertCircle,
   FiPhoneCall 
 } from 'react-icons/fi';
+import { GiFlowerEmblem, GiSparkles, GiBookCover, GiEagleHead } from 'react-icons/gi';
+import { FaBook, FaRegStar } from 'react-icons/fa';
 import { 
   IoRocketOutline, 
   IoPeopleOutline,
@@ -137,23 +139,30 @@ const MatunguluGirlsLoadingScreen = () => {
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-300/10 via-rose-300/10 to-emerald-300/10 rounded-full blur-3xl animate-spin-slow"></div>
         
-        {/* Floating Petal/Flower Shapes */}
+        {/* Floating Petal/Flower Shapes (replaced with colored icons) */}
         <div className="absolute inset-0 opacity-40">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-2xl"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `float-petal ${8 + Math.random() * 6}s ease-in-out infinite`,
-                animationDelay: `${i * 0.5}s`,
-                transform: `rotate(${Math.random() * 360}deg)`
-              }}
-            >
-              {i % 3 === 0 ? '🌸' : i % 3 === 1 ? '🌺' : '✨'}
-            </div>
-          ))}
+          {[...Array(8)].map((_, i) => {
+            let IconComponent;
+            if (i % 3 === 0) IconComponent = GiFlowerEmblem;
+            else if (i % 3 === 1) IconComponent = GiSparkles;
+            else IconComponent = FaRegStar;
+            return (
+              <div
+                key={i}
+                className="absolute text-2xl"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animation: `float-petal ${8 + Math.random() * 6}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.5}s`,
+                  transform: `rotate(${Math.random() * 360}deg)`,
+                  color: i % 3 === 0 ? '#f472b6' : i % 3 === 1 ? '#fbbf24' : '#10b981'
+                }}
+              >
+                <IconComponent />
+              </div>
+            );
+          })}
         </div>
 
         {/* Elegant Light Beams */}
@@ -265,18 +274,31 @@ const MatunguluGirlsLoadingScreen = () => {
         {/* Decorative Bottom Elements */}
         <div className="absolute bottom-8 left-0 right-0 flex justify-center">
           <div className="flex items-center gap-6">
-            {['🦅', '🌸', '📚', '✨'].map((emoji, i) => (
-              <span 
-                key={i}
-                className="text-gray-400 text-sm opacity-60"
-                style={{ 
-                  animation: `float-icon ${3 + i}s ease-in-out infinite`,
-                  animationDelay: `${i * 0.3}s`
-                }}
-              >
-                {emoji}
-              </span>
-            ))}
+            {/* Eagle, Flower, Book, Sparkles as colored icons */}
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 3s ease-in-out infinite`, animationDelay: `0s`, color: '#6366f1' }}
+            >
+              <GiEagleHead />
+            </span>
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 4s ease-in-out infinite`, animationDelay: `0.3s`, color: '#f472b6' }}
+            >
+              <GiFlowerEmblem />
+            </span>
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 5s ease-in-out infinite`, animationDelay: `0.6s`, color: '#fbbf24' }}
+            >
+              <FaBook />
+            </span>
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 6s ease-in-out infinite`, animationDelay: `0.9s`, color: '#10b981' }}
+            >
+              <GiSparkles />
+            </span>
           </div>
         </div>
       </div>
