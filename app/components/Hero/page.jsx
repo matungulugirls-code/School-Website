@@ -24,90 +24,88 @@ import { useRouter } from 'next/navigation';
 const heroSlides = [
   {
     id: 1,
-    title: "Matungulu Girls High School",
+    title: "Matungulu Girls' Senior School",
     subtitle: "Machakos County, Kenya",
     gradient: "from-emerald-500 via-teal-400 to-green-600",
-    description: "A premier public girls' secondary school in Matungulu Sub-County, Machakos County. Established to empower young women through quality education, leadership development, and character formation.",
+    description: "A premier National Girls' Senior School in Matungulu Sub-County, Machakos County. Recently elevated to National School status, Matungulu Girls' Senior School is recognized for academic excellence, leadership, and holistic development.",
     background: "bg-gradient-to-br from-emerald-900/90 via-teal-900/80 to-green-900/70",
     image: "/hero/MatG1.jpg",
-    mobileImage: "/hero/MatG1-mobile.jpg",
     stats: { 
       established: "Est. 1955", 
-      type: "Public Girls' School", 
-      status: "Extra County School",
+      type: "National Girls' Senior School", 
+      status: "National School",
       motto: "Strive to Excel"
     },
-    features: ["CBC Curriculum", "STEM Excellence", "Leadership Programs", "Sports & Arts"],
+    features: ["National Status 2026", "KCSE Mean 8.14 (2025)", "84% University Transition", "STEM & Science Fair Winner"],
     cta: "Discover More",
     link: "/pages/AboutUs",
     highlightColor: "emerald",
-    testimonial: "\"Empowering the girl child through quality education, character development, and opportunity for a brighter tomorrow.\"",
+    testimonial: "\"Matungulu Girls' Senior School has officially been conferred National School status and continues to excel in academics and leadership.\"",
     icon: GiGraduateCap,
     infoCard: {
       location: "Matungulu, Machakos County",
-      type: "Public Girls' Secondary School",
+      type: "National Girls' Senior School",
       motto: "Strive to Excel",
       focus: "Girls' Education & Empowerment"
     },
-    seoKeywords: "Matungulu Girls High School, Machakos County, girls education Kenya, public secondary school"
+    seoKeywords: "Matungulu Girls Senior School, National School Kenya, Machakos County, girls education Kenya, academic excellence, KCSE results"
   },
   {
     id: 2,
-    title: "CBC Pathways & Academic Excellence",
-    subtitle: "Competency Based Curriculum",
+    title: "Academic Excellence & Achievements",
+    subtitle: "KCSE & University Transition",
     gradient: "from-blue-500 via-cyan-400 to-teal-600",
-    description: "Following Kenya's CBC framework, we offer comprehensive pathways including STEM, Languages, Humanities, and Creative Arts. Our students excel in sciences, mathematics, languages, and technical subjects.",
+    description: "Matungulu Girls' Senior School has consistently ranked among the top schools in Machakos County. In 2025, the school achieved a mean score of 8.14 (B plain), with 84% university transition and 254 students qualifying for university entry. The school is a regional beacon for academic brilliance.",
     background: "bg-gradient-to-br from-blue-900/90 via-cyan-900/80 to-teal-900/70",
     image: "/hero/MatGG.jpg",
-    mobileImage: "/hero/MatGG-mobile.jpg",
     stats: { 
-      pathways: "3 CBC Pathways", 
-      subjects: "12+ Subjects", 
-      labs: "Science & Computer Labs",
-      performance: "Strong KCSE Results"
+      meanScore: "8.14 (2025)",
+      ranking: "#2 in Machakos County",
+      transition: "84% Univ. Transition",
+      honors: "1 A, 15 A- (2025)"
     },
-    features: ["STEM Pathway", "Languages", "Humanities", "Creative Arts", "Technical"],
+    features: ["KCSE 2025: 8.14 Mean", "254 Univ. Entries", "Top Girls' School", "Ambitious 2026 Target: 8.7"],
     cta: "Academic Programs",
     link: "/pages/academics",
     highlightColor: "blue",
-    testimonial: "\"Preparing future women leaders through rigorous academics and practical skills development.\"",
+    testimonial: "\"Ranked among the best in Machakos County, Matungulu Girls' Senior School continues to set new academic records.\"",
     icon: BookOpen,
     infoCard: {
       curriculum: "CBC Junior & Senior School",
-      pathways: "STEM, Arts & Sports Science, Social Sciences",
-      subjects: "Mathematics, Sciences, Languages, Humanities, Technical",
-      facilities: "Modern Labs, Library, Computer Room"
+      meanScore: "8.14 (2025)",
+      transition: "84% University Transition",
+      honors: "1 A, 15 A-",
+      university: "254 Qualified for University"
     },
-    seoKeywords: "CBC pathways Kenya, STEM education girls, Competency Based Curriculum, secondary school subjects"
+    seoKeywords: "KCSE results, Matungulu Girls, university transition, Machakos County, academic excellence"
   },
   {
     id: 3,
-    title: "Holistic Development & Co-Curricular",
+    title: "Co-curricular & STEM Achievements",
     subtitle: "Beyond the Classroom",
     gradient: "from-purple-500 via-pink-400 to-rose-600",
-    description: "We nurture well-rounded individuals through diverse co-curricular activities including sports (athletics, volleyball, netball), drama, music, clubs, and leadership programs that build confidence and character.",
+    description: "Matungulu Girls' Senior School is a National Science Fair winner and a leader in STEM education. The school is also recognized for its strong student leadership, sports, drama, and music programs, nurturing disciplined and high-performing young women.",
     background: "bg-gradient-to-br from-purple-900/90 via-pink-900/80 to-rose-900/70",
     image: "/hero/matG.jpg",
-    mobileImage: "/hero/matG-mobile.jpg",
     stats: { 
-      sports: "6+ Sports Teams", 
-      clubs: "12+ Student Clubs", 
-      events: "Annual Events",
-      leadership: "Student Council"
+      scienceFair: "Nat'l Science Fair Winner", 
+      leadership: "Award-winning Student Leaders", 
+      sports: "6+ Sports Teams",
+      clubs: "12+ Clubs"
     },
-    features: ["Athletics", "Volleyball", "Netball", "Drama Club", "Music", "Debate"],
+    features: ["Science Fair Winner", "Student Leadership", "Sports & Arts", "Discipline & Character"],
     cta: "Student Life",
     link: "/pages/student-life",
     highlightColor: "purple",
-    testimonial: "\"Developing confident, capable young women ready to lead and serve their communities.\"",
+    testimonial: "\"National Science Fair champions and a beacon for holistic development in Kenya.\"",
     icon: GiTrophyCup,
     infoCard: {
+      scienceFair: "National Science Fair Winner",
+      leadership: "Award-winning Student Leaders",
       sports: "Athletics, Volleyball, Netball, Handball",
-      clubs: "Debate, Drama, Music, Environmental, Journalism",
-      events: "Sports Day, Drama Festival, Music Competition, Academic Day",
-      leadership: "Student Council, Prefect Body, Club Leadership"
+      clubs: "Debate, Drama, Music, Environmental, Journalism"
     },
-    seoKeywords: "girls sports Kenya, co-curricular activities, student leadership, drama and music education"
+    seoKeywords: "science fair winner, student leadership, girls sports Kenya, co-curricular activities, holistic development"
   }
 ];
 
@@ -182,12 +180,12 @@ const ModernHero = () => {
               name: 'Matungulu Girls High School',
               location: data.school.location || 'Matungulu, Machakos County, Kenya',
               established: data.school.established || '1955',
-              type: data.school.type || 'Public Girls\' Secondary School',
+              type: data.school.type || 'Public Girls\' Senior School',
               motto: data.school.motto || 'Strive to Excel',
               studentPopulation: data.school.studentPopulation || '800+ Female Students',
               principal: data.school.principal || 'School Principal',
               website: data.school.website || 'www.matungulugirls.sc.ke',
-              status: 'Extra County School',
+              status: 'National school',
               curriculum: 'CBC (Competency Based Curriculum)',
               vision: 'To be a center of excellence in girls\' education',
               mission: 'To provide quality education that empowers girls academically, morally, and socially'
@@ -201,9 +199,9 @@ const ModernHero = () => {
           name: 'Matungulu Girls High School',
           location: 'Matungulu, Machakos County, Kenya',
           established: '1955',
-          type: 'Public Girls\' Secondary School',
+          type: 'Public Girls\' Senior School',
           motto: 'Strive to Excel',
-          studentPopulation: '800+ Female Students',
+          studentPopulation: '1400+ Female Students',
           principal: 'School Principal',
           website: 'https://matungulu-girls.vercel.app',
           status: 'Extra County School',
@@ -231,10 +229,6 @@ const ModernHero = () => {
     heroSlides.forEach(slide => {
       const img = new Image();
       img.src = slide.image;
-      if (slide.mobileImage) {
-        const mobileImg = new Image();
-        mobileImg.src = slide.mobileImage;
-      }
     });
   }, []);
 
@@ -379,10 +373,10 @@ const ModernHero = () => {
       {/* SEO Meta Tags - Hidden but searchable */}
       <div className="hidden">
         <h1>Matungulu Girls High School - Machakos County, Kenya</h1>
-        <h2>Public Girls' Secondary School - CBC Curriculum</h2>
-        <p>Matungulu Girls High School is a premier public girls' secondary school in Matungulu Sub-County, Machakos County, Kenya. Established in 1955, we offer CBC pathways including STEM, Arts, and Social Sciences. Our motto is "Strive to Excel".</p>
-        <meta name="description" content="Matungulu Girls High School - A leading public girls' secondary school in Machakos County, Kenya offering CBC curriculum, STEM education, sports, and holistic development." />
-        <meta name="keywords" content="Matungulu Girls High School, Machakos County schools, girls education Kenya, CBC curriculum, STEM girls, public secondary school Kenya, Matungulu Sub-County" />
+        <h2>Public Girls' Senior School - CBC Curriculum</h2>
+        <p>Matungulu Girls High School is a premier public girls' Senior school in Matungulu Sub-County, Machakos County, Kenya. Established in 1955, we offer CBC pathways including STEM, Arts, and Social Sciences. Our motto is "Strive to Excel".</p>
+        <meta name="description" content="Matungulu Girls High School - A leading public girls' Senior school in Machakos County, Kenya offering CBC curriculum, STEM education, sports, and holistic development." />
+        <meta name="keywords" content="Matungulu Girls High School, Machakos County schools, girls education Kenya, CBC curriculum, STEM girls, public Senior school Kenya, Matungulu Sub-County" />
       </div>
 
       {/* Background Image Layers */}
@@ -393,17 +387,17 @@ const ModernHero = () => {
             idx === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {/* Background Image - Mobile Optimized */}
+          {/* Background Image - Responsive for all screens */}
           <div 
             className="absolute inset-0 bg-cover bg-center md:bg-fixed scale-105 animate-slow-zoom"
             style={{ 
-              backgroundImage: `url(${isMobile && s.mobileImage ? s.mobileImage : s.image})`,
+              backgroundImage: `url(${s.image})`,
               backgroundPosition: isMobile ? 'center 30%' : 'center'
             }}
             onLoad={() => setImageLoaded(true)}
           />
           
-          {/* Mobile-optimized overlay gradients */}
+          {/* Overlay gradients */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60 md:from-black/25 md:via-black/35 md:to-black/45" />
           
           <div className="absolute inset-0" style={{
