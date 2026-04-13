@@ -10,131 +10,6 @@ import { FaFacebookF, FaTwitter, FaWhatsapp, FaGraduationCap, FaChalkboardTeache
 import { IoNewspaperOutline, IoSchoolOutline } from 'react-icons/io5';
 import { GiBookshelf, GiTeacher, GiTrophyCup, GiDramaMasks } from 'react-icons/gi';
 
-// ─── Real Matungulu Girls Data ────────────────────────────────────────────────
-
-const REAL_EVENTS = [
-  {
-    id: 1,
-    title: "Matungulu Girls 68th Founders' Day & Prize Giving Ceremony",
-    category: "achievement",
-    description: "Join us as we celebrate 68 years of excellence in girls' education. The ceremony will feature distinguished guests, student performances, and recognition of academic excellence. Guest of Honor: Dr. Lydia Nzomo - Director of Secondary Education, Ministry of Education.",
-    location: "Matungulu Girls High School Main Hall",
-    date: "2026-05-15T09:00:00",
-    time: "9:00 AM - 2:00 PM",
-    image: "/events/founders-day.jpg",
-    speaker: "Dr. Lydia Nzomo (Guest of Honor) & Bishop Dr. Timothy Kinyanjui",
-    type: "School Ceremony",
-    highlights: ["Academic Excellence Awards", "Cultural Performances", "Guest Speech", "Lunch Reception"]
-  },
-  {
-    id: 2,
-    title: "STEM Girls Empowerment Conference 2026",
-    category: "science",
-    description: "A two-day conference empowering young women in Science, Technology, Engineering, and Mathematics. Featuring workshops from leading female scientists, coding sessions, and career mentorship from STEM professionals.",
-    location: "Science Complex, Matungulu Girls",
-    date: "2026-04-25T08:30:00",
-    time: "8:30 AM - 4:30 PM (2 Days)",
-    image: "/events/stem-conference.jpg",
-    speaker: "Prof. Margaret Karembu - Biotech Expert, Eng. Catherine Ngila - Google Kenya",
-    type: "Academic Conference",
-    highlights: ["Coding Workshop", "Lab Sessions", "Career Panels", "Science Fair"]
-  },
-  {
-    id: 3,
-    title: "Machakos County Secondary Schools Music Festival",
-    category: "cultural",
-    description: "Matungulu Girls proudly hosts the prestigious Machakos County Music Festival. Our school choir, instrumental ensemble, and drama club will compete in various categories including traditional songs, western choral, and verse speaking.",
-    location: "Matungulu Girls Amphitheater",
-    date: "2026-06-10T08:00:00",
-    time: "8:00 AM - 5:00 PM",
-    image: "/events/music-festival.jpg",
-    speaker: "County Director of Education",
-    type: "Competition",
-    highlights: ["Choral Performances", "Traditional Dances", "Instrumental Pieces", "Drama Presentations"]
-  },
-  {
-    id: 4,
-    title: "Parents' Career Guidance & Mentorship Day",
-    category: "guidance",
-    description: "An interactive session where parents and alumni professionals guide students through career pathways. Explore opportunities in STEM, Arts, Business, and Leadership. One-on-one mentorship sessions available.",
-    location: "School Hall",
-    date: "2026-05-28T09:00:00",
-    time: "9:00 AM - 3:00 PM",
-    image: "/events/career-day.jpg",
-    speaker: "Alumni Professionals & Industry Leaders",
-    type: "Guidance",
-    highlights: ["Career Panels", "CV Workshops", "Mock Interviews", "Alumni Networking"]
-  }
-];
-
-const REAL_NEWS = [
-  {
-    id: 1,
-    title: "Matungulu Girls Shines at National Science and Engineering Fair",
-    category: "science",
-    excerpt: "Four students from Matungulu Girls have been selected to represent Machakos County at the National Science Congress with their innovative water purification project.",
-    fullContent: "In a remarkable achievement, Form Three students Mary Wanjiku, Esther Muthoni, Grace Nduta, and Faith Mwende have developed a low-cost water filtration system using locally available materials. Their project, 'SafiWater', aims to address waterborne diseases in rural communities. The innovation earned them first place at the County level and a spot at the National Science Congress scheduled for July 2026 at Kenyatta University. The students were mentored by Head of Science Department, Mrs. Jane Kamau, and have received interest from the Ministry of Water for possible implementation.",
-    date: "2026-04-10",
-    author: "School Communications Office",
-    image: "/news/science-fair.jpg",
-    likes: 234,
-    categoryColor: "science",
-    impact: "Community Impact Project"
-  },
-  {
-    id: 2,
-    title: "School Achieves 98% Pass Rate in 2025 KCSE",
-    category: "achievement",
-    excerpt: "Matungulu Girls records outstanding KCSE results with 98% of students qualifying for university placement.",
-    fullContent: "Principal Mrs. Rose Mwangi announced the remarkable results at a press conference, highlighting that 45 students scored A- and above, while 120 students attained B+ and above. Top student, Maureen Adhiambo, scored an A plain of 82 points and has been admitted to study Medicine at the University of Nairobi. The school's mean score improved from 7.2 to 8.4, placing Matungulu Girls among the top-performing schools in Machakos County. 'This success is a testament to the dedication of our teachers and the resilience of our girls,' said Principal Mwangi.",
-    date: "2026-03-15",
-    author: "Academic Office",
-    image: "/news/kcse-results.jpg",
-    likes: 567,
-    categoryColor: "achievement",
-    impact: "Academic Excellence"
-  },
-  {
-    id: 3,
-    title: "New State-of-the-Art Science Laboratory Complex Inaugurated",
-    category: "infrastructure",
-    excerpt: "CS Education inaugurates Ksh. 50M modern laboratory complex equipped with cutting-edge scientific equipment.",
-    fullContent: "The Cabinet Secretary for Education, Hon. Julius Ogamba, officially opened the four-story laboratory complex that includes two physics labs, two chemistry labs, two biology labs, and a computer science lab with 100 computers. The facility, funded by the World Bank's Secondary Education Quality Improvement Project (SEQIP), will serve over 800 students and includes a virtual reality lab for STEM education. 'This investment in girls' education will prepare Matungulu students for 21st-century careers,' said CS Ogamba during the ceremony.",
-    date: "2026-02-28",
-    author: "Infrastructure Committee",
-    image: "/news/new-labs.jpg",
-    likes: 412,
-    categoryColor: "infrastructure",
-    impact: "Facility Upgrade"
-  },
-  {
-    id: 4,
-    title: "Matungulu Girls Basketball Team Crowned County Champions",
-    category: "sports",
-    excerpt: "The school's basketball team secures victory in the Machakos County Secondary Schools Sports Association tournament.",
-    fullContent: "In a thrilling final match played at Kenyatta Stadium, Machakos, Matungulu Girls defeated defending champions Mumbuni High School 47-42 to claim the county title. Team captain Vivian Akinyi scored 18 points and was named Most Valuable Player of the tournament. The team, coached by Mr. Peter Omondi, will now represent Machakos County at the Eastern Regionals in July. 'This victory shows that our girls excel both in class and on the court,' said Sports Director Mrs. Florence Muthoni.",
-    date: "2026-03-05",
-    author: "Sports Department",
-    image: "/news/basketball.jpg",
-    likes: 289,
-    categoryColor: "sports",
-    impact: "Sports Achievement"
-  },
-  {
-    id: 5,
-    title: "Matungulu Alumni Association Launches Ksh. 10M Bursary Fund",
-    category: "achievement",
-    excerpt: "Former students unite to support needy girls through a comprehensive financial aid program.",
-    fullContent: "The Matungulu Girls Alumni Association (MGAA) has launched a Ksh. 10 million bursary fund to support bright but needy students. The initiative, led by alumni chairperson Hon. Esther Mwende (Class of 1995), will benefit 100 students annually. 'We were once in their shoes, and we believe education transformed our lives. It's time to give back,' said Hon. Mwende. The fund was launched during the Alumni Homecoming Weekend attended by over 500 former students from across the country.",
-    date: "2026-03-20",
-    author: "Alumni Office",
-    image: "/news/alumni-fund.jpg",
-    likes: 445,
-    categoryColor: "achievement",
-    impact: "Student Support"
-  }
-];
-
 const CATEGORY_STYLES = {
   academic:       { accent: 'bg-blue-500',    light: 'bg-blue-50',    text: 'text-blue-600',    border: 'border-blue-200', icon: FaGraduationCap },
   sports:         { accent: 'bg-emerald-500', light: 'bg-emerald-50',  text: 'text-emerald-600',  border: 'border-emerald-200', icon: GiTrophyCup },
@@ -186,15 +61,35 @@ const ModernEventsNewsSection = () => {
   const [news, setNews] = useState([]);
   const [activeEvent, setActiveEvent] = useState(0);
   const [activeNews, setActiveNews] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [shareModal, setShareModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Load real data
+  // Fetch data from API only
   useEffect(() => {
-    setEvents(REAL_EVENTS);
-    setNews(REAL_NEWS);
-    setLoading(false);
+    let mounted = true;
+    const load = async () => {
+      try {
+        const [evRes, nwRes] = await Promise.all([
+          fetch('/api/events').then(r => r.json()),
+          fetch('/api/news').then(r => r.json()),
+        ]);
+        if (!mounted) return;
+        if (evRes.success && Array.isArray(evRes.events)) {
+          setEvents(evRes.events.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 4));
+        }
+        if (nwRes.success && Array.isArray(nwRes.data)) {
+          setNews(nwRes.data.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 4));
+        }
+      } catch (err) {
+        if (mounted) setError(err.message);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false; };
   }, []);
 
   const featured = tab === 'events' ? events[activeEvent] : news[activeNews];
@@ -246,6 +141,32 @@ const ModernEventsNewsSection = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error && events.length === 0 && news.length === 0) {
+    return (
+      <section className="bg-gray-50 min-h-[60vh] flex items-center justify-center px-4">
+        <div className="max-w-lg w-full text-center bg-white rounded-2xl border border-gray-100 shadow-lg p-8 sm:p-12">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-red-50 flex items-center justify-center">
+            <FiX className="w-7 h-7 text-red-400" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-3">Content Unavailable</h2>
+          <p className="text-gray-500 text-sm sm:text-base mb-6 leading-relaxed">
+            We couldn&apos;t load the latest updates. Please try again.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white font-bold text-sm rounded-xl hover:bg-black transition-colors active:scale-[0.97]"
+          >
+            <FiRefreshCw className="w-4 h-4" /> Refresh
+          </button>
+          <p className="mt-6 text-xs text-gray-400 flex items-center justify-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+            {error}
+          </p>
         </div>
       </section>
     );
@@ -334,13 +255,13 @@ const ModernEventsNewsSection = () => {
                         <>
                           <span className="flex items-center gap-1"><FiCalendar className="w-3 h-3" /> {fmtDate(featured.date).full}</span>
                           <span className="hidden sm:block w-1 h-1 bg-white/40 rounded-full" />
-                          <span className="flex items-center gap-1"><FiClock className="w-3 h-3" /> {featured.time}</span>
+                          <span className="flex items-center gap-1"><FiClock className="w-3 h-3" /> {featured.time || fmtDate(featured.date).time}</span>
                           <span className="hidden sm:block w-1 h-1 bg-white/40 rounded-full" />
                           <span className="flex items-center gap-1"><FiMapPin className="w-3 h-3" /> {featured.location}</span>
                         </>
                       ) : (
                         <>
-                          <span className="flex items-center gap-1"><FiUser className="w-3 h-3" /> {featured.author}</span>
+                          <span className="flex items-center gap-1"><FiUser className="w-3 h-3" /> {featured.author || 'School Admin'}</span>
                           <span className="hidden sm:block w-1 h-1 bg-white/40 rounded-full" />
                           <span className="flex items-center gap-1"><FiCalendar className="w-3 h-3" /> {fmtDate(featured.date).full}</span>
                         </>
@@ -360,30 +281,13 @@ const ModernEventsNewsSection = () => {
                       </h4>
                       <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                         {tab === 'events'
-                          ? featured.description
-                          : featured.excerpt}
+                          ? (featured.description || 'No description available.')
+                          : (featured.excerpt || featured.fullContent || 'No content available.')}
                       </p>
 
-                      {tab === 'events' && featured.highlights && (
+                      {tab === 'events' && featured.speaker && (
                         <div className="mt-4 p-3 sm:p-4 bg-emerald-50/60 border-l-4 border-emerald-500 rounded-r-xl">
-                          <p className="text-gray-700 text-sm font-semibold mb-2">🎯 Event Highlights:</p>
-                          <ul className="space-y-1">
-                            {featured.highlights.map((highlight, idx) => (
-                              <li key={idx} className="text-gray-600 text-xs flex items-center gap-2">
-                                <FiStar className="text-emerald-500 w-3 h-3" />
-                                {highlight}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {tab === 'news' && featured.impact && (
-                        <div className="mt-4 p-3 sm:p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-r-xl">
-                          <p className="text-gray-700 text-sm flex items-center gap-2">
-                            <FiTrendingUp className="text-emerald-500" />
-                            <span className="font-semibold">Impact:</span> {featured.impact}
-                          </p>
+                          <p className="text-gray-700 text-sm"><span className="font-bold">Guest Speaker:</span> {featured.speaker}</p>
                         </div>
                       )}
                     </div>
@@ -399,17 +303,16 @@ const ModernEventsNewsSection = () => {
                         {tab === 'events' ? (
                           <>
                             <InfoRow label="Date" value={fmtDate(featured.date).full} />
-                            <InfoRow label="Time" value={featured.time} />
+                            <InfoRow label="Time" value={featured.time || fmtDate(featured.date).time} />
                             <InfoRow label="Location" value={featured.location} />
-                            <InfoRow label="Type" value={featured.type} />
+                            {featured.type && <InfoRow label="Type" value={featured.type} />}
                             {featured.speaker && <InfoRow label="Speaker(s)" value={featured.speaker} />}
                           </>
                         ) : (
                           <>
                             <InfoRow label="Published" value={fmtDate(featured.date).full} />
-                            <InfoRow label="Author" value={featured.author} />
+                            <InfoRow label="Author" value={featured.author || 'School Admin'} />
                             <InfoRow label="Category" value={featured.category} />
-                            <InfoRow label="Engagement" value={`${featured.likes} likes`} />
                           </>
                         )}
                       </div>
@@ -438,7 +341,7 @@ const ModernEventsNewsSection = () => {
                           <>
                             <div className="flex items-center gap-3 flex-1 flex-wrap">
                               <button className="flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors text-sm">
-                                <FiHeart className="w-4 h-4" /> <span className="font-bold">{featured.likes}</span>
+                                <FiHeart className="w-4 h-4" /> <span className="font-bold">{featured.likes || 0}</span>
                               </button>
                               <button onClick={() => setShareModal(true)} className="flex items-center gap-1 text-gray-400 hover:text-emerald-500 transition-colors text-sm">
                                 <FiShare2 className="w-4 h-4" /> <span className="font-bold">Share</span>
@@ -471,7 +374,7 @@ const ModernEventsNewsSection = () => {
                   const selected = activeIdx === idx;
                   return (
                     <button
-                      key={item.id}
+                      key={item.id || idx}
                       onClick={() => setActiveIdx(idx)}
                       className={`w-full text-left group bg-white rounded-xl border-2 p-3 sm:p-4 transition-all duration-200 ${
                         selected
@@ -513,9 +416,9 @@ const ModernEventsNewsSection = () => {
                           {/* Meta */}
                           <p className="text-gray-400 text-[10px] sm:text-xs mt-1 flex items-center gap-1">
                             {tab === 'events' ? (
-                              <><FiMapPin className="w-2.5 h-2.5" /> {item.location}</>
+                              <><FiMapPin className="w-2.5 h-2.5" /> {item.location || 'TBD'}</>
                             ) : (
-                              <><FiUser className="w-2.5 h-2.5" /> {item.author}</>
+                              <><FiUser className="w-2.5 h-2.5" /> {item.author || 'Admin'}</>
                             )}
                           </p>
                         </div>
