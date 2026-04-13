@@ -235,12 +235,12 @@ const ContactList = () => (
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-emerald-500/10 transition-all group"
         >
           <div className="p-2 bg-emerald-500/20 rounded-lg group-hover:bg-emerald-500/30 transition-colors">
-            <Icon className="text-emerald-400 text-sm" />
+            <Icon className="text-white text-sm" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white font-bold text-sm truncate">{item.text}</p>
             {item.detail && (
-              <p className="text-emerald-200/60 text-xs">{item.detail}</p>
+              <p className="text-white text-xs">{item.detail}</p>
             )}
           </div>
         </a>
@@ -253,7 +253,7 @@ const ContactList = () => (
 const LinkGroup = ({ title, icon: Icon, links }) => (
   <div className="space-y-4">
     <div className="flex items-center gap-2 pb-2 border-b border-emerald-500/20">
-      <Icon className="text-emerald-400 text-lg" />
+      <Icon className="text-white text-lg" />
       <h4 className="text-lg font-semibold text-white">{title}</h4>
     </div>
     <div className="space-y-2">
@@ -263,7 +263,7 @@ const LinkGroup = ({ title, icon: Icon, links }) => (
           <a
             key={idx}
             href={link.href}
-            className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition-colors font-medium text-sm group"
+            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors font-medium text-sm group"
           >
             <LinkIcon className="text-xs group-hover:translate-x-1 transition-transform" />
             <span>{link.name}</span>
@@ -598,17 +598,17 @@ export default function ModernFooter() {
                   </div>
 
                   <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
-                    <p className="text-[11px] font-bold text-emerald-200/60 tracking-tight">
+                    <p className="text-[11px] font-bold text-white tracking-tight">
                       © {currentYear} Matungulu Girls High School. All rights reserved.
                     </p>
                     <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-emerald-500/20">
-                      <p className="text-[10px] font-bold text-emerald-300/60">
+                      <p className="text-[10px] font-bold text-white">
                         Developed by{" "}
                         <a 
                           href="https://www.linkedin.com/in/emmanuel-makau-40a12028b/" 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-emerald-400 hover:text-emerald-300 transition-colors"
+                          className="text-white hover:text-emerald-300 transition-colors"
                         >
                           Emmanuel Makau
                         </a>
@@ -616,21 +616,21 @@ export default function ModernFooter() {
                       <div className="w-[1px] h-3 bg-emerald-500/20" />
                       <a 
                         href="https://github.com/Emmanuel10701" 
-                        className="text-emerald-300/50 hover:text-emerald-400 transition-all"
+                        className="text-emerald-300/50 hover:text-white transition-all"
                         title="GitHub"
                       >
                         <FiGithub size={12} />
                       </a>
                       <a 
                         href="mailto:emmanuelmakau90@gmail.com" 
-                        className="text-emerald-300/50 hover:text-emerald-400 transition-all"
+                        className="text-emerald-300/50 hover:text-white transition-all"
                         title="Email"
                       >
                         <FiMail size={12} />
                       </a>
                       <a 
                         href="tel:+254793472960" 
-                        className="text-emerald-300/50 hover:text-emerald-400 transition-all"
+                        className="text-emerald-300/50 hover:text-white transition-all"
                         title="Call"
                       >
                         <FiPhone size={12} />
