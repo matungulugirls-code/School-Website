@@ -706,7 +706,7 @@ const ModernSchoolLayout = () => {
                 Collaborations
               </span>
             </h3>
-            <p className="mt-4 text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">
+            <p className="mt-4 text-gray-600 text-sm sm:text-base max-w-3xl mx-auto">
               We bridge the gap between secondary education and the professional world through 
               strong alliances with top-tier universities.
             </p>
