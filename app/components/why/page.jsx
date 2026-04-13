@@ -748,45 +748,63 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
-      {/* ===== VISION / MISSION / MOTTO STRIP ===== */}
-      <section className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-            {[
-              {
-                label: "Our Motto",
-                value: motto,
-                icon: <FiTarget className="w-5 h-5" />,
-              },
-              {
-                label: "Our Vision",
-                value: vision,
-                icon: <FiEye className="w-5 h-5" />,
-              },
-              {
-                label: "Our Mission",
-                value: mission,
-                icon: <FiBookOpen className="w-5 h-5" />,
-              },
-            ].map((item, idx) => (
-              <div key={idx} className="flex gap-3 items-start">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white flex-shrink-0">
-                  {item.icon}
-                </div>
-                <div>
-                  <p className="text-emerald-200 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">
-                    {item.label}
-                  </p>
-                  <p className="text-white text-sm sm:text-base font-medium leading-relaxed">
-                    {item.value}
-                  </p>
-                </div>
-              </div>
-            ))}
+ {/* ===== VISION / MISSION / MOTTO SECTION (Clean Display) ===== */}
+<section className="bg-white py-12 sm:py-16">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {[
+        {
+          label: "Our Motto",
+          value: motto,
+          icon: <FiTarget className="w-6 h-6" />,
+          accent: "from-emerald-500 to-teal-600",
+          textColor: "text-emerald-700",
+          bg: "bg-emerald-50",
+        },
+        {
+          label: "Our Vision",
+          value: vision,
+          icon: <FiEye className="w-6 h-6" />,
+          accent: "from-blue-500 to-indigo-600",
+          textColor: "text-blue-700",
+          bg: "bg-blue-50",
+        },
+        {
+          label: "Our Mission",
+          value: mission,
+          icon: <FiBookOpen className="w-6 h-6" />,
+          accent: "from-teal-500 to-emerald-600",
+          textColor: "text-teal-700",
+          bg: "bg-teal-50",
+        },
+      ].map((item, idx) => (
+        <div 
+          key={idx} 
+          className="relative group p-8 rounded-3xl border border-slate-100 bg-white hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300"
+        >
+          {/* Subtle top accent line */}
+          <div className={`absolute top-0 left-1/2 -translate-x-1/2 h-1 w-24 rounded-b-full bg-gradient-to-r ${item.accent} opacity-0 group-hover:opacity-100 transition-opacity`} />
+
+          <div className="flex flex-col items-center text-center">
+            {/* Icon Circle */}
+            <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center ${item.textColor} mb-5 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
+              {item.icon}
+            </div>
+
+            {/* Content */}
+            <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${item.textColor} mb-3`}>
+              {item.label}
+            </span>
+            
+            <h4 className="text-slate-800 text-lg sm:text-xl font-bold leading-relaxed">
+              "{item.value}"
+            </h4>
           </div>
         </div>
-      </section>
-
+      ))}
+    </div>
+  </div>
+</section>
       {/* ===== ACHIEVEMENTS TIMELINE ===== */}
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
