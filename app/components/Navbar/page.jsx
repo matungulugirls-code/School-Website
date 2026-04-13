@@ -107,7 +107,7 @@ export default function ModernNavbar() {
     },
      { 
       name: 'Curriculum', 
-      href: '/pages/curriculum',
+      href: '/pages/admissions',
       icon: FiUserPlus
     },
     { 
