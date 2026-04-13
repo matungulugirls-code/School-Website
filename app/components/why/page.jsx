@@ -753,61 +753,7 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
-      {/* ===== CTA SECTION ===== */}
-      <section className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4">
-            Ready to Join the Matungulu Family?
-          </h2>
-          <p className="text-emerald-100 text-sm sm:text-base max-w-2xl mx-auto mb-8">
-            Take the first step towards an exceptional education for your daughter. 
-            Limited slots available for the upcoming academic year.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={handleExplorePathways}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-emerald-700 rounded-xl font-black text-sm uppercase tracking-wider shadow-lg hover:bg-emerald-50 transition-all active:scale-95"
-            >
-              Apply for Admission
-              <FiArrowRight size={16} />
-            </button>
-            <button
-              onClick={() => router.push('/pages/contact')}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white/30 text-white rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-all"
-            >
-              Contact Admissions
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== FOOTER ===== */}
-      <footer className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
-                <FiTarget className="text-white w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">Matungulu Girls Senior School</p>
-                <p className="text-gray-400 text-[10px] uppercase tracking-wider">{motto}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <span className="text-[9px] font-black uppercase text-emerald-400 bg-emerald-900/50 px-3 py-1 rounded-full">
-                National School Status 2026
-              </span>
-              <span className="text-gray-400 text-xs">Est. 1955</span>
-            </div>
-          </div>
-          <div className="mt-6 pt-6 border-t border-gray-800 text-center">
-            <p className="text-gray-500 text-[10px] font-medium">
-              © {new Date().getFullYear()} Matungulu Girls High School. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+   
 
       {/* Marquee Animation Style */}
       <style>{`
