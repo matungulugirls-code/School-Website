@@ -105,16 +105,16 @@ export default function ModernNavbar() {
       href: '/pages/contact', 
       icon: FiMail 
     },
+     { 
+      name: 'Curriculum', 
+      href: '/pages/curriculum',
+      icon: FiUserPlus
+    },
     { 
       name: 'Academics', 
       href: '/pages/academics',
       icon: FiBook,
       hasDropdown: true
-    },
-    { 
-      name: 'Curriculum', 
-      href: '/pages/curriculum',
-      icon: FiUserPlus
     },
     { 
       name: 'Memories', 
