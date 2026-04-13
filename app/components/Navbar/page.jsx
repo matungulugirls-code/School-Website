@@ -184,7 +184,7 @@ export default function ModernNavbar() {
     },
     {
       name: 'Staff Directory',
-      href: '/pages/staff',
+      href: '/pages/School Team',
       icon: FiUsers,
       description: 'Find staff contacts & departments'
     },
@@ -410,7 +410,7 @@ export default function ModernNavbar() {
                       isResourcesDropdownOpen || 
                       isActiveLink('/pages/careers') ||
                       isActiveLink('/pages/adminLogin') ||
-                      isActiveLink('/pages/staff') ||
+                      isActiveLink('/pages/School Team') ||
                       isActiveLink('/pages/alumni')
                         ? 'text-emerald-100' 
                         : 'text-white/80 hover:text-emerald-100'
@@ -427,7 +427,7 @@ export default function ModernNavbar() {
                     {(isResourcesDropdownOpen || 
                       isActiveLink('/pages/adminLogin') ||
                       isActiveLink('/pages/careers') ||
-                      isActiveLink('/pages/staff') ||
+                      isActiveLink('/pages/School Team') ||
                       isActiveLink('/pages/alumni')) && (
                       <span className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-emerald-300 rounded-full"></span>
                     )}
@@ -632,7 +632,7 @@ export default function ModernNavbar() {
                     onClick={() => setIsMobileResourcesDropdownOpen(!isMobileResourcesDropdownOpen)}
                     className={`w-full flex items-center justify-between p-3 xs:p-4 rounded-lg xs:rounded-xl text-left ${
                       isMobileResourcesDropdownOpen ||
-                      isActiveLink('/pages/staff') ||
+                      isActiveLink('/pages/School Team') ||
                       isActiveLink('/pages/careers') ||
                       isActiveLink('/pages/adminLogin') ||
                       isActiveLink('/pages/alumni')

@@ -119,7 +119,7 @@ export default function StaffProfilePage() {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`/api/staff/${id}`);
+        const response = await fetch(`/api/School Team/${id}`);
         
         if (!response.ok) {
           throw new Error(`Staff member not available (${response.status})`);
@@ -185,7 +185,7 @@ export default function StaffProfilePage() {
       `Experienced educator specializing in ${staff.expertise?.slice(0, 3).join(', ') || 'education'}. ` +
       `View full profile, qualifications, and contact information.`;
     
-    const profileUrl = `https://kinyui-senior.vercel.app/pages/staff/${id}`;
+    const profileUrl = `https://kinyui-senior.vercel.app/pages/School Team/${id}`;
     const imageUrl = staff.image?.startsWith('http') ? staff.image : `https://kinyui-senior.vercel.app${staff.image}`;
     
     return (
@@ -274,7 +274,7 @@ export default function StaffProfilePage() {
               },
               "sameAs": [
                 profileUrl,
-                `https://kinyui-senior.vercel.app/pages/staff`
+                `https://kinyui-senior.vercel.app/pages/School Team`
               ]
             })
           }}
@@ -298,7 +298,7 @@ export default function StaffProfilePage() {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Staff Directory",
-                  "item": "https://kinyui-senior.vercel.app/pages/staff"
+                  "item": "https://kinyui-senior.vercel.app/pages/School Team"
                 },
                 {
                   "@type": "ListItem",
@@ -473,7 +473,7 @@ export default function StaffProfilePage() {
             We couldn&apos;t load this staff member&apos;s profile.
           </p>
           <button 
-            onClick={() => router.push('/pages/staff')}
+            onClick={() => router.push('/pages/School Team')}
             className="bg-[#1a1a2e] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-[#2d2d44] transition-colors w-full"
           >
             Return to Staff Directory
@@ -492,7 +492,7 @@ export default function StaffProfilePage() {
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
             <button
-              onClick={() => router.push('/pages/staff')}
+              onClick={() => router.push('/pages/School Team')}
               className="flex items-center gap-2 text-slate-600 hover:text-[#1a1a2e] transition-colors"
             >
               <FiArrowLeft size={18} />

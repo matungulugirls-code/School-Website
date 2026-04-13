@@ -1082,7 +1082,7 @@ const fetchData = async () => {
     const [campaignsRes, studentRes, staffRes] = await Promise.all([
       fetch('/api/emails'),
       fetch('/api/s'),
-      fetch('/api/staff')
+      fetch('/api/School Team')
     ]);
 
     console.log('API Responses:', { 

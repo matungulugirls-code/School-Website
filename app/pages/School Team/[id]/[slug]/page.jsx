@@ -1,5 +1,5 @@
-// app/staff/[id]/page.jsx
-import StaffProfilePage from '../../../../components/staffseo.jsx';
+// app/School Team/[id]/page.jsx
+import StaffProfilePage from '../../../../components/School Teamseo.jsx';
 
 // Import static data or use empty array as fallback
 let STAFF_DATA = [];
@@ -7,7 +7,7 @@ let STAFF_DATA = [];
 // Try to import local data if it exists
 try {
   // Option 1: Import from a local JSON file in your project
-  // STAFF_DATA = require('@/data/staff.json');
+  // STAFF_DATA = require('@/data/School Team.json');
   
   // Option 2: Use hardcoded data as fallback
   STAFF_DATA = [
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }) {
         follow: true,
       },
       alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/staff/${id}`,
+        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/School Team/${id}`,
       }
     };
   }
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }) {
       ? staff.image 
       : staff.image.startsWith('/')
         ? `${baseUrl}${staff.image}`
-        : `${baseUrl}/images/staff/${staff.image}`
+        : `${baseUrl}/images/School Team/${staff.image}`
     : `${baseUrl}/MatG.jpg`;
 
   return {
@@ -110,7 +110,7 @@ export async function generateMetadata({ params }) {
       'max-snippet': -1,
     },
     alternates: {
-      canonical: `${baseUrl}/staff/${id}`,
+      canonical: `${baseUrl}/School Team/${id}`,
     },
     keywords: `${staff.name}, ${staff.position}, ${staff.department}, Matungulu Girls High School, teaching staff, Kenyan education, ${staff.expertise?.join(', ') || ''}`,
   };
@@ -132,7 +132,7 @@ export async function generateStaticParams() {
   // ALTERNATIVE: If you want to fetch from API but avoid build errors:
   // try {
   //   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
-  //   const res = await fetch(`${baseUrl}/api/staff`, { next: { revalidate: 3600 } });
+  //   const res = await fetch(`${baseUrl}/api/School Team`, { next: { revalidate: 3600 } });
   //   
   //   if (res.ok) {
   //     const data = await res.json();
@@ -174,7 +174,7 @@ export function generateJsonLd(staff) {
     },
     "description": staff.bio || `Dedicated educator at Matungulu Girls High School specializing in ${staff.department}.`,
     "image": staff.image || `${baseUrl}/MatG.jpg`,
-    "url": `${baseUrl}/staff/${staff.id}`,
+    "url": `${baseUrl}/School Team/${staff.id}`,
     "email": staff.email,
     "telephone": staff.phone,
     "knowsAbout": staff.expertise || [],

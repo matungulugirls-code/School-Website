@@ -42,7 +42,7 @@ import AdminSidebar from '../components/sidebar/page';
 import DashboardOverview from '../components/dashbaord/page';
 import AssignmentsManager from '../components/AssignmentsManager/page';
 import NewsEventsManager from '../components/eventsandnews/page';
-import StaffManager from '../components/staff/page';
+import StaffManager from '../components/School Team/page';
 import SubscriberManager from '../components/subscriber/page';
 import EmailManager from '../components/email/page';
 import GalleryManager from '../components/gallery/page';
@@ -670,7 +670,7 @@ const LoadingSpinner = () => {
         schooldocumentsRes,
         smsRes
       ] = await Promise.allSettled([
-        fetch('/api/staff'),
+        fetch('/api/School Team'),
         fetch('/api/subscriber'),
         fetch('/api/events'),
         fetch('/api/news'),

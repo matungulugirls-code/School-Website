@@ -324,7 +324,7 @@ const StaffCard = ({ staff, onContactClick }) => {
           </button>
           
           <Link
-            href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`}
+            href={`/pages/School Team/${staff.id}/${generateSlug(staff.name, staff.id)}`}
             className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold text-white bg-[#1a1a2e] hover:bg-[#2d2d44] transition-colors"
           >
             <FiChevronRight size={11} /> View
@@ -364,7 +364,7 @@ const StaffListCard = ({ staff, onContactClick }) => {
       <div className="flex-1 text-center sm:text-left min-w-0">
         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-0.5">
           <h3 className="text-sm font-semibold text-slate-900">
-            <Link href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`} className="hover:text-[#1a1a2e] transition-colors">
+            <Link href={`/pages/School Team/${staff.id}/${generateSlug(staff.name, staff.id)}`} className="hover:text-[#1a1a2e] transition-colors">
               {staff.name}
             </Link>
           </h3>
@@ -385,7 +385,7 @@ const StaffListCard = ({ staff, onContactClick }) => {
           <FiMail size={11} /> Contact
         </button>
         <Link
-          href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`}
+          href={`/pages/School Team/${staff.id}/${generateSlug(staff.name, staff.id)}`}
           className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1a1a2e] text-white text-[11px] font-semibold hover:bg-[#2d2d44] transition-colors"
         >
           <FiChevronRight size={11} /> View
@@ -500,7 +500,7 @@ export default function StaffDirectory() {
   const fetchStaffData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/staff');
+      const response = await fetch('/api/School Team');
       
       if (!response.ok) {
         throw new Error(`Failed to fetch staff data: ${response.status}`);
