@@ -1533,94 +1533,114 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
-          {/* Right Panel - Branding (Swapped position with feminine design) */}
-          <div className="relative hidden md:flex flex-col justify-between bg-gradient-to-br from-black via-gray-900 to-black text-white px-16 py-20 lg:px-24 overflow-hidden border-l border-white/5">
-            {/* Decorative elements */}
-            <div className="absolute inset-0 overflow-hidden opacity-10">
-              <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-green-700 blur-3xl"></div>
-              <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-gray-500 blur-3xl"></div>
-            </div>
-            
-            <div className="absolute inset-0 bg-cover bg-center opacity-20 transition-transform duration-100"
-              style={{ backgroundImage: "url('/hero/MatG.jpg')" }}
-            ></div>
-            <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-950/30 to-black/40"></div>
-            
-            <div className="relative z-10 flex flex-col h-full w-full">
-              <div className="mb-auto">
-                <Link href="/" className="flex items-center gap-5 group transition-transform hover:translate-x-1">
-                  <div className="relative p-1 bg-white/10 rounded-full backdrop-blur-xl border border-gray-300/30 shadow-2xl">
-                    <Image
-                      src="/MatG.jpg"
-                      alt="Matungulu Logo"
-                      width={64}
-                      height={64}
-                      className="rounded-full"
-                    />
-                    <div className="absolute inset-0 rounded-full bg-green-700/20 animate-pulse"></div>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-2xl font-black tracking-tighter leading-none uppercase">
-                      Matungulu <span className="text-green-600">Girls'</span>
-                    </span>
-                    <span className="text-[10px] font-bold tracking-[0.4em] text-green-700/80 uppercase mt-1">
-                      Senior School
-                    </span>
-                  </div>
-                </Link>
-              </div>
+     {/* Right Panel - Premium Branding Panel */}
+<div className="relative hidden md:flex flex-col justify-between bg-[#050a05] text-white px-16 py-20 lg:px-24 overflow-hidden border-l border-white/10">
+  
+  {/* Layer 1: Animated Mesh Background */}
+  <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute -top-[10%] -left-[10%] w-[70%] h-[70%] rounded-full bg-green-900/20 blur-[120px] animate-pulse"></div>
+    <div className="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-emerald-900/10 blur-[100px]"></div>
+    {/* Subtle Grid Pattern Overlay */}
+    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] mix-blend-overlay"></div>
+  </div>
 
-              <div className="my-auto py-10 sm:py-12 px-4 max-w-md mx-auto text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-700/20 border border-green-700/30 text-gray-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6">
-                  <Heart size={14} className="fill-green-700" />
-                  Authorized Personnel Only
-                </div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight mb-5 sm:mb-6">
-                  Secure{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-300 via-white to-gray-300">
-                    Admin
-                  </span>{" "}
-                  Portal
-                </h1>
-                <p className="text-sm sm:text-md text-gray-100/90 font-medium leading-relaxed max-w-xs sm:max-w-sm mx-auto">
-                  Enter your credentials to securely access Matungulu Girls' administrative system, manage operations, and empower young women through excellence in education.
-                </p>
-                
-                {/* Feature Pills */}
-                <div className="flex flex-wrap justify-center gap-2 mt-6">
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-gray-200 border border-green-700/30">
-                    <Flower2 className="inline w-3 h-3 mr-1" />
-                    Excellence
-                  </span>
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-white border border-white/30">
-                    Integrity
-                  </span>
-                  <span className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-wide text-gray-200 border border-green-700/30">
-                    Leadership
-                  </span>
-                </div>
-              </div>
+  {/* Layer 2: Hero Image with Vignette */}
+  <div 
+    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105 opacity-30"
+    style={{ backgroundImage: "url('/hero/MatG1.jpg')" }}
+  ></div>
+  <div className="absolute inset-0 bg-gradient-to-t from-[#050a05] via-[#050a05]/60 to-transparent"></div>
 
-              <div className="mt-auto pt-8 mb-[5%] border-t border-green-700/20">
-                <div className="flex flex-col gap-6">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">School Motto</p>
-                    <p className="text-2xl font-black italic tracking-tight text-white drop-shadow-md">
-                      "Empower • Excel • Lead"
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-[10px] font-bold text-gray-200 tracking-widest uppercase mt-4">
-                    <span>&copy; {new Date().getFullYear()} Matungulu Girls' High</span>
-                    <span className="flex items-center gap-2">
-                      <Server size={10} />
-                      Commited to Excellence              
-                      </span>
-                  </div>
-                </div>
-              </div>
+  {/* Content Container */}
+  <div className="relative z-10 flex flex-col h-full w-full">
+    
+    {/* Header / Logo Section */}
+    <div className="mb-auto">
+      <Link href="/" className="flex items-center gap-4 group">
+        <div className="relative">
+          <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
+          <Image
+            src="/MatG.jpg"
+            alt="Matungulu Logo"
+            width={56}
+            height={56}
+            className="relative rounded-full border-2 border-white/10 shadow-2xl"
+          />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-xl font-black tracking-tight leading-none">
+            MATUNGULU <span className="text-green-500">GIRLS</span>
+          </span>
+          <span className="text-[9px] font-bold tracking-[0.5em] text-gray-400 uppercase mt-1">
+            Senior School • Admin
+          </span>
+        </div>
+      </Link>
+    </div>
+
+    {/* Center Piece: The Floating Card */}
+    <div className="my-auto relative p-8 rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-md mx-auto overflow-hidden">
+      {/* Glossy Reflection Effect */}
+      <div className="absolute -top-24 -left-24 w-48 h-48 bg-white/5 rotate-45 blur-2xl"></div>
+      
+      <div className="relative z-10 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-bold uppercase tracking-widest mb-6">
+          <ShieldCheck size={14} />
+          System Security Active
+        </div>
+        
+        <h1 className="text-3xl lg:text-4xl font-bold tracking-tight mb-4">
+          Empowering <br />
+          <span className="bg-gradient-to-r from-white via-green-200 to-gray-400 bg-clip-text text-transparent">
+            Future Leaders
+          </span>
+        </h1>
+        
+        <p className="text-sm text-gray-400 leading-relaxed mb-8">
+          Welcome to the heart of Matungulu Girls' digital infrastructure. Access tools designed for excellence, integrity, and administrative precision.
+        </p>
+
+        {/* Dynamic Badges */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { icon: <Flower2 size={12} />, label: "Excellence" },
+            { icon: <CheckCircle size={12} />, label: "Integrity" },
+            { icon: <Star size={12} />, label: "Leadership" }
+          ].map((item, i) => (
+            <div key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+              <span className="text-green-500">{item.icon}</span>
+              <span className="text-[9px] font-bold uppercase tracking-tighter text-gray-300">{item.label}</span>
             </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Footer Section */}
+    <div className="mt-auto pt-10">
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center gap-4">
+          <div className="h-[1px] w-12 bg-green-600"></div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-green-600">Our Motto</p>
+        </div>
+        
+        <h2 className="text-2xl font-serif italic text-white/90">
+          "Commited to excellence."
+        </h2>
+
+        <div className="flex items-center justify-between text-[9px] font-medium text-gray-500 tracking-widest uppercase border-t border-white/5 pt-6">
+          <p>&copy; {new Date().getFullYear()} Del Big Technologies</p>
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+              Server: VERCEL
+            </span>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
       </main>
     </>
