@@ -149,7 +149,7 @@ export default function ModernNavbar() {
     },
     {
       name: 'School Magazine',
-      href: '/pages/Magazine',
+      href: '/pages/School Magazine',
       icon: FiBookOpen,
       description: 'School publications & newsletters'
     },
