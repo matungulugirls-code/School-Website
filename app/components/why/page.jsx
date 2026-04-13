@@ -399,7 +399,7 @@ const ModernSchoolLayout = () => {
   </div>
 
   {/* CTA Buttons */}
-  <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full">
+  <div className="flex flex-nowrap gap-3 pt-2 w-full">
     <button
       onClick={handleExplorePathways}
       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold text-sm transition-all active:scale-[0.98] shadow-lg shadow-emerald-600/20"
@@ -695,22 +695,6 @@ const ModernSchoolLayout = () => {
                 ))}
               </div>
 
-              {/* CTA (dark cards only) */}
-              {isDark && (
-                <div className="mt-5 flex items-center justify-between border-t border-emerald-800 pt-4">
-                  <button
-                    onClick={handleExplorePathways}
-                    className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold uppercase tracking-wide transition-all shadow-md active:scale-95"
-                  >
-                    Apply Now
-                    <FiArrowRight size={14} />
-                  </button>
-
-                  <div className="text-emerald-300 text-xs font-semibold">
-                    Limited Slots
-                  </div>
-                </div>
-              )}
 
               {/* Metrics */}
               <div
