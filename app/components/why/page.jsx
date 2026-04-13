@@ -352,17 +352,7 @@ const ModernSchoolLayout = () => {
   </p>
 
   {/* Contact Pills */}
-  <div className="flex flex-wrap gap-2 sm:gap-3">
-    <span className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700">
-      <FiMapPin className="text-emerald-500" size={14} /> Matungulu, Machakos
-    </span>
-    <span className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700">
-      <FiPhone className="text-emerald-500" size={14} /> {contactPhone}
-    </span>
-    <span className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700 break-all">
-      <FiMail className="text-emerald-500" size={14} /> {contactEmail}
-    </span>
-  </div>
+
 
   {/* Stats Grid (MORE RESPONSIVE ✅) */}
 
@@ -397,6 +387,55 @@ const ModernSchoolLayout = () => {
       </div>
     ))}
   </div>
+
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+  {/* Location Card */}
+  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-50">
+      <FiMapPin className="text-emerald-600" size={18} />
+    </div>
+    <div>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        Location
+      </p>
+      <p className="text-sm font-semibold text-gray-900">
+        Matungulu Constituency, Machakos County
+      </p>
+    </div>
+  </div>
+
+  {/* Phone Card */}
+  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50">
+      <FiPhone className="text-blue-600" size={18} />
+    </div>
+    <div>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        Phone
+      </p>
+      <p className="text-sm font-semibold text-gray-900">
+        {contactPhone || "Add phone number"}
+      </p>
+    </div>
+  </div>
+
+  {/* Email Card */}
+  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-purple-50">
+      <FiMail className="text-purple-600" size={18} />
+    </div>
+    <div>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        Email
+      </p>
+      <p className="text-sm font-semibold text-gray-900 break-all">
+        matungulugirls@gmail.com
+      </p>
+    </div>
+  </div>
+
+</div>
 
   {/* CTA Buttons */}
   <div className="flex flex-nowrap gap-3 pt-2 w-full">
