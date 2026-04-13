@@ -1454,7 +1454,7 @@ const VisionMissionSection = ({ vision, mission, motto, videoTour, videoType, vi
             <div className="flex items-center justify-end gap-2 mt-2">
               <div className="w-2 h-2 rounded-full bg-emerald-600" />
               <span className="text-[9px] font-black text-slate-900 uppercase tracking-wider">
-                Kinyui Boys Senior School
+                Matungulu GirlsSenior School
               </span>
             </div>
           </div>
@@ -2177,10 +2177,10 @@ export default function ComprehensiveAdmissions() {
           <img src="/kinyui.png" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white/10 p-1 border border-white/10" />
           <div className="flex flex-col min-w-0">
             <h2 className="text-sm md:text-base font-bold text-white leading-tight truncate">
-              {schoolData?.name || 'Kinyui Boys Senior School'}
+              {schoolData?.name || 'Matungulu GirlsSenior School'}
             </h2>
             <p className="text-[10px] md:text-xs text-slate-900 font-medium mt-0.5">
-              Soaring to Greater Heights
+              Commited to Excellence
             </p>
           </div>
         </div>
@@ -2413,12 +2413,12 @@ return (
       <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-stone-900 mb-3 tracking-tight leading-[1.15] text-balance">
         Discover{" "}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-800 to-cyan-600">
-          {schoolData?.name || "Kinyui Boys"}
+          {schoolData?.name || "Matungulu Girls"}
         </span>
       </h2>
       
       <p className="text-dark mx-auto text-sm sm:text-base md:text-md px-2 text-balance max-w-4xl">
-        {schoolData?.description || "A premier learning institution that blends academic rigor with character formation, preparing young men to lead with purpose and integrity."}
+        {schoolData?.description || "A premier learning institution that blends academic rigor with character formation, preparing young women to lead with purpose and integrity."}
       </p>
       </div>
     </div>
@@ -2474,7 +2474,7 @@ return (
         <span className="text-[9px] font-semibold uppercase tracking-wider text-teal-700">What Sets Us Apart</span>
       </div>
       <h2 className="text-xl md:text-2xl font-extrabold text-stone-900 tracking-tight leading-tight">
-        The Kinyui Advantage
+        The Matungulu Girls Advantage
       </h2>
       <p className="text-stone-700 text-xs md:text-sm mt-1 max-w-md">
         Three pillars that define the student experience at our institution.
@@ -2499,7 +2499,7 @@ return (
     </h4>
 
     <p className="text-slate-100 text-xs md:text-sm leading-relaxed max-w-md">
-      Kinyui Senior School is steadily building a strong academic foundation, with consistent improvement in performance and a clear focus on excellence. Through dedicated teaching, structured learning, and student support, we are working towards achieving and surpassing a projected mean score of 5 and beyond. Our journey is defined by progress, discipline, and a shared commitment to unlocking every student’s potential.
+      Matungulu Girls' Senior School is steadily building a strong academic foundation, with consistent improvement in performance and a clear focus on excellence. Through dedicated teaching, structured learning, and student support, we are working towards achieving and surpassing a projected mean score of 5 and beyond. Our journey is defined by progress, discipline, and a shared commitment to unlocking every student’s potential.
     </p>
 
     <div className="flex items-center gap-3 mt-4">
@@ -2564,7 +2564,7 @@ return (
             Academic <span className="text-indigo-600">Programs</span>
           </h2>
        <p className="text-slate-900 text-md md:text-md font-medium ">
-  Kinyui Boys Senior School offers a future-ready, holistic curriculum 
+  Matungulu GirlsSenior School offers a future-ready, holistic curriculum 
   specifically designed to cultivate critical thinking, academic excellence, 
   and global leadership. We empower our students to navigate the complexities 
   of the modern world with integrity, innovation, and a commitment to excellence.
