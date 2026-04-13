@@ -11,7 +11,7 @@ const LoadingSpinner = () => {
     "Loading your Student Portal...",
     "Fetching your academic dashboard...",
     "Preparing your personalized resources...",
-    "Syncing your progress and results..."
+    "Syncing your progress and results...."
   ];
 
   useEffect(() => {
