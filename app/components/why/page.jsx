@@ -640,141 +640,144 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
-    {/* CBC Pathways & Subjects Section */}
-    <section className="relative max-w-7xl bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-2xl md:rounded-3xl border border-slate-200/60 p-5 md:p-10 overflow-hidden">
-      {/* Logo watermark */}
-      <img src="/hero/MatG1.jpg" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
+{/* CBC Pathways & Subjects Section */}
+<section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div className="relative bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
+    
+    {/* Logo watermark */}
+    <img src="/hero/MatG1.jpg" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
+
+    {/* Header Section */}
+    <div className="max-w-3xl mb-12">
+      <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 rounded-full mb-4">
+        <FiBookOpen className="text-teal-800 text-lg" />
+        <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-teal-700">CBC Framework</span>
+      </div>
       
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-teal-100 rounded-full mb-2 justify-center w-full">
-  <FiBookOpen className="text-teal-800 text-lg sm:text-xl" />
-  <span className="text-base sm:text-lg font-extrabold uppercase tracking-wider text-teal-700">CBC Framework</span>
-</div>
-<h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-3">
-    CBC <span className="text-teal-800">Learning Tracks</span> & Subjects
-  </h3>
-  <p className="text-slate-700 text-lg sm:text-xl mt-2 max-w-2xl mx-auto font-medium">
-    The Competency Based Curriculum organizes learning around three main pathways, each tailored to different student strengths and career goals at <span className="text-emerald-700 font-bold">Matungulu</span> Girls.
-  </p>
-  <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm mt-4">
-    <IoSparkles className="text-teal-500" />
-    <span className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">7 Core Competencies</span>
-  </div>
-</div>
+      <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
+        CBC <span className="text-teal-800">Learning Tracks</span> & Subjects
+      </h3>
+      
+      <p className="text-slate-700 text-lg font-medium leading-relaxed">
+        The Competency Based Curriculum organizes learning around three main pathways, each tailored to different student strengths and career goals at <span className="text-emerald-700 font-bold">Matungulu</span> Girls.
+      </p>
 
-        {/* CBC Pathways — Numbered Timeline Layout */}
-        <div className="space-y-5 mb-8">
-          {([
-            {
-              pathway: 'STEM Pathway',
-              icon: IoFlaskOutline,
-              color: 'from-blue-600 to-cyan-500',
-              accent: 'blue',
-              description: 'Science, Technology, Engineering & Mathematics',
-              subjects: ['Mathematics', 'Integrated Science', 'Computer Science', 'Pre-Technical Studies', 'Health Education'],
-              careers: 'Software Engineer, Medical Doctor, Civil Engineer, Data Scientist, Pharmacist, Architect, Cybersecurity Analyst, Pilot, Agricultural Researcher, Biotechnologist, Quantitative Analyst, Telecommunications Expert, Environmental Scientist, AI Specialist, Mechanical Technician'
-            },
-            {
-              pathway: 'Arts & Sports Pathway',
-              icon: IoAccessibilityOutline,
-              color: 'from-purple-600 to-pink-500',
-              accent: 'purple',
-              description: 'Creative Arts, Performing Arts & Athletic Excellence',
-              subjects: ['Visual Arts', 'Performing Arts', 'Physical Education', 'Music', 'Creative Design'],
-              careers: 'Professional Athlete, Graphic Designer, Music Producer, Film Director, Interior Decorator, Sports Physiotherapist, Fashion Designer, Choreographer, Fine Artist, Photojournalist, Sports Agent, Animator, Theatre Manager, Fitness Consultant, Content Creator'
-            },
-            {
-              pathway: 'Social Sciences Pathway',
-              icon: IoNewspaperOutline,
-              color: 'from-amber-600 to-orange-500',
-              accent: 'amber',
-              description: 'Humanities, Languages & Civic Education',
-              subjects: ['Social Studies', 'Religious Education', 'Business Studies', 'Languages', 'Life Skills'],
-              careers: 'Advocate of the High Court, Diplomat, Economist, Clinical Psychologist, Human Resource Manager, Journalist, International Relations Officer, Sociologist, Public Relations Specialist, Social Worker, Political Scientist, Archaeologist, Translator/Linguist, Historian, Urban Planner'
-            }
-          ]).map((path, idx) => {
-            const PathIcon = path.icon;
-            const isDark = idx === 1;
-            return (
-              <div key={idx} className={`flex flex-col md:flex-row rounded-2xl overflow-hidden border transition-all hover:shadow-lg ${
-                isDark ? 'bg-slate-900 border-slate-700/50' : 'bg-white border-slate-200'
-              }`}>
-                {/* Left number strip */}
-                <div className={`flex md:flex-col items-center justify-center gap-2 px-4 py-4 md:px-6 md:py-0 md:min-w-[70px] bg-gradient-to-b ${path.color}`}>
-                  <span className="text-3xl md:text-4xl font-black text-white/95">0{idx + 1}</span>
+      <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm mt-6">
+        <IoSparkles className="text-teal-500" />
+        <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">7 Core Competencies</span>
+      </div>
+    </div>
+
+    {/* CBC Pathways — Grid Layout (Prevents Overlap) */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      {([
+        {
+          pathway: 'STEM Pathway',
+          icon: IoFlaskOutline,
+          color: 'from-blue-600 to-cyan-500',
+          description: 'Science, Tech, Engineering & Mathematics',
+          subjects: ['Maths', 'Integrated Science', 'Comp Sci', 'Pre-Tech', 'Health Ed'],
+          careers: 'Medical Doctor, Software Engineer, Architect, Data Scientist'
+        },
+        {
+          pathway: 'Arts & Sports',
+          icon: IoAccessibilityOutline,
+          color: 'from-purple-600 to-pink-500',
+          description: 'Creative Arts, Performing Arts & Athletic Excellence',
+          subjects: ['Visual Arts', 'Music', 'PE', 'Creative Design', 'Performing Arts'],
+          careers: 'Professional Athlete, Graphic Designer, Film Director, Fashion'
+        },
+        {
+          pathway: 'Social Sciences',
+          icon: IoNewspaperOutline,
+          color: 'from-amber-600 to-orange-500',
+          description: 'Humanities, Languages & Civic Education',
+          subjects: ['Social Studies', 'Religious Ed', 'Business', 'Languages', 'Life Skills'],
+          careers: 'Advocate, Diplomat, Economist, Journalist, Psychologist'
+        }
+      ]).map((path, idx) => {
+        const PathIcon = path.icon;
+        const isDark = idx === 1; // Middle card style
+        
+        return (
+          <div key={idx} className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl ${
+            isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'
+          }`}>
+            {/* Top Color Bar with Number */}
+            <div className={`h-2 w-full bg-gradient-to-r ${path.color}`} />
+            
+            <div className="p-6 flex flex-col h-full">
+              <div className="flex items-start justify-between mb-4">
+                <div className={`p-3 rounded-xl ${isDark ? 'bg-white/10' : 'bg-slate-100'}`}>
+                  <PathIcon className={`text-2xl ${isDark ? 'text-white' : 'text-slate-700'}`} />
                 </div>
-                
-                {/* Content */}
-                <div className="flex-1 p-5 md:p-7 space-y-5">
-                  <div className="flex items-center gap-4">
-                    <div className={`p-2 rounded-lg ${isDark ? 'bg-white/10' : 'bg-slate-100'}`}>
-                        <PathIcon className={`text-xl ${isDark ? 'text-white' : 'text-slate-700'}`} />
-                    </div>
-                    <div>
-                      <h4 className={`font-bold text-base md:text-lg ${isDark ? 'text-white' : 'text-slate-900'}`}>{path.pathway}</h4>
-                      <p className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-700'}`}>{path.description}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {path.subjects.map((subj, i) => (
-                      <span key={i} className={`px-2.5 py-1 rounded-md text-[11px] md:text-xs font-semibold border ${
-                        isDark ? 'bg-white/5 text-slate-300 border-white/10' : 'bg-slate-50 text-slate-700 border-slate-100'
-                      }`}>
-                        {subj}
-                      </span>
-                    ))}
-                  </div>
-                  
-                  <div className={`pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
-                    <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>Potential Career Outcomes</p>
-                    <p className={`text-xs md:text-sm font-medium leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                      {path.careers}
-                    </p>
-                  </div>
-                </div>
+                <span className={`text-2xl font-black opacity-20 ${isDark ? 'text-white' : 'text-slate-900'}`}>0{idx + 1}</span>
               </div>
-            );
-          })}
-        </div>
 
-        {/* CBC Core Subjects Row */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 md:p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
-              <FiLayers className="text-white text-sm" />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-900 text-sm">CBC Core Subjects (Mandatory for All Pathways)</h4>
-              <p className="text-[10px] text-slate-900">Every student takes these foundational subjects</p>
+              <h4 className={`font-bold text-xl mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{path.pathway}</h4>
+              <p className={`text-sm font-medium mb-6 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{path.description}</p>
+              
+              {/* Subjects Tags */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {path.subjects.map((subj, i) => (
+                  <span key={i} className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
+                    isDark ? 'bg-white/5 text-slate-300 border-white/10' : 'bg-slate-50 text-slate-600 border-slate-100'
+                  }`}>
+                    {subj}
+                  </span>
+                ))}
+              </div>
+              
+              {/* Careers - Pushed to bottom */}
+              <div className={`mt-auto pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
+                <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>Potential Careers</p>
+                <p className={`text-xs leading-relaxed font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {path.careers}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-            {([
-              { name: 'English', icon: FiBook },
-              { name: 'Kiswahili', icon: FiGlobe },
-              { name: 'Mathematics', icon: FiCpu },
-              { name: 'Integrated Science', icon: FiActivity },
-              { name: 'Social Studies', icon: FiUsers },
-              { name: 'Religious Education', icon: FiHeart },
-              { name: 'Creative Arts', icon: FiPenTool },
-              { name: 'Agriculture', icon: FiDroplet },
-              { name: 'Life Skills', icon: FiStar },
-              { name: 'Physical Education', icon: FiTarget }
-            ]).map((subj, i) => {
-              const SubjIcon = subj.icon;
-              return (
-                <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                  <SubjIcon className="text-teal-800 text-sm shrink-0" />
-                  <span className="text-[10px] md:text-xs font-semibold text-slate-700 truncate">{subj.name}</span>
-                </div>
-              );
-            })}
-          </div>
+        );
+      })}
+    </div>
+
+    {/* CBC Core Subjects Row */}
+    <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+        <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
+          <FiLayers className="text-white text-xl" />
+        </div>
+        <div>
+          <h4 className="font-bold text-slate-900 text-lg">Mandatory Core Subjects</h4>
+          <p className="text-sm text-slate-500">Foundational learning required for every student regardless of pathway</p>
         </div>
       </div>
-    </section>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+        {([
+          { name: 'English', icon: FiBook },
+          { name: 'Kiswahili', icon: FiGlobe },
+          { name: 'Mathematics', icon: FiCpu },
+          { name: 'Integrated Science', icon: FiActivity },
+          { name: 'Social Studies', icon: FiUsers },
+          { name: 'Religious Education', icon: FiHeart },
+          { name: 'Creative Arts', icon: FiPenTool },
+          { name: 'Agriculture', icon: FiDroplet },
+          { name: 'Life Skills', icon: FiStar },
+          { name: 'Physical Education', icon: FiTarget }
+        ]).map((subj, i) => {
+          const SubjIcon = subj.icon;
+          return (
+            <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-white transition-colors">
+              <SubjIcon className="text-teal-700 text-base shrink-0" />
+              <span className="text-xs font-bold text-slate-700">{subj.name}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* ===== EDUCATIONAL PILLARS - BENTO GRID ===== */}
 <section className="bg-white">
