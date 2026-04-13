@@ -196,7 +196,7 @@ const BrandSection = () => (
         </div>
       </div>
       <div>
-        <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-100 to-teal-100 bg-clip-text text-transparent">
           Matungulu Girls
         </h3>
         <p className="text-emerald-200/80 text-sm">Senior School</p>
@@ -216,16 +216,10 @@ const BrandSection = () => (
     </div>
     
     <p className="text-gray-200 text-sm leading-relaxed">
-      A premier Extra County girls' school in Matungulu, Machakos County, dedicated to 
+      A  National  girls' school in Matungulu, Machakos County, dedicated to 
       empowering young women through quality education, leadership development, and 
       character formation since 1955. <span className="text-emerald-300 font-semibold">"Strive to Excel"</span>
     </p>
-    
-    {/* School Motto Badge */}
-    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3 text-center">
-      <p className="text-emerald-300 text-xs font-semibold uppercase tracking-wider">School Motto</p>
-      <p className="text-white text-sm font-bold">Strive to Excel</p>
-    </div>
   </div>
 );
 
@@ -315,7 +309,7 @@ const NewsletterForm = ({ email, setEmail, isSubmitting, showSuccess, errorMsg, 
         <FiBell className="text-white text-lg" />
       </div>
       <h4 className="text-lg font-semibold text-white">School Newsletter</h4>
-      <p className="text-emerald-200/70 text-xs mt-1">Get academic events & announcements</p>
+      <p className="text-white text-xs mt-1">Get academic events & announcements</p>
     </div>
     <form onSubmit={handleSubscribe} className="space-y-3">
       <div className="relative">
@@ -525,7 +519,7 @@ export default function ModernFooter() {
                       <h3 className="text-xl sm:text-2xl font-bold leading-tight">
                         Subscribe to <span className="text-emerald-400">Matungulu Girls</span> Newsletter
                       </h3>
-                      <p className="text-emerald-200/70 text-sm md:text-base max-w-md mx-auto md:mx-0">
+                      <p className="text-white text-sm md:text-base max-w-md mx-auto md:mx-0">
                         Get the latest updates, events, and achievements from our school
                       </p>
                     </div>
@@ -579,14 +573,14 @@ export default function ModernFooter() {
               <div className="flex flex-wrap gap-4 items-center justify-center mt-8">
                 <button
                   onClick={() => setShowSitemap(true)}
-                  className="text-emerald-200/70 hover:text-emerald-400 font-medium transition-all text-sm"
+                  className="text-white hover:text-emerald-400 font-medium transition-all text-sm"
                   type="button"
                 >
                   Sitemap
                 </button>
                 <button
                   onClick={() => setShowPrivacy(true)}
-                  className="text-emerald-200/70 hover:text-emerald-400 font-medium transition-all text-sm"
+                  className="text-white hover:text-emerald-400 font-medium transition-all text-sm"
                   type="button"
                 >
                   Privacy Policy
