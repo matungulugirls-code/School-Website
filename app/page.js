@@ -673,7 +673,7 @@ export default function ModernHero() {
 
   const handleStaffClick = useCallback(() => {
     if (navigationBlocked) return;
-    router.push('/pages/School Team');
+    router.push('/pages/SchoolTeam');
   }, [router, navigationBlocked]);
 
   const handleAdmissionsClick = useCallback(() => {

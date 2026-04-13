@@ -46,7 +46,7 @@ class DeviceTokenManager {
           return { valid: false, reason: 'admin_token_expired', message: 'Admin token has expired' };
         }
         
-        // Check user role - only admins/School Team can manage fees
+        // Check user role - only admins/SchoolTeam can manage fees
         const userRole = adminPayload.role || adminPayload.userRole;
         const validRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'PRINCIPAL', 'STAFF', 'HR_MANAGER', 'TEACHER', 'ACCOUNTANT'];
         

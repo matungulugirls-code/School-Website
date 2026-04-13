@@ -327,7 +327,7 @@ P.O. Box 363 – 90131 Tala, Kenya
 **Visit Us:** We welcome parents, guardians, and visitors during office hours.`,
     links: [
       { label: 'Contact', path: '/pages/contact', icon: 'phone' },
-      { label: 'Staff Directory', path: '/pages/School Team', icon: 'users' },
+      { label: 'Staff Directory', path: '/pages/SchoolTeam', icon: 'users' },
       { label: 'Careers', path: '/pages/career', icon: 'briefcase' },
       { label: 'Admin Login', path: '/pages/adminLogin', icon: 'login' }
     ]

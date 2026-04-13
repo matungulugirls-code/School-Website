@@ -47,7 +47,7 @@ class DeviceTokenManager {
           return { valid: false, reason: 'admin_token_expired', message: 'Admin token has expired' };
         }
         
-        // Check user role - only admins/School Team can create events
+        // Check user role - only admins/SchoolTeam can create events
         const userRole = adminPayload.role || adminPayload.userRole;
         const validRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'TEACHER', 'PRINCIPAL', 'STAFF', 'EVENT_MANAGER'];
         

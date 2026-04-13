@@ -2068,7 +2068,7 @@ const fetchStaff = async (isRefresh = false) => {
     }
     
     // ✅ PUBLIC ENDPOINT - No authentication needed
-    const response = await fetch('/api/School Team');
+    const response = await fetch('/api/SchoolTeam');
     
     const data = await response.json();
     
@@ -2178,7 +2178,7 @@ const confirmDelete = async () => {
     
     if (deleteType === 'single' && staffToDelete) {
       setBulkDeleting(true);
-      const response = await fetch(`/api/School Team/${staffToDelete.id}`, {
+      const response = await fetch(`/api/SchoolTeam/${staffToDelete.id}`, {
         method: 'DELETE',
         headers: headers, // Add authentication headers
       });
@@ -2205,7 +2205,7 @@ const confirmDelete = async () => {
       
       for (const staffId of selectedPosts) {
         try {
-          const response = await fetch(`/api/School Team/${staffId}`, {
+          const response = await fetch(`/api/SchoolTeam/${staffId}`, {
             method: 'DELETE',
             headers: headers, // Add authentication headers
           });
@@ -2277,13 +2277,13 @@ const handleSubmit = async (formData, id) => {
     
     let response;
     if (id) {
-      response = await fetch(`/api/School Team/${id}`, {
+      response = await fetch(`/api/SchoolTeam/${id}`, {
         method: 'PUT',
         headers: headers, // Add authentication headers
         body: formData,
       });
     } else {
-      response = await fetch('/api/School Team', {
+      response = await fetch('/api/SchoolTeam', {
         method: 'POST',
         headers: headers, // Add authentication headers
         body: formData,

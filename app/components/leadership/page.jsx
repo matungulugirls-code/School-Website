@@ -95,7 +95,7 @@ useEffect(() => {
   const fetchStaff = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/School Team');
+      const response = await fetch('/api/SchoolTeam');
       const data = await response.json();
 
       if (data.success && Array.isArray(data.staff)) {

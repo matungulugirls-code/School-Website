@@ -888,7 +888,7 @@ useEffect(() => {
      const [campaignsRes, studentRes, staffRes] = await Promise.all([
           fetch("/api/sms?limit=1000"),
           fetch("/api/s"),
-          fetch("/api/School Team"),
+          fetch("/api/SchoolTeam"),
 ]);
 
       const campaignsData = await campaignsRes.json();

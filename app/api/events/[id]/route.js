@@ -47,7 +47,7 @@ class DeviceTokenManager {
           return { valid: false, reason: 'admin_token_expired', message: 'Admin token has expired' };
         }
         
-        // Check user role - only admins/School Team can modify events
+        // Check user role - only admins/SchoolTeam can modify events
         const userRole = adminPayload.role || adminPayload.userRole;
         const validRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'TEACHER', 'PRINCIPAL', 'STAFF', 'EVENT_MANAGER'];
         
@@ -310,7 +310,7 @@ export async function PUT(req, { params }) {
       );
     }
 
-    // Optional: Check if user owns this event (for teachers/School Team)
+    // Optional: Check if user owns this event (for teachers/SchoolTeam)
     // Only allow original creator or admin to modify
     if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN' && auth.user.role !== 'administrator') {
       if (existingEvent.createdBy && existingEvent.createdBy !== auth.user.id) {

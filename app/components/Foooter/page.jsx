@@ -67,7 +67,7 @@ const RESOURCES = [
     href: '/pages/Guidance-and-Councelling',
     icon: FiHelpCircle,
   },
-  { name: 'Staff Directory', href: '/pages/School Team', icon: FiUsers },
+  { name: 'Staff Directory', href: '/pages/SchoolTeam', icon: FiUsers },
   { name: 'Admin Login', href: '/pages/adminLogin', icon: FiLock },
   { name: 'School Policies', href: '/pages/OurSchoolpolicies', icon: FiShield },
   { name: 'E-Learning Platform', href: '/pages/e-learning', icon: FiCompass },
