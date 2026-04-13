@@ -36,7 +36,6 @@ import {
   IoNewspaperOutline 
 } from 'react-icons/io5';
 
-
 const ModernSchoolLayout = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
