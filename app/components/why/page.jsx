@@ -307,7 +307,7 @@ const ModernSchoolLayout = () => {
                 <div className="absolute bottom-12 left-4 right-4 sm:left-5 sm:right-auto z-10">
                   <div className="backdrop-blur-xl bg-white/10 border border-white/20 px-4 py-3 rounded-xl max-w-xs">
                     <p className="text-white font-black text-sm sm:text-base tracking-tight leading-snug">
-                      🦅 {schoolName}
+                      🏆{schoolName}
                     </p>
                     <p className="text-white/60 text-[10px] sm:text-xs font-semibold uppercase tracking-wider mt-0.5">
                       {motto}
