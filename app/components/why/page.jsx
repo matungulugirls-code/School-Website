@@ -964,7 +964,7 @@ const ModernSchoolLayout = () => {
       </section>
 
       {/* CBC Pathways & Subjects Section */}
-      <section className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="relative rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
           {/* Logo watermark */}
           <img
