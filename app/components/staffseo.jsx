@@ -39,7 +39,7 @@ export default function StaffProfilePage() {
   const [showShareModal, setShowShareModal] = useState(false);
 
   // School description
-  const schoolDescription = "kinyui boys Senior School provides exceptional education through trained professionals dedicated to holistic student development and academic excellence.";
+  const schoolDescription = "Matungulu Girls Senior School provides exceptional education through trained professionals dedicated to holistic student development and academic excellence.";
 
   // In the transformStaffData function, update the image handling:
   const transformStaffData = (apiData) => {
@@ -94,7 +94,7 @@ export default function StaffProfilePage() {
       email: apiData.email || '',
       phone: apiData.phone || '',
       image: getImageUrl(apiData.image), // Use the helper function
-      bio: apiData.bio || `A committed educator at kinyui boys Senior School with a passion for student success and educational excellence.`,
+      bio: apiData.bio || `A committed educator at Matungulu Girls Senior School with a passion for student success and educational excellence.`,
       expertise: expertise,
       responsibilities: responsibilities,
       achievements: achievements,
@@ -152,7 +152,7 @@ export default function StaffProfilePage() {
     const fullName = staff.name;
     const position = staff.position;
     const department = staff.department;
-    const schoolName = "kinyui boys Senior School";
+    const schoolName = "Matungulu Girls Senior School";
     
     // Create multiple name variations for better searchability
     const firstName = fullName.split(' ')[0];
@@ -172,10 +172,10 @@ export default function StaffProfilePage() {
       `${schoolName} staff`,
       `${schoolName} teachers`,
       `${schoolName} faculty`,
-      `teacher at kinyui boys`,
-      `kinyui boys High School staff`,
-      `SA kinyui boys teachers`,
-      `Katz school teachers`,
+      `teacher at Matungulu Girls`,
+      `Matungulu GirlsHigh School staff`,
+      ` Matungulu Girlsteachers`,
+      `MatG teachers`,
       ...staff.expertise || []
     ].filter(Boolean).join(', ');
     
@@ -191,8 +191,8 @@ export default function StaffProfilePage() {
     return (
       <Head>
         {/* Basic Meta Tags */}
-        <title>{`${fullName} - ${position} at kinyui boys Senior School`}</title>
-        <meta name="title" content={`${fullName} - ${position} | kinyui boys Senior School Faculty`} />
+        <title>{`${fullName} - ${position} at Matungulu Girls Senior School`}</title>
+        <meta name="title" content={`${fullName} - ${position} | Matungulu Girls Senior School Faculty`} />
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
         <meta name="author" content={schoolName} />
@@ -221,7 +221,7 @@ export default function StaffProfilePage() {
         <meta name="twitter:title" content={`${fullName} - ${position} at ${schoolName}`} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl} />
-        <meta name="twitter:site" content="@kinyui boysHS" />
+        <meta name="twitter:site" content="@Matungulu GirlsHS" />
         <meta name="twitter:creator" content={schoolName} />
         
         {/* Robots - Allow indexing */}
@@ -241,7 +241,7 @@ export default function StaffProfilePage() {
               "worksFor": {
                 "@type": "EducationalOrganization",
                 "name": schoolName,
-                "alternateName": ["kinyui boys High School", "SA kinyui boys", "Katz School"],
+                "alternateName": ["Matungulu GirlsHigh School", "SA Matungulu Girls", "Katz School"],
                 "description": schoolDescription,
                 "url": "https://kinyui-senior.vercel.app",
                 "address": {
@@ -319,7 +319,7 @@ export default function StaffProfilePage() {
     if (!showShareModal || !staff) return null;
   
     const profileUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const shareText = `Check out ${staff.name}'s profile - ${staff.position} at kinyui boys Senior School `;
+    const shareText = `Check out ${staff.name}'s profile - ${staff.position} at Matungulu Girls Senior School `;
     
     const handleCopy = async () => {
       await navigator.clipboard.writeText(profileUrl);
@@ -501,7 +501,7 @@ export default function StaffProfilePage() {
 
             <div className="flex items-center gap-2">
               <Image src="/seo/kinyui.png" alt="Logo" width={24} height={24} />
-              <span className="text-sm font-black text-[#1a1a2e] hidden sm:inline">Kinyui Boys Senior School</span>
+              <span className="text-sm font-black text-[#1a1a2e] hidden sm:inline">Matungulu Girls Senior School</span>
             </div>
 
             <div className="flex gap-1.5">
@@ -777,7 +777,7 @@ export default function StaffProfilePage() {
               <div className="flex items-center gap-3">
                 <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} className="opacity-50" />
                 <span className="text-xs font-black text-slate-300 uppercase tracking-[0.2em]">
-                  Kinyui Boys Senior School
+                  Matungulu Girls Senior School
                 </span>
               </div>
               <div className="flex items-center gap-3 text-[10px] text-slate-300">
