@@ -1,13 +1,13 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { 
-  FiAward, 
-  FiBook, 
-  FiHeart, 
-  FiMapPin, 
-  FiUsers, 
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import {
+  FiAward,
+  FiBook,
+  FiHeart,
+  FiMapPin,
+  FiUsers,
   FiCalendar,
   FiShield,
   FiStar,
@@ -28,14 +28,15 @@ import {
   FiCpu,
   FiActivity,
   FiPenTool,
-  FiDroplet
-} from 'react-icons/fi';
-import { 
-  IoSparkles, 
-  IoFlaskOutline, 
-  IoAccessibilityOutline, 
-  IoNewspaperOutline 
-} from 'react-icons/io5';
+  FiDroplet,
+  FiX,
+} from "react-icons/fi";
+import {
+  IoSparkles,
+  IoFlaskOutline,
+  IoAccessibilityOutline,
+  IoNewspaperOutline,
+} from "react-icons/io5";
 
 const ModernSchoolLayout = () => {
   const router = useRouter();
@@ -45,7 +46,9 @@ const ModernSchoolLayout = () => {
   const [imagesLoading, setImagesLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [expandedCards, setExpandedCards] = useState({});
-  
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPathway, setSelectedPathway] = useState(null);
+
   // School images for carousel
   const schoolImages = [
     { src: "/hero/MatG1.jpg", alt: "Matungulu Girls Campus" },
@@ -55,20 +58,20 @@ const ModernSchoolLayout = () => {
 
   // Fetch school data
   useEffect(() => {
-    fetch('/api/school')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/school")
+      .then((res) => res.json())
+      .then((data) => {
         if (data.success && data.school) setSchoolData(data.school);
       })
-      .catch(err => console.error('Error fetching school data:', err))
+      .catch((err) => console.error("Error fetching school data:", err))
       .finally(() => setLoading(false));
   }, []);
 
   // Fetch university logos
   useEffect(() => {
-    fetch('/api/unis')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/unis")
+      .then((res) => res.json())
+      .then((data) => {
         const imgs = data.images || [];
         for (let i = imgs.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -83,185 +86,323 @@ const ModernSchoolLayout = () => {
   // Auto-advance carousel
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex(prev => (prev + 1) % schoolImages.length);
+      setCurrentImageIndex((prev) => (prev + 1) % schoolImages.length);
     }, 8000);
     return () => clearInterval(timer);
   }, [schoolImages.length]);
 
-  const nextImage = () => setCurrentImageIndex(prev => (prev + 1) % schoolImages.length);
-  const prevImage = () => setCurrentImageIndex(prev => (prev - 1 + schoolImages.length) % schoolImages.length);
-  
+  const nextImage = () =>
+    setCurrentImageIndex((prev) => (prev + 1) % schoolImages.length);
+  const prevImage = () =>
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + schoolImages.length) % schoolImages.length
+    );
+
   const toggleReadMore = (id) => {
-    setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const handleExplorePathways = () => {
     router.push("/pages/admissions");
   };
 
-  const schoolName = schoolData?.name || 'Matungulu Girls Senior School';
-  const motto = schoolData?.motto || 'Strive to Excel';
-  const vision = schoolData?.vision || 'To be a center of excellence in nurturing holistic, God-fearing, and academically empowered young women for global leadership.';
-  const mission = schoolData?.mission || 'To provide quality education that fosters academic excellence, moral integrity, and personal growth in a supportive Christian environment.';
+  const openModal = (pathway) => {
+    setSelectedPathway(pathway);
+    setModalOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedPathway(null);
+    document.body.style.overflow = "auto";
+  };
+
+  const schoolName = schoolData?.name || "Matungulu Girls Senior School";
+  const motto = schoolData?.motto || "Strive to Excel";
+  const vision =
+    schoolData?.vision ||
+    "To be a center of excellence in nurturing holistic, God-fearing, and academically empowered young women for global leadership.";
+  const mission =
+    schoolData?.mission ||
+    "To provide quality education that fosters academic excellence, moral integrity, and personal growth in a supportive Christian environment.";
   const description = schoolData?.description;
   const studentCount = schoolData?.studentCount || 1200;
-  const contactEmail = schoolData?.admissionContactEmail || 'info@matungulugirls.ac.ke';
-  const contactPhone = schoolData?.admissionContactPhone || '+254 720 123 456';
+  const contactEmail = schoolData?.admissionContactEmail || "info@matungulugirls.ac.ke";
+  const contactPhone = schoolData?.admissionContactPhone || "+254 720 123 456";
 
   // Double images for seamless scrolling
   const scrollImages = [...uniImages, ...uniImages];
 
   const colorMap = {
-    emerald: { bg: 'bg-emerald-600', light: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200' },
-    blue: { bg: 'bg-blue-600', light: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200' },
+    emerald: {
+      bg: "bg-emerald-600",
+      light: "bg-emerald-50",
+      text: "text-emerald-600",
+      border: "border-emerald-200",
+    },
+    blue: {
+      bg: "bg-blue-600",
+      light: "bg-blue-50",
+      text: "text-blue-600",
+      border: "border-blue-200",
+    },
   };
 
   const whyChooseUs = [
     {
       id: 1,
-      color: 'emerald',
+      color: "emerald",
       title: "Academic Excellence",
-      shortDescription: "Consistently ranked among top-performing girls' schools in Machakos County.",
-      description: "Consistently ranked among top-performing girls' schools in Machakos County with impressive KCSE results and university placements. Our students achieve mean scores above 8.0 with over 80% qualifying for direct university entry.",
+      shortDescription:
+        "Consistently ranked among top-performing girls' schools in Machakos County.",
+      description:
+        "Consistently ranked among top-performing girls' schools in Machakos County with impressive KCSE results and university placements. Our students achieve mean scores above 8.0 with over 80% qualifying for direct university entry.",
       metrics: "Top Performer",
       icon: <FiAward size={20} />,
-      image: { src: "/hero/MatG1.jpg", alt: "Academic Excellence" }
+      image: { src: "/hero/MatG1.jpg", alt: "Academic Excellence" },
     },
     {
       id: 2,
-      color: 'emerald',
+      color: "emerald",
       title: "Holistic Development",
-      shortDescription: "Balancing academic rigor with spiritual growth and co-curricular activities.",
-      description: "Balancing academic rigor with spiritual growth, sports, music, drama, and leadership programs for well-rounded individuals. We offer over 15 clubs and societies for talent development.",
+      shortDescription:
+        "Balancing academic rigor with spiritual growth and co-curricular activities.",
+      description:
+        "Balancing academic rigor with spiritual growth, sports, music, drama, and leadership programs for well-rounded individuals. We offer over 15 clubs and societies for talent development.",
       metrics: "Complete Education",
       icon: <FiUsers size={20} />,
     },
     {
       id: 3,
-      color: 'emerald',
+      color: "emerald",
       title: "National School Status",
-      shortDescription: "Elevated to National School status in April 2026.",
-      description: "In recognition of consistent excellence, the Ministry of Education conferred Category One (C1) National School status during our 60th-anniversary celebrations in April 2026.",
+      shortDescription:
+        "Elevated to National School status in April 2026.",
+      description:
+        "In recognition of consistent excellence, the Ministry of Education conferred Category One (C1) National School status during our 60th-anniversary celebrations in April 2026.",
       metrics: "National School",
       icon: <FiShield size={20} />,
     },
     {
       id: 4,
-      color: 'emerald',
+      color: "emerald",
       title: "Modern Facilities",
       shortDescription: "Well-equipped laboratories, computer labs, and library.",
-      description: "Well-equipped science laboratories, computer labs, library, and serene learning environment in Matungulu's beautiful landscape with modern boarding facilities.",
+      description:
+        "Well-equipped science laboratories, computer labs, library, and serene learning environment in Matungulu's beautiful landscape with modern boarding facilities.",
       metrics: "Premier Infrastructure",
       icon: <FiGlobe size={20} />,
-    }
+    },
   ];
 
   const schoolFeatures = [
     {
       title: "Academic Excellence",
       gradient: "from-emerald-600 to-emerald-500",
-      description: "Matungulu Girls maintains outstanding academic performance with consistent high KCSE results. Our dedicated faculty ensures students excel in all subjects.",
+      description:
+        "Matungulu Girls maintains outstanding academic performance with consistent high KCSE results. Our dedicated faculty ensures students excel in all subjects.",
       highlight: "Academic Distinction",
       details: ["Mean Score 8.14", "84% University", "Merit Awards", "Science Excellence"],
       metrics: ["8.14 Mean", "254 Uni", "15 A-"],
       icon: <FiAward />,
-      isPremium: false
+      isPremium: false,
     },
     {
       title: "Experienced Faculty",
       gradient: "from-emerald-600 to-emerald-500",
-      description: "Our team comprises qualified educators with specialized training in girl-child education and personalized mentorship.",
+      description:
+        "Our team comprises qualified educators with specialized training in girl-child education and personalized mentorship.",
       highlight: "Qualified Educators",
       details: ["TSC Certified", "Subject Specialists", "Mentorship", "Training"],
       metrics: ["45 Teachers", "18+ Years", "100% TSC"],
       icon: <FiUsers />,
-      isPremium: false
+      isPremium: false,
     },
     {
       title: "Modern Learning Environment",
       gradient: "from-emerald-600 to-emerald-500",
-      description: "Our campus features well-equipped science laboratories, computer labs, and digital resources in scenic Matungulu.",
+      description:
+        "Our campus features well-equipped science laboratories, computer labs, and digital resources in scenic Matungulu.",
       highlight: "Advanced Facilities",
       details: ["3 Science Labs", "2 Computer Labs", "Library", "Sports Fields"],
       metrics: ["3 Labs", "2 Comp Labs", "8,000 Books"],
       icon: <FiMapPin />,
-      isPremium: false
+      isPremium: false,
     },
     {
       title: "Co-curricular Activities",
       gradient: "from-emerald-600 to-emerald-500",
-      description: "We offer diverse extracurricular activities including sports, music, drama, clubs, and leadership programs.",
+      description:
+        "We offer diverse extracurricular activities including sports, music, drama, clubs, and leadership programs.",
       highlight: "15+ Activities",
       details: ["Athletics", "Ball Games", "Music & Drama", "Journalism"],
       metrics: ["8 Sports", "15 Clubs", "Events"],
       icon: <FiStar />,
-      isPremium: false
+      isPremium: false,
     },
     {
       title: "Spiritual & Moral Formation",
       gradient: "from-emerald-600 to-emerald-500",
-      description: "As a Christian institution, we emphasize spiritual growth, moral values, and character development.",
+      description:
+        "As a Christian institution, we emphasize spiritual growth, moral values, and character development.",
       highlight: "Values Education",
       details: ["Christian Teachings", "Character Building", "Community Service", "Retreats"],
       metrics: ["Weekly Mass", "Retreats", "Outreach"],
       icon: <FiHeart />,
-      isPremium: false
+      isPremium: false,
     },
     {
       title: "University & Career Preparation",
       gradient: "from-emerald-700 to-emerald-600",
-      description: "We provide comprehensive career guidance and university linkage programs for smooth transition to higher education.",
+      description:
+        "We provide comprehensive career guidance and university linkage programs for smooth transition to higher education.",
       highlight: "University Pathways",
       details: ["Career Counseling", "University Tours", "Alumni Network", "Scholarships"],
       metrics: ["15+ Partners", "Career Fairs", "Success"],
       icon: <FiTrendingUp />,
-      isPremium: true
-    }
+      isPremium: true,
+    },
   ];
 
   const achievements = [
     {
       year: "2026",
       title: "National School Status",
-      description: "Elevated to Category One (C1) National School status by Ministry of Education",
-      icon: <FiAward className="w-5 h-5" />
+      description:
+        "Elevated to Category One (C1) National School status by Ministry of Education",
+      icon: <FiAward className="w-5 h-5" />,
     },
     {
       year: "2025",
       title: "Record KCSE Performance",
-      description: "Mean score of 8.14 (B plain), 84% university transition rate, 1 A (plain) and 15 A- grades",
-      icon: <FiTrendingUp className="w-5 h-5" />
+      description:
+        "Mean score of 8.14 (B plain), 84% university transition rate, 1 A (plain) and 15 A- grades",
+      icon: <FiTrendingUp className="w-5 h-5" />,
     },
     {
       year: "2025",
       title: "Top County Ranking",
-      description: "Best-performing girls' school in category, second-best public school in Machakos County",
-      icon: <FiStar className="w-5 h-5" />
+      description:
+        "Best-performing girls' school in category, second-best public school in Machakos County",
+      icon: <FiStar className="w-5 h-5" />,
     },
     {
       year: "2024",
       title: "Most Improved School",
       description: "Recognized as most improved secondary school in Machakos County",
-      icon: <FiTrendingUp className="w-5 h-5" />
+      icon: <FiTrendingUp className="w-5 h-5" />,
     },
     {
       year: "2024",
       title: "National Science Fair",
       description: "Won National Science and Engineering Fair, top position nationally",
-      icon: <FiAward className="w-5 h-5" />
-    }
+      icon: <FiAward className="w-5 h-5" />,
+    },
+  ];
+
+  // CBC Pathways Data
+  const pathways = [
+    {
+      id: "stem",
+      name: "STEM Pathway",
+      icon: IoFlaskOutline,
+      color: "from-blue-600 to-cyan-500",
+      description: "Science, Technology, Engineering & Mathematics",
+      subjects: ["Maths", "Integrated Science", "Comp Sci", "Pre-Tech", "Health Ed"],
+      careers: [
+        "Medical Doctor",
+        "Software Engineer",
+        "Civil Engineer",
+        "Pharmacist",
+        "Architect",
+        "Pilot",
+        "Data Scientist",
+        "Electrical Engineer",
+        "Nursing Officer",
+        "Cybersecurity Expert",
+        "Biomedical Engineer",
+        "Chemical Engineer",
+        "Dentist",
+        "Veterinarian",
+        "Agricultural Scientist",
+        "Physicist",
+        "Chemist",
+        "Laboratory Technician",
+        "Radiologist",
+        "Geologist",
+      ],
+    },
+    {
+      id: "arts",
+      name: "Arts & Sports",
+      icon: IoAccessibilityOutline,
+      color: "from-purple-600 to-pink-500",
+      description: "Creative Arts, Performing Arts & Athletic Excellence",
+      subjects: ["Visual Arts", "Music", "PE", "Creative Design", "Performing Arts"],
+      careers: [
+        "Graphic Designer",
+        "Professional Athlete",
+        "Music Producer",
+        "Film Director",
+        "Fashion Designer",
+        "Interior Decorator",
+        "Fine Artist",
+        "Sports Coach",
+        "Choreographer",
+        "Photojournalist",
+        "Actor",
+        "Dancer",
+        "Sports Journalist",
+        "Art Curator",
+        "Event Manager",
+        "Animator",
+        "Fitness Trainer",
+        "Set Designer",
+        "Voice Actor",
+        "Sports Psychologist",
+      ],
+    },
+    {
+      id: "social",
+      name: "Social Sciences",
+      icon: IoNewspaperOutline,
+      color: "from-amber-600 to-orange-500",
+      description: "Humanities, Languages & Civic Education",
+      subjects: ["Social Studies", "Religious Ed", "Business", "Languages", "Life Skills"],
+      careers: [
+        "Advocate / Lawyer",
+        "Diplomat",
+        "Economist",
+        "HR Manager",
+        "Journalist",
+        "Accountant",
+        "Sociologist",
+        "Psychologist",
+        "Public Relations",
+        "Urban Planner",
+        "Teacher",
+        "Social Worker",
+        "Criminologist",
+        "Political Scientist",
+        "Archivist",
+        "Librarian",
+        "Market Researcher",
+        "Policy Analyst",
+        "Translator",
+        "Counselor",
+      ],
+    },
   ];
 
   return (
     <div className="bg-white overflow-hidden">
-      
       {/* ===== HERO SECTION ===== */}
       <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
             {/* Left Column - Text Content */}
-    
+
             {/* Right Column - Image Carousel */}
             <div className="lg:col-span-7">
               <div className="relative aspect-[4/3] sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl group">
@@ -269,12 +410,14 @@ const ModernSchoolLayout = () => {
                   <div
                     key={idx}
                     className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-                      idx === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                      idx === currentImageIndex
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-105"
                     }`}
                   >
-                    <Image 
-                      src={image.src} 
-                      alt={image.alt} 
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
                       fill
                       className="object-cover"
                       priority={idx === 0}
@@ -286,16 +429,16 @@ const ModernSchoolLayout = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                 {/* Navigation Arrows */}
-                <button 
-                  onClick={prevImage} 
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/30 z-10" 
+                <button
+                  onClick={prevImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/30 z-10"
                   aria-label="Previous"
                 >
                   <FiChevronLeft size={20} />
                 </button>
-                <button 
-                  onClick={nextImage} 
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/30 z-10" 
+                <button
+                  onClick={nextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/30 z-10"
                   aria-label="Next"
                 >
                   <FiChevronRight size={20} />
@@ -304,12 +447,14 @@ const ModernSchoolLayout = () => {
                 {/* Dots Indicator */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                   {schoolImages.map((_, idx) => (
-                    <button 
-                      key={idx} 
+                    <button
+                      key={idx}
                       onClick={() => setCurrentImageIndex(idx)}
                       className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === currentImageIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/70'
-                      }`} 
+                        idx === currentImageIndex
+                          ? "w-6 bg-white"
+                          : "w-1.5 bg-white/40 hover:bg-white/70"
+                      }`}
                     />
                   ))}
                 </div>
@@ -327,144 +472,157 @@ const ModernSchoolLayout = () => {
                 </div>
               </div>
             </div>
-             <div className="lg:col-span-5 space-y-6 sm:space-y-7">
-  
-  {/* Status Badge */}
-  <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200 w-fit">
-    <span className="relative flex h-2 w-2">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-    </span>
-    <span className="text-[10px] sm:text-xs font-semibold tracking-wider text-emerald-700 uppercase">
-      Now a National School (2026)
-    </span>
-  </div>
+            <div className="lg:col-span-5 space-y-6 sm:space-y-7">
+              {/* Status Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200 w-fit">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-[10px] sm:text-xs font-semibold tracking-wider text-emerald-700 uppercase">
+                  Now a National School (2026)
+                </span>
+              </div>
 
-  {/* Heading */}
-  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
-    {loading ? (
-      <span className="inline-flex items-center gap-2">
-        <FiLoader className="w-5 h-5 animate-spin text-emerald-500" /> Loading...
-      </span>
-    ) : (
-      <>
-        {schoolName.split(' ').slice(0, -2).join(' ')}{" "}
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
-          {schoolName.split(' ').slice(-2).join(' ')}
-        </span>
-      </>
-    )}
-  </h1>
+              {/* Heading */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
+                {loading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <FiLoader className="w-5 h-5 animate-spin text-emerald-500" />{" "}
+                    Loading...
+                  </span>
+                ) : (
+                  <>
+                    {schoolName.split(" ").slice(0, -2).join(" ")}{" "}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+                      {schoolName.split(" ").slice(-2).join(" ")}
+                    </span>
+                  </>
+                )}
+              </h1>
 
-  {/* Description (FIXED DARKER TEXT ✅) */}
-  <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-medium">
-    {description ||
-      "Located in the heart of Matungulu, Machakos County, we are dedicated to nurturing young women into confident, compassionate, and accomplished leaders through academic excellence and character formation."}
-  </p>
+              {/* Description (FIXED DARKER TEXT ✅) */}
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-medium">
+                {description ||
+                  "Located in the heart of Matungulu, Machakos County, we are dedicated to nurturing young women into confident, compassionate, and accomplished leaders through academic excellence and character formation."}
+              </p>
 
-  {/* Contact Pills */}
+              {/* Contact Pills */}
 
+              {/* Stats Grid (MORE RESPONSIVE ✅) */}
 
-  {/* Stats Grid (MORE RESPONSIVE ✅) */}
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                {[
+                  {
+                    label: "Students",
+                    value: `${studentCount}+`,
+                    icon: <FiUsers className="w-4 h-4" />,
+                  },
+                  {
+                    label: "KCSE Mean",
+                    value: "8.14",
+                    icon: <FiBookOpen className="w-4 h-4" />,
+                  },
+                  {
+                    label: "Uni Transition",
+                    value: "84%",
+                    icon: <FiTrendingUp className="w-4 h-4" />,
+                  },
+                  {
+                    label: "Motto",
+                    value: motto,
+                    icon: <FiTarget className="w-4 h-4" />,
+                  },
+                ].map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="relative p-4 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[90px]"
+                  >
+                    <span className="absolute top-2 right-2 text-sm opacity-30">
+                      {stat.icon}
+                    </span>
 
-  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-    {([
-      { label: "Students", value: `${studentCount}+`, icon: <FiUsers className="w-4 h-4" /> },
-      { label: "KCSE Mean", value: "8.14", icon: <FiBookOpen className="w-4 h-4" /> },
-      { label: "Uni Transition", value: "84%", icon: <FiTrendingUp className="w-4 h-4" /> },
-      { label: "Motto", value: motto, icon: <FiTarget className="w-4 h-4" /> },
-    ]).map((stat, idx) => (
-      <div
-        key={idx}
-        className="relative p-4 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[90px]"
-      >
-        <span className="absolute top-2 right-2 text-sm opacity-30">
-          {stat.icon}
-        </span>
+                    <p
+                      className={`font-bold text-emerald-600 leading-tight ${
+                        stat.label === "Motto"
+                          ? "text-xs sm:text-sm"
+                          : "text-lg sm:text-xl md:text-2xl"
+                      }`}
+                    >
+                      {stat.value}
+                    </p>
 
-        <p
-          className={`font-bold text-emerald-600 leading-tight ${
-            stat.label === "Motto"
-              ? "text-xs sm:text-sm"
-              : "text-lg sm:text-xl md:text-2xl"
-          }`}
-        >
-          {stat.value}
-        </p>
+                    <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-gray-500 mt-1">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
 
-        <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-gray-500 mt-1">
-          {stat.label}
-        </p>
-      </div>
-    ))}
-  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* Location Card */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-50">
+                    <FiMapPin className="text-emerald-600" size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                      Location
+                    </p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      Matungulu Constituency, Machakos County
+                    </p>
+                  </div>
+                </div>
 
-<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* Phone Card */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50">
+                    <FiPhone className="text-blue-600" size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                      Phone
+                    </p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {contactPhone || "Add phone number"}
+                    </p>
+                  </div>
+                </div>
 
-  {/* Location Card */}
-  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-50">
-      <FiMapPin className="text-emerald-600" size={18} />
-    </div>
-    <div>
-      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-        Location
-      </p>
-      <p className="text-sm font-semibold text-gray-900">
-        Matungulu Constituency, Machakos County
-      </p>
-    </div>
-  </div>
+                {/* Email Card */}
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-purple-50">
+                    <FiMail className="text-purple-600" size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                      Email
+                    </p>
+                    <p className="text-sm font-semibold text-gray-900 break-all">
+                      matungulugirls@gmail.com
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-  {/* Phone Card */}
-  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50">
-      <FiPhone className="text-blue-600" size={18} />
-    </div>
-    <div>
-      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-        Phone
-      </p>
-      <p className="text-sm font-semibold text-gray-900">
-        {contactPhone || "Add phone number"}
-      </p>
-    </div>
-  </div>
+              {/* CTA Buttons */}
+              <div className="flex flex-nowrap gap-3 pt-2 w-full">
+                <button
+                  onClick={handleExplorePathways}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold text-sm transition-all active:scale-[0.98] shadow-lg shadow-emerald-600/20"
+                >
+                  Admission <FiArrowRight size={16} />
+                </button>
 
-  {/* Email Card */}
-  <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-    <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-purple-50">
-      <FiMail className="text-purple-600" size={18} />
-    </div>
-    <div>
-      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-        Email
-      </p>
-      <p className="text-sm font-semibold text-gray-900 break-all">
-        matungulugirls@gmail.com
-      </p>
-    </div>
-  </div>
-
-</div>
-
-  {/* CTA Buttons */}
-  <div className="flex flex-nowrap gap-3 pt-2 w-full">
-    <button
-      onClick={handleExplorePathways}
-      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold text-sm transition-all active:scale-[0.98] shadow-lg shadow-emerald-600/20"
-    >
-      Admission <FiArrowRight size={16} />
-    </button>
-
-    <button
-      onClick={() => router.push("/pages/AboutUs")}
-      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-800 rounded-xl font-semibold text-sm transition-all border border-gray-300"
-    >
-      Discover More
-    </button>
-  </div>
-</div>
+                <button
+                  onClick={() => router.push("/pages/AboutUs")}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-800 rounded-xl font-semibold text-sm transition-all border border-gray-300"
+                >
+                  Discover More
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -473,11 +631,23 @@ const ModernSchoolLayout = () => {
       <section className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-            {([
-              { label: 'Our Motto', value: motto, icon: <FiTarget className="w-5 h-5" /> },
-              { label: 'Our Vision', value: vision, icon: <FiEye className="w-5 h-5" /> },
-              { label: 'Our Mission', value: mission, icon: <FiBookOpen className="w-5 h-5" /> },
-            ]).map((item, idx) => (
+            {[
+              {
+                label: "Our Motto",
+                value: motto,
+                icon: <FiTarget className="w-5 h-5" />,
+              },
+              {
+                label: "Our Vision",
+                value: vision,
+                icon: <FiEye className="w-5 h-5" />,
+              },
+              {
+                label: "Our Mission",
+                value: mission,
+                icon: <FiBookOpen className="w-5 h-5" />,
+              },
+            ].map((item, idx) => (
               <div key={idx} className="flex gap-3 items-start">
                 <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white flex-shrink-0">
                   {item.icon}
@@ -514,60 +684,60 @@ const ModernSchoolLayout = () => {
           <div className="relative">
             {/* Timeline Line */}
             <div className="absolute left-8 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-300 to-emerald-200"></div>
-            
-      <div className="space-y-10">
-  {achievements.map((item, idx) => (
-    <div
-      key={idx}
-      className={`relative flex flex-col sm:flex-row items-start gap-6 sm:gap-10 ${
-        idx % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
-      }`}
-    >
-      {/* Timeline Dot */}
-      <div className="absolute left-6 sm:left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 border-4 border-white shadow-xl flex items-center justify-center z-10">
-        <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
-      </div>
 
-      {/* Content */}
-      <div
-        className={`ml-14 sm:ml-0 ${
-          idx % 2 === 0 ? "sm:pr-14 sm:text-right" : "sm:pl-14"
-        } sm:w-1/2`}
-      >
-        <div
-          className={`group bg-white/90 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
-            idx % 2 === 0 ? "sm:mr-auto" : "sm:ml-auto"
-          }`}
-        >
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-3">
-            <div
-              className={`w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-md ${
-                idx % 2 === 0 ? "order-first" : "sm:order-last"
-              }`}
-            >
-              {item.icon}
+            <div className="space-y-10">
+              {achievements.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`relative flex flex-col sm:flex-row items-start gap-6 sm:gap-10 ${
+                    idx % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+                  }`}
+                >
+                  {/* Timeline Dot */}
+                  <div className="absolute left-6 sm:left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 border-4 border-white shadow-xl flex items-center justify-center z-10">
+                    <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div
+                    className={`ml-14 sm:ml-0 ${
+                      idx % 2 === 0 ? "sm:pr-14 sm:text-right" : "sm:pl-14"
+                    } sm:w-1/2`}
+                  >
+                    <div
+                      className={`group bg-white/90 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
+                        idx % 2 === 0 ? "sm:mr-auto" : "sm:ml-auto"
+                      }`}
+                    >
+                      {/* Header */}
+                      <div className="flex items-center gap-3 mb-3">
+                        <div
+                          className={`w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-md ${
+                            idx % 2 === 0 ? "order-first" : "sm:order-last"
+                          }`}
+                        >
+                          {item.icon}
+                        </div>
+
+                        <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full tracking-wide">
+                          {item.year}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h4 className="font-bold text-gray-900 text-base mb-1.5 tracking-tight">
+                        {item.title}
+                      </h4>
+
+                      {/* Description (DARKER TEXT ✅) */}
+                      <p className="text-gray-700 text-sm leading-relaxed font-medium">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full tracking-wide">
-              {item.year}
-            </span>
-          </div>
-
-          {/* Title */}
-          <h4 className="font-bold text-gray-900 text-base mb-1.5 tracking-tight">
-            {item.title}
-          </h4>
-
-          {/* Description (DARKER TEXT ✅) */}
-          <p className="text-gray-700 text-sm leading-relaxed font-medium">
-            {item.description}
-          </p>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
           </div>
         </div>
       </section>
@@ -583,7 +753,8 @@ const ModernSchoolLayout = () => {
               The Matungulu Advantage
             </h2>
             <p className="text-gray-500 text-sm sm:text-base">
-              Discover what makes Matungulu Girls the premier choice for your daughter's education
+              Discover what makes Matungulu Girls the premier choice for your
+              daughter's education
             </p>
           </div>
 
@@ -591,17 +762,22 @@ const ModernSchoolLayout = () => {
             {whyChooseUs.map((item) => {
               const c = colorMap[item.color];
               return (
-                <div key={item.id} className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                <div
+                  key={item.id}
+                  className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                >
                   {item.image && (
                     <div className="relative h-40 sm:h-48 overflow-hidden">
-                      <Image 
-                        src={item.image.src} 
-                        alt={item.image.alt} 
-                        fill 
-                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      <Image
+                        src={item.image.src}
+                        alt={item.image.alt}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                      <span className={`absolute top-3 left-3 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${c.bg} text-white`}>
+                      <span
+                        className={`absolute top-3 left-3 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${c.bg} text-white`}
+                      >
                         {item.metrics}
                       </span>
                     </div>
@@ -610,7 +786,9 @@ const ModernSchoolLayout = () => {
                   <div className="p-5 sm:p-6">
                     <div className="flex items-start gap-3 mb-3">
                       {!item.image && (
-                        <div className={`w-10 h-10 rounded-xl ${c.light} ${c.text} flex items-center justify-center flex-shrink-0`}>
+                        <div
+                          className={`w-10 h-10 rounded-xl ${c.light} ${c.text} flex items-center justify-center flex-shrink-0`}
+                        >
                           {item.icon}
                         </div>
                       )}
@@ -620,16 +798,22 @@ const ModernSchoolLayout = () => {
                     </div>
 
                     <p className="text-gray-500 text-sm leading-relaxed mb-3">
-                      {expandedCards[item.id] ? item.description : item.shortDescription}
+                      {expandedCards[item.id]
+                        ? item.description
+                        : item.shortDescription}
                     </p>
 
                     {item.description !== item.shortDescription && (
-                      <button 
+                      <button
                         onClick={() => toggleReadMore(item.id)}
                         className={`inline-flex items-center gap-1.5 ${c.text} text-xs font-semibold hover:underline transition-colors`}
                       >
-                        {expandedCards[item.id] ? 'Read Less' : 'Read More'}
-                        <FiChevronRight className={`w-3.5 h-3.5 transition-transform duration-300 ${expandedCards[item.id] ? 'rotate-90' : ''}`} />
+                        {expandedCards[item.id] ? "Read Less" : "Read More"}
+                        <FiChevronRight
+                          className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                            expandedCards[item.id] ? "rotate-90" : ""
+                          }`}
+                        />
                       </button>
                     )}
                   </div>
@@ -640,281 +824,357 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
-{/* CBC Pathways & Subjects Section */}
-<section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div className="relative bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
-    
-    {/* Logo watermark */}
-    <img src="/hero/MatG1.jpg" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
+      {/* CBC Pathways & Subjects Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
+          {/* Logo watermark */}
+          <img
+            src="/hero/MatG1.jpg"
+            alt=""
+            className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none"
+          />
 
-    {/* Header Section */}
-    <div className="max-w-3xl mb-12">
-      <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 rounded-full mb-4">
-        <FiBookOpen className="text-teal-800 text-lg" />
-        <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-teal-700">CBC Framework</span>
-      </div>
-      
-      <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-        CBC <span className="text-teal-800">Learning Tracks</span> & Subjects
-      </h3>
-      
-      <p className="text-slate-700 text-lg font-medium leading-relaxed">
-        The Competency Based Curriculum organizes learning around three main pathways, each tailored to different student strengths and career goals at <span className="text-emerald-700 font-bold">Matungulu</span> Girls.
-      </p>
+          {/* Header Section */}
+          <div className="max-w-3xl mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 rounded-full mb-4">
+              <FiBookOpen className="text-teal-800 text-lg" />
+              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-teal-700">
+                CBC Framework
+              </span>
+            </div>
 
-      <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm mt-6">
-        <IoSparkles className="text-teal-500" />
-        <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">7 Core Competencies</span>
-      </div>
-    </div>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
+              CBC <span className="text-teal-800">Learning Tracks</span> &
+              Subjects
+            </h3>
 
-    {/* CBC Pathways — Grid Layout (Prevents Overlap) */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      {([
-        {
-          pathway: 'STEM Pathway',
-          icon: IoFlaskOutline,
-          color: 'from-blue-600 to-cyan-500',
-          description: 'Science, Tech, Engineering & Mathematics',
-          subjects: ['Maths', 'Integrated Science', 'Comp Sci', 'Pre-Tech', 'Health Ed'],
-          careers: 'Medical Doctor, Software Engineer, Architect, Data Scientist'
-        },
-        {
-          pathway: 'Arts & Sports',
-          icon: IoAccessibilityOutline,
-          color: 'from-purple-600 to-pink-500',
-          description: 'Creative Arts, Performing Arts & Athletic Excellence',
-          subjects: ['Visual Arts', 'Music', 'PE', 'Creative Design', 'Performing Arts'],
-          careers: 'Professional Athlete, Graphic Designer, Film Director, Fashion'
-        },
-        {
-          pathway: 'Social Sciences',
-          icon: IoNewspaperOutline,
-          color: 'from-amber-600 to-orange-500',
-          description: 'Humanities, Languages & Civic Education',
-          subjects: ['Social Studies', 'Religious Ed', 'Business', 'Languages', 'Life Skills'],
-          careers: 'Advocate, Diplomat, Economist, Journalist, Psychologist'
-        }
-      ]).map((path, idx) => {
-        const PathIcon = path.icon;
-        const isDark = idx === 1; // Middle card style
-        
-        return (
-          <div key={idx} className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl ${
-            isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'
-          }`}>
-            {/* Top Color Bar with Number */}
-            <div className={`h-2 w-full bg-gradient-to-r ${path.color}`} />
-            
-            <div className="p-6 flex flex-col h-full">
-              <div className="flex items-start justify-between mb-4">
-                <div className={`p-3 rounded-xl ${isDark ? 'bg-white/10' : 'bg-slate-100'}`}>
-                  <PathIcon className={`text-2xl ${isDark ? 'text-white' : 'text-slate-700'}`} />
-                </div>
-                <span className={`text-2xl font-black opacity-20 ${isDark ? 'text-white' : 'text-slate-900'}`}>0{idx + 1}</span>
-              </div>
+            <p className="text-slate-700 text-lg font-medium leading-relaxed">
+              The Competency Based Curriculum organizes learning around three
+              main pathways, each tailored to different student strengths and
+              career goals at{" "}
+              <span className="text-emerald-700 font-bold">Matungulu</span>{" "}
+              Girls.
+            </p>
 
-              <h4 className={`font-bold text-xl mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{path.pathway}</h4>
-              <p className={`text-sm font-medium mb-6 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{path.description}</p>
-              
-              {/* Subjects Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {path.subjects.map((subj, i) => (
-                  <span key={i} className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
-                    isDark ? 'bg-white/5 text-slate-300 border-white/10' : 'bg-slate-50 text-slate-600 border-slate-100'
-                  }`}>
-                    {subj}
-                  </span>
-                ))}
-              </div>
-              
-              {/* Careers - Pushed to bottom */}
-              <div className={`mt-auto pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>Potential Careers</p>
-                <p className={`text-xs leading-relaxed font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                  {path.careers}
-                </p>
-              </div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm mt-6">
+              <IoSparkles className="text-teal-500" />
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                7 Core Competencies
+              </span>
             </div>
           </div>
-        );
-      })}
-    </div>
 
-    {/* CBC Core Subjects Row */}
-    <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
-      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
-        <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
-          <FiLayers className="text-white text-xl" />
-        </div>
-        <div>
-          <h4 className="font-bold text-slate-900 text-lg">Mandatory Core Subjects</h4>
-          <p className="text-sm text-slate-500">Foundational learning required for every student regardless of pathway</p>
-        </div>
-      </div>
+          {/* CBC Pathways — Grid Layout (Prevents Overlap) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {pathways.map((path, idx) => {
+              const PathIcon = path.icon;
+              const isDark = idx === 1; // Middle card style
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        {([
-          { name: 'English', icon: FiBook },
-          { name: 'Kiswahili', icon: FiGlobe },
-          { name: 'Mathematics', icon: FiCpu },
-          { name: 'Integrated Science', icon: FiActivity },
-          { name: 'Social Studies', icon: FiUsers },
-          { name: 'Religious Education', icon: FiHeart },
-          { name: 'Creative Arts', icon: FiPenTool },
-          { name: 'Agriculture', icon: FiDroplet },
-          { name: 'Life Skills', icon: FiStar },
-          { name: 'Physical Education', icon: FiTarget }
-        ]).map((subj, i) => {
-          const SubjIcon = subj.icon;
-          return (
-            <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-white transition-colors">
-              <SubjIcon className="text-teal-700 text-base shrink-0" />
-              <span className="text-xs font-bold text-slate-700">{subj.name}</span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </div>
-</section>
-
-      {/* ===== EDUCATIONAL PILLARS - BENTO GRID ===== */}
-<section className="bg-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-    
-    {/* Header */}
-    <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-      <span className="inline-block text-sm font-extrabold uppercase tracking-[0.2em] text-emerald-700 mb-3">
-        Our Foundation
-      </span>
-
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
-        Educational Pillars
-      </h2>
-
-      <p className="text-gray-700 text-base sm:text-lg font-medium">
-        Building academic excellence, strong character, and future-ready skills
-      </p>
-    </div>
-
-    {/* Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
-      {schoolFeatures.map((feature, index) => {
-        const spans = [
-          "md:col-span-3",
-          "md:col-span-3",
-          "md:col-span-2",
-          "md:col-span-2",
-          "md:col-span-2",
-          "md:col-span-6",
-        ];
-
-        const isDark = feature.isPremium;
-
-        return (
-          <div
-            key={index}
-            className={`${spans[index] || "md:col-span-2"} relative overflow-hidden ${
-              isDark
-                ? "bg-gradient-to-br from-emerald-900 to-teal-900 text-white"
-                : "bg-white text-gray-900"
-            } border ${
-              isDark ? "border-emerald-800" : "border-gray-200"
-            } rounded-2xl p-6 group hover:border-emerald-400 transition-all duration-300 shadow-sm hover:shadow-lg`}
-          >
-            {/* Background glow */}
-            <div
-              className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-[0.05] group-hover:opacity-15 transition-opacity rounded-bl-full`}
-            ></div>
-
-            <div className="relative z-10 flex flex-col h-full">
-              
-              {/* Icon */}
-              <div
-                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white shadow-md mb-4`}
-              >
-                {feature.icon &&
-                  React.cloneElement(feature.icon, {
-                    className: "w-6 h-6",
-                  })}
-              </div>
-
-              {/* Content */}
-              <div className="mb-4">
-                <span
-                  className={`text-[10px] font-extrabold ${
-                    isDark ? "text-emerald-300" : "text-emerald-700"
-                  } uppercase tracking-widest mb-1 block`}
+              return (
+                <div
+                  key={idx}
+                  className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl ${
+                    isDark ? "bg-slate-900 border-slate-700" : "bg-white border-slate-200"
+                  }`}
                 >
-                  {feature.highlight}
-                </span>
+                  {/* Top Color Bar */}
+                  <div className={`h-1.5 w-full bg-gradient-to-r ${path.color}`} />
 
-                <h4 className="text-lg sm:text-xl font-extrabold tracking-tight leading-snug mb-2">
-                  {feature.title}
-                </h4>
+                  <div className="p-6 flex flex-col h-full">
+                    <div className="flex items-start justify-between mb-4">
+                      <div
+                        className={`p-3 rounded-xl ${
+                          isDark ? "bg-white/10" : "bg-slate-100"
+                        }`}
+                      >
+                        <PathIcon
+                          className={`text-2xl ${
+                            isDark ? "text-white" : "text-slate-700"
+                          }`}
+                        />
+                      </div>
+                      <span
+                        className={`text-2xl font-black opacity-10 ${
+                          isDark ? "text-white" : "text-slate-900"
+                        }`}
+                      >
+                        0{idx + 1}
+                      </span>
+                    </div>
 
-                {/* ✅ DARKER + BIGGER DESCRIPTION */}
-                <p
-                  className={`${
-                    isDark ? "text-white/90" : "text-gray-800"
-                  } text-sm sm:text-base font-medium leading-relaxed line-clamp-3`}
-                >
-                  {feature.description}
-                </p>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mt-auto pt-3">
-                {feature.details.map((detail, dIdx) => (
-                  <span
-                    key={dIdx}
-                    className={`px-3 py-1 ${
-                      isDark
-                        ? "bg-emerald-800 text-emerald-100"
-                        : "bg-gray-100 text-gray-700"
-                    } border ${
-                      isDark ? "border-emerald-700" : "border-gray-200"
-                    } rounded-full text-[10px] font-semibold uppercase`}
-                  >
-                    {detail}
-                  </span>
-                ))}
-              </div>
-
-
-              {/* Metrics */}
-              <div
-                className={`mt-5 flex items-center justify-between border-t ${
-                  isDark ? "border-emerald-800" : "border-gray-200"
-                } pt-3`}
-              >
-                {feature.metrics.map((metric, mIdx) => (
-                  <div key={mIdx} className="text-center">
-                    <p
-                      className={`text-sm font-extrabold ${
-                        isDark ? "text-white" : "text-gray-900"
+                    <h4
+                      className={`font-bold text-xl mb-1 ${
+                        isDark ? "text-white" : "text-slate-900"
                       }`}
                     >
-                      {metric.split(" ")[0]}
-                    </p>
+                      {path.name}
+                    </h4>
                     <p
-                      className={`text-[10px] ${
-                        isDark ? "text-emerald-300" : "text-gray-600"
-                      } font-semibold uppercase tracking-wide`}
+                      className={`text-sm font-medium mb-6 ${
+                        isDark ? "text-slate-400" : "text-slate-600"
+                      }`}
                     >
-                      {metric.split(" ").slice(1).join(" ")}
+                      {path.description}
                     </p>
+
+                    {/* Subjects Tags - Only showing first 3 as preview */}
+                    <div className="flex flex-wrap gap-1.5 mb-6">
+                      {path.subjects.slice(0, 3).map((subj, i) => (
+                        <span
+                          key={i}
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${
+                            isDark
+                              ? "bg-white/5 text-slate-300 border-white/10"
+                              : "bg-slate-50 text-slate-600 border-slate-100"
+                          }`}
+                        >
+                          {subj}
+                        </span>
+                      ))}
+                      {path.subjects.length > 3 && (
+                        <span
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${
+                            isDark
+                              ? "bg-white/5 text-slate-300 border-white/10"
+                              : "bg-slate-50 text-slate-600 border-slate-100"
+                          }`}
+                        >
+                          +{path.subjects.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Careers Section - Preview with 4 careers + Read More button */}
+                    <div
+                      className={`mt-auto pt-4 border-t ${
+                        isDark ? "border-white/10" : "border-slate-100"
+                      }`}
+                    >
+                      <p
+                        className={`text-[10px] font-black uppercase tracking-widest mb-3 ${
+                          isDark ? "text-emerald-400" : "text-emerald-600"
+                        }`}
+                      >
+                        Popular Careers
+                      </p>
+                      <div className="grid grid-cols-2 gap-y-1 gap-x-2 mb-3">
+                        {path.careers.slice(0, 4).map((career, cIdx) => (
+                          <div key={cIdx} className="flex items-center gap-1.5">
+                            <div
+                              className={`w-1 h-1 rounded-full shrink-0 ${
+                                isDark ? "bg-slate-500" : "bg-slate-400"
+                              }`}
+                            />
+                            <span
+                              className={`text-[11px] leading-tight font-semibold truncate ${
+                                isDark ? "text-slate-300" : "text-slate-700"
+                              }`}
+                            >
+                              {career}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => openModal(path)}
+                        className={`inline-flex items-center gap-1 text-xs font-bold mt-1 transition-colors ${
+                          isDark
+                            ? "text-emerald-400 hover:text-emerald-300"
+                            : "text-emerald-600 hover:text-emerald-700"
+                        }`}
+                      >
+                        Read More Careers
+                        <FiArrowRight size={12} />
+                      </button>
+                    </div>
                   </div>
-                ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CBC Core Subjects Row */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+              <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
+                <FiLayers className="text-white text-xl" />
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-900 text-lg">
+                  Mandatory Core Subjects
+                </h4>
+                <p className="text-sm text-slate-500">
+                  Foundational learning required for every student regardless of
+                  pathway
+                </p>
               </div>
             </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {[
+                { name: "English", icon: FiBook },
+                { name: "Kiswahili", icon: FiGlobe },
+                { name: "Mathematics", icon: FiCpu },
+                { name: "Integrated Science", icon: FiActivity },
+                { name: "Social Studies", icon: FiUsers },
+                { name: "Religious Education", icon: FiHeart },
+                { name: "Creative Arts", icon: FiPenTool },
+                { name: "Agriculture", icon: FiDroplet },
+                { name: "Life Skills", icon: FiStar },
+                { name: "Physical Education", icon: FiTarget },
+              ].map((subj, i) => {
+                const SubjIcon = subj.icon;
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-white transition-colors"
+                  >
+                    <SubjIcon className="text-teal-700 text-base shrink-0" />
+                    <span className="text-xs font-bold text-slate-700">
+                      {subj.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
+
+      {/* ===== EDUCATIONAL PILLARS - BENTO GRID ===== */}
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+          {/* Header */}
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+            <span className="inline-block text-sm font-extrabold uppercase tracking-[0.2em] text-emerald-700 mb-3">
+              Our Foundation
+            </span>
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+              Educational Pillars
+            </h2>
+
+            <p className="text-gray-700 text-base sm:text-lg font-medium">
+              Building academic excellence, strong character, and future-ready
+              skills
+            </p>
+          </div>
+
+          {/* Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
+            {schoolFeatures.map((feature, index) => {
+              const spans = [
+                "md:col-span-3",
+                "md:col-span-3",
+                "md:col-span-2",
+                "md:col-span-2",
+                "md:col-span-2",
+                "md:col-span-6",
+              ];
+
+              const isDark = feature.isPremium;
+
+              return (
+                <div
+                  key={index}
+                  className={`${spans[index] || "md:col-span-2"} relative overflow-hidden ${
+                    isDark
+                      ? "bg-gradient-to-br from-emerald-900 to-teal-900 text-white"
+                      : "bg-white text-gray-900"
+                  } border ${
+                    isDark ? "border-emerald-800" : "border-gray-200"
+                  } rounded-2xl p-6 group hover:border-emerald-400 transition-all duration-300 shadow-sm hover:shadow-lg`}
+                >
+                  {/* Background glow */}
+                  <div
+                    className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-[0.05] group-hover:opacity-15 transition-opacity rounded-bl-full`}
+                  ></div>
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    {/* Icon */}
+                    <div
+                      className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white shadow-md mb-4`}
+                    >
+                      {feature.icon &&
+                        React.cloneElement(feature.icon, {
+                          className: "w-6 h-6",
+                        })}
+                    </div>
+
+                    {/* Content */}
+                    <div className="mb-4">
+                      <span
+                        className={`text-[10px] font-extrabold ${
+                          isDark ? "text-emerald-300" : "text-emerald-700"
+                        } uppercase tracking-widest mb-1 block`}
+                      >
+                        {feature.highlight}
+                      </span>
+
+                      <h4 className="text-lg sm:text-xl font-extrabold tracking-tight leading-snug mb-2">
+                        {feature.title}
+                      </h4>
+
+                      {/* ✅ DARKER + BIGGER DESCRIPTION */}
+                      <p
+                        className={`${
+                          isDark ? "text-white/90" : "text-gray-800"
+                        } text-sm sm:text-base font-medium leading-relaxed line-clamp-3`}
+                      >
+                        {feature.description}
+                      </p>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mt-auto pt-3">
+                      {feature.details.map((detail, dIdx) => (
+                        <span
+                          key={dIdx}
+                          className={`px-3 py-1 ${
+                            isDark
+                              ? "bg-emerald-800 text-emerald-100"
+                              : "bg-gray-100 text-gray-700"
+                          } border ${
+                            isDark ? "border-emerald-700" : "border-gray-200"
+                          } rounded-full text-[10px] font-semibold uppercase`}
+                        >
+                          {detail}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Metrics */}
+                    <div
+                      className={`mt-5 flex items-center justify-between border-t ${
+                        isDark ? "border-emerald-800" : "border-gray-200"
+                      } pt-3`}
+                    >
+                      {feature.metrics.map((metric, mIdx) => (
+                        <div key={mIdx} className="text-center">
+                          <p
+                            className={`text-sm font-extrabold ${
+                              isDark ? "text-white" : "text-gray-900"
+                            }`}
+                          >
+                            {metric.split(" ")[0]}
+                          </p>
+                          <p
+                            className={`text-[10px] ${
+                              isDark ? "text-emerald-300" : "text-gray-600"
+                            } font-semibold uppercase tracking-wide`}
+                          >
+                            {metric.split(" ").slice(1).join(" ")}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* ===== UNIVERSITY PARTNERS ===== */}
       <section className="bg-gray-50 border-t border-gray-200 py-12">
@@ -930,8 +1190,8 @@ const ModernSchoolLayout = () => {
               </span>
             </h3>
             <p className="mt-4 text-gray-600 text-sm sm:text-base max-w-3xl mx-auto">
-              We bridge the gap between secondary education and the professional world through 
-              strong alliances with top-tier universities.
+              We bridge the gap between secondary education and the professional
+              world through strong alliances with top-tier universities.
             </p>
           </div>
 
@@ -945,14 +1205,21 @@ const ModernSchoolLayout = () => {
               <div
                 className="flex gap-8 animate-marquee"
                 style={{
-                  animation: 'marquee 120s linear infinite',
-                  width: 'max-content',
+                  animation: "marquee 120s linear infinite",
+                  width: "max-content",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.animationPlayState = 'paused')}
-                onMouseLeave={(e) => (e.currentTarget.style.animationPlayState = 'running')}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.animationPlayState = "paused")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.animationPlayState = "running")
+                }
               >
                 {scrollImages.map((img, idx) => (
-                  <div key={idx} className="relative w-32 h-20 flex-shrink-0 bg-white rounded-xl shadow-sm p-2 hover:shadow-md transition-shadow">
+                  <div
+                    key={idx}
+                    className="relative w-32 h-20 flex-shrink-0 bg-white rounded-xl shadow-sm p-2 hover:shadow-md transition-shadow"
+                  >
                     <Image
                       src={img}
                       alt={`University logo ${idx}`}
@@ -961,7 +1228,7 @@ const ModernSchoolLayout = () => {
                       sizes="128px"
                       onError={(e) => {
                         const parent = e.currentTarget.parentElement;
-                        if (parent) parent.style.display = 'none';
+                        if (parent) parent.style.display = "none";
                       }}
                     />
                   </div>
@@ -976,7 +1243,96 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
-   
+      {/* Careers Modal */}
+      {modalOpen && selectedPathway && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all duration-300"
+          onClick={closeModal}
+        >
+          <div
+            className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div
+              className={`bg-gradient-to-r ${selectedPathway.color} p-6 text-white`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    {React.createElement(selectedPathway.icon, {
+                      className: "w-6 h-6",
+                    })}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">{selectedPathway.name}</h3>
+                    <p className="text-white/80 text-sm">
+                      {selectedPathway.description}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                >
+                  <FiX className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto max-h-[calc(85vh-120px)]">
+              {/* Subjects Section */}
+              <div className="mb-6">
+                <h4 className="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
+                  <FiBook className="text-emerald-600" />
+                  Core Subjects
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPathway.subjects.map((subject, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold"
+                    >
+                      {subject}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Careers Section */}
+              <div>
+                <h4 className="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
+                  <FiTrendingUp className="text-emerald-600" />
+                  All Career Paths ({selectedPathway.careers.length})
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {selectedPathway.careers.map((career, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span className="text-gray-700 text-sm font-medium">
+                        {career}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-gray-100 bg-gray-50">
+              <p className="text-xs text-gray-500 text-center">
+                These career pathways are aligned with Matungulu Girls' CBC
+                curriculum and university preparation programs.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Marquee Animation Style */}
       <style>{`
         @keyframes marquee {
@@ -985,6 +1341,24 @@ const ModernSchoolLayout = () => {
         }
         .animate-marquee {
           animation: marquee 120s linear infinite;
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes zoom-in {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-in {
+          animation-duration: 0.2s;
+          animation-fill-mode: both;
+        }
+        .fade-in {
+          animation-name: fade-in;
+        }
+        .zoom-in {
+          animation-name: zoom-in;
         }
       `}</style>
     </div>
