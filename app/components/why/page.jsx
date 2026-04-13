@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -23,8 +22,20 @@ import {
   FiBookOpen,
   FiLoader,
   FiCheckCircle,
-  FiExternalLink
+  FiExternalLink,
+  FiLayers,
+  FiCpu,
+  FiActivity,
+  FiPenTool,
+  FiDroplet
 } from 'react-icons/fi';
+import { 
+  IoSparkles, 
+  IoFlaskOutline, 
+  IoAccessibilityOutline, 
+  IoNewspaperOutline 
+} from 'react-icons/io5';
+
 
 const ModernSchoolLayout = () => {
   const router = useRouter();
