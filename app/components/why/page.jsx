@@ -645,7 +645,6 @@ const ModernSchoolLayout = () => {
       {/* Logo watermark */}
       <img src="/hero/MatG1.jpg" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
       
-      <div className="relative z-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-teal-100 rounded-full mb-2 justify-center w-full">
