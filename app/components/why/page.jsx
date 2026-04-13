@@ -303,36 +303,157 @@ const ModernSchoolLayout = () => {
 
   // CBC Pathways Data
   const pathways = [
-    {
-      id: "stem",
-      name: "STEM Pathway",
-      icon: IoFlaskOutline,
-      color: "from-blue-600 to-cyan-500",
-      description: "Science, Technology, Engineering & Mathematics",
-      subjects: ["Maths", "Integrated Science", "Comp Sci", "Pre-Tech", "Health Ed"],
-      careers: [
-        "Medical Doctor",
-        "Software Engineer",
-        "Civil Engineer",
-        "Pharmacist",
-        "Architect",
-        "Pilot",
-        "Data Scientist",
-        "Electrical Engineer",
-        "Nursing Officer",
-        "Cybersecurity Expert",
-        "Biomedical Engineer",
-        "Chemical Engineer",
-        "Dentist",
-        "Veterinarian",
-        "Agricultural Scientist",
-        "Physicist",
-        "Chemist",
-        "Laboratory Technician",
-        "Radiologist",
-        "Geologist",
-      ],
-    },
+ {
+  id: "stem",
+  name: "STEM Pathway",
+  icon: IoFlaskOutline,
+  color: "from-blue-600 to-cyan-500",
+  description: "Science, Technology, Engineering & Mathematics",
+  subjects: ["Maths", "Integrated Science", "Computer Science", "Pre-Tech", "Health Ed"],
+  careers: [
+    "Medical Doctor",
+    "Surgeon",
+    "Pediatrician",
+    "Cardiologist",
+    "Neurologist",
+    "Pharmacist",
+    "Clinical Pharmacologist",
+    "Nursing Officer",
+    "Registered Nurse (RN)",
+    "Nurse Anesthetist",
+    "Dentist",
+    "Orthodontist",
+    "Veterinarian",
+    "Radiologist",
+    "Medical Lab Scientist",
+    "Laboratory Technician",
+    "Public Health Officer",
+    "Epidemiologist",
+    "Physiotherapist",
+    "Occupational Therapist",
+    "Speech Therapist",
+    "Nutritionist / Dietitian",
+    "Optometrist",
+    "Audiologist",
+
+    // Engineering
+    "Civil Engineer",
+    "Structural Engineer",
+    "Mechanical Engineer",
+    "Electrical Engineer",
+    "Electronic Engineer",
+    "Chemical Engineer",
+    "Biomedical Engineer",
+    "Aerospace Engineer",
+    "Automotive Engineer",
+    "Petroleum Engineer",
+    "Mining Engineer",
+    "Geotechnical Engineer",
+    "Environmental Engineer",
+    "Agricultural Engineer",
+    "Food Process Engineer",
+    "Textile Engineer",
+    "Marine Engineer",
+    "Robotics Engineer",
+    "Mechatronics Engineer",
+    "Instrumentation Engineer",
+
+    // Technology & Computing
+    "Software Engineer",
+    "Web Developer",
+    "Mobile App Developer",
+    "Game Developer",
+    "Data Scientist",
+    "Data Analyst",
+    "Database Administrator",
+    "Cybersecurity Expert",
+    "Network Engineer",
+    "Cloud Architect",
+    "DevOps Engineer",
+    "AI / Machine Learning Engineer",
+    "IT Project Manager",
+    "Systems Analyst",
+    "IT Support Specialist",
+    "Embedded Systems Engineer",
+    "UI/UX Designer (Tech-focused)",
+    "Blockchain Developer",
+
+    // Physical & Natural Sciences
+    "Physicist",
+    "Astronomer",
+    "Astrophysicist",
+    "Chemist",
+    "Analytical Chemist",
+    "Industrial Chemist",
+    "Biochemist",
+    "Molecular Biologist",
+    "Microbiologist",
+    "Geneticist",
+    "Biotechnologist",
+    "Geologist",
+    "Seismologist",
+    "Volcanologist",
+    "Meteorologist",
+    "Oceanographer",
+    "Environmental Scientist",
+    "Forensic Scientist",
+    "Materials Scientist",
+    "Nanotechnologist",
+
+    // Mathematics & Data
+    "Mathematician",
+    "Statistician",
+    "Actuary",
+    "Quantitative Analyst",
+    "Operations Researcher",
+    "Econometrician",
+    "Cryptographer",
+    "Data Engineer",
+
+    // Architecture & Design
+    "Architect",
+    "Landscape Architect",
+    "Urban Planner",
+    "Interior Designer (Tech/Arch background)",
+    "Quantity Surveyor",
+    "Construction Manager",
+
+    // Agriculture & Environment
+    "Agricultural Scientist",
+    "Agronomist",
+    "Crop Scientist",
+    "Soil Scientist",
+    "Horticulturist",
+    "Fisheries Scientist",
+    "Forestry Scientist",
+    "Wildlife Biologist",
+    "Conservation Scientist",
+    "Climate Change Analyst",
+
+    // Transport & Aviation
+    "Pilot (Commercial/Aviation)",
+    "Aircraft Maintenance Engineer",
+    "Air Traffic Controller",
+    "Drone Operator / Engineer",
+    "Locomotive Engineer",
+    "Marine Navigator",
+
+    // Emerging & Interdisciplinary STEM
+    "Bioinformatician",
+    "Clinical Research Associate",
+    "Genomic Counselor",
+    "Renewable Energy Engineer",
+    "Solar Energy Technician",
+    "Wind Energy Engineer",
+    "Nuclear Engineer",
+    "Space Scientist",
+    "Remote Sensing Specialist",
+    "GIS Analyst",
+    "Patent Examiner (STEM field)",
+    "Science Communicator / Writer",
+    "STEM Educator / Teacher"
+  ],
+},
     {
       id: "arts",
       name: "Arts & Sports",
@@ -1304,7 +1425,7 @@ const ModernSchoolLayout = () => {
               <div>
                 <h4 className="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
                   <FiTrendingUp className="text-emerald-600" />
-                  All Career Paths ({selectedPathway.careers.length})
+                  Common  Career Paths ({selectedPathway.careers.length})
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedPathway.careers.map((career, idx) => (
@@ -1320,15 +1441,16 @@ const ModernSchoolLayout = () => {
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Modal Footer */}
+                  {/* Modal Footer */}
             <div className="p-4 border-t border-gray-100 bg-gray-50">
               <p className="text-xs text-gray-500 text-center">
                 These career pathways are aligned with Matungulu Girls' CBC
                 curriculum and university preparation programs.
               </p>
             </div>
+            </div>
+
+        
           </div>
         </div>
       )}
