@@ -225,7 +225,7 @@ export default function ModernNavbar() {
         className={`fixed w-full z-50 transition-all duration-300 ${
           isScrolled 
             ? 'bg-gradient-to-br from-emerald-900 to-teal-900 backdrop-blur-lg shadow-xl border-b border-white/10' 
-            : 'bg-gradient-to-br from-emerald-800 to-teal-800 shadow-lg'
+            : 'bg-gradient-to-br from-emerald-900 to-teal-900 shadow-lg'
         }`}
       >
         <div className="w-full px-3 xs:px-4 sm:px-6 lg:px-8">
@@ -254,7 +254,7 @@ export default function ModernNavbar() {
                 />
               </div>
               <div className="sm:block">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-emerald-100 to-teal-50 bg-clip-text text-transparent whitespace-nowrap tracking-tight">
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-white whitespace-nowrap tracking-tight">
                   MatG 
                 </h1>
                 <p className="text-xs sm:text-sm text-emerald-100/90 font-medium tracking-wide whitespace-nowrap">
@@ -281,8 +281,8 @@ export default function ModernNavbar() {
                         <button
                           className={`group flex items-center gap-0.5 xs:gap-1 font-bold transition-all text-[0.85rem] xs:text-[0.9rem] tracking-wide whitespace-nowrap px-1.5 xs:px-2 py-2 relative ${
                             isActive || isAcademicDropdownOpen
-                              ? 'text-emerald-200' 
-                              : 'text-white/80 hover:text-emerald-200'
+                              ? 'text-white' 
+                              : 'text-white/90 hover:text-emerald-100'
                           }`}
                           aria-expanded={isAcademicDropdownOpen}
                           aria-haspopup="true"
@@ -303,7 +303,7 @@ export default function ModernNavbar() {
                           <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                             <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-3">
                               <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                                <FiBook className="text-emerald-200" />
+                                <FiBook className="text-white" />
                                 Academic Resources
                               </h3>
                               <p className="text-emerald-100 text-xs mt-0.5">Everything you need for your academic journey</p>
@@ -382,8 +382,8 @@ export default function ModernNavbar() {
                       href={item.href}
                       className={`group flex items-center gap-0.5 xs:gap-1 font-bold transition-all text-[0.85rem] xs:text-[0.9rem] tracking-wide whitespace-nowrap px-1.5 xs:px-2 py-2 relative ${
                         isActive 
-                          ? 'text-emerald-200' 
-                          : 'text-white/80 hover:text-emerald-200'
+                          ? 'text-emerald-100' 
+                          : 'text-white/80 hover:text-emerald-100'
                       }`}
                     >
                       <item.icon className="text-xs flex-shrink-0" />
@@ -412,8 +412,8 @@ export default function ModernNavbar() {
                       isActiveLink('/pages/adminLogin') ||
                       isActiveLink('/pages/staff') ||
                       isActiveLink('/pages/alumni')
-                        ? 'text-emerald-200' 
-                        : 'text-white/80 hover:text-emerald-200'
+                        ? 'text-emerald-100' 
+                        : 'text-white/80 hover:text-emerald-100'
                     }`}
                     aria-expanded={isResourcesDropdownOpen}
                     aria-haspopup="true"
