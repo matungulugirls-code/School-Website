@@ -14,6 +14,7 @@ import {
   Shield,
   Users,
   Building,
+  Star,
   Server,
   Network,
   Smartphone,
