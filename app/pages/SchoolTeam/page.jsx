@@ -644,7 +644,7 @@ export default function StaffDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
           
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} />
+            <Image src="/seo/MatG.jpg" alt="Logo" width={28} height={28} />
             <div className="hidden sm:block">
               <span className="text-sm font-black text-[#1a1a2e] tracking-tight">
                 Matungulu Girls
@@ -1098,7 +1098,7 @@ export default function StaffDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center gap-2">
-              <Image src="/seo/kinyui.png" alt="Logo" width={24} height={24} className="opacity-40" />
+              <Image src="/seo/MatG.png" alt="Logo" width={24} height={24} className="opacity-40" />
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Matungulu Girls Senior School</span>
             </div>
             <p className="text-[10px] text-slate-300">Soaring to Excellence &bull; Staff Directory &bull; &copy; {new Date().getFullYear()}</p>
