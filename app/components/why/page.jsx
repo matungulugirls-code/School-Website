@@ -826,7 +826,7 @@ const ModernSchoolLayout = () => {
 
       {/* CBC Pathways & Subjects Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="relative bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
+        <div className="relative rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
           {/* Logo watermark */}
           <img
             src="/hero/MatG1.jpg"
@@ -1003,7 +1003,7 @@ const ModernSchoolLayout = () => {
                 <h4 className="font-bold text-slate-900 text-lg">
                   Mandatory Core Subjects
                 </h4>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm sm:text-base font-medium leading-relaxed line-clamp-3">
                   Foundational learning required for every student regardless of
                   pathway
                 </p>
