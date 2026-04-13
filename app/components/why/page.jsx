@@ -748,60 +748,107 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
- {/* ===== VISION / MISSION / MOTTO SECTION (Clean Display) ===== */}
-<section className="bg-white py-12 sm:py-16">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {[
-        {
-          label: "Our Motto",
-          value: motto,
-          icon: <FiTarget className="w-6 h-6" />,
-          accent: "from-emerald-500 to-teal-600",
-          textColor: "text-emerald-700",
-          bg: "bg-emerald-50",
-        },
-        {
-          label: "Our Vision",
-          value: vision,
-          icon: <FiEye className="w-6 h-6" />,
-          accent: "from-blue-500 to-indigo-600",
-          textColor: "text-blue-700",
-          bg: "bg-blue-50",
-        },
-        {
-          label: "Our Mission",
-          value: mission,
-          icon: <FiBookOpen className="w-6 h-6" />,
-          accent: "from-teal-500 to-emerald-600",
-          textColor: "text-teal-700",
-          bg: "bg-teal-50",
-        },
-      ].map((item, idx) => (
-        <div 
-          key={idx} 
-          className="relative group p-8 rounded-3xl border border-slate-100 bg-white hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300"
-        >
-          {/* Subtle top accent line */}
-          <div className={`absolute top-0 left-1/2 -translate-x-1/2 h-1 w-24 rounded-b-full bg-gradient-to-r ${item.accent} opacity-0 group-hover:opacity-100 transition-opacity`} />
-
-          <div className="flex flex-col items-center text-center">
-            {/* Icon Circle */}
-            <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center ${item.textColor} mb-5 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-              {item.icon}
-            </div>
-
-            {/* Content */}
-            <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${item.textColor} mb-3`}>
-              {item.label}
-            </span>
-            
-            <h4 className="text-slate-800 text-lg sm:text-xl font-bold leading-relaxed">
-              "{item.value}"
-            </h4>
-          </div>
+{/* ===== VISION / MISSION / MOTTO SECTION (Modern Institutional Layout) ===== */}
+<section className="relative bg-white py-20 sm:py-24 overflow-hidden">
+  {/* Decorative Background Element */}
+  <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50" />
+  
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      
+      {/* Left Side: Section Header */}
+      <div className="lg:col-span-4 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+          <IoSparkles className="text-emerald-600 w-4 h-4" />
+          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Core Foundations</span>
         </div>
-      ))}
+        <h2 className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+          Nurturing Excellence <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+            Through Purpose
+          </span>
+        </h2>
+        <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-sm">
+          Our guiding principles define our commitment to holistic development and academic distinction in the 2026 academic landscape.
+        </p>
+      </div>
+
+      {/* Right Side: Interactive Cards */}
+      <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[
+          {
+            label: "Our Motto",
+            value: motto,
+            icon: <FiTarget />,
+            gradient: "from-emerald-600 to-teal-600",
+            shadow: "shadow-emerald-200/50",
+            bg: "bg-emerald-50",
+            border: "border-emerald-100",
+            text: "text-emerald-700"
+          },
+          {
+            label: "Our Vision",
+            value: vision,
+            icon: <FiEye />,
+            gradient: "from-blue-600 to-indigo-600",
+            shadow: "shadow-blue-200/50",
+            bg: "bg-blue-50",
+            border: "border-blue-100",
+            text: "text-blue-700"
+          },
+          {
+            label: "Our Mission",
+            value: mission,
+            icon: <FiBookOpen />,
+            gradient: "from-teal-600 to-emerald-600",
+            shadow: "shadow-teal-200/50",
+            bg: "bg-teal-50",
+            border: "border-teal-100",
+            text: "text-teal-700",
+            span: "md:col-span-2" // Makes mission full width on tablet/desktop
+          },
+        ].map((item, idx) => (
+          <div 
+            key={idx} 
+            className={`group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-slate-100 to-white hover:shadow-2xl transition-all duration-500 ${item.span || ""}`}
+          >
+            <div className="relative h-full bg-white rounded-[2.4rem] p-8 border border-white overflow-hidden">
+              {/* Animated Corner Accent */}
+              <div className={`absolute -top-12 -right-12 w-24 h-24 bg-gradient-to-br ${item.gradient} opacity-10 group-hover:opacity-20 transition-opacity rounded-full`} />
+              
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between mb-8">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white shadow-lg ${item.shadow} group-hover:rotate-6 transition-transform duration-300`}>
+                    {React.cloneElement(item.icon, { size: 24 })}
+                  </div>
+                  <div className={`px-3 py-1 rounded-full ${item.bg} ${item.border} ${item.text} text-[10px] font-bold uppercase tracking-tighter`}>
+                    Official Statement
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 group-hover:text-emerald-600 transition-colors">
+                    {item.label}
+                  </h3>
+                  <p className="text-slate-800 text-base sm:text-lg font-bold leading-snug tracking-tight italic">
+                    "{item.value}"
+                  </p>
+                </div>
+
+                {/* Decorative Bottom Bar */}
+                <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                  <div className="flex gap-1">
+                    {[1, 2, 3].map((dot) => (
+                      <div key={dot} className={`w-1 h-1 rounded-full bg-gradient-to-r ${item.gradient} opacity-30`} />
+                    ))}
+                  </div>
+                  <FiArrowRight className="text-slate-300 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </section>
@@ -964,7 +1011,7 @@ const ModernSchoolLayout = () => {
       </section>
 
       {/* CBC Pathways & Subjects Section */}
-      <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="relative rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
           {/* Logo watermark */}
           <img
