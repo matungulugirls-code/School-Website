@@ -81,12 +81,7 @@ const SOCIAL_LINKS = [
     label: 'Facebook',
     color: '#1877F2',
   },
-  {
-    icon: SiInstagram,
-    href: 'https://instagram.com/matungulugirlshs',
-    label: 'Instagram',
-    color: '#E4405F',
-  },
+
   {
     icon: FaLinkedin,
     href: 'https://linkedin.com/school/matungulugirlshs',
@@ -204,7 +199,7 @@ const BrandSection = () => (
         <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
           Matungulu Girls
         </h3>
-        <p className="text-emerald-200/80 text-sm">High School</p>
+        <p className="text-emerald-200/80 text-sm">Senior School</p>
         <p className="text-white/60 text-xs mt-1">Est. 1955</p>
       </div>
     </div>
