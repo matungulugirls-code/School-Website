@@ -186,7 +186,7 @@ const ModernEventsNewsSection = () => {
             Eagles' <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Updates</span>
           </h1>
           <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
-            Celebrating excellence, empowerment, and achievement at Matungulu Girls
+            Celebrating excellence, empowerment, and achievement at Matungulu Girls School
           </p>
         </div>
 
