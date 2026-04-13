@@ -593,105 +593,157 @@ const ModernSchoolLayout = () => {
       </section>
 
       {/* ===== EDUCATIONAL PILLARS - BENTO GRID ===== */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 mb-3">
-              Our Foundation
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-3">
-              Educational Pillars
-            </h2>
-            <p className="text-gray-500 text-sm sm:text-base">
-              Building academic excellence, strong character, and future-ready skills
-            </p>
-          </div>
+<section className="bg-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    
+    {/* Header */}
+    <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+      <span className="inline-block text-sm font-extrabold uppercase tracking-[0.2em] text-emerald-700 mb-3">
+        Our Foundation
+      </span>
 
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-            {schoolFeatures.map((feature, index) => {
-              const spans = ["md:col-span-3", "md:col-span-3", "md:col-span-2", "md:col-span-2", "md:col-span-2", "md:col-span-6"];
-              const isDark = feature.isPremium;
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+        Educational Pillars
+      </h2>
+
+      <p className="text-gray-700 text-base sm:text-lg font-medium">
+        Building academic excellence, strong character, and future-ready skills
+      </p>
+    </div>
+
+    {/* Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
+      {schoolFeatures.map((feature, index) => {
+        const spans = [
+          "md:col-span-3",
+          "md:col-span-3",
+          "md:col-span-2",
+          "md:col-span-2",
+          "md:col-span-2",
+          "md:col-span-6",
+        ];
+
+        const isDark = feature.isPremium;
+
+        return (
+          <div
+            key={index}
+            className={`${spans[index] || "md:col-span-2"} relative overflow-hidden ${
+              isDark
+                ? "bg-gradient-to-br from-emerald-900 to-teal-900 text-white"
+                : "bg-white text-gray-900"
+            } border ${
+              isDark ? "border-emerald-800" : "border-gray-200"
+            } rounded-2xl p-6 group hover:border-emerald-400 transition-all duration-300 shadow-sm hover:shadow-lg`}
+          >
+            {/* Background glow */}
+            <div
+              className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-[0.05] group-hover:opacity-15 transition-opacity rounded-bl-full`}
+            ></div>
+
+            <div className="relative z-10 flex flex-col h-full">
               
-              return (
-                <div 
-                  key={index} 
-                  className={`${spans[index] || "md:col-span-2"} relative overflow-hidden ${
-                    isDark ? 'bg-gradient-to-br from-emerald-900 to-teal-900 text-white' : 'bg-white text-gray-900'
-                  } border ${isDark ? 'border-emerald-800' : 'border-gray-200'} rounded-2xl p-5 group hover:border-emerald-400 transition-all duration-300 shadow-sm`}
+              {/* Icon */}
+              <div
+                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white shadow-md mb-4`}
+              >
+                {feature.icon &&
+                  React.cloneElement(feature.icon, {
+                    className: "w-6 h-6",
+                  })}
+              </div>
+
+              {/* Content */}
+              <div className="mb-4">
+                <span
+                  className={`text-[10px] font-extrabold ${
+                    isDark ? "text-emerald-300" : "text-emerald-700"
+                  } uppercase tracking-widest mb-1 block`}
                 >
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-[0.03] group-hover:opacity-10 transition-opacity rounded-bl-full`}></div>
-                  
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white shadow-lg mb-4`}>
-                      {feature.icon && React.cloneElement(feature.icon, { className: "w-5 h-5" })}
-                    </div>
+                  {feature.highlight}
+                </span>
 
-                    <div className="mb-3">
-                      <span className={`text-[8px] font-black ${
-                        isDark ? 'text-emerald-300' : 'text-emerald-600'
-                      } uppercase tracking-widest mb-1 block`}>
-                        {feature.highlight}
-                      </span>
-                      <h4 className="text-base font-black tracking-tight leading-tight mb-2">
-                        {feature.title}
-                      </h4>
-                      <p className={`${
-                        isDark ? 'text-emerald-100' : 'text-gray-600'
-                      } text-xs leading-relaxed line-clamp-3`}>
-                        {feature.description}
-                      </p>
-                    </div>
+                <h4 className="text-lg sm:text-xl font-extrabold tracking-tight leading-snug mb-2">
+                  {feature.title}
+                </h4>
 
-                    <div className="flex flex-wrap gap-1 mt-auto pt-3">
-                      {feature.details.map((detail, dIdx) => (
-                        <span key={dIdx} className={`px-2 py-0.5 ${
-                          isDark ? 'bg-emerald-800 text-emerald-100' : 'bg-gray-50 text-gray-600'
-                        } border ${isDark ? 'border-emerald-700' : 'border-gray-100'} rounded-full text-[8px] font-bold uppercase`}>
-                          {detail}
-                        </span>
-                      ))}
-                    </div>
+                {/* ✅ DARKER + BIGGER DESCRIPTION */}
+                <p
+                  className={`${
+                    isDark ? "text-white/90" : "text-gray-800"
+                  } text-sm sm:text-base font-medium leading-relaxed line-clamp-3`}
+                >
+                  {feature.description}
+                </p>
+              </div>
 
-                    {isDark && (
-                      <div className="mt-4 flex items-center justify-between border-t border-emerald-800 pt-4">
-                        <button 
-                          onClick={handleExplorePathways} 
-                          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-wider transition-all shadow-lg active:scale-95"
-                        >
-                          Apply Now
-                          <FiArrowRight size={12} />
-                        </button>
-                        <div className="text-emerald-300 text-[10px] font-bold">
-                          Limited Slots
-                        </div>
-                      </div>
-                    )}
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mt-auto pt-3">
+                {feature.details.map((detail, dIdx) => (
+                  <span
+                    key={dIdx}
+                    className={`px-3 py-1 ${
+                      isDark
+                        ? "bg-emerald-800 text-emerald-100"
+                        : "bg-gray-100 text-gray-700"
+                    } border ${
+                      isDark ? "border-emerald-700" : "border-gray-200"
+                    } rounded-full text-[10px] font-semibold uppercase`}
+                  >
+                    {detail}
+                  </span>
+                ))}
+              </div>
 
-                    <div className={`mt-4 flex items-center justify-between border-t ${
-                      isDark ? 'border-emerald-800' : 'border-gray-100'
-                    } pt-3`}>
-                      {feature.metrics.map((metric, mIdx) => (
-                        <div key={mIdx} className="text-center">
-                          <p className={`text-xs font-black ${
-                            isDark ? 'text-white' : 'text-gray-800'
-                          }`}>
-                            {metric.split(' ')[0]}
-                          </p>
-                          <p className={`text-[7px] ${
-                            isDark ? 'text-emerald-300' : 'text-gray-400'
-                          } font-bold uppercase tracking-tight`}>
-                            {metric.split(' ').slice(1).join(' ')}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+              {/* CTA (dark cards only) */}
+              {isDark && (
+                <div className="mt-5 flex items-center justify-between border-t border-emerald-800 pt-4">
+                  <button
+                    onClick={handleExplorePathways}
+                    className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold uppercase tracking-wide transition-all shadow-md active:scale-95"
+                  >
+                    Apply Now
+                    <FiArrowRight size={14} />
+                  </button>
+
+                  <div className="text-emerald-300 text-xs font-semibold">
+                    Limited Slots
                   </div>
                 </div>
-              );
-            })}
+              )}
+
+              {/* Metrics */}
+              <div
+                className={`mt-5 flex items-center justify-between border-t ${
+                  isDark ? "border-emerald-800" : "border-gray-200"
+                } pt-3`}
+              >
+                {feature.metrics.map((metric, mIdx) => (
+                  <div key={mIdx} className="text-center">
+                    <p
+                      className={`text-sm font-extrabold ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      {metric.split(" ")[0]}
+                    </p>
+                    <p
+                      className={`text-[10px] ${
+                        isDark ? "text-emerald-300" : "text-gray-600"
+                      } font-semibold uppercase tracking-wide`}
+                    >
+                      {metric.split(" ").slice(1).join(" ")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
       {/* ===== UNIVERSITY PARTNERS ===== */}
       <section className="bg-gray-50 border-t border-gray-200 py-12">
