@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
+import Head from 'next/head'; // IMPORTANT: Add this import
 import { 
   FiMail, 
   FiPhone, 
@@ -23,10 +24,9 @@ import {
   FiGlobe,
   FiHome,
   FiX,
-  FiRefreshCw
 } from 'react-icons/fi';
-import { IoSchoolOutline, IoSparkles } from 'react-icons/io5';
-import { FaGraduationCap, FaChalkboardTeacher, FaUserTie, FaWhatsapp, FaFacebook, FaInstagram, FaLeaf } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
+import { FaGraduationCap, FaChalkboardTeacher, FaUserTie, FaWhatsapp, FaFacebook, FaInstagram } from 'react-icons/fa';
 
 export default function StaffProfilePage() {
   const params = useParams();
@@ -39,41 +39,50 @@ export default function StaffProfilePage() {
   const [showShareModal, setShowShareModal] = useState(false);
 
   // School description
-  const schoolDescription = "Matungulu Girls High School provides exceptional education through trained professionals dedicated to holistic student development and academic excellence.";
+  const schoolDescription = "kinyui boys Senior School provides exceptional education through trained professionals dedicated to holistic student development and academic excellence.";
 
+  // In the transformStaffData function, update the image handling:
   const transformStaffData = (apiData) => {
     if (!apiData) return null;
     
+    // Ensure arrays exist
     const expertise = Array.isArray(apiData.expertise) ? apiData.expertise : [];
     const responsibilities = Array.isArray(apiData.responsibilities) ? apiData.responsibilities : [];
     const achievements = Array.isArray(apiData.achievements) ? apiData.achievements : [];
     
+    // Generate skills safely
     const skills = expertise.slice(0, 4).map((skill, index) => ({
       name: skill || `Skill ${index + 1}`,
       level: 75 + (index * 5)
     }));
 
+    // FIXED: Proper image URL handling
     const getImageUrl = (imagePath) => {
       if (!imagePath || typeof imagePath !== 'string') {
-        return '/male.png';
+        return '/male.png'; // Default fallback
       }
       
+      // Handle Cloudinary URLs
       if (imagePath.includes('cloudinary.com')) {
         return imagePath;
       }
       
+      // Handle local paths that already start with /
       if (imagePath.startsWith('/')) {
         return imagePath;
       }
       
+      // Handle external URLs
       if (imagePath.startsWith('http')) {
         return imagePath;
       }
       
+      // Handle base64 images
       if (imagePath.startsWith('data:image')) {
         return imagePath;
       }
       
+      // If it's just a filename, return as is (Next.js will handle it from public folder)
       return imagePath;
     };
 
@@ -84,8 +93,8 @@ export default function StaffProfilePage() {
       department: apiData.department || 'Academic Department',
       email: apiData.email || '',
       phone: apiData.phone || '',
-      image: getImageUrl(apiData.image),
-      bio: apiData.bio || `A committed educator at Matungulu Girls High School with a passion for student success and educational excellence.`,
+      image: getImageUrl(apiData.image), // Use the helper function
+      bio: apiData.bio || `A committed educator at kinyui boys Senior School with a passion for student success and educational excellence.`,
       expertise: expertise,
       responsibilities: responsibilities,
       achievements: achievements,
@@ -135,177 +144,337 @@ export default function StaffProfilePage() {
     if (id) fetchStaffData();
   }, [id]);
 
+  // ================ FIXED SEO HEAD COMPONENT ================
+  // This now properly uses Next.js Head component for all metadata
   const SeoHead = () => {
     if (!staff) return null;
     
-    const profileTitle = `${staff.name} - ${staff.position} at Matungulu Girls High School`;
-    const profileDescription = staff.bio || `Meet ${staff.name}, ${staff.position} at Matungulu Girls High School. ${schoolDescription}`;
-    const profileUrl = typeof window !== 'undefined' ? window.location.href : `https://matungulu-girls.vercel.app/staff/${staff.id}`;
+    const fullName = staff.name;
+    const position = staff.position;
+    const department = staff.department;
+    const schoolName = "kinyui boys Senior School";
+    
+    // Create multiple name variations for better searchability
+    const firstName = fullName.split(' ')[0];
+    const lastName = fullName.split(' ').slice(1).join(' ');
+    
+    // Keywords for better SEO - including variations of the teacher's name and school
+    const keywords = [
+      fullName,
+      `${firstName} ${lastName}`,
+      `${lastName} ${firstName}`,
+      position,
+      department,
+      `${fullName} ${schoolName}`,
+      `${fullName} teacher`,
+      `${fullName} profile`,
+      `${department} teacher`,
+      `${schoolName} staff`,
+      `${schoolName} teachers`,
+      `${schoolName} faculty`,
+      `teacher at kinyui boys`,
+      `kinyui boys High School staff`,
+      `SA kinyui boys teachers`,
+      `Katz school teachers`,
+      ...staff.expertise || []
+    ].filter(Boolean).join(', ');
+    
+    // Create a rich description
+    const description = staff.bio || 
+      `Meet ${fullName}, ${position} in the ${department} at ${schoolName}. ` +
+      `Experienced educator specializing in ${staff.expertise?.slice(0, 3).join(', ') || 'education'}. ` +
+      `View full profile, qualifications, and contact information.`;
+    
+    const profileUrl = `https://kinyui-senior.vercel.app/pages/staff/${id}`;
+    const imageUrl = staff.image?.startsWith('http') ? staff.image : `https://kinyui-senior.vercel.app${staff.image}`;
     
     return (
-      <>
-        <title>{profileTitle}</title>
-        <meta name="title" content={profileTitle} />
-        <meta name="description" content={profileDescription} />
-        <meta name="keywords" content={`${staff.name}, ${staff.position}, Matungulu Girls High School, teacher profile, ${staff.department}`} />
-        <meta name="author" content="Matungulu Girls High School" />
+      <Head>
+        {/* Basic Meta Tags */}
+        <title>{`${fullName} - ${position} at kinyui boys Senior School`}</title>
+        <meta name="title" content={`${fullName} - ${position} | kinyui boys Senior School Faculty`} />
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
+        <meta name="author" content={schoolName} />
         
+        {/* Canonical URL */}
+        <link rel="canonical" href={profileUrl} />
+        
+        {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="profile" />
         <meta property="og:url" content={profileUrl} />
-        <meta property="og:title" content={profileTitle} />
-        <meta property="og:description" content={profileDescription} />
-        <meta property="og:image" content={staff.image} />
-        <meta property="og:site_name" content="Matungulu Girls High School" />
-        <meta property="profile:first_name" content={staff.name.split(' ')[0]} />
-        <meta property="profile:last_name" content={staff.name.split(' ').slice(1).join(' ')} />
+        <meta property="og:title" content={`${fullName} - ${position} at ${schoolName}`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content={schoolName} />
+        <meta property="og:locale" content="en_KE" />
         
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={profileUrl} />
-        <meta property="twitter:title" content={profileTitle} />
-        <meta property="twitter:description" content={profileDescription} />
-        <meta property="twitter:image" content={staff.image} />
-        <meta property="twitter:site" content="@MatunguluGirlsHS" />
+        {/* Profile-specific Open Graph tags */}
+        <meta property="profile:first_name" content={firstName} />
+        <meta property="profile:last_name" content={lastName} />
+        <meta property="profile:username" content={id} />
         
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${fullName} - ${position} at ${schoolName}`} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+        <meta name="twitter:site" content="@kinyui boysHS" />
+        <meta name="twitter:creator" content={schoolName} />
+        
+        {/* Robots - Allow indexing */}
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+        
+        {/* JSON-LD Structured Data for Google Rich Results */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
-              "name": staff.name,
-              "jobTitle": staff.position,
+              "name": fullName,
+              "givenName": firstName,
+              "familyName": lastName,
+              "jobTitle": position,
               "worksFor": {
                 "@type": "EducationalOrganization",
-                "name": "Matungulu Girls High School",
+                "name": schoolName,
+                "alternateName": ["kinyui boys High School", "SA kinyui boys", "Katz School"],
                 "description": schoolDescription,
-                "url": "https://matungulu-girls.vercel.app",
+                "url": "https://kinyui-senior.vercel.app",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Matungulu",
+                  "addressRegion": "Machakos County",
+                  "addressCountry": "KE"
+                }
               },
-              "description": profileDescription,
+              "description": description,
               "url": profileUrl,
-              "image": staff.image,
-              "alumniOf": staff.expertise?.length > 0 ? staff.expertise : undefined,
+              "image": imageUrl,
+              "email": staff.email,
+              "telephone": staff.phone,
               "knowsAbout": staff.expertise,
-              "memberOf": staff.department
+              "hasOccupation": {
+                "@type": "Occupation",
+                "name": position,
+                "occupationalCategory": "Education",
+                "responsibilities": staff.responsibilities
+              },
+              "alumniOf": staff.achievements,
+              "memberOf": {
+                "@type": "OrganizationRole",
+                "member": {
+                  "@type": "EducationalOrganization",
+                  "name": `${department} Department`
+                },
+                "startDate": staff.joinDate
+              },
+              "sameAs": [
+                profileUrl,
+                `https://kinyui-senior.vercel.app/pages/staff`
+              ]
             })
           }}
         />
-      </>
+        
+        {/* Additional Schema for Breadcrumbs */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://kinyui-senior.vercel.app"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Staff Directory",
+                  "item": "https://kinyui-senior.vercel.app/pages/staff"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": fullName,
+                  "item": profileUrl
+                }
+              ]
+            })
+          }}
+        />
+      </Head>
     );
   };
 
   const ShareModal = () => {
     const [copied, setCopied] = useState(false);
     if (!showShareModal || !staff) return null;
-
+  
     const profileUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const shareText = `Check out ${staff.name}'s profile - ${staff.position} at Matungulu Girls High School `;
+    const shareText = `Check out ${staff.name}'s profile - ${staff.position} at kinyui boys Senior School `;
     
     const handleCopy = async () => {
       await navigator.clipboard.writeText(profileUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     };
-
+  
     const channels = [
       { 
         name: 'WhatsApp', 
-        icon: <FaWhatsapp />, 
-        color: 'bg-[#25D366]', 
+        icon: <FaWhatsapp size={20} />, 
+        color: '#25D366',
         link: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + profileUrl)}` 
       },
       { 
         name: 'Facebook', 
-        icon: <FaFacebook />, 
-        color: 'bg-[#1877F2]', 
+        icon: <FaFacebook size={20} />, 
+        color: '#1877F2',
         link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(profileUrl)}` 
       },
       { 
-        name: 'Copy Link', 
-        icon: <FiShare2 />, 
-        color: 'bg-emerald-600', 
+        name: 'Instagram', 
+        icon: <FaInstagram size={20} />, 
+        color: '#E4405F',
         action: handleCopy 
       },
     ];
-
+  
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setShowShareModal(false)} />
+      <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowShareModal(false)} />
         
-        <div className="relative bg-white w-full max-w-sm rounded-lg shadow-3xl overflow-hidden animate-in zoom-in-95 duration-200">
-          <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">Share Profile</h3>
-                <p className="text-xs text-slate-500">Share this staff profile</p>
-              </div>
-              <button onClick={() => setShowShareModal(false)} className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">
-                <FiX size={16} />
+        {/* Modal — slides up on mobile, centered on desktop */}
+        <div className="relative bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl overflow-hidden shadow-2xl">
+          
+          {/* Profile preview strip */}
+          <div className="bg-[#1a1a2e] px-6 pt-6 pb-5">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[9px] font-semibold text-white/30 uppercase tracking-[0.2em]">Share Profile</span>
+              <button 
+                onClick={() => setShowShareModal(false)} 
+                className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all"
+              >
+                <FiX size={14} />
               </button>
             </div>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl overflow-hidden bg-white/10 ring-2 ring-white/10 shrink-0">
+                <Image
+                  src={staff.image || '/male.png'}
+                  alt={staff.name}
+                  width={44}
+                  height={44}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-white truncate">{staff.name}</h3>
+                <p className="text-[11px] text-white/40 font-medium">{staff.position} &bull; {staff.department}</p>
+              </div>
+            </div>
+          </div>
 
-            <div className="space-y-2">
+          {/* Share channels — horizontal row */}
+          <div className="px-6 py-5">
+            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">Share via</p>
+            <div className="flex items-center gap-3">
               {channels.map((ch) => (
-                <a 
+                <a
                   key={ch.name}
                   href={ch.link || '#'}
                   target={ch.link ? "_blank" : "_self"}
+                  rel="noopener noreferrer"
                   onClick={ch.action}
-                  className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50 transition-colors"
+                  className="group flex-1 flex flex-col items-center gap-2 py-3 rounded-xl border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all cursor-pointer"
                 >
-                  <div className={`w-10 h-10 ${ch.color} rounded-lg flex items-center justify-center text-white text-lg`}>
+                  <div 
+                    className="w-11 h-11 rounded-full flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform"
+                    style={{ backgroundColor: ch.color }}
+                  >
                     {ch.icon}
                   </div>
-                  <span className="flex-1 font-medium text-slate-700">{ch.name}</span>
-                  {ch.name === 'Copy Link' && copied && (
-                    <span className="text-xs text-emerald-600">Copied!</span>
-                  )}
+                  <span className="text-[10px] font-semibold text-slate-500 group-hover:text-slate-700 transition-colors">{ch.name}</span>
                 </a>
               ))}
+              
+              {/* Copy link as a channel */}
+              <button
+                onClick={handleCopy}
+                className="group flex-1 flex flex-col items-center gap-2 py-3 rounded-xl border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all cursor-pointer"
+              >
+                <div className={`w-11 h-11 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-all ${
+                  copied ? 'bg-emerald-500 text-white' : 'bg-[#1a1a2e] text-white'
+                }`}>
+                  {copied ? <FiCheckCircle size={18} /> : <FiShare2 size={18} />}
+                </div>
+                <span className="text-[10px] font-semibold text-slate-500 group-hover:text-slate-700 transition-colors">
+                  {copied ? 'Copied!' : 'Copy'}
+                </span>
+              </button>
             </div>
           </div>
-          
-          <div className="bg-slate-50 p-4 border-t border-slate-100">
-            <p className="text-xs text-center text-slate-400">Matungulu Girls High School • Strive to Excel</p>
+
+          {/* URL row */}
+          <div className="px-6 pb-6">
+            <div className="flex items-center gap-2 bg-slate-50 rounded-xl p-1.5 border border-slate-100">
+              <div className="flex-1 min-w-0 px-3">
+                <p className="text-[11px] font-medium text-slate-400 truncate">{profileUrl}</p>
+              </div>
+              <button
+                onClick={handleCopy}
+                className={`shrink-0 px-4 py-2 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all ${
+                  copied 
+                    ? 'bg-emerald-500 text-white' 
+                    : 'bg-[#1a1a2e] text-white hover:bg-[#2d2d44]'
+                }`}
+              >
+                {copied ? 'Copied' : 'Copy Link'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     );
   };
-
+  
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
-        <div className="relative mb-8">
-          <div className="w-20 h-20 bg-emerald-100 rounded-xl flex items-center justify-center">
-            <FaGraduationCap className="text-emerald-700 text-3xl animate-pulse" />
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
+        <div className="relative mb-10">
+          <div className="w-16 h-16 border-[3px] border-slate-200 border-t-[#1a1a2e] rounded-full animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} className="opacity-60" />
           </div>
         </div>
-
-        <div className="space-y-2">
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Loading Profile</h2>
-          <div className="flex items-center justify-center gap-1">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.1}s` }} />
-            ))}
-          </div>
-          <p className="text-xs text-slate-400 mt-2">Matungulu Girls High School</p>
-        </div>
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">Loading Profile</p>
       </div>
     );
   }
-
+  
   if (error || !staff) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
-          <div className="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <FaUserTie className="text-2xl text-red-600" />
+        <div className="text-center max-w-sm w-full">
+          <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-red-100">
+            <FaUserTie className="text-xl text-red-500" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Profile Unavailable</h2>
-          <p className="text-slate-600 mb-6">Unable to retrieve this staff member's profile.</p>
+          <h2 className="text-lg font-black text-slate-900 mb-2">Profile Unavailable</h2>
+          <p className="text-sm text-slate-500 mb-6">
+            We couldn&apos;t load this staff member&apos;s profile.
+          </p>
           <button 
             onClick={() => router.push('/pages/staff')}
-            className="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium text-sm"
+            className="bg-[#1a1a2e] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-[#2d2d44] transition-colors w-full"
           >
             Return to Staff Directory
           </button>
@@ -317,262 +486,310 @@ export default function StaffProfilePage() {
   return (
     <>
       <SeoHead />
-      <div className="min-h-screen bg-white">
-        
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200 sticky top-0 z-30">
-          <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="min-h-screen bg-white font-sans">
+
+        {/* ── Sticky Top Bar ── */}
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
             <button
               onClick={() => router.push('/pages/staff')}
-              className="flex items-center gap-2 text-slate-600 hover:text-emerald-600 transition-colors"
+              className="flex items-center gap-2 text-slate-600 hover:text-[#1a1a2e] transition-colors"
             >
               <FiArrowLeft size={18} />
-              <span className="text-sm font-medium hidden sm:block">Back to Directory</span>
+              <span className="text-sm font-bold hidden sm:inline">Staff Directory</span>
             </button>
-            
+
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-                <IoSchoolOutline className="text-emerald-700 text-sm" />
-              </div>
-              <span className="font-bold text-slate-800 text-sm hidden sm:block">Matungulu Girls High School</span>
+              <Image src="/seo/kinyui.png" alt="Logo" width={24} height={24} />
+              <span className="text-sm font-black text-[#1a1a2e] hidden sm:inline">Kinyui Boys Senior School</span>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-1.5">
               <button 
                 onClick={() => setShowShareModal(true)}
-                className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-600 hover:bg-emerald-100 hover:text-emerald-600 transition-colors"
-                title="Share Profile"
+                className="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1a1a2e] hover:border-slate-300 transition-all"
               >
-                <FiShare2 size={14} />
+                <FiShare2 size={15} />
               </button>
               <button 
                 onClick={() => window.print()}
-                className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-600 hover:bg-emerald-100 hover:text-emerald-600 transition-colors"
-                title="Print Profile"
+                className="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1a1a2e] hover:border-slate-300 transition-all"
               >
-                <FiPrinter size={14} />
+                <FiPrinter size={15} />
               </button>
             </div>
           </div>
         </div>
-
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        
+        {/* ── Hero Section: Full-width dark banner ── */}
+        <div className="relative bg-[#1a1a2e] overflow-hidden">
+          {/* Subtle grid pattern */}
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           
-          {/* Profile Card */}
-          <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
-            
-            {/* Header with Pattern */}
-            <div className="relative h-24 bg-gradient-to-r from-emerald-900 to-teal-800">
-              <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]" />
-              <div className="absolute top-2 right-3 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
-                <span className="text-white text-xs font-medium">Matungulu Girls High School</span>
-              </div>
-            </div>
-            
-            {/* Profile Content */}
-            <div className="relative px-4 pb-6">
-              
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16 relative z-10">
+            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 sm:gap-8">
               {/* Profile Image */}
-              <div className="relative -mt-12 mb-4 flex items-end justify-between">
-                <div className="relative flex items-center gap-4">
-                  <div className="relative shrink-0">
-                    <div className="w-20 h-20 rounded-lg border-4 border-white shadow-lg overflow-hidden bg-white">
-                      <Image
-                        src={staff.image || '/male.png'}
-                        alt={staff.name}
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-cover"
-                        priority
-                      />
-                    </div>
-                    <div className="absolute -bottom-1 -right-1">
-                      <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-full w-full bg-green-500 border border-white"></span>
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h1 className="text-lg font-bold text-slate-900">{staff.name}</h1>
-                    <p className="text-sm text-emerald-600 font-medium">{staff.position}</p>
-                  </div>
+              <div className="relative shrink-0">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-36 lg:h-36 rounded-2xl border-[3px] border-white/20 overflow-hidden bg-white/10 shadow-2xl">
+                  <Image
+                    src={staff.image || '/male.png'}
+                    alt={staff.name}
+                    width={144}
+                    height={144}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
+                </div>
+                <div className="absolute -bottom-1 -right-1">
+                  <span className="relative flex h-4 w-4">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-[#1a1a2e]"></span>
+                  </span>
                 </div>
               </div>
+
+              {/* Name & Meta */}
+              <div className="text-center sm:text-left flex-1 min-w-0">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
+                  <span className="px-2.5 py-0.5 bg-white/10 border border-white/10 rounded text-[10px] font-black text-white/70 uppercase tracking-widest">
+                    {staff.department}
+                  </span>
+                  <span className="px-2.5 py-0.5 bg-emerald-500/20 border border-emerald-400/20 rounded text-[10px] font-black text-emerald-300 uppercase tracking-widest">
+                    Since {staff.joinDate}
+                  </span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
+                  {staff.name}
+                </h1>
+                <p className="text-sm sm:text-base text-blue-300/80 font-semibold mt-1">{staff.position}</p>
+                
+                {/* Quick contact row */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-4">
+                  {staff.email && (
+                    <a href={`mailto:${staff.email}`} className="flex items-center gap-1.5 text-white/50 hover:text-white text-xs transition-colors">
+                      <FiMail size={13} />
+                      <span className="hidden md:inline">{staff.email}</span>
+                      <span className="md:hidden">Email</span>
+                    </a>
+                  )}
+                  {staff.phone && (
+                    <a href={`tel:${staff.phone}`} className="flex items-center gap-1.5 text-white/50 hover:text-white text-xs transition-colors">
+                      <FiPhone size={13} />
+                      <span className="hidden md:inline">{staff.phone}</span>
+                      <span className="md:hidden">Call</span>
+                    </a>
+                  )}
+                  <span className="flex items-center gap-1.5 text-white/40 text-xs">
+                    <FiMapPin size={13} />
+                    <span className="hidden md:inline">{staff.location}</span>
+                    <span className="md:hidden">{staff.department}</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Action buttons - desktop */}
+              <div className="hidden lg:flex gap-2 shrink-0">
+                {staff.email && (
+                  <a href={`mailto:${staff.email}`} className="px-4 py-2.5 bg-white text-[#1a1a2e] rounded-lg text-xs font-black uppercase tracking-wider hover:bg-blue-50 transition-colors flex items-center gap-2">
+                    <FiMail size={14} /> Contact
+                  </a>
+                )}
+                <button onClick={() => setShowShareModal(true)} className="px-4 py-2.5 bg-white/10 text-white border border-white/10 rounded-lg text-xs font-black uppercase tracking-wider hover:bg-white/20 transition-colors flex items-center gap-2">
+                  <FiShare2 size={14} /> Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Stats Strip ── */}
+        <div className="border-b border-slate-100 bg-slate-50/50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-4 divide-x divide-slate-200">
+              {[
+                { icon: FiCalendar, label: 'Joined', value: staff.joinDate, color: 'text-blue-600' },
+                { icon: FiStar, label: 'Expertise', value: staff.expertise?.length || 0, color: 'text-purple-600' },
+                { icon: FiBriefcase, label: 'Roles', value: staff.responsibilities?.length || 0, color: 'text-emerald-600' },
+                { icon: FiAward, label: 'Awards', value: staff.achievements?.length || 0, color: 'text-amber-600' },
+              ].map((stat, i) => (
+                <div key={i} className="py-4 sm:py-5 flex flex-col items-center text-center">
+                  <stat.icon className={`${stat.color} mb-1`} size={16} />
+                  <p className="text-lg sm:text-xl font-black text-slate-900">{stat.value}</p>
+                  <p className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Main Content ── */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+
+            {/* ── Left Sidebar (1 col) ── */}
+            <div className="lg:col-span-1 space-y-6">
 
               {/* Quote */}
               {staff.quote && (
-                <div className="mb-4 p-3 bg-emerald-50 rounded-lg border-l-3 border-emerald-600">
-                  <p className="text-sm text-slate-700 italic">"{staff.quote}"</p>
+                <div className="relative bg-slate-50 rounded-xl p-5 border border-slate-100">
+                  <span className="absolute -top-3 left-4 text-4xl text-[#1a1a2e]/10 font-serif leading-none">&ldquo;</span>
+                  <p className="text-sm text-slate-600 italic leading-relaxed pt-2">
+                    {staff.quote}
+                  </p>
                 </div>
               )}
 
-              {/* Bio */}
-              <p className="text-sm text-slate-600 leading-relaxed mb-5 border-l-2 border-emerald-200 pl-3 py-1">
-                {staff.bio}
-              </p>
+              {/* Areas of Expertise */}
+              {staff.expertise?.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                    <div className="w-5 h-0.5 bg-blue-500 rounded-full" />
+                    Expertise
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {staff.expertise.map((item, i) => (
+                      <span 
+                        key={i}
+                        className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-semibold rounded-lg border border-blue-100 hover:bg-blue-100 transition-colors"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
-                <div className="bg-slate-50 rounded-lg p-3">
-                  <FiCalendar className="text-emerald-600 mb-1" size={16} />
-                  <p className="text-lg font-bold text-slate-900">{staff.joinDate}</p>
-                  <p className="text-[10px] text-slate-500 uppercase">Joined</p>
+              {/* Professional Skills */}
+              {staff.skills && staff.skills.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                    <div className="w-5 h-0.5 bg-purple-500 rounded-full" />
+                    Skills
+                  </h3>
+                  <div className="space-y-2">
+                    {staff.skills.slice(0, 4).map((skill, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <span className="text-xs font-bold text-slate-700 flex-1">{skill.name}</span>
+                        <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-purple-500 rounded-full transition-all duration-700"
+                            style={{ width: `${skill.level}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                
-                <div className="bg-slate-50 rounded-lg p-3">
-                  <FiStar className="text-emerald-600 mb-1" size={16} />
-                  <p className="text-lg font-bold text-slate-900">{staff.expertise?.length || 0}</p>
-                  <p className="text-[10px] text-slate-500 uppercase">Expertise</p>
-                </div>
-                
-                <div className="bg-slate-50 rounded-lg p-3">
-                  <FiBriefcase className="text-emerald-600 mb-1" size={16} />
-                  <p className="text-lg font-bold text-slate-900">{staff.responsibilities?.length || 0}</p>
-                  <p className="text-[10px] text-slate-500 uppercase">Roles</p>
-                </div>
-                
-                <div className="bg-slate-50 rounded-lg p-3">
-                  <FiAward className="text-emerald-600 mb-1" size={16} />
-                  <p className="text-lg font-bold text-slate-900">{staff.achievements?.length || 0}</p>
-                  <p className="text-[10px] text-slate-500 uppercase">Awards</p>
-                </div>
-              </div>
+              )}
 
-              {/* Main Content Grid */}
-              <div className="grid lg:grid-cols-2 gap-5">
-                
-                {/* Left Column */}
-                <div className="space-y-5">
-                  
-                  {/* Expertise */}
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                      Areas of Expertise
-                    </h3>
-                    <div className="flex flex-wrap gap-1.5">
-                      {staff.expertise?.map((item, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-white text-slate-700 text-xs rounded-lg border border-slate-200">
-                          {item}
-                        </span>
-                      ))}
+              {/* Office Info Card */}
+              <div className="bg-[#1a1a2e] rounded-xl p-5 text-white/80">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-4">Office Details</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <FiMapPin size={14} className="text-blue-400 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-[10px] font-bold text-white/40 uppercase">Location</p>
+                      <p className="text-xs font-semibold text-white/90">{staff.location}</p>
                     </div>
                   </div>
-
-                  {/* Skills */}
-                  {staff.skills && staff.skills.length > 0 && (
+                  <div className="flex items-start gap-3">
+                    <FiCalendar size={14} className="text-emerald-400 mt-0.5 shrink-0" />
                     <div>
-                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                        Professional Skills
-                      </h3>
-                      <div className="flex flex-wrap gap-1.5">
-                        {staff.skills.slice(0, 4).map((skill, i) => (
-                          <span key={i} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-lg border border-emerald-200">
-                            {skill.name}
-                          </span>
-                        ))}
+                      <p className="text-[10px] font-bold text-white/40 uppercase">Office Hours</p>
+                      <p className="text-xs font-semibold text-white/90">{staff.officeHours}</p>
+                    </div>
+                  </div>
+                  {staff.email && (
+                    <div className="flex items-start gap-3">
+                      <FiMail size={14} className="text-amber-400 mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-[10px] font-bold text-white/40 uppercase">Email</p>
+                        <a href={`mailto:${staff.email}`} className="text-xs font-semibold text-white/90 hover:text-white break-all">{staff.email}</a>
                       </div>
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
 
-                {/* Right Column */}
-                <div className="space-y-5">
-                  
-                  {/* Responsibilities */}
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                      Key Responsibilities
-                    </h3>
-                    <div className="space-y-1.5">
-                      {staff.responsibilities?.map((item, i) => (
-                        <div key={i} className="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
-                          <div className="w-4 h-4 bg-emerald-100 rounded flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
-                            <FiCheckCircle size={10} />
-                          </div>
-                          <span className="text-xs text-slate-600">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+            {/* ── Right Content (2 cols) ── */}
+            <div className="lg:col-span-2 space-y-8">
 
-                  {/* Achievements */}
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <span className="w-4 h-0.5 bg-emerald-400 rounded-full"></span>
-                      Notable Achievements
-                    </h3>
-                    <div className="space-y-1.5">
-                      {staff.achievements?.map((item, i) => (
-                        <div key={i} className="bg-white border border-amber-100 rounded-lg p-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-5 h-5 bg-amber-100 rounded flex items-center justify-center text-amber-600 font-bold text-[10px]">
-                              {i + 1}
-                            </div>
-                            <span className="text-xs text-slate-600">{item}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+              {/* Bio Section */}
+              <div>
+                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                  <div className="w-5 h-0.5 bg-slate-400 rounded-full" />
+                  About
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  {staff.bio}
+                </p>
               </div>
 
-              {/* Footer Contact Bar */}
-              <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-3">
-                  {staff.email && (
-                    <a href={`mailto:${staff.email}`} className="flex items-center gap-1.5 text-slate-600 hover:text-emerald-600 transition-colors text-xs">
-                      <FiMail size={14} />
-                      <span className="hidden sm:inline">{staff.email}</span>
-                      <span className="sm:hidden">Email</span>
-                    </a>
-                  )}
-                  {staff.phone && (
-                    <a href={`tel:${staff.phone}`} className="flex items-center gap-1.5 text-slate-600 hover:text-emerald-600 transition-colors text-xs">
-                      <FiPhone size={14} />
-                      <span className="hidden sm:inline">{staff.phone}</span>
-                      <span className="sm:hidden">Call</span>
-                    </a>
-                  )}
+              {/* Responsibilities */}
+              {staff.responsibilities?.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <div className="w-5 h-0.5 bg-emerald-500 rounded-full" />
+                    Key Responsibilities
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {staff.responsibilities.map((item, i) => (
+                      <div key={i} className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all group">
+                        <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 shrink-0 mt-0.5 group-hover:bg-emerald-200 transition-colors">
+                          <FiCheckCircle size={12} />
+                        </div>
+                        <span className="text-xs sm:text-sm text-slate-700 leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-[10px] text-slate-400">
-                  <span>Matungulu Girls High School</span>
-                  <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                  <span>Strive to Excel</span>
+              )}
+
+              {/* Achievements */}
+              {staff.achievements?.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <div className="w-5 h-0.5 bg-amber-500 rounded-full" />
+                    Notable Achievements
+                  </h3>
+                  <div className="space-y-2.5">
+                    {staff.achievements.map((item, i) => (
+                      <div key={i} className="flex items-center gap-4 p-3 sm:p-4 bg-white border border-slate-100 rounded-xl hover:border-amber-200 hover:shadow-sm transition-all group">
+                        <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center border border-amber-100 group-hover:bg-amber-100 transition-colors shrink-0">
+                          <FiAward size={14} className="text-amber-600" />
+                        </div>
+                        <span className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="mt-8 border-t border-slate-100 bg-white py-6">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex flex-col items-center justify-center space-y-4">
-              
-              <div className="flex flex-col items-center">
-                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3">
-                  <FaGraduationCap className="text-emerald-700 text-lg" />
-                </div>
-                <h4 className="font-bold text-slate-900 text-sm">Matungulu Girls High School</h4>
-                <p className="text-xs text-slate-500 mt-1">Strive to Excel</p>
+        {/* ── Footer ── */}
+        <footer className="border-t border-slate-100 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-3">
+                <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} className="opacity-50" />
+                <span className="text-xs font-black text-slate-300 uppercase tracking-[0.2em]">
+                  Kinyui Boys Senior School
+                </span>
               </div>
-
-              <div className="flex items-center gap-4 text-xs text-slate-400">
-                <p>Professional Staff Directory</p>
-                <div className="w-1 h-1 bg-slate-300 rounded-full" />
-                <p>© {new Date().getFullYear()}</p>
+              <div className="flex items-center gap-3 text-[10px] text-slate-300">
+                <span>Soaring to Excellence</span>
+                <span className="w-1 h-1 rounded-full bg-slate-200" />
+                <span>Staff Directory</span>
+                <span className="w-1 h-1 rounded-full bg-slate-200" />
+                <span>&copy; {new Date().getFullYear()}</span>
               </div>
-
               <button 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="px-4 py-2 rounded-full border border-slate-200 text-slate-500 text-xs font-medium hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-colors"
+                className="mt-2 px-5 py-1.5 rounded-full border border-slate-200 text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:bg-[#1a1a2e] hover:text-white hover:border-[#1a1a2e] transition-all"
               >
                 Back to Top
               </button>
@@ -580,7 +797,8 @@ export default function StaffProfilePage() {
           </div>
         </footer>
       </div>
-
+  
+      {/* Share Modal */}
       <ShareModal />
     </>
   );

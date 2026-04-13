@@ -16,7 +16,6 @@ import {
   FiCalendar, 
   FiUser,
   FiX,
-  FiMenu,
   FiArrowLeft,
   FiArrowRight,
   FiMapPin,
@@ -25,58 +24,78 @@ import {
   FiBook,
   FiTarget,
   FiUsers,
-  FiChevronUp,
   FiBookOpen,
-  FiRefreshCw
+  FiRefreshCw,
+  FiSettings,
+  FiHeart,
+  FiCpu,
+  FiGlobe,
+  FiActivity,
+  FiLayers,
+  FiShield
 } from 'react-icons/fi';
+import { toast } from 'sonner';
 import { SiGmail } from 'react-icons/si';
-import { IoSchoolOutline } from 'react-icons/io5';
-import { FaLeaf } from 'react-icons/fa';
 
 // ==========================================
-// 1. CONFIGURATION WITH HIERARCHY
+// 1. ENHANCED CONFIGURATION WITH HIERARCHY
 // ==========================================
+
+const HIERARCHY_ICONS = {
+  leadership: FiShield,
+  teaching: FiBookOpen,
+  support: FiSettings,
+};
+
+const DEPT_ICONS = {
+  administration: FiShield,
+  sciences: FiActivity,
+  mathematics: FiTarget,
+  languages: FiGlobe,
+  humanities: FiBook,
+  guidance: FiHeart,
+  sports: FiAward,
+  technical: FiCpu,
+  support: FiSettings,
+};
 
 const STAFF_HIERARCHY = [
   {
     level: 'leadership',
     label: 'School Leadership',
-    color: 'emerald',
-    icon: '👑',
-    positions: ['Principal', 'Deputy Principal', 'Senior Teacher', 'Head of Department']
+    color: 'blue',
+    positions: ['Principal', 'Deputy Principal']
   },
   {
     level: 'teaching',
     label: 'Teaching Staff',
     color: 'emerald',
-    icon: '📚',
-    positions: ['Teacher', 'Subject Teacher', 'Class Teacher', 'Assistant Teacher']
+    positions: ['Teacher', 'Subject Teacher', 'Class Teacher', 'Assistant Teacher', 'Senior Teacher', 'Head of Department']
   },
   {
     level: 'support',
     label: 'Support Staff',
-    color: 'emerald',
-    icon: '🛠️',
+    color: 'orange',
     positions: ['Librarian', 'Laboratory Technician', 'Accountant', 'Secretary', 'Support Staff']
   }
 ];
 
 const DEPARTMENTS = [
-  { id: 'administration', label: 'Administration', color: 'emerald', icon: '👑', hierarchy: 'leadership' },
-  { id: 'sciences', label: 'Sciences', color: 'emerald', icon: '🔬', hierarchy: 'teaching' },
-  { id: 'mathematics', label: 'Mathematics', color: 'emerald', icon: '📊', hierarchy: 'teaching' },
-  { id: 'languages', label: 'Languages', color: 'emerald', icon: '🌐', hierarchy: 'teaching' },
-  { id: 'humanities', label: 'Humanities', color: 'emerald', icon: '📚', hierarchy: 'teaching' },
-  { id: 'guidance', label: 'Guidance & Counseling', color: 'emerald', icon: '💝', hierarchy: 'support' },
-  { id: 'sports', label: 'Sports & Athletics', color: 'emerald', icon: '⚽', hierarchy: 'teaching' },
-  { id: 'technical', label: 'Technical & IT', color: 'emerald', icon: '💻', hierarchy: 'support' },
-  { id: 'support', label: 'Support Staff', color: 'emerald', icon: '🛠️', hierarchy: 'support' }
+  { id: 'administration', label: 'Administration', color: 'blue', hierarchy: 'leadership' },
+  { id: 'sciences', label: 'Sciences', color: 'emerald', hierarchy: 'teaching' },
+  { id: 'mathematics', label: 'Mathematics', color: 'orange', hierarchy: 'teaching' },
+  { id: 'languages', label: 'Languages', color: 'violet', hierarchy: 'teaching' },
+  { id: 'humanities', label: 'Humanities', color: 'amber', hierarchy: 'teaching' },
+  { id: 'guidance', label: 'Guidance & Counseling', color: 'pink', hierarchy: 'support' },
+  { id: 'sports', label: 'Sports & Athletics', color: 'teal', hierarchy: 'teaching' },
+  { id: 'technical', label: 'Technical & IT', color: 'cyan', hierarchy: 'support' },
+  { id: 'support', label: 'Support Staff', color: 'slate', hierarchy: 'support' }
 ];
 
 const ITEMS_PER_PAGE = 12;
 
 // ==========================================
-// 2. UTILITY FUNCTIONS
+// 2. ENHANCED UTILITY FUNCTIONS WITH HIERARCHY
 // ==========================================
 
 const generateSlug = (name, id) => {
@@ -92,8 +111,14 @@ const generateSlug = (name, id) => {
 
 const getBadgeColorStyles = (colorName) => {
   const map = {
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     blue: 'bg-blue-50 text-blue-700 border-blue-200',
+    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    orange: 'bg-orange-50 text-orange-700 border-orange-200',
+    violet: 'bg-violet-50 text-violet-700 border-violet-200',
+    amber: 'bg-amber-50 text-amber-700 border-amber-200',
+    pink: 'bg-pink-50 text-pink-700 border-pink-200',
+    teal: 'bg-teal-50 text-teal-700 border-teal-200',
+    cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200',
     slate: 'bg-slate-50 text-slate-700 border-slate-200',
   };
   return map[colorName] || map.slate;
@@ -109,32 +134,21 @@ const getImageSrc = (staff) => {
   return '/images/default-staff.jpg';
 };
 
-const extractExpertiseCount = (staff) => {
-  return staff?.expertise?.length || 0;
-};
-
-const extractResponsibilitiesCount = (staff) => {
-  return staff?.responsibilities?.length || 0;
-};
-
-const extractAchievementsCount = (staff) => {
-  return staff?.achievements?.length || 0;
-};
-
 const getStaffHierarchy = (position) => {
   if (!position) return 'teaching';
   
   const positionLower = position.toLowerCase();
-  if (positionLower.includes('principal') || positionLower.includes('head') || positionLower.includes('senior')) {
+  if ((positionLower.includes('principal') || positionLower.includes('deputy principal')) &&
+      !positionLower.includes('senior') && !positionLower.includes('head')) {
     return 'leadership';
-  } else if (positionLower.includes('teacher') || positionLower.includes('lecturer') || positionLower.includes('tutor')) {
+  } else if (positionLower.includes('teacher') || positionLower.includes('lecturer') || positionLower.includes('tutor') ||
+             positionLower.includes('senior') || positionLower.includes('head')) {
     return 'teaching';
   } else {
     return 'support';
   }
 };
 
-// Sort staff by hierarchy - Principal first, then Deputies
 const sortStaffByHierarchy = (staff) => {
   const hierarchyOrder = { leadership: 1, teaching: 2, support: 3 };
   
@@ -164,9 +178,9 @@ const sortStaffByHierarchy = (staff) => {
 // 3. SUB-COMPONENTS
 // ==========================================
 
-const Badge = ({ children, color = 'emerald', className = '', icon }) => (
-  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border ${getBadgeColorStyles(color)} ${className}`}>
-    {icon && <span className="mr-1.5">{icon}</span>}
+const Badge = ({ children, color = 'slate', className = '', icon }) => (
+  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold border ${getBadgeColorStyles(color)} ${className}`}>
+    {icon && <span className="mr-1">{icon}</span>}
     {children}
   </span>
 );
@@ -174,94 +188,64 @@ const Badge = ({ children, color = 'emerald', className = '', icon }) => (
 const StaffSkeleton = ({ viewMode }) => {
   if (viewMode === 'list') {
     return (
-      <div className="flex gap-6 p-6 border border-slate-200 rounded-lg bg-white/80 animate-pulse">
-        <div className="w-24 h-24 bg-gradient-to-br from-teal-600 to-emerald-700 rounded-lg shrink-0" />
-        <div className="flex-1 space-y-4">
-          <div className="h-6 bg-gradient-to-r from-teal-600 to-emerald-700 rounded w-1/3" />
-          <div className="h-4 bg-gradient-to-r from-teal-600 to-emerald-700 rounded w-1/4" />
-          <div className="h-12 bg-gradient-to-r from-teal-600 to-emerald-700 rounded w-full" />
+      <div className="flex gap-4 p-4 bg-white border border-slate-100 rounded-xl animate-pulse">
+        <div className="w-14 h-14 bg-slate-100 rounded-xl shrink-0" />
+        <div className="flex-1 space-y-2">
+          <div className="h-4 bg-slate-100 rounded w-1/3" />
+          <div className="h-3 bg-slate-100 rounded w-1/4" />
+          <div className="h-3 bg-slate-100 rounded w-full" />
         </div>
       </div>
     );
   }
   return (
-    <div className="border border-slate-200 rounded-lg bg-white/80 p-6 space-y-6 animate-pulse">
-      <div className="w-full aspect-[4/5] bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg" />
-      <div className="space-y-3">
-        <div className="h-6 bg-gradient-to-r from-teal-600 to-emerald-700 rounded w-3/4" />
-        <div className="h-4 bg-gradient-to-r from-teal-600 to-emerald-700 rounded w-1/2" />
+    <div className="bg-white border border-slate-100 rounded-xl overflow-hidden animate-pulse">
+      <div className="w-full aspect-[4/3] bg-slate-100" />
+      <div className="p-4 space-y-2">
+        <div className="h-4 bg-slate-100 rounded w-3/4" />
+        <div className="h-3 bg-slate-100 rounded w-1/2" />
       </div>
     </div>
   );
 };
 
-const Checkbox = ({ label, count, checked, onChange, color, icon }) => (
-  <label className="flex items-center gap-4 cursor-pointer p-3 rounded-lg hover:bg-slate-50 transition-colors">
-    <div className={`w-5 h-5 rounded border flex items-center justify-center ${
-      checked 
-        ? 'bg-emerald-600 border-emerald-600' 
-        : 'bg-white border-slate-300'
-    }`}>
-      {checked && <FiUser className="text-white text-xs" />}
-    </div>
-    <input type="checkbox" className="hidden" checked={checked} onChange={onChange} />
-    <div className="flex-1 flex items-center gap-3">
-      {icon && <span className="text-lg">{icon}</span>}
-      <span className={`text-sm font-medium ${checked ? 'text-slate-900' : 'text-slate-600'}`}>
-        {label}
-      </span>
-    </div>
-    {count !== undefined && (
-      <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full min-w-[2rem] text-center">
-        {count}
-      </span>
-    )}
-  </label>
+const StatsPill = ({ icon: Icon, value, label }) => (
+  <div className="flex flex-col items-center py-3 sm:py-4 px-4 sm:px-6">
+    {Icon && <Icon size={16} className="text-blue-400 mb-1" />}
+    <span className="text-lg sm:text-xl font-black text-white">{value}</span>
+    <span className="text-[9px] font-semibold text-white/40 uppercase tracking-wider">{label}</span>
+  </div>
 );
 
-const StatsPill = ({ icon, value, label, color = 'emerald' }) => {
-  return (
-    <div className="flex items-center gap-3 px-3 py-2 bg-white rounded-lg border border-slate-200">
-      <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-base bg-emerald-50 text-emerald-600`}>
-        {icon}
-      </div>
-      <div className="flex flex-col leading-tight">
-        <span className="text-sm font-bold text-slate-900">
-          {value}
-        </span>
-        <span className="text-xs text-slate-500">
-          {label}
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const HierarchySection = ({ title, icon, staff, viewMode, isFirst = false }) => {
+const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, onContactClick }) => {
   if (!staff?.length) return null;
+  const Icon = HIERARCHY_ICONS[iconKey] || FiUsers;
 
   return (
-    <section className={isFirst ? "" : "mt-12"}>
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-          <span className="text-lg">{icon}</span>
+    <section className={isFirst ? "" : "mt-10"}>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-8 h-8 rounded-lg bg-[#1a1a2e] flex items-center justify-center">
+          <Icon size={14} className="text-white" />
         </div>
-        <div>
-          <h2 className="text-lg font-bold text-slate-900">{title}</h2>
-          <p className="text-xs text-slate-500">{staff.length} members</p>
-        </div>
+        <h2 className="text-sm font-black text-[#1a1a2e] uppercase tracking-[0.15em]">
+          {title}
+        </h2>
+        <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+          {staff.length}
+        </span>
+        <div className="flex-1 h-px bg-slate-100 ml-2" />
       </div>
       
       <div className={
         viewMode === 'grid' 
-          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" 
-          : "space-y-4"
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" 
+          : "flex flex-col gap-3"
       }>
         {staff.map((member) => (
           <div key={member.id}>
             {viewMode === 'grid' 
-              ? <StaffCard staff={member} /> 
-              : <StaffListCard staff={member} />
+              ? <StaffCard staff={member} onContactClick={onContactClick} /> 
+              : <StaffListCard staff={member} onContactClick={onContactClick} />
             }
           </div>
         ))}
@@ -270,167 +254,141 @@ const HierarchySection = ({ title, icon, staff, viewMode, isFirst = false }) => 
   );
 };
 
-const StaffCard = ({ staff }) => {
+// StaffCard Component — horizontal modern card
+const StaffCard = ({ staff, onContactClick }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
   const hierarchy = getStaffHierarchy(staff.position);
+  const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
-  const formatPhone = (phone) => {
-    if (!phone) return null;
-    return phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
-  };
-
   return (
-    <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
-      <div className="relative w-full aspect-square bg-gradient-to-br from-emerald-50 to-emerald-100">
+    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:border-slate-200 transition-all duration-300 group flex flex-col h-full">
+      
+      {/* Image */}
+      <div className="relative w-full aspect-square bg-slate-50">
         <Image
           src={getImageSrc(staff)}
           alt={staff.name}
           fill
-          className="object-cover object-top"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           priority={hierarchy === 'leadership'}
           onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
         />
-        
-        <div className="absolute top-2 right-2">
-          <div className="flex items-center gap-1 bg-white/90 px-2 py-1 rounded-full text-xs">
-            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            <span className="text-slate-600">Active</span>
-          </div>
-        </div>
 
-        <div className="absolute bottom-2 left-2">
-          <Badge color="emerald" className="bg-white/90">
-            {staff.department}
-          </Badge>
-        </div>
+        {hierarchy === 'leadership' && (
+          <div className="absolute top-3 left-3 bg-[#1a1a2e] text-white px-2.5 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider flex items-center gap-1">
+            <FiShield size={10} /> Leadership
+          </div>
+        )}
       </div>
 
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-slate-900 mb-1">
-          {staff.name}
-        </h3>
-        <p className="text-sm font-medium text-emerald-600 mb-2">
-          {staff.position}
-        </p>
-
-        <p className="text-xs text-slate-600 line-clamp-2 mb-3">
-          "{staff.quote || staff.bio || 'Dedicated educator at Matungulu Girls.'}"
-        </p>
-
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="bg-slate-50 rounded p-2 text-center">
-            <span className="block text-sm font-bold text-slate-900">{staff.expertise?.length || 0}</span>
-            <span className="text-[10px] text-slate-500">Skills</span>
+      {/* Content */}
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <div className="min-w-0">
+            <h3 className="text-[13px] font-semibold text-slate-900 leading-tight truncate">
+              {staff.name}
+            </h3>
+            <p className="text-[11px] font-semibold text-[#1a1a2e]/60 mt-0.5">{staff.position}</p>
           </div>
-          <div className="bg-slate-50 rounded p-2 text-center">
-            <span className="block text-sm font-bold text-slate-900">{staff.responsibilities?.length || 0}</span>
-            <span className="text-[10px] text-slate-500">Roles</span>
-          </div>
-          <div className="bg-slate-50 rounded p-2 text-center">
-            <span className="block text-sm font-bold text-slate-900">{staff.achievements?.length || 0}</span>
-            <span className="text-[10px] text-slate-500">Awards</span>
+          <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${getBadgeColorStyles(deptConfig?.color).split(' ')[0]} border ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
+            <DeptIcon size={12} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
           </div>
         </div>
 
-        <div className="flex gap-2 mb-3">
-          {staff.email && (
-            <a 
-              href={`mailto:${staff.email}`} 
-              className="flex-1 flex items-center justify-center gap-2 py-2 bg-emerald-50 text-emerald-600 rounded text-xs font-medium"
-            >
-              <FiMail size={14} />
-              <span>Email</span>
-            </a>
-          )}
-          {staff.phone && (
-            <a 
-              href={`tel:${staff.phone}`} 
-              className="flex-1 flex items-center justify-center gap-2 py-2 bg-slate-50 text-slate-600 rounded text-xs font-medium"
-            >
-              <FiPhone size={14} />
-              <span>Call</span>
-            </a>
-          )}
-        </div>
+        <p className="text-[11px] font-medium text-slate-400 line-clamp-2 mb-3 leading-relaxed">
+          {staff.quote || staff.bio}
+        </p>
 
-        <Link
-          href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-          className="flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white text-xs font-medium rounded"
-        >
-          <FiUser size={14} />
-          <span>View Profile</span>
-          <FiArrowRight size={14} />
-        </Link>
+        {staff.expertise && staff.expertise.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {staff.expertise.slice(0, 2).map((tag, idx) => (
+              <span key={idx} className="px-2 py-0.5 bg-slate-50 text-slate-500 text-[10px] font-semibold rounded-full">
+                {tag}
+              </span>
+            ))}
+            {staff.expertise.length > 2 && (
+              <span className="px-2 py-0.5 bg-slate-50 text-slate-400 text-[10px] font-semibold rounded-full">
+                +{staff.expertise.length - 2}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="flex gap-2 mt-auto pt-3 border-t border-slate-50">
+          <button
+            onClick={() => onContactClick(staff)}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold text-slate-600 bg-slate-50 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          >
+            <FiMail size={11} /> Contact
+          </button>
+          
+          <Link
+            href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-semibold text-white bg-[#1a1a2e] hover:bg-[#2d2d44] transition-colors"
+          >
+            <FiChevronRight size={11} /> View
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
 
-const StaffListCard = ({ staff }) => {
+// StaffListCard Component
+const StaffListCard = ({ staff, onContactClick }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
   const hierarchy = getStaffHierarchy(staff.position);
+  const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 flex flex-col sm:flex-row gap-4">
-      <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gradient-to-br from-emerald-50 to-emerald-100">
-        <Image
-          src={getImageSrc(staff)}
-          alt={staff.name}
-          fill
-          className="object-cover"
-          sizes="80px"
-          onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
-        />
+    <div className="bg-white rounded-xl border border-slate-100 p-4 flex flex-col sm:flex-row gap-4 items-center hover:shadow-md hover:border-slate-200 transition-all duration-300">
+      <div className="relative shrink-0">
+        <div className="relative w-14 h-14 rounded-2xl overflow-hidden bg-slate-50 ring-2 ring-slate-100">
+          <Image
+            src={getImageSrc(staff)}
+            alt={staff.name}
+            fill
+            className="object-cover"
+            sizes="56px"
+            onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+          />
+        </div>
+        {hierarchy === 'leadership' && (
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#1a1a2e] rounded-full flex items-center justify-center border-2 border-white">
+            <FiShield size={8} className="text-white" />
+          </div>
+        )}
       </div>
 
-      <div className="flex-1">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-          <h3 className="text-base font-bold text-slate-900">
-            <Link href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`}>
+      <div className="flex-1 text-center sm:text-left min-w-0">
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-0.5">
+          <h3 className="text-sm font-semibold text-slate-900">
+            <Link href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`} className="hover:text-[#1a1a2e] transition-colors">
               {staff.name}
             </Link>
           </h3>
-          <Badge color="emerald" className="text-xs w-fit">
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${getBadgeColorStyles(deptConfig?.color)}`}>
+            <DeptIcon size={9} />
             {staff.department}
-          </Badge>
+          </span>
         </div>
-        
-        <p className="text-emerald-600 font-medium text-sm mb-2">{staff.position}</p>
-        <p className="text-xs text-slate-600 line-clamp-2 mb-3">{staff.bio}</p>
-        
-        <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-1 text-xs text-slate-500">
-            <FiStar className="text-emerald-600" size={12} />
-            <span>{extractExpertiseCount(staff)} skills</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-slate-500">
-            <FiTarget className="text-emerald-600" size={12} />
-            <span>{extractResponsibilitiesCount(staff)} roles</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-slate-500">
-            <FiAward className="text-emerald-600" size={12} />
-            <span>{extractAchievementsCount(staff)} awards</span>
-          </div>
-        </div>
+        <p className="text-[11px] font-semibold text-[#1a1a2e]/50 mb-0.5">{staff.position}</p>
+        <p className="text-slate-400 text-[11px] font-medium leading-relaxed line-clamp-1">{staff.bio}</p>
       </div>
 
-      <div className="flex sm:flex-col gap-2">
-        {staff.email && (
-          <a 
-            href={`mailto:${staff.email}`}
-            className="flex items-center justify-center gap-1 px-3 py-2 bg-emerald-50 text-emerald-600 rounded text-xs font-medium"
-          >
-            <FiMail size={14} />
-            <span className="hidden sm:inline">Email</span>
-          </a>
-        )}
+      <div className="flex gap-2 shrink-0 w-full sm:w-auto">
+        <button
+          onClick={() => onContactClick(staff)}
+          className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-50 text-slate-600 text-[11px] font-semibold hover:bg-blue-50 hover:text-blue-600 transition-colors"
+        >
+          <FiMail size={11} /> Contact
+        </button>
         <Link
           href={`/pages/staff/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-          className="flex items-center justify-center gap-1 px-3 py-2 border border-slate-200 text-slate-600 rounded text-xs font-medium"
+          className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1a1a2e] text-white text-[11px] font-semibold hover:bg-[#2d2d44] transition-colors"
         >
-          <FiUser size={14} />
-          <span className="hidden sm:inline">Profile</span>
+          <FiChevronRight size={11} /> View
         </Link>
       </div>
     </div>
@@ -438,19 +396,106 @@ const StaffListCard = ({ staff }) => {
 };
 
 // ==========================================
-// 4. MAIN PAGE COMPONENT
+// 4. MAIN COMPONENT
 // ==========================================
 
 export default function StaffDirectory() {
   const [staffData, setStaffData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepts, setSelectedDepts] = useState([]);
   const [selectedHierarchy, setSelectedHierarchy] = useState('all');
+  
   const [viewMode, setViewMode] = useState('grid');
   const [currentPage, setCurrentPage] = useState(1);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Consultation Modal States
+  const [showConsultModal, setShowConsultModal] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [consultForm, setConsultForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    subject: '',
+    inquiryType: 'general',
+    contactMethod: 'email',
+    studentGrade: '',
+    staffId: '',
+    staffName: '',
+    staffEmail: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  // Handle Contact Click
+  const handleContactClick = (staff) => {
+    setSelectedStaff(staff);
+    setConsultForm({
+      ...consultForm,
+      staffId: staff.id,
+      staffName: staff.name,
+      staffEmail: staff.email,
+      subject: `Inquiry for ${staff.name}`
+    });
+    setShowConsultModal(true);
+  };
+
+  // Handle Consultation Submit
+  const handleConsultSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const payload = {
+        name: consultForm.name,
+        email: consultForm.email,
+        phone: consultForm.phone,
+        message: consultForm.message,
+        subject: consultForm.subject || `Consultation with ${selectedStaff.name}`,
+        studentDetails: consultForm.studentGrade,
+        contactMethod: consultForm.contactMethod,
+        teacherId: selectedStaff.id,
+        teacherName: selectedStaff.name,
+        teacherEmail: selectedStaff.email,
+        teacherPosition: selectedStaff.position
+      };
+
+      const response = await fetch('/api/teacher-consultation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast.success(`Consultation request sent! Reference: ${data.referenceNumber}`);
+        setShowConsultModal(false);
+        setConsultForm({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          subject: '',
+          inquiryType: 'general',
+          contactMethod: 'email',
+          studentGrade: '',
+          staffId: '',
+          staffName: '',
+          staffEmail: ''
+        });
+      } else {
+        throw new Error(data.error || 'Failed to send consultation request');
+      }
+    } catch (error) {
+      console.error('Error sending consultation:', error);
+      toast.error(error.message || 'Failed to send message. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const fetchStaffData = async () => {
     try {
@@ -478,7 +523,7 @@ export default function StaffDirectory() {
           bio: staff.bio,
           responsibilities: staff.responsibilities || [],
           achievements: staff.achievements || [],
-          location: 'Matungulu Girls High School',
+          location: 'kinyui boys Senior School',
           joinDate: '2020'
         }));
         
@@ -510,6 +555,7 @@ export default function StaffDirectory() {
         staff.expertise.some(exp => exp.toLowerCase().includes(searchLower));
 
       const matchesDept = selectedDepts.length === 0 || selectedDepts.includes(staff.departmentId);
+
       const staffHierarchy = getStaffHierarchy(staff.position);
       const matchesHierarchy = selectedHierarchy === 'all' || selectedHierarchy === staffHierarchy;
 
@@ -518,17 +564,9 @@ export default function StaffDirectory() {
   }, [staffData, searchQuery, selectedDepts, selectedHierarchy]);
 
   const staffByHierarchy = useMemo(() => {
-    const leadership = filteredStaff.filter(staff => 
-      getStaffHierarchy(staff.position) === 'leadership'
-    );
-    
-    const teaching = filteredStaff.filter(staff => 
-      getStaffHierarchy(staff.position) === 'teaching'
-    );
-    
-    const support = filteredStaff.filter(staff => 
-      getStaffHierarchy(staff.position) === 'support'
-    );
+    const leadership = filteredStaff.filter(staff => getStaffHierarchy(staff.position) === 'leadership');
+    const teaching = filteredStaff.filter(staff => getStaffHierarchy(staff.position) === 'teaching');
+    const support = filteredStaff.filter(staff => getStaffHierarchy(staff.position) === 'support');
     
     const sortedLeadership = [...leadership].sort((a, b) => {
       const aIsPrincipal = a.position?.toLowerCase().includes('principal') && !a.position?.toLowerCase().includes('deputy');
@@ -572,24 +610,24 @@ export default function StaffDirectory() {
   const getDeptCount = (id) => staffData.filter(s => s.departmentId === id).length;
 
   const departmentStats = useMemo(() => [
-    { icon: '👑', value: staffByHierarchy.leadership.length, label: 'Leadership' },
-    { icon: '📚', value: staffByHierarchy.teaching.length, label: 'Teachers' },
-    { icon: '🛠️', value: staffByHierarchy.support.length, label: 'Support' },
-    { icon: '🏢', value: DEPARTMENTS.length, label: 'Departments' }
+    { icon: FiShield, value: staffByHierarchy.leadership.length, label: 'Leadership', color: 'blue' },
+    { icon: FiBookOpen, value: staffByHierarchy.teaching.length, label: 'Teachers', color: 'emerald' },
+    { icon: FiSettings, value: staffByHierarchy.support.length, label: 'Support', color: 'orange' },
+    { icon: FiLayers, value: DEPARTMENTS.length, label: 'Depts', color: 'violet' }
   ], [staffByHierarchy]);
 
   if (error) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
-          <div className="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <FiUser className="text-2xl text-red-600" />
+        <div className="text-center max-w-sm w-full">
+          <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-red-100">
+            <FiUser className="text-xl text-red-500" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Error Loading Staff</h2>
-          <p className="text-slate-600 mb-4">{error}</p>
+          <h2 className="text-lg font-black text-slate-900 mb-2">Error Loading Directory</h2>
+          <p className="text-sm text-slate-500 mb-5">{error}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium"
+            className="bg-[#1a1a2e] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-[#2d2d44] transition-colors w-full"
           >
             Try Again
           </button>
@@ -599,363 +637,474 @@ export default function StaffDirectory() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-sans text-slate-900">
       
-      {/* Mobile Filter Overlay */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      {/* ── Sticky Header ── */}
+      <header className="bg-white border-b border-slate-100 sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 text-slate-600"
-            >
-              <FiMenu size={20} />
-            </button>
-            
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-900 rounded-lg flex items-center justify-center">
-              <img src="/MatG.jpg" alt="MatG Logo" className="w-8 h-8 object-contain" />
-              </div>
-              <div>
-                <span className="text-lg font-bold text-slate-900">MatG Staff</span>
-                <p className="text-xs text-slate-500">Faculty Directory</p>
-              </div>
-            </Link>
-          </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} />
+            <div className="hidden sm:block">
+              <span className="text-sm font-black text-[#1a1a2e] tracking-tight">
+                Kinyui Boys
+              </span>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Staff Directory</p>
+            </div>
+          </Link>
 
-          <div className="hidden md:flex flex-1 max-w-md mx-4">
+          {/* Search */}
+          <div className="flex-1 max-w-md mx-4">
             <div className="relative w-full">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search staff..."
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500"
+                placeholder="Search by name, role, expertise..."
+                className="w-full pl-9 pr-8 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10 transition-all"
               />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                  <FiX size={14} />
+                </button>
+              )}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={fetchStaffData}
-              className="p-2 text-slate-600 hover:text-emerald-600 transition-colors"
+              disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:border-[#1a1a2e] hover:text-[#1a1a2e] disabled:opacity-50 transition-all text-xs font-bold"
             >
-              <FiRefreshCw size={18} />
+              <FiRefreshCw size={12} className={loading ? 'animate-spin' : ''} />
+              <span className="hidden sm:inline">{loading ? 'Loading...' : 'Refresh'}</span>
             </button>
             
-            <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden">
+            <div className="hidden sm:flex bg-slate-50 p-0.5 rounded-lg border border-slate-100">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 ${viewMode === 'grid' ? 'bg-emerald-50 text-emerald-600' : 'text-slate-500'}`}
+                className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-[#1a1a2e] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
               >
-                <FiGrid size={16} />
+                <FiGrid size={14} />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 ${viewMode === 'list' ? 'bg-emerald-50 text-emerald-600' : 'text-slate-500'}`}
+                className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-[#1a1a2e] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
               >
-                <FiList size={16} />
+                <FiList size={14} />
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          
-          {/* Sidebar */}
-          <aside className={`
-            fixed lg:static inset-y-0 left-0 w-80 bg-white transform transition-transform duration-300 ease-in-out shadow-xl lg:shadow-none z-40 overflow-y-auto
-            ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          `}>
-            <div className="p-6 lg:p-0 lg:sticky lg:top-24 space-y-6">
-              
-              {/* Mobile Header */}
-              <div className="flex items-center justify-between lg:hidden pb-4 border-b border-slate-100">
-                <h2 className="text-lg font-bold text-slate-900">Filters</h2>
-                <button 
-                  onClick={() => setIsSidebarOpen(false)} 
-                  className="p-2 bg-slate-100 rounded-lg"
-                >
-                  <FiX size={20} className="text-slate-600" />
-                </button>
-              </div>
-
-              {/* Mobile Search */}
-              <div className="lg:hidden">
-                <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search staff..."
-                    className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Hierarchy Filter */}
-              <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
-                <div className="p-4 bg-slate-50 border-b border-slate-200">
-                  <h3 className="font-bold text-slate-900 text-sm">Staff Hierarchy</h3>
-                </div>
-                <div className="p-2 space-y-1">
-                  <button
-                    onClick={() => setSelectedHierarchy('all')}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
-                      selectedHierarchy === 'all' 
-                      ? 'bg-emerald-600 text-white' 
-                      : 'hover:bg-slate-50 text-slate-700'
-                    }`}
-                  >
-                    <span className="text-sm font-medium">ALL STAFF</span>
-                    <span className={`text-xs px-2 py-1 rounded ${selectedHierarchy === 'all' ? 'bg-white/20' : 'bg-slate-100'}`}>
-                      {staffData.length}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setSelectedHierarchy('leadership')}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
-                      selectedHierarchy === 'leadership' 
-                      ? 'bg-emerald-900 text-white' 
-                      : 'hover:bg-slate-50 text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span>👑</span>
-                      <span className="text-sm font-medium">Leadership</span>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded ${selectedHierarchy === 'leadership' ? 'bg-white/20' : 'bg-slate-100'}`}>
-                      {staffByHierarchy.leadership?.length || 0}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setSelectedHierarchy('teaching')}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
-                      selectedHierarchy === 'teaching' 
-                      ? 'bg-emerald-900 text-white' 
-                      : 'hover:bg-slate-50 text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span>📚</span>
-                      <span className="text-sm font-medium">Teaching</span>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded ${selectedHierarchy === 'teaching' ? 'bg-white/20' : 'bg-slate-100'}`}>
-                      {staffByHierarchy.teaching?.length || 0}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setSelectedHierarchy('support')}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
-                      selectedHierarchy === 'support' 
-                      ? 'bg-emerald-900 text-white' 
-                      : 'hover:bg-slate-50 text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span>🛠️</span>
-                      <span className="text-sm font-medium">Support</span>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded ${selectedHierarchy === 'support' ? 'bg-white/20' : 'bg-slate-100'}`}>
-                      {staffByHierarchy.support?.length || 0}
-                    </span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Departments */}
-              <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
-                <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                  <h3 className="font-bold text-slate-900 text-sm">Departments</h3>
-                  {selectedDepts.length > 0 && (
-                    <button 
-                      onClick={() => setSelectedDepts([])}
-                      className="text-xs text-emerald-900 font-medium"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-                
-                <div className="p-2 max-h-80 overflow-y-auto">
-                  {DEPARTMENTS.map((dept) => (
-                    <div 
-                      key={dept.id}
-                      onClick={() => toggleDept(dept.id)}
-                      className={`cursor-pointer flex items-center justify-between p-3 rounded-lg border ${
-                        selectedDepts.includes(dept.id)
-                        ? 'border-emerald-200 bg-emerald-50'
-                        : 'border-transparent hover:bg-slate-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{dept.icon}</span>
-                        <span className="text-sm font-medium text-slate-700">{dept.label}</span>
-                      </div>
-                      <span className="text-xs text-slate-400">
-                        {getDeptCount(dept.id)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Clear All */}
-              {(selectedDepts.length > 0 || searchQuery || selectedHierarchy !== 'all') && (
-                <button
-                  onClick={clearAllFilters}
-                  className="w-full py-3 rounded-lg border border-emerald-900 text-emerald-900 hover:bg-emerald-50 text-sm font-medium transition-colors"
-                >
-                  Clear All Filters
-                </button>
-              )}
-
-            </div>
-          </aside>
-
-          {/* Main Content */}
-          <main className="flex-1">
-            
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-slate-900 mb-1">Meet Our Team</h1>
-              <p className="text-sm text-slate-500">
-                {loading ? 'Loading...' : `${filteredStaff.length} dedicated professionals`}
-                {!loading && filteredStaff.length !== staffData.length && (
-                  <span className="text-emerald-900 ml-1">(filtered from {staffData.length})</span>
-                )}
+      {/* ── Hero Banner ── */}
+      <div className="relative bg-[#1a1a2e] overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 relative z-10">
+          <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-2">Kinyui Boys Senior School</p>
+              <h1 className="text-4xl sm:text-3xl lg:text-5xl font-black text-white tracking-tight">
+                Our Staff <span className="text-blue-400">Directory</span>
+              </h1>
+              <p className="text-sm text-white/50 mt-2 max-w-md">
+                {loading ? 'Discovering our talented educators...' : `${staffData.length} dedicated professionals shaping the future`}
               </p>
             </div>
 
             {/* Stats */}
             {!loading && (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                {departmentStats.map((stat, index) => (
-                  <StatsPill key={index} {...stat} />
+              <div className="grid grid-cols-4 divide-x divide-white/10 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                {departmentStats.map((stat, i) => (
+                  <StatsPill key={i} icon={stat.icon} value={stat.value} label={stat.label} />
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      </div>
 
-            {/* Staff Listing */}
+      {/* ── Top Filter Bar ── */}
+      <div className="bg-slate-50/80 backdrop-blur-sm border-b border-slate-100 sticky top-14 z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          
+          {/* Hierarchy Tabs */}
+          <div className="flex items-center gap-1.5 py-3 overflow-x-auto scrollbar-hide -mx-1 px-1">
+            {[
+              { key: 'all', label: 'All Staff', Icon: FiUsers, count: staffData.length },
+              { key: 'leadership', label: 'Leadership', Icon: FiShield, count: staffByHierarchy.leadership?.length || 0 },
+              { key: 'teaching', label: 'Teaching', Icon: FiBookOpen, count: staffByHierarchy.teaching?.length || 0 },
+              { key: 'support', label: 'Support', Icon: FiSettings, count: staffByHierarchy.support?.length || 0 },
+            ].map((item) => (
+              <button
+                key={item.key}
+                onClick={() => setSelectedHierarchy(item.key)}
+                className={`flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[11px] font-semibold transition-all ${
+                  selectedHierarchy === item.key
+                    ? 'bg-[#1a1a2e] text-white shadow-sm'
+                    : 'text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm'
+                }`}
+              >
+                <item.Icon size={13} />
+                <span className="whitespace-nowrap">{item.label}</span>
+                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
+                  selectedHierarchy === item.key ? 'bg-white/15' : 'bg-slate-200/60'
+                }`}>
+                  {item.count}
+                </span>
+              </button>
+            ))}
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-slate-200 mx-2 flex-shrink-0" />
+
+            {/* Department Pills */}
+            {DEPARTMENTS.map((dept) => {
+              const DIcon = DEPT_ICONS[dept.id] || FiLayers;
+              return (
+                <button
+                  key={dept.id}
+                  onClick={() => toggleDept(dept.id)}
+                  className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-semibold transition-all border ${
+                    selectedDepts.includes(dept.id)
+                      ? 'bg-blue-50 border-blue-200 text-blue-700 shadow-sm'
+                      : 'border-transparent text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm'
+                  }`}
+                >
+                  <DIcon size={12} />
+                  <span className="whitespace-nowrap">{dept.label}</span>
+                  <span className="text-[9px] font-bold text-slate-400">{getDeptCount(dept.id)}</span>
+                </button>
+              );
+            })}
+
+            {/* Clear Filters */}
+            {(selectedDepts.length > 0 || searchQuery || selectedHierarchy !== 'all') && (
+              <>
+                <div className="w-px h-5 bg-slate-200 mx-1 flex-shrink-0" />
+                <button
+                  onClick={clearAllFilters}
+                  className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-black text-red-500 hover:bg-red-50 transition-colors uppercase tracking-wider"
+                >
+                  <FiX size={12} /> Clear
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          {/* ── Main Content ── */}
+          <main className="w-full">
+            
+            {/* Toolbar */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
+              <div>
+                <p className="text-sm text-slate-500">
+                  {loading ? 'Loading...' : (
+                    <>
+                      Showing <span className="font-bold text-slate-900">{filteredStaff.length}</span> staff members
+                      {filteredStaff.length !== staffData.length && (
+                        <span className="text-blue-600 font-semibold"> (filtered from {staffData.length})</span>
+                      )}
+                    </>
+                  )}
+                </p>
+              </div>
+
+              <div className="relative w-full sm:w-52">
+                <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
+                <select className="appearance-none w-full bg-white border border-slate-200 pl-8 pr-8 py-2 rounded-lg text-xs font-bold text-slate-700 focus:outline-none focus:border-[#1a1a2e] cursor-pointer">
+                  <option value="hierarchy">Hierarchy View</option>
+                  <option value="alphabetical">Alphabetical (A-Z)</option>
+                  <option value="department">By Department</option>
+                </select>
+                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={12} />
+              </div>
+            </div>
+
+            {/* Consultation Modal */}
+            {showConsultModal && selectedStaff && (
+              <div 
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[200]"
+                onClick={() => setShowConsultModal(false)}
+              >
+                <div 
+                  className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl border border-slate-100"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Modal Header */}
+                  <div className="bg-[#1a1a2e] p-5 text-white">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                          <FiMail size={18} />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-black">Contact {selectedStaff.name}</h2>
+                          <p className="text-white/50 text-xs">{selectedStaff.position} &bull; {selectedStaff.department}</p>
+                        </div>
+                      </div>
+                      <button onClick={() => setShowConsultModal(false)} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                        <FiX size={18} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleConsultSubmit} className="p-5 overflow-y-auto max-h-[calc(90vh-100px)] space-y-4">
+                    {/* Staff Card */}
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center gap-3">
+                      <div className="w-10 h-10 bg-[#1a1a2e] rounded-lg flex items-center justify-center text-white font-black text-sm">
+                        {selectedStaff.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-900">{selectedStaff.name}</p>
+                        <p className="text-[10px] text-slate-500">{selectedStaff.position} &bull; {selectedStaff.department}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Your Name *</label>
+                        <input
+                          type="text"
+                          required
+                          value={consultForm.name}
+                          onChange={(e) => setConsultForm({...consultForm, name: e.target.value})}
+                          className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10"
+                          placeholder="Full name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Email *</label>
+                        <input
+                          type="email"
+                          required
+                          value={consultForm.email}
+                          onChange={(e) => setConsultForm({...consultForm, email: e.target.value})}
+                          className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10"
+                          placeholder="your@email.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Phone *</label>
+                        <input
+                          type="tel"
+                          required
+                          value={consultForm.phone}
+                          onChange={(e) => setConsultForm({...consultForm, phone: e.target.value})}
+                          className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10"
+                          placeholder="+254700000000"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Inquiry Type</label>
+                        <select
+                          value={consultForm.inquiryType}
+                          onChange={(e) => setConsultForm({...consultForm, inquiryType: e.target.value})}
+                          className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e]"
+                        >
+                          <option value="general">General Inquiry</option>
+                          <option value="academic">Academic Consultation</option>
+                          <option value="guidance">Guidance & Counseling</option>
+                          <option value="complaint">Feedback / Complaint</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Student Details (optional)</label>
+                      <input
+                        type="text"
+                        value={consultForm.studentGrade}
+                        onChange={(e) => setConsultForm({...consultForm, studentGrade: e.target.value})}
+                        className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10"
+                        placeholder="Student name, grade, class"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Subject *</label>
+                      <input
+                        type="text"
+                        required
+                        value={consultForm.subject}
+                        onChange={(e) => setConsultForm({...consultForm, subject: e.target.value})}
+                        className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10"
+                        placeholder="Subject of inquiry"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Message *</label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={consultForm.message}
+                        onChange={(e) => setConsultForm({...consultForm, message: e.target.value})}
+                        className="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#1a1a2e] focus:ring-1 focus:ring-[#1a1a2e]/10 resize-none"
+                        placeholder="Your message..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Preferred Contact</label>
+                      <div className="flex gap-4">
+                        {['email', 'phone', 'whatsapp'].map(method => (
+                          <label key={method} className="flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="contactMethod"
+                              value={method}
+                              checked={consultForm.contactMethod === method}
+                              onChange={(e) => setConsultForm({...consultForm, contactMethod: e.target.value})}
+                              className="w-3.5 h-3.5 text-[#1a1a2e]"
+                            />
+                            <span className="text-xs font-semibold text-slate-600 capitalize">{method}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-3 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => setShowConsultModal(false)}
+                        className="flex-1 py-2.5 bg-slate-50 text-slate-600 rounded-lg font-bold text-sm hover:bg-slate-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="flex-1 py-2.5 bg-[#1a1a2e] text-white rounded-lg font-bold text-sm hover:bg-[#2d2d44] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      >
+                        {submitting ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <FiMail size={14} /> Send Message
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* Content */}
             {loading ? (
-              <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-4"}>
-                {[...Array(6)].map((_, i) => <StaffSkeleton key={i} viewMode={viewMode} />)}
+              <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-3'}>
+                {[...Array(6)].map((_, i) => (
+                  <StaffSkeleton key={i} viewMode={viewMode} />
+                ))}
               </div>
             ) : filteredStaff.length > 0 ? (
               <>
                 {selectedHierarchy === 'all' ? (
-                  <div className="space-y-8">
-                    <HierarchySection
-                      title="School Leadership"
-                      icon="👑"
-                      staff={staffByHierarchy.leadership}
-                      viewMode={viewMode}
-                      isFirst={true}
-                    />
-                    <HierarchySection
-                      title="Teaching Staff"
-                      icon="📚"
-                      staff={staffByHierarchy.teaching}
-                      viewMode={viewMode}
-                    />
-                    <HierarchySection
-                      title="Support Staff"
-                      icon="🛠️"
-                      staff={staffByHierarchy.support}
-                      viewMode={viewMode}
-                    />
+                  <div className="space-y-6">
+                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst={true} onContactClick={handleContactClick} />
+                    <HierarchySection title="Teaching Staff" iconKey="teaching" staff={staffByHierarchy.teaching} viewMode={viewMode} onContactClick={handleContactClick} />
+                    <HierarchySection title="Support Staff" iconKey="support" staff={staffByHierarchy.support} viewMode={viewMode} onContactClick={handleContactClick} />
+                  </div>
+                ) : viewMode === 'grid' ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {paginatedStaff.map((staff) => (
+                      <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
+                    ))}
                   </div>
                 ) : (
-                  viewMode === 'grid' ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {paginatedStaff.map((staff) => (
-                        <StaffCard key={staff.id} staff={staff} />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {paginatedStaff.map((staff) => (
-                        <StaffListCard key={staff.id} staff={staff} />
-                      ))}
-                    </div>
-                  )
+                  <div className="space-y-3">
+                    {paginatedStaff.map((staff) => (
+                      <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
+                    ))}
+                  </div>
                 )}
 
                 {/* Pagination */}
                 {totalPages > 1 && selectedHierarchy !== 'all' && (
-                  <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 pt-6">
-                    <div className="text-sm text-slate-500">
-                      Page {currentPage} of {totalPages}
-                    </div>
-                    <div className="flex gap-2">
+                  <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 pt-5">
+                    <p className="text-xs text-slate-400">
+                      Page <span className="font-bold text-slate-900">{currentPage}</span> of <span className="font-bold text-slate-900">{totalPages}</span>
+                      <span className="text-blue-600 ml-2">&bull; {filteredStaff.length} total</span>
+                    </p>
+                    <div className="flex gap-1.5">
                       <button
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
-                        className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 disabled:opacity-50"
+                        className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 disabled:opacity-40 flex items-center gap-1 hover:border-slate-300 transition-colors"
                       >
-                        Previous
+                        <FiArrowLeft size={12} /> <span className="hidden sm:inline">Prev</span>
                       </button>
-                      <div className="flex gap-1">
-                        {Array.from({length: totalPages}, (_, i) => i + 1).map((page) => (
+                      
+                      {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+                        let pageNum = i + 1;
+                        if (totalPages > 3 && currentPage > 2) pageNum = currentPage - 1 + i;
+                        if (pageNum > totalPages) return null;
+                        return (
                           <button
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            className={`w-8 h-8 rounded-lg text-sm font-medium ${
-                              currentPage === page 
-                                ? 'bg-emerald-900 text-white' 
-                                : 'text-slate-600 hover:bg-slate-50'
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                              currentPage === pageNum ? 'bg-[#1a1a2e] text-white' : 'text-slate-500 hover:bg-slate-50'
                             }`}
                           >
-                            {page}
+                            {pageNum}
                           </button>
-                        ))}
-                      </div>
+                        );
+                      })}
+                      
                       <button
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
-                        className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 disabled:opacity-50"
+                        className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 disabled:opacity-40 flex items-center gap-1 hover:border-slate-300 transition-colors"
                       >
-                        Next
+                        <span className="hidden sm:inline">Next</span> <FiArrowRight size={12} />
                       </button>
                     </div>
                   </div>
                 )}
-
               </>
             ) : (
-              <div className="bg-white border border-dashed border-slate-200 rounded-lg p-12 text-center">
-                <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FiSearch className="text-slate-400 text-xl" />
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                  <FiSearch className="text-xl text-slate-300" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">No staff members found</h3>
-                <p className="text-sm text-slate-500 mb-4">Try adjusting your search or filters</p>
+                <h3 className="text-base font-black text-slate-900 mb-1">No staff found</h3>
+                <p className="text-sm text-slate-400 max-w-sm mb-5">Try adjusting your search or filters.</p>
                 <button
                   onClick={clearAllFilters}
-                  className="px-4 py-2 bg-emerald-900 text-white rounded-lg text-sm font-medium"
+                  className="px-5 py-2 bg-[#1a1a2e] text-white rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-[#2d2d44] transition-colors"
                 >
-                  Clear All Filters
+                  Clear Filters
                 </button>
               </div>
             )}
-            
           </main>
-        </div>
       </div>
+
+      {/* ── Footer ── */}
+      <footer className="border-t border-slate-100 bg-white mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Image src="/seo/kinyui.png" alt="Logo" width={24} height={24} className="opacity-40" />
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Kinyui Boys Senior School</span>
+            </div>
+            <p className="text-[10px] text-slate-300">Soaring to Excellence &bull; Staff Directory &bull; &copy; {new Date().getFullYear()}</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
