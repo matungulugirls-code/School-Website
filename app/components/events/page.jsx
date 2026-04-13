@@ -183,7 +183,7 @@ const ModernEventsNewsSection = () => {
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">Matungulu Girls High School</span>
           </div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-2 sm:mb-3">
-            Eagles' <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Updates</span>
+            The Schools' <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Updates and Activities</span>
           </h1>
           <p className="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">
             Celebrating excellence, empowerment, and achievement at Matungulu Girls School

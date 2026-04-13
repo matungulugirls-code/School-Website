@@ -250,94 +250,7 @@ const ModernSchoolLayout = () => {
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             {/* Left Column - Text Content */}
-            <div className="lg:col-span-5 space-y-5 sm:space-y-6">
-              {/* Status Badge */}
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-full border border-emerald-200">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="text-[10px] sm:text-xs font-bold tracking-[0.15em] text-emerald-700 uppercase">
-                  Now a National School (2026)
-                </span>
-              </div>
-
-              {/* Main Heading */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 leading-[1.08] tracking-tight">
-                {loading ? (
-                  <span className="inline-flex items-center gap-2">
-                    <FiLoader className="w-5 h-5 animate-spin text-emerald-500" /> Loading...
-                  </span>
-                ) : (
-                  <>
-                    {schoolName.split(' ').slice(0, -2).join(' ')}{' '}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
-                      {schoolName.split(' ').slice(-2).join(' ')}
-                    </span>
-                  </>
-                )}
-              </h1>
-
-              {/* Description */}
-              <p className="text-gray-500 text-sm sm:text-base lg:text-lg leading-relaxed max-w-lg">
-                {description || 'Located in the heart of Matungulu, Machakos County, we are dedicated to nurturing young women into confident, compassionate, and accomplished leaders through academic excellence and character formation.'}
-              </p>
-
-              {/* Contact Info Pills */}
-              <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg text-xs text-gray-600">
-                  <FiMapPin className="text-emerald-500 flex-shrink-0" size={14} /> Matungulu, Machakos
-                </span>
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg text-xs text-gray-600">
-                  <FiPhone className="text-emerald-500 flex-shrink-0" size={14} /> {contactPhone}
-                </span>
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg text-xs text-gray-600">
-                  <FiMail className="text-emerald-500 flex-shrink-0" size={14} /> {contactEmail}
-                </span>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 pt-2">
-                {[
-                  { label: 'Students', value: `${studentCount}+`, icon: '👩🏾‍🎓' },
-                  { label: 'KCSE Mean', value: '8.14', icon: '📊' },
-                  { label: 'Uni Transition', value: '84%', icon: '🎓' },
-                  { label: 'Motto', value: motto, icon: '🦅' }
-                ].map((stat, idx) => (
-                  <div 
-                    key={idx} 
-                    className="relative p-3 sm:p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-center min-h-[80px] sm:min-h-[100px]"
-                  >
-                    <span className="absolute top-2 right-2 text-sm opacity-40">{stat.icon}</span>
-                    <p className={`font-black text-emerald-600 leading-tight ${
-                      stat.label === 'Motto' ? 'text-xs sm:text-sm' : 'text-xl sm:text-2xl'
-                    }`}>
-                      {stat.value}
-                    </p>
-                    <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400 mt-1">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <button
-                  onClick={handleExplorePathways}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-bold text-sm transition-all active:scale-[0.98] shadow-lg shadow-emerald-600/20"
-                >
-                  Apply for Admission <FiArrowRight size={16} />
-                </button>
-                <button
-                  onClick={() => router.push('/pages/AboutUs')}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 rounded-xl font-bold text-sm transition-all border border-gray-200"
-                >
-                  Discover More
-                </button>
-              </div>
-            </div>
-
+    
             {/* Right Column - Image Carousel */}
             <div className="lg:col-span-7">
               <div className="relative aspect-[4/3] sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl group">
@@ -403,6 +316,104 @@ const ModernSchoolLayout = () => {
                 </div>
               </div>
             </div>
+             <div className="lg:col-span-5 space-y-6 sm:space-y-7">
+  
+  {/* Status Badge */}
+  <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200 w-fit">
+    <span className="relative flex h-2 w-2">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+    </span>
+    <span className="text-[10px] sm:text-xs font-semibold tracking-wider text-emerald-700 uppercase">
+      Now a National School (2026)
+    </span>
+  </div>
+
+  {/* Heading */}
+  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
+    {loading ? (
+      <span className="inline-flex items-center gap-2">
+        <FiLoader className="w-5 h-5 animate-spin text-emerald-500" /> Loading...
+      </span>
+    ) : (
+      <>
+        {schoolName.split(' ').slice(0, -2).join(' ')}{" "}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+          {schoolName.split(' ').slice(-2).join(' ')}
+        </span>
+      </>
+    )}
+  </h1>
+
+  {/* Description (FIXED DARKER TEXT ✅) */}
+  <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-medium">
+    {description ||
+      "Located in the heart of Matungulu, Machakos County, we are dedicated to nurturing young women into confident, compassionate, and accomplished leaders through academic excellence and character formation."}
+  </p>
+
+  {/* Contact Pills */}
+  <div className="flex flex-wrap gap-2 sm:gap-3">
+    <span className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700">
+      <FiMapPin className="text-emerald-500" size={14} /> Matungulu, Machakos
+    </span>
+    <span className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700">
+      <FiPhone className="text-emerald-500" size={14} /> {contactPhone}
+    </span>
+    <span className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg text-xs sm:text-sm text-gray-700 break-all">
+      <FiMail className="text-emerald-500" size={14} /> {contactEmail}
+    </span>
+  </div>
+
+  {/* Stats Grid (MORE RESPONSIVE ✅) */}
+  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+    {[
+      { label: "Students", value: `${studentCount}+`, icon: "👩🏾‍🎓" },
+      { label: "KCSE Mean", value: "8.14", icon: "📊" },
+      { label: "Uni Transition", value: "84%", icon: "🎓" },
+      { label: "Motto", value: motto, icon: "🦅" },
+    ].map((stat, idx) => (
+      <div
+        key={idx}
+        className="relative p-4 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[90px]"
+      >
+        <span className="absolute top-2 right-2 text-sm opacity-30">
+          {stat.icon}
+        </span>
+
+        <p
+          className={`font-bold text-emerald-600 leading-tight ${
+            stat.label === "Motto"
+              ? "text-xs sm:text-sm"
+              : "text-lg sm:text-xl md:text-2xl"
+          }`}
+        >
+          {stat.value}
+        </p>
+
+        <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-gray-500 mt-1">
+          {stat.label}
+        </p>
+      </div>
+    ))}
+  </div>
+
+  {/* CTA Buttons */}
+  <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full">
+    <button
+      onClick={handleExplorePathways}
+      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-semibold text-sm transition-all active:scale-[0.98] shadow-lg shadow-emerald-600/20"
+    >
+      Apply for Admission <FiArrowRight size={16} />
+    </button>
+
+    <button
+      onClick={() => router.push("/pages/AboutUs")}
+      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-800 rounded-xl font-semibold text-sm transition-all border border-gray-300"
+    >
+      Discover More
+    </button>
+  </div>
+</div>
           </div>
         </div>
       </section>
@@ -453,38 +464,59 @@ const ModernSchoolLayout = () => {
             {/* Timeline Line */}
             <div className="absolute left-8 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-300 to-emerald-200"></div>
             
-            <div className="space-y-8">
-              {achievements.map((item, idx) => (
-                <div key={idx} className={`relative flex flex-col sm:flex-row items-start gap-4 sm:gap-8 ${
-                  idx % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'
-                }`}>
-                  {/* Timeline Dot */}
-                  <div className="absolute left-8 sm:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-emerald-600 border-4 border-white shadow-lg flex items-center justify-center z-10">
-                    <div className="w-2 h-2 rounded-full bg-white"></div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className={`ml-16 sm:ml-0 ${idx % 2 === 0 ? 'sm:pr-12 sm:text-right' : 'sm:pl-12'} sm:w-1/2`}>
-                    <div className={`bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all ${
-                      idx % 2 === 0 ? 'sm:mr-auto' : 'sm:ml-auto'
-                    }`}>
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white ${
-                          idx % 2 === 0 ? 'order-first' : 'sm:order-last'
-                        }`}>
-                          {item.icon}
-                        </div>
-                        <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
-                          {item.year}
-                        </span>
-                      </div>
-                      <h4 className="font-black text-gray-900 mb-1">{item.title}</h4>
-                      <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+      <div className="space-y-10">
+  {achievements.map((item, idx) => (
+    <div
+      key={idx}
+      className={`relative flex flex-col sm:flex-row items-start gap-6 sm:gap-10 ${
+        idx % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+      }`}
+    >
+      {/* Timeline Dot */}
+      <div className="absolute left-6 sm:left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 border-4 border-white shadow-xl flex items-center justify-center z-10">
+        <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+      </div>
+
+      {/* Content */}
+      <div
+        className={`ml-14 sm:ml-0 ${
+          idx % 2 === 0 ? "sm:pr-14 sm:text-right" : "sm:pl-14"
+        } sm:w-1/2`}
+      >
+        <div
+          className={`group bg-white/90 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
+            idx % 2 === 0 ? "sm:mr-auto" : "sm:ml-auto"
+          }`}
+        >
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-3">
+            <div
+              className={`w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-md ${
+                idx % 2 === 0 ? "order-first" : "sm:order-last"
+              }`}
+            >
+              {item.icon}
             </div>
+
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full tracking-wide">
+              {item.year}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h4 className="font-bold text-gray-900 text-base mb-1.5 tracking-tight">
+            {item.title}
+          </h4>
+
+          {/* Description (DARKER TEXT ✅) */}
+          <p className="text-gray-700 text-sm leading-relaxed font-medium">
+            {item.description}
+          </p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
           </div>
         </div>
       </section>
