@@ -145,7 +145,7 @@ const CONTACT_INFO = [
 const ACHIEVEMENTS = [
   { value: 68, label: 'Years of Excellence', icon: FiAward },
   { value: 98, label: 'KCSE Pass Rate', icon: FiTrendingUp },
-  { value: 800, label: 'Students Enrolled', icon: FiUsers },
+  { value: 1300, label: 'Students Enrolled', icon: FiUsers },
   { value: 45, label: 'Qualified Teachers', icon: FaChalkboardTeacher },
 ];
 

@@ -254,8 +254,8 @@ export default function ModernNavbar() {
                 />
               </div>
               <div className="sm:block">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-emerald-200 to-teal-100 bg-clip-text text-transparent whitespace-nowrap tracking-tight">
-                  Matungulu Girls
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-emerald-100 to-teal-50 bg-clip-text text-transparent whitespace-nowrap tracking-tight">
+                  MatG 
                 </h1>
                 <p className="text-xs sm:text-sm text-emerald-100/90 font-medium tracking-wide whitespace-nowrap">
                   Strive to Excel
