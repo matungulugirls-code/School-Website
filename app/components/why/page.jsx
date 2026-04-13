@@ -365,12 +365,13 @@ const ModernSchoolLayout = () => {
   </div>
 
   {/* Stats Grid (MORE RESPONSIVE ✅) */}
+
   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
     {[
-      { label: "Students", value: `${studentCount}+`, icon: "👩🏾‍🎓" },
-      { label: "KCSE Mean", value: "8.14", icon: "📊" },
-      { label: "Uni Transition", value: "84%", icon: "🎓" },
-      { label: "Motto", value: motto, icon: "🦅" },
+      { label: "Students", value: `${studentCount}+`, icon: <FiUsers className="w-4 h-4" /> },
+      { label: "KCSE Mean", value: "8.14", icon: <FiBookOpen className="w-4 h-4" /> },
+      { label: "Uni Transition", value: "84%", icon: <FiTrendingUp className="w-4 h-4" /> },
+      { label: "Motto", value: motto, icon: <FiTarget className="w-4 h-4" /> },
     ].map((stat, idx) => (
       <div
         key={idx}
@@ -786,7 +787,7 @@ const ModernSchoolLayout = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
-                <span className="text-white text-lg">🦅</span>
+                <FiTarget className="text-white w-5 h-5" />
               </div>
               <div>
                 <p className="text-white font-bold text-sm">Matungulu Girls Senior School</p>
