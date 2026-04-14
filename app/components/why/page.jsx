@@ -1342,7 +1342,7 @@ const ModernSchoolLayout = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm mt-6">
               <IoSparkles className="text-teal-500" />
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                7 Core Competencies
+                7+ Core Competencies
               </span>
             </div>
           </div>
@@ -1495,9 +1495,9 @@ const ModernSchoolLayout = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {[
+                 { name: "Mathematics", icon: FiCpu },
                 { name: "English", icon: FiBook },
                 { name: "Kiswahili", icon: FiGlobe },
-                { name: "Mathematics", icon: FiCpu },
                 { name: "Integrated Science", icon: FiActivity },
                 { name: "Social Studies", icon: FiUsers },
                 { name: "Religious Education", icon: FiHeart },
