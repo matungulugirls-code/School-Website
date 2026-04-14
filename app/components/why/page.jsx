@@ -1897,13 +1897,12 @@ const achievements = [
                   </div>
                 )}
               </div>
-            </div>
-
-            {/* Modal Footer */}
+                {/* Modal Footer */}
             <div className="p-4 border-t border-gray-100 bg-gray-50">
               <p className="text-xs text-gray-500 text-center">
-                Matungulu Girls Senior School — Celebrating Excellence Since 1966
+                Matungulu Girls Senior School — Celebrating Excellence Since 1955
               </p>
+            </div>
             </div>
           </div>
         </div>
