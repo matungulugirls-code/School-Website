@@ -42,7 +42,7 @@ import AdminSidebar from '../components/sidebar/page';
 import DashboardOverview from '../components/dashbaord/page';
 import AssignmentsManager from '../components/AssignmentsManager/page';
 import NewsEventsManager from '../components/eventsandnews/page';
-import StaffManager from '../components/SchoolTeam/page';
+import StaffManager from '../components/staff/page';
 import SubscriberManager from '../components/subscriber/page';
 import EmailManager from '../components/email/page';
 import GalleryManager from '../components/gallery/page';

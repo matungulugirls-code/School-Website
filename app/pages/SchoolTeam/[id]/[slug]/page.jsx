@@ -1,5 +1,5 @@
 // app/SchoolTeam/[id]/page.jsx
-import StaffProfilePage from '../../../../components/SchoolTeamseo.jsx';
+import StaffProfilePage from '../../../../components/staffseo.jsx';
 
 // Import static data or use empty array as fallback
 let STAFF_DATA = [];
