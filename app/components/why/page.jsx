@@ -1232,9 +1232,9 @@ const achievements = [
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
               Recent <span className="text-emerald-800">Achievements</span>
             </h2>
-          <p className="text-gray-900 text-base sm:text-base">
-  Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
-</p>
+            <p className="text-gray-900 text-base sm:text-base">
+              Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
+            </p>
           </div>
 
           <div className="relative">
@@ -1285,10 +1285,23 @@ const achievements = [
                         {item.title}
                       </h4>
 
-                      {/* Description (DARKER TEXT ✅) */}
-                      <p className="text-gray-700 text-sm leading-relaxed font-medium">
-                        {item.description}
+                      {/* TRUNCATED DESCRIPTION - only showing shortDescription */}
+                      <p className="text-gray-700 text-sm leading-relaxed font-medium mb-3">
+                        {item.shortDescription}
                       </p>
+{item.description !== item.shortDescription && (
+  <button
+    onClick={() => toggleReadMore(item.id)}
+    className={`inline-flex items-center gap-1.5 ${c.text} text-xs font-semibold hover:underline transition-colors`}
+  >
+    {expandedCards[item.id] ? "Read Less" : "Read More"}
+    <FiChevronRight
+      className={`w-3.5 h-3.5 transition-transform duration-300 ${
+        expandedCards[item.id] ? "rotate-90" : ""
+      }`}
+    />
+  </button>
+)}
                     </div>
                   </div>
                 </div>
