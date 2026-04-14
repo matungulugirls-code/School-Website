@@ -1074,9 +1074,9 @@ const ModernSchoolLayout = () => {
             Through Purpose
           </span>
         </h2>
-        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-sm">
-          Guiding principles for the {new Date().getFullYear()} academic landscape.
-        </p>
+     <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-sm">
+  Guiding principles for the {new Date().getFullYear()} academic landscape. For us at Matungulu Girls Senior School, the champions — our slogan.
+</p>
       </div>
 
       {/* Right Side: Interactive Cards (Reduced Height) */}
@@ -1116,7 +1116,7 @@ const ModernSchoolLayout = () => {
         ].map((item, idx) => (
           <div 
             key={idx} 
-            className={`group relative p-[1px] rounded-[1.5rem] bg-gradient-to-b from-slate-200 to-white hover:shadow-xl transition-all duration-500 ${item.span || ""}`}
+            className={`group relative p-[1px] rounded-[1.5rem] bg-gradient-to-b from-slate-200 to-white shadow-lg transition-all duration-200 ${item.span || ""}`}
           >
             <div className="relative h-full bg-white rounded-[1.45rem] p-5 border border-white overflow-hidden">
               {/* Corner Accent - Scaled Down */}
@@ -1130,14 +1130,14 @@ const ModernSchoolLayout = () => {
 
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-emerald-600 transition-colors">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-emerald-600 transition-colors">
                       {item.label}
                     </h3>
                     <div className={`px-2 py-0.5 rounded-full ${item.bg} ${item.border} ${item.text} text-[8px] font-bold uppercase`}>
                       Official
                     </div>
                   </div>
-                  <p className="text-slate-800 text-sm font-bold leading-snug tracking-tight italic">
+                  <p className="text-slate-800 text-md font-bold leading-snug tracking-tight italic">
                     "{item.value}"
                   </p>
                 </div>
