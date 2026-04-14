@@ -1000,19 +1000,7 @@ const ModernSchoolLayout = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Location Card */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-50">
-                    <FiMapPin className="text-emerald-600" size={18} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                      Location
-                    </p>
-                    <p className="text-sm font-semibold text-gray-900">
-                      Matungulu Constituency, Machakos County
-                    </p>
-                  </div>
-                </div>
+            
 
                 {/* Phone Card */}
                 <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
@@ -1023,7 +1011,7 @@ const ModernSchoolLayout = () => {
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
                       Phone
                     </p>
-                    <p className="text-sm font-semibold text-gray-900">
+                    <p className="text-xs font-semibold text-gray-900">
                       {contactPhone || "Add phone number"}
                     </p>
                   </div>
@@ -1038,7 +1026,7 @@ const ModernSchoolLayout = () => {
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
                       Email
                     </p>
-                    <p className="text-sm font-semibold text-gray-900 break-all">
+                    <p className="text-xs font-semibold text-gray-900 break-all">
                       matungulugirls@gmail.com
                     </p>
                   </div>
