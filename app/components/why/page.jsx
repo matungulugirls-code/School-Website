@@ -216,17 +216,17 @@ const closeAchievementModal = () => {
   ];
 
   const schoolFeatures = [
-    {
-      title: "Academic Excellence",
-      gradient: "from-emerald-600 to-emerald-500",
-      description:
-        "Matungulu Girls maintains outstanding academic performance with consistent high KCSE results. Our dedicated faculty ensures students excel in all subjects.",
-      highlight: "Academic Distinction",
-      details: ["Mean Score 8.14", "84% University", "Merit Awards", "Science Excellence"],
-      metrics: ["8.14 Mean", "254 Uni", "15 A-"],
-      icon: <FiAward />,
-      isPremium: false,
-    },
+  {
+  title: "Academic Excellence",
+  gradient: "from-emerald-600 to-emerald-500",
+  description:
+    "Matungulu Girls fosters a culture of academic excellence through holistic learning, critical thinking, and consistent student growth across all disciplines.",
+  highlight: "Excellence in Learning",
+  details: ["Holistic Education", "Critical Thinking", "Student Growth", "Strong Academic Culture"],
+  metrics: ["Top Performance", "High Transition", "All-Round Excellence"],
+  icon: <FiAward />,
+  isPremium: false,
+},
     {
       title: "Experienced Faculty",
       gradient: "from-emerald-600 to-emerald-500",
