@@ -22,14 +22,14 @@ import {
   FiEye,
   FiBookOpen,
   FiLoader,
-  FiCheckCircle,
+  FiCheckCircle,  // ← ADD THIS (missing)
   FiExternalLink,
   FiLayers,
   FiCpu,
   FiActivity,
   FiPenTool,
   FiDroplet,
-  FiX,
+  FiX,            // ← ADD THIS (missing)
 } from "react-icons/fi";
 import {
   IoSparkles,
@@ -48,6 +48,8 @@ const ModernSchoolLayout = () => {
   const [expandedCards, setExpandedCards] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPathway, setSelectedPathway] = useState(null);
+  const [selectedAchievement, setSelectedAchievement] = useState(null);
+  const [achievementModalOpen, setAchievementModalOpen] = useState(false);
 
   // School images for carousel
   const schoolImages = [
@@ -133,6 +135,23 @@ const ModernSchoolLayout = () => {
 
   // Double images for seamless scrolling
   const scrollImages = [...uniImages, ...uniImages];
+
+
+
+
+  const openAchievementModal = (achievement) => {
+  setSelectedAchievement(achievement);
+  setAchievementModalOpen(true);
+  document.body.style.overflow = "hidden";
+};
+
+const closeAchievementModal = () => {
+  setAchievementModalOpen(false);
+  setSelectedAchievement(null);
+  document.body.style.overflow = "auto";
+};
+
+
 
   const colorMap = {
     emerald: {
@@ -265,41 +284,95 @@ const ModernSchoolLayout = () => {
     },
   ];
 
-  const achievements = [
-    {
-      year: "2026",
-      title: "National School Status",
-      description:
-        "Elevated to Category One (C1) National School status by Ministry of Education",
-      icon: <FiAward className="w-5 h-5" />,
-    },
-    {
-      year: "2025",
-      title: "Record KCSE Performance",
-      description:
-        "Mean score of 8.14 (B plain), 84% university transition rate, 1 A (plain) and 15 A- grades",
-      icon: <FiTrendingUp className="w-5 h-5" />,
-    },
-    {
-      year: "2025",
-      title: "Top County Ranking",
-      description:
-        "Best-performing girls' school in category, second-best public school in Machakos County",
-      icon: <FiStar className="w-5 h-5" />,
-    },
-    {
-      year: "2024",
-      title: "Most Improved School",
-      description: "Recognized as most improved secondary school in Machakos County",
-      icon: <FiTrendingUp className="w-5 h-5" />,
-    },
-    {
-      year: "2024",
-      title: "National Science Fair",
-      description: "Won National Science and Engineering Fair, top position nationally",
-      icon: <FiAward className="w-5 h-5" />,
-    },
-  ];
+const achievements = [
+  {
+    year: "2026",
+    title: "National School Status",
+    shortDescription: "Elevated to Category One (C1) National School status by Ministry of Education",
+    description: "In a historic milestone during our 60th-anniversary celebrations in April 2026, Matungulu Girls Senior School was officially conferred Category One (C1) National School status by the Ministry of Education. This prestigious recognition places us among the elite institutions in Kenya, allowing us to admit students from all 47 counties. The elevation came after a rigorous assessment of our infrastructure, academic performance, co-curricular achievements, and governance structures. As a National School, we now have enhanced resources, expanded capacity, and greater opportunities to shape young women from across the nation into future leaders. This transformation marks the beginning of a new chapter in our 60-year legacy of excellence.",
+    impact: "Admission from all 47 counties, enhanced resources, national recognition",
+    stats: "Category One (C1) Status | 60th Anniversary | April 2026",
+    icon: <FiAward className="w-5 h-5" />,
+    image: "/hero/MatG1.jpg",
+    highlights: [
+      "Conferred during 60th-anniversary celebrations",
+      "Allows admission from all 47 counties",
+      "Enhanced government funding and resources",
+      "Rigorous assessment by Ministry of Education",
+      "One of only a few National Schools in Machakos County"
+    ]
+  },
+  {
+    year: "2025",
+    title: "Record KCSE Performance",
+    shortDescription: "Mean score of 8.14 (B plain), 84% university transition rate, 1 A (plain) and 15 A- grades",
+    description: "The 2025 KCSE results marked a historic turning point for Matungulu Girls. With a mean score of 8.14 (B plain), we achieved the highest academic performance in our school's history. One candidate scored an A (plain), 15 candidates earned A- grades, and over 60% of candidates scored B+ and above. The 84% university transition rate means that 8 out of every 10 students qualified for direct entry to public universities. This outstanding performance was driven by our intensive revision programs, dedicated faculty mentorship, and the resilience of our candidates. The results placed us as the best-performing girls' school in Machakos County and among the top 50 nationally. Our top-performing student scored an A and has since joined the University of Nairobi to pursue Medicine.",
+    impact: "Best performance in school history, top county ranking",
+    stats: "Mean 8.14 | 84% Uni Transition | 1 A | 15 A- | 60% B+",
+    icon: <FiTrendingUp className="w-5 h-5" />,
+    image: "/hero/MatG.jpg",
+    highlights: [
+      "Highest mean score in school history (8.14)",
+      "84% of students qualified for direct university entry",
+      "1 student scored A (plain)",
+      "15 students scored A-",
+      "Over 60% scored B+ and above",
+      "Top student joined University of Nairobi for Medicine"
+    ]
+  },
+  {
+    year: "2025",
+    title: "Top County Ranking",
+    shortDescription: "Best-performing girls' school in category, second-best public school in Machakos County",
+    description: "Beyond our individual performance, Matungulu Girls was officially recognized as the best-performing girls' school in our category and the second-best public school overall in Machakos County. This ranking, released by the County Education Office, considered not only KCSE results but also consistency in performance, student retention rates, and co-curricular achievements. We surpassed 15 other girls' schools in the county and stood only behind a long-standing national school. This recognition affirmed our position as a center of academic excellence in the lower Eastern region and attracted applications from students across Machakos, Makueni, Kitui, and beyond. The County Director of Education personally visited our school to present the award and commend our teachers and students for their dedication.",
+    impact: "Top 2 in Machakos County, benchmark for other schools",
+    stats: "2nd Best Public School | Top Girls' School | Surpassed 15 Schools",
+    icon: <FiStar className="w-5 h-5" />,
+    image: "/hero/MatG1.jpg",
+    highlights: [
+      "Best-performing girls' school in Machakos County",
+      "2nd best public school overall in the county",
+      "Surpassed 15 other girls' schools",
+      "Recognition from County Education Office",
+      "Increased applications from neighboring counties"
+    ]
+  },
+  {
+    year: "2024",
+    title: "Most Improved School",
+    shortDescription: "Recognized as most improved secondary school in Machakos County",
+    description: "The 2024 'Most Improved School' award from the Machakos County Government celebrated our remarkable transformation journey. Over three years, our mean score improved by 1.8 points — from 6.34 in 2022 to 8.14 in 2025. This improvement was the largest margin among all secondary schools in the county. The award recognized not just academic gains but improvements in infrastructure, student enrollment, teacher retention, and community engagement. Our strategic interventions, including remedial classes, parent-teacher partnerships, and student wellness programs, were cited as best practices for other schools to emulate. The award was presented during the county's Education Week celebrations, with our Principal delivering a keynote speech on our transformation strategies.",
+    impact: "Largest improvement margin in county (+1.8 points)",
+    stats: "1.8 Point Gain | 2022: 6.34 → 2025: 8.14 | County Recognition",
+    icon: <FiTrendingUp className="w-5 h-5" />,
+    image: "/hero/MatG.jpg",
+    highlights: [
+      "Largest improvement margin in Machakos County",
+      "1.8 point gain over three years",
+      "Improved from 6.34 to 8.14 mean score",
+      "Recognized for academic and infrastructure improvements",
+      "Principal delivered keynote at Education Week"
+    ]
+  },
+  {
+    year: "2024",
+    title: "National Science Fair",
+    shortDescription: "Won National Science and Engineering Fair, top position nationally",
+    description: "Our students made history at the 2024 National Science and Engineering Fair by securing the top position nationally in the 'Innovations for Sustainable Energy' category. The winning project, 'Biogas from Market Waste: A Renewable Energy Solution for Schools,' was developed by three Form 3 students under the mentorship of our Chemistry and Biology departments. The project demonstrated how organic waste from local markets could be converted into clean cooking fuel, reducing deforestation and improving sanitation. Beyond the national award, the project earned a sponsorship from the Kenya Climate Innovation Center (KCIC) for further development. This achievement placed Matungulu Girls on the map as a hub for scientific innovation and problem-solving among girls' schools nationally. The students have since been invited to present their project at the East Africa Science Symposium.",
+    impact: "National champions, sponsorship from KCIC",
+    stats: "1st Place | Sustainable Energy Category | National Champions",
+    icon: <FiAward className="w-5 h-5" />,
+    image: "/hero/MatG1.jpg",
+    highlights: [
+      "Top position nationally in Sustainable Energy category",
+      "Project: Biogas from Market Waste",
+      "Developed by three Form 3 students",
+      "Sponsorship from Kenya Climate Innovation Center",
+      "Invited to East Africa Science Symposium",
+      "Mentored by Chemistry and Biology departments"
+    ]
+  },
+];
 
   // CBC Pathways Data
   const pathways = [
@@ -1233,7 +1306,7 @@ const ModernSchoolLayout = () => {
               Why Choose Us
             </span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
-              The Matungulu Advantage
+              The Matungulu Girls Slogan---The Champions
             </h2>
             <p className="text-gray-500 text-sm sm:text-base">
               Discover what makes Matungulu Girls the premier choice for your
@@ -1287,17 +1360,13 @@ const ModernSchoolLayout = () => {
                     </p>
 
                     {item.description !== item.shortDescription && (
-                      <button
-                        onClick={() => toggleReadMore(item.id)}
-                        className={`inline-flex items-center gap-1.5 ${c.text} text-xs font-semibold hover:underline transition-colors`}
-                      >
-                        {expandedCards[item.id] ? "Read Less" : "Read More"}
-                        <FiChevronRight
-                          className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                            expandedCards[item.id] ? "rotate-90" : ""
-                          }`}
-                        />
-                      </button>
+                    <button
+                    onClick={() => openAchievementModal(item)}
+                    className="inline-flex items-center gap-1.5 text-emerald-600 text-xs font-semibold hover:text-emerald-700 mt-3 transition-colors"
+                  >
+                    Read Full Story
+                    <FiArrowRight size={12} />
+                  </button>
                     )}
                   </div>
                 </div>
@@ -1309,7 +1378,7 @@ const ModernSchoolLayout = () => {
 
       {/* CBC Pathways & Subjects Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="relative rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
+        <div className="relative rounded-3xl border p-6 md:p-12 overflow-hidden shadow-sm">
           {/* Logo watermark */}
           <img
             src="/hero/MatG1.jpg"
@@ -1725,6 +1794,109 @@ const ModernSchoolLayout = () => {
           )}
         </div>
       </section>
+
+
+            {/* ===== ACHIEVEMENT DETAIL MODAL ===== */}
+      {achievementModalOpen && selectedAchievement && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300"
+          onClick={closeAchievementModal}
+        >
+          <div
+            className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header with Gradient */}
+            <div className="bg-gradient-to-r from-emerald-700 to-teal-700 p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    {selectedAchievement.icon}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">
+                        {selectedAchievement.year}
+                      </span>
+                      <h3 className="text-xl font-bold">{selectedAchievement.title}</h3>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={closeAchievementModal}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                >
+                  <FiX className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body with Scroll */}
+            <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
+              {/* Hero Image */}
+              {selectedAchievement.image && (
+                <div className="relative h-56 w-full">
+                  <Image
+                    src={selectedAchievement.image}
+                    alt={selectedAchievement.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+              )}
+
+              <div className="p-6">
+                {/* Stats Badges */}
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full">
+                    <FiAward className="text-emerald-600 w-4 h-4" />
+                    <span className="text-xs font-bold text-emerald-700">{selectedAchievement.stats}</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full">
+                    <FiTrendingUp className="text-blue-600 w-4 h-4" />
+                    <span className="text-xs font-bold text-blue-700">{selectedAchievement.impact}</span>
+                  </div>
+                </div>
+
+                {/* Deep Explanation */}
+                <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <FiBookOpen className="text-emerald-600 w-5 h-5" />
+                  Full Story
+                </h4>
+                <p className="text-gray-700 leading-relaxed mb-6">
+                  {selectedAchievement.description}
+                </p>
+
+                {/* Key Highlights Section */}
+                {selectedAchievement.highlights && selectedAchievement.highlights.length > 0 && (
+                  <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                    <h5 className="font-bold text-emerald-800 text-sm mb-3 flex items-center gap-2">
+                      <FiCheckCircle className="w-4 h-4" />
+                      Key Highlights
+                    </h5>
+                    <ul className="space-y-2">
+                      {selectedAchievement.highlights.map((highlight, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                          <span className="text-emerald-600 mt-0.5">✓</span>
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-gray-100 bg-gray-50">
+              <p className="text-xs text-gray-500 text-center">
+                Matungulu Girls Senior School — Celebrating Excellence Since 1966
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Careers Modal */}
       {modalOpen && selectedPathway && (
