@@ -1054,32 +1054,33 @@ const ModernSchoolLayout = () => {
         </div>
       </section>
 
-{/* ===== VISION / MISSION / MOTTO SECTION (Modern Institutional Layout) ===== */}
+{/* ===== VISION / MISSION / MOTTO SECTION (Compact Institutional Layout) ===== */}
 <section className="relative bg-white py-8 sm:py-10 overflow-hidden">
   {/* Decorative Background Element */}
   <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50" />
   
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       
       {/* Left Side: Section Header */}
-      <div className="lg:col-span-4 space-y-4">
+      <div className="lg:col-span-4 space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100">
-          <IoSparkles className="text-emerald-600 w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Core Foundations</span>
+          <IoSparkles className="text-emerald-600 w-3 h-3" />
+          <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-700">Core Foundations</span>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
           Nurturing Excellence <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
             Through Purpose
           </span>
         </h2>
-        <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-sm">
-Our guiding principles in Matungulu Girls Senior School define our commitment to holistic development and academic distinction in the ${new Date().getFullYear()} academic landscape.        </p>
+        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-sm">
+          Guiding principles for the {new Date().getFullYear()} academic landscape.
+        </p>
       </div>
 
-      {/* Right Side: Interactive Cards */}
-      <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Right Side: Interactive Cards (Reduced Height) */}
+      <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
           {
             label: "Our Motto",
@@ -1110,44 +1111,35 @@ Our guiding principles in Matungulu Girls Senior School define our commitment to
             bg: "bg-teal-50",
             border: "border-teal-100",
             text: "text-teal-700",
-            span: "md:col-span-2" // Makes mission full width on tablet/desktop
+            span: "md:col-span-2" 
           },
         ].map((item, idx) => (
           <div 
             key={idx} 
-            className={`group relative p-1 rounded-[2.5rem] bg-gradient-to-b from-slate-100 to-white hover:shadow-2xl transition-all duration-500 ${item.span || ""}`}
+            className={`group relative p-[1px] rounded-[1.5rem] bg-gradient-to-b from-slate-200 to-white hover:shadow-xl transition-all duration-500 ${item.span || ""}`}
           >
-            <div className="relative h-full bg-white rounded-[2.4rem] p-8 border border-white overflow-hidden">
-              {/* Animated Corner Accent */}
-              <div className={`absolute -top-12 -right-12 w-24 h-24 bg-gradient-to-br ${item.gradient} opacity-10 group-hover:opacity-20 transition-opacity rounded-full`} />
+            <div className="relative h-full bg-white rounded-[1.45rem] p-5 border border-white overflow-hidden">
+              {/* Corner Accent - Scaled Down */}
+              <div className={`absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br ${item.gradient} opacity-5 group-hover:opacity-15 transition-opacity rounded-full`} />
               
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between mb-8">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white shadow-lg ${item.shadow} group-hover:rotate-6 transition-transform duration-300`}>
-                    {React.cloneElement(item.icon, { size: 24 })}
-                  </div>
-                  <div className={`px-3 py-1 rounded-full ${item.bg} ${item.border} ${item.text} text-[10px] font-bold uppercase tracking-tighter`}>
-                    Official Statement
-                  </div>
+              <div className="flex items-start gap-4">
+                {/* Scaled Down Icon Container */}
+                <div className={`flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white shadow-md ${item.shadow} group-hover:scale-110 transition-transform duration-300`}>
+                  {React.cloneElement(item.icon, { size: 18 })}
                 </div>
 
-                <div className="space-y-3">
-                  <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 group-hover:text-emerald-600 transition-colors">
-                    {item.label}
-                  </h3>
-                  <p className="text-slate-800 text-base sm:text-lg font-bold leading-snug tracking-tight italic">
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-emerald-600 transition-colors">
+                      {item.label}
+                    </h3>
+                    <div className={`px-2 py-0.5 rounded-full ${item.bg} ${item.border} ${item.text} text-[8px] font-bold uppercase`}>
+                      Official
+                    </div>
+                  </div>
+                  <p className="text-slate-800 text-sm font-bold leading-snug tracking-tight italic">
                     "{item.value}"
                   </p>
-                </div>
-
-                {/* Decorative Bottom Bar */}
-                <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
-                  <div className="flex gap-1">
-                    {[1, 2, 3].map((dot) => (
-                      <div key={dot} className={`w-1 h-1 rounded-full bg-gradient-to-r ${item.gradient} opacity-30`} />
-                    ))}
-                  </div>
-                  <FiArrowRight className="text-slate-300 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
                 </div>
               </div>
             </div>
@@ -1167,9 +1159,9 @@ Our guiding principles in Matungulu Girls Senior School define our commitment to
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
               Recent Achievements
             </h2>
-            <p className="text-gray-500 text-sm sm:text-base">
-              Milestones that showcase our commitment to excellence (2019–2026)
-            </p>
+          <p className="text-gray-500 text-sm sm:text-base">
+  Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
+</p>
           </div>
 
           <div className="relative">
