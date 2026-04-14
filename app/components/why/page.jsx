@@ -1222,6 +1222,8 @@ const achievements = [
     </div>
   </div>
 </section>
+
+
       {/* ===== ACHIEVEMENTS TIMELINE ===== */}
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
@@ -1289,19 +1291,15 @@ const achievements = [
                       <p className="text-gray-700 text-sm leading-relaxed font-medium mb-3">
                         {item.shortDescription}
                       </p>
-{item.description !== item.shortDescription && (
-  <button
-    onClick={() => toggleReadMore(item.id)}
-    className={`inline-flex items-center gap-1.5 ${c.text} text-xs font-semibold hover:underline transition-colors`}
-  >
-    {expandedCards[item.id] ? "Read Less" : "Read More"}
-    <FiChevronRight
-      className={`w-3.5 h-3.5 transition-transform duration-300 ${
-        expandedCards[item.id] ? "rotate-90" : ""
-      }`}
-    />
-  </button>
-)}
+
+                      {/* READ MORE BUTTON - opens modal with full details */}
+                      <button
+                        onClick={() => openAchievementModal(item)}
+                        className="inline-flex items-center gap-1.5 text-emerald-600 text-xs font-semibold hover:text-emerald-700 transition-colors"
+                      >
+                        Read Full Story
+                        <FiArrowRight size={12} />
+                      </button>
                     </div>
                   </div>
                 </div>
