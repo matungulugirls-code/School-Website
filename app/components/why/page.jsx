@@ -1055,7 +1055,7 @@ const ModernSchoolLayout = () => {
       </section>
 
 {/* ===== VISION / MISSION / MOTTO SECTION (Modern Institutional Layout) ===== */}
-<section className="relative bg-white py-20 sm:py-24 overflow-hidden">
+<section className="relative bg-white py-8 sm:py-10 overflow-hidden">
   {/* Decorative Background Element */}
   <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-50" />
   
@@ -1075,8 +1075,7 @@ const ModernSchoolLayout = () => {
           </span>
         </h2>
         <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-sm">
-          Our guiding principles define our commitment to holistic development and academic distinction in the 2026 academic landscape.
-        </p>
+Our guiding principles in Matungulu Girls Senior School define our commitment to holistic development and academic distinction in the ${new Date().getFullYear()} academic landscape.        </p>
       </div>
 
       {/* Right Side: Interactive Cards */}
