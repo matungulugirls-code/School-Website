@@ -223,7 +223,7 @@ const closeAchievementModal = () => {
     "Matungulu Girls fosters a culture of academic excellence through holistic learning, critical thinking, and consistent student growth across all disciplines.",
   highlight: "Excellence in Learning",
   details: ["Holistic Education", "Critical Thinking", "Student Growth", "Strong Academic Culture"],
-  metrics: ["Top Performance", "High Transition", "All-Round Excellence"],
+  metrics: ["8.0+ Mean", "80%+ Uni", "90% Pass"],
   icon: <FiAward />,
   isPremium: false,
 },
