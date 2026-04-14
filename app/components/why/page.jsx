@@ -1157,9 +1157,9 @@ const ModernSchoolLayout = () => {
               Our Journey
             </span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
-              Recent Achievements
+              Recent <span className="text-emerald-800">Achievements</span>
             </h2>
-          <p className="text-gray-500 text-sm sm:text-base">
+          <p className="text-gray-900 text-base sm:text-base">
   Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
 </p>
           </div>
@@ -1308,7 +1308,7 @@ const ModernSchoolLayout = () => {
       </section>
 
       {/* CBC Pathways & Subjects Section */}
-      <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="relative rounded-3xl border border-slate-200/60 p-6 md:p-12 overflow-hidden shadow-sm">
           {/* Logo watermark */}
           <img
@@ -1787,7 +1787,7 @@ const ModernSchoolLayout = () => {
               <div>
                 <h4 className="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
                   <FiTrendingUp className="text-emerald-600" />
-                  Common  Career Paths ({selectedPathway.careers.length})
+                  Common <span className="text-emerald-800">Career Paths</span> ({selectedPathway.careers.length})+
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedPathway.careers.map((career, idx) => (
