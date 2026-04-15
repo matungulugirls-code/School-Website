@@ -419,95 +419,115 @@ const ModernHero = () => {
         )}
       </div>
 
-      {/* Video Modal */}
-      {showVideoModal && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-2 sm:p-4">
-          <div className="relative w-full max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
-            <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/80 to-transparent p-3 sm:p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3 overflow-hidden">
-                <div className={`w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center flex-shrink-0`}>
-                  <Play className="text-white w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                </div>
-                <div className="overflow-hidden">
-                  <h4 className="text-white font-bold text-xs sm:text-sm md:text-base truncate">Matungulu Girls School Tour</h4>
-                  <p className="text-white/50 text-[10px] sm:text-xs truncate">
-                    {schoolData?.name || 'Matungulu Girls Senior School'} — Virtual Tour
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={closeVideoModal}
-                className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/10 text-white 
-                  hover:bg-white/20 transition-colors flex items-center justify-center"
-                aria-label="Close video"
-              >
-                <X className="w-4 h-4 md:w-5 md:h-5" />
-              </button>
+   {/* ===== MODERN CINEMATIC VIDEO MODAL ===== */}
+{showVideoModal && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden">
+    {/* Animated Backdrop */}
+    <div 
+      className="absolute inset-0 bg-slate-950/90 backdrop-blur-xl animate-in fade-in duration-500" 
+      onClick={closeVideoModal}
+    />
+
+    <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 animate-in zoom-in-95 duration-300">
+      <div className="relative aspect-video rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_0_100px_-20px_rgba(16,185,129,0.3)] bg-black border border-white/10">
+        
+        {/* Top Navigation Bar (Floating Glass) */}
+        <div className="absolute top-4 sm:top-6 left-4 right-4 sm:left-6 sm:right-6 z-30 flex items-center justify-between">
+          <div className="flex items-center gap-3 backdrop-blur-md bg-black/20 border border-white/10 p-2 pr-5 rounded-2xl">
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+              <FiPlay className="text-white fill-current w-4 h-4" />
             </div>
-            
-            <div className="relative bg-black aspect-video">
-              {loading ? (
-                <div className="w-full h-full flex flex-col items-center justify-center">
-                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-white/20 border-t-white mb-4"></div>
-                  <p className="text-white/70 text-sm">Loading video tour...</p>
-                </div>
-              ) : error ? (
-                <div className="w-full h-full flex flex-col items-center justify-center p-6">
-                  <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
-                    <X className="w-6 h-6 text-red-400" />
-                  </div>
-                  <p className="text-white text-center text-sm mb-4">{error}</p>
-                  <button
-                    onClick={retryVideoLoad}
-                    className={`px-4 py-2 bg-gradient-to-r ${colors.gradient} text-white rounded-lg text-sm font-medium`}
-                  >
-                    Retry Loading
-                  </button>
-                </div>
-              ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
-                <iframe
-                  src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1&controls=1`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title={`${schoolData.name} Virtual Tour`}
-                />
-              ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
-                <video
-                  src={schoolData.videoTour}
-                  className="w-full h-full"
-                  autoPlay
-                  controls
-                  title={`${schoolData.name} Virtual Tour`}
-                  poster={schoolData?.videoThumbnail}
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center p-6">
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                    <Play className="w-6 h-6 text-gray-500" />
-                  </div>
-                  <p className="text-gray-400 text-center text-sm">No video tour available</p>
-                </div>
-              )}
-            </div>
-            
-            <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-3 sm:p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-white/50 text-xs hidden sm:block">Experience Matungulu Girls Senior School from anywhere</p>
-                <button
-                  onClick={handleContactClick}
-                  className={`px-5 py-2.5 text-sm bg-gradient-to-r ${colors.gradient} 
-                    text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 
-                    disabled:opacity-50 disabled:cursor-not-allowed`}
-                  disabled={navigationBlocked}
-                >
-                  {isMobile ? 'Learn More' : 'Discover Matungulu Girls'}
-                </button>
-              </div>
+            <div>
+              <h4 className="text-white font-bold text-xs sm:text-sm tracking-tight">Virtual Campus Tour</h4>
+              <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest leading-none mt-1">
+                Live Experience
+              </p>
             </div>
           </div>
+
+          <button
+            onClick={closeVideoModal}
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/10 transition-all flex items-center justify-center group"
+          >
+            <FiX className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+          </button>
         </div>
-      )}
+
+        {/* Video Player Core */}
+        <div className="relative w-full h-full">
+          {loading ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900">
+              <div className="relative w-16 h-16">
+                <div className="absolute inset-0 rounded-full border-2 border-emerald-500/20" />
+                <div className="absolute inset-0 rounded-full border-t-2 border-emerald-500 animate-spin" />
+              </div>
+              <p className="text-emerald-500/70 text-[10px] font-bold uppercase tracking-[0.2em] mt-6">Initializing Stream</p>
+            </div>
+          ) : error ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950 p-8 text-center">
+              <div className="w-16 h-16 rounded-3xl bg-red-500/10 flex items-center justify-center mb-6">
+                <FiX className="w-8 h-8 text-red-500" />
+              </div>
+              <h3 className="text-white font-bold mb-2">Connection Interrupted</h3>
+              <p className="text-slate-400 text-sm max-w-xs mb-6">{error}</p>
+              <button
+                onClick={retryVideoLoad}
+                className={`px-8 py-3 bg-gradient-to-r ${colors.gradient} text-white rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg hover:shadow-emerald-500/20 transition-all`}
+              >
+                Reconnect
+              </button>
+            </div>
+          ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
+            <iframe
+              src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&showinfo=0`}
+              className="w-full h-full scale-[1.01]" // Tiny scale hides edge artifacts
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <video
+              src={schoolData?.videoTour}
+              className="w-full h-full object-cover"
+              autoPlay
+              controls
+              poster={schoolData?.videoThumbnail}
+            />
+          )}
+        </div>
+
+        {/* Bottom Interactive Layer */}
+        <div className="absolute bottom-6 left-6 right-6 z-30 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="hidden sm:flex items-center gap-4">
+            <div className="flex -space-x-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center overflow-hidden">
+                   <div className={`w-full h-full bg-gradient-to-br ${colors.gradient} opacity-50`} />
+                </div>
+              ))}
+            </div>
+            <p className="text-white/70 text-[11px] font-medium">
+              Join <span className="text-white font-bold">1.2k+</span> viewers exploring our campus
+            </p>
+          </div>
+
+          <button
+            onClick={handleContactClick}
+            disabled={navigationBlocked}
+            className={`group relative overflow-hidden px-8 py-3.5 rounded-2xl bg-white text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 disabled:opacity-50`}
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              {isMobile ? 'Apply Now' : 'Schedule Physical Visit'}
+              <FiChevronRight className="group-hover:translate-x-1 transition-transform" />
+            </span>
+          </button>
+        </div>
+
+        {/* Cinematic Vignette Overlay (Non-interactive) */}
+        <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
+      </div>
+    </div>
+  </div>
+)}
 
       {navigationBlocked && (
         <div className="absolute inset-0 z-40 pointer-events-none">
