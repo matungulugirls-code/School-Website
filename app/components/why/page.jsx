@@ -208,18 +208,32 @@ useEffect(() => {
 
 // Helper function to get achievements (API data or fallback)
 const getAchievements = () => {
-  // If API returned achievements, use them
+  // Check if API returned achievements AND they exist (count > 0)
   if (achievementsData?.achievements) {
     // Flatten the grouped achievements into an array
     const allAchievements = [];
     const grouped = achievementsData.achievements;
     
+    // Count total achievements across all categories
+    let totalCount = 0;
+    Object.keys(grouped).forEach(category => {
+      if (Array.isArray(grouped[category])) {
+        totalCount += grouped[category].length;
+      }
+    });
+    
+    // If there are NO achievements (count < 1), use fallback
+    if (totalCount < 1) {
+      console.log('No achievements found in API, using fallback data');
+      return achievements; // Return the static fallback achievements array
+    }
+    
+    // Otherwise, map API achievements to expected format
     Object.keys(grouped).forEach(category => {
       if (Array.isArray(grouped[category])) {
         grouped[category].forEach(achievement => {
           allAchievements.push({
             ...achievement,
-            // Map API fields to expected format
             year: achievement.year?.toString() || '',
             title: achievement.title || '',
             shortDescription: achievement.description?.substring(0, 100) + '...' || '',
@@ -237,12 +251,21 @@ const getAchievements = () => {
     });
     
     // Sort by year (newest first)
-    return allAchievements.sort((a, b) => (b.year || 0) - (a.year || 0)).slice(0, 5);
+    const sortedAchievements = allAchievements.sort((a, b) => (b.year || 0) - (a.year || 0)).slice(0, 5);
+    
+    // If after mapping we still have no achievements, use fallback
+    if (sortedAchievements.length < 1) {
+      return achievements;
+    }
+    
+    return sortedAchievements;
   }
   
-  // Fallback to static achievements
+  // Fallback to static achievements array (defined in the component)
   return achievements;
 };
+
+
 
 // Helper to get category icon
 const getCategoryIcon = (category) => {

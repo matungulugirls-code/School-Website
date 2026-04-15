@@ -697,7 +697,7 @@ function SchoolStatsModal({ onClose, onSave, stats, loading }) {
                 type="text"
                 value={formData.sloganAuthor}
                 onChange={(e) => handleChange('sloganAuthor', e.target.value)}
-                placeholder="e.g., School Founder"
+                placeholder="e.g., School Administrator"
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
