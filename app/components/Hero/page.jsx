@@ -23,6 +23,8 @@ const accentColors = {
   },
 };
 
+
+
 // ============================================================
 // SLIDE DATA – FOCUSED ON GENERAL SCHOOL INFO
 // ============================================================
@@ -194,7 +196,7 @@ export default function ModernHero() {
     if (showVideoModal) {
       setLoading(true);
       setError(null);
-      fetch('/api/school')
+      fetch('/school')
         .then(res => res.json())
         .then(data => {
           if (data.success && data.school) {
@@ -212,7 +214,7 @@ export default function ModernHero() {
   const retryVideoLoad = () => {
     setLoading(true);
     setError(null);
-    fetch('/api/school')
+    fetch('/school')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.school) setSchoolData(data.school);
@@ -321,6 +323,43 @@ export default function ModernHero() {
             {slide.cta}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
+
+
+
+{/* 👇 ADD IT HERE (Academic dynamic stats) */}
+{currentSlide === 1 && !statsLoading && schoolStats && (
+  <div className="mt-6 grid grid-cols-2 gap-4 text-white">
+    
+    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+      <p className="text-xs text-white/70">Mean Score</p>
+      <p className="text-lg font-black text-white">
+        {schoolStats.meanScore?.toFixed(2)} (B plain)
+      </p>
+    </div>
+
+    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+      <p className="text-xs text-white/70">University Transition</p>
+      <p className="text-lg font-black text-white">
+        {schoolStats.transitionRate || "84%"}
+      </p>
+    </div>
+
+    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+      <p className="text-xs text-white/70">Last Year</p>
+      <p className="text-lg font-black text-white">
+        {schoolStats.lastYearMean?.toFixed(2)}
+      </p>
+    </div>
+
+    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+      <p className="text-xs text-white/70">Target</p>
+      <p className="text-lg font-black text-white">
+        {schoolStats.targetMean?.toFixed(2)}
+      </p>
+    </div>
+
+  </div>
+)}
 
           <button
             onClick={openVideoModal}
