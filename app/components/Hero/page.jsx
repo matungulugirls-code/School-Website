@@ -9,17 +9,17 @@ import { GiGraduateCap, GiTrophyCup } from 'react-icons/gi';
 import { useRouter } from 'next/navigation';
 
 // ============================================================
-// FRESH, DISTINCT COLOR PALETTE – CORAL/AMBER ACCENT
+// FRESH, DISTINCT COLOR PALETTE – CORAL/teal ACCENT
 // ============================================================
 const accentColors = {
   primary: {
-    text: "text-amber-400",
-    bg: "bg-gradient-to-r from-rose-600 to-amber-500",
-    border: "border-rose-500/40",
-    glow: "shadow-rose-500/20",
-    ring: "ring-rose-500/30",
-    gradient: "from-rose-600 to-amber-500",
-    badge: "bg-rose-500/20 text-rose-300 border-rose-500/30",
+    text: "text-teal-400",
+    bg: "bg-gradient-to-r from-emerald-600 to-teal-500",
+    border: "border-emerald-500/40",
+    glow: "shadow-emerald-500/20",
+    ring: "ring-emerald-500/30",
+    gradient: "from-emerald-600 to-teal-500",
+    badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
   },
 };
 
@@ -260,11 +260,11 @@ export default function ModernHero() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
 
       {/* Decorative abstract shapes */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
       {/* Left accent line */}
-      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-rose-500 to-amber-500 z-30" />
+      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-emerald-500 to-teal-500 z-30" />
 
       {/* ========== MAIN CONTENT ========== */}
       <div className={`relative z-20 h-full flex flex-col justify-center px-6 sm:px-10 md:px-20 transition-all duration-500 ${
@@ -273,7 +273,7 @@ export default function ModernHero() {
         
         {/* Top badge with location */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 w-fit mb-6">
-          <MapPin className="w-3.5 h-3.5 text-amber-400" />
+          <MapPin className="w-3.5 h-3.5 text-teal-400" />
           <span className="text-[11px] font-bold uppercase tracking-wider text-white/90">
             {slide.subtitle}
           </span>
@@ -282,7 +282,7 @@ export default function ModernHero() {
         {/* Title with prominent accent color */}
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.1] tracking-tight">
           <span className="text-white">{slide.title} </span>
-          <span className="bg-gradient-to-r from-rose-500 to-amber-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
             {slide.titleAccent}
           </span>
         </h1>
@@ -313,9 +313,9 @@ export default function ModernHero() {
           <button
             onClick={handleSlideButtonClick}
             disabled={navigationBlocked}
-            className="group relative px-8 py-3.5 bg-gradient-to-r from-rose-600 to-amber-500 
-              text-white rounded-xl font-bold text-sm shadow-lg shadow-rose-500/20
-              hover:shadow-xl hover:shadow-rose-500/30 transition-all duration-300
+            className="group relative px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 
+              text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20
+              hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
               flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {slide.cta}
@@ -335,9 +335,10 @@ export default function ModernHero() {
 
         {/* Floating stats card (desktop only) – shows key metrics from API */}
         {!isMobile && (
-          <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-80 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-600 to-amber-500 flex items-center justify-center">
+<div className="absolute right-[10%] lg:right-[25%] top-1/2 -translate-y-1/2 w-84 
+                                bg-transparent p-6 space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center">
                 <GiGraduateCap className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -363,7 +364,7 @@ export default function ModernHero() {
                   </div>
                   <div className="flex justify-between items-center border-b border-white/10 pb-2">
                     <span className="text-white/60">Category</span>
-                    <span className="text-amber-400 font-semibold">
+                    <span className="text-teal-400 font-semibold">
                       {getStatValue('category', 'National School')}
                     </span>
                   </div>
@@ -398,7 +399,7 @@ export default function ModernHero() {
                     </div>
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-white/50">Target</span>
-                      <span className="text-amber-400 font-semibold">
+                      <span className="text-teal-400 font-semibold">
                         {schoolStats?.targetMean?.toFixed(2) || '8.50'}
                       </span>
                     </div>
@@ -436,7 +437,7 @@ export default function ModernHero() {
       {/* Bottom progress bar */}
       <div className="absolute bottom-0 left-0 right-0 z-30 h-1 bg-white/10">
         <div
-          className="h-full bg-gradient-to-r from-rose-500 to-amber-500 transition-all duration-100 ease-linear"
+          className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-100 ease-linear"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -463,7 +464,7 @@ export default function ModernHero() {
               {/* Modal Header */}
               <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
                 <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center">
                     <Play className="w-4 h-4 text-white fill-white" />
                   </div>
                   <span className="text-white text-sm font-semibold">School Tour</span>
@@ -479,7 +480,7 @@ export default function ModernHero() {
               {/* Video Player */}
               {loading ? (
                 <div className="w-full h-full flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin mb-4" />
+                  <div className="w-12 h-12 border-3 border-white/20 border-t-emerald-500 rounded-full animate-spin mb-4" />
                   <p className="text-white/70 text-sm">Loading tour...</p>
                 </div>
               ) : error ? (
@@ -490,7 +491,7 @@ export default function ModernHero() {
                   <p className="text-white mb-4">{error}</p>
                   <button
                     onClick={retryVideoLoad}
-                    className="px-6 py-2 bg-gradient-to-r from-rose-600 to-amber-500 text-white rounded-full text-sm font-semibold"
+                    className="px-6 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-full text-sm font-semibold"
                   >
                     Retry
                   </button>
