@@ -109,6 +109,35 @@ export default function ModernHero() {
     return () => clearInterval(interval);
   }, [currentSlide, showVideoModal]);
 
+  const handleSlideChange = useCallback((index) => {
+  setIsTransitioning(true);
+  setTimeout(() => {
+    setCurrentSlide(index);
+    setIsTransitioning(false);
+  }, 500);
+}, []);
+
+const nextSlide = useCallback(() => {
+  handleSlideChange(
+    currentSlide === heroSlides.length - 1 ? 0 : currentSlide + 1
+  );
+}, [currentSlide, handleSlideChange]);
+
+const prevSlide = useCallback(() => {
+  handleSlideChange(
+    currentSlide === 0 ? heroSlides.length - 1 : currentSlide - 1
+  );
+}, [currentSlide, handleSlideChange]);
+
+// 👇 THEN useEffect comes AFTER
+useEffect(() => {
+  if (showVideoModal) return;
+  const timer = setInterval(() => nextSlide(), 8000);
+  return () => clearInterval(timer);
+}, [currentSlide, nextSlide, showVideoModal]);
+
+
+
   // Auto slide every 8 seconds
   useEffect(() => {
     if (showVideoModal) return;
@@ -116,21 +145,6 @@ export default function ModernHero() {
     return () => clearInterval(timer);
   }, [currentSlide, nextSlide, showVideoModal]);
 
-  const handleSlideChange = useCallback((index) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide(index);
-      setIsTransitioning(false);
-    }, 500);
-  }, []);
-
-  const nextSlide = useCallback(() => {
-    handleSlideChange(currentSlide === heroSlides.length - 1 ? 0 : currentSlide + 1);
-  }, [currentSlide, handleSlideChange]);
-
-  const prevSlide = useCallback(() => {
-    handleSlideChange(currentSlide === 0 ? heroSlides.length - 1 : currentSlide - 1);
-  }, [currentSlide, handleSlideChange]);
 
   const openVideoModal = () => setShowVideoModal(true);
   const closeVideoModal = () => {
