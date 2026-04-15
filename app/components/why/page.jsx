@@ -51,6 +51,11 @@ const ModernSchoolLayout = () => {
   const [selectedAchievement, setSelectedAchievement] = useState(null);
   const [achievementModalOpen, setAchievementModalOpen] = useState(false);
 
+  // Add these state variables
+const [achievementsData, setAchievementsData] = useState(null);
+const [schoolStatsData, setSchoolStatsData] = useState(null);
+const [achievementsLoading, setAchievementsLoading] = useState(true);
+const [statsLoading, setStatsLoading] = useState(false);
   // School images for carousel
   const schoolImages = [
     { src: "/hero/MatG1.jpg", alt: "Matungulu Girls Campus" },
@@ -150,6 +155,131 @@ const closeAchievementModal = () => {
   setSelectedAchievement(null);
   document.body.style.overflow = "auto";
 };
+
+
+
+
+// Fetch achievements and school stats
+useEffect(() => {
+  const fetchAchievementsAndStats = async () => {
+    try {
+      // Fetch achievements
+      const achievementsRes = await fetch('/api/achievements');
+      const achievementsResult = await achievementsRes.json();
+      
+      if (achievementsResult.success) {
+        setAchievementsData(achievementsResult);
+      } else {
+        console.warn('Failed to fetch achievements, using fallback');
+        setAchievementsData(null);
+      }
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      setAchievementsData(null);
+    } finally {
+      setAchievementsLoading(false);
+    }
+
+    try {
+      // Fetch school stats
+      const statsRes = await fetch('/api/school-stats');
+      const statsResult = await statsRes.json();
+      
+      if (statsResult.success && statsResult.stats) {
+        setSchoolStatsData(statsResult.stats);
+      } else {
+        console.warn('No school stats found, using fallback');
+        setSchoolStatsData(null);
+      }
+    } catch (error) {
+      console.error('Error fetching school stats:', error);
+      setSchoolStatsData(null);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
+  fetchAchievementsAndStats();
+}, []);
+
+
+
+
+
+// Helper function to get achievements (API data or fallback)
+const getAchievements = () => {
+  // If API returned achievements, use them
+  if (achievementsData?.achievements) {
+    // Flatten the grouped achievements into an array
+    const allAchievements = [];
+    const grouped = achievementsData.achievements;
+    
+    Object.keys(grouped).forEach(category => {
+      if (Array.isArray(grouped[category])) {
+        grouped[category].forEach(achievement => {
+          allAchievements.push({
+            ...achievement,
+            // Map API fields to expected format
+            year: achievement.year?.toString() || '',
+            title: achievement.title || '',
+            shortDescription: achievement.description?.substring(0, 100) + '...' || '',
+            description: achievement.description || '',
+            impact: achievement.awardingBody || 'Achievement',
+            stats: `${achievement.category} | ${achievement.year}`,
+            icon: getCategoryIcon(achievement.category),
+            image: achievement.images && achievement.images.length > 0 
+              ? achievement.images[0].url 
+              : "/hero/MatG1.jpg",
+            highlights: achievement.recipients || []
+          });
+        });
+      }
+    });
+    
+    // Sort by year (newest first)
+    return allAchievements.sort((a, b) => (b.year || 0) - (a.year || 0)).slice(0, 5);
+  }
+  
+  // Fallback to static achievements
+  return achievements;
+};
+
+// Helper to get category icon
+const getCategoryIcon = (category) => {
+  const icons = {
+    'Academic': <FiAward className="w-5 h-5" />,
+    'Sports': <FiAward className="w-5 h-5" />,
+    'Arts': <FiAward className="w-5 h-5" />,
+    'Leadership': <FiStar className="w-5 h-5" />,
+    'Other': <FiAward className="w-5 h-5" />
+  };
+  return icons[category] || <FiAward className="w-5 h-5" />;
+};
+
+// Helper function to get school stats (API data or fallback)
+const getSchoolStats = () => {
+  if (schoolStatsData) {
+    return {
+      meanScore: schoolStatsData.meanScore || 8.14,
+      lastYearMean: schoolStatsData.lastYearMean || 7.85,
+      targetMean: schoolStatsData.targetMean || 8.50,
+      slogan: schoolStatsData.slogan || motto,
+      sloganDescription: schoolStatsData.sloganDescription || '',
+      sloganAuthor: schoolStatsData.sloganAuthor || ''
+    };
+  }
+  
+  // Fallback stats
+  return {
+    meanScore: 8.14,
+    lastYearMean: 7.85,
+    targetMean: 8.50,
+    slogan: motto,
+    sloganDescription: '',
+    sloganAuthor: ''
+  };
+};
+
 
 
 
@@ -373,6 +503,9 @@ const achievements = [
     ]
   },
 ];
+
+
+
 
   // CBC Pathways Data
   const pathways = [
@@ -1020,56 +1153,94 @@ const achievements = [
               </p>
 
               {/* Contact Pills */}
+{/* Stats Grid (MORE RESPONSIVE ✅) */}
+<div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+  {(() => {
+    const stats = getSchoolStats();
+    const statItems = [
+      {
+        label: "Students",
+        value: `${studentCount}+`,
+        icon: <FiUsers className="w-4 h-4" />,
+        color: "text-blue-600",
+        bgColor: "bg-blue-50",
+      },
+      {
+        label: "KCSE Mean",
+        value: stats.meanScore?.toFixed(2) || "8.14",
+        icon: <FiBookOpen className="w-4 h-4" />,
+        color: "text-emerald-600",
+        bgColor: "bg-emerald-50",
+        trend: stats.lastYearMean ? (
+          <span className={`text-[10px] font-bold ml-1 ${
+            (stats.meanScore || 0) > (stats.lastYearMean || 0) 
+              ? 'text-green-600' 
+              : 'text-red-600'
+          }`}>
+            {(stats.meanScore || 0) > (stats.lastYearMean || 0) ? '↑' : '↓'}
+          </span>
+        ) : null,
+      },
+      {
+        label: "Target Mean",
+        value: stats.targetMean?.toFixed(2) || "8.50",
+        icon: <FiTarget className="w-4 h-4" />,
+        color: "text-amber-600",
+        bgColor: "bg-amber-50",
+        progress: stats.meanScore && stats.targetMean ? (
+          <span className="text-[10px] font-bold ml-1 text-amber-600">
+            {((stats.meanScore / stats.targetMean) * 100).toFixed(0)}%
+          </span>
+        ) : null,
+      },
+      {
+        label: "Slogan",
+        value: stats.slogan || motto,
+        icon: <FiStar className="w-4 h-4" />,
+        color: "text-purple-600",
+        bgColor: "bg-purple-50",
+      },
+    ];
 
-              {/* Stats Grid (MORE RESPONSIVE ✅) */}
+    return statItems.map((stat, idx) => (
+      <div
+        key={idx}
+        className="relative p-4 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[90px] group"
+      >
+        {/* Background Accent */}
+        <div className={`absolute top-0 right-0 w-16 h-16 ${stat.bgColor} rounded-bl-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-0`} />
+        
+        {/* Icon */}
+        <span className={`absolute top-2 right-2 text-sm opacity-30 group-hover:opacity-100 transition-opacity duration-300 ${stat.color}`}>
+          {stat.icon}
+        </span>
 
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-                {[
-                  {
-                    label: "Students",
-                    value: `${studentCount}+`,
-                    icon: <FiUsers className="w-4 h-4" />,
-                  },
-                  {
-                    label: "KCSE Mean",
-                    value: "8.14",
-                    icon: <FiBookOpen className="w-4 h-4" />,
-                  },
-                  {
-                    label: "Uni Transition",
-                    value: "84%",
-                    icon: <FiTrendingUp className="w-4 h-4" />,
-                  },
-                  {
-                    label: "Motto",
-                    value: motto,
-                    icon: <FiTarget className="w-4 h-4" />,
-                  },
-                ].map((stat, idx) => (
-                  <div
-                    key={idx}
-                    className="relative p-4 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[90px]"
-                  >
-                    <span className="absolute top-2 right-2 text-sm opacity-30">
-                      {stat.icon}
-                    </span>
+        {/* Value with optional trend/progress */}
+        <div className="relative z-10">
+          <p
+            className={`font-bold ${stat.color} leading-tight flex items-center ${
+              stat.label === "Slogan"
+                ? "text-xs sm:text-sm"
+                : "text-lg sm:text-xl md:text-2xl"
+            }`}
+          >
+            {stat.value}
+            {stat.trend}
+            {stat.progress}
+          </p>
+        </div>
 
-                    <p
-                      className={`font-bold text-emerald-600 leading-tight ${
-                        stat.label === "Motto"
-                          ? "text-xs sm:text-sm"
-                          : "text-lg sm:text-xl md:text-2xl"
-                      }`}
-                    >
-                      {stat.value}
-                    </p>
+        {/* Label */}
+        <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-gray-500 mt-1 relative z-10">
+          {stat.label}
+        </p>
 
-                    <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-gray-500 mt-1">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
+        {/* Hover Indicator */}
+        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    ));
+  })()}
+</div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Location Card */}
@@ -1224,90 +1395,157 @@ const achievements = [
 </section>
 
 
-      {/* ===== ACHIEVEMENTS TIMELINE ===== */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
-          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 mb-3">
-              Our Journey
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
-              Recent <span className="text-emerald-800">Achievements</span>
-            </h2>
-            <p className="text-gray-900 text-base sm:text-base">
-              Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
-            </p>
-          </div>
 
-          <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-8 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-300 to-emerald-200"></div>
+{/* ===== PERFORMANCE METRICS CARD ===== */}
+{!statsLoading && schoolStatsData && (
+  <section className="bg-gradient-to-r from-emerald-50 to-teal-50 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-white rounded-2xl p-6 shadow-lg border border-emerald-100">
+        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <FiTrendingUp className="text-emerald-600" />
+          Performance Metrics
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {schoolStatsData.lastYearMean && (
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
+              <p className="text-blue-600 text-sm font-bold">Last Year Mean</p>
+              <p className="text-3xl font-black text-blue-700">
+                {schoolStatsData.lastYearMean.toFixed(2)}
+              </p>
+            </div>
+          )}
+          
+          {schoolStatsData.meanScore && (
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4">
+              <p className="text-emerald-600 text-sm font-bold">Current Mean</p>
+              <p className="text-3xl font-black text-emerald-700">
+                {schoolStatsData.meanScore.toFixed(2)}
+              </p>
+              {schoolStatsData.lastYearMean && (
+                <p className={`text-sm font-bold mt-1 ${
+                  schoolStatsData.meanScore > schoolStatsData.lastYearMean 
+                    ? 'text-green-600' 
+                    : 'text-red-600'
+                }`}>
+                  {schoolStatsData.meanScore > schoolStatsData.lastYearMean ? '↑' : '↓'} 
+                  {(schoolStatsData.meanScore - schoolStatsData.lastYearMean).toFixed(2)} from last year
+                </p>
+              )}
+            </div>
+          )}
+          
+          {schoolStatsData.targetMean && (
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4">
+              <p className="text-amber-600 text-sm font-bold">Target Mean</p>
+              <p className="text-3xl font-black text-amber-700">
+                {schoolStatsData.targetMean.toFixed(2)}
+              </p>
+              {schoolStatsData.meanScore && (
+                <p className="text-sm font-bold mt-1 text-amber-600">
+                  {((schoolStatsData.meanScore / schoolStatsData.targetMean) * 100).toFixed(1)}% achieved
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
-            <div className="space-y-10">
-              {achievements.map((item, idx) => (
+
+{/* ===== ACHIEVEMENTS TIMELINE ===== */}
+<section className="bg-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
+    <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+      <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 mb-3">
+        Our Journey
+      </span>
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
+        Recent <span className="text-emerald-800">Achievements</span>
+      </h2>
+      <p className="text-gray-900 text-base sm:text-base">
+        Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
+      </p>
+    </div>
+
+    {achievementsLoading ? (
+      <div className="text-center py-12">
+        <FiLoader className="w-8 h-8 animate-spin mx-auto mb-4 text-emerald-600" />
+        <p className="text-gray-500">Loading achievements...</p>
+      </div>
+    ) : (
+      <div className="relative">
+        {/* Timeline Line */}
+        <div className="absolute left-8 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-300 to-emerald-200"></div>
+
+        <div className="space-y-10">
+          {getAchievements().map((item, idx) => (
+            <div
+              key={idx}
+              className={`relative flex flex-col sm:flex-row items-start gap-6 sm:gap-10 ${
+                idx % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+              }`}
+            >
+              {/* Timeline Dot */}
+              <div className="absolute left-6 sm:left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 border-4 border-white shadow-xl flex items-center justify-center z-10">
+                <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+              </div>
+
+              {/* Content */}
+              <div
+                className={`ml-14 sm:ml-0 ${
+                  idx % 2 === 0 ? "sm:pr-14 sm:text-right" : "sm:pl-14"
+                } sm:w-1/2`}
+              >
                 <div
-                  key={idx}
-                  className={`relative flex flex-col sm:flex-row items-start gap-6 sm:gap-10 ${
-                    idx % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+                  className={`group bg-white/90 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
+                    idx % 2 === 0 ? "sm:mr-auto" : "sm:ml-auto"
                   }`}
                 >
-                  {/* Timeline Dot */}
-                  <div className="absolute left-6 sm:left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 border-4 border-white shadow-xl flex items-center justify-center z-10">
-                    <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div
-                    className={`ml-14 sm:ml-0 ${
-                      idx % 2 === 0 ? "sm:pr-14 sm:text-right" : "sm:pl-14"
-                    } sm:w-1/2`}
-                  >
+                  {/* Header */}
+                  <div className="flex items-center gap-3 mb-3">
                     <div
-                      className={`group bg-white/90 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
-                        idx % 2 === 0 ? "sm:mr-auto" : "sm:ml-auto"
+                      className={`w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-md ${
+                        idx % 2 === 0 ? "order-first" : "sm:order-last"
                       }`}
                     >
-                      {/* Header */}
-                      <div className="flex items-center gap-3 mb-3">
-                        <div
-                          className={`w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-md ${
-                            idx % 2 === 0 ? "order-first" : "sm:order-last"
-                          }`}
-                        >
-                          {item.icon}
-                        </div>
-
-                        <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full tracking-wide">
-                          {item.year}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <h4 className="font-bold text-gray-900 text-base mb-1.5 tracking-tight">
-                        {item.title}
-                      </h4>
-
-                      {/* TRUNCATED DESCRIPTION - only showing shortDescription */}
-                      <p className="text-gray-700 text-sm leading-relaxed font-medium mb-3">
-                        {item.shortDescription}
-                      </p>
-
-                      {/* READ MORE BUTTON - opens modal with full details */}
-                      <button
-                        onClick={() => openAchievementModal(item)}
-                        className="inline-flex items-center gap-1.5 text-emerald-600 text-xs font-semibold hover:text-emerald-700 transition-colors"
-                      >
-                        Read Full Story
-                        <FiArrowRight size={12} />
-                      </button>
+                      {item.icon || <FiAward className="w-5 h-5" />}
                     </div>
+
+                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full tracking-wide">
+                      {item.year}
+                    </span>
                   </div>
+
+                  {/* Title */}
+                  <h4 className="font-bold text-gray-900 text-base mb-1.5 tracking-tight">
+                    {item.title}
+                  </h4>
+
+                  {/* Short Description */}
+                  <p className="text-gray-700 text-sm leading-relaxed font-medium mb-3">
+                    {item.shortDescription || (item.description && item.description.substring(0, 120) + '...')}
+                  </p>
+
+                  {/* Read More Button */}
+                  <button
+                    onClick={() => openAchievementModal(item)}
+                    className="inline-flex items-center gap-1.5 text-emerald-600 text-xs font-semibold hover:text-emerald-700 transition-colors"
+                  >
+                    Read Full Story
+                    <FiArrowRight size={12} />
+                  </button>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
+    )}
+  </div>
+</section>
 
       {/* ===== WHY CHOOSE US ===== */}
       <section className="bg-gray-50">
