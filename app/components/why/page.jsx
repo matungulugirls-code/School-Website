@@ -2026,71 +2026,86 @@ const achievements = [
       </section>
 
       {/* ===== UNIVERSITY PARTNERS ===== */}
-      <section className="bg-gray-50 border-t border-gray-200 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 block mb-2">
-              Our Partners
-            </span>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900">
-              University{" "}
-              <span className="bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
-                Collaborations
-              </span>
-            </h3>
-            <p className="mt-4 text-gray-600 text-sm sm:text-base max-w-3xl mx-auto">
-              We bridge the gap between secondary education and the professional
-              world through strong alliances with top-tier universities.
-            </p>
-          </div>
+{/* ===== UNIVERSITY PARTNERS ===== */}
+<section className="bg-gray-50 border-t border-gray-200 py-16 sm:py-20 overflow-hidden">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {/* Header with modernized text */}
+    <div className="text-center mb-12">
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100/50 border border-emerald-200 mb-4">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+        </span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700">
+          Global Pathways
+        </span>
+      </div>
+      
+      <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+        Academic <br className="sm:hidden" />
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800">
+          Success Partners
+        </span>
+      </h3>
+      
+      <p className="mt-6 text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
+        Empowering our graduates through strategic transitions. We collaborate with world-class institutions to ensure every Matungulu girl is prepared for the rigors of global higher education.
+      </p>
+    </div>
 
-          {imagesLoading ? (
-            <div className="text-center text-gray-400 py-8">
-              <FiLoader className="w-8 h-8 animate-spin mx-auto mb-2" />
-              Loading university partners...
-            </div>
-          ) : uniImages.length > 0 ? (
-            <div className="relative overflow-hidden">
+    {imagesLoading ? (
+      <div className="flex flex-col items-center justify-center py-12">
+        <FiLoader className="w-10 h-10 animate-spin text-emerald-600 mb-4" />
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Synchronizing Partners...</span>
+      </div>
+    ) : uniImages.length > 0 ? (
+      <div className="relative group">
+        {/* Modern Gradient Overlays for Marquee Edges */}
+        <div className="absolute inset-y-0 left-0 w-20 sm:w-40 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-20 sm:w-40 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none" />
+
+        <div className="relative overflow-hidden py-4">
+          <div
+            className="flex gap-6 sm:gap-10 animate-marquee whitespace-nowrap"
+            style={{
+              animation: "marquee 60s linear infinite",
+              width: "max-content",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.animationPlayState = "paused")}
+            onMouseLeave={(e) => (e.currentTarget.style.animationPlayState = "running")}
+          >
+            {scrollImages.map((img, idx) => (
               <div
-                className="flex gap-8 animate-marquee"
-                style={{
-                  animation: "marquee 120s linear infinite",
-                  width: "max-content",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.animationPlayState = "paused")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.animationPlayState = "running")
-                }
+                key={idx}
+                className="relative w-36 h-20 sm:w-44 sm:h-24 flex-shrink-0 bg-white/40 backdrop-blur-sm rounded-2xl border border-white shadow-sm flex items-center justify-center p-4 group/logo transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:bg-white"
               >
-                {scrollImages.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative w-32 h-20 flex-shrink-0 bg-white rounded-xl shadow-sm p-2 hover:shadow-md transition-shadow"
-                  >
-                    <Image
-                      src={img}
-                      alt={`University logo ${idx}`}
-                      fill
-                      className="object-contain p-1"
-                      sizes="128px"
-                      onError={(e) => {
-                        const parent = e.currentTarget.parentElement;
-                        if (parent) parent.style.display = "none";
-                      }}
-                    />
-                  </div>
-                ))}
+                {/* Logo with grayscale to color transition */}
+                <div className="relative w-full h-full grayscale group-hover/logo:grayscale-0 transition-all duration-500">
+                  <Image
+                    src={img}
+                    alt={`Partner University ${idx}`}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 640px) 144px, 176px"
+                    onError={(e) => {
+                      const parent = e.currentTarget.parentElement?.parentElement;
+                      if (parent) parent.style.display = "none";
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="text-center text-gray-400 py-8">
-              No university logos found
-            </div>
-          )}
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
+    ) : (
+      <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-3xl">
+        <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Network Under Maintenance</p>
+      </div>
+    )}
+  </div>
+</section>
 
 
             {/* ===== ACHIEVEMENT DETAIL MODAL ===== */}
