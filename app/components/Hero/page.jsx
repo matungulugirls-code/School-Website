@@ -290,7 +290,7 @@ export default function ModernHero() {
         </h1>
 
         {/* Description */}
-        <p className="text-base sm:text-lg text-white/80 max-w-2xl mt-6 leading-relaxed font-light">
+        <p className="text-sm font-semibold sm:text-lg text-white/80 max-w-2xl mt-6 leading-relaxed font-light">
           {isMobile && slide.description.length > 200 
             ? slide.description.substring(0, 200) + '...' 
             : slide.description}
