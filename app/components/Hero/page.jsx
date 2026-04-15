@@ -33,11 +33,10 @@ const heroSlides = [
     subtitle: "Excellence in the Heart of Machakos",
     description: "A premier public girls' boarding Senior school in Matungulu sub-county, Machakos County. Established in 1955, we empower young women through a holistic education rooted in academic excellence, character formation, and leadership.",
     image: "/hero/MatG1.jpg",
-    mobileImage: "/hero/MatG1_mobile.jpg", // optional – can use same
+    mobileImage: "/hero/MatG1_mobile.jpg",
     tags: ["Public School", "Girls' Boarding", "National School", "CBC Curriculum"],
     cta: "Apply Now",
     link: "/pages/admissions",
-    stats: { established: "1955", students: "1400+", motto: "Strive to Excel" }
   },
   {
     title: "Academic",
@@ -48,7 +47,6 @@ const heroSlides = [
     tags: ["Mean 8.14", "84% Uni Transition", "STEM Focus", "Career Guidance"],
     cta: "Explore Academics",
     link: "/pages/academics",
-    stats: { mean: "8.14", transition: "84%", topGrade: "1 A, 15 A-" }
   },
   {
     title: "Holistic",
@@ -59,7 +57,6 @@ const heroSlides = [
     tags: ["Science Fair Winner", "Sports & Arts", "Leadership", "Empowerment"],
     cta: "Student Life",
     link: "/pages/student-life",
-    stats: { clubs: "15+", sports: "6 teams", achievements: "National Champions" }
   }
 ];
 
@@ -76,6 +73,8 @@ export default function ModernHero() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [schoolData, setSchoolData] = useState(null);
+  const [schoolStats, setSchoolStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [navigationBlocked, setNavigationBlocked] = useState(true);
@@ -91,6 +90,47 @@ export default function ModernHero() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Fetch school stats from API
+  useEffect(() => {
+    const fetchSchoolStats = async () => {
+      try {
+        const response = await fetch('/api/school-stats');
+        const result = await response.json();
+        
+        if (result.success && result.stats) {
+          setSchoolStats(result.stats);
+        } else {
+          // Fallback stats if API returns nothing
+          setSchoolStats({
+            meanScore: 8.14,
+            lastYearMean: 7.85,
+            targetMean: 8.50,
+            studentCount: 1400,
+            established: 1955,
+            category: "National School",
+            motto: "Strive to Excel"
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching school stats:', error);
+        // Fallback stats on error
+        setSchoolStats({
+          meanScore: 8.14,
+          lastYearMean: 7.85,
+          targetMean: 8.50,
+          studentCount: 1400,
+          established: 1955,
+          category: "National School",
+          motto: "Strive to Excel"
+        });
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    fetchSchoolStats();
   }, []);
 
   // Preload images and block navigation for 2 sec
@@ -110,41 +150,26 @@ export default function ModernHero() {
   }, [currentSlide, showVideoModal]);
 
   const handleSlideChange = useCallback((index) => {
-  setIsTransitioning(true);
-  setTimeout(() => {
-    setCurrentSlide(index);
-    setIsTransitioning(false);
-  }, 500);
-}, []);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentSlide(index);
+      setIsTransitioning(false);
+    }, 500);
+  }, []);
 
-const nextSlide = useCallback(() => {
-  handleSlideChange(
-    currentSlide === heroSlides.length - 1 ? 0 : currentSlide + 1
-  );
-}, [currentSlide, handleSlideChange]);
+  const nextSlide = useCallback(() => {
+    handleSlideChange(currentSlide === heroSlides.length - 1 ? 0 : currentSlide + 1);
+  }, [currentSlide, handleSlideChange]);
 
-const prevSlide = useCallback(() => {
-  handleSlideChange(
-    currentSlide === 0 ? heroSlides.length - 1 : currentSlide - 1
-  );
-}, [currentSlide, handleSlideChange]);
+  const prevSlide = useCallback(() => {
+    handleSlideChange(currentSlide === 0 ? heroSlides.length - 1 : currentSlide - 1);
+  }, [currentSlide, handleSlideChange]);
 
-// 👇 THEN useEffect comes AFTER
-useEffect(() => {
-  if (showVideoModal) return;
-  const timer = setInterval(() => nextSlide(), 8000);
-  return () => clearInterval(timer);
-}, [currentSlide, nextSlide, showVideoModal]);
-
-
-
-  // Auto slide every 8 seconds
   useEffect(() => {
     if (showVideoModal) return;
     const timer = setInterval(() => nextSlide(), 8000);
     return () => clearInterval(timer);
   }, [currentSlide, nextSlide, showVideoModal]);
-
 
   const openVideoModal = () => setShowVideoModal(true);
   const closeVideoModal = () => {
@@ -200,6 +225,14 @@ useEffect(() => {
   const slide = heroSlides[currentSlide];
   const colors = accentColors.primary;
 
+  // Helper to format stats with fallback values
+  const getStatValue = (key, fallback) => {
+    if (!statsLoading && schoolStats && schoolStats[key]) {
+      return schoolStats[key];
+    }
+    return fallback;
+  };
+
   return (
     <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 font-sans">
       {/* ========== BACKGROUND IMAGES – RESPONSIVE WITH OBJECT-FIT ========== */}
@@ -210,7 +243,6 @@ useEffect(() => {
             idx === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
           }`}
         >
-          {/* Use <img> for better control on mobile */}
           <img
             src={s.image}
             alt={s.title}
@@ -227,14 +259,14 @@ useEffect(() => {
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
 
-      {/* Decorative abstract shapes (instead of grid) */}
+      {/* Decorative abstract shapes */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-      {/* Left accent line – new color */}
+      {/* Left accent line */}
       <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-rose-500 to-amber-500 z-30" />
 
-      {/* ========== MAIN CONTENT – CENTERED CARD-LAYOUT (DESKTOP) ========== */}
+      {/* ========== MAIN CONTENT ========== */}
       <div className={`relative z-20 h-full flex flex-col justify-center px-6 sm:px-10 md:px-20 transition-all duration-500 ${
         isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
       }`}>
@@ -255,14 +287,14 @@ useEffect(() => {
           </span>
         </h1>
 
-        {/* Description with elegant font */}
+        {/* Description */}
         <p className="text-base sm:text-lg text-white/80 max-w-2xl mt-6 leading-relaxed font-light">
           {isMobile && slide.description.length > 200 
             ? slide.description.substring(0, 200) + '...' 
             : slide.description}
         </p>
 
-        {/* Tags row – rounded-pill design */}
+        {/* Tags row */}
         <div className="flex flex-wrap gap-3 mt-8">
           {slide.tags.map((tag, i) => (
             <span
@@ -276,12 +308,12 @@ useEffect(() => {
           ))}
         </div>
 
-        {/* Action buttons – coral/amber gradient on primary */}
+        {/* Action buttons */}
         <div className="flex flex-wrap gap-4 mt-10">
           <button
             onClick={handleSlideButtonClick}
             disabled={navigationBlocked}
-            className="group relative px-8 py-3.5 bg-gradient-to-r from-teal-600 to-green-500 
+            className="group relative px-8 py-3.5 bg-gradient-to-r from-rose-600 to-amber-500 
               text-white rounded-xl font-bold text-sm shadow-lg shadow-rose-500/20
               hover:shadow-xl hover:shadow-rose-500/30 transition-all duration-300
               flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -301,11 +333,11 @@ useEffect(() => {
           </button>
         </div>
 
-        {/* Floating stats card (desktop only) – shows key metrics */}
+        {/* Floating stats card (desktop only) – shows key metrics from API */}
         {!isMobile && (
-          <div className="absolute right-[10%] lg:right-[30%] top-1/2 -translate-y-1/2 w-80 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+          <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-80 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-600 to-teal-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-600 to-amber-500 flex items-center justify-center">
                 <GiGraduateCap className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -313,24 +345,68 @@ useEffect(() => {
                 <p className="text-white/50 text-xs">Senior School</p>
               </div>
             </div>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                <span className="text-white/60">Established</span>
-                <span className="text-white font-semibold">1955</span>
+            
+            {statsLoading ? (
+              <div className="space-y-3">
+                <div className="h-10 bg-white/10 rounded-lg animate-pulse" />
+                <div className="h-10 bg-white/10 rounded-lg animate-pulse" />
+                <div className="h-10 bg-white/10 rounded-lg animate-pulse" />
               </div>
-              <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                <span className="text-white/60">Category</span>
-                <span className="text-amber-400 font-semibold">National School</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                <span className="text-white/60">Enrollment</span>
-                <span className="text-white font-semibold">1400+ Girls</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-white/60">KCSE 2025 Mean</span>
-                <span className="text-white font-bold">8.14 (B plain)</span>
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                    <span className="text-white/60">Established</span>
+                    <span className="text-white font-semibold">
+                      {getStatValue('established', 1955)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                    <span className="text-white/60">Category</span>
+                    <span className="text-amber-400 font-semibold">
+                      {getStatValue('category', 'National School')}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                    <span className="text-white/60">Enrollment</span>
+                    <span className="text-white font-semibold">
+                      {getStatValue('studentCount', 1400)}+ Girls
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                    <span className="text-white/60">Motto</span>
+                    <span className="text-white font-semibold italic text-xs">
+                      "{getStatValue('motto', 'Strive to Excel')}"
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/60">KCSE 2025 Mean</span>
+                    <span className="text-white font-bold">
+                      {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Performance indicators */}
+                {(schoolStats?.lastYearMean || schoolStats?.targetMean) && (
+                  <div className="mt-4 pt-3 border-t border-white/10">
+                    <div className="flex justify-between items-center text-xs mb-2">
+                      <span className="text-white/50">Last Year</span>
+                      <span className="text-white/70">
+                        {schoolStats?.lastYearMean?.toFixed(2) || '7.85'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-white/50">Target</span>
+                      <span className="text-amber-400 font-semibold">
+                        {schoolStats?.targetMean?.toFixed(2) || '8.50'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            
             <button
               onClick={openVideoModal}
               className="w-full mt-6 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white text-xs font-bold uppercase tracking-wider"
@@ -341,7 +417,7 @@ useEffect(() => {
         )}
       </div>
 
-      {/* ========== SLIDE CONTROLS (bottom right) ========== */}
+      {/* ========== SLIDE CONTROLS ========== */}
       <div className={`absolute z-30 flex gap-3 ${isMobile ? 'bottom-24 right-5' : 'bottom-8 right-8'}`}>
         <button
           onClick={prevSlide}
@@ -357,15 +433,15 @@ useEffect(() => {
         </button>
       </div>
 
-{/* Bottom progress bar – using accent gradient */}
-<div className="absolute bottom-0 left-0 right-0 z-30 h-1 bg-white/10">
-  <div
-    className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-100 ease-linear"
-    style={{ width: `${progress}%` }}
-  />
-</div>
+      {/* Bottom progress bar */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 h-1 bg-white/10">
+        <div
+          className="h-full bg-gradient-to-r from-rose-500 to-amber-500 transition-all duration-100 ease-linear"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
 
-      {/* Bottom info strip – minimal */}
+      {/* Bottom info strip */}
       <div className="absolute bottom-3 left-0 right-0 z-20 px-6 sm:px-10 md:px-20">
         <div className="flex items-center justify-between text-white/40 text-[10px] font-medium uppercase tracking-wider">
           <div className="flex gap-6">
@@ -379,81 +455,82 @@ useEffect(() => {
         </div>
       </div>
 
-{showVideoModal && (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
-    <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
-      <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
-     {/* Modal Header */}
-<div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
-  <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
-    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center">
-      <Play className="w-4 h-4 text-white fill-white" />
-    </div>
-    <span className="text-white text-sm font-semibold">School Tour</span>
-  </div>
-  <button
-    onClick={closeVideoModal}
-    className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
-  >
-    <X className="w-5 h-5" />
-  </button>
-</div>
+      {/* Video Modal */}
+      {showVideoModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
+          <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
+            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
+              {/* Modal Header */}
+              <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
+                <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 flex items-center justify-center">
+                    <Play className="w-4 h-4 text-white fill-white" />
+                  </div>
+                  <span className="text-white text-sm font-semibold">School Tour</span>
+                </div>
+                <button
+                  onClick={closeVideoModal}
+                  className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-        {/* Video Player */}
-        {loading ? (
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="w-12 h-12 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin mb-4" />
-            <p className="text-white/70 text-sm">Loading tour...</p>
-          </div>
-        ) : error ? (
-          <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
-            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
-              <X className="w-8 h-8 text-red-400" />
+              {/* Video Player */}
+              {loading ? (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <div className="w-12 h-12 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin mb-4" />
+                  <p className="text-white/70 text-sm">Loading tour...</p>
+                </div>
+              ) : error ? (
+                <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
+                  <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+                    <X className="w-8 h-8 text-red-400" />
+                  </div>
+                  <p className="text-white mb-4">{error}</p>
+                  <button
+                    onClick={retryVideoLoad}
+                    className="px-6 py-2 bg-gradient-to-r from-rose-600 to-amber-500 text-white rounded-full text-sm font-semibold"
+                  >
+                    Retry
+                  </button>
+                </div>
+              ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
+                <video
+                  src={schoolData.videoTour}
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  controls
+                  poster={schoolData?.videoThumbnail}
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <Play className="w-16 h-16 text-white/30 mb-4" />
+                  <p className="text-white/60">No tour video available yet</p>
+                </div>
+              )}
+
+              {/* Modal Footer */}
+              <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4">
+                <button
+                  onClick={handleContactClick}
+                  className="w-full sm:w-auto ml-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-all"
+                >
+                  Learn More About Matungulu
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            <p className="text-white mb-4">{error}</p>
-            <button
-              onClick={retryVideoLoad}
-              className="px-6 py-2 bg-gradient-to-r from-rose-600 to-amber-500 text-white rounded-full text-sm font-semibold"
-            >
-              Retry
-            </button>
           </div>
-        ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1`}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
-          <video
-            src={schoolData.videoTour}
-            className="w-full h-full object-cover"
-            autoPlay
-            controls
-            poster={schoolData?.videoThumbnail}
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <Play className="w-16 h-16 text-white/30 mb-4" />
-            <p className="text-white/60">No tour video available yet</p>
-          </div>
-        )}
-
-        {/* Modal Footer */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4">
-          <button
-            onClick={handleContactClick}
-            className="w-full sm:w-auto ml-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-all"
-          >
-            Learn More About Matungulu
-            <ChevronRight className="w-4 h-4" />   {/* ← fixed */}
-          </button>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
       {/* Navigation blocker overlay */}
       {navigationBlocked && (
