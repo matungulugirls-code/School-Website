@@ -506,7 +506,7 @@ const ModernHero = () => {
               ))}
             </div>
             <p className="text-white/70 text-[11px] font-medium">
-              Join <span className="text-white font-bold">1.2k+</span> viewers exploring our campus
+              Join <span className="text-white font-bold">1.2k+</span> viewers exploring our School
             </p>
           </div>
 

@@ -58,9 +58,28 @@ const [achievementsLoading, setAchievementsLoading] = useState(true);
 const [statsLoading, setStatsLoading] = useState(false);
   // School images for carousel
   const schoolImages = [
-    { src: "/hero/MatG1.jpg", alt: "Matungulu Girls Campus" },
-    { src: "/hero/MatG.jpg", alt: "School Building" },
-    { src: "/hero/MatG1.jpg", alt: "Students" },
+    { src: "/Matungulu/29.jpeg", alt: "Matungulu Girls Campus" },
+    { src: "/Matungulu/2.jpeg", alt: "Matungulu Girls" },
+    { src: "/Matungulu/30.jpeg", alt: "Matungulu Girls Senior School" },
+   { src: "/Matungulu/3.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/4.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/5.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/6.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/7.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/8.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/9.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/10.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/11.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/12.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/13.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/14.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/15.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/16.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/17.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/18.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/19.jpeg", alt: "Matungulu Girls Senior School" },
+
+
   ];
 
   // Fetch school data
@@ -463,7 +482,7 @@ const achievements = [
     impact: "Best performance in school history, top county ranking",
     stats: "Mean 8.14 | 84% Uni Transition | 1 A | 15 A- | 60% B+",
     icon: <FiTrendingUp className="w-5 h-5" />,
-    image: "/hero/MatG.jpg",
+    image: "/Matungulu/9.jpeg",
     highlights: [
       "Highest mean score in school history (8.14)",
       "84% of students qualified for direct university entry",
@@ -481,7 +500,7 @@ const achievements = [
     impact: "Top 2 in Machakos County, benchmark for other schools",
     stats: "2nd Best Public School | Top Girls' School | Surpassed 15 Schools",
     icon: <FiStar className="w-5 h-5" />,
-    image: "/hero/MatG1.jpg",
+    image: "/Matungulu/29.jpeg",
     highlights: [
       "Best-performing girls' school in Machakos County",
       "2nd best public school overall in the county",
@@ -498,7 +517,7 @@ const achievements = [
     impact: "Largest improvement margin in county (+1.8 points)",
     stats: "1.8 Point Gain | 2022: 6.34 → 2025: 8.14 | County Recognition",
     icon: <FiTrendingUp className="w-5 h-5" />,
-    image: "/hero/MatG.jpg",
+    image: "/Matungulu/37.jpeg",
     highlights: [
       "Largest improvement margin in Machakos County",
       "1.8 point gain over three years",
@@ -515,7 +534,7 @@ const achievements = [
     impact: "National champions, sponsorship from KCIC",
     stats: "1st Place | Sustainable Energy Category | National Champions",
     icon: <FiAward className="w-5 h-5" />,
-    image: "/hero/MatG1.jpg",
+    image: "/Matungulu/26.jpeg",
     highlights: [
       "Top position nationally in Sustainable Energy category",
       "Project: Biogas from Market Waste",
