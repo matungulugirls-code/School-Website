@@ -127,12 +127,16 @@ import {
   Briefcase,
   PlayCircle
 } from 'lucide-react';
+import {IoSparkles} from 'react-icons/io5';
+import { CircularProgress, Box, Typography, Stack } from '@mui/material';
 
 export default function AdminManager() {
   const [session, setSession] = useState(null);
   const [status, setStatus] = useState('loading');
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  // Add this after your existing states
+const [currentUserRole, setCurrentUserRole] = useState(null);
 
   const [admins, setAdmins] = useState([]);
   const [filteredAdmins, setFilteredAdmins] = useState([]);
@@ -156,7 +160,7 @@ const [viewingAdmin, setViewingAdmin] = useState(null);
     email: '',
     password: '',
     phone: '+254',
-    role: 'ADMIN',
+    role: 'SUPER_ADMIN', // Default to SUPER_ADMIN
     permissions: {
       manageUsers: false,
       manageContent: true,
@@ -190,6 +194,10 @@ const handleViewAdmin = (admin) => {
         if (token && user) {
           const userData = JSON.parse(user);
           console.log('User data:', userData);
+
+
+           setCurrentUserRole(userData.role || userData.userRole);
+ 
           
           // Verify token expiration
           try {
@@ -331,33 +339,25 @@ const PasswordStrengthIndicator = () => {
 const getAuthHeaders = (contentType = 'application/json') => {
   const adminToken = localStorage.getItem('admin_token');
   const deviceToken = localStorage.getItem('device_token');
-  const adminUser = localStorage.getItem('admin_user');
   
   console.log('🔑 Auth debug:', {
     hasAdminToken: !!adminToken,
     hasDeviceToken: !!deviceToken,
-    hasAdminUser: !!adminUser,
-    adminToken: adminToken ? adminToken.substring(0, 30) + '...' : 'none',
-    deviceToken: deviceToken ? deviceToken.substring(0, 30) + '...' : 'none'
   });
   
   if (!adminToken) {
     throw new Error('Admin authentication required. Please login again.');
   }
   
+  // Clean headers matching your PortalHeader pattern
   const headers = {
-    'Authorization': `Bearer ${adminToken}`,
+    'x-admin-token': adminToken,  // Primary header for your API
     'Content-Type': contentType
   };
   
-  // Only add device token if it exists
+  // Add device token if exists
   if (deviceToken) {
     headers['x-device-token'] = deviceToken;
-  }
-  
-  // Only add admin user if it exists
-  if (adminUser) {
-    headers['x-admin-user'] = adminUser;
   }
   
   return headers;
@@ -528,6 +528,9 @@ const fetchAdmins = async (showRefresh = false) => {
 
   const stats = calculateStats();
 
+
+
+
   // Filter admins by search
   useEffect(() => {
     let filtered = admins || [];
@@ -577,74 +580,75 @@ const fetchAdmins = async (showRefresh = false) => {
     setAdminToDelete(admin);
     setShowDeleteConfirm(true);
   };
-
 const confirmDelete = async () => {
   if (!adminToDelete) return;
   
   try {
-    // Check authentication first
+    // Check current user role
+    const currentUser = JSON.parse(localStorage.getItem('admin_user') || '{}');
+    console.log('👤 Current user attempting delete:', {
+      id: currentUser.id,
+      name: currentUser.name,
+      role: currentUser.role,
+      targetUser: adminToDelete.name,
+      targetRole: adminToDelete.role
+    });
+    
+    // Check if trying to delete an ADMIN without SUPER_ADMIN role
+    if (adminToDelete.role === 'ADMIN' && currentUser.role !== 'SUPER_ADMIN') {
+      toast.error('Only SUPER_ADMIN can delete other ADMIN users');
+      setShowDeleteConfirm(false);
+      setAdminToDelete(null);
+      return;
+    }
+    
+    // Check if trying to delete SUPER_ADMIN
+    if (adminToDelete.role === 'SUPER_ADMIN') {
+      toast.error('Cannot delete SUPER_ADMIN users');
+      setShowDeleteConfirm(false);
+      setAdminToDelete(null);
+      return;
+    }
+    
     const headers = getAuthHeaders('application/json');
+    console.log('📤 Sending delete request with headers:', {
+      hasToken: !!headers['x-admin-token'],
+      hasDeviceToken: !!headers['x-device-token']
+    });
     
     const response = await fetch(`/api/register/${adminToDelete.id}`, {
       method: 'DELETE',
       headers: headers
     });
 
-    // Handle authentication errors
-    if (response.status === 401) {
-      localStorage.removeItem('admin_token');
-      localStorage.removeItem('admin_user');
-      localStorage.removeItem('device_token');
-      throw new Error('Session expired. Please login again.');
-    }
-
-    // Check if response is OK before trying to parse JSON
-    if (!response.ok) {
-      // Try to get error message from response if possible
-      try {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Failed to delete admin (${response.status})`);
-      } catch (jsonError) {
-        // If can't parse JSON, just use status text
-        throw new Error(`Failed to delete admin: ${response.statusText || response.status}`);
-      }
-    }
-
-    // Check if response has content before parsing
-    const contentType = response.headers.get('content-type');
-    let data = { success: true }; // Default success response
+    console.log('📥 Delete response status:', response.status);
     
-    if (contentType && contentType.includes('application/json')) {
-      const text = await response.text(); // Get as text first
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          console.log('Response text that failed to parse:', text);
-          // If parsing fails but response was OK, assume success
-          data = { success: true };
-        }
-      }
+    if (response.status === 403) {
+      const errorData = await response.json();
+      console.error('❌ 403 Forbidden details:', errorData);
+      toast.error(errorData.message || 'You do not have permission to delete this user');
+      return;
     }
 
-    if (data.success !== false) {
-      // Remove from local state
-      const updatedAdmins = admins.filter(admin => admin.id !== adminToDelete.id);
-      setAdmins(updatedAdmins);
-      setSelectedAdmins(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(adminToDelete.id);
-        return newSet;
-      });
-      
-      toast.success('Admin deleted successfully!');
-    } else {
-      throw new Error(data.error || 'Failed to delete admin');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Failed to delete admin (${response.status})`);
     }
+
+    // Remove from local state
+    const updatedAdmins = admins.filter(admin => admin.id !== adminToDelete.id);
+    setAdmins(updatedAdmins);
+    setSelectedAdmins(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(adminToDelete.id);
+      return newSet;
+    });
+    
+    toast.success('Admin deleted successfully!');
+    
   } catch (error) {
     console.error('Error deleting admin:', error);
     
-    // Handle authentication errors
     if (handleAuthError(error, toast.error)) {
       return;
     }
@@ -1082,12 +1086,68 @@ const handleSaveAdmin = async (e) => {
     return null;
   }
 
-  if (loading) {
+
+
+if (loading) {
+  return (
+    <Box 
+      className="min-h-[70vh] flex items-center justify-center p-4 bg-transparent"
+    >
+      <Stack 
+        spacing={2} 
+        alignItems="center"
+        className="w-full transition-all duration-500"
+      >
+        {/* Modern Layered Loader - Responsive sizing */}
+        <Box className="relative flex items-center justify-center scale-90 sm:scale-110">
+          <CircularProgress
+            variant="determinate"
+            value={100}
+            size={48} 
+            thickness={4.5}
+            sx={{ color: '#f1f5f9' }} 
+          />
+          <CircularProgress
+            variant="indeterminate"
+            disableShrink
+            size={48}
+            thickness={4.5}
+            sx={{
+              color: '#0f172a', // Matches your dark slate theme
+              animationDuration: '1000ms',
+              position: 'absolute',
+              [`& .MuiCircularProgress-circle`]: {
+                strokeLinecap: 'round',
+              },
+            }}
+          />
+          <Box className="absolute">
+            <IoSparkles className="text-blue-600 text-sm animate-pulse" />
+          </Box>
+        </Box>
+
+        {/* Minimalist Typography */}
+        <div className="text-center px-4">
+          <p className="text-slate-900 font-medium text-sm sm:text-base tracking-tight italic">
+           Loading For Administrators
+          </p>
+          <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">
+            kinyui boys Senior School
+          </p>
+        </div>
+      </Stack>
+    </Box>
+  );
+}
+
+
+  // Only ADMIN or SUPER_ADMIN can access privileged actions
+  if (currentUserRole && !['ADMIN', 'SUPER_ADMIN'].includes(currentUserRole.toUpperCase())) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 flex items-center justify-center p-4">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-gray-600 text-lg mt-4 font-medium">Loading admins...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow text-center">
+          <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
+          <p className="text-gray-700">Only ADMIN or SUPER ADMIN can access this page.</p>
         </div>
       </div>
     );
@@ -1130,7 +1190,7 @@ const handleSaveAdmin = async (e) => {
           <div className="h-8 w-1 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
           <div>
             <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-400">
-              Matungulu Girls High School
+              kinyui boys Senior School
             </h2>
             <p className="text-[9px] italic font-medium text-white/40 tracking-widest uppercase">
               Central Authority Hub
@@ -1363,7 +1423,8 @@ const handleSaveAdmin = async (e) => {
     </span>
   </button>
   
-  {/* Create Action */}
+{/* Create Action - Only visible to SUPER_ADMIN */}
+{currentUserRole === 'SUPER_ADMIN' && (
   <button
     onClick={handleCreateAdmin}
     className="flex items-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-2xl hover:bg-blue-600 shadow-xl shadow-slate-200 hover:shadow-blue-200/50 transition-all duration-300 active:scale-95"
@@ -1375,6 +1436,7 @@ const handleSaveAdmin = async (e) => {
       Add Admin
     </span>
   </button>
+)}
 
 </div>
 
@@ -1546,24 +1608,29 @@ const handleSaveAdmin = async (e) => {
                       })}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleEditAdmin(admin)}
-                        className="p-2 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 text-blue-600 rounded-xl transition-all duration-200 border border-blue-200 hover:scale-100 active:scale-95"
-                      >
-                        <Edit className="text-sm" />
-                      </button>
-                      {session?.user && admin.id !== session.user.id && (
-                        <button
-                          onClick={() => handleDelete(admin)}
-                          className="p-2 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-600 rounded-xl transition-all duration-200 border border-red-200 hover:scale-100 active:scale-95"
-                        >
-                          <Trash2 className="text-sm" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
+                 <td className="px-6 py-4">
+  <div className="flex items-center gap-2">
+    {/* Edit button - Only visible to SUPER_ADMIN */}
+    {currentUserRole === 'SUPER_ADMIN' && (
+      <button
+        onClick={() => handleEditAdmin(admin)}
+        className="p-2 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 text-blue-600 rounded-xl transition-all duration-200 border border-blue-200 hover:scale-100 active:scale-95"
+      >
+        <Edit className="text-sm" />
+      </button>
+    )}
+    
+    {/* Delete button - Only visible to SUPER_ADMIN AND not current user */}
+    {currentUserRole === 'SUPER_ADMIN' && session?.user && admin.id !== session.user.id && (
+      <button
+        onClick={() => handleDelete(admin)}
+        className="p-2 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-600 rounded-xl transition-all duration-200 border border-red-200 hover:scale-100 active:scale-95"
+      >
+        <Trash2 className="text-sm" />
+      </button>
+    )}
+  </div>
+</td>
                 </tr>
               ))}
             </tbody>

@@ -2,121 +2,111 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import { hashPassword, sanitizeUser } from "../../../../libs/auth";
 
-// Device Token Manager Class
+// ==================== AUTHENTICATION UTILITIES (Matching your working pattern) ====================
+
 class DeviceTokenManager {
-  static validateTokensFromHeaders(headers, options = {}) {
+  static decodeBase64(str) {
+    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = base64.length % 4;
+    if (pad) {
+      if (pad === 1) throw new Error('Invalid base64 string');
+      base64 += '==='.slice(0, 4 - pad);
+    }
+    return Buffer.from(base64, 'base64').toString('utf-8');
+  }
+
+  static validateTokensFromHeaders(headers) {
     try {
-      const adminToken = headers.get('x-admin-token') || headers.get('authorization')?.replace('Bearer ', '');
+      // Try to get token from different header formats
+      let adminToken = headers.get('x-admin-token');
+      
+      // If not found, try authorization header
+      if (!adminToken) {
+        const authHeader = headers.get('authorization');
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+          adminToken = authHeader.replace('Bearer ', '');
+        }
+      }
+      
       const deviceToken = headers.get('x-device-token');
 
-      if (!adminToken) {
-        return { valid: false, reason: 'no_admin_token', message: 'Admin token is required' };
+      if (!adminToken || !deviceToken) {
+        return { valid: false, reason: 'missing_tokens', message: 'Both admin and device tokens are required' };
       }
 
-      if (!deviceToken) {
-        return { valid: false, reason: 'no_device_token', message: 'Device token is required' };
-      }
-
+      // Validate JWT format
       const adminParts = adminToken.split('.');
       if (adminParts.length !== 3) {
-        return { valid: false, reason: 'invalid_admin_token_format', message: 'Invalid admin token format' };
+        return { valid: false, reason: 'invalid_jwt_format', message: 'Invalid JWT format' };
       }
 
-      const deviceValid = this.validateDeviceToken(deviceToken);
-      if (!deviceValid.valid) {
-        return { 
-          valid: false, 
-          reason: `device_${deviceValid.reason}`,
-          message: `Device token ${deviceValid.reason}: ${deviceValid.error || ''}`
-        };
-      }
-
-      let adminPayload;
       try {
-        adminPayload = JSON.parse(atob(adminParts[1]));
+        // Parse JWT payload using decodeBase64
+        const payloadStr = this.decodeBase64(adminParts[1]);
+        const payload = JSON.parse(payloadStr);
         
-        const currentTime = Date.now() / 1000;
-        if (adminPayload.exp < currentTime) {
-          return { valid: false, reason: 'admin_token_expired', message: 'Admin token has expired' };
+        // Check expiration
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (payload.exp && payload.exp < currentTime) {
+          return { valid: false, reason: 'token_expired', message: 'Token has expired' };
         }
-        
-        const userRole = adminPayload.role || adminPayload.userRole;
-        const validRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'PRINCIPAL', 'TEACHER', 'teacher'];
-        
-        if (!userRole || !validRoles.includes(userRole.toUpperCase())) {
-          return { 
-            valid: false, 
-            reason: 'invalid_role', 
-            message: 'User does not have permission to manage resources' 
-          };
-        }
-        
-      } catch (error) {
-        return { valid: false, reason: 'invalid_admin_token', message: 'Invalid admin token' };
-      }
 
-      console.log('✅ Resource management authentication successful for user:', adminPayload.name || 'Unknown');
-      
-      return { 
-        valid: true, 
-        user: {
-          id: adminPayload.userId || adminPayload.id,
-          name: adminPayload.name,
-          email: adminPayload.email,
-          role: adminPayload.role || adminPayload.userRole
-        },
-        deviceInfo: deviceValid.payload
-      };
+        // Check role
+        const userRole = payload.role || payload.userRole;
+        const validRoles = ['ADMIN', 'SUPER_ADMIN'];
+        if (!userRole || !validRoles.includes(userRole.toUpperCase())) {
+          return { valid: false, reason: 'invalid_role', message: 'Insufficient permissions' };
+        }
+
+        // Validate device token
+        try {
+          const devicePayloadStr = Buffer.from(deviceToken, 'base64').toString('utf-8');
+          const devicePayload = JSON.parse(devicePayloadStr);
+          
+          if (devicePayload.exp && devicePayload.exp * 1000 <= Date.now()) {
+            return { valid: false, reason: 'device_expired', message: 'Device token expired' };
+          }
+
+        } catch (deviceError) {
+          return { valid: false, reason: 'invalid_device_token', message: 'Invalid device token' };
+        }
+
+        return { 
+          valid: true,
+          user: {
+            id: payload.userId || payload.id,
+            name: payload.name,
+            email: payload.email,
+            role: payload.role || payload.userRole
+          }
+        };
+
+      } catch (error) {
+        console.error('❌ Token decode error:', error);
+        return { valid: false, reason: 'token_parsing_error', message: 'Failed to parse token' };
+      }
 
     } catch (error) {
       console.error('❌ Token validation error:', error);
-      return { 
-        valid: false, 
-        reason: 'validation_error', 
-        message: 'Authentication validation failed',
-        error: error.message 
-      };
-    }
-  }
-
-  static validateDeviceToken(token) {
-    try {
-      const payloadStr = Buffer.from(token, 'base64').toString('utf-8');
-      const payload = JSON.parse(payloadStr);
-      
-      if (payload.exp && payload.exp * 1000 <= Date.now()) {
-        return { valid: false, reason: 'expired', payload, error: 'Device token has expired' };
-      }
-      
-      const createdAt = new Date(payload.createdAt || payload.iat * 1000);
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-      
-      if (createdAt < thirtyDaysAgo) {
-        return { valid: false, reason: 'age_expired', payload, error: 'Device token is too old' };
-      }
-      
-      return { valid: true, payload };
-    } catch (error) {
-      return { valid: false, reason: 'invalid_format', error: error.message };
+      return { valid: false, reason: 'validation_error', message: 'Authentication failed' };
     }
   }
 }
 
-// Authentication helper function
+// Authentication helper function - UPDATED to match working pattern
 const authenticateRequest = (req) => {
-  const headers = req.headers;
+  const validation = DeviceTokenManager.validateTokensFromHeaders(req.headers);
   
-  const validationResult = DeviceTokenManager.validateTokensFromHeaders(headers);
-  
-  if (!validationResult.valid) {
+  if (!validation.valid) {
+    console.log('❌ Authentication failed:', validation.message);
     return {
       authenticated: false,
       response: NextResponse.json(
         { 
           success: false, 
-          error: "Access Denied",
-          message: "Authentication required to manage users.",
-          details: validationResult.message
+          error: "Authentication Failed",
+          message: "Please login again to perform this action.",
+          details: validation.message
         },
         { status: 401 }
       )
@@ -125,13 +115,13 @@ const authenticateRequest = (req) => {
 
   return {
     authenticated: true,
-    user: validationResult.user,
-    deviceInfo: validationResult.deviceInfo
+    user: validation.user
   };
 };
 
-// Helpers
-const validateInput = (name, email, password, role) => {
+// ==================== HELPER FUNCTIONS ====================
+
+const validateInput = (name, email, password, role, phone = null, isEditing = false) => {
   const errors = [];
 
   if (name && name.trim().length < 2) {
@@ -142,34 +132,96 @@ const validateInput = (name, email, password, role) => {
     errors.push("Valid email is required");
   }
 
-  if (password && password.length < 6) {
-    errors.push("Password must be at least 6 characters");
+  // Phone validation for Kenyan format
+  if (phone && !/^\+254[17]\d{8}$/.test(phone)) {
+    errors.push("Phone number must be in format: +2547XXXXXXXX or +2541XXXXXXXX");
   }
 
-  const validRoles = ["TEACHER", "PRINCIPAL", "ADMIN", "SUPER_ADMIN"];
-  if (role && !validRoles.includes(role)) {
-    errors.push("Invalid user role");
+  // Password validation
+  if (!isEditing) {
+    if (!password || password.length < 8) {
+      errors.push("Password must be at least 8 characters long");
+    } else {
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      
+      if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+        errors.push("Password must contain uppercase, lowercase, numbers, and special characters");
+      }
+    }
+  } else if (password && password.length > 0) {
+    // If editing and password is being changed, validate it
+    if (password.length < 8) {
+      errors.push("New password must be at least 8 characters long");
+    } else {
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      
+      if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+        errors.push("New password must contain uppercase, lowercase, numbers, and special characters");
+      }
+    }
   }
-
+  // Only allow ADMIN, SUPER_ADMIN. Default to ADMIN if invalid or missing.
+  const validRoles = ["ADMIN", "SUPER_ADMIN"];
+  if (role && !validRoles.includes(role.toUpperCase())) {
+    // No error, just ignore and will default to ADMIN in handler
+  }
   return errors;
 };
 
-// Helper to check if operation requires admin privileges - FIXED
+// Helper to check if operation requires admin privileges
 const requiresAdminPrivilege = (operation, targetUserRole, currentUserRole) => {
-  const adminRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'PRINCIPAL'];
+  const normalizedCurrentRole = currentUserRole?.toUpperCase() || '';
+  const normalizedTargetRole = targetUserRole?.toUpperCase() || '';
+  
+  console.log('🔐 Permission check:', {
+    operation,
+    currentRole: normalizedCurrentRole,
+    targetRole: normalizedTargetRole
+  });
+  
+  // SUPER_ADMIN can do anything
+  if (normalizedCurrentRole === 'SUPER_ADMIN') {
+    return { allowed: true, message: 'Super admin access granted' };
+  }
   
   // Check if current user has admin role
-  if (!adminRoles.includes(currentUserRole?.toUpperCase())) {
-    return false;
+  const adminRoles = ['ADMIN'];
+  const isAdmin = adminRoles.includes(normalizedCurrentRole);
+  if (!isAdmin) {
+    return { 
+      allowed: false, 
+      message: `Insufficient permissions. Required: ADMIN or SUPER_ADMIN. Current: ${normalizedCurrentRole}` 
+    };
+  }
+  // For ADMIN users (non-super)
+  if (normalizedCurrentRole === 'ADMIN') {
+    // Admins can manage ADMIN users (but not SUPER_ADMIN)
+    if (["ADMIN"].includes(normalizedTargetRole)) {
+      return { allowed: true, message: 'Admin access granted for admin' };
+    }
+    // Admins cannot manage SUPER_ADMIN
+    if (normalizedTargetRole === 'SUPER_ADMIN') {
+      return { 
+        allowed: false, 
+        message: 'Only SUPER_ADMIN can manage SUPER_ADMIN users',
+        requiresSuperAdmin: true
+      };
+    }
   }
   
-  // Special protection for ADMIN users - only SUPER_ADMIN can modify other ADMINS
-  if (targetUserRole?.toUpperCase() === 'ADMIN' && currentUserRole?.toUpperCase() !== 'SUPER_ADMIN') {
-    return 'SUPER_ADMIN_REQUIRED'; // Changed to more descriptive string
-  }
-  
-  return true;
+  return { 
+    allowed: false, 
+    message: `Insufficient permissions for operation: ${operation}` 
+  };
 };
+
+// ==================== API ROUTES ====================
 
 // GET user by ID
 export async function GET(req, { params }) {
@@ -182,13 +234,11 @@ export async function GET(req, { params }) {
     
     const { id } = params;
     
-    // Log the request for audit
     console.log('👁️ User view request:', {
       requestedBy: auth.user.name,
       requestedById: auth.user.id,
       requestedRole: auth.user.role,
       targetUserId: id,
-      device: auth.deviceInfo,
       timestamp: new Date().toISOString()
     });
 
@@ -200,18 +250,18 @@ export async function GET(req, { params }) {
         email: true,
         phone: true,
         role: true,
+        status: true,
         createdAt: true,
         updatedAt: true,
       },
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Check if user has permission to view this user
-    // Admins can view anyone, teachers can only view themselves
-    const userRolesForView = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'PRINCIPAL'];
+    const userRolesForView = ['ADMIN', 'SUPER_ADMIN', 'PRINCIPAL'];
     if (!userRolesForView.includes(auth.user.role?.toUpperCase()) && auth.user.id !== id) {
       return NextResponse.json(
         { 
@@ -225,7 +275,7 @@ export async function GET(req, { params }) {
 
     return NextResponse.json({ 
       success: true, 
-      user,
+      user: sanitizeUser(user),
       requestedBy: {
         name: auth.user.name,
         role: auth.user.role
@@ -237,7 +287,7 @@ export async function GET(req, { params }) {
   }
 }
 
-// UPDATE user by ID - FIXED
+// UPDATE user by ID
 export async function PUT(req, { params }) {
   try {
     // Authenticate request
@@ -247,90 +297,71 @@ export async function PUT(req, { params }) {
     }
     
     const { id } = params;
-    const { name, email, phone, password, role, confirmationToken } = await req.json();
+    const { name, email, phone, password, role, status } = await req.json();
 
     // Get target user to check role
     const targetUser = await prisma.user.findUnique({
       where: { id },
-      select: { role: true, email: true, name: true }
+      select: { role: true, email: true, name: true, id: true }
     });
 
     if (!targetUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
-    // ================ FIXED: ALLOW SELF-UPDATES ================
     // Allow users to update their own profile
-    if (auth.user.id === id) {
-      console.log('👤 User updating their own profile:', auth.user.name);
-      // Skip admin privilege check for self-updates
-      // Still validate input but don't check admin permissions
-    } else {
-      // For updating other users, check admin permissions
-      const permissionCheck = requiresAdminPrivilege('UPDATE', targetUser.role, auth.user.role);
-      if (permissionCheck === false) {
+    let permissionCheck = { allowed: true };
+    if (auth.user.id !== id) {
+      permissionCheck = requiresAdminPrivilege('UPDATE', targetUser.role, auth.user.role);
+      if (!permissionCheck.allowed) {
         return NextResponse.json(
           { 
             success: false, 
             error: "Permission Denied",
-            message: "You do not have permission to update other users"
+            message: permissionCheck.message
           },
           { status: 403 }
         );
       }
-      
-      // Extra protection for ADMIN users - requires SUPER_ADMIN
-      if (permissionCheck === 'SUPER_ADMIN_REQUIRED') {
-        if (!confirmationToken) {
-          return NextResponse.json(
-            { 
-              success: false, 
-              error: "Super Admin Required",
-              message: "Only SUPER_ADMIN can update other ADMIN accounts",
-              requiresConfirmation: true,
-              requiresSuperAdmin: true
-            },
-            { status: 403 }
-          );
-        }
-        
-        console.log('⚠️ Admin user update attempt by non-super admin:', {
-          admin: auth.user.name,
-          targetAdmin: targetUser.name,
-          confirmationToken: confirmationToken ? 'Provided' : 'Missing'
-        });
+    }
+
+    console.log('📝 User update attempt:', {
+      updatedBy: auth.user.name,
+      targetUser: targetUser.email,
+      isSelfUpdate: auth.user.id === id,
+      changes: { name, email, phone, role, status, passwordChanged: !!password }
+    });
+
+    // Validate input (excluding status since it's not in schema)
+    const validationErrors = validateInput(name, email, password, role, phone, true);
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Validation failed", 
+          details: validationErrors 
+        }, 
+        { status: 400 }
+      );
+    }
+
+    // Build data object with only valid fields
+    let dataToUpdate = {
+      name: name || targetUser.name,
+      email: email || targetUser.email,
+      phone: phone || undefined,
+    };
+
+    // Only update role if user has permission and role is valid
+    const validRoles = ["ADMIN", "SUPER_ADMIN", "USER"];
+    if (auth.user.id !== id && role && validRoles.includes(role.toUpperCase())) {
+      const rolePermission = requiresAdminPrivilege('UPDATE_ROLE', targetUser.role, auth.user.role);
+      if (rolePermission.allowed) {
+        dataToUpdate.role = role.toUpperCase();
       }
     }
 
-    // Log the update attempt
-    console.log('📝 User update attempt:', {
-      updatedBy: auth.user.name,
-      updatedById: auth.user.id,
-      updatedByRole: auth.user.role,
-      targetUser: targetUser.email,
-      targetUserId: id,
-      targetUserRole: targetUser.role,
-      isSelfUpdate: auth.user.id === id,
-      changes: { name, email, role, phoneChanged: !!phone, passwordChanged: !!password },
-      device: auth.deviceInfo,
-      timestamp: new Date().toISOString()
-    });
-
-    const validationErrors = validateInput(name, email, password, role);
-    if (validationErrors.length > 0) {
-      return NextResponse.json({ error: "Validation failed", details: validationErrors }, { status: 400 });
-    }
-
-    let dataToUpdate = {
-      name,
-      email,
-      phone,
-      // For self-updates, don't allow role change unless SUPER_ADMIN
-      role: auth.user.id === id && auth.user.role !== 'SUPER_ADMIN' 
-        ? targetUser.role // Keep existing role for self-updates
-        : (role || targetUser.role),
-    };
-
+    // Add password if provided
     if (password) {
       dataToUpdate.password = await hashPassword(password);
     }
@@ -338,19 +369,26 @@ export async function PUT(req, { params }) {
     // Remove undefined fields
     Object.keys(dataToUpdate).forEach(key => dataToUpdate[key] === undefined && delete dataToUpdate[key]);
 
+    // Remove status from dataToUpdate if it exists (since it's not in schema)
+    delete dataToUpdate.status;
+
     const updatedUser = await prisma.user.update({
       where: { id },
       data: dataToUpdate,
-      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true },
+      select: { 
+        id: true, 
+        name: true, 
+        email: true, 
+        phone: true, 
+        role: true, 
+        createdAt: true, 
+        updatedAt: true 
+      },
     });
 
-    // Log successful update
     console.log('✅ User updated successfully:', {
       updatedBy: auth.user.name,
-      isSelfUpdate: auth.user.id === id,
-      targetUser: updatedUser.email,
-      changes: Object.keys(dataToUpdate),
-      timestamp: new Date().toISOString()
+      targetUser: updatedUser.email
     });
 
     return NextResponse.json({ 
@@ -367,13 +405,17 @@ export async function PUT(req, { params }) {
     console.error("❌ Error updating user:", error);
     
     if (error.code === 'P2002') {
-      return NextResponse.json({ error: "User with this email already exists" }, { status: 409 });
+      return NextResponse.json({ 
+        success: false, 
+        error: "User with this email already exists" 
+      }, { status: 409 });
     }
     
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }
 
+// DELETE user by ID
 export async function DELETE(req, { params }) {
   try {
     // Authenticate request
@@ -384,23 +426,14 @@ export async function DELETE(req, { params }) {
     
     const { id } = params;
     
-    // Read body once at the beginning if it might be needed
-    let body = null;
-    try {
-      body = await req.json();
-    } catch (e) {
-      // No body or invalid JSON - that's fine
-      body = {};
-    }
-    
     // Get target user to check role
     const targetUser = await prisma.user.findUnique({
       where: { id },
-      select: { role: true, email: true, name: true }
+      select: { role: true, email: true, name: true, id: true }
     });
 
     if (!targetUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Prevent self-deletion
@@ -415,57 +448,23 @@ export async function DELETE(req, { params }) {
       );
     }
 
-    // Check permission with special handling for ADMIN users
+    // Check permission
     const permissionCheck = requiresAdminPrivilege('DELETE', targetUser.role, auth.user.role);
-    if (permissionCheck === false) {
+    if (!permissionCheck.allowed) {
       return NextResponse.json(
         { 
           success: false, 
           error: "Permission Denied",
-          message: "You do not have permission to delete users"
+          message: permissionCheck.message
         },
         { status: 403 }
       );
     }
-    
-    // Extra protection for ADMIN users - requires SUPER_ADMIN
-    if (permissionCheck === 'SUPER_ADMIN_REQUIRED') {
-      // Check headers OR the body we already parsed
-      const confirmationToken = req.headers.get('x-confirmation-token') || body?.confirmationToken;
-      
-      if (!confirmationToken) {
-        return NextResponse.json(
-          { 
-            success: false, 
-            error: "Super Admin Required",
-            message: "Deleting an ADMIN user requires confirmation from SUPER_ADMIN",
-            requiresConfirmation: true,
-            requiresSuperAdmin: true,
-            targetUser: {
-              name: targetUser.name,
-              email: targetUser.email,
-              role: targetUser.role
-            }
-          },
-          { status: 403 }
-        );
-      }
-      
-      console.log('⚠️ Admin user deletion attempt with confirmation token:', {
-        superAdmin: auth.user.name,
-        targetAdmin: targetUser.name,
-        confirmationToken: confirmationToken ? 'Provided' : 'Missing'
-      });
-    }
 
-    // Log the deletion attempt
-    console.log('🗑️ User deletion attempt:', {
+    console.log('🗑️ User deletion:', {
       deletedBy: auth.user.name,
       targetUser: targetUser.email,
-      targetUserId: id,
-      targetUserRole: targetUser.role,
-      device: auth.deviceInfo,
-      timestamp: new Date().toISOString()
+      targetRole: targetUser.role
     });
 
     const deletedUser = await prisma.user.delete({
@@ -473,13 +472,7 @@ export async function DELETE(req, { params }) {
       select: { id: true, name: true, email: true, role: true },
     });
 
-    // Log successful deletion
-    console.log('✅ User deleted successfully:', {
-      deletedBy: auth.user.name,
-      deletedUser: deletedUser.email,
-      role: deletedUser.role,
-      timestamp: new Date().toISOString()
-    });
+    console.log('✅ User deleted successfully');
 
     return NextResponse.json({ 
       success: true, 
@@ -494,7 +487,7 @@ export async function DELETE(req, { params }) {
     console.error("❌ Error deleting user:", error);
     
     if (error.code === 'P2025') {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
     
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
