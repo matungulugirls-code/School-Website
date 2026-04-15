@@ -270,6 +270,12 @@ const handleLogout = () => {
       badge: 'purple',
     },
     { 
+      id: "achievements",
+      label: "Achievements & Awards",
+      icon: FiFileText,
+      badge: 'blue'
+    },
+    { 
       id: 'newsevents', 
       label: 'News & Events', 
       icon: IoNewspaper,

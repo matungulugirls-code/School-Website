@@ -100,7 +100,7 @@ const ModernEventsNewsSection = () => {
 
   const shareLinks = (title) => ({
     whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out "${title}" from Matungulu Girls: ${SHARE_URL}`)}`,
-    twitter:  `https://twitter.com/intent/tweet?text=${encodeURIComponent(`📚 ${title} - Matungulu Girls High School`)}&url=${encodeURIComponent(SHARE_URL)}`,
+    twitter:  `https://twitter.com/intent/tweet?text=${encodeURIComponent(`📚 ${title} - Matungulu Girls Senior School`)}&url=${encodeURIComponent(SHARE_URL)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`,
     email:    `mailto:?subject=${encodeURIComponent(`Matungulu Girls: ${title}`)}&body=${encodeURIComponent(`Read more about "${title}"\n\n${SHARE_URL}`)}`,
   });
@@ -180,7 +180,7 @@ const ModernEventsNewsSection = () => {
         <div className="text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-full border border-emerald-200 shadow-sm mb-4">
             <span className="text-lg">🏫</span>
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">Matungulu Girls High School</span>
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">Matungulu Girls Senior School</span>
           </div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-2 sm:mb-3">
             The Schools' <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Updates and Activities</span>
