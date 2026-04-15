@@ -281,7 +281,7 @@ useEffect(() => {
           <button
             onClick={handleSlideButtonClick}
             disabled={navigationBlocked}
-            className="group relative px-8 py-3.5 bg-gradient-to-r from-rose-600 to-amber-500 
+            className="group relative px-8 py-3.5 bg-gradient-to-r from-teal-600 to-green-500 
               text-white rounded-xl font-bold text-sm shadow-lg shadow-rose-500/20
               hover:shadow-xl hover:shadow-rose-500/30 transition-all duration-300
               flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -303,9 +303,9 @@ useEffect(() => {
 
         {/* Floating stats card (desktop only) – shows key metrics */}
         {!isMobile && (
-          <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-80 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
+          <div className="absolute right-[10%] lg:right-[30%] top-1/2 -translate-y-1/2 w-80 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-600 to-amber-500 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-600 to-teal-500 flex items-center justify-center">
                 <GiGraduateCap className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -357,13 +357,13 @@ useEffect(() => {
         </button>
       </div>
 
-      {/* Bottom progress bar – using accent gradient */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 h-1 bg-white/10">
-        <div
-          className="h-full bg-gradient-to-r from-rose-500 to-amber-500 transition-all duration-100 ease-linear"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
+{/* Bottom progress bar – using accent gradient */}
+<div className="absolute bottom-0 left-0 right-0 z-30 h-1 bg-white/10">
+  <div
+    className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-100 ease-linear"
+    style={{ width: `${progress}%` }}
+  />
+</div>
 
       {/* Bottom info strip – minimal */}
       <div className="absolute bottom-3 left-0 right-0 z-20 px-6 sm:px-10 md:px-20">
@@ -383,21 +383,21 @@ useEffect(() => {
   <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
     <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
       <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
-        {/* Modal Header */}
-        <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
-          <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 flex items-center justify-center">
-              <Play className="w-4 h-4 text-white fill-white" />
-            </div>
-            <span className="text-white text-sm font-semibold">Campus Tour</span>
-          </div>
-          <button
-            onClick={closeVideoModal}
-            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
-          >
-            <X className="w-5 h-5" />   {/* ← fixed */}
-          </button>
-        </div>
+     {/* Modal Header */}
+<div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
+  <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
+    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center">
+      <Play className="w-4 h-4 text-white fill-white" />
+    </div>
+    <span className="text-white text-sm font-semibold">School Tour</span>
+  </div>
+  <button
+    onClick={closeVideoModal}
+    className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
+  >
+    <X className="w-5 h-5" />
+  </button>
+</div>
 
         {/* Video Player */}
         {loading ? (
