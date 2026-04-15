@@ -392,7 +392,7 @@ export default function ModernHero() {
 
       <div>
         <h3 className="text-white font-black text-2xl">Matungulu Girls</h3>
-        <p className="text-white font-semibold text-lg">Senior School</p>
+        <p className="text-white font-semibold text-md">Senior School</p>
       </div>
     </div>
 
@@ -406,36 +406,36 @@ export default function ModernHero() {
       <>
         <div className="space-y-4 text-base">
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-lg">Established</span>
-            <span className="text-white font-bold text-lg">
+            <span className="text-white font-semibold text-md">Established</span>
+            <span className="text-white font-bold text-md">
               {getStatValue('established', 1955)}
             </span>
           </div>
 
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-lg">Category</span>
+            <span className="text-white font-semibold text-md">Category</span>
             <span className="text-white font-bold text-lg">
               {getStatValue('category', 'National School')}
             </span>
           </div>
 
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-lg">Enrollment</span>
-            <span className="text-white font-bold text-lg">
+            <span className="text-white font-semibold text-md">Enrollment</span>
+            <span className="text-white font-bold text-md">
               {getStatValue('studentCount', 1400)}+ Girls
             </span>
           </div>
 
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-lg">Motto</span>
+            <span className="text-white font-semibold text-md">Motto</span>
             <span className="text-white font-bold italic text-base">
               "{getStatValue('motto', 'Strive to Excel')}"
             </span>
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-white font-semibold text-lg">KCSE 2025 Mean</span>
-            <span className="text-white font-black text-lg">
+            <span className="text-white font-semibold text-md">KCSE 2025 Mean</span>
+            <span className="text-white font-black text-md">
               {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
             </span>
           </div>
