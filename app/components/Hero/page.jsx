@@ -310,24 +310,12 @@ export default function ModernHero() {
           ))}
         </div>
 
-  {/* Action buttons - Added items-start to prevent buttons from stretching vertically */}
-<div className={`flex flex-wrap gap-4 items-start ${currentSlide === 1 ? 'mt-6' : 'mt-10'}`}>
+{/* Action buttons Container */}
+<div className="mt-10 max-w-xl">
   
-  <button
-    onClick={handleSlideButtonClick}
-    disabled={navigationBlocked}
-    className={`group relative px-8 ${currentSlide === 1 ? 'py-2.5' : 'py-3.5'} bg-gradient-to-r from-emerald-600 to-teal-500 
-      text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20
-      hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
-      flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed`}
-  >
-    {slide.cta}
-    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-  </button>
-
-  {/* Dynamic Stats Grid - Now handled separately to avoid breaking button layout */}
+  {/* 1. Dynamic Stats Grid - Moved ABOVE the buttons so it doesn't push them apart */}
   {currentSlide === 1 && !statsLoading && schoolStats && (
-    <div className="w-full grid grid-cols-2 gap-3 text-white mb-2">
+    <div className="grid grid-cols-2 gap-3 text-white mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
       <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
         <p className="text-[10px] uppercase tracking-wider text-white/50">Mean Score</p>
         <p className="text-base font-black text-white">
@@ -358,15 +346,30 @@ export default function ModernHero() {
     </div>
   )}
 
-  <button
-    onClick={openVideoModal}
-    className={`group flex items-center gap-2 px-6 ${currentSlide === 1 ? 'py-2.5' : 'py-3.5'} rounded-xl border border-white/30 
-      text-white font-semibold text-sm backdrop-blur-sm bg-white/5
-      hover:bg-white/10 hover:border-white/50 transition-all`}
-  >
-    <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
-    {isMobile ? 'Virtual Tour' : 'Watch Virtual Tour'}
-  </button>
+  {/* 2. The Actual Buttons - Now they stay side-by-side */}
+  <div className="flex flex-row items-center gap-4">
+    <button
+      onClick={handleSlideButtonClick}
+      disabled={navigationBlocked}
+      className="group relative px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 
+        text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20
+        hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
+        flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+    >
+      {slide.cta}
+      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+    </button>
+
+    <button
+      onClick={openVideoModal}
+      className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-white/30 
+        text-white font-semibold text-sm backdrop-blur-sm bg-white/5
+        hover:bg-white/10 hover:border-white/50 transition-all whitespace-nowrap"
+    >
+      <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
+      {isMobile ? 'Tour' : 'Watch Tour'}
+    </button>
+  </div>
 </div>
 
 {/* Floating stats card (desktop only) – shows key metrics from API */}
