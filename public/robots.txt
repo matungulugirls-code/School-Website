@@ -1,57 +1,221 @@
 # ============================================
-# Matungulu Girls School - Search Engine Directives
+# ROBOTS.TXT - Matungulu Girls Senior School
+# ============================================
+# Domain: https://matungulu-girls.vercel.app/
+# Last Updated: 2026-04-15
+# Purpose: Control search engine crawling and indexing
 # ============================================
 
+# ========== GLOBAL RULES (All Bots) ==========
 User-agent: *
 Allow: /
+
+# Disallow sensitive/private areas
 Disallow: /api/
-Disallow: /adminLogin
-Disallow: /pages/forgotpassword
-Disallow: /MainDashboard*
 Disallow: /admin/
+Disallow: /adminLogin
+Disallow: /MainDashboard
+Disallow: /MainDashboard/
+Disallow: /dashboard/
 Disallow: /private/
 Disallow: /secure/
-Disallow: /*.php$
+Disallow: /pages/adminLogin
+Disallow: /pages/forgotpassword
+Disallow: /pages/OurSchoolPolicies?*
+
+# Disallow dynamic/duplicate content
 Disallow: /*?*
 Disallow: /search/
+Disallow: /*.php$
+Disallow: /*.asp$
+Disallow: /*.jsp$
 
-# ========== CRAWL DELAY ==========
-# For respectful crawling
+# Disallow temporary or staging patterns
+Disallow: /temp/
+Disallow: /test/
+Disallow: /backup/
+
+# ========== CRAWL RATE CONTROL ==========
+# Respectful crawling for shared hosting
 Crawl-delay: 2
 
 # ========== SITEMAP LOCATIONS ==========
-# Primary sitemap
-Sitemap: https://katwanyaa.vercel.app/sitemap.xml
+# Main sitemap XML
+Sitemap: https://matungulu-girls.vercel.app/sitemap.xml
 
-# Optional: Image sitemap (if available)
-Sitemap: https://katwanyaa.vercel.app/sitemap-images.xml
+# Extended sitemaps (optional - create if needed)
+Sitemap: https://matungulu-girls.vercel.app/sitemap-images.xml
+Sitemap: https://matungulu-girls.vercel.app/sitemap-news.xml
 
-# Optional: Video sitemap (if available)
-Sitemap: https://katwanyaa.vercel.app/sitemap-video.xml
+# ============================================
+# ========== MAJOR SEARCH ENGINES ==========
+# ============================================
 
-# ========== SPECIFIC BOTS ==========
-# GoogleBot Specific
+# ---------- Google Bot (Most Important) ----------
 User-agent: Googlebot
+Allow: /
 Allow: /pages/
 Allow: /images/
+Allow: /assets/
+Allow: /gallery/
+
+# Disallow Google from crawling these
 Disallow: /api/*
 Disallow: /MainDashboard/*
-Disallow: /user/*/private
+Disallow: /dashboard/*
+Disallow: /admin/*
+Disallow: /private/*
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
 
-# BingBot Specific
+# Google-specific crawl delay (usually respects, but explicit)
+Crawl-delay: 1
+
+# ---------- Google Images ----------
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /assets/images/
+Allow: /gallery/
+Disallow: /private/
+Disallow: /admin/
+
+# ---------- Bing / Microsoft Bot ----------
 User-agent: bingbot
-Crawl-delay: 3
+Allow: /
+Allow: /pages/
+Allow: /images/
 Disallow: /api/
+Disallow: /admin/
+Disallow: /MainDashboard
+Crawl-delay: 3
 
-# ========== BAD BOTS ==========
+# ---------- Yahoo / Slurp ----------
+User-agent: Slurp
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Crawl-delay: 2
+
+# ---------- DuckDuckGo ----------
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Crawl-delay: 2
+
+# ---------- Yandex ----------
+User-agent: Yandex
+Allow: /
+Allow: /pages/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /MainDashboard
+Crawl-delay: 2
+
+# ---------- Baidu (Chinese search) ----------
+User-agent: Baiduspider
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Crawl-delay: 3
+
+# ============================================
+# ========== BLOCK AGGRESSIVE / BAD BOTS ==========
+# ============================================
+
+# Ahrefs (SEO scraper - often aggressive)
 User-agent: AhrefsBot
 Disallow: /
 
+# Semrush (SEO tool bot)
 User-agent: SemrushBot
 Disallow: /
 
+# MJ12bot (sometimes heavy crawler)
 User-agent: MJ12bot
 Disallow: /
 
+# DotBot (DotDash crawler)
 User-agent: DotBot
 Disallow: /
+
+# DataForSeoBot
+User-agent: DataForSeoBot
+Disallow: /
+
+# SEOCrawler
+User-agent: SEOkicks
+Disallow: /
+
+# BLEXBot (often problematic)
+User-agent: BLEXBot
+Disallow: /
+
+# Petal Bot
+User-agent: PetalBot
+Disallow: /
+
+# Aspiegel Bot
+User-agent: AspiegelBot
+Disallow: /
+
+# ============================================
+# ========== ALLOWED SPECIFIC BOTS ==========
+# ============================================
+
+# Google AdsBot (for landing page quality checks)
+User-agent: AdsBot-Google
+Allow: /
+
+# Google Mobile-friendly test
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Bing preview bot
+User-agent: BingPreview
+Allow: /
+
+# ============================================
+# ========== ADDITIONAL CLEANUP RULES ==========
+# ============================================
+
+# Prevent crawling of common vulnerable paths
+Disallow: /wp-admin/
+Disallow: /wp-content/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /logs/
+Disallow: /config/
+
+# Prevent indexing of error pages
+Disallow: /404
+Disallow: /500
+Disallow: /error
+
+# Block access to version control files
+Disallow: /.git/
+Disallow: /.env
+Disallow: /composer.json
+Disallow: /package.json
+
+# ============================================
+# ========== NOTES FOR WEBMASTERS ==========
+# ============================================
+# 
+# 1. Always test this file in Google Search Console:
+#    https://search.google.com/search-console
+#
+# 2. After changes, wait 24-48 hours for recrawling
+#
+# 3. To block a specific URL pattern, use:
+#    Disallow: /path/to/block/
+#
+# 4. Allow rules take precedence over Disallow rules
+#    when patterns match (order matters)
+#
+# 5. This robots.txt is publicly accessible at:
+#    https://matungulu-girls.vercel.app/robots.txt
+#
+# ============================================
