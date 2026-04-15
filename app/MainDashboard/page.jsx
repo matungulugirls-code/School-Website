@@ -356,7 +356,7 @@ const LoadingSpinner = () => {
   const [loadingText, setLoadingText] = useState(0);
   
   const loadingMessages = [
-    "Loading your Student Portal...",
+    "Loading  Admin Portal...",
     "Fetching your academic dashboard...",
     "Preparing your personalized resources...",
     "Syncing your progress and results..."

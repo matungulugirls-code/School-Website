@@ -2,171 +2,292 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <!-- Home -->
+  <!-- ======================= -->
+  <!-- SECTION 1: HOMEPAGE & CORE BRANDING -->
+  <!-- ======================= -->
+  
   <url>
-    <loc>https://katwanyaa.vercel.app/</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>yearly</changefreq>
+    <loc>https://matungulu-girls.vercel.app/</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Matungulu Girls School Home</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Matungulu Girls Senior School - Home</image:title>
     </image:image>
   </url>
 
-  <!-- About Us -->
+  <!-- ======================= -->
+  <!-- SECTION 2: ABOUT THE SCHOOL -->
+  <!-- ======================= -->
+
   <url>
-    <loc>https://katwanyaa.vercel.app/pages/AboutUs</loc>
-    <lastmod>2026-01-21</lastmod>
+    <loc>https://matungulu-girls.vercel.app/about</loc>
+    <lastmod>2026-04-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>About Matungulu Girls School</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>About Matungulu Girls Senior School</image:title>
     </image:image>
   </url>
 
-  <!-- Admissions -->
   <url>
-    <loc>https://katwanyaa.vercel.app/pages/admissions</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Admissions Information</image:title>
-    </image:image>
-  </url>
-
-  <!-- Apply for Admissions -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/apply-for-admissions</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Apply for Admissions</image:title>
-    </image:image>
-  </url>
-
-  <!-- Guidance & Counselling -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/Guidance-and-Coucelling</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Guidance and Counselling</image:title>
-    </image:image>
-  </url>
-
-  <!-- Career -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/careers</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Careers at Katwanyaa</image:title>
-    </image:image>
-  </url>
-
-  <!-- Events & News -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/eventsandnews</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Events and News</image:title>
-    </image:image>
-  </url>
-
-  <!-- Staff -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/SchoolTeam</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Staff Profiles</image:title>
-    </image:image>
-  </url>
-
-  <!-- Gallery -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/gallery</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>School Gallery</image:title>
-    </image:image>
-  </url>
-
-  <!-- Contact -->
-  <url>
-    <loc>https://katwanyaa.vercel.app/pages/contact</loc>
-    <lastmod>2026-01-21</lastmod>
+    <loc>https://matungulu-girls.vercel.app/school-history</loc>
+    <lastmod>2026-04-15</lastmod>
     <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Our History & Heritage</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/mission-vision</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Mission, Vision & Core Values</image:title>
+    </image:image>
+  </url>
+
+  <!-- ======================= -->
+  <!-- SECTION 3: ADMISSIONS (Primary User Journey) -->
+  <!-- ======================= -->
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/admissions</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Admissions Overview - Join Matungulu Girls</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/apply-now</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Online Application Form</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/fees-structure</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Fee Structure & Payment Guidelines</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/scholarships</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Scholarships & Bursaries</image:title>
+    </image:image>
+  </url>
+
+  <!-- ======================= -->
+  <!-- SECTION 4: ACADEMICS & STUDENT SUPPORT -->
+  <!-- ======================= -->
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/academics</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Academic Programs & Curriculum</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/guidance-counselling</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Guidance & Counselling Department</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/career-guidance</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Career Guidance & Mentorship</image:title>
+    </image:image>
+  </url>
+
+  <!-- ======================= -->
+  <!-- SECTION 5: SCHOOL LIFE & NEWS -->
+  <!-- ======================= -->
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/news-events</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Latest News & School Events</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/gallery</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Photo Gallery & Campus Life</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/co-curricular</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Sports, Clubs & Societies</image:title>
+    </image:image>
+  </url>
+
+  <!-- ======================= -->
+  <!-- SECTION 6: SCHOOL COMMUNITY & STAFF -->
+  <!-- ======================= -->
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/staff-directory</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Staff Profiles & Teaching Team</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/alumni</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Alumni Network & Reunions</image:title>
+    </image:image>
+  </url>
+
+  <!-- ======================= -->
+  <!-- SECTION 7: PORTALS & POLICIES -->
+  <!-- ======================= -->
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/student-portal</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.5</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Contact Us</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Student Portal - Academics & Resources</image:title>
     </image:image>
   </url>
 
-  <!-- Terms & Privacy -->
   <url>
-    <loc>https://katwanyaa.vercel.app/pages/OurSchoolpolicies</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://matungulu-girls.vercel.app/parent-portal</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Terms and Privacy</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Parent Portal & Communication</image:title>
     </image:image>
   </url>
 
-  <!-- Student Portal -->
   <url>
-    <loc>https://katwanyaa.vercel.app/pages/StudentPortal</loc>
-    <lastmod>2026-01-21</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://matungulu-girls.vercel.app/school-policies</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>yearly</changefreq>
     <priority>0.4</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Student Portal</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>School Policies, Terms & Privacy</image:title>
     </image:image>
   </url>
 
-  <!-- Admin Login -->
+  <!-- ======================= -->
+  <!-- SECTION 8: CONTACT & ADMIN -->
+  <!-- ======================= -->
+
   <url>
-    <loc>https://katwanyaa.vercel.app/pages/adminLogin</loc>
-    <lastmod>2026-01-21</lastmod>
+    <loc>https://matungulu-girls.vercel.app/contact-us</loc>
+    <lastmod>2026-04-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Admin Login</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Contact Information & Location</image:title>
     </image:image>
   </url>
 
-  <!-- Dashboard -->
   <url>
-    <loc>https://katwanyaa.vercel.app/MainDashboard</loc>
-    <lastmod>2026-01-21</lastmod>
+    <loc>https://matungulu-girls.vercel.app/admin-login</loc>
+    <lastmod>2026-04-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.2</priority>
     <image:image>
-      <image:loc>https://katwanyaa.vercel.app/MatG.jpg</image:loc>
-      <image:title>Admin Dashboard</image:title>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Staff & Admin Login</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/dashboard</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Administration Dashboard</image:title>
+    </image:image>
+  </url>
+
+  <!-- ======================= -->
+  <!-- SECTION 9: CAREER OPPORTUNITIES -->
+  <!-- ======================= -->
+
+  <url>
+    <loc>https://matungulu-girls.vercel.app/careers</loc>
+    <lastmod>2026-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Work with Us - Job Vacancies</image:title>
     </image:image>
   </url>
 
