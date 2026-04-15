@@ -48,7 +48,7 @@ const heroSlides = [
     image: "/Matungulu/9.jpeg",
     tags: ["Mean 8.14", "84% Uni Transition", "STEM Focus", "Career Guidance"],
     cta: "Explore Academics",
-    link: "/pages/academics",
+    link: "/pages/Admission",
   },
   {
     title: "Holistic",
@@ -57,8 +57,8 @@ const heroSlides = [
     description: "National Science Fair winners, award‑winning sports teams, vibrant music and drama clubs, and leadership programs. We nurture confident, compassionate, and accomplished young women.",
     image: "/Matungulu/29.jpeg",
     tags: ["Science Fair Winner", "Sports & Arts", "Leadership", "Empowerment"],
-    cta: "Student Life",
-    link: "/pages/student-life",
+    cta: "Our History",
+    link: "/pages/About Us",
   }
 ];
 
@@ -310,72 +310,78 @@ export default function ModernHero() {
           ))}
         </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-wrap gap-4 mt-10">
-          <button
-            onClick={handleSlideButtonClick}
-            disabled={navigationBlocked}
-            className="group relative px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 
-              text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20
-              hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
-              flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {slide.cta}
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+  {/* Action buttons - Added items-start to prevent buttons from stretching vertically */}
+<div className={`flex flex-wrap gap-4 items-start ${currentSlide === 1 ? 'mt-6' : 'mt-10'}`}>
+  
+  <button
+    onClick={handleSlideButtonClick}
+    disabled={navigationBlocked}
+    className={`group relative px-8 ${currentSlide === 1 ? 'py-2.5' : 'py-3.5'} bg-gradient-to-r from-emerald-600 to-teal-500 
+      text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20
+      hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
+      flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+  >
+    {slide.cta}
+    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+  </button>
 
+  {/* Dynamic Stats Grid - Now handled separately to avoid breaking button layout */}
+  {currentSlide === 1 && !statsLoading && schoolStats && (
+    <div className="w-full grid grid-cols-2 gap-3 text-white mb-2">
+      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+        <p className="text-[10px] uppercase tracking-wider text-white/50">Mean Score</p>
+        <p className="text-base font-black text-white">
+          {schoolStats.meanScore?.toFixed(2)} <span className="text-[10px] font-normal text-emerald-400">(B)</span>
+        </p>
+      </div>
 
+      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+        <p className="text-[10px] uppercase tracking-wider text-white/50">Transition</p>
+        <p className="text-base font-black text-white">
+          {schoolStats.transitionRate || "84%"}
+        </p>
+      </div>
 
-{/* 👇 ADD IT HERE (Academic dynamic stats) */}
-{currentSlide === 1 && !statsLoading && schoolStats && (
-  <div className="mt-6 grid grid-cols-2 gap-4 text-white">
-    
-    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-      <p className="text-xs text-white/70">Mean Score</p>
-      <p className="text-lg font-black text-white">
-        {schoolStats.meanScore?.toFixed(2)} (B plain)
-      </p>
+      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+        <p className="text-[10px] uppercase tracking-wider text-white/50">Last Year</p>
+        <p className="text-base font-black text-white">
+          {schoolStats.lastYearMean?.toFixed(2)}
+        </p>
+      </div>
+
+      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+        <p className="text-[10px] uppercase tracking-wider text-white/50">Target</p>
+        <p className="text-base font-black text-white">
+          {schoolStats.targetMean?.toFixed(2)}
+        </p>
+      </div>
     </div>
+  )}
 
-    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-      <p className="text-xs text-white/70">University Transition</p>
-      <p className="text-lg font-black text-white">
-        {schoolStats.transitionRate || "84%"}
-      </p>
-    </div>
-
-    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-      <p className="text-xs text-white/70">Last Year</p>
-      <p className="text-lg font-black text-white">
-        {schoolStats.lastYearMean?.toFixed(2)}
-      </p>
-    </div>
-
-    <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-      <p className="text-xs text-white/70">Target</p>
-      <p className="text-lg font-black text-white">
-        {schoolStats.targetMean?.toFixed(2)}
-      </p>
-    </div>
-
-  </div>
-)}
-
-          <button
-            onClick={openVideoModal}
-            className="group flex items-center gap-2 px-6 py-3.5 rounded-xl border border-white/30 
-              text-white font-semibold text-sm backdrop-blur-sm bg-white/5
-              hover:bg-white/10 hover:border-white/50 transition-all"
-          >
-            <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
-            {isMobile ? 'Virtual Tour' : 'Watch Virtual Tour'}
-          </button>
-        </div>
+  <button
+    onClick={openVideoModal}
+    className={`group flex items-center gap-2 px-6 ${currentSlide === 1 ? 'py-2.5' : 'py-3.5'} rounded-xl border border-white/30 
+      text-white font-semibold text-sm backdrop-blur-sm bg-white/5
+      hover:bg-white/10 hover:border-white/50 transition-all`}
+  >
+    <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
+    {isMobile ? 'Virtual Tour' : 'Watch Virtual Tour'}
+  </button>
+</div>
 
 {/* Floating stats card (desktop only) – shows key metrics from API */}
 {!isMobile && (
-  <div className="absolute right-[10%] lg:right-[25%] top-1/2 -translate-y-1/2 w-[28rem]
-                                  bg-transparent p-6 space-y-4">
+  <div
+  className="absolute 
+  right-4 sm:right-6 md:right-10 lg:right-16 xl:right-[10%]
+  top-1/2 -translate-y-1/2
+  w-[85vw] sm:w-[24rem] md:w-[26rem] lg:w-[28rem] xl:w-[30rem]
+  max-w-[92vw]
+  bg-transparent
+  p-4 sm:p-5 md:p-6
+  space-y-3 sm:space-y-4
+  rounded-2xl"
+>
     <div className="flex items-center gap-3 mb-4">
       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center">
         <GiGraduateCap className="w-6 h-6 text-white" />
