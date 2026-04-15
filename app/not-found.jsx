@@ -13,55 +13,101 @@ import {
   FiAlertCircle,
   FiMapPin,
   FiGlobe,
-  FiChevronRight,
-  FiStar,
   FiHeart,
-  FiShield,
-  FiZap
+  FiCompass
 } from 'react-icons/fi';
+import { FaGraduationCap, FaCrown, FaSeedling } from 'react-icons/fa';
+import { IoSparkles, IoFlowerOutline } from 'react-icons/io5';
 
 const Modern404 = () => {
-  const [currentMessage, setCurrentMessage] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  // Official single message
+  const officialMessage = "Strive to Excel... 404 This page cannot be found";
 
   const quickLinks = [
     { name: 'Home Base', href: '/', icon: FiHome, description: 'Back to assembly' },
     { name: 'Academics', href: '/pages/academics', icon: FiBook, description: 'Course directory' },
-    { name: 'Gallery', href: '/pages/gallery', icon: FiBookOpen, description: 'School resources' },
-    { name: 'Admissions', href: '/pages/admissions', icon: FiUsers, description: 'Join our family' },
+    { name: 'Gallery', href: '/pages/gallery', icon: FiBookOpen, description: 'School moments' },
+    { name: 'Admissions', href: '/pages/admissions', icon: FiUsers, description: 'Join our sisterhood' },
     { name: 'Events', href: '/pages/eventsandnews', icon: FiCalendar, description: 'Upcoming terms' },
     { name: 'Support', href: '/pages/contact', icon: FiMail, description: 'Talk to the office' },
-    { name: 'Portal', href: '/pages/StudentPortal', icon: FiUsers, description: 'Student Portal' },
+    { name: 'Portal', href: '/pages/StudentPortal', icon: FaGraduationCap, description: 'Student Portal' },
     { name: 'Guidance', href: '/pages/Guidance-and-Coucelling', icon: FiHeart, description: 'Counseling sessions' },
   ];
 
-  const errorMessages = [
-    "Looks like this page does not exist!",
-    "This page is on a field trip!",
-    "Assignment not found!",
-    "This lesson hasn't been scheduled yet!",
-    "Page is in detention!",
-    "This classroom is empty!",
-    "Lesson plan missing!",
-    "This page graduated early!"
-  ];
-
   useEffect(() => {
-    setCurrentMessage(Math.floor(Math.random() * errorMessages.length));
-    const messageInterval = setInterval(() => {
-      setCurrentMessage(prev => (prev + 1) % errorMessages.length);
-    }, 5000);
-    return () => clearInterval(messageInterval);
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50 overflow-hidden relative font-sans text-slate-900 antialiased">
-      {/* Decorative Background Elements - Updated to emerald */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.03]">
-        <div className="absolute top-1/4 -left-8 text-emerald-400 scale-[4] rotate-12"><FiGlobe /></div>
-        <div className="absolute bottom-1/4 -right-8 text-emerald-400 scale-[4] -rotate-12"><FiMapPin /></div>
-        <div className="absolute top-1/2 left-1/4 text-slate-500 scale-[3] rotate-45"><FiSearch /></div>
-        <div className="absolute top-3/4 right-1/3 text-emerald-400 scale-[3] -rotate-45"><FiAlertCircle /></div>
-        <div className="absolute top-1/3 right-1/4 text-emerald-300 scale-[2] rotate-90"><FiStar /></div>
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50/30 to-emerald-50/30 overflow-hidden relative font-sans text-slate-900 antialiased">
+      
+      {/* Mouse Follow Glow Effect */}
+      <div 
+        className="fixed pointer-events-none w-[600px] h-[600px] rounded-full opacity-20 blur-[100px] transition-all duration-1000 ease-out z-0"
+        style={{
+          left: mousePosition.x - 300,
+          top: mousePosition.y - 300,
+          background: 'radial-gradient(circle, rgba(244,114,182,0.3) 0%, rgba(16,185,129,0.1) 50%, transparent 100%)'
+        }}
+      />
+
+      {/* Floating Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Sparkles */}
+        {[...Array(12)].map((_, i) => (
+          <IoSparkles 
+            key={`sparkle-${i}`}
+            className="absolute text-amber-400/30 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              fontSize: `${12 + Math.random() * 20}px`,
+              animationDelay: `${i * 0.3}s`,
+              animationDuration: `${3 + Math.random() * 4}s`
+            }}
+          />
+        ))}
+        
+        {/* Flowers */}
+        {[...Array(6)].map((_, i) => (
+          <IoFlowerOutline 
+            key={`flower-${i}`}
+            className="absolute text-pink-400/20 animate-spin-slow"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              fontSize: `${20 + Math.random() * 30}px`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${20 + Math.random() * 10}s`
+            }}
+          />
+        ))}
+        
+        {/* Crowns */}
+        {[...Array(4)].map((_, i) => (
+          <FaCrown 
+            key={`crown-${i}`}
+            className="absolute text-amber-400/15"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              fontSize: `${30 + Math.random() * 40}px`,
+              transform: `rotate(${Math.random() * 30 - 15}deg)`
+            }}
+          />
+        ))}
+        
+        {/* Large Decorative Icons */}
+        <FaGraduationCap className="absolute top-[15%] -left-8 text-emerald-400/10 scale-[4] rotate-12" />
+        <FaSeedling className="absolute bottom-[10%] -right-8 text-emerald-400/10 scale-[4] -rotate-12" />
+        <FiCompass className="absolute top-[40%] left-[5%] text-rose-400/10 scale-[3] rotate-45" />
+        <FiMapPin className="absolute bottom-[30%] right-[5%] text-rose-400/10 scale-[3] -rotate-45" />
       </div>
 
       <div className="min-h-screen flex items-center justify-center px-3 sm:px-6 py-6 md:py-12 relative z-10">
@@ -70,91 +116,105 @@ const Modern404 = () => {
             
             {/* Left Side: Error Message Section */}
             <div className="w-full lg:w-1/2 text-center lg:text-left space-y-4 md:space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
-                <FiBell className="text-xs animate-pulse" />
-                <span className="text-[9px] font-black uppercase tracking-widest">School Announcement</span>
+              {/* School Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 rounded-full border border-rose-200 shadow-sm">
+                <FaCrown className="text-xs text-amber-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Matungulu Girls' High School</span>
+                <IoSparkles className="text-xs text-amber-500" />
               </div>
 
+              {/* 404 Number */}
               <div className="relative">
-                <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter text-slate-900 flex justify-center lg:justify-start items-baseline">
-                  <span className="text-emerald-600 drop-shadow-sm">4</span>
-                  <span className="text-emerald-500 mx-1 md:mx-2 drop-shadow-sm">0</span>
-                  <span className="text-emerald-600 drop-shadow-sm">4</span>
+                <h1 className="text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-500 to-emerald-600 flex justify-center lg:justify-start items-baseline">
+                  <span>4</span>
+                  <span className="mx-1 md:mx-2">0</span>
+                  <span>4</span>
                 </h1>
-                <div className="h-1.5 w-24 bg-gradient-to-r from-emerald-400 to-emerald-600 mx-auto lg:mx-0 mt-2 rounded-full shadow"></div>
+                <div className="h-1.5 w-32 bg-gradient-to-r from-rose-400 via-pink-400 to-emerald-400 mx-auto lg:mx-0 mt-2 rounded-full shadow"></div>
               </div>
 
+              {/* Official Message */}
               <div className="space-y-3 md:space-y-4">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 leading-tight">
-                  {errorMessages[currentMessage]}
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-black text-slate-800 leading-tight italic">
+                  "{officialMessage}"
                 </h2>
                 <p className="text-xs sm:text-sm md:text-base text-slate-600 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                  Even top students lose their way. This page seems to have wandered off-school. 
-                  Let's guide you back to your studies with the options below.
+                  Even the brightest students lose their way sometimes. Let us guide you back to your journey of excellence.
                 </p>
               </div>
 
-              {/* Action Buttons - Responsive and Smaller */}
-              <div className="flex flex-row items-center gap-2 pt-2 w-full">
-                {/* Back to Assembly - Primary Emerald */}
+              {/* School Motto Display */}
+              <div className="flex items-center justify-center lg:justify-start gap-3 py-2">
+                <div className="h-px w-8 bg-gradient-to-r from-transparent to-rose-300"></div>
+                <div className="flex items-center gap-2">
+                  <FaSeedling className="text-emerald-500 text-sm" />
+                  <span className="text-sm font-serif italic text-slate-600">Strive to Excel</span>
+                  <FaCrown className="text-amber-500 text-sm" />
+                </div>
+                <div className="h-px w-8 bg-gradient-to-l from-transparent to-rose-300"></div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-row items-center gap-3 pt-2 w-full">
+                {/* Back to Home - Primary */}
                 <a
                   href="/"
                   className="
                     group
-                    flex flex-1 items-center justify-center gap-1.5
-                    bg-emerald-600
-                    hover:bg-emerald-700
+                    flex flex-1 items-center justify-center gap-2
+                    bg-gradient-to-r from-rose-600 to-pink-600
+                    hover:from-rose-700 hover:to-pink-700
                     text-white
-                    px-3 py-2.5
+                    px-4 py-3
                     rounded-xl
                     transition-all duration-200
-                    shadow-lg shadow-emerald-200/50
+                    shadow-lg shadow-rose-200/50
                     active:scale-95
                   "
                 >
-                  <FiHome className="text-sm group-hover:scale-110 transition-transform" />
-                  <span className="whitespace-nowrap font-black uppercase tracking-wider text-[9px] sm:text-[10px]">
-                    <span className="hidden xs:inline">Back to </span>Home
+                  <FiHome className="text-base group-hover:scale-110 transition-transform" />
+                  <span className="whitespace-nowrap font-black uppercase tracking-wider text-[10px] sm:text-xs">
+                    Return Home
                   </span>
                 </a>
 
-                {/* Previous Page - Secondary Outline */}
+                {/* Go Back - Secondary */}
                 <button
                   onClick={() => window.history.back()}
                   className="
                     group
-                    flex flex-1 items-center justify-center gap-1.5
+                    flex flex-1 items-center justify-center gap-2
                     bg-white
-                    border border-emerald-200
-                    hover:border-emerald-300 hover:bg-emerald-50
-                    text-emerald-700
-                    px-3 py-2.5
+                    border-2 border-rose-200
+                    hover:border-rose-300 hover:bg-rose-50
+                    text-rose-700
+                    px-4 py-3
                     rounded-xl
                     transition-all duration-200
                     shadow-sm
                     active:scale-95
                   "
                 >
-                  <FiArrowLeft className="text-sm group-hover:-translate-x-1 transition-transform" />
-                  <span className="whitespace-nowrap font-black uppercase tracking-wider text-[9px] sm:text-[10px]">
+                  <FiArrowLeft className="text-base group-hover:-translate-x-1 transition-transform" />
+                  <span className="whitespace-nowrap font-black uppercase tracking-wider text-[10px] sm:text-xs">
                     Go Back
                   </span>
                 </button>
               </div>
 
-              {/* Quick Stats Row */}
-              <div className="flex items-center justify-center lg:justify-start gap-4 pt-2">
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center lg:justify-start gap-6 pt-3">
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                  <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">24/7 Support</span>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Est. Excellence</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                  <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">Secure</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Girls' School</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                  <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">Fast</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Matungulu</span>
                 </div>
               </div>
             </div>
@@ -162,38 +222,37 @@ const Modern404 = () => {
             {/* Right Side: Quick Links Section */}
             <div className="w-full lg:w-1/2">
               <div className="relative">
-                <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-tr from-emerald-100 via-white to-emerald-100 rounded-[2rem] sm:rounded-[3rem] blur-xl opacity-60 -z-10"></div>
+                <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-tr from-rose-100 via-pink-50 to-emerald-100 rounded-[2rem] sm:rounded-[3rem] blur-xl opacity-60 -z-10"></div>
                 
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-100/80 p-5 sm:p-6 md:p-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-[2.5rem] shadow-2xl shadow-rose-200/40 border border-rose-100/80 p-5 sm:p-6 md:p-8">
                   <div className="flex items-center justify-between mb-4 md:mb-6">
                     <h3 className="text-base sm:text-lg md:text-xl font-black text-slate-800 flex items-center gap-2">
-                      <FiMapPin className="text-emerald-600" />
-                      School Directory
+                      <FiCompass className="text-rose-600" />
+                      Navigate Matungulu
                     </h3>
-                    <div className="flex gap-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse delay-75"></div>
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse delay-150"></div>
+                    <div className="flex items-center gap-1">
+                      <IoSparkles className="text-amber-400 text-sm" />
+                      <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">Directory</span>
                     </div>
                   </div>
                   
-                  {/* Quick Links Grid - 2 columns */}
+                  {/* Quick Links Grid */}
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     {quickLinks.map((link) => {
                       const Icon = link.icon;
-
                       return (
                         <a
                           key={link.name}
                           href={link.href}
                           className="
-                            p-2 sm:p-3
+                            p-2.5 sm:p-3
                             rounded-xl
-                            border border-slate-100
+                            border border-rose-100
                             bg-white
-                            hover:border-emerald-200 hover:bg-emerald-50/30
+                            hover:border-rose-200 hover:bg-gradient-to-br hover:from-rose-50/50 hover:to-pink-50/50
                             transition-all duration-200
                             active:scale-[0.98]
+                            group
                           "
                         >
                           <div className="flex flex-col items-start gap-1.5">
@@ -201,10 +260,12 @@ const Modern404 = () => {
                             <div
                               className="
                                 p-1.5
-                                bg-emerald-50
-                                text-emerald-600
+                                bg-gradient-to-br from-rose-100 to-pink-100
+                                text-rose-600
                                 rounded-lg
                                 shadow-sm
+                                group-hover:from-rose-200 group-hover:to-pink-200
+                                transition-colors
                               "
                             >
                               <Icon className="text-xs sm:text-sm" />
@@ -225,26 +286,36 @@ const Modern404 = () => {
                     })}
                   </div>
 
-                  {/* Footer Card */}
-                  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-100">
-                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-900 to-emerald-800 p-3 sm:p-4 text-white">
+                  {/* Footer Card with School Spirit */}
+                  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-rose-100">
+                    <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-rose-900 via-pink-800 to-emerald-900 p-3 sm:p-4 text-white">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+                      
+                      {/* Decorative Pattern */}
+                      <div className="absolute inset-0 opacity-10">
+                        {[...Array(5)].map((_, i) => (
+                          <FaCrown key={i} className="absolute text-white" style={{
+                            left: `${i * 25}%`,
+                            top: `${i * 20}%`,
+                            fontSize: '40px',
+                            transform: 'rotate(15deg)'
+                          }} />
+                        ))}
+                      </div>
 
                       <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <div className="space-y-0.5 min-w-0">
-                          <p className="text-emerald-200 text-[8px] font-black uppercase tracking-wider">
-                            Enrollment Status
-                          </p>
-                          <div className="flex items-baseline gap-1.5 flex-wrap">
-                            <span className="text-lg sm:text-xl font-black text-emerald-300">
-                              1K+
-                            </span>
-                            <span className="text-[8px] sm:text-[9px] text-emerald-200/80">
-                              Active students
-                            </span>
+                          <div className="flex items-center gap-2 mb-1">
+                            <FaCrown className="text-amber-400 text-xs" />
+                            <p className="text-rose-200 text-[8px] font-black uppercase tracking-wider">
+                              Matungulu Girls' High School
+                            </p>
                           </div>
-                          <p className="text-[8px] text-emerald-200/60 mt-1">
-                            Need immediate assistance?
+                          <p className="text-white/90 text-sm font-serif italic">
+                            "Strive to Excel"
+                          </p>
+                          <p className="text-[8px] text-rose-200/60 mt-1">
+                            Matungulu, Machakos • Since Excellence
                           </p>
                         </div>
 
@@ -255,21 +326,20 @@ const Modern404 = () => {
                             items-center
                             gap-1.5
                             px-3 py-1.5
-                            text-[8px] sm:text-[9px] font-black uppercase tracking-wider
+                            text-[9px] sm:text-[10px] font-black uppercase tracking-wider
                             rounded-lg
-                            border border-emerald-400/30
-                            bg-emerald-500/20
+                            border border-rose-300/30
+                            bg-white/10
                             backdrop-blur-sm
-                            hover:bg-emerald-500/30
+                            hover:bg-white/20
                             transition-colors
                             flex-shrink-0
                           "
                         >
                           <FiMail className="text-xs" />
-                          Contact
+                          Contact Office
                         </a>
                       </div>
-                      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-400/10 to-emerald-600/10 -rotate-45 translate-x-8 -translate-y-8 rounded-full" />
                     </div>
                   </div>
                 </div>
@@ -279,13 +349,20 @@ const Modern404 = () => {
 
           {/* Footer */}
           <footer className="mt-8 md:mt-12 text-center">
-            <p className="text-slate-500 text-[10px] sm:text-xs font-medium">
-              &copy; {new Date().getFullYear()} Matungulu Girls High School, Matungulu, Machakos    
-              <span className="mx-1.5 text-slate-300">•</span>
-              Strive to Excel              
-              <span className="mx-1.5 text-slate-300">•</span>
-              <a href="/" className="text-emerald-600 hover:text-emerald-800 transition-colors font-black uppercase tracking-wider text-[9px] sm:text-[10px]">
-                Site Map
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <FaSeedling className="text-emerald-500 text-xs" />
+              <p className="text-slate-500 text-[10px] sm:text-xs font-medium">
+                &copy; {new Date().getFullYear()} Matungulu Girls' High School
+              </p>
+              <FaSeedling className="text-emerald-500 text-xs" />
+            </div>
+            <p className="text-slate-400 text-[9px] sm:text-[10px]">
+              Matungulu, Machakos • 
+              <span className="mx-1.5">•</span>
+              <span className="font-serif italic">Strive to Excel</span>
+              <span className="mx-1.5">•</span>
+              <a href="/" className="text-rose-600 hover:text-rose-800 transition-colors font-black uppercase tracking-wider">
+                Return Home
               </a>
             </p>
           </footer>
@@ -295,9 +372,22 @@ const Modern404 = () => {
       {/* Global Styles */}
       <style jsx global>{`
         @media (max-width: 640px) {
-          .rounded-\[2\.5rem\] {
+          .rounded-\\[2\\.5rem\\] {
             border-radius: 1.5rem;
           }
+        }
+        
+        @keyframes spin-slow {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        
+        .animate-spin-slow {
+          animation: spin-slow 30s linear infinite;
         }
         
         .animate-pulse {
@@ -309,7 +399,7 @@ const Modern404 = () => {
             opacity: 1;
           }
           50% {
-            opacity: 0.5;
+            opacity: 0.3;
           }
         }
       `}</style>
