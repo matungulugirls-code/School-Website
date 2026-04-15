@@ -333,89 +333,96 @@ export default function ModernHero() {
           </button>
         </div>
 
-        {/* Floating stats card (desktop only) – shows key metrics from API */}
-        {!isMobile && (
-<div className="absolute right-[10%] lg:right-[25%] top-1/2 -translate-y-1/2 w-84 
-                                bg-transparent p-6 space-y-4">
-                  <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center">
-                <GiGraduateCap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-white font-bold text-xl">Matungulu Girls</h3>
-                <p className="text-white/50 text-md">Senior School</p>
-              </div>
+{/* Floating stats card (desktop only) – shows key metrics from API */}
+{!isMobile && (
+  <div className="absolute right-[10%] lg:right-[25%] top-1/2 -translate-y-1/2 w-[28rem]
+                                  bg-transparent p-6 space-y-4">
+    <div className="flex items-center gap-3 mb-4">
+      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center">
+        <GiGraduateCap className="w-6 h-6 text-white" />
+      </div>
+
+      <div>
+        <h3 className="text-white font-black text-2xl">Matungulu Girls</h3>
+        <p className="text-white font-semibold text-lg">Senior School</p>
+      </div>
+    </div>
+
+    {statsLoading ? (
+      <div className="space-y-3">
+        <div className="h-12 bg-white/10 rounded-lg animate-pulse" />
+        <div className="h-12 bg-white/10 rounded-lg animate-pulse" />
+        <div className="h-12 bg-white/10 rounded-lg animate-pulse" />
+      </div>
+    ) : (
+      <>
+        <div className="space-y-4 text-base">
+          <div className="flex justify-between items-center border-b border-white/10 pb-3">
+            <span className="text-white font-semibold text-lg">Established</span>
+            <span className="text-white font-bold text-lg">
+              {getStatValue('established', 1955)}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center border-b border-white/10 pb-3">
+            <span className="text-white font-semibold text-lg">Category</span>
+            <span className="text-white font-bold text-lg">
+              {getStatValue('category', 'National School')}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center border-b border-white/10 pb-3">
+            <span className="text-white font-semibold text-lg">Enrollment</span>
+            <span className="text-white font-bold text-lg">
+              {getStatValue('studentCount', 1400)}+ Girls
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center border-b border-white/10 pb-3">
+            <span className="text-white font-semibold text-lg">Motto</span>
+            <span className="text-white font-bold italic text-base">
+              "{getStatValue('motto', 'Strive to Excel')}"
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-white font-semibold text-lg">KCSE 2025 Mean</span>
+            <span className="text-white font-black text-lg">
+              {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
+            </span>
+          </div>
+        </div>
+
+        {/* Performance indicators */}
+        {(schoolStats?.lastYearMean || schoolStats?.targetMean) && (
+          <div className="mt-5 pt-4 border-t border-white/10">
+            <div className="flex justify-between items-center text-sm mb-2">
+              <span className="text-white font-medium">Last Year</span>
+              <span className="text-white font-bold">
+                {schoolStats?.lastYearMean?.toFixed(2) || '7.85'}
+              </span>
             </div>
-            
-            {statsLoading ? (
-              <div className="space-y-3">
-                <div className="h-10 bg-white/10 rounded-lg animate-pulse" />
-                <div className="h-10 bg-white/10 rounded-lg animate-pulse" />
-                <div className="h-10 bg-white/10 rounded-lg animate-pulse" />
-              </div>
-            ) : (
-              <>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span className="text-white/60">Established</span>
-                    <span className="text-white font-semibold">
-                      {getStatValue('established', 1955)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span className="text-white/60">Category</span>
-                    <span className="text-teal-400 font-semibold">
-                      {getStatValue('category', 'National School')}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span className="text-white/60">Enrollment</span>
-                    <span className="text-white font-semibold">
-                      {getStatValue('studentCount', 1400)}+ Girls
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span className="text-white/60">Motto</span>
-                    <span className="text-white font-semibold italic text-xs">
-                      "{getStatValue('motto', 'Strive to Excel')}"
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/60">KCSE 2025 Mean</span>
-                    <span className="text-white font-bold">
-                      {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Performance indicators */}
-                {(schoolStats?.lastYearMean || schoolStats?.targetMean) && (
-                  <div className="mt-4 pt-3 border-t border-white/10">
-                    <div className="flex justify-between items-center text-xs mb-2">
-                      <span className="text-white/50">Last Year</span>
-                      <span className="text-white/70">
-                        {schoolStats?.lastYearMean?.toFixed(2) || '7.85'}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-white/50">Target</span>
-                      <span className="text-teal-400 font-semibold">
-                        {schoolStats?.targetMean?.toFixed(2) || '8.50'}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-            
-            <button
-              onClick={openVideoModal}
-              className="w-full mt-6 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white text-xs font-bold uppercase tracking-wider"
-            >
-              <Play className="w-3.5 h-3.5" /> Take a Tour
-            </button>
+
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-white font-medium">Target</span>
+              <span className="text-white font-black">
+                {schoolStats?.targetMean?.toFixed(2) || '8.50'}
+              </span>
+            </div>
           </div>
         )}
+      </>
+    )}
+
+    <button
+      onClick={openVideoModal}
+      className="w-full mt-6 flex items-center justify-center gap-2 py-3 rounded-xl 
+      bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-black uppercase tracking-wider"
+    >
+      <Play className="w-4 h-4" /> Take a Tour
+    </button>
+  </div>
+)}
       </div>
 
       {/* ========== SLIDE CONTROLS ========== */}
