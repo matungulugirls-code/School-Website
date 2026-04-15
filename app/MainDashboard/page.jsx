@@ -36,6 +36,8 @@ import {
 } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
 import { Toaster, toast } from 'sonner'; // Changed to sonner
+import { GiEagleHead, GiFlowerEmblem, GiSparkles } from 'react-icons/gi'; // ← ADD THESE
+
 
 // Import components
 import AdminSidebar from '../components/sidebar/page';
@@ -351,33 +353,43 @@ export default function AdminDashboard() {
 
 
 
-const LoadingSpinner = () => {
+const LoadingSpinner  = () => {
+  const [textIndex, setTextIndex] = useState(0);
+  const [glowIntensity, setGlowIntensity] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [loadingText, setLoadingText] = useState(0);
   
-  const loadingMessages = [
-    "Loading  Admin Portal...",
-    "Fetching your academic dashboard...",
-    "Preparing your personalized resources...",
-    "Syncing your progress and results..."
-  ];
+  const schoolName = "MATUNGULU GIRLS' SENIOR";
+  const motto = "Strive to Excel";
+  const established = "EST. 1955 | NATIONAL SCHOOL";
+  const tagline = "Empowering Young Women • Shaping Future Leaders";
+
+const loadingMessages = [
+  "Loading administrator dashboard...",
+  "Please wait a moment",
+];
 
   useEffect(() => {
-    const textInterval = setInterval(() => {
-      setLoadingText((prev) => (prev + 1) % loadingMessages.length);
+    const interval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % loadingMessages.length);
     }, 400);
+    return () => clearInterval(interval);
+  }, []);
 
+  useEffect(() => {
+    const glowInterval = setInterval(() => {
+      setGlowIntensity((prev) => (prev + 1) % 100);
+    }, 50);
+    return () => clearInterval(glowInterval);
+  }, []);
+
+  useEffect(() => {
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) return 0;
         return prev + 1;
       });
     }, 30);
-
-    return () => {
-      clearInterval(textInterval);
-      clearInterval(progressInterval);
-    };
+    return () => clearInterval(progressInterval);
   }, []);
 
   return (
@@ -385,165 +397,151 @@ const LoadingSpinner = () => {
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Soft gradient orbs */}
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-gradient-to-r from-rose-300/20 to-pink-300/20 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-emerald-300/20 to-teal-300/20 rounded-full blur-3xl animate-pulse-slow animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-300/10 via-rose-300/10 to-emerald-300/10 rounded-full blur-3xl animate-spin-slow"></div>
         
-        {/* Floating icons */}
-        <div className="absolute inset-0 opacity-40">
-          {[...Array(8)].map((_, i) => {
-            let IconComponent;
-            if (i % 4 === 0) IconComponent = FaFeatherAlt;
-            else if (i % 4 === 1) IconComponent = FaBookOpen;
-            else if (i % 4 === 2) IconComponent = FaStar;
-            else IconComponent = FaGraduationCap;
-            return (
-              <div
-                key={i}
-                className="absolute text-2xl text-emerald-400 opacity-70"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animation: `float-petal ${8 + Math.random() * 6}s ease-in-out infinite`,
-                  animationDelay: `${i * 0.5}s`,
-                  transform: `rotate(${Math.random() * 360}deg)`
-                }}
-              >
-                <IconComponent />
-              </div>
-            );
-          })}
+        {/* Removed floating petal/flower shapes for cleaner loading animation */}
+
+        {/* Elegant Light Beams */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent animate-beam"></div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400 to-transparent animate-beam animation-delay-1000"></div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-6">
+      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl px-6">
         
         {/* Logo Section */}
-        <div className="relative mb-8">
-          {/* Outer rotating ring */}
-          <div className="absolute -inset-4 border-2 border-dashed border-rose-300/50 rounded-full animate-spin-slow"></div>
+        <div className="relative mb-8 md:mb-12">
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-rose-400 via-emerald-400 to-purple-400 rounded-full blur-2xl transition-all duration-300"
+            style={{ 
+              opacity: 0.2 + (glowIntensity / 100) * 0.2,
+              transform: `scale(${1 + (glowIntensity / 100) * 0.15})`
+            }}
+          ></div>
           
-          {/* Pulsing ring */}
-          <div className="absolute -inset-2 border border-emerald-300/40 rounded-full animate-pulse"></div>
-          
-          {/* Logo Container */}
-          <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-rose-500 via-pink-500 to-emerald-500 p-0.5 shadow-2xl">
-            <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white/20"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
-              
-              {/* Animated spinner inside logo */}
-              <svg className="w-16 h-16" viewBox="0 0 100 100">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="35"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  strokeWidth="3"
-                  className="opacity-20"
+          <div className="relative w-28 h-28 md:w-36 md:h-36">
+            <div className="absolute -inset-3 border-2 border-dashed border-rose-300/50 rounded-full animate-spin-slow"></div>
+            <div className="absolute -inset-1.5 border border-emerald-300/40 rounded-full animate-pulse"></div>
+            
+            <div className="relative w-full h-full rounded-full bg-gradient-to-br from-rose-500 via-pink-500 to-emerald-500 p-0.5 shadow-2xl">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-white/20 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
+                <img 
+                  src="/MatG.jpg" 
+                  alt="Matungulu Girls High School Logo" 
+                  className="w-[85%] h-[85%] object-cover rounded-full relative z-10"
                 />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="35"
-                  fill="none"
-                  stroke="url(#spinnerGradient)"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeDasharray="220"
-                  strokeDashoffset={220 - (220 * progress) / 100}
-                  className="transition-all duration-300"
-                  transform="rotate(-90 50 50)"
-                />
-                <defs>
-                  <linearGradient id="spinnerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#f43f5e" />
-                    <stop offset="50%" stopColor="#ec4899" />
-                    <stop offset="100%" stopColor="#10b981" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              
-              {/* Center dot */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-2 h-2 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full animate-pulse"></div>
               </div>
             </div>
           </div>
         </div>
 
         {/* School Name */}
-        <div className="text-center mb-3">
-          <h2 className="text-xl md:text-2xl font-serif font-black tracking-wide text-gray-800">
-            MATUNGULU GIRLS'
-          </h2>
-          <p className="text-gray-600 text-[10px] md:text-xs tracking-[0.3em] font-medium mt-1">
-            SENIOR SCHOOL
+        <div className="text-center mb-4">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-black tracking-wide text-gray-800">
+            {schoolName.split("'")[0]}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-emerald-600">'</span>
+            {schoolName.split("'")[1]}
+          </h1>
+          
+          <div className="flex items-center justify-center gap-3 my-3">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-rose-300"></div>
+            <div className="w-1.5 h-1.5 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full rotate-45"></div>
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-emerald-300"></div>
+          </div>
+          
+          <p className="text-gray-600 text-[10px] md:text-xs tracking-[0.3em] font-medium">
+            {established}
           </p>
         </div>
 
         {/* Motto */}
         <div className="text-center mb-6">
-          <p className="text-base md:text-lg font-serif italic tracking-wide text-gray-700">
-            "Strive to Excel"
+          <p className="text-xl md:text-2xl lg:text-3xl font-serif italic tracking-wide text-gray-700">
+            "{motto}"
           </p>
         </div>
 
-        {/* Loading Message */}
-        <div className="h-8 flex items-center justify-center mb-4">
-          <p className="text-gray-600 text-sm md:text-base font-medium tracking-wide">
-            {loadingMessages[loadingText]}
-            <span className="inline-flex ml-1">
-              <span className="animate-bounce" style={{ animationDelay: '0s' }}>.</span>
-              <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>.</span>
-              <span className="animate-bounce" style={{ animationDelay: '0.4s' }}>.</span>
-            </span>
+        {/* Tagline */}
+        <div className="text-center mb-8">
+          <p className="text-xs md:text-sm text-gray-500 tracking-wider">
+            {tagline}
           </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-48 md:w-64 h-0.5 bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-rose-400 via-pink-400 to-emerald-400 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+        {/* Loading Indicator */}
+        <div className="flex flex-col items-center gap-4 w-64">
+          <div className="h-8 flex items-center justify-center">
+            <p className="text-gray-600 text-sm md:text-base font-medium tracking-wide">
+              {loadingMessages[textIndex]}
+              <span className="inline-flex ml-1">
+                <span className="animate-bounce" style={{ animationDelay: '0s' }}>.</span>
+                <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>.</span>
+                <span className="animate-bounce" style={{ animationDelay: '0.4s' }}>.</span>
+              </span>
+            </p>
+          </div>
+
+          <div className="relative w-full h-0.5 bg-gray-200 rounded-full overflow-hidden">
+            <div 
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-400 via-pink-400 to-emerald-400 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 mt-2">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="relative"
+                style={{ animationDelay: `${i * 0.15}s` }}
+              >
+                <div className="w-1.5 h-1.5 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full animate-pulse"></div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Decorative dots */}
-        <div className="flex items-center justify-center gap-2 mt-4">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="w-1.5 h-1.5 bg-gradient-to-r from-rose-400 to-emerald-400 rounded-full animate-pulse"
-              style={{ animationDelay: `${i * 0.15}s` }}
-            />
-          ))}
-        </div>
-
-        {/* Bottom decorative elements */}
-        <div className="absolute bottom-8 flex items-center gap-6">
-          {[FaGraduationCap, FaBookOpen, FaStar, FaFeatherAlt].map((Icon, i) => (
-            <span 
-              key={i}
-              className="text-emerald-400 text-lg opacity-60"
-              style={{ 
-                animation: `float-icon ${3 + i}s ease-in-out infinite`,
-                animationDelay: `${i * 0.3}s`
-              }}
+        {/* Decorative Bottom Elements */}
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+          <div className="flex items-center gap-6">
+            {/* Eagle, Flower, Book, Sparkles as colored icons */}
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 3s ease-in-out infinite`, animationDelay: `0s`, color: '#6366f1' }}
             >
-              <Icon />
+              <GiEagleHead />
             </span>
-          ))}
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 4s ease-in-out infinite`, animationDelay: `0.3s`, color: '#f472b6' }}
+            >
+              <GiFlowerEmblem />
+            </span>
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 5s ease-in-out infinite`, animationDelay: `0.6s`, color: '#fbbf24' }}
+            >
+              <FaBook />
+            </span>
+            <span
+              className="text-gray-400 text-sm opacity-60"
+              style={{ animation: `float-icon 6s ease-in-out infinite`, animationDelay: `0.9s`, color: '#10b981' }}
+            >
+              <GiSparkles />
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Custom Animations */}
-      <style jsx>{`
+      <style jsx global>{`
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.3; transform: scale(1); }
           50% { opacity: 0.6; transform: scale(1.05); }
@@ -578,6 +576,12 @@ const LoadingSpinner = () => {
           50% { transform: translateY(-5px); }
         }
         
+        @keyframes beam {
+          0% { transform: translateX(-100%); opacity: 0; }
+          50% { opacity: 0.8; }
+          100% { transform: translateX(100%); opacity: 0; }
+        }
+        
         @keyframes shimmer {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(200%); }
@@ -596,8 +600,16 @@ const LoadingSpinner = () => {
           animation: spin-slow 30s linear infinite;
         }
         
+        .animation-delay-1000 {
+          animation-delay: 1s;
+        }
+        
         .animation-delay-2000 {
           animation-delay: 2s;
+        }
+        
+        .animate-beam {
+          animation: beam 4s ease-in-out infinite;
         }
         
         .animate-shimmer {
@@ -611,7 +623,6 @@ const LoadingSpinner = () => {
     </div>
   );
 };
-
 
   // Fetch student count
   const fetchStudentCount = async () => {
