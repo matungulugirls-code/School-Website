@@ -119,7 +119,7 @@ export default function StaffProfilePage() {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`/api/SchoolTeam/${id}`);
+        const response = await fetch(`/api/staff/${id}`);
         
         if (!response.ok) {
           throw new Error(`Staff member not available (${response.status})`);

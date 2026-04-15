@@ -683,7 +683,7 @@ const loadingMessages = [
         smsRes,
         achievementsRes
       ] = await Promise.allSettled([
-        fetch('/api/SchoolTeam'),
+        fetch('/api/staff'),
         fetch('/api/subscriber'),
         fetch('/api/events'),
         fetch('/api/news'),

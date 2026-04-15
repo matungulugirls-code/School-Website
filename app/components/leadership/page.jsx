@@ -22,7 +22,10 @@ import {
   FiGlobe,
   FiLinkedin,
   FiTwitter,
-  FiTrendingUp
+  FiTrendingUp,
+  FiSearch,
+  FiFilter,
+  FiDownload
 } from 'react-icons/fi';
 import { 
   Loader2,
@@ -36,7 +39,8 @@ import {
   Building2,
   Layers,
   Sparkles,
-  Shield
+  Shield,
+  ChevronDown
 } from "lucide-react";
 
 // Helper function for image URLs
@@ -78,6 +82,14 @@ const ModernStaffLeadership = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [viewMode, setViewMode] = useState('principal');
   const [activeTab, setActiveTab] = useState('featured');
+  
+  // Table state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterRole, setFilterRole] = useState('all');
+  const [sortField, setSortField] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Check for mobile screen size
   useEffect(() => {
@@ -90,100 +102,95 @@ const ModernStaffLeadership = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-// Fetch staff data from API
-useEffect(() => {
-  const fetchStaff = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/SchoolTeam');
-      const data = await response.json();
+  // Fetch staff data from API
+  useEffect(() => {
+    const fetchStaff = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/staff');
+        const data = await response.json();
 
-      if (data.success && Array.isArray(data.staff)) {
-        const allStaff = data.staff;
-        setStaff(allStaff);
+        if (data.success && Array.isArray(data.staff)) {
+          const allStaff = data.staff;
+          setStaff(allStaff);
 
-        // ========== CORRECTED HIERARCHY LOGIC ==========
+          // ========== CORRECTED HIERARCHY LOGIC ==========
 
-        // 1. Find Principal - EXACT MATCH only (no partial matches)
-        const foundPrincipal = allStaff.find(s => 
-          // Direct ID match for Mr David Muange
-          s.id === 1 ||
-          // Exact role match - check for "Principal" exactly
-          s.role === 'Principal' ||
-          s.role?.toLowerCase() === 'principal' ||
-          // Position contains principal BUT ensure it's not a deputy
-          (s.position && (
-            s.position.toLowerCase().includes('chief principal') || 
-            s.position.toLowerCase().includes('principal')
-          ) && !s.position.toLowerCase().includes('deputy'))
-        );
+          // 1. Find Principal - EXACT MATCH only
+          const foundPrincipal = allStaff.find(s => 
+            s.id === 1 ||
+            s.role === 'Principal' ||
+            s.role?.toLowerCase() === 'principal' ||
+            (s.position && (
+              s.position.toLowerCase().includes('chief principal') || 
+              s.position.toLowerCase().includes('principal')
+            ) && !s.position.toLowerCase().includes('deputy'))
+          );
 
-        // Set principal - use found principal or first staff as fallback
-        const selectedPrincipal = foundPrincipal || allStaff[0];
-        setPrincipal(selectedPrincipal);
-        setFeaturedStaff(selectedPrincipal);
+          const selectedPrincipal = foundPrincipal || allStaff[0];
+          setPrincipal(selectedPrincipal);
+          setFeaturedStaff(selectedPrincipal);
 
-        // 2. Find all deputies (excluding the principal)
-        const allDeputies = allStaff.filter(s => 
-          (s.role?.toLowerCase().includes('deputy') || 
-           s.position?.toLowerCase().includes('deputy')) &&
-          s.id !== selectedPrincipal.id // Exclude the principal
-        );
+          // 2. Find all deputies
+          const allDeputies = allStaff.filter(s => 
+            (s.role?.toLowerCase().includes('deputy') || 
+             s.position?.toLowerCase().includes('deputy')) &&
+            s.id !== selectedPrincipal.id
+          );
 
-        // 3. Academics Deputy - based on position containing "academics"
-        const foundAcademicsDeputy = allDeputies.find(s => 
-          s.position?.toLowerCase().includes('academics')
-        );
+          // 3. Academics Deputy
+          const foundAcademicsDeputy = allDeputies.find(s => 
+            s.position?.toLowerCase().includes('academics')
+          );
+          setAcademicsDeputy(foundAcademicsDeputy || null);
 
-        // 4. Administration Deputy - based on position containing "admin" or "administration"
-        const foundAdminDeputy = allDeputies.find(s => 
-          s.position?.toLowerCase().includes('admin') || 
-          s.position?.toLowerCase().includes('administration')
-        );
+          // 4. Administration Deputy
+          const foundAdminDeputy = allDeputies.find(s => 
+            s.position?.toLowerCase().includes('admin') || 
+            s.position?.toLowerCase().includes('administration')
+          );
+          setAdminDeputy(foundAdminDeputy || null);
 
-        setAcademicsDeputy(foundAcademicsDeputy || null);
-        setAdminDeputy(foundAdminDeputy || null);
+          // 5. Find ALL Teachers
+          const allTeachers = allStaff.filter(s => 
+            (s.role?.toLowerCase().includes('teacher') || 
+             s.position?.toLowerCase().includes('teacher')) &&
+            s.id !== selectedPrincipal.id &&
+            !allDeputies.includes(s)
+          );
+          setTeachers(allTeachers);
 
-        // 5. Find ALL Teachers - Everyone with teacher role/position
-        const allTeachers = allStaff.filter(s => 
-          (s.role?.toLowerCase().includes('teacher') || 
-           s.position?.toLowerCase().includes('teacher')) &&
-          s.id !== selectedPrincipal.id && // Not principal
-          !allDeputies.includes(s) // Not a deputy
-        );
-        setTeachers(allTeachers);
+          // 6. Find Support Staff
+          const allSupportStaff = allStaff.filter(s => 
+            s.id !== selectedPrincipal.id &&
+            !allDeputies.includes(s) &&
+            !allTeachers.includes(s)
+          );
+          setSupportStaff(allSupportStaff);
 
-        // 6. Find Support Staff - Everyone else
-        const allSupportStaff = allStaff.filter(s => 
-          s.id !== selectedPrincipal.id && // Not principal
-          !allDeputies.includes(s) && // Not a deputy
-          !allTeachers.includes(s) // Not a teacher
-        );
-        setSupportStaff(allSupportStaff);
+          console.log('✅ Staff loaded:', {
+            principal: selectedPrincipal?.name,
+            academicsDeputy: foundAcademicsDeputy?.name,
+            adminDeputy: foundAdminDeputy?.name,
+            teachers: allTeachers.length,
+            supportStaff: allSupportStaff.length
+          });
 
-        // Debug: Log the hierarchy to verify
-        console.log('✅ HIERARCHY ASSIGNMENT:');
-        console.log('Principal:', selectedPrincipal?.name);
-        console.log('Academics Deputy:', foundAcademicsDeputy?.name || 'None');
-        console.log('Admin Deputy:', foundAdminDeputy?.name || 'None');
-        console.log('Teachers:', allTeachers.length);
-        console.log('Support Staff:', allSupportStaff.length);
-
-        // ========== END OF HIERARCHY LOGIC ==========
-
-      } else {
-        throw new Error('Format error: Expected successful staff array');
+        } else {
+          throw new Error('Format error: Expected successful staff array');
+        }
+      } catch (err) {
+        console.error('Fetch Error:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('Fetch Error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchStaff();
-}, []);  // Handle staff click
+    fetchStaff();
+  }, []);
+
+  // Handle staff click
   const handleStaffClick = (staffMember) => {
     if (principal?.id === staffMember.id) {
       setViewMode('principal');
@@ -192,7 +199,6 @@ useEffect(() => {
     }
     setFeaturedStaff(staffMember);
     
-    // Scroll main card into view on mobile
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setTimeout(() => {
         const mainCard = document.querySelector('.lg\\:col-span-8');
@@ -228,7 +234,7 @@ useEffect(() => {
     return phone;
   };
 
-  // Get role badge with emerald/dark green theme
+  // Get role badge
   const getRoleBadge = (role, position) => {
     if (!role && !position) return { 
       bg: 'bg-emerald-100', 
@@ -245,7 +251,8 @@ useEffect(() => {
         bg: 'bg-gradient-to-r from-emerald-900 to-teal-800', 
         text: 'text-white', 
         border: 'border-emerald-700',
-        icon: <Crown className="w-3 h-3 text-yellow-300" />
+        icon: <Crown className="w-3 h-3 text-yellow-300" />,
+        label: 'PRINCIPAL'
       };
     }
     if (roleLower.includes('deputy') || positionLower.includes('deputy')) {
@@ -253,7 +260,8 @@ useEffect(() => {
         bg: 'bg-gradient-to-r from-teal-700 to-emerald-700', 
         text: 'text-white', 
         border: 'border-teal-600',
-        icon: <Medal className="w-3 h-3 text-yellow-200" />
+        icon: <Medal className="w-3 h-3 text-yellow-200" />,
+        label: 'DEPUTY'
       };
     }
     if (roleLower.includes('teacher') || positionLower.includes('teacher')) {
@@ -261,75 +269,127 @@ useEffect(() => {
         bg: 'bg-gradient-to-r from-emerald-600 to-teal-600', 
         text: 'text-white', 
         border: 'border-emerald-500',
-        icon: <BookOpen className="w-3 h-3 text-white" />
+        icon: <BookOpen className="w-3 h-3 text-white" />,
+        label: 'TEACHER'
       };
     }
     return { 
-      bg: 'bg-gradient-to-r from-emerald-800 to-teal-700', 
+      bg: 'bg-gradient-to-r from-slate-600 to-slate-700', 
       text: 'text-white', 
-      border: 'border-emerald-600',
-      icon: <Users className="w-3 h-3 text-white" />
+      border: 'border-slate-500',
+      icon: <Users className="w-3 h-3 text-white" />,
+      label: 'STAFF'
     };
   };
 
-  // Simplified but elegant spinner
- if (loading) {
-  return (
-    <div className="min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] flex items-center justify-center bg-gradient-to-b from-emerald-900/5 to-transparent px-4">
-      <div className="text-center space-y-4 sm:space-y-5 md:space-y-6 w-full max-w-[280px] xs:max-w-sm mx-auto">
-        
-        {/* Animated Spinner with Rings - Responsive sizing */}
-        <div className="relative flex justify-center">
-          {/* Outer glow - responsive sizing */}
-          <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-20 animate-ping scale-75 xs:scale-90 sm:scale-100"></div>
-          <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-10 animate-pulse scale-75 xs:scale-90 sm:scale-100"></div>
-          
-          {/* Double ring spinner - responsive sizing */}
-          <div className="relative w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24">
-            {/* Static background ring */}
-            <div className="absolute inset-0 rounded-full border-2 xs:border-3 sm:border-4 border-emerald-100"></div>
-            
-            {/* Spinning foreground ring */}
-            <div className="absolute inset-0 rounded-full border-2 xs:border-3 sm:border-4 border-t-emerald-600 border-r-emerald-600 border-b-transparent border-l-transparent animate-spin"></div>
-            
-            {/* Center icon - responsive sizing */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <FiHeart className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10 text-emerald-600" />
+  // ========== TABLE LOGIC ==========
+  
+  // Combine all staff for table view
+  const allStaffForTable = [...(principal ? [principal] : []), ...(academicsDeputy ? [academicsDeputy] : []), ...(adminDeputy ? [adminDeputy] : []), ...teachers, ...supportStaff];
+  
+  // Filter staff based on search and role filter
+  const filteredStaff = allStaffForTable.filter(member => {
+    const matchesSearch = searchTerm === '' || 
+      member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.position?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.subject?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    let roleCategory = 'other';
+    if (member.id === principal?.id) roleCategory = 'principal';
+    else if (member.id === academicsDeputy?.id || member.id === adminDeputy?.id) roleCategory = 'deputy';
+    else if (teachers.includes(member)) roleCategory = 'teacher';
+    else roleCategory = 'support';
+    
+    const matchesRole = filterRole === 'all' || roleCategory === filterRole;
+    
+    return matchesSearch && matchesRole;
+  });
+  
+  // Sort staff
+  const sortedStaff = [...filteredStaff].sort((a, b) => {
+    let aVal = '', bVal = '';
+    
+    switch(sortField) {
+      case 'name':
+        aVal = a.name || '';
+        bVal = b.name || '';
+        break;
+      case 'position':
+        aVal = a.position || a.role || '';
+        bVal = b.position || b.role || '';
+        break;
+      case 'department':
+        aVal = a.department || a.subject || '';
+        bVal = b.department || b.subject || '';
+        break;
+      case 'contact':
+        aVal = a.phone || a.email || '';
+        bVal = b.phone || b.email || '';
+        break;
+      default:
+        aVal = a.name || '';
+        bVal = b.name || '';
+    }
+    
+    if (sortDirection === 'asc') {
+      return aVal.localeCompare(bVal);
+    } else {
+      return bVal.localeCompare(aVal);
+    }
+  });
+  
+  // Pagination
+  const totalPages = Math.ceil(sortedStaff.length / itemsPerPage);
+  const paginatedStaff = sortedStaff.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  
+  // Handle sort
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+  
+  // Get role class for table row styling
+  const getRoleRowClass = (member) => {
+    if (member.id === principal?.id) return 'border-l-4 border-l-emerald-600 bg-emerald-50/30';
+    if (member.id === academicsDeputy?.id || member.id === adminDeputy?.id) return 'border-l-4 border-l-teal-500 bg-teal-50/30';
+    if (teachers.includes(member)) return 'hover:bg-emerald-50/20';
+    return 'hover:bg-slate-50';
+  };
+
+  // Loading spinner
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-emerald-900/5 to-transparent px-4">
+        <div className="text-center space-y-4 w-full max-w-[280px] mx-auto">
+          <div className="relative flex justify-center">
+            <div className="absolute inset-0 rounded-full bg-emerald-400 opacity-20 animate-ping scale-75"></div>
+            <div className="relative w-16 h-16">
+              <div className="absolute inset-0 rounded-full border-2 border-emerald-100"></div>
+              <div className="absolute inset-0 rounded-full border-2 border-t-emerald-600 border-r-emerald-600 border-b-transparent border-l-transparent animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <FiHeart className="w-6 h-6 text-emerald-600" />
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Text Content - Responsive typography */}
-        <div className="space-y-2 sm:space-y-3">
-          <h3 className="text-lg xs:text-xl sm:text-2xl font-black text-emerald-900 tracking-tight">
-            Matungulu Girls
-          </h3>
-          
-          <p className="text-xs xs:text-sm sm:text-base font-bold text-emerald-700 animate-pulse">
-            Loading Staff Directory
-          </p>
-          
-          {/* Loading dots with staggered animation - responsive sizing */}
-          <div className="flex justify-center gap-1.5 xs:gap-2 mt-2 xs:mt-3 sm:mt-4">
-            <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-            <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-            <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-black text-emerald-900">Matungulu Girls</h3>
+            <p className="text-xs font-bold text-emerald-700 animate-pulse">Loading Staff Directory</p>
+            <p className="text-[10px] font-medium text-emerald-600/70">Meet our dedicated team...</p>
+            <p className="text-[8px] font-bold text-emerald-400 uppercase tracking-wider">"Strive to Excel"</p>
           </div>
-
-          {/* Loading message - responsive */}
-          <p className="text-[10px] xs:text-xs sm:text-sm font-medium text-emerald-600/70 mt-3 xs:mt-4 sm:mt-6 animate-pulse">
-            Meet our dedicated team...
-          </p>
-
-          {/* School motto - responsive */}
-          <p className="text-[8px] xs:text-[10px] sm:text-xs font-bold text-emerald-400 uppercase tracking-wider mt-4 xs:mt-6 sm:mt-8">
-            "Strive to Excel"
-          </p>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   // Error state
   if (error) {
@@ -341,7 +401,7 @@ useEffect(() => {
           <p className="text-slate-600 mb-6">{error}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-gradient-to-r from-emerald-700 to-teal-700 text-white font-bold rounded-xl hover:from-emerald-800 hover:to-teal-800 transition-all shadow-lg shadow-emerald-200"
+            className="px-6 py-3 bg-gradient-to-r from-emerald-700 to-teal-700 text-white font-bold rounded-xl hover:from-emerald-800 hover:to-teal-800 transition-all shadow-lg"
           >
             Try Again
           </button>
@@ -368,28 +428,22 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-teal-50 font-sans">
       
-      {/* Header - Matching navbar gradient */}
+      {/* Header */}
       <div className="bg-gradient-to-r from-emerald-900 via-teal-800 to-slate-900 pt-16 pb-24 relative overflow-hidden">
-        {/* Decorative Pattern */}
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:40px_40px]" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center ">
-          {/* Balanced Badge - Smaller on mobile */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-4 sm:mb-6">
             <Sparkles className="w-3 h-3 sm:w-4 text-emerald-300" />
-            <span className="text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase">
-              Our Dedicated Team
-            </span>
+            <span className="text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase">Our Dedicated Team</span>
           </div>
           
-          {/* Balanced Title - Drastically reduced for XS screens */}
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight leading-tight">
             School Leadership <br className="sm:hidden" /> & Staff
           </h1>
           
-          {/* Balanced Paragraph - Smaller text and narrower width on mobile */}
           <p className="text-xs sm:text-base md:text-lg text-emerald-100 max-w-xl sm:max-w-3xl mx-auto font-light leading-relaxed px-4">
             Meet the passionate educators and administrators committed to excellence at Matungulu Girls High School
           </p>
@@ -428,7 +482,7 @@ useEffect(() => {
 
         {activeTab === 'featured' ? (
           <>
-            {/* Main Grid */}
+            {/* Featured Card View - Same as before */}
             <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 items-start">
               
               {/* Featured Hero Card */}
@@ -489,7 +543,7 @@ useEffect(() => {
                       )}
                     </div>
 
-                    {/* Back to Principal Button - Show when viewing other staff */}
+                    {/* Back to Principal Button */}
                     {viewMode === 'other' && principal && (
                       <button
                         onClick={returnToPrincipal}
@@ -604,7 +658,7 @@ useEffect(() => {
               {/* Sidebar Cards */}
               <div className="lg:col-span-4 space-y-4 mt-4 lg:mt-0">
                 
-                {/* PRINCIPAL CARD - Top of hierarchy */}
+                {/* PRINCIPAL CARD */}
                 {principal && (
                   <button
                     key={principal.id}
@@ -659,7 +713,7 @@ useEffect(() => {
                   </button>
                 )}
 
-                {/* ACADEMICS DEPUTY CARD - Second in hierarchy */}
+                {/* ACADEMICS DEPUTY CARD */}
                 {academicsDeputy && (
                   <button
                     key={academicsDeputy.id}
@@ -714,7 +768,7 @@ useEffect(() => {
                   </button>
                 )}
 
-                {/* ADMIN DEPUTY CARD - Third in hierarchy */}
+                {/* ADMIN DEPUTY CARD */}
                 {adminDeputy && (
                   <button
                     key={adminDeputy.id}
@@ -810,259 +864,269 @@ useEffect(() => {
             </div>
           </>
         ) : (
-          /* All Staff Grid View - With Proper Hierarchy */
-          <div className="space-y-8">
+          /* ========== MODERN TABLE VIEW FOR ALL STAFF ========== */
+          <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 overflow-hidden">
             
-            {/* PRINCIPAL SECTION - Top of hierarchy */}
-            {principal && (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 px-2">
-                  <Crown className="w-5 h-5 text-emerald-700" />
-                  <h3 className="text-sm font-black text-emerald-800 uppercase tracking-wider">School Principal</h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-emerald-200 to-transparent"></div>
+            {/* Table Header with Search and Filters */}
+            <div className="p-4 sm:p-6 border-b border-emerald-100 bg-gradient-to-r from-emerald-50/50 to-white">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                  <h3 className="text-lg font-black text-emerald-800 flex items-center gap-2">
+                    <Users className="w-5 h-5" />
+                    Complete Staff Directory
+                  </h3>
+                  <p className="text-sm text-slate-500 mt-1">
+                    {sortedStaff.length} staff members • Page {currentPage} of {totalPages || 1}
+                  </p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  <button
-                    key={principal.id}
-                    onClick={() => {
-                      handleStaffClick(principal);
-                      setActiveTab('featured');
-                    }}
-                    className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 border-2 border-emerald-700/30 relative"
-                  >
-                    {/* Principal Badge */}
-                    <div className="absolute top-2 right-2 z-10">
-                      <div className="px-2 py-0.5 bg-gradient-to-r from-emerald-900 to-teal-800 text-white text-[8px] font-bold rounded-full flex items-center gap-1">
-                        <Crown className="w-3 h-3 text-yellow-300" />
-                        PRINCIPAL
-                      </div>
-                    </div>
-                    <div className="relative h-32 overflow-hidden bg-gradient-to-br from-emerald-900 to-teal-800">
-                      {principal.image ? (
-                        <img
-                          src={getImageUrl(principal.image)}
-                          alt={principal.name}
-                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(principal.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <GraduationCap className="w-8 h-8 text-white/70" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3 bg-gradient-to-r from-emerald-50 to-white">
-                      <h4 className="font-bold text-slate-900 text-sm truncate">{principal.name}</h4>
-                      <p className="text-xs text-emerald-700 font-medium truncate">{principal.position || 'Chief Principal'}</p>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* DEPUTY PRINCIPALS SECTION - Second in hierarchy */}
-            {(academicsDeputy || adminDeputy) && (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 px-2">
-                  <Medal className="w-5 h-5 text-teal-600" />
-                  <h3 className="text-sm font-black text-teal-700 uppercase tracking-wider">Deputy Principals</h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-teal-200 to-transparent"></div>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {/* Academics Deputy */}
-                  {academicsDeputy && (
-                    <button
-                      key={academicsDeputy.id}
-                      onClick={() => {
-                        handleStaffClick(academicsDeputy);
-                        setActiveTab('featured');
+                
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                  {/* Search Bar */}
+                  <div className="relative">
+                    <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search by name, position, department..."
+                      value={searchTerm}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1);
                       }}
-                      className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 border border-teal-200"
-                    >
-                      <div className="relative h-32 overflow-hidden bg-gradient-to-br from-teal-600 to-emerald-600">
-                        {academicsDeputy.image ? (
-                          <img
-                            src={getImageUrl(academicsDeputy.image)}
-                            alt={academicsDeputy.name}
-                            className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(academicsDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Users className="w-8 h-8 text-white/70" />
-                          </div>
-                        )}
-                        {/* Deputy Badge */}
-                        <div className="absolute top-2 right-2">
-                          <div className="px-2 py-0.5 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[8px] font-bold rounded-full">
-                            ACADEMICS
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-3">
-                        <h4 className="font-bold text-slate-900 text-sm truncate">{academicsDeputy.name}</h4>
-                        <p className="text-xs text-slate-500 truncate">{academicsDeputy.position || 'Deputy Principal (Academics)'}</p>
-                      </div>
-                    </button>
-                  )}
-
-                  {/* Admin Deputy */}
-                  {adminDeputy && (
-                    <button
-                      key={adminDeputy.id}
-                      onClick={() => {
-                        handleStaffClick(adminDeputy);
-                        setActiveTab('featured');
+                      className="pl-9 pr-4 py-2 border border-emerald-200 rounded-xl text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    />
+                  </div>
+                  
+                  {/* Role Filter */}
+                  <div className="relative">
+                    <select
+                      value={filterRole}
+                      onChange={(e) => {
+                        setFilterRole(e.target.value);
+                        setCurrentPage(1);
                       }}
-                      className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 border border-teal-200"
+                      className="pl-4 pr-8 py-2 border border-emerald-200 rounded-xl text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
-                      <div className="relative h-32 overflow-hidden bg-gradient-to-br from-teal-600 to-emerald-600">
-                        {adminDeputy.image ? (
-                          <img
-                            src={getImageUrl(adminDeputy.image)}
-                            alt={adminDeputy.name}
-                            className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(adminDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Users className="w-8 h-8 text-white/70" />
-                          </div>
-                        )}
-                        {/* Deputy Badge */}
-                        <div className="absolute top-2 right-2">
-                          <div className="px-2 py-0.5 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[8px] font-bold rounded-full">
-                            ADMIN
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-3">
-                        <h4 className="font-bold text-slate-900 text-sm truncate">{adminDeputy.name}</h4>
-                        <p className="text-xs text-slate-500 truncate">{adminDeputy.position || 'Deputy Principal (Administration)'}</p>
-                      </div>
-                    </button>
-                  )}
+                      <option value="all">All Roles</option>
+                      <option value="principal">Principal</option>
+                      <option value="deputy">Deputy Principals</option>
+                      <option value="teacher">Teaching Staff</option>
+                      <option value="support">Support Staff</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  </div>
                 </div>
               </div>
-            )}
-
-            {/* TEACHERS SECTION - Third in hierarchy */}
-            {teachers.length > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 px-2">
-                  <BookOpen className="w-5 h-5 text-emerald-600" />
-                  <h3 className="text-sm font-black text-emerald-700 uppercase tracking-wider">Teaching Staff</h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-emerald-200 to-transparent"></div>
-                  <span className="text-xs font-bold text-emerald-600">{teachers.length} Teachers</span>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {teachers.map((teacher) => {
-                    const badge = getRoleBadge(teacher.role, teacher.position);
+            </div>
+            
+            {/* Staff Table - Responsive with horizontal scroll on mobile */}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('name')}>
+                      <div className="flex items-center gap-1">
+                        Staff Member
+                        {sortField === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </div>
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('position')}>
+                      <div className="flex items-center gap-1">
+                        Position
+                        {sortField === 'position' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </div>
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('department')}>
+                      <div className="flex items-center gap-1">
+                        Department / Subject
+                        {sortField === 'department' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </div>
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('contact')}>
+                      <div className="flex items-center gap-1">
+                        Contact
+                        {sortField === 'contact' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </div>
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Role</th>
+                    <th className="px-4 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {paginatedStaff.map((member) => {
+                    const roleBadge = getRoleBadge(member.role, member.position);
+                    const isPrincipal = member.id === principal?.id;
+                    const isDeputy = member.id === academicsDeputy?.id || member.id === adminDeputy?.id;
+                    
                     return (
-                      <button
-                        key={teacher.id}
-                        onClick={() => {
-                          handleStaffClick(teacher);
-                          setActiveTab('featured');
-                        }}
-                        className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 border border-emerald-100"
-                      >
-                        <div className="relative h-32 overflow-hidden bg-gradient-to-br from-emerald-100 to-teal-100">
-                          {teacher.image ? (
-                            <img
-                              src={getImageUrl(teacher.image)}
-                              alt={teacher.name}
-                              className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(teacher.name)}&background=059669&color=fff&bold=true&size=64`;
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <BookOpen className="w-8 h-8 text-emerald-600/50" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="p-3">
-                          <h4 className="font-bold text-slate-900 text-sm truncate">{teacher.name}</h4>
-                          <p className="text-xs text-slate-500 truncate mb-2">{teacher.subject || teacher.department || 'Teacher'}</p>
-                          <div className={`inline-block px-2 py-0.5 ${badge.bg} ${badge.text} text-[8px] font-bold rounded-full`}>
-                            TEACHER
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* SUPPORT STAFF SECTION - Fourth in hierarchy */}
-            {supportStaff.length > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 px-2">
-                  <Users className="w-5 h-5 text-slate-600" />
-                  <h3 className="text-sm font-black text-slate-700 uppercase tracking-wider">Support Staff</h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent"></div>
-                  <span className="text-xs font-bold text-slate-600">{supportStaff.length} Members</span>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {supportStaff.map((member) => {
-                    const badge = getRoleBadge(member.role, member.position);
-                    return (
-                      <button
-                        key={member.id}
+                      <tr 
+                        key={member.id} 
+                        className={`${getRoleRowClass(member)} transition-colors cursor-pointer hover:bg-emerald-50/40`}
                         onClick={() => {
                           handleStaffClick(member);
                           setActiveTab('featured');
                         }}
-                        className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 border border-slate-200"
                       >
-                        <div className="relative h-32 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-                          {member.image ? (
-                            <img
-                              src={getImageUrl(member.image)}
-                              alt={member.name}
-                              className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=64748b&color=fff&bold=true&size=64`;
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Users className="w-8 h-8 text-slate-500/50" />
+                        {/* Name Column with Avatar */}
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-100 to-teal-100 flex-shrink-0">
+                              {member.image ? (
+                                <img
+                                  src={getImageUrl(member.image)}
+                                  alt={member.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  {isPrincipal ? <Crown className="w-5 h-5 text-emerald-600" /> : <FiUser className="w-5 h-5 text-emerald-500" />}
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                        <div className="p-3">
-                          <h4 className="font-bold text-slate-900 text-sm truncate">{member.name}</h4>
-                          <p className="text-xs text-slate-500 truncate">{member.position || member.role || 'Staff'}</p>
-                        </div>
+                            <div>
+                              <p className="font-bold text-slate-900 text-sm">{member.name}</p>
+                              {member.qualification && (
+                                <p className="text-xs text-slate-500">{member.qualification}</p>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        
+                        {/* Position Column */}
+                        <td className="px-4 py-3">
+                          <p className="text-sm text-slate-700 font-medium">
+                            {member.position || member.role || 'Staff Member'}
+                          </p>
+                        </td>
+                        
+                        {/* Department/Subject Column */}
+                        <td className="px-4 py-3">
+                          <p className="text-sm text-slate-600">
+                            {member.department || member.subject || '—'}
+                          </p>
+                        </td>
+                        
+                        {/* Contact Column */}
+                        <td className="px-4 py-3">
+                          <div className="space-y-1">
+                            {member.email && (
+                              <a href={`mailto:${member.email}`} className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                <FiMail className="w-3 h-3" />
+                                <span className="truncate max-w-[150px]">{member.email}</span>
+                              </a>
+                            )}
+                            {member.phone && (
+                              <a href={`tel:${member.phone}`} className="text-xs text-slate-500 hover:text-slate-700 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                <FiPhone className="w-3 h-3" />
+                                <span>{formatPhone(member.phone)}</span>
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                        
+                        {/* Role Badge Column */}
+                        <td className="px-4 py-3">
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${roleBadge.bg} ${roleBadge.text}`}>
+                            {roleBadge.icon}
+                            {roleBadge.label}
+                          </span>
+                        </td>
+                        
+                        {/* Action Column */}
+                        <td className="px-4 py-3 text-center">
+                          <button 
+                            className="text-emerald-600 hover:text-emerald-700 text-xs font-semibold flex items-center gap-1 mx-auto"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleStaffClick(member);
+                              setActiveTab('featured');
+                            }}
+                          >
+                            View Profile
+                            <FiChevronRight className="w-3 h-3" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            
+            {/* Empty State */}
+            {sortedStaff.length === 0 && (
+              <div className="text-center py-12">
+                <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <p className="text-slate-500 font-medium">No staff members found</p>
+                <p className="text-sm text-slate-400 mt-1">Try adjusting your search or filter</p>
+              </div>
+            )}
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="px-4 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                >
+                  <FiChevronRight className="w-4 h-4 rotate-180" />
+                  Previous
+                </button>
+                
+                <div className="flex gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                          currentPage === pageNum
+                            ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white'
+                            : 'text-slate-600 hover:bg-emerald-100'
+                        }`}
+                      >
+                        {pageNum}
                       </button>
                     );
                   })}
                 </div>
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                >
+                  Next
+                  <FiChevronRight className="w-4 h-4" />
+                </button>
               </div>
             )}
-
-            {/* If no staff at all */}
-            {staff.length === 0 && (
-              <div className="text-center py-12">
-                <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                <p className="text-slate-500">No staff members found</p>
-              </div>
-            )}
+            
+            {/* Table Footer Stats */}
+            <div className="px-4 py-3 bg-slate-50/80 border-t border-slate-100 text-xs text-slate-500 flex justify-between items-center">
+              <span>Showing {paginatedStaff.length} of {sortedStaff.length} staff members</span>
+              <span className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-600"></span> Principal</span>
+                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-teal-500"></span> Deputy</span>
+                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400"></span> Teacher</span>
+                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-400"></span> Support</span>
+              </span>
+            </div>
           </div>
         )}
 

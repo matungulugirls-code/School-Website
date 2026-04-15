@@ -500,7 +500,7 @@ export default function StaffDirectory() {
   const fetchStaffData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/SchoolTeam');
+      const response = await fetch('/api/staff');
       
       if (!response.ok) {
         throw new Error(`Failed to fetch staff data: ${response.status}`);

@@ -132,7 +132,7 @@ export async function generateStaticParams() {
   // ALTERNATIVE: If you want to fetch from API but avoid build errors:
   // try {
   //   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
-  //   const res = await fetch(`${baseUrl}/api/SchoolTeam`, { next: { revalidate: 3600 } });
+  //   const res = await fetch(`${baseUrl}/api/staff`, { next: { revalidate: 3600 } });
   //   
   //   if (res.ok) {
   //     const data = await res.json();

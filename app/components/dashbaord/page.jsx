@@ -760,7 +760,7 @@ const [admissionGrowth, setAdmissionGrowth] = useState({});
         smsRes
       ] = await Promise.allSettled([
         fetch('/api/studentupload?includeStats=true&limit=1000'),
-        fetch('/api/SchoolTeam'),
+        fetch('/api/staff'),
         fetch('/api/subscriber'),
         fetch('/api/assignment'),
         fetch('/api/career'),
