@@ -365,82 +365,81 @@ export default function ModernHero() {
         </div>
       </div>
 
-      {/* ========== CINEMATIC VIDEO MODAL – FULLY REDESIGNED ========== */}
-      {showVideoModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
-          <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
-            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
-              {/* Modal Header */}
-              <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
-                <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 flex items-center justify-center">
-                    <Play className="w-4 h-4 text-white fill-white" />
-                  </div>
-                  <span className="text-white text-sm font-semibold">Campus Tour</span>
-                </div>
-                <button
-                  onClick={closeVideoModal}
-                  className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Video Player */}
-              {loading ? (
-                <div className="w-full h-full flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin mb-4" />
-                  <p className="text-white/70 text-sm">Loading tour...</p>
-                </div>
-              ) : error ? (
-                <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
-                  <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
-                    <X className="w-8 h-8 text-red-400" />
-                  </div>
-                  <p className="text-white mb-4">{error}</p>
-                  <button
-                    onClick={retryVideoLoad}
-                    className="px-6 py-2 bg-gradient-to-r from-rose-600 to-amber-500 text-white rounded-full text-sm font-semibold"
-                  >
-                    Retry
-                  </button>
-                </div>
-              ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
-                <iframe
-                  src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
-                <video
-                  src={schoolData.videoTour}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  controls
-                  poster={schoolData?.videoThumbnail}
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center">
-                  <Play className="w-16 h-16 text-white/30 mb-4" />
-                  <p className="text-white/60">No tour video available yet</p>
-                </div>
-              )}
-
-              {/* Modal Footer */}
-              <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4">
-                <button
-                  onClick={handleContactClick}
-                  className="w-full sm:w-auto ml-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-all"
-                >
-                  Learn More About Matungulu
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+{showVideoModal && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
+    <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
+      <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
+        {/* Modal Header */}
+        <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
+          <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 flex items-center justify-center">
+              <Play className="w-4 h-4 text-white fill-white" />
             </div>
+            <span className="text-white text-sm font-semibold">Campus Tour</span>
           </div>
+          <button
+            onClick={closeVideoModal}
+            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
+          >
+            <X className="w-5 h-5" />   {/* ← fixed */}
+          </button>
         </div>
-      )}
+
+        {/* Video Player */}
+        {loading ? (
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="w-12 h-12 border-3 border-white/20 border-t-rose-500 rounded-full animate-spin mb-4" />
+            <p className="text-white/70 text-sm">Loading tour...</p>
+          </div>
+        ) : error ? (
+          <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
+            <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
+              <X className="w-8 h-8 text-red-400" />
+            </div>
+            <p className="text-white mb-4">{error}</p>
+            <button
+              onClick={retryVideoLoad}
+              className="px-6 py-2 bg-gradient-to-r from-rose-600 to-amber-500 text-white rounded-full text-sm font-semibold"
+            >
+              Retry
+            </button>
+          </div>
+        ) : schoolData?.videoType === 'youtube' && schoolData?.videoTour ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${extractYouTubeId(schoolData.videoTour)}?autoplay=1&rel=0&modestbranding=1`}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
+          <video
+            src={schoolData.videoTour}
+            className="w-full h-full object-cover"
+            autoPlay
+            controls
+            poster={schoolData?.videoThumbnail}
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <Play className="w-16 h-16 text-white/30 mb-4" />
+            <p className="text-white/60">No tour video available yet</p>
+          </div>
+        )}
+
+        {/* Modal Footer */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4">
+          <button
+            onClick={handleContactClick}
+            className="w-full sm:w-auto ml-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-all"
+          >
+            Learn More About Matungulu
+            <ChevronRight className="w-4 h-4" />   {/* ← fixed */}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Navigation blocker overlay */}
       {navigationBlocked && (
