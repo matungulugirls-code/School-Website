@@ -2024,8 +2024,6 @@ const achievements = [
           </div>
         </div>
       </section>
-
-      {/* ===== UNIVERSITY PARTNERS ===== */}
 {/* ===== UNIVERSITY PARTNERS ===== */}
 <section className="bg-gray-50 border-t border-gray-200 py-16 sm:py-20 overflow-hidden">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2045,7 +2043,7 @@ const achievements = [
       <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
         Academic <br className="sm:hidden" />
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800">
-          Success Partners
+          Success Partners.. Universities
         </span>
       </h3>
       
@@ -2069,7 +2067,7 @@ const achievements = [
           <div
             className="flex gap-6 sm:gap-10 animate-marquee whitespace-nowrap"
             style={{
-              animation: "marquee 60s linear infinite",
+              animation: "marquee 120s linear infinite",  /* ← Speed reduced by half (60s → 120s) */
               width: "max-content",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.animationPlayState = "paused")}
@@ -2080,8 +2078,8 @@ const achievements = [
                 key={idx}
                 className="relative w-36 h-20 sm:w-44 sm:h-24 flex-shrink-0 bg-white/40 backdrop-blur-sm rounded-2xl border border-white shadow-sm flex items-center justify-center p-4 group/logo transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:bg-white"
               >
-                {/* Logo with grayscale to color transition */}
-                <div className="relative w-full h-full grayscale group-hover/logo:grayscale-0 transition-all duration-500">
+                {/* Logo - FULL COLOR (no grayscale) */}
+                <div className="relative w-full h-full">
                   <Image
                     src={img}
                     alt={`Partner University ${idx}`}
