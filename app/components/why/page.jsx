@@ -1290,12 +1290,9 @@ const achievements = [
   })()}
 </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {/* Location Card */}
             
-
-                {/* Phone Card */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+<div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
+    <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
                   <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50">
                     <FiPhone className="text-blue-600" size={18} />
                   </div>
@@ -1323,7 +1320,10 @@ const achievements = [
                     </p>
                   </div>
                 </div>
-              </div>
+
+</div>
+                {/* Phone Card */}
+              
 
               {/* CTA Buttons */}
               <div className="flex flex-nowrap gap-3 pt-2 w-full">
