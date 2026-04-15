@@ -434,8 +434,9 @@ export default function ModernHero() {
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-white font-semibold text-md">KCSE 2025 Mean</span>
-            <span className="text-white font-black text-md">
+          <span className="text-white font-semibold text-md">
+            KCSE {date.getFullYear() - 1} Mean
+          </span>            <span className="text-white font-black text-md">
               {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
             </span>
           </div>
