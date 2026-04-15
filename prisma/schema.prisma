@@ -400,10 +400,6 @@ model SchoolStats {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   
-  // Relations
-  schoolInfoId      Int?
-  schoolInfo        SchoolInfo? @relation(fields: [schoolInfoId], references: [id])
-  
   @@map("SchoolStats")
 }
 
