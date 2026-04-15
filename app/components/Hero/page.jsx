@@ -282,7 +282,7 @@ export default function ModernHero() {
         </div>
 
         {/* Title with prominent accent color */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.1] tracking-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
           <span className="text-white">{slide.title} </span>
           <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
             {slide.titleAccent}
