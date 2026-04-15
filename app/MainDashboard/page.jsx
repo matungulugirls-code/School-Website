@@ -529,7 +529,7 @@ const loadingMessages = [
               className="text-gray-400 text-sm opacity-60"
               style={{ animation: `float-icon 5s ease-in-out infinite`, animationDelay: `0.6s`, color: '#fbbf24' }}
             >
-              <FaBook />
+              <FiBook />
             </span>
             <span
               className="text-gray-400 text-sm opacity-60"
