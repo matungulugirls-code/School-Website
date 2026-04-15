@@ -46,7 +46,7 @@ const heroSlides = [
     subtitle: "KCSE 2025 & Beyond",
     description: "Ranked among the top schools in Machakos County, we achieved a mean score of 8.14 (B plain) with 84% university transition rate. Our STEM, Humanities, and Creative Arts pathways prepare students for global success.",
     image: "/Matungulu/9.jpeg",
-    tags: ["Mean 8.14", "84% Uni Transition", "STEM Focus", "Career Guidance"],
+    tags: ["CBC Patheways", "We are Champions", "STEM Focus", "Career Guidance"],
     cta: "Explore Academics",
     link: "/pages/Admission",
   },
