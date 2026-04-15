@@ -342,8 +342,8 @@ export default function ModernHero() {
                 <GiGraduateCap className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-white font-bold text-lg">Matungulu Girls</h3>
-                <p className="text-white/50 text-xs">Senior School</p>
+                <h3 className="text-white font-bold text-xl">Matungulu Girls</h3>
+                <p className="text-white/50 text-md">Senior School</p>
               </div>
             </div>
             
