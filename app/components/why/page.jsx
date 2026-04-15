@@ -363,6 +363,8 @@ const getSchoolStats = () => {
         "Balancing academic rigor with spiritual growth, sports, music, drama, and leadership programs for well-rounded individuals. We offer over 15 clubs and societies for talent development.",
       metrics: "Complete Education",
       icon: <FiUsers size={20} />,
+            image: { src: "/Matungulu/22.jpeg", alt: "Academic Excellence" },
+
     },
     {
       id: 3,
@@ -374,6 +376,8 @@ const getSchoolStats = () => {
         "In recognition of consistent excellence, the Ministry of Education conferred Category One (C1) National School status during our 60th-anniversary celebrations in April 2026.",
       metrics: "National School",
       icon: <FiShield size={20} />,
+            image: { src: "/Matungulu/21.jpeg", alt: "Academic Excellence" },
+
     },
     {
       id: 4,
@@ -384,6 +388,8 @@ const getSchoolStats = () => {
         "Well-equipped science laboratories, computer labs, library, and serene learning environment in Matungulu's beautiful landscape with modern boarding facilities.",
       metrics: "Premier Infrastructure",
       icon: <FiGlobe size={20} />,
+            image: { src: "/Matungulu/30.jpeg", alt: "Academic Excellence" },
+
     },
   ];
 
