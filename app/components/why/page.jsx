@@ -2105,198 +2105,207 @@ const achievements = [
   </div>
 </section>
 
-
-            {/* ===== ACHIEVEMENT DETAIL MODAL ===== */}
-      {achievementModalOpen && selectedAchievement && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300"
-          onClick={closeAchievementModal}
-        >
-          <div
-            className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header with Gradient */}
-            <div className="bg-gradient-to-r from-emerald-700 to-teal-700 p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    {selectedAchievement.icon}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">
-                        {selectedAchievement.year}
-                      </span>
-                      <h3 className="text-xl font-bold">{selectedAchievement.title}</h3>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onClick={closeAchievementModal}
-                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
-                >
-                  <FiX className="w-5 h-5" />
-                </button>
+{/* ===== ACHIEVEMENT DETAIL MODAL ===== */}
+{achievementModalOpen && selectedAchievement && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm transition-all duration-300"
+    onClick={closeAchievementModal}
+  >
+    <div
+      className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 flex flex-col"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Modal Header with Gradient */}
+      <div className="bg-gradient-to-r from-emerald-700 to-teal-700 p-4 sm:p-6 text-white shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+              {/* Ensure icon scales if it's an SVG */}
+              <div className="scale-75 sm:scale-100">
+                {selectedAchievement.icon}
               </div>
             </div>
-
-            {/* Modal Body with Scroll */}
-            <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
-              {/* Hero Image */}
-              {selectedAchievement.image && (
-                <div className="relative h-56 w-full">
-                  <Image
-                    src={selectedAchievement.image}
-                    alt={selectedAchievement.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                </div>
-              )}
-
-              <div className="p-6">
-                {/* Stats Badges */}
-                <div className="flex flex-wrap gap-3 mb-6">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full">
-                    <FiAward className="text-emerald-600 w-4 h-4" />
-                    <span className="text-xs font-bold text-emerald-700">{selectedAchievement.stats}</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full">
-                    <FiTrendingUp className="text-blue-600 w-4 h-4" />
-                    <span className="text-xs font-bold text-blue-700">{selectedAchievement.impact}</span>
-                  </div>
-                </div>
-
-                {/* Deep Explanation */}
-                <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <FiBookOpen className="text-emerald-600 w-5 h-5" />
-                  Full Story
-                </h4>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  {selectedAchievement.description}
-                </p>
-
-                {/* Key Highlights Section */}
-                {selectedAchievement.highlights && selectedAchievement.highlights.length > 0 && (
-                  <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
-                    <h5 className="font-bold text-emerald-800 text-sm mb-3 flex items-center gap-2">
-                      <FiCheckCircle className="w-4 h-4" />
-                      Key Highlights
-                    </h5>
-                    <ul className="space-y-2">
-                      {selectedAchievement.highlights.map((highlight, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                          <span className="text-emerald-600 mt-0.5">✓</span>
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+            <div className="min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <span className="w-fit text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase">
+                  {selectedAchievement.year}
+                </span>
+                <h3 className="text-lg sm:text-xl font-bold truncate pr-2">
+                  {selectedAchievement.title}
+                </h3>
               </div>
-                {/* Modal Footer */}
-            <div className="p-4 border-t border-gray-100 bg-gray-50">
-              <p className="text-xs text-gray-500 text-center">
-                Matungulu Girls Senior School — Celebrating Excellence Since 1955
-              </p>
-            </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Careers Modal */}
-      {modalOpen && selectedPathway && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all duration-300"
-          onClick={closeModal}
-        >
-          <div
-            className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300"
-            onClick={(e) => e.stopPropagation()}
+          <button
+            onClick={closeAchievementModal}
+            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors shrink-0"
           >
-            {/* Modal Header */}
-            <div
-              className={`bg-gradient-to-r ${selectedPathway.color} p-6 text-white`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    {React.createElement(selectedPathway.icon, {
-                      className: "w-6 h-6",
-                    })}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold">{selectedPathway.name}</h3>
-                    <p className="text-white/80 text-sm">
-                      {selectedPathway.description}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={closeModal}
-                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
-                >
-                  <FiX className="w-5 h-5" />
-                </button>
-              </div>
+            <FiX className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Modal Body with Scroll */}
+      <div className="overflow-y-auto flex-1">
+        {/* Hero Image - Responsive Height */}
+        {selectedAchievement.image && (
+          <div className="relative h-40 sm:h-56 w-full">
+            <Image
+              src={selectedAchievement.image}
+              alt={selectedAchievement.title}
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+        )}
+
+        <div className="p-4 sm:p-6">
+          {/* Stats Badges - Improved Wrap/Overlap */}
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full border border-emerald-100">
+              <FiAward className="text-emerald-600 w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="text-[10px] sm:text-xs font-bold text-emerald-700">
+                {selectedAchievement.stats}
+              </span>
             </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
+              <FiTrendingUp className="text-blue-600 w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="text-[10px] sm:text-xs font-bold text-blue-700">
+                {selectedAchievement.impact}
+              </span>
+            </div>
+          </div>
 
-            {/* Modal Body */}
-            <div className="p-6 overflow-y-auto max-h-[calc(85vh-120px)]">
-              {/* Subjects Section */}
-              <div className="mb-6">
-                <h4 className="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
-                  <FiBook className="text-emerald-600" />
-                  Core Subjects
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedPathway.subjects.map((subject, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold"
-                    >
-                      {subject}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          {/* Deep Explanation */}
+          <h4 className="text-md sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3 flex items-center gap-2">
+            <FiBookOpen className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
+            Full Story
+          </h4>
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-6">
+            {selectedAchievement.description}
+          </p>
 
-              {/* Careers Section */}
-              <div>
-                <h4 className="font-bold text-gray-900 text-lg mb-3 flex items-center gap-2">
-                  <FiTrendingUp className="text-emerald-600" />
-                  Common <span className="text-emerald-800">Career Paths</span> ({selectedPathway.careers.length})+
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {selectedPathway.careers.map((career, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span className="text-gray-700 text-sm font-medium">
-                        {career}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-                  {/* Modal Footer */}
-            <div className="p-4 border-t border-gray-100 bg-gray-50">
-              <p className="text-xs text-gray-500 text-center">
-                These career pathways are aligned with Matungulu Girls' CBC
-                curriculum and university preparation programs.
+          {/* Key Highlights Section */}
+          {selectedAchievement.highlights && selectedAchievement.highlights.length > 0 && (
+            <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+              <h5 className="font-bold text-emerald-800 text-xs sm:text-sm mb-3 flex items-center gap-2">
+                <FiCheckCircle className="w-4 h-4" />
+                Key Highlights
+              </h5>
+              <ul className="space-y-2.5">
+                {selectedAchievement.highlights.map((highlight, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700">
+                    <span className="text-emerald-600 mt-0.5 font-bold">✓</span>
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Modal Footer */}
+      <div className="p-3 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
+        <p className="text-[10px] sm:text-xs text-gray-500 text-center italic">
+          Matungulu Girls Senior School — Celebrating Excellence Since 1955
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* ===== CAREERS MODAL ===== */}
+{modalOpen && selectedPathway && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm transition-all duration-300"
+    onClick={closeModal}
+  >
+    <div
+      className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[85vh] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 flex flex-col"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Modal Header */}
+      <div className={`bg-gradient-to-r ${selectedPathway.color} p-4 sm:p-6 text-white shrink-0`}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+              {React.createElement(selectedPathway.icon, {
+                className: "w-5 h-5 sm:w-6 sm:h-6",
+              })}
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-lg sm:text-xl font-bold truncate">
+                {selectedPathway.name}
+              </h3>
+              <p className="text-white/80 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-none">
+                {selectedPathway.description}
               </p>
             </div>
-            </div>
+          </div>
+          <button
+            onClick={closeModal}
+            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors shrink-0"
+          >
+            <FiX className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
 
-        
+      {/* Modal Body with Scroll */}
+      <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+        {/* Subjects Section */}
+        <div className="mb-6">
+          <h4 className="font-bold text-gray-900 text-md sm:text-lg mb-3 flex items-center gap-2">
+            <FiBook className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
+            Core Subjects
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {selectedPathway.subjects.map((subject, idx) => (
+              <span
+                key={idx}
+                className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-[11px] sm:text-sm font-semibold border border-emerald-100/50"
+              >
+                {subject}
+              </span>
+            ))}
           </div>
         </div>
-      )}
+
+        {/* Careers Section */}
+        <div>
+          <h4 className="font-bold text-gray-900 text-md sm:text-lg mb-3 flex items-center gap-2">
+            <FiTrendingUp className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
+            Common <span className="text-emerald-800">Career Paths</span>
+          </h4>
+          {/* Force 2 columns on small tablets, 1 column on tiny phones */}
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-1.5 sm:gap-2">
+            {selectedPathway.careers.map((career, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-2 p-2 rounded-lg bg-gray-50/50 sm:hover:bg-gray-50 transition-colors border border-transparent sm:hover:border-gray-100"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span className="text-gray-700 text-[12px] sm:text-sm font-medium">
+                  {career}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Fixed Modal Footer */}
+      <div className="p-3 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
+        <p className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">
+          These career pathways are aligned with Matungulu Girls' CBC
+          curriculum and university preparation programs.
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Marquee Animation Style */}
       <style>{`
