@@ -351,7 +351,7 @@ const getSchoolStats = () => {
         "Consistently ranked among top-performing girls' schools in Machakos County with impressive KCSE results and university placements. Our students achieve mean scores above 8.0 with over 80% qualifying for direct university entry.",
       metrics: "Top Performer",
       icon: <FiAward size={20} />,
-      image: { src: "/hero/MatG1.jpg", alt: "Academic Excellence" },
+      image: "/hero/MatG1.jpg",
     },
     {
       id: 2,
@@ -363,8 +363,7 @@ const getSchoolStats = () => {
         "Balancing academic rigor with spiritual growth, sports, music, drama, and leadership programs for well-rounded individuals. We offer over 15 clubs and societies for talent development.",
       metrics: "Complete Education",
       icon: <FiUsers size={20} />,
-            image: { src: "/Matungulu/22.jpeg", alt: "Academic Excellence" },
-
+      image: "/Matungulu/22.jpeg",
     },
     {
       id: 3,
@@ -376,8 +375,7 @@ const getSchoolStats = () => {
         "In recognition of consistent excellence, the Ministry of Education conferred Category One (C1) National School status during our 60th-anniversary celebrations in April 2026.",
       metrics: "National School",
       icon: <FiShield size={20} />,
-            image: { src: "/Matungulu/21.jpeg", alt: "Academic Excellence" },
-
+      image: "/Matungulu/21.jpeg",
     },
     {
       id: 4,
@@ -388,8 +386,7 @@ const getSchoolStats = () => {
         "Well-equipped science laboratories, computer labs, library, and serene learning environment in Matungulu's beautiful landscape with modern boarding facilities.",
       metrics: "Premier Infrastructure",
       icon: <FiGlobe size={20} />,
-            image: { src: "/Matungulu/30.jpeg", alt: "Academic Excellence" },
-
+      image: "/Matungulu/30.jpeg",
     },
   ];
 
@@ -1622,8 +1619,8 @@ const achievements = [
                   {item.image && (
                     <div className="relative h-40 sm:h-48 overflow-hidden">
                       <Image
-                        src={item.image.src}
-                        alt={item.image.alt}
+                        src={item.image}
+                        alt={item.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
