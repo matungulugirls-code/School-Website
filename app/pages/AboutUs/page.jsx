@@ -113,7 +113,7 @@ export default function AboutPage() {
     {
       title: "Postal Address",
       icon: <MapPin className="h-5 w-5" />,
-      body: "P.O. Box 32, Tala 90131",
+      body: "P.O. Box 109 - 90131, Tala",
       tone: "bg-[#eef4ff] text-[#1d4ed8]",
     },
     {
@@ -125,7 +125,7 @@ export default function AboutPage() {
     {
       title: "School Motto",
       icon: <Star className="h-5 w-5" />,
-      body: "Committed to Excellence",
+      body: "Strive to Excel",
       tone: "bg-[#f5efff] text-[#7c3aed]",
     },
   ];
