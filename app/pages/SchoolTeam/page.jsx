@@ -751,9 +751,9 @@ export default function StaffDirectory() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:items-end">
             <div>
               <p className="mb-3 text-[10px] font-black uppercase tracking-[0.34em] text-[#f8c95f]/80">Matungulu Girls Senior School</p>
-              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Meet the women and mentors shaping the next generation.
-              </h1>
+          <h1 className="max-w-4xl text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-5xl leading-tight">
+            Meet the dedicated team shaping the next generation.
+          </h1>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/68 sm:text-base">
                 Explore the people behind leadership, teaching, and student support across the school. Each profile highlights the expertise and care that keeps the community moving.
               </p>
