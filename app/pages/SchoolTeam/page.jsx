@@ -1200,7 +1200,7 @@ export default function StaffDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center gap-2">
-              <Image src="/hero/MatG.png" alt="Logo" width={24} height={24} className="opacity-40" />
+              <Image src="/MatG.jpg" alt="Logo" width={24} height={24} className="opacity-40" />
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Matungulu Girls Senior School</span>
             </div>
             <p className="text-[10px] text-slate-300">Strive to Excel &bull; Staff Directory &bull; &copy; {new Date().getFullYear()}</p>
