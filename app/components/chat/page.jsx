@@ -755,7 +755,7 @@ export default function ChatBot() {
 Hello! I'm MatG, your assistant.
 
 About Our School:
-• Public Extra County School (Girl's Boarding)
+• Public C1 National School (Girl's Boarding)
 • Established: 1956
 • Location: Kinyui, Matungulu, Machakos County
 • Students: ${studentCount} | Teachers: ${staffCount}
