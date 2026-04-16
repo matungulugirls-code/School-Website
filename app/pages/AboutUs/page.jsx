@@ -150,7 +150,7 @@ export default function AboutPage() {
       <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden sm:min-h-[85vh]">
         <div className="absolute inset-0 overflow-hidden rounded-t-md">
           <Image
-            src="/hero/MatG1.jpg"
+            src="/Matungulu/29.jpeg"
             alt="Matungulu Girls Senior School"
             fill
             className="object-cover opacity-60 scale-[1.02] sm:opacity-65"
