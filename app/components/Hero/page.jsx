@@ -71,6 +71,7 @@ const extractYouTubeId = (url) => {
 };
 
 export default function ModernHero() {
+  const currentYear = new Date().getFullYear();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
@@ -435,7 +436,7 @@ export default function ModernHero() {
 
           <div className="flex justify-between items-center">
           <span className="text-white font-semibold text-md">
-            KCSE {date.getFullYear() - 1} Mean
+            KCSE {currentYear - 1} Mean
           </span>            <span className="text-white font-black text-md">
               {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
             </span>
