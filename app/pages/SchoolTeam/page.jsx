@@ -296,37 +296,17 @@ const StaffCard = ({ staff, onContactClick }) => {
       <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
 
       {/* Image */}
-      <div className="relative mx-5 mt-5 aspect-[4/4.15] overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
-        <Image
-          src={getImageSrc(staff)}
-          alt={staff.name}
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          priority={hierarchy === 'leadership'}
-          onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
-        />
-
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07111b]/78 via-[#07111b]/28 to-transparent" />
-
-        {hierarchy === 'leadership' && (
-          <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-[#1a1a2e]/92 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
-            <FiShield size={11} /> Leadership
-          </div>
-        )}
-
-        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
-          <div className="min-w-0 rounded-[20px] bg-white/95 px-4 py-3 shadow-sm backdrop-blur-sm">
-            <p className="truncate text-[15px] font-black text-slate-950">{staff.name}</p>
-            <p className="truncate text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700">
-              {staff.position}
-            </p>
-          </div>
-          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border bg-white/92 shadow-sm backdrop-blur-sm ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
-            <DeptIcon size={18} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
-          </div>
+<div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden">
+          <Image
+            src={getImageSrc(staff)}
+            alt={staff.name}
+            fill
+            className="object-cover object-top"
+            sizes="(max-width: 640px) 100vw, 420px"
+            priority={hierarchy === 'leadership'}
+            onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+          />
         </div>
-      </div>
 
       {/* Content */}
       <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
