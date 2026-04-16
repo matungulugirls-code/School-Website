@@ -364,7 +364,7 @@ const LoadingSpinner  = () => {
   const tagline = "Empowering Young Women • Shaping Future Leaders";
 
 const loadingMessages = [
-  "Loading administrator dashboard...",
+  "Loading dashboard..",
   "Please wait a moment",
 ];
 
