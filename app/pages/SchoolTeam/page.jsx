@@ -716,21 +716,6 @@ export default function StaffDirectory() {
           </Link>
 
           <div className="flex flex-1 flex-col gap-3 lg:max-w-3xl lg:flex-row lg:items-center lg:justify-end">
-            <div className="grid grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 text-center lg:max-w-xs">
-              <div className="px-3 py-2">
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Profiles</p>
-                <p className="text-sm font-black text-slate-900">{staffData.length}</p>
-              </div>
-              <div className="border-x border-slate-200 px-3 py-2">
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Views</p>
-                <p className="text-sm font-black text-slate-900">{viewMode === 'grid' ? 'Grid' : 'List'}</p>
-              </div>
-              <div className="px-3 py-2">
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Focus</p>
-                <p className="text-sm font-black text-slate-900">{selectedHierarchy === 'all' ? 'All' : selectedHierarchy}</p>
-              </div>
-            </div>
-
             <div className="relative w-full lg:max-w-md">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input
