@@ -754,7 +754,7 @@ export default function StaffDirectory() {
           <h1 className="max-w-4xl text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-5xl leading-tight">
             Meet the dedicated team shaping the next generation.
           </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/68 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white sm:text-base">
                 Explore the people behind leadership, teaching, and student support across the school. Each profile highlights the expertise and care that keeps the community moving.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
