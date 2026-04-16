@@ -536,17 +536,6 @@ export default function StaffProfilePage() {
                       <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/45">Department</p>
                       <p className="mt-2 text-lg font-black text-white">{staff.department}</p>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-[20px] border border-white/10 bg-white/6 p-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Expertise</p>
-                        <p className="mt-2 text-2xl font-black text-white">{staff.expertise?.length || 0}</p>
-                      </div>
-                      <div className="rounded-[20px] border border-white/10 bg-white/6 p-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Roles</p>
-                        <p className="mt-2 text-2xl font-black text-white">{staff.responsibilities?.length || 0}</p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
