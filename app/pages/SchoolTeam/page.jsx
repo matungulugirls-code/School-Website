@@ -269,7 +269,7 @@ const StaffCard = ({ staff, onContactClick }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)] hover:border-[#1a1a2e]/15 hover:shadow-[0_28px_70px_-34px_rgba(15,23,42,0.45)]">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
 
       {/* Image */}
@@ -278,7 +278,7 @@ const StaffCard = ({ staff, onContactClick }) => {
           src={getImageSrc(staff)}
           alt={staff.name}
           fill
-          className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+          className="object-cover object-top"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           priority={hierarchy === 'leadership'}
           onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
@@ -295,7 +295,7 @@ const StaffCard = ({ staff, onContactClick }) => {
         <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
           <div className="min-w-0 rounded-2xl bg-white/92 px-3 py-2 shadow-sm backdrop-blur-sm">
             <p className="truncate text-[12px] font-black text-slate-900">{staff.name}</p>
-            <p className="truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <p className="truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-100">
               {staff.position}
             </p>
           </div>
