@@ -863,27 +863,27 @@ export default function StaffDirectory() {
             {/* Divider */}
             <div className="w-px h-6 bg-slate-200 mx-2 flex-shrink-0" />
 
-            {/* Department Pills */}
-            {DEPARTMENTS.map((dept) => {
-              const DIcon = DEPT_ICONS[dept.id] || FiLayers;
-              return (
-                <button
-                  key={dept.id}
-                  onClick={() => toggleDept(dept.id)}
-                  className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-extrabold transition-[box-shadow,background-color,border-color,color] ${
-                    selectedDepts.includes(dept.id)
-                      ? `${getBadgeColorStyles(dept.color)} shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_5px_rgba(148,163,184,0.18)]`
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <DIcon size={14} />
-                  <span className="whitespace-nowrap">{dept.label}</span>
-                  <span className={`rounded-full px-2 py-1 text-[10px] font-black ${
-                    selectedDepts.includes(dept.id) ? 'bg-white/75 text-slate-900' : 'bg-slate-100 text-slate-600'
-                  }`}>{getDeptCount(dept.id)}</span>
-                </button>
-              );
-            })}
+{/* Department Pills */}
+{DEPARTMENTS.map((dept) => {
+  const DIcon = DEPT_ICONS[dept.id] || FiLayers;
+  return (
+    <button
+      key={dept.id}
+      onClick={() => toggleDept(dept.id)}
+      className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-extrabold transition-[box-shadow,background-color,border-color,color] ${
+        selectedDepts.includes(dept.id)
+          ? `${getBadgeColorStyles(dept.color)} shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_5px_rgba(148,163,184,0.18)]`
+          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+      }`}
+    >
+      <DIcon size={14} />
+      <span className="whitespace-nowrap">{dept.label}</span>
+      <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${
+        selectedDepts.includes(dept.id) ? 'bg-white/75 text-slate-900' : 'bg-slate-100 text-slate-600'
+      }`}>{getDeptCount(dept.id)}</span>
+    </button>
+  );
+})}
 
             {/* Clear Filters */}
             {(selectedDepts.length > 0 || searchQuery || selectedHierarchy !== 'all') && (
