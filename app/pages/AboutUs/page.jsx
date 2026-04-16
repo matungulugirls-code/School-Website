@@ -130,24 +130,39 @@ export default function AboutPage() {
     },
   ];
 
+  const schoolDetails = [
+    {
+      title: "Who We Are",
+      text: "Matungulu Girls High School is a public extra county girls boarding school serving learners in Matungulu Sub-County, Machakos County.",
+    },
+    {
+      title: "Our Learning Culture",
+      text: "The school combines academic seriousness with structure, mentorship, and a strong emphasis on discipline, confidence, and positive growth.",
+    },
+    {
+      title: "Where We Are Going",
+      text: "As a senior school, Matungulu Girls is positioned to support modern pathways while preparing girls for university, careers, leadership, and service.",
+    },
+  ];
+
   return (
     <div className="bg-[#f7f8f4] text-slate-900">
-      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
+      <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden sm:min-h-[85vh]">
         <div className="absolute inset-0 overflow-hidden rounded-t-md">
           <Image
-            src="/Matungulu/9.jpeg"
+            src="/hero/MatG1.jpg"
             alt="Matungulu Girls High School"
             fill
-            className="object-cover opacity-85 scale-[1.03]"
+            className="object-cover opacity-60 scale-[1.02] sm:opacity-65"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e3b2d]/72 via-[#124635]/58 to-[#09131e]/72" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#051016] to-transparent" />
-          <div className="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/15 blur-[120px]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a241b]/45 via-[#124635]/30 to-[#09131e]/48" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#051016]/90 via-[#051016]/25 to-transparent" />
+          <div className="absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/10 blur-[110px] sm:h-[560px] sm:w-[560px]" />
         </div>
 
-        <div className="relative z-30 mx-auto max-w-5xl px-6 text-center">
-          <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-emerald-300/25 bg-emerald-500/10 px-5 py-2 backdrop-blur-md">
+        <div className="relative z-30 mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-emerald-300/25 bg-emerald-500/10 px-4 py-2 backdrop-blur-md sm:mb-8 sm:px-5">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
@@ -157,26 +172,26 @@ export default function AboutPage() {
             </span>
           </div>
 
-          <h1 className="mb-6 text-3xl font-black leading-none tracking-tighter text-white sm:text-4xl md:text-5xl">
+          <h1 className="mb-5 text-3xl font-black leading-none tracking-tighter text-white sm:mb-6 sm:text-4xl md:text-5xl">
             Matungulu Girls
             <span className="bg-gradient-to-r from-emerald-300 via-emerald-200 to-white/80 bg-clip-text text-transparent">
               {" "}Senior School
             </span>
           </h1>
 
-          <div className="mx-auto mb-12 max-w-3xl space-y-6">
-            <p className="text-sm font-medium leading-relaxed text-white md:text-base">
+          <div className="mx-auto mb-10 max-w-3xl space-y-5 sm:mb-12 sm:space-y-6">
+            <p className="text-sm font-medium leading-7 text-white md:text-base md:leading-relaxed">
               A public girls boarding school in Matungulu Sub-County, Machakos County,
               known for academic focus, disciplined growth, and a learning environment
               designed to help girls rise with confidence.
             </p>
 
-            <div className="grid gap-6 border-y border-white/10 py-8 text-left md:grid-cols-2">
+            <div className="grid gap-5 border-y border-white/10 py-6 text-left md:grid-cols-2 md:gap-6 md:py-8">
               <div className="space-y-2">
                 <h4 className="text-[10px] font-black uppercase tracking-[0.28em] text-emerald-300">
                   What Makes Us Distinct
                 </h4>
-                <p className="text-sm leading-relaxed text-white/90">
+                <p className="text-sm leading-7 text-white/90">
                   Our girls are nurtured through academic rigor, mentorship, spiritual and
                   moral grounding, and a strong culture of discipline and purpose.
                 </p>
@@ -185,7 +200,7 @@ export default function AboutPage() {
                 <h4 className="text-[10px] font-black uppercase tracking-[0.28em] text-emerald-300">
                   What We Build
                 </h4>
-                <p className="text-sm leading-relaxed text-white/90">
+                <p className="text-sm leading-7 text-white/90">
                   We prepare young women who can think clearly, communicate boldly, serve
                   others well, and lead with integrity in school and beyond.
                 </p>
@@ -198,21 +213,21 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 sm:gap-4">
-            <Link href="/pages/apply-for-admissions" className="flex-1 sm:flex-none">
+          <div className="flex w-full flex-col items-stretch justify-center gap-3 px-1 sm:flex-row sm:items-center sm:gap-4 sm:px-2">
+            <Link href="/pages/apply-for-admissions" className="w-full sm:w-auto sm:flex-none">
               <button className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-[11px] font-black text-white shadow-lg shadow-emerald-900/20 transition-transform active:scale-95 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-sm">
                 Admission <ArrowRight size={16} className="shrink-0" />
               </button>
             </Link>
 
-            <Link href="/pages/admissions" className="flex-1 sm:flex-none">
+            <Link href="/pages/admissions" className="w-full sm:w-auto sm:flex-none">
               <button className="w-full whitespace-nowrap rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-[11px] font-black text-white shadow-xl transition-transform active:scale-95 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-sm">
                 Curriculum
               </button>
             </Link>
           </div>
 
-          <div className="mt-12 flex justify-center gap-6 opacity-70 sm:gap-8">
+          <div className="mt-10 flex flex-wrap justify-center gap-4 opacity-80 sm:mt-12 sm:gap-8">
             <span className="text-[10px] font-bold uppercase tracking-widest text-white">
               Girls Boarding
             </span>
@@ -240,6 +255,40 @@ export default function AboutPage() {
               <p className="mt-3 text-sm leading-relaxed text-slate-600">{stat.note}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
+        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div className="rounded-[2rem] bg-[#14382d] p-7 text-white shadow-[0_24px_80px_-45px_rgba(15,23,42,0.5)] sm:p-10">
+            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+              About The School
+            </span>
+            <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-5xl">
+              A girls&apos; school built around growth, discipline, and possibility.
+            </h2>
+            <p className="mt-5 text-sm leading-8 text-white/80 sm:text-base">
+              Matungulu Girls offers a focused boarding environment where young women can
+              learn with confidence, build strong values, and prepare for a future of
+              leadership, service, and academic excellence.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            {schoolDetails.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-[1.7rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.28)] sm:p-7"
+              >
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">
+                  {item.title}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-[15px] sm:leading-8">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
