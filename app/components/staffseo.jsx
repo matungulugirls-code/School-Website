@@ -334,99 +334,17 @@ export default function StaffProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f4efe7] p-4 sm:p-6">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-6 flex items-center justify-between rounded-full border border-[#d8d0c4] bg-[#f7f2ea] px-4 py-3 sm:px-5">
-            <div className="h-9 w-32 animate-pulse rounded-full bg-white" />
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 animate-pulse rounded-full bg-white" />
-              <div className="hidden h-9 w-44 animate-pulse rounded-full bg-white sm:block" />
-            </div>
-            <div className="flex gap-2">
-              <div className="h-10 w-10 animate-pulse rounded-full bg-white" />
-              <div className="h-10 w-10 animate-pulse rounded-full bg-[#172033]/15" />
-            </div>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
+        <div className="relative mb-10">
+          <div className="w-16 h-16 border-[3px] border-slate-200 border-t-[#1a1a2e] rounded-full animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} className="opacity-60" />
           </div>
-
-          <div className="overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.45)]">
-            <div className="grid lg:grid-cols-[360px_minmax(0,1fr)]">
-              <div className="bg-[#172033] p-6 text-white">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="h-7 w-28 animate-pulse rounded-full bg-white/10" />
-                  <div className="h-7 w-20 animate-pulse rounded-full bg-[#f2c357]/40" />
-                </div>
-
-                <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/5">
-                  <div className="flex aspect-[4/5] items-center justify-center">
-                    <div className="rounded-[28px] border border-white/10 bg-white/95 p-5 shadow-xl">
-                      <Image
-                        src="/hero/MatG.png"
-                        alt="Matungulu Girls logo"
-                        width={120}
-                        height={120}
-                        className="h-24 w-24 object-contain sm:h-28 sm:w-28"
-                        priority
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-5 space-y-3">
-                  <div className="h-20 animate-pulse rounded-[24px] bg-white/8" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="h-24 animate-pulse rounded-[20px] bg-white/8" />
-                    <div className="h-24 animate-pulse rounded-[20px] bg-white/8" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#fcfaf6] p-5 sm:p-7 lg:p-8">
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_280px]">
-                  <div>
-                    <div className="flex gap-2">
-                      <div className="h-7 w-28 animate-pulse rounded-full bg-[#172033]/10" />
-                      <div className="h-7 w-24 animate-pulse rounded-full bg-[#f6efe2]" />
-                    </div>
-                    <div className="mt-5 h-14 w-3/4 animate-pulse rounded-[24px] bg-[#172033]/10" />
-                    <div className="mt-3 h-5 w-1/2 animate-pulse rounded-full bg-[#172033]/10" />
-                    <div className="mt-6 space-y-3">
-                      <div className="h-4 w-full animate-pulse rounded-full bg-slate-200" />
-                      <div className="h-4 w-[92%] animate-pulse rounded-full bg-slate-200" />
-                      <div className="h-4 w-[78%] animate-pulse rounded-full bg-slate-200" />
-                    </div>
-                    <div className="mt-6 h-32 animate-pulse rounded-[28px] border border-[#d9d0c3] bg-white" />
-                  </div>
-
-                  <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-5">
-                    <div className="h-4 w-24 animate-pulse rounded-full bg-slate-200" />
-                    <div className="mt-5 space-y-4">
-                      <div className="h-16 animate-pulse rounded-[20px] bg-[#fcfaf6]" />
-                      <div className="h-16 animate-pulse rounded-[20px] bg-[#fcfaf6]" />
-                      <div className="h-16 animate-pulse rounded-[20px] bg-[#fcfaf6]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-            <div className="space-y-6">
-              <div className="h-72 animate-pulse rounded-[30px] border border-[#d9d0c3] bg-white" />
-              <div className="h-72 animate-pulse rounded-[30px] border border-[#d9d0c3] bg-[#172033]/95" />
-            </div>
-            <div className="space-y-6">
-              <div className="h-48 animate-pulse rounded-[30px] border border-[#d9d0c3] bg-white" />
-              <div className="h-48 animate-pulse rounded-[30px] border border-[#d9d0c3] bg-[#fbf7f1]" />
-              <div className="h-56 animate-pulse rounded-[30px] border border-[#d9d0c3] bg-white" />
-            </div>
-          </div>
-
-          <div className="mt-5 text-center">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Loading Staff Profile</p>
-            <p className="mt-2 text-sm font-semibold text-slate-500">Preparing profile details and faculty information.</p>
-          </div>
+          <h1 className="absolute inset-0 flex items-center justify-center text-2xl font-black text-[#1a1a2e]/80">
+            Matungulu Girls Senior school
+          </h1>
         </div>
+        <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.25em]">Loading The Staff Profile</p>
       </div>
     );
   }

@@ -888,7 +888,7 @@ export default function StaffDirectory() {
               </div>
 
               <div className="relative w-full sm:w-52">
-                <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
+                <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
                 <select className="appearance-none w-full bg-white border border-slate-200 pl-8 pr-8 py-2 rounded-lg text-xs font-bold text-slate-700 focus:outline-none focus:border-[#1a1a2e] cursor-pointer">
                   <option value="hierarchy">Hierarchy View</option>
                   <option value="alphabetical">Alphabetical (A-Z)</option>
