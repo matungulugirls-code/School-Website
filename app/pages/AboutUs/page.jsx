@@ -23,7 +23,7 @@ import { SiGooglemaps } from "react-icons/si";
 
 export default function AboutPage() {
   const stats = [
-    { value: "C2", label: "C1 National School", note: "Public girls boarding school" },
+    { value: "C1", label: "C1 National School", note: "Public girls boarding school" },
     { value: "12345503", label: "KNEC Code", note: "Recognized national institution" },
     { value: "Matungulu", label: "Sub-County", note: "Machakos County, Kenya" },
     { value: "8.13", label: "Recent Mean Score", note: "Reported for KCSE 2025" },
@@ -120,7 +120,7 @@ export default function AboutPage() {
       title: "Senior School",
       icon: <Sparkles className="h-5 w-5" />,
       body: "CBC-aligned pathways include STEM, Social Sciences, and Arts & Sports.",
-      tone: "bg-[#fff3ea] text-[#c2410c]",
+      tone: "bg-[#fff3ea] text-[#C1410c]",
     },
     {
       title: "School Motto",
