@@ -907,15 +907,27 @@ export default function StaffDirectory() {
                 </p>
               </div>
 
-              <div className="relative w-full sm:w-52">
-                <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                <select className="appearance-none w-full bg-white border border-slate-200 pl-8 pr-8 py-2 rounded-lg text-xs font-bold text-slate-700 focus:outline-none focus:border-[#1a1a2e] cursor-pointer">
-                  <option value="hierarchy">Hierarchy View</option>
-                  <option value="alphabetical">Alphabetical (A-Z)</option>
-                  <option value="department">By Department</option>
-                </select>
-                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={12} />
-              </div>
+<div className="relative w-full sm:w-64"> {/* Increased width from w-52 to w-64 */}
+  {/* Icon size increased from 14 to 18 */}
+  <FiFilter 
+    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" 
+    size={18} 
+  />
+  
+  <select 
+    className="appearance-none w-full bg-white border-2 border-slate-200 pl-11 pr-10 py-3 rounded-xl text-[14px] font-black uppercase tracking-wider text-slate-800 focus:outline-none focus:border-[#1a1a2e] focus:ring-2 focus:ring-[#1a1a2e]/10 cursor-pointer shadow-sm transition-all"
+  >
+    <option value="hierarchy">Hierarchy View</option>
+    <option value="alphabetical">Alphabetical (A-Z)</option>
+    <option value="department">By Department</option>
+  </select>
+  
+  {/* Icon size increased from 12 to 16 */}
+  <FiChevronDown 
+    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" 
+    size={16} 
+  />
+</div>
             </div>
 
             {/* Consultation Modal */}
@@ -1167,19 +1179,31 @@ export default function StaffDirectory() {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-100">
-                  <FiSearch className="text-xl text-slate-300" />
-                </div>
-                <h3 className="text-base font-black text-slate-900 mb-1">No staff found</h3>
-                <p className="text-sm text-slate-400 max-w-sm mb-5">Try adjusting your search or filters.</p>
-                <button
-                  onClick={clearAllFilters}
-                  className="px-5 py-2 bg-[#1a1a2e] text-white rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-[#2d2d44] transition-colors"
-                >
-                  Clear Filters
-                </button>
-              </div>
+           <div className="flex flex-col items-center justify-center py-24 text-center">
+  {/* Icon Container: Increased from w-14 to w-20, border thickened */}
+  <div className="w-20 h-20 bg-slate-50 rounded-[28px] flex items-center justify-center mx-auto mb-6 border-2 border-slate-100 shadow-sm">
+    <FiSearch className="text-3xl text-slate-300" /> {/* Icon size increased */}
+  </div>
+
+  {/* Heading: Increased from text-base to text-xl, ensured font-black */}
+  <h3 className="text-xl font-black text-slate-900 mb-2 tracking-tight">
+    No Staff Members Found
+  </h3>
+
+  {/* Subtext: Increased size and line height */}
+  <p className="text-[16px] font-medium text-slate-500 max-w-md mb-8 leading-relaxed">
+    We couldn't find anyone matching those criteria. <br className="hidden sm:block" />
+    Try adjusting your search keywords or filters.
+  </p>
+
+  {/* Button: Massive scaling, thicker padding, and font-black */}
+  <button
+    onClick={clearAllFilters}
+    className="px-8 py-4 bg-[#1a1a2e] text-white rounded-2xl font-black text-[14px] uppercase tracking-[0.15em] hover:bg-[#2d2d44] transition-all active:scale-95 shadow-lg shadow-indigo-900/20"
+  >
+    Clear All Filters
+  </button>
+</div>
             )}
           </main>
       </div>
