@@ -332,62 +332,56 @@ export default function StaffProfilePage() {
     );
   };
 
-if (loading) {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex flex-col items-center justify-center p-6">
-      {/* Animated background particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#1a1a2e]/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#d7a73d]/5 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex flex-col items-center justify-center p-4 sm:p-6">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#1a1a2e]/5 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#d7a73d]/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
 
-      {/* Main loading card */}
-      <div className="relative bg-white/60 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/50">
-        {/* Animated spinner with gradient */}
-        <div className="relative mb-8">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] animate-spin" />
-          <div className="absolute inset-[3px] bg-white rounded-full flex items-center justify-center">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1a1a2e] to-[#34556d] flex items-center justify-center animate-pulse">
-              <Image 
-                src="/MatG.jpeg" 
-                alt="Logo" 
-                width={32} 
-                height={32} 
-                className="brightness-0 invert opacity-90"
-              />
+        <div className="relative bg-white/60 backdrop-blur-sm rounded-3xl shadow-xl p-6 sm:p-10 border border-white/50">
+          <div className="relative mb-6 sm:mb-8">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] animate-spin" />
+            <div className="absolute inset-[3px] bg-white rounded-full flex items-center justify-center">
+              <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#1a1a2e] to-[#34556d] flex items-center justify-center animate-pulse">
+                <Image 
+                  src="/MatG.jpeg" 
+                  alt="Logo" 
+                  width={28} 
+                  height={28} 
+                  className="sm:w-8 sm:h-8 brightness-0 invert opacity-90"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mb-3 sm:mb-4">
+            <h2 className="text-base sm:text-xl font-black bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]">
+              Matungulu Girls Senior School
+            </h2>
+          </div>
+
+          <div className="flex items-center justify-center gap-1">
+            <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
+              Loading Staff Profile
+            </p>
+            <div className="flex gap-1">
+              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#1a1a2e] rounded-full animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#34556d] rounded-full animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#d7a73d] rounded-full animate-bounce" />
             </div>
           </div>
         </div>
 
-        {/* School name with shimmer effect */}
-        <div className="text-center mb-4">
-          <h2 className="text-xl font-black bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]">
-            Matungulu Girls Senior School
-          </h2>
-        </div>
-
-        {/* Loading text with animated dots */}
-        <div className="flex items-center justify-center gap-1">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
-            Loading Staff Profile
-          </p>
-          <div className="flex gap-1">
-            <span className="w-1.5 h-1.5 bg-[#1a1a2e] rounded-full animate-bounce [animation-delay:-0.3s]" />
-            <span className="w-1.5 h-1.5 bg-[#34556d] rounded-full animate-bounce [animation-delay:-0.15s]" />
-            <span className="w-1.5 h-1.5 bg-[#d7a73d] rounded-full animate-bounce" />
+        <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 w-32 sm:w-48">
+          <div className="h-0.5 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-full w-1/2 bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] rounded-full animate-progress" />
           </div>
         </div>
       </div>
-
-      {/* Optional: Progress bar */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48">
-        <div className="h-0.5 bg-slate-200 rounded-full overflow-hidden">
-          <div className="h-full w-1/2 bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] rounded-full animate-progress" />
-        </div>
-      </div>
-    </div>
-  );
-}
+    );
+  }
 
   if (error || !staff) {
     return (
@@ -412,18 +406,21 @@ if (loading) {
   return (
     <>
       <SeoHead />
+      
       <div className="min-h-screen bg-[#f4efe7] font-sans text-slate-900">
+        {/* Responsive Header */}
         <div className="sticky top-0 z-40 border-b border-[#d8d0c4] bg-[#f7f2ea]/95 backdrop-blur-sm">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 sm:px-4 md:px-6 py-2 sm:py-3">
             <button
               onClick={() => router.push('/pages/SchoolTeam')}
-              className="flex items-center gap-2 rounded-full border border-[#d8d0c4] bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-slate-700"
+              className="flex items-center gap-1 sm:gap-2 rounded-full border border-[#d8d0c4] bg-white px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-black uppercase tracking-[0.18em] text-slate-700"
             >
-              <FiArrowLeft size={15} />
-              <span className="hidden sm:inline">Staff Directory</span>
+              <FiArrowLeft size={12} className="sm:w-[15px] sm:h-[15px]" />
+              <span className="hidden xs:inline">Staff Directory</span>
+              <span className="xs:hidden">Back</span>
             </button>
 
-            <div className="hidden items-center gap-3 sm:flex">
+            <div className="hidden sm:flex items-center gap-3">
               <Image src="/MatG.jpg" alt="Logo" width={28} height={28} className="rounded-full object-cover" />
               <div className="text-right">
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Faculty Profile</p>
@@ -431,119 +428,138 @@ if (loading) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 onClick={() => setShowShareModal(true)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d8d0c4] bg-white text-slate-600"
+                className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-[#d8d0c4] bg-white text-slate-600"
               >
-                <FiShare2 size={15} />
+                <FiShare2 size={13} className="sm:w-[15px] sm:h-[15px]" />
               </button>
               <button
                 onClick={() => window.print()}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d8d0c4] bg-[#172033] text-white"
+                className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-[#d8d0c4] bg-[#172033] text-white"
               >
-                <FiPrinter size={15} />
+                <FiPrinter size={13} className="sm:w-[15px] sm:h-[15px]" />
               </button>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto w-[85%] px-4 py-6 sm:px-6 sm:py-8">       
-<section className="px-6 py-8 text-center sm:py-10 lg:px-8">
-  <div className="mx-auto w-full">
-    {/* The Title */}
-    <h2 className="text-lg font-black tracking-tight text-black sm:text-5xl mb-8">
-      A Legacy of Excellence
-    </h2>
-    
-    {/* The Description */}
-    <p className="text-md  text-start leading-relaxed text-slate-700">
-      At Matungulu Girls Senior School, our commitment to quality education 
-      is a sacred promise to every student who walks through our gates. 
-      We believe that educating a girl is educating a nation. By integrating 
-      rigorous academic standards with strong moral values and modern learning 
-      resources, we provide a nurturing environment where our girls don't 
-      just study—they thrive. Our mission is to transform young learners into 
-      confident, innovative, and principled global leaders who are ready to 
-      excel in the competitive world of tomorrow.
-    </p>
-  </div>
-</section>
-          <section className="overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.45)]">
-            <div className="grid lg:grid-cols-[360px_minmax(0,1fr)]">
-              <div className="relative border-b border-[#d9d0c3] bg-[#3e4b66] p-5 text-white lg:border-b-0 lg:border-r lg:p-6">
+        {/* Main Content - Responsive Container */}
+        <div className="mx-auto w-full max-w-7xl px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+          
+          {/* Hero Section */}
+          <section className="px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10 text-center">
+            <div className="mx-auto w-full">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black tracking-tight text-black mb-4 sm:mb-6 md:mb-8">
+                A Legacy of Excellence
+              </h2>
+              <p className="text-sm sm:text-base md:text-lg text-start leading-relaxed text-slate-700">
+                At Matungulu Girls Senior School, our commitment to quality education 
+                is a sacred promise to every student who walks through our gates. 
+                We believe that educating a girl is educating a nation. By integrating 
+                rigorous academic standards with strong moral values and modern learning 
+                resources, we provide a nurturing environment where our girls don't 
+                just study—they thrive. Our mission is to transform young learners into 
+                confident, innovative, and principled global leaders who are ready to 
+                excel in the competitive world of tomorrow.
+              </p>
+            </div>
+          </section>
+
+          {/* Main Profile Card */}
+          <section className="overflow-hidden rounded-[20px] sm:rounded-[28px] lg:rounded-[34px] border border-[#d9d0c3] bg-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.45)]">
+            <div className="flex flex-col lg:grid lg:grid-cols-[360px_minmax(0,1fr)]">
+              
+              {/* Sidebar - Left Column */}
+              <div className="relative border-b border-[#d9d0c3] lg:border-b-0 lg:border-r bg-[#3e4b66] p-4 sm:p-5 lg:p-6 text-white">
                 <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),transparent_35%),radial-gradient(circle_at_top_left,rgba(215,167,61,0.3),transparent_32%)]" />
                 <div className="relative">
-                  <div className="mb-4 flex items-center justify-between">
-                    <span className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-white/75">
+                  <div className="mb-3 sm:mb-4 flex items-center justify-between flex-wrap gap-2">
+                    <span className="rounded-full border border-white/15 bg-white/8 px-2 sm:px-3 py-0.5 sm:py-1 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-white/75">
                       Staff Profile
                     </span>
-                    <span className="rounded-full bg-[#f2c357] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#172033]">
+                    <span className="rounded-full bg-[#f2c357] px-2 sm:px-3 py-0.5 sm:py-1 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-[#172033]">
                       Since {staff.joinDate}
                     </span>
                   </div>
 
-                  <div className="overflow-hidden rounded-[28px] border border-white/12 bg-white/8">
-                    <div className="relative aspect-[4/5]">
-                      <Image src={staff.image || '/male.png'} alt={staff.name} fill className="object-cover" priority />
+                  <div className="overflow-hidden rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] border border-white/12 bg-white/8">
+                    <div className="relative aspect-[4/5] w-full">
+                      <Image 
+                        src={staff.image || '/male.png'} 
+                        alt={staff.name} 
+                        fill 
+                        className="object-cover" 
+                        priority 
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 360px"
+                      />
                     </div>
                   </div>
 
-                  <div className="mt-5 space-y-3">
-                    <div className="rounded-[24px] border border-white/12 bg-white/8 p-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/45">Department</p>
-                      <p className="mt-2 text-lg font-black text-white">{staff.department}</p>
+                  <div className="mt-4 sm:mt-5 space-y-2 sm:space-y-3">
+                    <div className="rounded-[20px] sm:rounded-[24px] border border-white/12 bg-white/8 p-3 sm:p-4">
+                      <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-white/45">Department</p>
+                      <p className="mt-1 sm:mt-2 text-base sm:text-lg lg:text-xl font-black text-white">{staff.department}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#fcfaf6] p-5 sm:p-7 lg:p-8">
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_280px]">
+              {/* Right Column - Content */}
+              <div className="bg-[#fcfaf6] p-4 sm:p-5 md:p-6 lg:p-8">
+                <div className="flex flex-col xl:grid xl:grid-cols-[minmax(0,1.1fr)_280px] gap-4 sm:gap-6">
+                  
+                  {/* Main Content Area */}
                   <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-[#172033] px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-white">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <span className="rounded-full bg-[#172033] px-2 sm:px-3 py-0.5 sm:py-1 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-white">
                         {staff.position}
                       </span>
-                      <span className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
+                      <span className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-2 sm:px-3 py-0.5 sm:py-1 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
                         Profile Detail
                       </span>
                     </div>
 
-                    <h1 className="mt-4 max-w-3xl text-3xl font-black leading-[0.95] tracking-tight text-[#172033] sm:text-5xl lg:text-6xl">
+                    <h1 className="mt-3 sm:mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight tracking-tight text-[#172033]">
                       {staff.name}
                     </h1>
 
-                    <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600">{staff.bio}</p>
+                    <p className="mt-3 sm:mt-4 md:mt-5 text-sm sm:text-base leading-relaxed text-slate-600">
+                      {staff.bio}
+                    </p>
 
                     {staff.quote && (
-                      <div className="mt-6 max-w-2xl rounded-[28px] border border-[#d9d0c3] bg-white p-5">
-                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Guiding Note</p>
-                        <p className="mt-3 text-lg font-medium italic leading-relaxed text-slate-700">&ldquo;{staff.quote}&rdquo;</p>
+                      <div className="mt-4 sm:mt-5 md:mt-6 rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] border border-[#d9d0c3] bg-white p-4 sm:p-5">
+                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Guiding Note</p>
+                        <p className="mt-2 sm:mt-3 text-base sm:text-lg font-medium italic leading-relaxed text-slate-700">
+                          &ldquo;{staff.quote}&rdquo;
+                        </p>
                       </div>
                     )}
                   </div>
 
-                  <aside className="rounded-[30px] border border-[#d9d0c3] bg-white p-5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Quick File</p>
-                    <div className="mt-5 space-y-4">
-                      <div className="flex gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eef3f8] text-[#172033]">
-                          <FiMapPin size={16} />
+                  {/* Sidebar Info */}
+                  <aside className="rounded-[20px] sm:rounded-[24px] lg:rounded-[30px] border border-[#d9d0c3] bg-white p-4 sm:p-5">
+                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Quick File</p>
+                    <div className="mt-3 sm:mt-4 md:mt-5 space-y-3 sm:space-y-4">
+                      <div className="flex gap-2 sm:gap-3">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#eef3f8] text-[#172033]">
+                          <FiMapPin size={14} className="sm:w-4 sm:h-4" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Location</p>
-                          <p className="mt-1 text-sm font-bold text-slate-800">{staff.location}</p>
+                          <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Location</p>
+                          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm font-bold text-slate-800">{staff.location}</p>
                         </div>
                       </div>
 
-                      <div className="flex gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eef3f8] text-[#172033]">
-                          <FiCalendar size={16} />
+                      <div className="flex gap-2 sm:gap-3">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-[#eef3f8] text-[#172033]">
+                          <FiCalendar size={14} className="sm:w-4 sm:h-4" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Office Hours</p>
-                          <p className="mt-1 text-sm font-bold text-slate-800">{staff.officeHours}</p>
+                          <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Office Hours</p>
+                          <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm font-bold text-slate-800">{staff.officeHours}</p>
                         </div>
                       </div>
                     </div>
@@ -553,30 +569,30 @@ if (loading) {
             </div>
           </section>
 
-
-
-
-
-          <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-            <div className="space-y-6">
+          {/* Bottom Sections */}
+          <section className="mt-4 sm:mt-5 md:mt-6 flex flex-col lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] gap-4 sm:gap-5 md:gap-6">
+            
+            {/* Left Column - Responsibilities & Achievements */}
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              
+              {/* Key Responsibilities */}
               {staff.responsibilities?.length > 0 && (
-                <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.45)] sm:p-6">
-                  <div className="mb-6 flex items-center justify-between gap-3">
+                <div className="rounded-[20px] sm:rounded-[24px] lg:rounded-[30px] border border-[#d9d0c3] bg-white p-4 sm:p-5 md:p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.45)]">
+                  <div className="mb-4 sm:mb-5 md:mb-6 flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Practice</p>
-                      <h2 className="mt-2 text-2xl font-black text-[#172033]">Key Responsibilities</h2>
+                      <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Practice</p>
+                      <h2 className="mt-1 sm:mt-2 text-xl sm:text-2xl font-black text-[#172033]">Key Responsibilities</h2>
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#172033] text-white">
-                      <FiBriefcase size={18} />
+                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl bg-[#172033] text-white">
+                      <FiBriefcase size={16} className="sm:w-[18px] sm:h-[18px]" />
                     </div>
                   </div>
 
-                    <div className="mt-5 flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {staff.responsibilities.map((item, i) => (
-                      
                       <span
                         key={i}
-                        className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-slate-700"
+                        className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[10px] sm:text-xs font-black uppercase tracking-[0.12em] text-slate-700"
                       >
                         {item}
                       </span>
@@ -585,23 +601,26 @@ if (loading) {
                 </div>
               )}
 
+              {/* Highlights & Achievements */}
               {staff.achievements?.length > 0 && (
-                <div className="rounded-[30px] border border-[#d9d0c3] bg-[#172033] p-5 text-white shadow-[0_24px_70px_-50px_rgba(15,23,42,0.75)] sm:p-6">
-                  <div className="mb-6 flex items-center justify-between gap-3">
+                <div className="rounded-[20px] sm:rounded-[24px] lg:rounded-[30px] border border-[#d9d0c3] bg-[#172033] p-4 sm:p-5 md:p-6 text-white shadow-[0_24px_70px_-50px_rgba(15,23,42,0.75)]">
+                  <div className="mb-4 sm:mb-5 md:mb-6 flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.24em] text-white/40">Recognition</p>
-                      <h2 className="mt-2 text-2xl font-black text-white">Highlights & Achievements</h2>
+                      <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-white/40">Recognition</p>
+                      <h2 className="mt-1 sm:mt-2 text-xl sm:text-2xl font-black text-white">Highlights & Achievements</h2>
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f2c357] text-[#172033]">
-                      <FiAward size={18} />
+                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl bg-[#f2c357] text-[#172033]">
+                      <FiAward size={16} className="sm:w-[18px] sm:h-[18px]" />
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {staff.achievements.map((item, i) => (
-                      <div key={i} className="rounded-[24px] border border-white/10 bg-white/6 p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.22em] text-[#f2c357]">Achievement {String(i + 1).padStart(2, '0')}</p>
-                        <p className="mt-2 text-sm font-medium leading-relaxed text-white/88">{item}</p>
+                      <div key={i} className="rounded-[18px] sm:rounded-[20px] lg:rounded-[24px] border border-white/10 bg-white/6 p-3 sm:p-4">
+                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-[#f2c357]">
+                          Achievement {String(i + 1).padStart(2, '0')}
+                        </p>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium leading-relaxed text-white/88">{item}</p>
                       </div>
                     ))}
                   </div>
@@ -609,16 +628,19 @@ if (loading) {
               )}
             </div>
 
-            <div className="space-y-6">
+            {/* Right Column - Expertise & Stats */}
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              
+              {/* Expertise Areas */}
               {staff.expertise?.length > 0 && (
-                <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.45)] sm:p-6">
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Capability Map</p>
-                  <h2 className="mt-2 text-2xl font-black text-[#172033]">Expertise Areas</h2>
-                  <div className="mt-5 flex flex-wrap gap-2">
+                <div className="rounded-[20px] sm:rounded-[24px] lg:rounded-[30px] border border-[#d9d0c3] bg-white p-4 sm:p-5 md:p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.45)]">
+                  <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Capability Map</p>
+                  <h2 className="mt-1 sm:mt-2 text-xl sm:text-2xl font-black text-[#172033]">Expertise Areas</h2>
+                  <div className="mt-3 sm:mt-4 md:mt-5 flex flex-wrap gap-1.5 sm:gap-2">
                     {staff.expertise.map((item, i) => (
                       <span
                         key={i}
-                        className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-slate-700"
+                        className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 text-[10px] sm:text-xs font-black uppercase tracking-[0.12em] text-slate-700"
                       >
                         {item}
                       </span>
@@ -627,21 +649,21 @@ if (loading) {
                 </div>
               )}
 
-          
-              <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.35)] sm:p-6">
-                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Profile Summary</p>
-                <h2 className="mt-2 text-2xl font-black text-[#172033]">At a Glance</h2>
-                <div className="mt-5 grid grid-cols-2 gap-3">
+              {/* Profile Summary Stats */}
+              <div className="rounded-[20px] sm:rounded-[24px] lg:rounded-[30px] border border-[#d9d0c3] bg-white p-4 sm:p-5 md:p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.35)]">
+                <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Profile Summary</p>
+                <h2 className="mt-1 sm:mt-2 text-xl sm:text-2xl font-black text-[#172033]">At a Glance</h2>
+                <div className="mt-3 sm:mt-4 md:mt-5 grid grid-cols-2 gap-2 sm:gap-3">
                   {[
                     { label: 'Joined', value: staff.joinDate, icon: FiCalendar },
                     { label: 'Expertise', value: staff.expertise?.length || 0, icon: FiStar },
                     { label: 'Roles', value: staff.responsibilities?.length || 0, icon: FiBriefcase },
                     { label: 'Awards', value: staff.achievements?.length || 0, icon: FiAward },
                   ].map((item, i) => (
-                    <div key={i} className="rounded-[24px] border border-[#e8dfd3] bg-[#fcfaf6] p-4">
-                      <item.icon size={16} className="text-[#172033]" />
-                      <p className="mt-4 text-2xl font-black text-[#172033]">{item.value}</p>
-                      <p className="mt-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{item.label}</p>
+                    <div key={i} className="rounded-[18px] sm:rounded-[20px] lg:rounded-[24px] border border-[#e8dfd3] bg-[#fcfaf6] p-3 sm:p-4">
+                      <item.icon size={14} className="sm:w-4 sm:h-4 text-[#172033]" />
+                      <p className="mt-2 sm:mt-3 md:mt-4 text-xl sm:text-2xl font-black text-[#172033]">{item.value}</p>
+                      <p className="mt-0.5 sm:mt-1 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{item.label}</p>
                     </div>
                   ))}
                 </div>
@@ -649,18 +671,23 @@ if (loading) {
             </div>
           </section>
 
-          <footer className="mt-6 rounded-[30px] border border-[#d9d0c3] bg-[#fffdfa] px-5 py-6 sm:px-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <Image src="/MatG.jpg" alt="Logo" width={34} height={34} className="rounded-full object-cover" />
+          {/* Footer */}
+          <footer className="mt-4 sm:mt-5 md:mt-6 rounded-[20px] sm:rounded-[24px] lg:rounded-[30px] border border-[#d9d0c3] bg-[#fffdfa] px-4 sm:px-5 md:px-6 py-4 sm:py-5 md:py-6">
+            <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Image src="/MatG.jpg" alt="Logo" width={28} height={28} className="sm:w-[34px] sm:h-[34px] rounded-full object-cover" />
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Matungulu Girls Senior School</p>
-                  <p className="text-sm font-bold text-slate-700">Staff profile archive and faculty directory</p>
+                  <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">
+                    Matungulu Girls Senior School
+                  </p>
+                  <p className="text-[10px] sm:text-xs md:text-sm font-bold text-slate-700">
+                    Staff profile archive and faculty directory
+                  </p>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
                 <span>Strive to Excel</span>
-                <span className="h-1 w-1 rounded-full bg-slate-300" />
+                <span className="h-0.5 w-0.5 sm:h-1 sm:w-1 rounded-full bg-slate-300" />
                 <span>&copy; {new Date().getFullYear()}</span>
               </div>
             </div>
@@ -669,6 +696,6 @@ if (loading) {
       </div>
 
       <ShareModal />
-      </>
+    </>
   );
 }
