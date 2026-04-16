@@ -1172,7 +1172,7 @@ export default function StaffDirectory() {
               <Image src="/seo/MatG.png" alt="Logo" width={24} height={24} className="opacity-40" />
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Matungulu Girls Senior School</span>
             </div>
-            <p className="text-[10px] text-slate-300">Soaring to Excellence &bull; Staff Directory &bull; &copy; {new Date().getFullYear()}</p>
+            <p className="text-[10px] text-slate-300">Strive to Excel &bull; Staff Directory &bull; &copy; {new Date().getFullYear()}</p>
           </div>
         </div>
       </footer>

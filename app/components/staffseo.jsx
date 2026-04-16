@@ -498,7 +498,7 @@ export default function StaffProfilePage() {
                 <div className="relative">
                   <div className="mb-4 flex items-center justify-between">
                     <span className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-white/75">
-                      Staff Dossier
+                      Staff Profile
                     </span>
                     <span className="rounded-full bg-[#f2c357] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#172033]">
                       Since {staff.joinDate}
@@ -543,7 +543,7 @@ export default function StaffProfilePage() {
                       </span>
                     </div>
 
-                    <h1 className="mt-4 max-w-3xl text-4xl font-black leading-[0.95] tracking-tight text-[#172033] sm:text-5xl lg:text-6xl">
+                    <h1 className="mt-4 max-w-3xl text-3xl font-black leading-[0.95] tracking-tight text-[#172033] sm:text-5xl lg:text-6xl">
                       {staff.name}
                     </h1>
 
@@ -579,30 +579,6 @@ export default function StaffProfilePage() {
                           <p className="mt-1 text-sm font-bold text-slate-800">{staff.officeHours}</p>
                         </div>
                       </div>
-
-                      {staff.email && (
-                        <a href={`mailto:${staff.email}`} className="flex gap-3 rounded-[20px] border border-[#e5ddd2] bg-[#fcfaf6] p-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033] text-white">
-                            <FiMail size={16} />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Email</p>
-                            <p className="mt-1 truncate text-sm font-bold text-slate-800">{staff.email}</p>
-                          </div>
-                        </a>
-                      )}
-
-                      {staff.phone && (
-                        <a href={`tel:${staff.phone}`} className="flex gap-3 rounded-[20px] border border-[#e5ddd2] bg-[#fcfaf6] p-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#f2c357] text-[#172033]">
-                            <FiPhone size={16} />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Phone</p>
-                            <p className="mt-1 truncate text-sm font-bold text-slate-800">{staff.phone}</p>
-                          </div>
-                        </a>
-                      )}
                     </div>
                   </aside>
                 </div>
@@ -679,25 +655,7 @@ export default function StaffProfilePage() {
                 </div>
               )}
 
-              {staff.skills && staff.skills.length > 0 && (
-                <div className="rounded-[30px] border border-[#d9d0c3] bg-[#fbf7f1] p-5 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.35)] sm:p-6">
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Professional Strengths</p>
-                  <h2 className="mt-2 text-2xl font-black text-[#172033]">Skills Snapshot</h2>
-                  <div className="mt-5 space-y-3">
-                    {staff.skills.slice(0, 4).map((skill, i) => (
-                      <div key={i} className="rounded-[22px] border border-[#e6ddd0] bg-white p-4">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-sm font-bold text-slate-800">{skill.name}</span>
-                          <span className="rounded-full bg-[#172033] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-white">
-                            {skill.level}%
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+          
               <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.35)] sm:p-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Profile Summary</p>
                 <h2 className="mt-2 text-2xl font-black text-[#172033]">At a Glance</h2>
@@ -729,7 +687,7 @@ export default function StaffProfilePage() {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
-                <span>Soaring to Excellence</span>
+                <span>Strive to Excel</span>
                 <span className="h-1 w-1 rounded-full bg-slate-300" />
                 <span>&copy; {new Date().getFullYear()}</span>
               </div>
