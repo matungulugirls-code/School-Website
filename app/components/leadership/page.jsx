@@ -565,38 +565,44 @@ const ModernStaffLeadership = () => {
                 <div className="flex-grow p-6 md:p-8 bg-white">
                   <div className="grid lg:grid-cols-5 gap-6">
                     
-                    {/* Left Column - Bio */}
-                    <div className="lg:col-span-3 space-y-6">
-                      <div>
-                        <h4 className="text-sm font-black text-emerald-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <FiUser className="text-emerald-600" /> Professional Biography
-                        </h4>
-                        <p className="text-slate-600 leading-relaxed">
-                          {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
-                        </p>
-                      </div>
+               {/* Left Column - Bio */}
+<div className="lg:col-span-3 space-y-6">
+  {/* On small screens: quote first, bio after */}
+  <div className="flex flex-col space-y-6">
+    {/* Quote - moved to top on mobile */}
+    {featuredStaff?.quote && (
+      <div className="relative p-4 sm:p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-700 rounded-r-xl order-1 lg:order-none">
+        <p className="text-slate-700 italic font-medium text-sm sm:text-base">"{featuredStaff.quote}"</p>
+      </div>
+    )}
 
-                      {featuredStaff?.quote && (
-                        <div className="relative p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-700 rounded-r-xl">
-                          <p className="text-slate-700 italic font-medium">"{featuredStaff.quote}"</p>
-                        </div>
-                      )}
+    {/* Bio - appears after quote on mobile */}
+    <div className="order-2 lg:order-none">
+      <h4 className="text-xs sm:text-sm font-black text-emerald-700 uppercase tracking-wider mb-2 sm:mb-3 flex items-center gap-2">
+        <FiUser className="text-emerald-600 text-sm sm:text-base" /> Professional Biography
+      </h4>
+      <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
+        {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
+      </p>
+    </div>
 
-                      {featuredStaff?.expertise && featuredStaff.expertise.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-black text-emerald-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <Target className="w-4 h-4" /> Areas of Expertise
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {featuredStaff.expertise.slice(0, 4).map((skill, idx) => (
-                              <span key={idx} className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-700 text-xs font-bold rounded-lg">
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+    {/* Expertise section */}
+    {featuredStaff?.expertise && featuredStaff.expertise.length > 0 && (
+      <div className="order-3 lg:order-none">
+        <h4 className="text-xs sm:text-sm font-black text-emerald-700 uppercase tracking-wider mb-2 sm:mb-3 flex items-center gap-2">
+          <Target className="w-3 h-3 sm:w-4 sm:h-4" /> Areas of Expertise
+        </h4>
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+          {featuredStaff.expertise.slice(0, 4).map((skill, idx) => (
+            <span key={idx} className="px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-emerald-200 text-emerald-700 text-[11px] sm:text-xs font-bold rounded-lg">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
 
                     {/* Right Column - Details */}
                     <div className="lg:col-span-2 space-y-6">
