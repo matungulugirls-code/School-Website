@@ -578,7 +578,6 @@ if (loading) {
                         key={i}
                         className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-slate-700"
                       >
-                <FiCheckCircle size={15} />
                         {item}
                       </span>
                     ))}
