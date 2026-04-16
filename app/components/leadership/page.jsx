@@ -630,26 +630,6 @@ const ModernStaffLeadership = () => {
                         </ul>
                       </div>
 
-                      {/* Contact Card */}
-                      <div className="bg-gradient-to-br from-emerald-900 to-teal-800 rounded-xl p-5 text-white">
-                        <h4 className="text-sm font-bold mb-3 flex items-center gap-2">
-                          <FiMail className="text-emerald-300" /> Contact Information
-                        </h4>
-                        <div className="space-y-3">
-                          {featuredStaff?.email && (
-                            <a href={`mailto:${featuredStaff.email}`} className="flex items-center gap-2 text-sm hover:text-emerald-300 transition-colors">
-                              <FiMail className="w-4 h-4 text-emerald-300" />
-                              <span className="truncate">{featuredStaff.email}</span>
-                            </a>
-                          )}
-                          {featuredStaff?.phone && (
-                            <a href={`tel:${featuredStaff.phone}`} className="flex items-center gap-2 text-sm hover:text-emerald-300 transition-colors">
-                              <FiPhone className="w-4 h-4 text-emerald-300" />
-                              <span>{formatPhone(featuredStaff.phone)}</span>
-                            </a>
-                          )}
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -1016,12 +996,6 @@ const ModernStaffLeadership = () => {
                               <a href={`mailto:${member.email}`} className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                                 <FiMail className="w-3 h-3" />
                                 <span className="truncate max-w-[150px]">{member.email}</span>
-                              </a>
-                            )}
-                            {member.phone && (
-                              <a href={`tel:${member.phone}`} className="text-xs text-slate-500 hover:text-slate-700 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                                <FiPhone className="w-3 h-3" />
-                                <span>{formatPhone(member.phone)}</span>
                               </a>
                             )}
                           </div>
