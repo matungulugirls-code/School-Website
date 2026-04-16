@@ -394,16 +394,18 @@ const StaffListCard = ({ staff, onContactClick }) => {
       {/* Increased profile image size slightly to match card width */}
       <div className="relative shrink-0">
         <div className="absolute inset-0 rounded-[22px] bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] blur-md opacity-20" />
-        <div className="relative h-24 w-24 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100">
-          <Image
-            src={getImageSrc(staff)}
-            alt={staff.name}
-            fill
-            className="object-cover"
-            sizes="96px"
-            onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
-          />
-        </div>
+<div className="relative h-24 w-24 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100">
+  <div className="relative h-full w-full">
+    <Image
+      src={getImageSrc(staff)}
+      alt={staff.name}
+      fill
+      className="object-cover object-[center_25%]"  // Shows top 25-75% region
+      sizes="96px"
+      onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+    />
+  </div>
+</div>
         {hierarchy === 'leadership' && (
           <div className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-[#1a1a2e]">
             <FiShield size={10} className="text-white" />
@@ -736,7 +738,7 @@ export default function StaffDirectory() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by name, role, expertise..."
-                className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm shadow-sm outline-none transition-all focus:border-[#1a1a2e] focus:ring-4 focus:ring-[#1a1a2e]/5"
+                className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm font-bold shadow-sm outline-none transition-all focus:border-[#1a1a2e] focus:ring-4 focus:ring-[#1a1a2e]/5"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
