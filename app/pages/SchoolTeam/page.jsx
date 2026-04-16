@@ -366,54 +366,66 @@ const StaffListCard = ({ staff, onContactClick }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="flex flex-col items-center gap-4 rounded-[24px] border border-slate-200/80 bg-white p-4 shadow-[0_16px_45px_-34px_rgba(15,23,42,0.65)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1a1a2e]/15 hover:shadow-[0_24px_60px_-36px_rgba(15,23,42,0.8)] sm:flex-row">
+    /* Increased max-width and padding; removed all hover: classes */
+    <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 rounded-[24px] border border-slate-300 bg-white p-6 shadow-md sm:flex-row">
+      
+      {/* Increased profile image size slightly to match card width */}
       <div className="relative shrink-0">
         <div className="absolute inset-0 rounded-[22px] bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] blur-md opacity-20" />
-        <div className="relative h-16 w-16 overflow-hidden rounded-[22px] border border-white bg-slate-50 ring-2 ring-slate-100">
+        <div className="relative h-20 w-20 overflow-hidden rounded-[22px] border border-white bg-slate-50 ring-2 ring-slate-100">
           <Image
             src={getImageSrc(staff)}
             alt={staff.name}
             fill
             className="object-cover"
-            sizes="64px"
+            sizes="80px"
             onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
           />
         </div>
         {hierarchy === 'leadership' && (
-          <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-[#1a1a2e]">
-            <FiShield size={8} className="text-white" />
+          <div className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-[#1a1a2e]">
+            <FiShield size={10} className="text-white" />
           </div>
         )}
       </div>
 
       <div className="flex-1 text-center sm:text-left min-w-0">
-        <div className="mb-1 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-          <h3 className="text-sm font-black text-slate-900">
-            <Link href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`} className="hover:text-[#1a1a2e] transition-colors">
+        <div className="mb-2 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
+          {/* Font size increased to base for better visibility */}
+          <h3 className="text-base font-black text-slate-900">
+            <Link href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}>
               {staff.name}
             </Link>
           </h3>
-          <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${getBadgeColorStyles(deptConfig?.color)}`}>
-            <DeptIcon size={9} />
+          <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[11px] font-bold ${getBadgeColorStyles(deptConfig?.color)}`}>
+            <DeptIcon size={10} />
             {staff.department}
           </span>
         </div>
-        <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1a1a2e]/55">{staff.position}</p>
-        <p className="text-[11px] font-medium leading-relaxed text-slate-500 line-clamp-2">{staff.bio}</p>
+
+        {/* Position: Darker color and larger size for readability */}
+        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">
+          {staff.position}
+        </p>
+
+        {/* Bio: Increased size and line height */}
+        <p className="text-[13px] font-medium leading-relaxed text-slate-600 line-clamp-2">
+          {staff.bio}
+        </p>
       </div>
 
-      <div className="flex w-full shrink-0 gap-2 sm:w-auto">
+      <div className="flex w-full shrink-0 gap-3 sm:w-auto">
         <button
           onClick={() => onContactClick(staff)}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[11px] font-semibold text-slate-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:flex-none"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-slate-100 px-4 py-3 text-xs font-bold text-slate-800 transition-colors sm:flex-none"
         >
-          <FiMail size={11} /> Contact
+          <FiMail size={13} /> Contact
         </button>
         <Link
           href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#1a1a2e] px-3.5 py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#2d2d44] sm:flex-none"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#1a1a2e] px-4 py-3 text-xs font-bold text-white transition-colors sm:flex-none"
         >
-          <FiChevronRight size={11} /> View
+          <FiChevronRight size={13} /> View
         </Link>
       </div>
     </div>
