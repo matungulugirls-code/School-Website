@@ -282,6 +282,39 @@ const ModernStaffLeadership = () => {
     };
   };
 
+  const getLeadershipCardMeta = (member) => {
+    const isPrincipal = member?.id === principal?.id;
+    const isAcademicsDeputy = member?.id === academicsDeputy?.id;
+
+    if (isPrincipal) {
+      return {
+        label: 'Principal',
+        accent: 'from-emerald-900 via-emerald-800 to-teal-800',
+        badge: 'bg-emerald-950/90 text-white border-emerald-700',
+        chip: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+        icon: <Crown className="w-3.5 h-3.5 text-yellow-300" />,
+      };
+    }
+
+    if (isAcademicsDeputy) {
+      return {
+        label: 'Deputy Academics',
+        accent: 'from-teal-800 via-teal-700 to-emerald-700',
+        badge: 'bg-teal-900/90 text-white border-teal-700',
+        chip: 'bg-teal-50 text-teal-800 border-teal-200',
+        icon: <Medal className="w-3.5 h-3.5 text-amber-200" />,
+      };
+    }
+
+    return {
+      label: 'Deputy Administration',
+      accent: 'from-cyan-800 via-teal-700 to-emerald-700',
+      badge: 'bg-cyan-900/90 text-white border-cyan-700',
+      chip: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+      icon: <Shield className="w-3.5 h-3.5 text-cyan-100" />,
+    };
+  };
+
   // ========== TABLE LOGIC ==========
   
   // Combine all staff for table view
@@ -637,171 +670,135 @@ const ModernStaffLeadership = () => {
 
               {/* Sidebar Cards */}
               <div className="lg:col-span-4 space-y-4 mt-4 lg:mt-0">
-                
-                {/* PRINCIPAL CARD */}
-                {principal && (
-                  <button
-                    key={principal.id}
-                    onClick={() => handleStaffClick(principal)}
-                    className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
-                      featuredStaff?.id === principal.id 
-                        ? 'border-emerald-700 bg-gradient-to-r from-emerald-50 to-white scale-[1.02]' 
-                        : 'border-emerald-100 hover:border-emerald-300 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                        {principal.image ? (
-                          <img
-                            src={getImageUrl(principal.image)}
-                            alt={principal.name}
-                            className="w-full h-full object-cover object-top"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(principal.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-emerald-900 to-teal-800 flex items-center justify-center">
-                            <Crown className="w-8 h-8 text-yellow-300" />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="px-2 py-1 bg-gradient-to-r from-emerald-900 to-teal-800 text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
-                            <Crown className="w-3 h-3 text-yellow-300" /> PRINCIPAL
-                          </span>
-                          {featuredStaff?.id === principal.id && (
-                            <span className="flex items-center gap-1 text-emerald-700 text-xs font-bold">
-                              <FiCheck className="text-xs" /> Viewing
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                          {principal.name}
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1 line-clamp-1">
-                          {principal.position || 'Chief Principal'}
-                        </p>
-                        <div className="flex items-center gap-1 text-xs text-emerald-700 mt-2 font-bold">
-                          View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
+                <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-xl">
+                  <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-900 via-teal-800 to-slate-900 p-5 text-white">
+                    <p className="text-[10px] font-black uppercase tracking-[0.26em] text-emerald-200">
+                      Leadership Team
+                    </p>
+                    <h3 className="mt-2 text-xl font-black">Principal & Deputies</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/75">
+                      A modern overview of the school&apos;s top leadership team, with role focus and quick profile access.
+                    </p>
+                  </div>
 
-                {/* ACADEMICS DEPUTY CARD */}
-                {academicsDeputy && (
-                  <button
-                    key={academicsDeputy.id}
-                    onClick={() => handleStaffClick(academicsDeputy)}
-                    className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
-                      featuredStaff?.id === academicsDeputy.id 
-                        ? 'border-teal-600 bg-gradient-to-r from-teal-50 to-white scale-[1.02]' 
-                        : 'border-emerald-100 hover:border-teal-300 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                        {academicsDeputy.image ? (
-                          <img
-                            src={getImageUrl(academicsDeputy.image)}
-                            alt={academicsDeputy.name}
-                            className="w-full h-full object-cover object-top"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(academicsDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
-                            <Medal className="w-8 h-8 text-yellow-200" />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="px-2 py-1 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
-                            <Medal className="w-3 h-3 text-yellow-200" /> ACADEMICS DEPUTY
-                          </span>
-                          {featuredStaff?.id === academicsDeputy.id && (
-                            <span className="flex items-center gap-1 text-teal-600 text-xs font-bold">
-                              <FiCheck className="text-xs" /> Viewing
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 group-hover:text-teal-600 transition-colors">
-                          {academicsDeputy.name}
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1 line-clamp-1">
-                          {academicsDeputy.position || 'Deputy Principal (Academics)'}
-                        </p>
-                        <div className="flex items-center gap-1 text-xs text-teal-600 mt-2 font-bold">
-                          View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
+                  <div className="space-y-3 p-3 sm:p-4">
+                    {leadershipTeam.map((member) => {
+                      const meta = getLeadershipCardMeta(member);
+                      const isActive = featuredStaff?.id === member.id;
+                      const fallbackBg = member.id === principal?.id ? '2d6a4f' : '0d9488';
+                      const topExpertise = member?.expertise?.slice(0, 2) || [];
+                      const focusText = member?.responsibilities?.[0] || member?.department || member?.subject || member?.role || 'Leadership and school development';
 
-                {/* ADMIN DEPUTY CARD */}
-                {adminDeputy && (
-                  <button
-                    key={adminDeputy.id}
-                    onClick={() => handleStaffClick(adminDeputy)}
-                    className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
-                      featuredStaff?.id === adminDeputy.id 
-                        ? 'border-teal-600 bg-gradient-to-r from-teal-50 to-white scale-[1.02]' 
-                        : 'border-emerald-100 hover:border-teal-300 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                        {adminDeputy.image ? (
-                          <img
-                            src={getImageUrl(adminDeputy.image)}
-                            alt={adminDeputy.name}
-                            className="w-full h-full object-cover object-top"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(adminDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
-                            <Medal className="w-8 h-8 text-yellow-200" />
+                      return (
+                        <button
+                          key={member.id}
+                          onClick={() => handleStaffClick(member)}
+                          className={`group w-full rounded-[1.6rem] border text-left transition-all duration-300 ${
+                            isActive
+                              ? 'border-emerald-300 bg-[#f7fffb] shadow-[0_18px_45px_-32px_rgba(5,150,105,0.45)]'
+                              : 'border-slate-200 bg-white hover:border-emerald-200 hover:shadow-[0_18px_45px_-32px_rgba(15,23,42,0.25)]'
+                          }`}
+                        >
+                          <div className={`h-1.5 w-full bg-gradient-to-r ${meta.accent}`} />
+
+                          <div className="p-4 sm:p-5">
+                            <div className="flex items-start gap-4">
+                              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl ring-2 ring-white shadow-md">
+                                {member.image ? (
+                                  <img
+                                    src={getImageUrl(member.image)}
+                                    alt={member.name}
+                                    className="h-full w-full object-cover object-top"
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=${fallbackBg}&color=fff&bold=true&size=96`;
+                                    }}
+                                  />
+                                ) : (
+                                  <div className={`flex h-full w-full items-center justify-center bg-gradient-to-r ${meta.accent}`}>
+                                    {meta.icon}
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="min-w-0 flex-1">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${meta.badge}`}>
+                                    {meta.icon}
+                                    {meta.label}
+                                  </span>
+                                  {isActive && (
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
+                                      <FiCheck className="text-[11px]" />
+                                      Active
+                                    </span>
+                                  )}
+                                </div>
+
+                                <h4 className="mt-3 text-lg font-black tracking-tight text-slate-950">
+                                  {member.name}
+                                </h4>
+                                <p className="mt-1 text-sm font-semibold text-slate-600">
+                                  {member.position || member.role || 'School Leadership'}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                              <div className="rounded-2xl bg-slate-50 p-3">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
+                                  Focus
+                                </p>
+                                <p className="mt-2 text-sm font-semibold leading-6 text-slate-700 line-clamp-2">
+                                  {focusText}
+                                </p>
+                              </div>
+                              <div className="rounded-2xl bg-slate-50 p-3">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
+                                  Expertise
+                                </p>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  {topExpertise.length > 0 ? topExpertise.map((item, idx) => (
+                                    <span
+                                      key={idx}
+                                      className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold ${meta.chip}`}
+                                    >
+                                      {item}
+                                    </span>
+                                  )) : (
+                                    <span className="text-sm font-semibold text-slate-500">
+                                      Student leadership and school operations
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+                              <div className="min-w-0">
+                                {(member.department || member.subject) && (
+                                  <p className="truncate text-xs font-bold uppercase tracking-[0.16em] text-slate-400">
+                                    {member.department || member.subject}
+                                  </p>
+                                )}
+                                {!member.department && !member.subject && member.email && (
+                                  <p className="truncate text-xs font-bold uppercase tracking-[0.16em] text-slate-400">
+                                    {member.email}
+                                  </p>
+                                )}
+                              </div>
+
+                              <span className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-[0.14em] text-emerald-700">
+                                Open Profile
+                                <FiChevronRight className={`transition-transform ${isActive ? 'translate-x-0.5' : 'group-hover:translate-x-0.5'}`} />
+                              </span>
+                            </div>
                           </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="px-2 py-1 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
-                            <Medal className="w-3 h-3 text-yellow-200" /> ADMIN DEPUTY
-                          </span>
-                          {featuredStaff?.id === adminDeputy.id && (
-                            <span className="flex items-center gap-1 text-teal-600 text-xs font-bold">
-                              <FiCheck className="text-xs" /> Viewing
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 group-hover:text-teal-600 transition-colors">
-                          {adminDeputy.name}
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1 line-clamp-1">
-                          {adminDeputy.position || 'Deputy Principal (Administration)'}
-                        </p>
-                        <div className="flex items-center gap-1 text-xs text-teal-600 mt-2 font-bold">
-                          View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 {/* Stats Card */}
                 <div className="bg-gradient-to-br from-emerald-900 to-teal-800 rounded-xl p-6 text-white shadow-xl">
