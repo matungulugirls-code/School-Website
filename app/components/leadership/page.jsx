@@ -282,6 +282,49 @@ const ModernStaffLeadership = () => {
     };
   };
 
+  const getLeadershipCardMeta = (staffMember) => {
+    const roleLower = staffMember?.role?.toLowerCase() || '';
+    const positionLower = staffMember?.position?.toLowerCase() || '';
+
+    if (
+      roleLower.includes('principal') ||
+      positionLower.includes('chief principal') ||
+      (positionLower.includes('principal') && !positionLower.includes('deputy'))
+    ) {
+      return {
+        accent: 'from-emerald-950 via-emerald-800 to-teal-700',
+        badge: 'border-white/20 bg-emerald-950/45 text-white',
+        chip: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+        label: 'Principal'
+      };
+    }
+
+    if (roleLower.includes('deputy') || positionLower.includes('deputy')) {
+      return {
+        accent: 'from-teal-950 via-teal-800 to-emerald-700',
+        badge: 'border-white/20 bg-teal-950/45 text-white',
+        chip: 'border-teal-200 bg-teal-50 text-teal-800',
+        label: positionLower.includes('academic') ? 'Deputy Principal - Academics' : 'Deputy Principal'
+      };
+    }
+
+    if (roleLower.includes('teacher') || positionLower.includes('teacher')) {
+      return {
+        accent: 'from-emerald-900 via-green-700 to-teal-600',
+        badge: 'border-white/20 bg-emerald-900/45 text-white',
+        chip: 'border-green-200 bg-green-50 text-green-800',
+        label: 'Teacher'
+      };
+    }
+
+    return {
+      accent: 'from-slate-900 via-slate-700 to-slate-600',
+      badge: 'border-white/20 bg-slate-900/45 text-white',
+      chip: 'border-slate-200 bg-slate-50 text-slate-700',
+      label: staffMember?.position || staffMember?.role || 'Staff Member'
+    };
+  };
+
   // ========== TABLE LOGIC ==========
   
   // Combine all staff for table view
@@ -491,156 +534,162 @@ const ModernStaffLeadership = () => {
             <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 items-start">
               
               {/* Featured Hero Card */}
-              <div id="featured-staff-card" className="lg:col-span-8 w-full mx-auto flex flex-col bg-white rounded-2xl shadow-2xl border border-emerald-100 overflow-hidden">
-                
-                {/* Image Section */}
-                <div className="relative h-[60vh] sm:h-[65vh] lg:h-[70vh] overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 to-teal-900/20 z-10"></div>
-                  
-                  {getImageUrl(featuredStaff?.image) ? (
-                    <img
-                      src={getImageUrl(featuredStaff.image)}
-                      alt={featuredStaff?.name}
-                      className="w-full h-full object-cover object-top"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(featuredStaff?.name || 'Staff')}&background=2d6a4f&color=fff&bold=true&size=256`;
-                      }}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-800 to-teal-800 flex items-center justify-center">
-                      <GraduationCap className="w-24 h-24 text-white/30" />
-                    </div>
-                  )}
-                  
-                  {/* Floating Role Badge */}
-                  <div className="absolute top-6 left-6 z-20">
-                    <div className="px-4 py-2 bg-emerald-900/90 backdrop-blur-sm rounded-full border border-emerald-600">
-                      <span className="text-white text-sm font-bold flex items-center gap-2">
-                        {getRoleBadge(featuredStaff?.role, featuredStaff?.position).icon}
+              <div id="featured-staff-card" className="lg:col-span-8 w-full overflow-hidden rounded-[28px] border border-emerald-100 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.35)]">
+                <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
+                  <div className="relative min-h-[360px] sm:min-h-[460px] lg:min-h-full">
+                    {getImageUrl(featuredStaff?.image) ? (
+                      <img
+                        src={getImageUrl(featuredStaff.image)}
+                        alt={featuredStaff?.name}
+                        className="absolute inset-0 h-full w-full object-cover object-top"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(featuredStaff?.name || 'Staff')}&background=2d6a4f&color=fff&bold=true&size=256`;
+                        }}
+                      />
+                    ) : (
+                      <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${featuredMeta.accent}`}>
+                        <GraduationCap className="w-24 h-24 text-white/30" />
+                      </div>
+                    )}
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#041114] via-[#041114]/40 to-transparent" />
+                    <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/35 to-transparent" />
+
+                    <div className="absolute left-5 top-5 right-5 z-20 flex flex-wrap items-center gap-2">
+                      <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] backdrop-blur-sm ${featuredMeta.badge}`}>
+                        {featuredRoleBadge.icon}
                         {featuredStaff?.position || featuredStaff?.role || 'Staff Member'}
-                        {viewMode === 'other' && ' (Viewing)'}
                       </span>
-                    </div>
-                  </div>
-                  
-                  {/* Overlay Content */}
-                  <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8 lg:p-10 bg-gradient-to-t from-black/90 via-black/30 to-transparent">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-2">
-                      {featuredStaff?.name}
-                    </h2>
-                    
-                    <div className="flex flex-wrap items-center gap-3 text-white/80">
-                      {featuredStaff?.department && (
-                        <span className="flex items-center gap-1.5 text-sm">
-                          <Building2 className="w-4 h-4 text-emerald-400" />
-                          {featuredStaff.department}
+                      {viewMode === 'other' && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
+                          <FiCheck className="text-[11px]" />
+                          Currently Viewing
                         </span>
                       )}
-                      {featuredStaff?.phone && (
-                        <>
-                          <span className="w-1 h-1 bg-emerald-400 rounded-full"></span>
-                          <a href={`tel:${featuredStaff.phone}`} className="flex items-center gap-1.5 text-sm hover:text-white">
-                            <FiPhone className="w-4 h-4 text-emerald-400" />
-                            {formatPhone(featuredStaff.phone)}
-                          </a>
-                        </>
-                      )}
                     </div>
 
-                    {/* Back to Principal Button */}
-                    {viewMode === 'other' && principal && (
-                      <button
-                        onClick={returnToPrincipal}
-                        className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-white text-sm hover:bg-white/30 transition-all w-fit border border-white/30"
-                      >
-                        <FiArrowLeft className="w-4 h-4" />
-                        Back to Principal
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Content Section */}
-                <div className="flex-grow p-6 md:p-8 bg-white">
-                  <div className="grid lg:grid-cols-5 gap-6">
-                    
-               {/* Left Column - Bio */}
-<div className="lg:col-span-3 space-y-6">
-  {/* On small screens: quote first, bio after */}
-  <div className="flex flex-col space-y-6">
-    {/* Quote - moved to top on mobile */}
-    {featuredStaff?.quote && (
-      <div className="relative p-4 sm:p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-700 rounded-r-xl order-1 lg:order-none">
-        <p className="text-slate-700 italic font-medium text-sm sm:text-base">"{featuredStaff.quote}"</p>
-      </div>
-    )}
-
-    {/* Bio - appears after quote on mobile */}
-    <div className="order-2 lg:order-none">
-      <h4 className="text-xs sm:text-sm font-black text-emerald-700 uppercase tracking-wider mb-2 sm:mb-3 flex items-center gap-2">
-        <FiUser className="text-emerald-600 text-sm sm:text-base" /> Professional Biography
-      </h4>
-      <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-        {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
-      </p>
-    </div>
-
-    {/* Expertise section */}
-    {featuredStaff?.expertise && featuredStaff.expertise.length > 0 && (
-      <div className="order-3 lg:order-none">
-        <h4 className="text-xs sm:text-sm font-black text-emerald-700 uppercase tracking-wider mb-2 sm:mb-3 flex items-center gap-2">
-          <Target className="w-3 h-3 sm:w-4 sm:h-4" /> Areas of Expertise
-        </h4>
-        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-          {featuredStaff.expertise.slice(0, 4).map((skill, idx) => (
-            <span key={idx} className="px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-emerald-200 text-emerald-700 text-[11px] sm:text-xs font-bold rounded-lg">
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-</div>
-
-                    {/* Right Column - Details */}
-                    <div className="lg:col-span-2 space-y-6">
-                      {featuredStaff?.responsibilities && featuredStaff.responsibilities.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-black text-emerald-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <FiBriefcase /> Key Responsibilities
-                          </h4>
-                          <ul className="space-y-2">
-                            {featuredStaff.responsibilities.slice(0, 5).map((item, i) => (
-                              <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                                <div className="w-1.5 h-1.5 mt-2 rounded-full bg-emerald-600 flex-shrink-0"></div>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Achievements */}
-                      <div className="pt-4 border-t border-emerald-100">
-                        <h4 className="text-sm font-black text-emerald-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <Trophy className="w-4 h-4" /> Notable Achievements
-                        </h4>
-                        <ul className="space-y-2">
-                          {(featuredStaff?.achievements && featuredStaff.achievements.length > 0) ? (
-                            featuredStaff.achievements.slice(0, 3).map((item, i) => (
-                              <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                                <Medal className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                                <span>{item}</span>
-                              </li>
-                            ))
-                          ) : (
-                            <li className="text-sm text-slate-500 italic">Contributing to educational excellence</li>
+                    <div className="absolute inset-x-0 bottom-0 z-20 p-5 sm:p-7">
+                      <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
+                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">Leadership Profile</p>
+                        <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">{featuredStaff?.name}</h2>
+                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-white/80">
+                          {(featuredStaff?.department || featuredStaff?.subject) && (
+                            <span className="inline-flex items-center gap-1.5">
+                              <Building2 className="w-4 h-4 text-emerald-300" />
+                              {featuredStaff?.department || featuredStaff?.subject}
+                            </span>
                           )}
-                        </ul>
+                          {featuredStaff?.phone && (
+                            <a href={`tel:${featuredStaff.phone}`} className="inline-flex items-center gap-1.5 hover:text-white">
+                              <FiPhone className="w-4 h-4 text-emerald-300" />
+                              {formatPhone(featuredStaff.phone)}
+                            </a>
+                          )}
+                          {featuredStaff?.email && (
+                            <a href={`mailto:${featuredStaff.email}`} className="inline-flex items-center gap-1.5 hover:text-white">
+                              <FiMail className="w-4 h-4 text-emerald-300" />
+                              <span className="truncate">{featuredStaff.email}</span>
+                            </a>
+                          )}
+                        </div>
+
+                        {viewMode === 'other' && principal && (
+                          <button
+                            onClick={returnToPrincipal}
+                            className="mt-5 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-white/20"
+                          >
+                            <FiArrowLeft className="w-4 h-4" />
+                            Back to Principal
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-[linear-gradient(180deg,#ffffff_0%,#f7fffb_100%)] p-5 sm:p-7 lg:p-8">
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="rounded-2xl border border-emerald-100 bg-white p-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Role</p>
+                        <p className="mt-2 text-sm font-black text-slate-900">{featuredMeta.label}</p>
+                      </div>
+                      <div className="rounded-2xl border border-emerald-100 bg-white p-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Department</p>
+                        <p className="mt-2 text-sm font-black text-slate-900">{featuredStaff?.department || featuredStaff?.subject || 'School Leadership'}</p>
+                      </div>
+                      <div className="rounded-2xl border border-emerald-100 bg-white p-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Contact</p>
+                        <p className="mt-2 text-sm font-black text-slate-900">{featuredStaff?.phone || featuredStaff?.email || 'Available on request'}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+                      <div className="space-y-6">
+                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
+                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                            <FiUser className="text-emerald-600" /> Profile Summary
+                          </h4>
+                          <p className="text-sm leading-7 text-slate-600">
+                            {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
+                          </p>
+                        </div>
+
+                        {featuredStaff?.quote && (
+                          <div className="rounded-[24px] border border-emerald-100 bg-gradient-to-r from-emerald-50 to-teal-50 p-5">
+                            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">Signature Note</p>
+                            <p className="mt-3 text-base font-medium italic leading-7 text-slate-700">"{featuredStaff.quote}"</p>
+                          </div>
+                        )}
+
+                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
+                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                            <Target className="w-4 h-4" /> Areas of Expertise
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {featuredExpertise.length > 0 ? featuredExpertise.map((skill, idx) => (
+                              <span key={idx} className={`rounded-full border px-3 py-1.5 text-xs font-bold ${featuredMeta.chip}`}>
+                                {skill}
+                              </span>
+                            )) : (
+                              <span className="text-sm text-slate-500">Leadership, mentoring, school development, and student success.</span>
+                            )}
+                          </div>
+                        </div>
                       </div>
 
+                      <div className="space-y-6">
+                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
+                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                            <FiBriefcase /> Key Responsibilities
+                          </h4>
+                          <ul className="space-y-3">
+                            {featuredResponsibilities.length > 0 ? featuredResponsibilities.map((item, i) => (
+                              <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+                                <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-emerald-600" />
+                                <span className="leading-6">{item}</span>
+                              </li>
+                            )) : (
+                              <li className="text-sm italic text-slate-500">Leading school improvement, academic excellence, and student wellbeing.</li>
+                            )}
+                          </ul>
+                        </div>
+
+                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
+                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                            <Trophy className="w-4 h-4" /> Notable Achievements
+                          </h4>
+                          <ul className="space-y-3">
+                            {featuredAchievements.length > 0 ? featuredAchievements.map((item, i) => (
+                              <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+                                <Medal className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                                <span className="leading-6">{item}</span>
+                              </li>
+                            )) : (
+                              <li className="text-sm italic text-slate-500">Contributing to educational excellence and school leadership.</li>
+                            )}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
