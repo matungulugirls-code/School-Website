@@ -409,7 +409,7 @@ export default function StaffProfilePage() {
         </div>
 
         <div className="mx-auto w-[85%] px-4 py-6 sm:px-6 sm:py-8">       
-<section className="px-6 py-12 text-center sm:py-20 lg:px-8">
+<section className="px-6 py-8 text-center sm:py-10 lg:px-8">
   <div className="mx-auto w-full">
     {/* The Title */}
     <h2 className="text-lg font-black tracking-tight text-black sm:text-5xl mb-8">
@@ -417,8 +417,8 @@ export default function StaffProfilePage() {
     </h2>
     
     {/* The Description */}
-    <p className="text-md leading-relaxed text-slate-700">
-      "At Matungulu Girls Senior School, our commitment to quality education 
+    <p className="text-md  text-start leading-relaxed text-slate-700">
+      At Matungulu Girls Senior School, our commitment to quality education 
       is a sacred promise to every student who walks through our gates. 
       We believe that educating a girl is educating a nation. By integrating 
       rigorous academic standards with strong moral values and modern learning 
@@ -531,14 +531,17 @@ export default function StaffProfilePage() {
                     </div>
                   </div>
 
-                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="mt-5 flex flex-wrap gap-2">
                     {staff.responsibilities.map((item, i) => (
-                      <div key={i} className="rounded-[24px] border border-[#e9e1d6] bg-[#fbf7f1] p-4">
-                        <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-[#dfeadf] text-emerald-700">
-                          <FiCheckCircle size={15} />
-                        </div>
-                        <p className="text-sm font-semibold leading-relaxed text-slate-700">{item}</p>
-                      </div>
+                      
+                      <span
+                        key={i}
+                        className="rounded-full border border-[#d9d0c3] bg-[#f6efe2] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-slate-700"
+                      >
+                <FiCheckCircle size={15} />
+
+                        {item}
+                      </span>
                     ))}
                   </div>
                 </div>
