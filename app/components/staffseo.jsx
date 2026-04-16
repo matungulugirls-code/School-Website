@@ -597,7 +597,7 @@ export default function StaffProfilePage() {
     </h2>
     
     {/* The Description */}
-    <p className="text-lg leading-relaxed text-slate-300 sm:text-xl sm:leading-9 font-medium">
+    <p className="text-md leading-relaxed text-slate-300 sm:text-xl sm:leading-9 font-medium">
       "At Matungulu Girls Senior School, our commitment to quality education 
       is a sacred promise to every student who walks through our gates. 
       We believe that educating a girl is educating a nation. By integrating 
