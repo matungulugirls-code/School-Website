@@ -586,6 +586,30 @@ export default function StaffProfilePage() {
             </div>
           </section>
 
+
+
+
+          <section className="px-6 py-12 text-center sm:py-20 lg:px-8">
+  <div className="mx-auto max-w-4xl">
+    {/* The Title */}
+    <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl mb-8">
+      A Legacy of Excellence
+    </h2>
+    
+    {/* The Description */}
+    <p className="text-lg leading-relaxed text-slate-300 sm:text-xl sm:leading-9 font-medium">
+      "At Matungulu Girls Senior School, our commitment to quality education 
+      is a sacred promise to every student who walks through our gates. 
+      We believe that educating a girl is educating a nation. By integrating 
+      rigorous academic standards with strong moral values and modern learning 
+      resources, we provide a nurturing environment where our girls don't 
+      just study—they thrive. Our mission is to transform young learners into 
+      confident, innovative, and principled global leaders who are ready to 
+      excel in the competitive world of tomorrow."
+    </p>
+  </div>
+</section>
+
           <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
             <div className="space-y-6">
               {staff.responsibilities?.length > 0 && (
