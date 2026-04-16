@@ -493,7 +493,7 @@ export default function StaffProfilePage() {
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
           <section className="overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.45)]">
             <div className="grid lg:grid-cols-[360px_minmax(0,1fr)]">
-              <div className="relative border-b border-[#d9d0c3] bg-[#172033] p-5 text-white lg:border-b-0 lg:border-r lg:p-6">
+              <div className="relative border-b border-[#d9d0c3] bg-[#3e4b66] p-5 text-white lg:border-b-0 lg:border-r lg:p-6">
                 <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),transparent_35%),radial-gradient(circle_at_top_left,rgba(215,167,61,0.3),transparent_32%)]" />
                 <div className="relative">
                   <div className="mb-4 flex items-center justify-between">
