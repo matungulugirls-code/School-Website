@@ -1291,36 +1291,36 @@ const achievements = [
 </div>
 
             
-<div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-    <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50">
-                    <FiPhone className="text-blue-600" size={18} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                      Phone
-                    </p>
-                    <p className="text-xs font-semibold text-gray-900">
-                      {contactPhone || "Add phone number"}
-                    </p>
-                  </div>
-                </div>
+<div className="flex flex-col md:flex-row gap-3">
+  {/* Phone Card */}
+  <div className="bg-white border border-gray-200 rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center sm:items-start gap-3">
+    <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-blue-50 shrink-0">
+      <FiPhone className="text-blue-600 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+    </div>
+    <div className="min-w-0">
+      <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        Phone
+      </p>
+      <p className="text-[11px] sm:text-xs font-semibold text-gray-900 truncate">
+        {contactPhone || "Add phone number"}
+      </p>
+    </div>
+  </div>
 
-                {/* Email Card */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-start gap-3">
-                  <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-purple-50">
-                    <FiMail className="text-purple-600" size={18} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                      Email
-                    </p>
-                    <p className="text-xs font-semibold text-gray-900 break-all">
-                      matungulugirls@gmail.com
-                    </p>
-                  </div>
-                </div>
-
+  {/* Email Card */}
+  <div className="bg-white border border-gray-200 rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all flex items-center sm:items-start gap-3">
+    <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-purple-50 shrink-0">
+      <FiMail className="text-purple-600 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+    </div>
+    <div className="min-w-0">
+      <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-500">
+        Email
+      </p>
+      <p className="text-[11px] sm:text-xs font-semibold text-gray-900 break-all">
+        matungulugirls@gmail.com
+      </p>
+    </div>
+  </div>
 </div>
                 {/* Phone Card */}
               
