@@ -114,9 +114,7 @@ const ModernStaffLeadership = () => {
           const allStaff = data.staff;
           setStaff(allStaff);
 
-          // ========== CORRECTED HIERARCHY LOGIC ==========
-
-          // 1. Find Principal - EXACT MATCH only
+          // Find Principal
           const foundPrincipal = allStaff.find(s => 
             s.id === 1 ||
             s.role === 'Principal' ||
@@ -131,27 +129,27 @@ const ModernStaffLeadership = () => {
           setPrincipal(selectedPrincipal);
           setFeaturedStaff(selectedPrincipal);
 
-          // 2. Find all deputies
+          // Find all deputies
           const allDeputies = allStaff.filter(s => 
             (s.role?.toLowerCase().includes('deputy') || 
              s.position?.toLowerCase().includes('deputy')) &&
             s.id !== selectedPrincipal.id
           );
 
-          // 3. Academics Deputy
+          // Academics Deputy
           const foundAcademicsDeputy = allDeputies.find(s => 
             s.position?.toLowerCase().includes('academics')
           );
           setAcademicsDeputy(foundAcademicsDeputy || null);
 
-          // 4. Administration Deputy
+          // Administration Deputy
           const foundAdminDeputy = allDeputies.find(s => 
             s.position?.toLowerCase().includes('admin') || 
             s.position?.toLowerCase().includes('administration')
           );
           setAdminDeputy(foundAdminDeputy || null);
 
-          // 5. Find ALL Teachers
+          // Find ALL Teachers
           const allTeachers = allStaff.filter(s => 
             (s.role?.toLowerCase().includes('teacher') || 
              s.position?.toLowerCase().includes('teacher')) &&
@@ -160,21 +158,13 @@ const ModernStaffLeadership = () => {
           );
           setTeachers(allTeachers);
 
-          // 6. Find Support Staff
+          // Find Support Staff
           const allSupportStaff = allStaff.filter(s => 
             s.id !== selectedPrincipal.id &&
             !allDeputies.includes(s) &&
             !allTeachers.includes(s)
           );
           setSupportStaff(allSupportStaff);
-
-          console.log('✅ Staff loaded:', {
-            principal: selectedPrincipal?.name,
-            academicsDeputy: foundAcademicsDeputy?.name,
-            adminDeputy: foundAdminDeputy?.name,
-            teachers: allTeachers.length,
-            supportStaff: allSupportStaff.length
-          });
 
         } else {
           throw new Error('Format error: Expected successful staff array');
@@ -201,7 +191,7 @@ const ModernStaffLeadership = () => {
     
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setTimeout(() => {
-        const mainCard = document.querySelector('.lg\\:col-span-8');
+        const mainCard = document.querySelector('#featured-staff-card');
         if (mainCard) {
           const rect = mainCard.getBoundingClientRect();
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -218,7 +208,7 @@ const ModernStaffLeadership = () => {
     
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setTimeout(() => {
-        const mainCard = document.querySelector('.lg\\:col-span-8');
+        const mainCard = document.querySelector('#featured-staff-card');
         if (mainCard) {
           const rect = mainCard.getBoundingClientRect();
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -437,8 +427,8 @@ const ModernStaffLeadership = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-red-50 to-orange-50">
-        <div className="text-center max-w-md mx-auto p-8 bg-white rounded-2xl shadow-xl border border-red-100">
+      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-red-50 to-orange-50 px-4">
+        <div className="text-center max-w-md mx-auto p-6 sm:p-8 bg-white rounded-2xl shadow-xl border border-red-100">
           <Shield className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-red-700 mb-2">Error Loading Data</h3>
           <p className="text-slate-600 mb-6">{error}</p>
@@ -456,7 +446,7 @@ const ModernStaffLeadership = () => {
   // No data state
   if (!featuredStaff || !principal) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-slate-50 to-white">
+      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-slate-50 to-white px-4">
         <div className="text-center p-8">
           <Users className="w-16 h-16 text-emerald-600 mx-auto mb-4 opacity-50" />
           <h3 className="text-xl font-bold text-slate-900 mb-2">No Staff Data Available</h3>
@@ -477,10 +467,10 @@ const ModernStaffLeadership = () => {
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-teal-50 font-sans">
       
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-900 via-teal-800 to-slate-900 pt-16 pb-24 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-emerald-900 via-teal-800 to-slate-900 pt-12 sm:pt-16 pb-16 sm:pb-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:40px_40px]" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 sm:w-96 h-64 sm:h-96 bg-teal-500/10 rounded-full blur-3xl" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-4 sm:mb-6">
@@ -489,7 +479,7 @@ const ModernStaffLeadership = () => {
           </div>
           
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight leading-tight">
-            School Leadership <br className="sm:hidden" /> & Staff
+            School Leadership <br className="hidden sm:inline" /> & Staff
           </h1>
           
           <p className="text-xs sm:text-base md:text-lg text-emerald-100 max-w-xl sm:max-w-3xl mx-auto font-light leading-relaxed px-4">
@@ -499,44 +489,51 @@ const ModernStaffLeadership = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 pb-12 sm:pb-20">
+        
         {/* Tabs */}
-        <div className="flex justify-center mb-6 px-4">
-          <div className="inline-flex p-1 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-emerald-100 w-full max-w-[320px] sm:max-w-none sm:w-auto">
+        <div className="flex justify-center mb-6 sm:mb-8 px-4">
+          <div className="inline-flex p-1 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-emerald-100 w-full max-w-[320px] sm:max-w-none">
             <button
               onClick={() => setActiveTab('featured')}
-              className={`flex-1 sm:flex-none px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
                 activeTab === 'featured'
                   ? 'bg-gradient-to-r from-emerald-800 to-teal-700 text-white shadow-md'
                   : 'text-slate-600 hover:text-emerald-700'
               }`}
             >
               <Crown className="w-3.5 h-3.5 sm:w-4" />
-              Leadership
+              <span className="hidden xs:inline">Leadership</span>
+              <span className="xs:hidden">Lead</span>
             </button>
             <button
               onClick={() => setActiveTab('all')}
-              className={`flex-1 sm:flex-none px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
                 activeTab === 'all'
                   ? 'bg-gradient-to-r from-emerald-800 to-teal-700 text-white shadow-md'
                   : 'text-slate-600 hover:text-emerald-700'
               }`}
             >
-              <Users className="w-3.5 sm:w-4 h-4" />
-              All Staff
+              <Users className="w-3.5 h-3.5 sm:w-4" />
+              <span className="hidden xs:inline">All Staff</span>
+              <span className="xs:hidden">Staff</span>
             </button>
           </div>
         </div>
 
         {activeTab === 'featured' ? (
-          <>
-            {/* Featured Card View - Same as before */}
-            <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 items-start">
-              
-              {/* Featured Hero Card */}
-              <div id="featured-staff-card" className="lg:col-span-8 w-full overflow-hidden rounded-[28px] border border-emerald-100 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.35)]">
-                <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
-                  <div className="relative min-h-[360px] sm:min-h-[460px] lg:min-h-full">
+          /* Featured Card View - Responsive Layout */
+          <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-6">
+            
+            {/* Featured Hero Card - Takes 8 columns on large screens, full width on mobile */}
+            <div id="featured-staff-card" className="lg:col-span-8 w-full">
+              <div className="overflow-hidden rounded-[28px] border border-emerald-100 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.35)]">
+                
+                {/* Responsive Grid Layout inside card */}
+                <div className="flex flex-col lg:grid lg:grid-cols-2">
+                  
+                  {/* Image Section */}
+                  <div className="relative min-h-[360px] sm:min-h-[400px] lg:min-h-full">
                     {getImageUrl(featuredStaff?.image) ? (
                       <img
                         src={getImageUrl(featuredStaff.image)}
@@ -556,40 +553,44 @@ const ModernStaffLeadership = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#041114] via-[#041114]/40 to-transparent" />
                     <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/35 to-transparent" />
 
-                    <div className="absolute left-5 top-5 right-5 z-20 flex flex-wrap items-center gap-2">
-                      <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] backdrop-blur-sm ${featuredMeta.badge}`}>
+                    {/* Badges */}
+                    <div className="absolute left-4 sm:left-5 top-4 sm:top-5 right-4 sm:right-5 z-20 flex flex-wrap items-center gap-2">
+                      <span className={`inline-flex items-center gap-2 rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] backdrop-blur-sm ${featuredMeta.badge}`}>
                         {featuredRoleBadge.icon}
-                        {featuredStaff?.position || featuredStaff?.role || 'Staff Member'}
+                        <span className="hidden xs:inline">{featuredStaff?.position || featuredStaff?.role || 'Staff Member'}</span>
+                        <span className="xs:hidden">{featuredStaff?.role?.substring(0, 10) || 'Staff'}</span>
                       </span>
                       {viewMode === 'other' && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
-                          <FiCheck className="text-[11px]" />
-                          Currently Viewing
+                        <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
+                          <FiCheck className="text-[10px] sm:text-[11px]" />
+                          <span className="hidden xs:inline">Currently Viewing</span>
+                          <span className="xs:hidden">Viewing</span>
                         </span>
                       )}
                     </div>
 
-                    <div className="absolute inset-x-0 bottom-0 z-20 p-5 sm:p-7">
-                      <div className="rounded-[24px] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-md">
-                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">Leadership Profile</p>
-                        <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">{featuredStaff?.name}</h2>
-                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-white/80">
+                    {/* Bottom Info */}
+                    <div className="absolute inset-x-0 bottom-0 z-20 p-4 sm:p-5 lg:p-7">
+                      <div className="rounded-[20px] sm:rounded-[24px] border border-white/15 bg-white/10 p-4 sm:p-5 text-white backdrop-blur-md">
+                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">Leadership Profile</p>
+                        <h2 className="mt-2 sm:mt-3 text-xl sm:text-2xl lg:text-3xl font-black leading-tight">{featuredStaff?.name}</h2>
+                        <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-white/80">
                           {(featuredStaff?.department || featuredStaff?.subject) && (
                             <span className="inline-flex items-center gap-1.5">
-                              <Building2 className="w-4 h-4 text-emerald-300" />
-                              {featuredStaff?.department || featuredStaff?.subject}
+                              <Building2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
+                              <span className="hidden xs:inline">{featuredStaff?.department || featuredStaff?.subject}</span>
                             </span>
                           )}
                           {featuredStaff?.phone && (
                             <a href={`tel:${featuredStaff.phone}`} className="inline-flex items-center gap-1.5 hover:text-white">
-                              <FiPhone className="w-4 h-4 text-emerald-300" />
-                              {formatPhone(featuredStaff.phone)}
+                              <FiPhone className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
+                              <span className="hidden sm:inline">{formatPhone(featuredStaff.phone)}</span>
                             </a>
                           )}
                           {featuredStaff?.email && (
                             <a href={`mailto:${featuredStaff.email}`} className="inline-flex items-center gap-1.5 hover:text-white">
-                              <FiMail className="w-4 h-4 text-emerald-300" />
-                              <span className="truncate">{featuredStaff.email}</span>
+                              <FiMail className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
+                              <span className="hidden md:inline truncate max-w-[150px]">{featuredStaff.email}</span>
                             </a>
                           )}
                         </div>
@@ -597,9 +598,9 @@ const ModernStaffLeadership = () => {
                         {viewMode === 'other' && principal && (
                           <button
                             onClick={returnToPrincipal}
-                            className="mt-5 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-white/20"
+                            className="mt-4 sm:mt-5 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white transition-all hover:bg-white/20"
                           >
-                            <FiArrowLeft className="w-4 h-4" />
+                            <FiArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
                             Back to Principal
                           </button>
                         )}
@@ -607,344 +608,356 @@ const ModernStaffLeadership = () => {
                     </div>
                   </div>
 
-                  <div className="bg-[linear-gradient(180deg,#ffffff_0%,#f7fffb_100%)] p-5 sm:p-7 lg:p-8">
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      <div className="rounded-2xl border border-emerald-100 bg-white p-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Role</p>
-                        <p className="mt-2 text-sm font-black text-slate-900">{featuredMeta.label}</p>
+                  {/* Content Section */}
+                  <div className="bg-[linear-gradient(180deg,#ffffff_0%,#f7fffb_100%)] p-4 sm:p-5 lg:p-6 xl:p-8">
+                    
+                    {/* Stats Grid - Responsive columns */}
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                      <div className="rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
+                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Role</p>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900">{featuredMeta.label}</p>
                       </div>
-                      <div className="rounded-2xl border border-emerald-100 bg-white p-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Department</p>
-                        <p className="mt-2 text-sm font-black text-slate-900">{featuredStaff?.department || featuredStaff?.subject || 'School Leadership'}</p>
+                      <div className="rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
+                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Department</p>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900">{featuredStaff?.department || featuredStaff?.subject || 'School Leadership'}</p>
                       </div>
-                      <div className="rounded-2xl border border-emerald-100 bg-white p-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Contact</p>
-                        <p className="mt-2 text-sm font-black text-slate-900">{featuredStaff?.phone || featuredStaff?.email || 'Available on request'}</p>
+                      <div className="rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
+                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Contact</p>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900 break-words">
+                          {featuredStaff?.phone ? formatPhone(featuredStaff.phone) : (featuredStaff?.email ? 'Email available' : 'Available on request')}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-                      <div className="space-y-6">
-                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
-                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                            <FiUser className="text-emerald-600" /> Profile Summary
-                          </h4>
-                          <p className="text-sm leading-7 text-slate-600">
-                            {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
-                          </p>
+                    {/* Profile Details - Responsive layout */}
+                    <div className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
+                      
+                      {/* Profile Summary */}
+                      <div className="rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
+                        <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                          <FiUser className="text-emerald-600 w-3 h-3 sm:w-4 sm:h-4" /> Profile Summary
+                        </h4>
+                        <p className="text-xs sm:text-sm leading-6 sm:leading-7 text-slate-600">
+                          {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
+                        </p>
+                      </div>
+
+                      {/* Quote */}
+                      {featuredStaff?.quote && (
+                        <div className="rounded-[20px] sm:rounded-[24px] border border-emerald-100 bg-gradient-to-r from-emerald-50 to-teal-50 p-4 sm:p-5">
+                          <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">Signature Note</p>
+                          <p className="mt-2 sm:mt-3 text-sm sm:text-base font-medium italic leading-6 sm:leading-7 text-slate-700">"{featuredStaff.quote}"</p>
                         </div>
+                      )}
 
-                        {featuredStaff?.quote && (
-                          <div className="rounded-[24px] border border-emerald-100 bg-gradient-to-r from-emerald-50 to-teal-50 p-5">
-                            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">Signature Note</p>
-                            <p className="mt-3 text-base font-medium italic leading-7 text-slate-700">"{featuredStaff.quote}"</p>
-                          </div>
-                        )}
-
-                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
-                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                            <Target className="w-4 h-4" /> Areas of Expertise
+                      {/* Expertise & Responsibilities - Responsive grid */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                        
+                        {/* Areas of Expertise */}
+                        <div className="rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
+                          <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                            <Target className="w-3 h-3 sm:w-4 sm:h-4" /> Areas of Expertise
                           </h4>
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
                             {featuredExpertise.length > 0 ? featuredExpertise.map((skill, idx) => (
-                              <span key={idx} className={`rounded-full border px-3 py-1.5 text-xs font-bold ${featuredMeta.chip}`}>
+                              <span key={idx} className={`rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold ${featuredMeta.chip}`}>
                                 {skill}
                               </span>
                             )) : (
-                              <span className="text-sm text-slate-500">Leadership, mentoring, school development, and student success.</span>
+                              <span className="text-xs sm:text-sm text-slate-500">Leadership, mentoring, school development, and student success.</span>
                             )}
                           </div>
                         </div>
-                      </div>
 
-                      <div className="space-y-6">
-                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
-                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                        {/* Key Responsibilities */}
+                        <div className="rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
+                          <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
                             <FiBriefcase /> Key Responsibilities
                           </h4>
-                          <ul className="space-y-3">
+                          <ul className="space-y-2 sm:space-y-3">
                             {featuredResponsibilities.length > 0 ? featuredResponsibilities.map((item, i) => (
-                              <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
-                                <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-emerald-600" />
-                                <span className="leading-6">{item}</span>
+                              <li key={i} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
+                                <span className="mt-1.5 sm:mt-2 h-1.5 w-1.5 sm:h-2 sm:w-2 shrink-0 rounded-full bg-emerald-600" />
+                                <span className="leading-5 sm:leading-6">{item}</span>
                               </li>
                             )) : (
-                              <li className="text-sm italic text-slate-500">Leading school improvement, academic excellence, and student wellbeing.</li>
+                              <li className="text-xs sm:text-sm italic text-slate-500">Leading school improvement, academic excellence, and student wellbeing.</li>
                             )}
                           </ul>
                         </div>
 
-                        <div className="rounded-[24px] border border-slate-200 bg-white p-5">
-                          <h4 className="mb-3 flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                            <Trophy className="w-4 h-4" /> Notable Achievements
+                        {/* Notable Achievements */}
+                        <div className="lg:col-span-2 rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
+                          <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                            <Trophy className="w-3 h-3 sm:w-4 sm:h-4" /> Notable Achievements
                           </h4>
-                          <ul className="space-y-3">
+                          <ul className="space-y-2 sm:space-y-3">
                             {featuredAchievements.length > 0 ? featuredAchievements.map((item, i) => (
-                              <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
-                                <Medal className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                                <span className="leading-6">{item}</span>
+                              <li key={i} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
+                                <Medal className="mt-0.5 h-3 w-3 sm:h-4 sm:w-4 shrink-0 text-emerald-600" />
+                                <span className="leading-5 sm:leading-6">{item}</span>
                               </li>
                             )) : (
-                              <li className="text-sm italic text-slate-500">Contributing to educational excellence and school leadership.</li>
+                              <li className="text-xs sm:text-sm italic text-slate-500">Contributing to educational excellence and school leadership.</li>
                             )}
                           </ul>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Sidebar Cards */}
-              <div className="lg:col-span-4 space-y-4 mt-4 lg:mt-0">
-                
-                {/* PRINCIPAL CARD */}
-                {principal && (
-                  <button
-                    key={principal.id}
-                    onClick={() => handleStaffClick(principal)}
-                    className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
-                      featuredStaff?.id === principal.id 
-                        ? 'border-emerald-700 bg-gradient-to-r from-emerald-50 to-white scale-[1.02]' 
-                        : 'border-emerald-100 hover:border-emerald-300 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                        {principal.image ? (
-                          <img
-                            src={getImageUrl(principal.image)}
-                            alt={principal.name}
-                            className="w-full h-full object-cover object-top"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(principal.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-emerald-900 to-teal-800 flex items-center justify-center">
-                            <Crown className="w-8 h-8 text-yellow-300" />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="px-2 py-1 bg-gradient-to-r from-emerald-900 to-teal-800 text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
-                            <Crown className="w-3 h-3 text-yellow-300" /> PRINCIPAL
-                          </span>
-                          {featuredStaff?.id === principal.id && (
-                            <span className="flex items-center gap-1 text-emerald-700 text-xs font-bold">
-                              <FiCheck className="text-xs" /> Viewing
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                          {principal.name}
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1 line-clamp-1">
-                          {principal.position || 'Chief Principal'}
-                        </p>
-                        <div className="flex items-center gap-1 text-xs text-emerald-700 mt-2 font-bold">
-                          View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
-
-                {/* ACADEMICS DEPUTY CARD */}
-                {academicsDeputy && (
-                  <button
-                    key={academicsDeputy.id}
-                    onClick={() => handleStaffClick(academicsDeputy)}
-                    className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
-                      featuredStaff?.id === academicsDeputy.id 
-                        ? 'border-teal-600 bg-gradient-to-r from-teal-50 to-white scale-[1.02]' 
-                        : 'border-emerald-100 hover:border-teal-300 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                        {academicsDeputy.image ? (
-                          <img
-                            src={getImageUrl(academicsDeputy.image)}
-                            alt={academicsDeputy.name}
-                            className="w-full h-full object-cover object-top"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(academicsDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
-                            <Medal className="w-8 h-8 text-yellow-200" />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="px-2 py-1 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
-                            <Medal className="w-3 h-3 text-yellow-200" /> ACADEMICS DEPUTY
-                          </span>
-                          {featuredStaff?.id === academicsDeputy.id && (
-                            <span className="flex items-center gap-1 text-teal-600 text-xs font-bold">
-                              <FiCheck className="text-xs" /> Viewing
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 group-hover:text-teal-600 transition-colors">
-                          {academicsDeputy.name}
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1 line-clamp-1">
-                          {academicsDeputy.position || 'Deputy Principal (Academics)'}
-                        </p>
-                        <div className="flex items-center gap-1 text-xs text-teal-600 mt-2 font-bold">
-                          View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
-
-                {/* ADMIN DEPUTY CARD */}
-                {adminDeputy && (
-                  <button
-                    key={adminDeputy.id}
-                    onClick={() => handleStaffClick(adminDeputy)}
-                    className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
-                      featuredStaff?.id === adminDeputy.id 
-                        ? 'border-teal-600 bg-gradient-to-r from-teal-50 to-white scale-[1.02]' 
-                        : 'border-emerald-100 hover:border-teal-300 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                        {adminDeputy.image ? (
-                          <img
-                            src={getImageUrl(adminDeputy.image)}
-                            alt={adminDeputy.name}
-                            className="w-full h-full object-cover object-top"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(adminDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
-                            <Medal className="w-8 h-8 text-yellow-200" />
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="px-2 py-1 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
-                            <Medal className="w-3 h-3 text-yellow-200" /> ADMIN DEPUTY
-                          </span>
-                          {featuredStaff?.id === adminDeputy.id && (
-                            <span className="flex items-center gap-1 text-teal-600 text-xs font-bold">
-                              <FiCheck className="text-xs" /> Viewing
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-slate-900 group-hover:text-teal-600 transition-colors">
-                          {adminDeputy.name}
-                        </h3>
-                        <p className="text-slate-500 text-xs mt-1 line-clamp-1">
-                          {adminDeputy.position || 'Deputy Principal (Administration)'}
-                        </p>
-                        <div className="flex items-center gap-1 text-xs text-teal-600 mt-2 font-bold">
-                          View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                )}
-
-                {/* Stats Card */}
-                <div className="bg-gradient-to-br from-emerald-900 to-teal-800 rounded-xl p-6 text-white shadow-xl">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 bg-white/20 rounded-xl">
-                      <Users className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider opacity-90">Staff Overview</p>
-                      <p className="text-2xl font-black">{staff.length} Team Members</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex justify-between">
-                      <span className="text-sm opacity-90">Leadership</span>
-                      <span className="font-bold">
-                        {[principal, academicsDeputy, adminDeputy].filter(Boolean).length}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm opacity-90">Teaching Staff</span>
-                      <span className="font-bold">{teachers.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm opacity-90">Support Staff</span>
-                      <span className="font-bold">{supportStaff.length}</span>
-                    </div>
-                  </div>
-                  
-                  <button 
-                    onClick={() => setActiveTab('all')}
-                    className="w-full py-3 bg-white/20 hover:bg-white/30 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
-                  >
-                    View All Staff
-                    <FiChevronRight className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
             </div>
-          </>
+
+            {/* Sidebar Cards - Takes 4 columns on large screens */}
+            <div className="lg:col-span-4 space-y-4 mt-6 lg:mt-0">
+              
+              {/* PRINCIPAL CARD */}
+              {principal && (
+                <button
+                  key={principal.id}
+                  onClick={() => handleStaffClick(principal)}
+                  className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
+                    featuredStaff?.id === principal.id 
+                      ? 'border-emerald-700 bg-gradient-to-r from-emerald-50 to-white scale-[1.02]' 
+                      : 'border-emerald-100 hover:border-emerald-300 hover:shadow-xl'
+                  }`}
+                >
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden">
+                      {principal.image ? (
+                        <img
+                          src={getImageUrl(principal.image)}
+                          alt={principal.name}
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(principal.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-r from-emerald-900 to-teal-800 flex items-center justify-center">
+                          <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-grow min-w-0">
+                      <div className="flex items-center justify-between mb-1 flex-wrap gap-1">
+                        <span className="px-2 py-1 bg-gradient-to-r from-emerald-900 to-teal-800 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
+                          <Crown className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-yellow-300" /> PRINCIPAL
+                        </span>
+                        {featuredStaff?.id === principal.id && (
+                          <span className="flex items-center gap-1 text-emerald-700 text-[10px] sm:text-xs font-bold">
+                            <FiCheck className="text-[10px] sm:text-xs" /> Viewing
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors text-sm sm:text-base truncate">
+                        {principal.name}
+                      </h3>
+                      <p className="text-slate-500 text-[11px] sm:text-xs mt-0.5 sm:mt-1 truncate">
+                        {principal.position || 'Chief Principal'}
+                      </p>
+                      <div className="flex items-center gap-1 text-[10px] sm:text-xs text-emerald-700 mt-1.5 sm:mt-2 font-bold">
+                        View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              )}
+
+              {/* ACADEMICS DEPUTY CARD */}
+              {academicsDeputy && (
+                <button
+                  key={academicsDeputy.id}
+                  onClick={() => handleStaffClick(academicsDeputy)}
+                  className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
+                    featuredStaff?.id === academicsDeputy.id 
+                      ? 'border-teal-600 bg-gradient-to-r from-teal-50 to-white scale-[1.02]' 
+                      : 'border-emerald-100 hover:border-teal-300 hover:shadow-xl'
+                  }`}
+                >
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden">
+                      {academicsDeputy.image ? (
+                        <img
+                          src={getImageUrl(academicsDeputy.image)}
+                          alt={academicsDeputy.name}
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(academicsDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
+                          <Medal className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-200" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-grow min-w-0">
+                      <div className="flex items-center justify-between mb-1 flex-wrap gap-1">
+                        <span className="px-2 py-1 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
+                          <Medal className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-yellow-200" /> ACADEMICS
+                        </span>
+                        {featuredStaff?.id === academicsDeputy.id && (
+                          <span className="flex items-center gap-1 text-teal-600 text-[10px] sm:text-xs font-bold">
+                            <FiCheck className="text-[10px] sm:text-xs" /> Viewing
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-slate-900 group-hover:text-teal-600 transition-colors text-sm sm:text-base truncate">
+                        {academicsDeputy.name}
+                      </h3>
+                      <p className="text-slate-500 text-[11px] sm:text-xs mt-0.5 sm:mt-1 truncate">
+                        {academicsDeputy.position || 'Deputy Principal (Academics)'}
+                      </p>
+                      <div className="flex items-center gap-1 text-[10px] sm:text-xs text-teal-600 mt-1.5 sm:mt-2 font-bold">
+                        View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              )}
+
+              {/* ADMIN DEPUTY CARD */}
+              {adminDeputy && (
+                <button
+                  key={adminDeputy.id}
+                  onClick={() => handleStaffClick(adminDeputy)}
+                  className={`w-full group relative bg-white rounded-xl p-4 shadow-lg border-2 transition-all duration-300 text-left ${
+                    featuredStaff?.id === adminDeputy.id 
+                      ? 'border-teal-600 bg-gradient-to-r from-teal-50 to-white scale-[1.02]' 
+                      : 'border-emerald-100 hover:border-teal-300 hover:shadow-xl'
+                  }`}
+                >
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden">
+                      {adminDeputy.image ? (
+                        <img
+                          src={getImageUrl(adminDeputy.image)}
+                          alt={adminDeputy.name}
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(adminDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
+                          <Medal className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-200" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-grow min-w-0">
+                      <div className="flex items-center justify-between mb-1 flex-wrap gap-1">
+                        <span className="px-2 py-1 bg-gradient-to-r from-teal-700 to-emerald-700 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
+                          <Medal className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-yellow-200" /> ADMIN
+                        </span>
+                        {featuredStaff?.id === adminDeputy.id && (
+                          <span className="flex items-center gap-1 text-teal-600 text-[10px] sm:text-xs font-bold">
+                            <FiCheck className="text-[10px] sm:text-xs" /> Viewing
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-slate-900 group-hover:text-teal-600 transition-colors text-sm sm:text-base truncate">
+                        {adminDeputy.name}
+                      </h3>
+                      <p className="text-slate-500 text-[11px] sm:text-xs mt-0.5 sm:mt-1 truncate">
+                        {adminDeputy.position || 'Deputy Principal (Administration)'}
+                      </p>
+                      <div className="flex items-center gap-1 text-[10px] sm:text-xs text-teal-600 mt-1.5 sm:mt-2 font-bold">
+                        View Profile <FiChevronRight className="group-hover:translate-x-0.5 transition-transform w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              )}
+
+              {/* Stats Card */}
+              <div className="bg-gradient-to-br from-emerald-900 to-teal-800 rounded-xl p-5 sm:p-6 text-white shadow-xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 sm:p-3 bg-white/20 rounded-xl">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider opacity-90">Staff Overview</p>
+                    <p className="text-xl sm:text-2xl font-black">{staff.length} Team Members</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="opacity-90">Leadership</span>
+                    <span className="font-bold">
+                      {[principal, academicsDeputy, adminDeputy].filter(Boolean).length}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="opacity-90">Teaching Staff</span>
+                    <span className="font-bold">{teachers.length}</span>
+                  </div>
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span className="opacity-90">Support Staff</span>
+                    <span className="font-bold">{supportStaff.length}</span>
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={() => setActiveTab('all')}
+                  className="w-full py-2.5 sm:py-3 bg-white/20 hover:bg-white/30 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  View All Staff
+                  <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
         ) : (
-          /* ========== MODERN TABLE VIEW FOR ALL STAFF ========== */
+          /* Modern Table View for All Staff - Fully Responsive */
           <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 overflow-hidden">
             
             {/* Table Header with Search and Filters */}
             <div className="p-4 sm:p-6 border-b border-emerald-100 bg-gradient-to-r from-emerald-50/50 to-white">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
-                  <h3 className="text-lg font-black text-emerald-800 flex items-center gap-2">
-                    <Users className="w-5 h-5" />
+                  <h3 className="text-base sm:text-lg font-black text-emerald-800 flex items-center gap-2">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                     Complete Staff Directory
                   </h3>
-                  <p className="text-sm text-slate-500 mt-1">
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
                     {sortedStaff.length} staff members • Page {currentPage} of {totalPages || 1}
                   </p>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                   {/* Search Bar */}
-                  <div className="relative">
-                    <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <div className="relative flex-1 sm:flex-none">
+                    <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
                     <input
                       type="text"
-                      placeholder="Search by name, position, department..."
+                      placeholder="Search staff..."
                       value={searchTerm}
                       onChange={(e) => {
                         setSearchTerm(e.target.value);
                         setCurrentPage(1);
                       }}
-                      className="pl-9 pr-4 py-2 border border-emerald-200 rounded-xl text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      className="pl-9 pr-4 py-2 border border-emerald-200 rounded-xl text-xs sm:text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     />
                   </div>
                   
                   {/* Role Filter */}
-                  <div className="relative">
+                  <div className="relative flex-1 sm:flex-none">
                     <select
                       value={filterRole}
                       onChange={(e) => {
                         setFilterRole(e.target.value);
                         setCurrentPage(1);
                       }}
-                      className="pl-4 pr-8 py-2 border border-emerald-200 rounded-xl text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="pl-4 pr-8 py-2 border border-emerald-200 rounded-xl text-xs sm:text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full sm:w-auto"
                     >
                       <option value="all">All Roles</option>
                       <option value="principal">Principal</option>
@@ -952,43 +965,43 @@ const ModernStaffLeadership = () => {
                       <option value="teacher">Teaching Staff</option>
                       <option value="support">Support Staff</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 pointer-events-none" />
                   </div>
                 </div>
               </div>
             </div>
             
-            {/* Staff Table - Responsive with horizontal scroll on mobile */}
+            {/* Staff Table - Horizontal scroll on mobile */}
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[768px] lg:min-w-full">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('name')}>
+                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('name')}>
                       <div className="flex items-center gap-1">
                         Staff Member
                         {sortField === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('position')}>
+                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('position')}>
                       <div className="flex items-center gap-1">
                         Position
                         {sortField === 'position' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('department')}>
+                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('department')}>
                       <div className="flex items-center gap-1">
-                        Department / Subject
+                        Department
                         {sortField === 'department' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('contact')}>
+                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('contact')}>
                       <div className="flex items-center gap-1">
                         Contact
                         {sortField === 'contact' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Role</th>
-                    <th className="px-4 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Action</th>
+                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider">Role</th>
+                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-center text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -1007,9 +1020,9 @@ const ModernStaffLeadership = () => {
                         }}
                       >
                         {/* Name Column with Avatar */}
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-100 to-teal-100 flex-shrink-0">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-100 to-teal-100 flex-shrink-0">
                               {member.image ? (
                                 <img
                                   src={getImageUrl(member.image)}
@@ -1022,65 +1035,73 @@ const ModernStaffLeadership = () => {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  {isPrincipal ? <Crown className="w-5 h-5 text-emerald-600" /> : <FiUser className="w-5 h-5 text-emerald-500" />}
+                                  {isPrincipal ? <Crown className="w-3 h-3 sm:w-5 sm:h-5 text-emerald-600" /> : <FiUser className="w-3 h-3 sm:w-5 sm:h-5 text-emerald-500" />}
                                 </div>
                               )}
                             </div>
-                            <div>
-                              <p className="font-bold text-slate-900 text-sm">{member.name}</p>
+                            <div className="min-w-0">
+                              <p className="font-bold text-slate-900 text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">{member.name}</p>
                               {member.qualification && (
-                                <p className="text-xs text-slate-500">{member.qualification}</p>
+                                <p className="text-[10px] sm:text-xs text-slate-500 truncate hidden sm:block">{member.qualification}</p>
                               )}
                             </div>
                           </div>
                         </td>
                         
                         {/* Position Column */}
-                        <td className="px-4 py-3">
-                          <p className="text-sm text-slate-700 font-medium">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <p className="text-[11px] sm:text-sm text-slate-700 font-medium truncate max-w-[120px] sm:max-w-none">
                             {member.position || member.role || 'Staff Member'}
                           </p>
                         </td>
                         
                         {/* Department/Subject Column */}
-                        <td className="px-4 py-3">
-                          <p className="text-sm text-slate-600">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <p className="text-[11px] sm:text-sm text-slate-600 truncate max-w-[100px] sm:max-w-none">
                             {member.department || member.subject || '—'}
                           </p>
                         </td>
                         
                         {/* Contact Column */}
-                        <td className="px-4 py-3">
-                          <div className="space-y-1">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <div className="space-y-0.5 sm:space-y-1">
                             {member.email && (
-                              <a href={`mailto:${member.email}`} className="text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                                <FiMail className="w-3 h-3" />
-                                <span className="truncate max-w-[150px]">{member.email}</span>
+                              <a href={`mailto:${member.email}`} className="text-[10px] sm:text-xs text-emerald-600 hover:text-emerald-700 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                <FiMail className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                                <span className="truncate max-w-[100px] sm:max-w-[150px]">{member.email}</span>
+                              </a>
+                            )}
+                            {member.phone && (
+                              <a href={`tel:${member.phone}`} className="text-[10px] sm:text-xs text-slate-600 hover:text-emerald-600 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                <FiPhone className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                                <span className="truncate max-w-[100px] sm:max-w-[150px]">{member.phone}</span>
                               </a>
                             )}
                           </div>
                         </td>
                         
                         {/* Role Badge Column */}
-                        <td className="px-4 py-3">
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${roleBadge.bg} ${roleBadge.text}`}>
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <span className={`inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold whitespace-nowrap ${roleBadge.bg} ${roleBadge.text}`}>
                             {roleBadge.icon}
-                            {roleBadge.label}
+                            <span className="hidden sm:inline">{roleBadge.label}</span>
+                            <span className="sm:hidden">{roleBadge.label?.substring(0, 3)}</span>
                           </span>
                         </td>
                         
                         {/* Action Column */}
-                        <td className="px-4 py-3 text-center">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3 text-center">
                           <button 
-                            className="text-emerald-600 hover:text-emerald-700 text-xs font-semibold flex items-center gap-1 mx-auto"
+                            className="text-emerald-600 hover:text-emerald-700 text-[10px] sm:text-xs font-semibold flex items-center gap-0.5 sm:gap-1 mx-auto whitespace-nowrap"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleStaffClick(member);
                               setActiveTab('featured');
                             }}
                           >
-                            View Profile
-                            <FiChevronRight className="w-3 h-3" />
+                            <span className="hidden xs:inline">View</span>
+                            Profile
+                            <FiChevronRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                           </button>
                         </td>
                       </tr>
@@ -1092,26 +1113,26 @@ const ModernStaffLeadership = () => {
             
             {/* Empty State */}
             {sortedStaff.length === 0 && (
-              <div className="text-center py-12">
-                <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                <p className="text-slate-500 font-medium">No staff members found</p>
-                <p className="text-sm text-slate-400 mt-1">Try adjusting your search or filter</p>
+              <div className="text-center py-8 sm:py-12">
+                <Users className="w-10 h-10 sm:w-12 sm:h-12 text-slate-300 mx-auto mb-3 sm:mb-4" />
+                <p className="text-slate-500 font-medium text-sm sm:text-base">No staff members found</p>
+                <p className="text-xs sm:text-sm text-slate-400 mt-1">Try adjusting your search or filter</p>
               </div>
             )}
             
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="px-4 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+              <div className="px-3 sm:px-4 py-3 sm:py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 order-2 sm:order-1"
                 >
-                  <FiChevronRight className="w-4 h-4 rotate-180" />
+                  <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4 rotate-180" />
                   Previous
                 </button>
                 
-                <div className="flex gap-1">
+                <div className="flex gap-1 order-1 sm:order-2">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
                     if (totalPages <= 5) {
@@ -1128,7 +1149,7 @@ const ModernStaffLeadership = () => {
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                        className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg text-[11px] sm:text-sm font-medium transition-colors ${
                           currentPage === pageNum
                             ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white'
                             : 'text-slate-600 hover:bg-emerald-100'
@@ -1143,30 +1164,30 @@ const ModernStaffLeadership = () => {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 order-3"
                 >
                   Next
-                  <FiChevronRight className="w-4 h-4" />
+                  <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
               </div>
             )}
             
             {/* Table Footer Stats */}
-            <div className="px-4 py-3 bg-slate-50/80 border-t border-slate-100 text-xs text-slate-500 flex justify-between items-center">
+            <div className="px-3 sm:px-4 py-2 sm:py-3 bg-slate-50/80 border-t border-slate-100 text-[10px] sm:text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2">
               <span>Showing {paginatedStaff.length} of {sortedStaff.length} staff members</span>
-              <span className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-600"></span> Principal</span>
-                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-teal-500"></span> Deputy</span>
-                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400"></span> Teacher</span>
-                <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-400"></span> Support</span>
-              </span>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-center">
+                <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-600"></span> Principal</span>
+                <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-teal-500"></span> Deputy</span>
+                <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400"></span> Teacher</span>
+                <span className="inline-flex items-center gap-1"><span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-400"></span> Support</span>
+              </div>
             </div>
           </div>
         )}
 
         {/* Mobile Hint */}
         {isMobile && activeTab === 'featured' && (
-          <div className="mt-6 text-center text-sm text-slate-500">
+          <div className="mt-6 text-center text-xs sm:text-sm text-slate-500">
             Tap on any staff card to view their profile
           </div>
         )}
