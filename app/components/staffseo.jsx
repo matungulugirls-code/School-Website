@@ -332,22 +332,62 @@ export default function StaffProfilePage() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
-        <div className="relative mb-10">
-          <div className="w-16 h-16 border-[3px] border-slate-200 border-t-[#1a1a2e] rounded-full animate-spin" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Image src="/seo/kinyui.png" alt="Logo" width={28} height={28} className="opacity-60" />
-          </div>
-          <h1 className="absolute inset-0 flex items-center justify-center text-2xl font-black text-[#1a1a2e]/80">
-            Matungulu Girls Senior school
-          </h1>
-        </div>
-        <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.25em]">Loading The Staff Profile</p>
+if (loading) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex flex-col items-center justify-center p-6">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#1a1a2e]/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#d7a73d]/5 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
-    );
-  }
+
+      {/* Main loading card */}
+      <div className="relative bg-white/60 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/50">
+        {/* Animated spinner with gradient */}
+        <div className="relative mb-8">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] animate-spin" />
+          <div className="absolute inset-[3px] bg-white rounded-full flex items-center justify-center">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1a1a2e] to-[#34556d] flex items-center justify-center animate-pulse">
+              <Image 
+                src="/MatG.jpeg" 
+                alt="Logo" 
+                width={32} 
+                height={32} 
+                className="brightness-0 invert opacity-90"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* School name with shimmer effect */}
+        <div className="text-center mb-4">
+          <h2 className="text-xl font-black bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]">
+            Matungulu Girls Senior School
+          </h2>
+        </div>
+
+        {/* Loading text with animated dots */}
+        <div className="flex items-center justify-center gap-1">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
+            Loading Staff Profile
+          </p>
+          <div className="flex gap-1">
+            <span className="w-1.5 h-1.5 bg-[#1a1a2e] rounded-full animate-bounce [animation-delay:-0.3s]" />
+            <span className="w-1.5 h-1.5 bg-[#34556d] rounded-full animate-bounce [animation-delay:-0.15s]" />
+            <span className="w-1.5 h-1.5 bg-[#d7a73d] rounded-full animate-bounce" />
+          </div>
+        </div>
+      </div>
+
+      {/* Optional: Progress bar */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48">
+        <div className="h-0.5 bg-slate-200 rounded-full overflow-hidden">
+          <div className="h-full w-1/2 bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] rounded-full animate-progress" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
   if (error || !staff) {
     return (
