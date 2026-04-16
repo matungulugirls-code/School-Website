@@ -297,15 +297,17 @@ const StaffCard = ({ staff, onContactClick }) => {
 
       {/* Image */}
       <div className="relative mx-5 mt-5 aspect-[4/4.15] overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
-        <Image
-          src={getImageSrc(staff)}
-          alt={staff.name}
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          priority={hierarchy === 'leadership'}
-          onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
-        />
+       <div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden">
+          <Image
+            src={getImageSrc(staff)}
+            alt={staff.name}
+            fill
+            className="object-cover object-top"
+            sizes="(max-width: 640px) 100vw, 500px"
+            priority={hierarchy === 'leadership'}
+            onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+          />
+        </div>
 
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07111b]/78 via-[#07111b]/28 to-transparent" />
 
