@@ -135,7 +135,7 @@ export default function AboutPage() {
       <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0 overflow-hidden rounded-t-md">
           <Image
-            src="/hero/MatG1.jpg"
+            src="/Matungulu/9.jpeg"
             alt="Matungulu Girls High School"
             fill
             className="object-cover opacity-85 scale-[1.03]"
@@ -160,7 +160,7 @@ export default function AboutPage() {
           <h1 className="mb-6 text-3xl font-black leading-none tracking-tighter text-white sm:text-4xl md:text-5xl">
             Matungulu Girls
             <span className="bg-gradient-to-r from-emerald-300 via-emerald-200 to-white/80 bg-clip-text text-transparent">
-              {" "}High School
+              {" "}Senior School
             </span>
           </h1>
 
