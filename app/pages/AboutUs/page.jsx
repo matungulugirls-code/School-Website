@@ -23,7 +23,7 @@ import { SiGooglemaps } from "react-icons/si";
 
 export default function AboutPage() {
   const stats = [
-    { value: "C2", label: "Extra County School", note: "Public girls boarding school" },
+    { value: "C2", label: "C1 National School", note: "Public girls boarding school" },
     { value: "12345503", label: "KNEC Code", note: "Recognized national institution" },
     { value: "Matungulu", label: "Sub-County", note: "Machakos County, Kenya" },
     { value: "8.13", label: "Recent Mean Score", note: "Reported for KCSE 2025" },
@@ -133,7 +133,7 @@ export default function AboutPage() {
   const schoolDetails = [
     {
       title: "Who We Are",
-      text: "Matungulu Girls High School is a public extra county girls boarding school serving learners in Matungulu Sub-County, Machakos County.",
+      text: "Matungulu Girls High School is a public C1 National girls boarding school serving learners in Matungulu Sub-County, Machakos County.",
     },
     {
       title: "Our Learning Culture",
@@ -232,7 +232,7 @@ export default function AboutPage() {
               Girls Boarding
             </span>
             <span className="text-[10px] font-bold uppercase tracking-widest text-white">
-              Extra County
+              C1 National
             </span>
             <span className="text-[10px] font-bold uppercase tracking-widest text-white">
               CBC Ready
