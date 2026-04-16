@@ -490,11 +490,9 @@ export default function StaffProfilePage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-
-          
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">       
 <section className="px-6 py-12 text-center sm:py-20 lg:px-8">
-  <div className="mx-auto max-w-7xl">
+  <div className="mx-auto w-full">
     {/* The Title */}
     <h2 className="text-lg font-black tracking-tight text-black sm:text-5xl mb-8">
       A Legacy of Excellence
