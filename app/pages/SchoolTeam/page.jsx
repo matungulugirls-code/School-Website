@@ -285,110 +285,103 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
   );
 };
 
+// StaffCard Component — horizontal modern card
 const StaffCard = ({ staff, onContactClick }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
   const hierarchy = getStaffHierarchy(staff.position);
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    /* ULTRA-WIDE WIDTH: max-w-[500px] for a high-impact, premium feel */
-    <div className="relative flex h-full w-full max-w-[500px] mx-auto flex-col overflow-hidden rounded-[45px] border border-slate-200 bg-white shadow-[0_35px_70px_-30px_rgba(15,23,42,0.25)] transition-all">
-      
-      {/* Dynamic Background Header */}
-      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
+    <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
 
-      {/* Hero Image Section - 75% height focus */}
-      <div className="relative mx-6 mt-6 aspect-[4/5.2] overflow-hidden rounded-[38px] border border-white/80 bg-slate-100 shadow-xl">
-        
-        {/* The Image - Locked to top 75% of the inner container */}
-        <div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden">
-          <Image
-            src={getImageSrc(staff)}
-            alt={staff.name}
-            fill
-            className="object-cover object-top"
-            sizes="(max-width: 640px) 100vw, 500px"
-            priority={hierarchy === 'leadership'}
-            onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
-          />
-        </div>
+      {/* Image */}
+      <div className="relative mx-5 mt-5 aspect-[4/4.15] overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
+        <Image
+          src={getImageSrc(staff)}
+          alt={staff.name}
+          fill
+          className="object-cover object-top"
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          priority={hierarchy === 'leadership'}
+          onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+        />
 
-        {/* Deep Gradient for text protection */}
-        <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#07111b]/95 via-[#07111b]/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07111b]/78 via-[#07111b]/28 to-transparent" />
 
-        {/* Status Badge */}
         {hierarchy === 'leadership' && (
-          <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-[#1a1a2e]/95 px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.25em] text-white backdrop-blur-md border border-white/10">
-            <FiShield size={13} /> Leadership
+          <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-[#1a1a2e]/92 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+            <FiShield size={11} /> Leadership
           </div>
         )}
 
-        {/* Floating Expanded Info Plate */}
-        <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between gap-5">
-          <div className="min-w-0 flex-1 rounded-[28px] bg-white/95 px-6 py-5 shadow-2xl backdrop-blur-md border border-white/60">
-            <p className="truncate text-lg font-black text-slate-950 tracking-tighter leading-none">
-              {staff.name}
-            </p>
-            <p className="truncate text-[12px] font-black uppercase tracking-[0.2em] text-indigo-800 mt-1.5">
+        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+          <div className="min-w-0 rounded-[20px] bg-white/95 px-4 py-3 shadow-sm backdrop-blur-sm">
+            <p className="truncate text-[15px] font-black text-slate-950">{staff.name}</p>
+            <p className="truncate text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700">
               {staff.position}
             </p>
           </div>
-          
-          <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-[24px] border bg-white shadow-xl ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
-            <DeptIcon size={26} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border bg-white/92 shadow-sm backdrop-blur-sm ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
+            <DeptIcon size={18} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
           </div>
         </div>
       </div>
 
-      {/* Expanded Content Section */}
-      <div className="flex flex-1 flex-col px-10 pb-10 pt-8">
-        <div className="mb-6 flex flex-wrap items-center gap-4">
-          <span className={`inline-flex items-center gap-2.5 rounded-full border-2 px-5 py-2.5 text-[12px] font-black uppercase tracking-widest ${getBadgeColorStyles(deptConfig?.color)}`}>
-            <DeptIcon size={14} />
+      {/* Content */}
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
+        <div className="mb-4 flex flex-wrap items-center gap-2.5">
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-extrabold ${getBadgeColorStyles(deptConfig?.color)}`}>
+            <DeptIcon size={11} />
             {staff.department}
           </span>
-          <span className="inline-flex items-center gap-2.5 rounded-full border-2 border-slate-100 bg-slate-50 px-5 py-2.5 text-[12px] font-black text-slate-500 uppercase tracking-widest">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-            Active
-          </span>
+          {staff.email && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-bold text-slate-700">
+              <FiMail size={11} />
+              Available
+            </span>
+          )}
         </div>
 
-        {/* Bio text with improved readability for the wider layout */}
-        <p className="mb-8 text-[15px] font-medium leading-8 text-slate-600 italic border-l-4 border-slate-100 pl-4">
-          "{staff.quote || staff.bio}"
+        <p className="mb-5 text-[13px] font-semibold leading-6 text-slate-700 line-clamp-3">
+          {staff.quote || staff.bio}
         </p>
 
-        {/* Specialized Skills */}
         {staff.expertise && staff.expertise.length > 0 && (
-          <div className="mb-8 flex flex-wrap gap-3">
-            {staff.expertise.slice(0, 3).map((tag, idx) => (
-              <span key={idx} className="rounded-2xl bg-slate-50 px-4 py-2.5 text-[12px] font-bold text-slate-800 ring-2 ring-slate-100">
+          <div className="mb-5 flex flex-wrap gap-2.5">
+            {staff.expertise.slice(0, 2).map((tag, idx) => (
+              <span key={idx} className="rounded-full bg-[#f5f7fb] px-3 py-1.5 text-[11px] font-bold text-slate-700 ring-1 ring-slate-200/80">
                 {tag}
               </span>
             ))}
+            {staff.expertise.length > 2 && (
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-500 ring-1 ring-slate-200/80">
+                +{staff.expertise.length - 2}
+              </span>
+            )}
           </div>
         )}
 
-        {/* Large Action Buttons */}
-        <div className="mt-auto flex gap-5 border-t border-slate-100 pt-8">
+        <div className="mt-auto flex gap-3 border-t border-slate-200 pt-4">
           <button
             onClick={() => onContactClick(staff)}
-            className="flex flex-1 items-center justify-center gap-3 rounded-[22px] border-2 border-slate-200 bg-white px-6 py-4.5 text-[14px] font-black text-slate-800 transition-all hover:border-slate-400 active:scale-95"
+            className="flex flex-1 items-center cursor-pointer justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[12px] font-extrabold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50"
           >
-            <FiMail size={16} /> Contact
+            <FiMail size={12} /> Contact
           </button>
           
           <Link
             href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-            className="flex flex-1 items-center justify-center gap-3 rounded-[22px] bg-[#1a1a2e] px-6 py-4.5 text-[14px] font-black text-white transition-all hover:shadow-2xl hover:shadow-indigo-900/30 active:scale-95"
+            className="flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-2xl bg-[#1a1a2e] px-4 py-3 text-[12px] font-extrabold text-white transition-colors hover:bg-[#2d2d44]"
           >
-            View Full Profile <FiChevronRight size={16} />
+            <FiChevronRight size={12} /> View
           </Link>
         </div>
       </div>
     </div>
   );
 };
+
 // StaffListCard Component
 const StaffListCard = ({ staff, onContactClick }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
@@ -723,7 +716,20 @@ export default function StaffDirectory() {
           </Link>
 
           <div className="flex flex-1 flex-col gap-3 lg:max-w-3xl lg:flex-row lg:items-center lg:justify-end">
-        
+            <div className="grid grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 text-center lg:max-w-xs">
+              <div className="px-3 py-2">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Profiles</p>
+                <p className="text-sm font-black text-slate-900">{staffData.length}</p>
+              </div>
+              <div className="border-x border-slate-200 px-3 py-2">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Views</p>
+                <p className="text-sm font-black text-slate-900">{viewMode === 'grid' ? 'Grid' : 'List'}</p>
+              </div>
+              <div className="px-3 py-2">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">Focus</p>
+                <p className="text-sm font-black text-slate-900">{selectedHierarchy === 'all' ? 'All' : selectedHierarchy}</p>
+              </div>
+            </div>
 
             <div className="relative w-full lg:max-w-md">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
