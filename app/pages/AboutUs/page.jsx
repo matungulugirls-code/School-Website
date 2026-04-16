@@ -133,7 +133,7 @@ export default function AboutPage() {
   const schoolDetails = [
     {
       title: "Who We Are",
-      text: "Matungulu Girls High School is a public C1 National girls boarding school serving learners in Matungulu Sub-County, Machakos County.",
+      text: "Matungulu Girls Senior School is a public C1 National girls boarding school serving learners in Matungulu Sub-County, Machakos County.",
     },
     {
       title: "Our Learning Culture",
@@ -151,7 +151,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 overflow-hidden rounded-t-md">
           <Image
             src="/hero/MatG1.jpg"
-            alt="Matungulu Girls High School"
+            alt="Matungulu Girls Senior School"
             fill
             className="object-cover opacity-60 scale-[1.02] sm:opacity-65"
             priority
@@ -304,7 +304,7 @@ export default function AboutPage() {
               A space where girls are taught to excel and trusted to lead.
             </h2>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">
-              Matungulu Girls High School serves learners in a focused girls-only boarding
+              Matungulu Girls Senior School serves learners in a focused girls-only boarding
               environment that supports academic achievement, personal discipline, and
               positive identity formation. The school&apos;s setting allows girls to grow in
               confidence, discover their strengths, and prepare for meaningful futures in
@@ -331,7 +331,7 @@ export default function AboutPage() {
             <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-300/40 blur-3xl" />
             <div className="relative overflow-hidden rounded-[1.6rem]">
               <Image
-                src="/hero/matG.jpg"
+                src="/Matungulu/29.jpeg"
                 alt="Students at Matungulu Girls"
                 width={1200}
                 height={1200}
