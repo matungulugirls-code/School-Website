@@ -292,89 +292,98 @@ const StaffCard = ({ staff, onContactClick }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
+    /* Width increased by 20% using max-w-sm (approx 384px) up from original standard card sizes */
+    <div className="relative flex h-full w-full max-w-[420px] mx-auto flex-col overflow-hidden rounded-[40px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)] transition-all">
+      
+      {/* Top Brand Gradient */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
 
-      {/* Image */}
-      <div className="relative mx-5 mt-5 aspect-[4/4.15] overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
-        <Image
-          src={getImageSrc(staff)}
-          alt={staff.name}
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          priority={hierarchy === 'leadership'}
-          onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
-        />
+      {/* Image Section - Constrained to 75% height of its container */}
+      <div className="relative mx-5 mt-5 aspect-[4/5.8] overflow-hidden rounded-[32px] border border-white/70 bg-slate-100 shadow-md">
+        
+        {/* The Image - Forced to top 75% */}
+        <div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden">
+          <Image
+            src={getImageSrc(staff)}
+            alt={staff.name}
+            fill
+            className="object-cover object-top"
+            sizes="(max-width: 640px) 100vw, 420px"
+            priority={hierarchy === 'leadership'}
+            onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+          />
+        </div>
 
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07111b]/78 via-[#07111b]/28 to-transparent" />
+        {/* Improved Shadow Overlay for text readability */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#07111b]/90 via-[#07111b]/40 to-transparent" />
 
+        {/* Leadership Badge */}
         {hierarchy === 'leadership' && (
-          <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-[#1a1a2e]/92 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
-            <FiShield size={11} /> Leadership
+          <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-[#1a1a2e]/95 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white backdrop-blur-md">
+            <FiShield size={12} /> Leadership
           </div>
         )}
 
-        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
-          <div className="min-w-0 rounded-[20px] bg-white/95 px-4 py-3 shadow-sm backdrop-blur-sm">
-            <p className="truncate text-[15px] font-black text-slate-950">{staff.name}</p>
-            <p className="truncate text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700">
+        {/* Floating Info Plate */}
+        <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
+          <div className="min-w-0 flex-1 rounded-[24px] bg-white/95 px-5 py-4 shadow-lg backdrop-blur-md border border-white/50">
+            <p className="truncate text-16px font-black text-slate-950 tracking-tight">{staff.name}</p>
+            <p className="truncate text-[11px] font-black uppercase tracking-[0.15em] text-indigo-900 mt-0.5">
               {staff.position}
             </p>
           </div>
-          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border bg-white/92 shadow-sm backdrop-blur-sm ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
-            <DeptIcon size={18} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
+          
+          <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[22px] border bg-white shadow-md ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
+            <DeptIcon size={22} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
-        <div className="mb-4 flex flex-wrap items-center gap-2.5">
-          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-extrabold ${getBadgeColorStyles(deptConfig?.color)}`}>
-            <DeptIcon size={11} />
+      {/* Content Section */}
+      <div className="flex flex-1 flex-col px-7 pb-7 pt-6">
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-wider ${getBadgeColorStyles(deptConfig?.color)}`}>
+            <DeptIcon size={12} />
             {staff.department}
           </span>
           {staff.email && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-bold text-slate-700">
-              <FiMail size={11} />
+            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-black text-slate-600 uppercase tracking-wider">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Available
             </span>
           )}
         </div>
 
-        <p className="mb-5 text-[13px] font-semibold leading-6 text-slate-700 line-clamp-3">
-          {staff.quote || staff.bio}
+        {/* Bio/Quote with better visibility */}
+        <p className="mb-6 text-[14px] font-medium leading-7 text-slate-600 line-clamp-3 italic px-1">
+          "{staff.quote || staff.bio}"
         </p>
 
+        {/* Expertise Tags */}
         {staff.expertise && staff.expertise.length > 0 && (
-          <div className="mb-5 flex flex-wrap gap-2.5">
-            {staff.expertise.slice(0, 2).map((tag, idx) => (
-              <span key={idx} className="rounded-full bg-[#f5f7fb] px-3 py-1.5 text-[11px] font-bold text-slate-700 ring-1 ring-slate-200/80">
+          <div className="mb-6 flex flex-wrap gap-2">
+            {staff.expertise.slice(0, 3).map((tag, idx) => (
+              <span key={idx} className="rounded-xl bg-slate-50 px-3.5 py-2 text-[11px] font-bold text-slate-700 ring-1 ring-slate-200">
                 {tag}
               </span>
             ))}
-            {staff.expertise.length > 2 && (
-              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-500 ring-1 ring-slate-200/80">
-                +{staff.expertise.length - 2}
-              </span>
-            )}
           </div>
         )}
 
-        <div className="mt-auto flex gap-3 border-t border-slate-200 pt-4">
+        {/* Action Buttons - Larger and Bold */}
+        <div className="mt-auto flex gap-4 border-t border-slate-100 pt-6">
           <button
             onClick={() => onContactClick(staff)}
-            className="flex flex-1 items-center cursor-pointer justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[12px] font-extrabold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-5 py-4 text-[13px] font-black text-slate-800 transition-all hover:bg-slate-50 active:scale-95"
           >
-            <FiMail size={12} /> Contact
+            <FiMail size={14} /> Contact
           </button>
           
           <Link
             href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-            className="flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-2xl bg-[#1a1a2e] px-4 py-3 text-[12px] font-extrabold text-white transition-colors hover:bg-[#2d2d44]"
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#1a1a2e] px-5 py-4 text-[13px] font-black text-white transition-all hover:bg-[#2d2d44] active:scale-95 shadow-lg shadow-indigo-900/20"
           >
-            <FiChevronRight size={12} /> View
+            View Profile <FiChevronRight size={14} />
           </Link>
         </div>
       </div>
