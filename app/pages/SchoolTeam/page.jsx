@@ -831,76 +831,75 @@ export default function StaffDirectory() {
         </div>
       </div>
 
-      {/* ── Top Filter Bar ── */}
-      <div className="sticky top-[92px] z-20 border-b border-slate-100 bg-slate-50/88 backdrop-blur-sm lg:top-[73px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          
-          {/* Hierarchy Tabs */}
-          <div className="flex items-center gap-2 py-3.5 overflow-x-auto scrollbar-hide -mx-1 px-1">
-            {[
-              { key: 'all', label: 'All Staff', Icon: FiUsers, count: staffData.length },
-              { key: 'leadership', label: 'Leadership', Icon: FiShield, count: staffByHierarchy.leadership?.length || 0 },
-              { key: 'teaching', label: 'Teaching', Icon: FiBookOpen, count: staffByHierarchy.teaching?.length || 0 },
-              { key: 'support', label: 'Support', Icon: FiSettings, count: staffByHierarchy.support?.length || 0 },
-            ].map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => setSelectedHierarchy(item.key)}
-                  className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-black transition-[box-shadow,filter] ${
-                    selectedHierarchy === item.key
-                      ? FILTER_BUTTON_STYLES[item.key].active
-                      : `${FILTER_BUTTON_STYLES[item.key].base} opacity-95 hover:opacity-100`
-                  }`}
-                >
-                  <item.Icon size={16} />
-                  <span className="whitespace-nowrap">{item.label}</span>
-                  <span className={`rounded-full px-2 py-1 text-[10px] font-black ${FILTER_BUTTON_STYLES[item.key].count}`}>
-                    {item.count}
-                  </span>
-                </button>
-            ))}
+   {/* ── Top Filter Bar ── */}
+<div className="sticky top-[92px] z-20 border-b border-slate-100 bg-slate-50/88 backdrop-blur-sm lg:top-[73px]">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    
+    {/* Hierarchy Tabs */}
+    <div className="flex items-center gap-2 py-3.5 overflow-x-auto scrollbar-hide -mx-1 px-1">
+      {[
+        { key: 'all', label: 'All Staff', Icon: FiUsers, count: staffData.length },
+        { key: 'leadership', label: 'Leadership', Icon: FiShield, count: staffByHierarchy.leadership?.length || 0 },
+        { key: 'teaching', label: 'Teaching', Icon: FiBookOpen, count: staffByHierarchy.teaching?.length || 0 },
+        { key: 'support', label: 'Support', Icon: FiSettings, count: staffByHierarchy.support?.length || 0 },
+      ].map((item) => (
+          <button
+            key={item.key}
+            onClick={() => setSelectedHierarchy(item.key)}
+            className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-black transition-[box-shadow,filter] ${
+              selectedHierarchy === item.key
+                ? FILTER_BUTTON_STYLES[item.key].active
+                : `${FILTER_BUTTON_STYLES[item.key].base} opacity-95 hover:opacity-100`
+            }`}
+          >
+            <item.Icon size={16} />
+            <span className="whitespace-nowrap">{item.label}</span>
+            <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${FILTER_BUTTON_STYLES[item.key].count}`}>
+              {item.count}
+            </span>
+          </button>
+      ))}
 
-            {/* Divider */}
-            <div className="w-px h-6 bg-slate-200 mx-2 flex-shrink-0" />
+      {/* Divider */}
+      <div className="w-px h-6 bg-slate-200 mx-2 flex-shrink-0" />
 
-{/* Department Pills */}
-{DEPARTMENTS.map((dept) => {
-  const DIcon = DEPT_ICONS[dept.id] || FiLayers;
-  return (
-    <button
-      key={dept.id}
-      onClick={() => toggleDept(dept.id)}
-      className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-extrabold transition-[box-shadow,background-color,border-color,color] ${
-        selectedDepts.includes(dept.id)
-          ? `${getBadgeColorStyles(dept.color)} shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_5px_rgba(148,163,184,0.18)]`
-          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-      }`}
-    >
-      <DIcon size={14} />
-      <span className="whitespace-nowrap">{dept.label}</span>
-      <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${
-        selectedDepts.includes(dept.id) ? 'bg-white/75 text-slate-900' : 'bg-slate-100 text-slate-600'
-      }`}>{getDeptCount(dept.id)}</span>
-    </button>
-  );
-})}
+      {/* Department Pills */}
+      {DEPARTMENTS.map((dept) => {
+        const DIcon = DEPT_ICONS[dept.id] || FiLayers;
+        return (
+          <button
+            key={dept.id}
+            onClick={() => toggleDept(dept.id)}
+            className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-extrabold transition-[box-shadow,background-color,border-color,color] ${
+              selectedDepts.includes(dept.id)
+                ? `${getBadgeColorStyles(dept.color)} shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_5px_rgba(148,163,184,0.18)]`
+                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+            }`}
+          >
+            <DIcon size={14} />
+            <span className="whitespace-nowrap">{dept.label}</span>
+            <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${
+              selectedDepts.includes(dept.id) ? 'bg-white/75 text-slate-900' : 'bg-slate-100 text-slate-600'
+            }`}>{getDeptCount(dept.id)}</span>
+          </button>
+        );
+      })}
 
-            {/* Clear Filters */}
-            {(selectedDepts.length > 0 || searchQuery || selectedHierarchy !== 'all') && (
-              <>
-                <div className="w-px h-5 bg-slate-200 mx-1 flex-shrink-0" />
-                <button
-                  onClick={clearAllFilters}
-                  className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-black text-red-500 hover:bg-red-50 transition-colors uppercase tracking-wider"
-                >
-                  <FiX size={12} /> Clear
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
+      {/* Clear Filters */}
+      {(selectedDepts.length > 0 || searchQuery || selectedHierarchy !== 'all') && (
+        <>
+          <div className="w-px h-5 bg-slate-200 mx-1 flex-shrink-0" />
+          <button
+            onClick={clearAllFilters}
+            className="flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-black text-red-500 hover:bg-red-50 transition-colors uppercase tracking-wider"
+          >
+            <FiX size={12} /> Clear
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+</div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           {/* ── Main Content ── */}
           <main className="w-full">
