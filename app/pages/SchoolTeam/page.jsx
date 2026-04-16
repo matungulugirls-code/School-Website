@@ -294,8 +294,8 @@ const StaffCard = ({ staff, onContactClick }) => {
 
         <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
           <div className="min-w-0 rounded-2xl bg-white/92 px-3 py-2 shadow-sm backdrop-blur-sm">
-            <p className="truncate text-[12px] font-black text-slate-900">{staff.name}</p>
-            <p className="truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-100">
+            <p className="truncate text-[12px] font-black text-slate-200">{staff.name}</p>
+            <p className="truncate text-[10px] font-bold uppercase tracking-[0.18em] text-slate-100">
               {staff.position}
             </p>
           </div>
@@ -342,14 +342,14 @@ const StaffCard = ({ staff, onContactClick }) => {
         <div className="mt-auto flex gap-2 border-t border-slate-100 pt-3">
           <button
             onClick={() => onContactClick(staff)}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[11px] font-semibold text-slate-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+            className="flex flex-1 items-center cursor-pointer justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[11px] font-semibold text-slate-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
           >
             <FiMail size={11} /> Contact
           </button>
           
           <Link
             href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#1a1a2e] py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#2d2d44]"
+            className="flex flex-1 items-center justify-center gap-1.5 cursor-pointer rounded-xl bg-[#1a1a2e] py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#2d2d44]"
           >
             <FiChevronRight size={11} /> View
           </Link>
@@ -1101,7 +1101,7 @@ export default function StaffDirectory() {
                     <HierarchySection title="Support Staff" iconKey="support" staff={staffByHierarchy.support} viewMode={viewMode} onContactClick={handleContactClick} />
                   </div>
                 ) : viewMode === 'grid' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 px-2">
+                    <div className="flex flex-wrap gap-8 px-2">
                       {paginatedStaff.map((staff) => (
                         <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                       ))}
