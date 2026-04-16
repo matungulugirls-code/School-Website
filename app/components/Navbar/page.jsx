@@ -189,8 +189,8 @@ export default function ModernNavbar() {
       description: 'Find staff contacts & departments'
     },
     {
-      name: 'Alumni Portal',
-      href: '/pages/alumni',
+      name: 'Alumni page',
+      href: 'https://www.facebook.com/groups/53636547389',
       icon: FiHeart,
       description: 'Connect with fellow alumnae'
     }

@@ -1302,7 +1302,7 @@ const handleLogout = () => {
                 </button>
                 
                 <div className="flex items-center gap-4">
-                  <div className="hidden lg:flex w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl items-center justify-center shadow-lg">
+                  <div className="hidden lg:flex w-12 h-12 bg-gradient-to-br from-green-700 to-teal-800 rounded-2xl items-center justify-center shadow-lg">
                     <FiAward className="text-xl text-white" />
                   </div>
                 </div>
@@ -1312,28 +1312,6 @@ const handleLogout = () => {
                 {/* Quick Stats - Hidden on small screens */}
                 <div className="hidden md:flex items-center gap-6">
                   <CompactSchoolHeader/>
-                </div>
-
-                {/* User Menu */}
-                <div className="flex items-center gap-3">
-                  <div className="hidden lg:flex flex-col items-end justify-center">
-                    <span className="text-sm font-bold text-slate-900 tracking-tight leading-none mb-1">
-                      {user?.name?.split(' ')[0]}
-                    </span>
-
-                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-100 shadow-sm">
-                      <IoSparkles className="text-amber-500 text-[10px] animate-pulse" />
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-amber-700">
-                        {user?.role?.replace('_', ' ')}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="relative group">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity duration-200">
-                      {user?.name?.charAt(0) || 'A'}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
