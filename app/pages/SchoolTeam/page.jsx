@@ -269,7 +269,7 @@ const StaffCard = ({ staff, onContactClick }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1a1a2e]/15 hover:shadow-[0_28px_70px_-34px_rgba(15,23,42,0.45)]">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)] hover:border-[#1a1a2e]/15 hover:shadow-[0_28px_70px_-34px_rgba(15,23,42,0.45)]">
       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
 
       {/* Image */}
@@ -1101,11 +1101,11 @@ export default function StaffDirectory() {
                     <HierarchySection title="Support Staff" iconKey="support" staff={staffByHierarchy.support} viewMode={viewMode} onContactClick={handleContactClick} />
                   </div>
                 ) : viewMode === 'grid' ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {paginatedStaff.map((staff) => (
-                      <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
-                    ))}
-                  </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 px-2">
+  {paginatedStaff.map((staff) => (
+    <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
+  ))}
+</div>
                 ) : (
                   <div className="space-y-3">
                     {paginatedStaff.map((staff) => (
@@ -1181,7 +1181,7 @@ export default function StaffDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center gap-2">
-              <Image src="/seo/MatG.png" alt="Logo" width={24} height={24} className="opacity-40" />
+              <Image src="/hero/MatG.png" alt="Logo" width={24} height={24} className="opacity-40" />
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Matungulu Girls Senior School</span>
             </div>
             <p className="text-[10px] text-slate-300">Strive to Excel &bull; Staff Directory &bull; &copy; {new Date().getFullYear()}</p>
