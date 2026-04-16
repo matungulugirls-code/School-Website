@@ -1,429 +1,476 @@
 "use client";
-import React from 'react';
-import { MapPin, Users, BookOpen, Trophy, Target, Globe,Clock , TrendingUp , Lightbulb , ExternalLink , ShieldCheck, ArrowRight, Phone, Sparkles, Heart, Zap } from 'lucide-react';
-import Image from 'next/image';
+
+import React from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { SiGooglemaps } from 'react-icons/si';
+import {
+  ArrowRight,
+  BookOpen,
+  Clock,
+  Globe,
+  Heart,
+  Lightbulb,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Target,
+  Trophy,
+  Users,
+} from "lucide-react";
+import { SiGooglemaps } from "react-icons/si";
 
 export default function AboutPage() {
   const stats = [
-    { icon: <Users className="w-5 h-5" />, label: "Students", value: "1K+" },
-    { icon: <BookOpen className="w-5 h-5" />, label: "Curriculums", value: "12" },
-    { icon: <Trophy className="w-5 h-5" />, label: "Awards", value: "45" },
-    { icon: <ShieldCheck className="w-5 h-5" />, label: "Completion Rate", value: "88%" },
+    { value: "C2", label: "Extra County School", note: "Public girls boarding school" },
+    { value: "12345503", label: "KNEC Code", note: "Recognized national institution" },
+    { value: "Matungulu", label: "Sub-County", note: "Machakos County, Kenya" },
+    { value: "8.13", label: "Recent Mean Score", note: "Reported for KCSE 2025" },
+  ];
+
+  const pillars = [
+    {
+      title: "Academic Confidence",
+      icon: <BookOpen size={18} />,
+      desc: "A focused learning culture that helps girls build mastery, curiosity, and consistency in every subject area.",
+    },
+    {
+      title: "Character & Discipline",
+      icon: <ShieldCheck size={18} />,
+      desc: "We shape responsible young women through discipline, integrity, and respect for self, others, and community.",
+    },
+    {
+      title: "Mentorship & Sisterhood",
+      icon: <Heart size={18} />,
+      desc: "A girls-only environment creates room for support, belonging, positive role models, and confident self-expression.",
+    },
+    {
+      title: "Leadership Readiness",
+      icon: <Target size={18} />,
+      desc: "Learners are encouraged to lead boldly in academics, service, co-curricular life, and future career spaces.",
+    },
+  ];
+
+  const pathways = [
+    {
+      title: "STEM Pathway",
+      icon: <Lightbulb size={18} />,
+      desc: "Science, technology, engineering, and mathematics opportunities that encourage girls to solve real problems with confidence.",
+    },
+    {
+      title: "Social Sciences",
+      icon: <Globe size={18} />,
+      desc: "Humanities and business-oriented learning that develops communication, critical thinking, and civic awareness.",
+    },
+    {
+      title: "Arts & Sports",
+      icon: <Sparkles size={18} />,
+      desc: "Creative expression, talent growth, teamwork, and physical wellbeing as part of a balanced school experience.",
+    },
   ];
 
   const values = [
-    { title: "Integrity", icon: <ShieldCheck size={16}/> },
-    { title: "Leadership", icon: <Zap size={16}/> },
-    { title: "Compassion", icon: <Heart size={16}/> },
-    { title: "Innovation", icon: <Sparkles size={16}/> }
+    {
+      title: "Committed to Excellence",
+      icon: <Star size={18} />,
+      desc: "A daily standard that pushes every learner to aim higher and finish strong.",
+    },
+    {
+      title: "Integrity",
+      icon: <ShieldCheck size={18} />,
+      desc: "Doing what is right with honesty, accountability, and courage.",
+    },
+    {
+      title: "Discipline",
+      icon: <Clock size={18} />,
+      desc: "Consistency in habits, time, and personal responsibility.",
+    },
+    {
+      title: "Resilience",
+      icon: <Trophy size={18} />,
+      desc: "Rising through challenge with confidence, endurance, and hope.",
+    },
+    {
+      title: "Compassion",
+      icon: <Heart size={18} />,
+      desc: "Creating a caring sisterhood where every girl feels seen and supported.",
+    },
+    {
+      title: "Leadership",
+      icon: <Users size={18} />,
+      desc: "Preparing girls to influence their schools, communities, and future professions.",
+    },
   ];
-  
-  const date = new Date();
+
+  const contactCards = [
+    {
+      title: "School Profile",
+      icon: <BookOpen className="h-5 w-5" />,
+      body: "Public girls boarding school in Matungulu Sub-County, Machakos County.",
+      tone: "bg-[#eef8f2] text-[#166534]",
+    },
+    {
+      title: "Postal Address",
+      icon: <MapPin className="h-5 w-5" />,
+      body: "P.O. Box 32, Tala 90131",
+      tone: "bg-[#eef4ff] text-[#1d4ed8]",
+    },
+    {
+      title: "Senior School",
+      icon: <Sparkles className="h-5 w-5" />,
+      body: "CBC-aligned pathways include STEM, Social Sciences, and Arts & Sports.",
+      tone: "bg-[#fff3ea] text-[#c2410c]",
+    },
+    {
+      title: "School Motto",
+      icon: <Star className="h-5 w-5" />,
+      body: "Committed to Excellence",
+      tone: "bg-[#f5efff] text-[#7c3aed]",
+    },
+  ];
 
   return (
-    <div className="bg-white text-slate-900">
-{/* Hero Section */}
-<section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-  {/* Background with Zoom Effect */}
-  <div className="absolute inset-0 overflow-hidden rounded-t-md">
-    {/* Image - make it more visible by increasing opacity */}
-    <Image
-      src="/hero/MatG1.jpg"
-      alt="School"
-      fill
-      className="object-cover opacity-80 scale-105 hover:scale-100 transition-transform duration-10000"
-      priority
-    />
-    
-    {/* Subtle Gradient Overlay - reduced opacity so image shows through */}
-    <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/60 via-teal-900/50 to-slate-900/60 z-10"></div>
-
-    {/* Animated Radial Glow - optional, can keep or remove */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-600/20 rounded-full blur-[120px] z-20"></div>
-  </div>
-
-  <div className="relative z-30 max-w-5xl mx-auto px-6 text-center">
-    {/* Modern Static Badge */}
-    <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 backdrop-blur-md mb-8">
-      <span className="relative flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-      </span>
-      <span className="text-[10px] font-black tracking-[0.3em] text-emerald-50 uppercase">
-        Registration Open • {new Date().getFullYear()} Academic Year
-      </span>
-    </div>
-
-    {/* Refined Title */}
-    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-6 tracking-tighter leading-none">
-      Matungulu Girls <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-white/70">High School.</span>
-    </h1>
-
-    {/* Expanded Rich Description */}
-    <div className="max-w-3xl mx-auto space-y-6 mb-12">
-      <p className="text-sm md:text-base text-white font-medium leading-relaxed mb-8">
-        Since 1998, a cornerstone of <span className="text-emerald-400">academic distinction</span>, 
-        crafting a holistic pathway for future leaders.
-      </p>
-
-      <div className="grid md:grid-cols-2 gap-6 text-left border-y border-white/10 py-8">
-        <div className="space-y-2">
-          <h4 className="text-emerald-400 font-black text-[10px] uppercase tracking-widest">Why Us</h4>
-          <p className="text-sm text-white leading-relaxed">
-            We leverage modern STEM-based learning and state-of-the-art digital infrastructure to ensure our students are not just competitive, but are the innovators of tomorrow's global economy.
-          </p>
+    <div className="bg-[#f7f8f4] text-slate-900">
+      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden rounded-t-md">
+          <Image
+            src="/hero/MatG1.jpg"
+            alt="Matungulu Girls High School"
+            fill
+            className="object-cover opacity-85 scale-[1.03]"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e3b2d]/72 via-[#124635]/58 to-[#09131e]/72" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#051016] to-transparent" />
+          <div className="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/15 blur-[120px]" />
         </div>
-        <div className="space-y-2">
-          <h4 className="text-emerald-400 font-black text-[10px] uppercase tracking-widest">Core Excellence</h4>
-          <p className="text-sm text-white leading-relaxed">
-            Beyond the classroom, our community thrives on character development, sports leadership, and artistic expression, fostering well-rounded individuals ready for university and beyond.
-          </p>
-        </div>
-      </div>
 
-      <p className="text-xs md:text-sm text-slate-100 italic">
-        "Empowering Students through discipline, integrity, and a passion for lifelong learning."
-      </p>
-    </div>
+        <div className="relative z-30 mx-auto max-w-5xl px-6 text-center">
+          <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-emerald-300/25 bg-emerald-500/10 px-5 py-2 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-50">
+              About Matungulu Girls
+            </span>
+          </div>
 
-    {/* MODERN ACTION DOCK */}
-    <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center w-full px-2">
-      
-      <Link href="/pages/apply-for-admissions" passHref className="flex-1 sm:flex-none">
-        <button className="w-full sm:w-auto px-4 sm:px-10 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[11px] sm:text-sm font-black rounded-xl sm:rounded-2xl shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 active:scale-95 transition-transform whitespace-nowrap">
-          Admission <ArrowRight size={16} className="shrink-0" />
-        </button>
-      </Link>
+          <h1 className="mb-6 text-3xl font-black leading-none tracking-tighter text-white sm:text-4xl md:text-5xl">
+            Matungulu Girls
+            <span className="bg-gradient-to-r from-emerald-300 via-emerald-200 to-white/80 bg-clip-text text-transparent">
+              {" "}High School
+            </span>
+          </h1>
 
-      <Link href="/pages/admissions" passHref className="flex-1 sm:flex-none">
-        <button className="w-full sm:w-auto px-4 sm:px-10 py-3 bg-slate-900 text-white text-[11px] sm:text-sm font-black rounded-xl sm:rounded-2xl border border-white/10 shadow-xl flex items-center justify-center active:scale-95 transition-transform whitespace-nowrap">
-          Curriculum
-        </button>
-      </Link>
-      
-    </div>
+          <div className="mx-auto mb-12 max-w-3xl space-y-6">
+            <p className="text-sm font-medium leading-relaxed text-white md:text-base">
+              A public girls boarding school in Matungulu Sub-County, Machakos County,
+              known for academic focus, disciplined growth, and a learning environment
+              designed to help girls rise with confidence.
+            </p>
 
-    {/* Trust Indicators */}
-    <div className="mt-12 flex justify-center gap-8 opacity-40 grayscale">
-      <span className="text-[10px] font-bold text-white uppercase tracking-widest">Government Accredited</span>
-      <span className="text-[10px] font-bold text-white uppercase tracking-widest">STEM Certified</span>
-      <span className="text-[10px] font-bold text-white uppercase tracking-widest">National Champion 2025</span>
-    </div>
-  </div>
-</section>
-
-      {/* Modernized Static Stats Section */}
-      <section className="relative z-30 max-w-6xl mx-auto px-4 sm:px-6 -mt-8 md:-mt-16">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-          {stats.map((stat, idx) => (
-            <div 
-              key={idx} 
-              className="relative bg-white rounded-[1.5rem] sm:rounded-[2.5rem] p-4 sm:p-7 shadow-xl shadow-slate-900/5 border border-slate-100 flex flex-col items-start overflow-hidden transition-transform duration-300"
-            >
-              {/* Subtle Background Accent */}
-              <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-emerald-50/50 rounded-bl-[2.5rem] sm:rounded-bl-[4rem] -z-0" />
-
-              <div className="relative z-10 w-full">
-                {/* Icon Container */}
-                <div className="w-9 h-9 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-emerald-500 rounded-xl sm:rounded-2xl text-white flex items-center justify-center mb-3 sm:mb-6 shadow-lg shadow-emerald-900/20">
-                  {React.cloneElement(stat.icon, { size: 16, className: "sm:w-[20px] sm:h-[20px]" })}
-                </div>
-                
-                {/* Value */}
-                <div className="text-2xl sm:text-4xl font-black text-slate-900 mb-0.5 sm:mb-1 tracking-tighter">
-                  {stat.value}
-                </div>
-                
-                {/* Label */}
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <div className="w-3 h-[2px] sm:w-4 bg-emerald-500 rounded-full" />
-                  <div className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest sm:tracking-[0.2em] truncate">
-                    {stat.label}
-                  </div>
-                </div>
+            <div className="grid gap-6 border-y border-white/10 py-8 text-left md:grid-cols-2">
+              <div className="space-y-2">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.28em] text-emerald-300">
+                  What Makes Us Distinct
+                </h4>
+                <p className="text-sm leading-relaxed text-white/90">
+                  Our girls are nurtured through academic rigor, mentorship, spiritual and
+                  moral grounding, and a strong culture of discipline and purpose.
+                </p>
               </div>
+              <div className="space-y-2">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.28em] text-emerald-300">
+                  What We Build
+                </h4>
+                <p className="text-sm leading-relaxed text-white/90">
+                  We prepare young women who can think clearly, communicate boldly, serve
+                  others well, and lead with integrity in school and beyond.
+                </p>
+              </div>
+            </div>
 
-              {/* Sub-description */}
-              <p className="hidden xs:block mt-3 sm:mt-4 text-[9px] sm:text-[11px] text-slate-500 leading-tight sm:leading-relaxed relative z-10">
-                Maintaining standards of excellence.
+            <p className="text-xs italic text-slate-100 md:text-sm">
+              "Committed to Excellence" is more than a motto. It is the culture we expect
+              and the standard we grow into together.
+            </p>
+          </div>
+
+          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 sm:gap-4">
+            <Link href="/pages/apply-for-admissions" className="flex-1 sm:flex-none">
+              <button className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-[11px] font-black text-white shadow-lg shadow-emerald-900/20 transition-transform active:scale-95 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-sm">
+                Admission <ArrowRight size={16} className="shrink-0" />
+              </button>
+            </Link>
+
+            <Link href="/pages/admissions" className="flex-1 sm:flex-none">
+              <button className="w-full whitespace-nowrap rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-[11px] font-black text-white shadow-xl transition-transform active:scale-95 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-sm">
+                Curriculum
+              </button>
+            </Link>
+          </div>
+
+          <div className="mt-12 flex justify-center gap-6 opacity-70 sm:gap-8">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white">
+              Girls Boarding
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white">
+              Extra County
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white">
+              CBC Ready
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-20 mx-auto -mt-10 max-w-6xl px-4 sm:-mt-14 sm:px-6">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-[2rem] border border-white/70 bg-white/95 p-5 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.28)] backdrop-blur-sm sm:p-6"
+            >
+              <p className="text-3xl font-black tracking-tight text-slate-950">{stat.value}</p>
+              <p className="mt-2 text-[11px] font-black uppercase tracking-[0.22em] text-emerald-700">
+                {stat.label}
               </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">{stat.note}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Vision Section */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
-        <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 items-center">
-          
-          {/* Left Side: Content & Feature Grid */}
-          <div className="order-2 lg:order-1 text-center lg:text-left">
-            <div className="mb-8 sm:mb-10">
-              <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 mb-4 text-[9px] sm:text-[10px] font-black tracking-[0.2em] text-emerald-600 uppercase bg-emerald-50 rounded-full border border-emerald-100">
-                Future Outlook
-              </span>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 sm:mb-6 leading-[1.1]">
-                Empowering Minds, <br />
-                <span className="text-emerald-600">Enriching Lives.</span>
-              </h3>
-              <p className="text-sm sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
-                Our vision is to bridge traditional education with 21st-century needs through holistic development.
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+          <div className="rounded-[2rem] border border-[#dbe7dc] bg-white p-7 shadow-[0_24px_80px_-45px_rgba(15,23,42,0.3)] sm:p-10">
+            <span className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-700">
+              School Overview
+            </span>
+            <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">
+              A space where girls are taught to excel and trusted to lead.
+            </h2>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">
+              Matungulu Girls High School serves learners in a focused girls-only boarding
+              environment that supports academic achievement, personal discipline, and
+              positive identity formation. The school&apos;s setting allows girls to grow in
+              confidence, discover their strengths, and prepare for meaningful futures in
+              university, careers, and community leadership.
+            </p>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {pillars.map((pillar) => (
+                <div
+                  key={pillar.title}
+                  className="rounded-[1.5rem] border border-slate-200 bg-[#fafaf7] p-5"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#163c30] text-white">
+                    {pillar.icon}
+                  </div>
+                  <h3 className="mt-4 text-lg font-black text-slate-900">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">{pillar.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-[2rem] border border-[#dce8dd] bg-[#eaf4eb] p-4 sm:p-5">
+            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-300/40 blur-3xl" />
+            <div className="relative overflow-hidden rounded-[1.6rem]">
+              <Image
+                src="/hero/matG.jpg"
+                alt="Students at Matungulu Girls"
+                width={1200}
+                height={1200}
+                className="h-full w-full object-cover"
+                priority
+              />
+            </div>
+            <div className="relative mt-4 rounded-[1.6rem] bg-[#163c30] p-6 text-white">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+                Girls School Advantage
+              </p>
+              <p className="mt-3 text-2xl font-black tracking-tight">
+                Focused learning, stronger voice, deeper sisterhood.
+              </p>
+              <p className="mt-3 text-sm leading-7 text-emerald-50/85">
+                A supportive girls&apos; environment helps students participate more boldly,
+                explore leadership freely, and pursue excellence without limitation.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Vision Items */}
-            <div className="grid gap-3 sm:gap-4 text-left">
-              {([
-                { title: "Elite Faculty", icon: <Target size={18} />, desc: "Mentors from world-class institutions.", color: "emerald" },
-                { title: "Holistic Growth", icon: <Zap size={18} />, desc: "Emotional intelligence and academic mastery.", color: "emerald" },
-                { title: "Infrastructure", icon: <Globe size={18} />, desc: "Smart classrooms and collaborative labs.", color: "emerald" }
-              ]).map((item, i) => (
-                <div key={i} className="flex gap-4 p-4 sm:p-6 rounded-2xl bg-slate-50 border border-transparent transition-all duration-300">
-                  <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-lg">
-                    {item.icon}
+      <section className="bg-[#10261f] py-16 text-white sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="max-w-3xl">
+            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+              Learning Pathways
+            </span>
+            <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-5xl">
+              Modern preparation for the future girls will shape.
+            </h2>
+            <p className="mt-5 text-base leading-8 text-white/75">
+              As a senior school, Matungulu Girls aligns with CBC pathway growth while
+              continuing to nurture discipline, performance, and holistic development.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {pathways.map((path) => (
+              <div
+                key={path.title}
+                className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400 text-[#10261f]">
+                  {path.icon}
+                </div>
+                <h3 className="mt-5 text-xl font-black">{path.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/75">{path.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="rounded-[2rem] bg-[#f0eee7] p-8 sm:p-10">
+            <span className="inline-flex rounded-full border border-[#d7d0bc] bg-white/80 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-[#6a5f37]">
+              Our Values
+            </span>
+            <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">
+              The character we expect, teach, and celebrate.
+            </h2>
+            <p className="mt-5 text-base leading-8 text-slate-600">
+              The values below reflect the tone of school life at Matungulu Girls:
+              excellence, integrity, discipline, compassion, and the courage to lead as
+              young women of purpose.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {values.map((value) => (
+              <div
+                key={value.title}
+                className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-[0_18px_50px_-38px_rgba(15,23,42,0.35)]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+                  {value.icon}
+                </div>
+                <h3 className="mt-4 text-lg font-black text-slate-900">{value.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-slate-600">{value.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-gradient-to-br from-[#eef7ef] via-[#f8faf8] to-[#eef3fb] py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="overflow-hidden rounded-[2.2rem] bg-[#14382d] p-8 text-white shadow-[0_24px_80px_-45px_rgba(15,23,42,0.5)] sm:p-10">
+              <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+                Visit & Contact
+              </span>
+              <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-4xl">
+                Reach a school community built for growth.
+              </h2>
+
+              <div className="mt-8 space-y-6">
+                <div className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                    <MapPin size={18} />
                   </div>
                   <div>
-                    <h4 className="font-black text-slate-900 text-sm sm:text-lg mb-0.5">{item.title}</h4>
-                    <p className="text-slate-500 text-xs sm:text-sm leading-tight sm:leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Side: Image Container */}
-          <div className="relative order-1 lg:order-2 px-2 sm:px-0">
-            <div className="absolute -inset-6 bg-gradient-to-tr from-emerald-100 to-emerald-100 rounded-full opacity-40 blur-3xl -z-10"></div>
-            
-            <div className="relative px-2">
-              <div className="absolute -inset-2 bg-emerald-100/50 rounded-[2.5rem] -rotate-1 -z-10"></div>
-              
-              <div className="relative overflow-hidden aspect-square sm:aspect-video lg:aspect-square rounded-md shadow-2xl border border-emerald-100/20">
-                <Image
-                  src="/hero/matG.jpg"
-                  alt="School"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500" />
-
-                {/* Bottom Info Bar */}
-                <div className="absolute bottom-3 left-3 right-3 z-20">
-                  <div className="bg-white/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-lg border border-white/50 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-medium text-slate-600">Event Status</p>
-                        <p className="text-xs font-bold text-slate-800">Strive to Excel</p>
-                      </div>
-                    </div>
-                    <div className="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                      MatG
-                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200">
+                      Location
+                    </p>
+                    <p className="mt-2 text-base font-bold">Matungulu, Machakos County</p>
+                    <p className="mt-1 text-sm leading-7 text-white/75">
+                      Girls boarding secondary school in Matungulu Sub-County, Eastern Kenya.
+                    </p>
                   </div>
                 </div>
 
-                {/* Top Right Badge */}
-                <div className="absolute top-3 right-3 z-20">
-                  <div className="bg-emerald-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md flex items-center gap-1.5">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                    </span>
-                    Featured
+                <div className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                    <Phone size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200">
+                      Enquiries
+                    </p>
+                    <p className="mt-2 text-base font-bold">School office and admissions desk</p>
+                    <p className="mt-1 text-sm leading-7 text-white/75">
+                      Contact details vary across public listings, so visits and direct office
+                      follow-up remain the most reliable for admissions and school enquiries.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                    <SiGooglemaps size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200">
+                      Directions
+                    </p>
+                    <p className="mt-2 text-base font-bold">Plan your route before visiting</p>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Mission Section */}
-      <section className="py-12 sm:py-20 px-3 sm:px-8 max-w-7xl mx-auto">
-        <div className="bg-gradient-to-br from-emerald-50 to-emerald-50 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-16 overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-            
-            <div className="relative px-2">
-              <div className="absolute -inset-2 bg-emerald-100/50 rounded-[2.5rem] -rotate-1 -z-10"></div>
-              
-              <div className="relative overflow-hidden aspect-square sm:aspect-video lg:aspect-square rounded-md shadow-2xl border border-emerald-100/20">
-                <Image
-                  src="/hero/matG.jpg"
-                  alt="School"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                
-                {/* Bottom Info Bar */}
-                <div className="absolute bottom-3 left-3 right-3 z-20">
-                  <div className="bg-white/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-lg border border-white/50 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-medium text-slate-600">MatG</p>
-                        <p className="text-xs font-bold text-slate-800">Education</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-1">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                      </span>
-                      <span className="text-[10px] font-medium text-green-600">1K+ students</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Top right badge */}
-                <div className="absolute top-3 right-3 z-20">
-                  <div className="bg-emerald-500 text-white px-2 py-1 rounded-full text-[10px] font-bold shadow-md">
-                    New
-                  </div>
-                </div>
-              </div>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Matungulu+Girls+High+School+Machakos+County"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-black text-[#14382d] transition-transform active:scale-95"
+              >
+                View on Maps <ArrowRight size={15} />
+              </a>
             </div>
 
-            <div className="flex flex-col text-center lg:text-left items-center lg:items-start">
-              <h2 className="text-emerald-600 font-black uppercase text-[9px] sm:text-xs tracking-[0.2em] mb-4 bg-white/80 border border-emerald-100 w-fit px-3 py-1 rounded-full shadow-sm">
-                Our Mission
-              </h2>
-              <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 sm:mb-6 leading-[1.2]">
-                Fostering Excellence <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-600">Through Innovation.</span>
-              </h3>
-              <p className="text-slate-600 text-sm sm:text-lg mb-8 sm:mb-10 leading-relaxed font-medium">
-                We provide a supportive environment where students lead with integrity.
-              </p>
-
-              <div className="grid gap-3 w-full text-left">
-                {([
-                  { title: "Global Perspective", icon: <Globe size={20} />, text: "Preparing for a borderless future." },
-                  { title: "Agile Learning", icon: <Zap size={20} />, text: "Adapting to new technologies." }
-                ]).map((item, i) => (
-                  <div key={i} className="flex gap-4 p-4 rounded-xl sm:rounded-2xl transition-all duration-300 border border-transparent">
-                    <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white text-emerald-600 flex items-center justify-center shadow-sm">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-black text-slate-900 text-sm sm:text-lg">{item.title}</h4>
-                      <p className="text-slate-500 text-xs sm:text-sm">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
-        <div className="grid lg:grid-cols-2 gap-10 sm:gap-16 items-center">
-          
-          {/* Left Side: Content & Values Grid */}
-          <div className="order-2 lg:order-1">
-            <div className="mb-8 sm:mb-10 text-center lg:text-left">
-              <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 mb-4 text-[9px] sm:text-[10px] font-black tracking-[0.2em] text-emerald-700 uppercase bg-emerald-50 rounded-full border border-emerald-100">
-                Our Foundation
-              </span>
-              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 sm:mb-6 leading-[1.1]">
-                Character Over <br />
-                <span className="text-emerald-600 italic">Everything.</span>
-              </h3>
-              <p className="text-sm sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
-                Integrity, Discipline, and Resilience aren't just words here—they are the pillars of our community's DNA.
-              </p>
-            </div>
-
-            {/* Values Grid */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
-              {([
-                { title: "Integrity", icon: <ShieldCheck size={18} />, desc: "Doing right always." },
-                { title: "Discipline", icon: <Clock size={18} />, desc: "Consistency in effort." },
-                { title: "Resilience", icon: <TrendingUp size={18} />, desc: "Bouncing back stronger." },
-                { title: "Empathy", icon: <Heart size={18} />, desc: "Understanding others." },
-                { title: "Innovation", icon: <Lightbulb size={18} />, desc: "Thinking beyond limits." },
-                { title: "Leadership", icon: <Users size={18} />, desc: "Inspiring the collective." }
-              ]).map((val, i) => (
-                <div 
-                  key={i} 
-                  className="flex flex-col p-3 sm:p-4 bg-white border border-slate-100 rounded-xl sm:rounded-2xl transition-all duration-300"
+            <div className="grid gap-4 sm:grid-cols-2">
+              {contactCards.map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-[1.8rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.28)]"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600 shrink-0">
-                      {val.icon}
-                    </div>
-                    <span className="font-black text-xs sm:text-sm text-slate-800 tracking-tight">{val.title}</span>
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${card.tone}`}>
+                    {card.icon}
                   </div>
-                  <p className="hidden xs:block text-[10px] sm:text-xs text-slate-500 mt-2 ml-11 leading-tight">{val.desc}</p>
+                  <h3 className="mt-5 text-lg font-black text-slate-900">{card.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">{card.body}</p>
                 </div>
               ))}
-            </div>
-          </div>
 
-          {/* Right Side: Image */}
-          <div className="relative order-1 lg:order-2 px-2 sm:px-0">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-emerald-100/50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -z-10"></div>
-            
-            <div className="relative px-2">
-              <div className="absolute -inset-2 bg-emerald-100/50 rounded-[2.5rem] -rotate-1 -z-10"></div>
-              
-              <div className="relative overflow-hidden aspect-square sm:aspect-video lg:aspect-square rounded-md shadow-2xl border border-emerald-100/20">
-                <Image
-                  src="/hero/MatG1.jpg"
-                  alt="School"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-500" />
-
-                {/* Bottom Info Bar */}
-                <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 z-20">
-                  <div className="bg-white/90 backdrop-blur-md px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/50 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg bg-blue-500 flex items-center justify-center">
-                        <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-[8px] sm:text-[10px] font-medium text-slate-600">Event Status</p>
-                        <p className="text-[10px] sm:text-xs font-bold text-slate-800">Registration Open</p>
-                      </div>
-                    </div>
-                    <div className="text-[8px] sm:text-[10px] font-bold bg-green-100 text-green-800 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
-                      Join Now
-                    </div>
+              <div className="rounded-[1.8rem] border border-slate-200 bg-[#fffdf7] p-6 sm:col-span-2">
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-amber-700">
+                  Why Parents Choose Matungulu Girls
+                </p>
+                <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <p className="text-base font-black text-slate-900">Focused Environment</p>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      A girls-only space that encourages participation, discipline, and steady growth.
+                    </p>
                   </div>
-                </div>
-
-                {/* Top Right Badge */}
-                <div className="absolute top-2 sm:top-3 right-2 sm:right-3 z-20">
-                  <div className="bg-emerald-500 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold shadow-md flex items-center gap-1 sm:gap-1.5">
-                    <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-full w-full bg-white"></span>
-                    </span>
-                    <span className="hidden xs:inline">Featured</span>
+                  <div>
+                    <p className="text-base font-black text-slate-900">Holistic Formation</p>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      Academics, character, mentorship, talent, and wellbeing are developed together.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-base font-black text-slate-900">Future Readiness</p>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      Learners are prepared for senior school pathways, university ambitions, and life beyond campus.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -431,228 +478,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Modern Institutional Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-950 to-green-950">
-        <div className="relative w-full bg-[#1a0f0a] rounded-[2rem] md:rounded-[3.5rem] p-8 sm:p-6 md:p-16 text-center border border-white/5 shadow-2xl overflow-hidden">
-        
-          {/* Small Refined Icon */}
-          <div className="flex justify-center mb-6 md:mb-8">
-            <div className="relative p-4 bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl">
-              <ShieldCheck className="text-emerald-400 w-6 h-6 md:w-7 md:h-7" />
-            </div>
-          </div>
-
-          <div className="relative z-10 w-full">
-            {/* Title */}
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black text-white mb-6 md:mb-10 tracking-tighter leading-[1.1] md:leading-[0.95] max-w-4xl mx-auto">
-              Integrity & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-white/70">Wellbeing.</span>
-            </h2>
-            
-            {/* Info Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-10 md:mb-16 max-w-5xl mx-auto text-left items-start border-t border-white/5 pt-8 md:pt-12">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-1 h-4 bg-emerald-500 rounded-full" />
-                  <h4 className="text-emerald-400 font-black text-[10px] uppercase tracking-[0.2em]">Institutional Policy</h4>
-                </div>
-                <p className="text-white text-base md:text-lg leading-tight font-bold">
-                  Standardizing excellence through discipline.
-                </p>
-                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
-                  Our institutional policies ensure a focused environment. We uphold a strict code of conduct that prioritizes academic integrity and mutual respect as the bedrock of our School culture.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-1 h-4 bg-emerald-500 rounded-full" />
-                  <h4 className="text-emerald-400 font-black text-[10px] uppercase tracking-[0.2em]">Guidance & Counselling</h4>
-                </div>
-                <p className="text-white text-base md:text-lg leading-tight font-bold">
-                  Nurturing the mind beyond the classroom.
-                </p>
-                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
-                  Through professional Guidance and Counselling, we provide students with the emotional tools and support necessary to navigate the challenges of global leadership and personal growth.
-                </p>
-              </div>
-            </div>
-
-            {/* Action Row */}
-            <div className="flex flex-row gap-3 sm:gap-6 justify-center items-center w-full px-4 mt-6">
-              
-              <Link href="/pages/OurSchoolpolicies" className="w-auto">
-                <button className="px-5 sm:px-10 py-3.5 bg-white text-slate-950 font-black text-[9px] sm:text-[11px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-white/5 active:scale-95 transition-transform flex items-center justify-center gap-2 whitespace-nowrap border border-white">
-                  Policies <ArrowRight size={14} className="shrink-0 opacity-70" />
-                </button>
-              </Link>
-
-              <Link href="/pages/Guidance-and-Councelling" className="w-auto">
-                <button className="px-5 sm:px-10 py-3.5 bg-slate-900/40 text-white font-black text-[9px] sm:text-[11px] uppercase tracking-[0.2em] rounded-2xl border border-white/20 backdrop-blur-md active:scale-95 transition-transform whitespace-nowrap">
-                  Guidance
-                </button>
-              </Link>
-              
-            </div>
-
-            {/* Stats Grid */}
-            <div className="pt-8 border-t border-white/5 grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {([
-                { label: 'Safety Rating', val: '100%' },
-                { label: 'Student Support', val: '24/7' },
-                { label: 'Certified Mentors', val: '15+' },
-                { label: 'Ethics Standard', val: 'Gold' }
-              ]).map((stat, i) => (
-                <div key={i} className="flex flex-col items-center lg:items-start text-center lg:text-left">
-                  <span className="text-xl md:text-3xl font-black text-white tracking-tighter">{stat.val}</span>
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-emerald-400/80 font-bold mt-1">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Location Section */}
-      <section className="py-12 sm:py-24 bg-gradient-to-br from-emerald-50 to-emerald-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
-            
-            {/* 1. Contact Card */}
-            <div className="lg:col-span-4 relative overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-600 p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl shadow-emerald-200/50 flex flex-col justify-between">
-              
-              {/* Decorative background circle */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 sm:w-64 sm:h-64 bg-emerald-500 rounded-full opacity-40"></div>
-              
-              <div className="relative z-10">
-                <span className="inline-block px-3 py-1 mb-4 sm:mb-6 text-[9px] sm:text-[10px] font-black tracking-widest text-emerald-100 uppercase bg-emerald-700/50 rounded-full border border-emerald-400/30">
-                  Find Us
-                </span>
-                <h4 className="text-2xl sm:text-3xl font-black text-white mb-6 sm:mb-10 tracking-tight leading-tight">
-                  Get in <br className="hidden sm:block" /> Touch
-                </h4>
-                
-                <div className="space-y-6 sm:space-y-8">
-                  <div className="flex gap-4 sm:gap-5 items-start">
-                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/50 flex items-center justify-center text-white border border-emerald-400/30 shadow-lg">
-                      <MapPin size={20} className="sm:w-[24px] sm:h-[24px]" />
-                    </div>
-                    <div>
-                      <p className="text-emerald-100 text-[9px] sm:text-xs uppercase font-black tracking-tighter mb-0.5 sm:mb-1 opacity-80">School Address</p>
-                      <p className="text-white text-sm sm:text-base font-bold leading-snug sm:leading-relaxed">
-                        School, Matungulu, Machakos 
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 sm:gap-5 items-start">
-                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/50 flex items-center justify-center text-white border border-emerald-400/30 shadow-lg">
-                      <Phone size={20} className="sm:w-[24px] sm:h-[24px]" />
-                    </div>
-                    <div>
-                      <p className="text-emerald-100 text-[9px] sm:text-xs uppercase font-black tracking-tighter mb-0.5 sm:mb-1 opacity-80">Direct Line</p>
-                      <p className="text-white text-sm sm:text-base font-bold">+254 (0) 720 123 456</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 sm:gap-5 items-start pt-2">
-                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/50 flex items-center justify-center text-white border border-emerald-400/30 shadow-lg">
-                      <Globe size={20} className="sm:w-[24px] sm:h-[24px]" />
-                    </div>
-                    <div>
-                      <p className="text-emerald-100 text-[9px] sm:text-xs uppercase font-black tracking-tighter mb-0.5 sm:mb-1 opacity-80">Website</p>
-                      <p className="text-white text-sm sm:text-base font-bold break-all">matungulu-girls.sc.ke</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative z-10 mt-8 sm:mt-12">
-                                  <SiGooglemaps size={16} />
-
-                <a 
-                  href="https://www.google.com/maps/search/?api=1&query=Matungulu+Girls+High+School+Machakos+County"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3 sm:py-4 bg-white text-emerald-600 font-black text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl flex items-center justify-center gap-2 uppercase tracking-wider active:scale-95 transition-transform"
-                >
-                  View on Maps
-                </a>
-              </div>
-            </div>
-
-            {/* 2. Enhanced Info Section */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              
-              {/* Quick Info Cards */}
-              <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 shadow-lg border border-slate-100">
-                <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                    <Clock className="text-emerald-600 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wider mb-0.5">School Hours</h4>
-                    <p className="text-[10px] sm:text-sm text-slate-600 font-medium">
-                      Mon - Fri: 6:00 AM - 5:00 PM <br />
-                      Sat: 8:00 AM - 1:00 PM
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 shadow-lg border border-slate-100">
-                <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <Users className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wider mb-0.5">Principal Office</h4>
-                    <p className="text-[10px] sm:text-sm text-slate-600 font-medium">
-                      Available for inquiries <br />
-                      Book an appointment
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 shadow-lg border border-slate-100">
-                <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                    <BookOpen className="text-emerald-600 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wider mb-0.5">Admissions</h4>
-                    <p className="text-[10px] sm:text-sm text-slate-600 font-medium">
-                      Next intake: January 2026 <br />
-                      Limited slots available
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 shadow-lg border border-slate-100">
-                <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                    <Trophy className="text-purple-600 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wider mb-0.5">Achievements</h4>
-                    <p className="text-[10px] sm:text-sm text-slate-600 font-medium">
-                      County leaders in academics <br />
-                      45+ national awards
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </section>
-
     </div>
   );
 }
