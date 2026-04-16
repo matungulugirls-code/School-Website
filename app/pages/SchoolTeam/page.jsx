@@ -124,6 +124,29 @@ const getBadgeColorStyles = (colorName) => {
   return map[colorName] || map.slate;
 };
 
+const FILTER_BUTTON_STYLES = {
+  all: {
+    base: 'border-[#334155] bg-[#334155] text-white',
+    active: 'border-[#0f172a] bg-[#0f172a] text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_6px_rgba(15,23,42,0.18)]',
+    count: 'bg-white/20 text-white',
+  },
+  leadership: {
+    base: 'border-[#1e3a5f] bg-[#1e3a5f] text-white',
+    active: 'border-[#0f2743] bg-[#0f2743] text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_6px_rgba(30,58,95,0.24)]',
+    count: 'bg-white/20 text-white',
+  },
+  teaching: {
+    base: 'border-[#1f5f3a] bg-[#1f5f3a] text-white',
+    active: 'border-[#154529] bg-[#154529] text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_6px_rgba(31,95,58,0.24)]',
+    count: 'bg-white/20 text-white',
+  },
+  support: {
+    base: 'border-[#6f1d3d] bg-[#6f1d3d] text-white',
+    active: 'border-[#54122d] bg-[#54122d] text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_6px_rgba(111,29,61,0.24)]',
+    count: 'bg-white/20 text-white',
+  },
+};
+
 const getImageSrc = (staff) => {
   if (staff?.image) {
     if (staff.image.startsWith('/')) {
@@ -246,8 +269,8 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
       
       <div className={
         viewMode === 'grid' 
-          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" 
-          : "flex flex-col gap-3"
+          ? "grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" 
+          : "flex flex-col gap-4"
       }>
         {staff.map((member) => (
           <div key={member.id}>
@@ -269,89 +292,89 @@ const StaffCard = ({ staff, onContactClick }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
-      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
+    <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
 
       {/* Image */}
-      <div className="relative mx-4 mt-4 aspect-[4/4.3] overflow-hidden rounded-[24px] border border-white/60 bg-slate-100 shadow-sm">
+      <div className="relative mx-5 mt-5 aspect-[4/4.15] overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
         <Image
           src={getImageSrc(staff)}
           alt={staff.name}
           fill
           className="object-cover object-top"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
           priority={hierarchy === 'leadership'}
           onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
         />
 
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#07111b]/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07111b]/78 via-[#07111b]/28 to-transparent" />
 
         {hierarchy === 'leadership' && (
-          <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[#1a1a2e]/90 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-            <FiShield size={10} /> Leadership
+          <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-[#1a1a2e]/92 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+            <FiShield size={11} /> Leadership
           </div>
         )}
 
-        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
-          <div className="min-w-0 rounded-2xl bg-white/92 px-3 py-2 shadow-sm backdrop-blur-sm">
-            <p className="truncate text-[12px] font-black text-slate-200">{staff.name}</p>
-            <p className="truncate text-[10px] font-bold uppercase tracking-[0.18em] text-slate-100">
+        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+          <div className="min-w-0 rounded-[20px] bg-white/95 px-4 py-3 shadow-sm backdrop-blur-sm">
+            <p className="truncate text-[15px] font-black text-slate-950">{staff.name}</p>
+            <p className="truncate text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-700">
               {staff.position}
             </p>
           </div>
-          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border bg-white/90 shadow-sm backdrop-blur-sm ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
-            <DeptIcon size={15} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
+          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border bg-white/92 shadow-sm backdrop-blur-sm ${getBadgeColorStyles(deptConfig?.color).split(' ')[2]}`}>
+            <DeptIcon size={18} className={getBadgeColorStyles(deptConfig?.color).split(' ')[1]} />
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col px-4 pb-4 pt-4">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold ${getBadgeColorStyles(deptConfig?.color)}`}>
-            <DeptIcon size={10} />
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
+        <div className="mb-4 flex flex-wrap items-center gap-2.5">
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-extrabold ${getBadgeColorStyles(deptConfig?.color)}`}>
+            <DeptIcon size={11} />
             {staff.department}
           </span>
           {staff.email && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
-              <FiMail size={10} />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-bold text-slate-700">
+              <FiMail size={11} />
               Available
             </span>
           )}
         </div>
 
-        <p className="mb-4 text-[11px] font-medium leading-relaxed text-slate-500 line-clamp-3">
+        <p className="mb-5 text-[13px] font-semibold leading-6 text-slate-700 line-clamp-3">
           {staff.quote || staff.bio}
         </p>
 
         {staff.expertise && staff.expertise.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
+          <div className="mb-5 flex flex-wrap gap-2.5">
             {staff.expertise.slice(0, 2).map((tag, idx) => (
-              <span key={idx} className="rounded-full bg-[#f5f7fb] px-2.5 py-1 text-[10px] font-semibold text-slate-600 ring-1 ring-slate-200/70">
+              <span key={idx} className="rounded-full bg-[#f5f7fb] px-3 py-1.5 text-[11px] font-bold text-slate-700 ring-1 ring-slate-200/80">
                 {tag}
               </span>
             ))}
             {staff.expertise.length > 2 && (
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-400 ring-1 ring-slate-200/70">
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-500 ring-1 ring-slate-200/80">
                 +{staff.expertise.length - 2}
               </span>
             )}
           </div>
         )}
 
-        <div className="mt-auto flex gap-2 border-t border-slate-100 pt-3">
+        <div className="mt-auto flex gap-3 border-t border-slate-200 pt-4">
           <button
             onClick={() => onContactClick(staff)}
-            className="flex flex-1 items-center cursor-pointer justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[11px] font-semibold text-slate-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+            className="flex flex-1 items-center cursor-pointer justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[12px] font-extrabold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50"
           >
-            <FiMail size={11} /> Contact
+            <FiMail size={12} /> Contact
           </button>
           
           <Link
             href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-            className="flex flex-1 items-center justify-center gap-1.5 cursor-pointer rounded-xl bg-[#1a1a2e] py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#2d2d44]"
+            className="flex flex-1 items-center justify-center gap-2 cursor-pointer rounded-2xl bg-[#1a1a2e] px-4 py-3 text-[12px] font-extrabold text-white transition-colors hover:bg-[#2d2d44]"
           >
-            <FiChevronRight size={11} /> View
+            <FiChevronRight size={12} /> View
           </Link>
         </div>
       </div>
@@ -366,19 +389,18 @@ const StaffListCard = ({ staff, onContactClick }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    /* Increased max-width and padding; removed all hover: classes */
-    <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 rounded-[24px] border border-slate-300 bg-white p-6 shadow-md sm:flex-row">
+    <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-7 rounded-[28px] border border-slate-300 bg-white p-7 shadow-md sm:flex-row sm:items-start sm:p-8">
       
       {/* Increased profile image size slightly to match card width */}
       <div className="relative shrink-0">
         <div className="absolute inset-0 rounded-[22px] bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] blur-md opacity-20" />
-        <div className="relative h-20 w-20 overflow-hidden rounded-[22px] border border-white bg-slate-50 ring-2 ring-slate-100">
+        <div className="relative h-24 w-24 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100">
           <Image
             src={getImageSrc(staff)}
             alt={staff.name}
             fill
             className="object-cover"
-            sizes="80px"
+            sizes="96px"
             onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
           />
         </div>
@@ -389,43 +411,40 @@ const StaffListCard = ({ staff, onContactClick }) => {
         )}
       </div>
 
-      <div className="flex-1 text-center sm:text-left min-w-0">
-        <div className="mb-2 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-          {/* Font size increased to base for better visibility */}
-          <h3 className="text-base font-black text-slate-900">
+      <div className="min-w-0 flex-1 text-center sm:text-left">
+        <div className="mb-3 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
+          <h3 className="text-lg font-black text-slate-950">
             <Link href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}>
               {staff.name}
             </Link>
           </h3>
-          <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[11px] font-bold ${getBadgeColorStyles(deptConfig?.color)}`}>
-            <DeptIcon size={10} />
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[11px] font-extrabold ${getBadgeColorStyles(deptConfig?.color)}`}>
+            <DeptIcon size={11} />
             {staff.department}
           </span>
         </div>
 
-        {/* Position: Darker color and larger size for readability */}
-        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-700">
+        <p className="mb-3 text-sm font-extrabold uppercase tracking-[0.18em] text-slate-700">
           {staff.position}
         </p>
 
-        {/* Bio: Increased size and line height */}
-        <p className="text-[13px] font-medium leading-relaxed text-slate-600 line-clamp-2">
-          {staff.bio}
+        <p className="text-[15px] font-semibold leading-7 text-slate-700 line-clamp-3">
+          {staff.quote || staff.bio}
         </p>
       </div>
 
-      <div className="flex w-full shrink-0 gap-3 sm:w-auto">
+      <div className="flex w-full shrink-0 gap-3 sm:w-auto sm:self-center">
         <button
           onClick={() => onContactClick(staff)}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-slate-100 px-4 py-3 text-xs font-bold text-slate-800 transition-colors sm:flex-none"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-slate-100 px-5 py-3.5 text-sm font-extrabold text-slate-800 transition-colors sm:flex-none"
         >
-          <FiMail size={13} /> Contact
+          <FiMail size={14} /> Contact
         </button>
         <Link
           href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#1a1a2e] px-4 py-3 text-xs font-bold text-white transition-colors sm:flex-none"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#1a1a2e] px-5 py-3.5 text-sm font-extrabold text-white transition-colors sm:flex-none"
         >
-          <FiChevronRight size={13} /> View
+          <FiChevronRight size={14} /> View
         </Link>
       </div>
     </div>
@@ -815,30 +834,28 @@ export default function StaffDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           
           {/* Hierarchy Tabs */}
-          <div className="flex items-center gap-1.5 py-3 overflow-x-auto scrollbar-hide -mx-1 px-1">
+          <div className="flex items-center gap-2 py-3.5 overflow-x-auto scrollbar-hide -mx-1 px-1">
             {[
               { key: 'all', label: 'All Staff', Icon: FiUsers, count: staffData.length },
               { key: 'leadership', label: 'Leadership', Icon: FiShield, count: staffByHierarchy.leadership?.length || 0 },
               { key: 'teaching', label: 'Teaching', Icon: FiBookOpen, count: staffByHierarchy.teaching?.length || 0 },
               { key: 'support', label: 'Support', Icon: FiSettings, count: staffByHierarchy.support?.length || 0 },
             ].map((item) => (
-              <button
-                key={item.key}
-                onClick={() => setSelectedHierarchy(item.key)}
-                className={`flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[11px] font-semibold transition-all ${
-                  selectedHierarchy === item.key
-                    ? 'bg-[#1a1a2e] text-white shadow-sm'
-                    : 'text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm'
-                }`}
-              >
-                <item.Icon size={13} />
-                <span className="whitespace-nowrap">{item.label}</span>
-                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                  selectedHierarchy === item.key ? 'bg-white/15' : 'bg-slate-200/60'
-                }`}>
-                  {item.count}
-                </span>
-              </button>
+                <button
+                  key={item.key}
+                  onClick={() => setSelectedHierarchy(item.key)}
+                  className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-black transition-[box-shadow,filter] ${
+                    selectedHierarchy === item.key
+                      ? FILTER_BUTTON_STYLES[item.key].active
+                      : `${FILTER_BUTTON_STYLES[item.key].base} opacity-95 hover:opacity-100`
+                  }`}
+                >
+                  <item.Icon size={16} />
+                  <span className="whitespace-nowrap">{item.label}</span>
+                  <span className={`rounded-full px-2 py-1 text-[10px] font-black ${FILTER_BUTTON_STYLES[item.key].count}`}>
+                    {item.count}
+                  </span>
+                </button>
             ))}
 
             {/* Divider */}
@@ -851,15 +868,17 @@ export default function StaffDirectory() {
                 <button
                   key={dept.id}
                   onClick={() => toggleDept(dept.id)}
-                  className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-semibold transition-all border ${
+                  className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-extrabold transition-[box-shadow,background-color,border-color,color] ${
                     selectedDepts.includes(dept.id)
-                      ? 'bg-blue-50 border-blue-200 text-blue-700 shadow-sm'
-                      : 'border-transparent text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm'
+                      ? `${getBadgeColorStyles(dept.color)} shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_5px_rgba(148,163,184,0.18)]`
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
-                  <DIcon size={12} />
+                  <DIcon size={14} />
                   <span className="whitespace-nowrap">{dept.label}</span>
-                  <span className="text-[9px] font-bold text-slate-400">{getDeptCount(dept.id)}</span>
+                  <span className={`rounded-full px-2 py-1 text-[10px] font-black ${
+                    selectedDepts.includes(dept.id) ? 'bg-white/75 text-slate-900' : 'bg-slate-100 text-slate-600'
+                  }`}>{getDeptCount(dept.id)}</span>
                 </button>
               );
             })}
@@ -1087,7 +1106,7 @@ export default function StaffDirectory() {
 
             {/* Content */}
             {loading ? (
-              <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-3'}>
+              <div className={viewMode === 'grid' ? 'grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3' : 'space-y-4'}>
                 {[...Array(6)].map((_, i) => (
                   <StaffSkeleton key={i} viewMode={viewMode} />
                 ))}
@@ -1101,13 +1120,13 @@ export default function StaffDirectory() {
                     <HierarchySection title="Support Staff" iconKey="support" staff={staffByHierarchy.support} viewMode={viewMode} onContactClick={handleContactClick} />
                   </div>
                 ) : viewMode === 'grid' ? (
-                    <div className="flex flex-wrap gap-8 px-2">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                       {paginatedStaff.map((staff) => (
                         <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                       ))}
                     </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {paginatedStaff.map((staff) => (
                       <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                     ))}
