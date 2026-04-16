@@ -266,7 +266,7 @@ const [emailData, setEmailData] = useState({
   const emailTemplates = {
     admission: {
       name: 'Admission Updates',
-      subject: '🎓 Admissions Now Open for {schoolYear} - Matungulu Girls High School',
+      subject: '🎓 Admissions Now Open for {schoolYear} - Matungulu Girls Senior School',
       description: 'Send admission tips and deadlines with dynamic dates',
       color: 'from-blue-500 to-cyan-500',
       iconBg: 'bg-blue-100',
@@ -275,7 +275,7 @@ const [emailData, setEmailData] = useState({
     },
     newsletter: {
       name: 'Monthly Newsletter',
-      subject: '📰 {month} Newsletter - Matungulu Girls High School Updates',
+      subject: '📰 {month} Newsletter - Matungulu Girls Senior School Updates',
       description: 'Share monthly news, announcements and events',
       color: 'from-purple-500 to-pink-500',
       iconBg: 'bg-purple-100',
@@ -284,7 +284,7 @@ const [emailData, setEmailData] = useState({
     },
     event: {
       name: 'Event Announcement',
-      subject: '🎉 Event Invitation: {eventName} - Matungulu Girls High School',
+      subject: '🎉 Event Invitation: {eventName} - Matungulu Girls Senior School',
       description: 'Announce school events with dynamic event data',
       color: 'from-emerald-500 to-green-500',
       iconBg: 'bg-emerald-100',
@@ -293,7 +293,7 @@ const [emailData, setEmailData] = useState({
     },
     announcement: {
       name: 'Important Announcement',
-      subject: '📢 Important Announcement - Matungulu Girls High School',
+      subject: '📢 Important Announcement - Matungulu Girls Senior School',
       description: 'Send important school announcements',
       color: 'from-amber-500 to-orange-500',
       iconBg: 'bg-amber-100',
@@ -302,7 +302,7 @@ const [emailData, setEmailData] = useState({
     },
     custom: {
       name: 'Custom Email',
-      subject: '📧 {subject} - Matungulu Girls High School',
+      subject: '📧 {subject} - Matungulu Girls Senior School',
       description: 'Create a custom email with agenda data',
       color: 'from-gray-600 to-gray-800',
       iconBg: 'bg-gray-100',

@@ -88,7 +88,7 @@ import ModernLeadershipSection from './components/leadership/page';
 import Hero from "./components/Hero/page";
 import Why from "./components/why/page";
 
-// Modern Loading Screen for Matungulu Girls High School
+// Modern Loading Screen for Matungulu Girls Senior School
 const MatunguluGirlsLoadingScreen = () => {
   const [textIndex, setTextIndex] = useState(0);
   const [glowIntensity, setGlowIntensity] = useState(0);
@@ -171,7 +171,7 @@ const MatunguluGirlsLoadingScreen = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                 <img 
                   src="/MatG.jpg" 
-                  alt="Matungulu Girls High School Logo" 
+                  alt="Matungulu Girls Senior School Logo" 
                   className="w-[85%] h-[85%] object-cover rounded-full relative z-10"
                 />
               </div>
@@ -385,7 +385,7 @@ export default function ModernHero() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'School',
-    name: 'Matungulu Girls High School',
+    name: 'Matungulu Girls Senior School',
     image: 'https://matungulu-girls.vercel.app/MatG.jpg',
     description: 'A secondary school committed to academic excellence, integrity, and holistic student development.',
     address: {
@@ -441,7 +441,7 @@ export default function ModernHero() {
       title: "Academic Excellence",
       subtitle: "Redefined Through Innovation",
       gradient: "from-rose-500 via-pink-400 to-emerald-600",
-      description: "At Matungulu Girls High School, we're pioneering a new era of education. With a 94% KCSE success rate and state-of-the-art STEM facilities, we're not just teaching—we're inspiring the next generation of leaders and innovators.",
+      description: "At Matungulu Girls Senior School, we're pioneering a new era of education. With a 94% KCSE success rate and state-of-the-art STEM facilities, we're not just teaching—we're inspiring the next generation of leaders and innovators.",
       background: "bg-gradient-to-br from-rose-900/90 via-pink-900/80 to-emerald-900/70",
       image: "/student.jpg",
       stats: { 
@@ -731,7 +731,7 @@ export default function ModernHero() {
                 <div>
                   <h4 className="text-white font-bold">Virtual Tour</h4>
                   <p className="text-white/60 text-sm">
-                    {schoolData?.name || 'Matungulu Girls High School'}
+                    {schoolData?.name || 'Matungulu Girls Senior School'}
                   </p>
                 </div>
               </div>

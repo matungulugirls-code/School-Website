@@ -438,7 +438,7 @@ export default function StudentLoginModal({
         {/* Footer */}
         <footer className="px-5 py-3 bg-gray-50 border-t border-gray-100 flex-shrink-0">
           <p className="text-center text-gray-500 text-xs">
-            For assistance: Contact class teacher or school office • Matungulu Girls High School
+            For assistance: Contact class teacher or school office • Matungulu Girls Senior School
           </p>
         </footer>
       </main>

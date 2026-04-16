@@ -1091,7 +1091,7 @@ export default function ModernEventsNewsPage() {
                   Loading events & news...
                 </p>
                 <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">
-                  Matungulu Girls High School
+                  Matungulu Girls Senior School
                 </p>
               </div>
             </Stack>
@@ -1121,7 +1121,7 @@ export default function ModernEventsNewsPage() {
           <div className="h-8 w-1 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
           <div>
             <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-emerald-400">
-              Matungulu Girls High School
+              Matungulu Girls Senior School
             </h2>
             <p className="text-[8px] sm:text-[10px] italic font-medium text-emerald-200/60 tracking-widest uppercase">
               "Strive to Excel"

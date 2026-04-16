@@ -187,7 +187,7 @@ const BrandSection = () => (
         <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-emerald-400 bg-white/10 shadow-lg shadow-emerald-500/20">
           <img
             src="/MatG.jpg"
-            alt="Matungulu Girls High School Logo"
+            alt="Matungulu Girls Senior School Logo"
             className="w-full h-full object-cover"
           />
         </div>
@@ -386,7 +386,7 @@ const PrivacyModal = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="space-y-3 text-sm text-gray-300">
-          <p>Matungulu Girls High School is committed to protecting your privacy and personal information.</p>
+          <p>Matungulu Girls Senior School is committed to protecting your privacy and personal information.</p>
           <p>All data is collected and processed in compliance with the Kenyan Data Protection Act (2019).</p>
           <p className="text-emerald-300 text-xs">Last updated: {new Date().getFullYear()}</p>
         </div>
@@ -599,7 +599,7 @@ export default function ModernFooter() {
 
                   <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
                     <p className="text-[11px] font-bold text-white tracking-tight">
-                      © {currentYear} Matungulu Girls High School. All rights reserved.
+                      © {currentYear} Matungulu Girls Senior School. All rights reserved.
                     </p>
                     <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-emerald-500/20">
                       <p className="text-[10px] font-bold text-white">

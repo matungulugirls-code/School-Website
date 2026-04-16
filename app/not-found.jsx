@@ -119,7 +119,7 @@ const Modern404 = () => {
               {/* School Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 rounded-full border border-rose-200 shadow-sm">
                 <FaCrown className="text-xs text-amber-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Matungulu Girls' High School</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">Matungulu Girls' Senior School</span>
                 <IoSparkles className="text-xs text-amber-500" />
               </div>
 
@@ -308,7 +308,7 @@ const Modern404 = () => {
                           <div className="flex items-center gap-2 mb-1">
                             <FaCrown className="text-amber-400 text-xs" />
                             <p className="text-rose-200 text-[8px] font-black uppercase tracking-wider">
-                              Matungulu Girls' High School
+                              Matungulu Girls' Senior School
                             </p>
                           </div>
                           <p className="text-white/90 text-sm font-serif italic">
@@ -352,7 +352,7 @@ const Modern404 = () => {
             <div className="flex items-center justify-center gap-2 mb-2">
               <FaSeedling className="text-emerald-500 text-xs" />
               <p className="text-slate-500 text-[10px] sm:text-xs font-medium">
-                &copy; {new Date().getFullYear()} Matungulu Girls' High School
+                &copy; {new Date().getFullYear()} Matungulu Girls' Senior School
               </p>
               <FaSeedling className="text-emerald-500 text-xs" />
             </div>

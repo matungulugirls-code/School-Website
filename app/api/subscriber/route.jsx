@@ -3,7 +3,7 @@ import { prisma } from '../../../libs/prisma';
 import nodemailer from 'nodemailer';
 
 // School Information
-const SCHOOL_NAME = 'Matungulu Girls High School';
+const SCHOOL_NAME = 'Matungulu Girls Senior School';
 const SCHOOL_LOCATION = 'Matungulu, Machakos County';
 const SCHOOL_MOTTO = 'Strive to Excel';
 const CONTACT_PHONE = '+254720123456';

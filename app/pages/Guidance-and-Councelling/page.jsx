@@ -669,7 +669,7 @@ const TeamMemberModal = ({ member, isOpen, onClose }) => {
             {activeTab === 'overview' && (
               <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                  {member.bio || `Dedicated ${roleStyle.label} at Matungulu Girls High School.`}
+                  {member.bio || `Dedicated ${roleStyle.label} at Matungulu Girls Senior School.`}
                 </p>
               </div>
             )}
@@ -1376,7 +1376,7 @@ export default function StudentCounseling() {
                   <div className="h-8 w-1 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
                   <div>
                     <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-emerald-400">
-                      Matungulu Girls High School
+                      Matungulu Girls Senior School
                     </h2>
                     <p className="text-[8px] sm:text-[10px] italic font-medium text-emerald-200/60 tracking-widest uppercase">
                       "Strive to Excel"
@@ -1958,7 +1958,7 @@ export default function StudentCounseling() {
                 Your Well-being Matters.
               </h3>
               <p className="text-emerald-200 text-xs md:text-sm leading-relaxed max-w-xl mx-auto md:mx-0">
-                At Matungulu Girls High School, we believe that true education extends beyond academics. 
+                At Matungulu Girls Senior School, we believe that true education extends beyond academics. 
                 Our Guidance and Counseling Department is dedicated to nurturing the complete student—mind, 
                 body, and spirit.
               </p>

@@ -28,24 +28,24 @@ export async function generateMetadata({ params }) {
   if (!staff) {
     // Return generic metadata that works for all staff pages
     return {
-      title: "Staff Profile | Matungulu Girls High School",
-      description: "Meet our dedicated educators and staff members at Matungulu Girls High School. Professional educators committed to excellence.",
+      title: "Staff Profile | Matungulu Girls Senior School",
+      description: "Meet our dedicated educators and staff members at Matungulu Girls Senior School. Professional educators committed to excellence.",
       openGraph: {
-        title: "Staff Profile | Matungulu Girls High School",
-        description: "Professional educators dedicated to student success at Matungulu Girls High School",
+        title: "Staff Profile | Matungulu Girls Senior School",
+        description: "Professional educators dedicated to student success at Matungulu Girls Senior School",
         images: [
           {
             url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/MatG.jpg`,
             width: 1200,
             height: 630,
-            alt: 'Matungulu Girls High School Staff - Strive to Excel'
+            alt: 'Matungulu Girls Senior School Staff - Strive to Excel'
           }
         ],
-        siteName: 'Matungulu Girls High School',
+        siteName: 'Matungulu Girls Senior School',
       },
       twitter: {
         card: 'summary_large_image',
-        title: "Staff Profile | Matungulu Girls High School",
+        title: "Staff Profile | Matungulu Girls Senior School",
         description: "Professional educators dedicated to student success",
         images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/MatG.jpg`],
       },
@@ -59,10 +59,10 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const title = `${staff.name} - ${staff.position} | Matungulu Girls High School`;
+  const title = `${staff.name} - ${staff.position} | Matungulu Girls Senior School`;
   const description = staff.bio 
     ? staff.bio.substring(0, 160) 
-    : `Meet ${staff.name}, a dedicated ${staff.position} at Matungulu Girls High School specializing in ${staff.department}.`;
+    : `Meet ${staff.name}, a dedicated ${staff.position} at Matungulu Girls Senior School specializing in ${staff.department}.`;
   
   // Fix the image URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
@@ -85,11 +85,11 @@ export async function generateMetadata({ params }) {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: `Professional portrait of ${staff.name}, ${staff.position} at Matungulu Girls High School`
+          alt: `Professional portrait of ${staff.name}, ${staff.position} at Matungulu Girls Senior School`
         }
       ],
       type: 'profile',
-      siteName: 'Matungulu Girls High School',
+      siteName: 'Matungulu Girls Senior School',
       profile: {
         firstName: staff.name?.split(' ')[0] || '',
         lastName: staff.name?.split(' ').slice(1).join(' ') || '',
@@ -112,7 +112,7 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: `${baseUrl}/SchoolTeam/${id}`,
     },
-    keywords: `${staff.name}, ${staff.position}, ${staff.department}, Matungulu Girls High School, teaching staff, Kenyan education, ${staff.expertise?.join(', ') || ''}`,
+    keywords: `${staff.name}, ${staff.position}, ${staff.department}, Matungulu Girls Senior School, teaching staff, Kenyan education, ${staff.expertise?.join(', ') || ''}`,
   };
 }
 
@@ -162,9 +162,9 @@ export function generateJsonLd(staff) {
     "jobTitle": staff.position,
     "worksFor": {
       "@type": "EducationalOrganization",
-      "name": "Matungulu Girls High School",
+      "name": "Matungulu Girls Senior School",
       "url": baseUrl,
-      "description": "A leading girls' high school in Kenya committed to academic excellence and holistic development.",
+      "description": "A leading girls' Senior School in Kenya committed to academic excellence and holistic development.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Matungulu",
@@ -172,7 +172,7 @@ export function generateJsonLd(staff) {
         "addressCountry": "KE"
       }
     },
-    "description": staff.bio || `Dedicated educator at Matungulu Girls High School specializing in ${staff.department}.`,
+    "description": staff.bio || `Dedicated educator at Matungulu Girls Senior School specializing in ${staff.department}.`,
     "image": staff.image || `${baseUrl}/MatG.jpg`,
     "url": `${baseUrl}/SchoolTeam/${staff.id}`,
     "email": staff.email,

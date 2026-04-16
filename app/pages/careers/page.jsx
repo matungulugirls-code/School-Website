@@ -91,7 +91,7 @@ const ModernJobCard = ({ job, onView, onBookmark, onShare, viewMode = 'grid' }) 
 
   const handleWhatsAppShare = (e) => {
     e.stopPropagation();
-    const text = `Job Opening: ${job?.jobTitle} at Matungulu Girls High School. ${job?.jobType} position in ${job?.department || 'various departments'}.`;
+    const text = `Job Opening: ${job?.jobTitle} at Matungulu Girls Senior School. ${job?.jobType} position in ${job?.department || 'various departments'}.`;
     const url = window.location.href;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
     window.open(whatsappUrl, '_blank');
@@ -229,7 +229,7 @@ const ModernJobCard = ({ job, onView, onBookmark, onShare, viewMode = 'grid' }) 
 
           {/* Description */}
           <p className="text-slate-600 text-sm mb-6 line-clamp-2 leading-relaxed">
-            {job?.jobDescription || 'Join our dedicated team at Matungulu Girls High School.'}
+            {job?.jobDescription || 'Join our dedicated team at Matungulu Girls Senior School.'}
           </p>
 
           {/* Info Grid */}
@@ -367,7 +367,7 @@ const ModernJobCard = ({ job, onView, onBookmark, onShare, viewMode = 'grid' }) 
             </div>
 
             <p className="text-slate-600 text-xs line-clamp-2 mb-3">
-              {job?.jobDescription || 'Join our dedicated team at Matungulu Girls High School.'}
+              {job?.jobDescription || 'Join our dedicated team at Matungulu Girls Senior School.'}
             </p>
           </div>
 
@@ -430,7 +430,7 @@ const ModernJobDetailModal = ({ job, onClose, onApply }) => {
   if (!job) return null;
 
   const handleWhatsAppShare = () => {
-    const text = `Check out this job opportunity at Matungulu Girls High School: ${job.jobTitle} - ${job.department || 'Various Departments'}`;
+    const text = `Check out this job opportunity at Matungulu Girls Senior School: ${job.jobTitle} - ${job.department || 'Various Departments'}`;
     const url = window.location.href;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
     window.open(whatsappUrl, '_blank');
@@ -568,7 +568,7 @@ const ModernJobDetailModal = ({ job, onClose, onApply }) => {
             <section className="space-y-3 sm:space-y-4">
               <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-slate-400">Job Description</h3>
               <div className="text-slate-700 leading-relaxed text-sm sm:text-base md:text-lg bg-slate-50 p-3 sm:p-4 rounded-xl sm:rounded-2xl md:rounded-3xl border border-slate-200">
-                {job.jobDescription || 'Join our dedicated team at Matungulu Girls High School.'}
+                {job.jobDescription || 'Join our dedicated team at Matungulu Girls Senior School.'}
               </div>
             </section>
 
@@ -681,7 +681,7 @@ const ModernEmptyState = ({ onClearFilters }) => {
       </h3>
       
       <p className="text-slate-600 text-[9px] md:text-lg mb-6 md:mb-8 max-w-[240px] md:max-w-md mx-auto leading-relaxed">
-        Currently no opportunities available at <span className="text-emerald-700 font-bold">Matungulu Girls High School</span>.
+        Currently no opportunities available at <span className="text-emerald-700 font-bold">Matungulu Girls Senior School</span>.
       </p>
 
       <div className="flex justify-center mb-8">
@@ -844,8 +844,8 @@ export default function ModernCareersPage() {
   const handleShare = (job) => {
     if (navigator.share) {
       navigator.share({
-        title: `${job.jobTitle} - Matungulu Girls High School`,
-        text: `Check out this job opportunity at Matungulu Girls High School: ${job.jobTitle}`,
+        title: `${job.jobTitle} - Matungulu Girls Senior School`,
+        text: `Check out this job opportunity at Matungulu Girls Senior School: ${job.jobTitle}`,
         url: window.location.href,
       });
     } else {
@@ -883,7 +883,7 @@ export default function ModernCareersPage() {
   };
 
   const handleShareAllJobs = () => {
-    const text = `Check out current job openings at Matungulu Girls High School! ${filteredJobs.length} positions available.`;
+    const text = `Check out current job openings at Matungulu Girls Senior School! ${filteredJobs.length} positions available.`;
     const url = window.location.href;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
     window.open(whatsappUrl, '_blank');
@@ -951,7 +951,7 @@ export default function ModernCareersPage() {
               Join Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 to-teal-700">Matungulu Girls</span> Family
             </h1>
             <p className="text-slate-600 text-sm sm:text-base md:text-lg max-w-2xl">
-              Shape the future of education at Matungulu Girls High School - Excellence Through Discipline and Hard Work
+              Shape the future of education at Matungulu Girls Senior School - Excellence Through Discipline and Hard Work
             </p>
           </div>
           
@@ -1024,7 +1024,7 @@ export default function ModernCareersPage() {
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-100 rounded-lg sm:rounded-xl flex items-center justify-center">
                   <IoSchoolOutline className="text-emerald-700 text-lg sm:text-xl" />
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900">Matungulu Girls High School</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900">Matungulu Girls Senior School</h2>
               </div>
 
               <div className="space-y-3 sm:space-y-4">

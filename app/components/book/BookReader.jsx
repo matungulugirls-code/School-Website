@@ -226,7 +226,7 @@ const BookReader = ({ issue, onClose }) => {
       try {
         await navigator.share({
           title: issue.title,
-          text: `Reading ${issue.title} magazine from Matungulu Girls High School!`,
+          text: `Reading ${issue.title} magazine from Matungulu Girls Senior School!`,
           url: window.location.href
         });
       } catch (err) {

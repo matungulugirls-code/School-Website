@@ -72,7 +72,7 @@ const ModernHeroBanner = ({ stats, onRefresh }) => {
               <div className="h-8 w-1 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
               <div>
                 <h2 className="text-xs font-black uppercase tracking-[0.3em] text-emerald-400">
-                  Matungulu Girls High School
+                  Matungulu Girls Senior School
                 </h2>
                 <p className="text-[10px] italic font-medium text-emerald-200/60 tracking-widest uppercase">
                   "Strive to Excel"
@@ -1335,7 +1335,7 @@ const categoryOptions = [
               <div className="text-center">
                 <p className="text-slate-600 font-medium text-sm">Loading school galleries...</p>
                 <p className="text-slate-400 text-xs uppercase tracking-widest mt-1 font-bold">
-                  Matungulu Girls High School
+                  Matungulu Girls Senior School
                 </p>
               </div>
             </Stack>

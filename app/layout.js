@@ -34,24 +34,24 @@ export const metadata = {
   metadataBase: new URL("https://matungulu-girls.vercel.app"),
 
   title: {
-    default: "Matungulu Girls High School",
-    template: "%s | Matungulu Girls Senior High School",
+    default: "Matungulu Girls Senior School",
+    template: "%s | Matungulu Girls Senior Senior School",
   },
 
   description:
-    "The official website of Matungulu Girls Senior High School in Matungulu, Machakos County. Dedicated to academic excellence, Christian values, and holistic student development in Kenya.",
+    "The official website of Matungulu Girls Senior Senior School in Matungulu, Machakos County. Dedicated to academic excellence, Christian values, and holistic student development in Kenya.",
   
   keywords: [
-    "Matungulu Girls Senior High School",
+    "Matungulu Girls Senior Senior School",
     "Matungulu Girls Secondary School",
     "Matungulu g",
     "Matungulu Girls school",
-    "Matungulu Girls High School",
+    "Matungulu Girls Senior School",
     "MatG school",
     "MatG",
     "Matungulu Girls Senior High",
-    "MatG senior high school",
-    "Matungulu Girls High School Matungulu",
+    "MatG senior Senior School",
+    "Matungulu Girls Senior School Matungulu",
     "Machakos County Schools",
     "Best secondary schools in Machakos",
     "Public schools in Kenya",
@@ -71,7 +71,7 @@ export const metadata = {
     
   ],
 
-  authors: [{ name: "Matungulu Girls Senior High School" }],
+  authors: [{ name: "Matungulu Girls Senior Senior School" }],
   
   alternates: {
     canonical: "/",
@@ -79,10 +79,10 @@ export const metadata = {
 
   /* Open Graph (Social Media Sharing) */
   openGraph: {
-    title: "Matungulu Girls High School",
+    title: "Matungulu Girls Senior School",
     description: "Official school website.",
     url: "https://matungulu-girls.vercel.app",
-    siteName: "Matungulu Girls High School",
+    siteName: "Matungulu Girls Senior School",
     locale: "en_KE",
     type: "website",
     images: [
@@ -90,7 +90,7 @@ export const metadata = {
         url: "/MatG.jpg",
         width: 1200,
         height: 630,
-        alt: "Matungulu Girls Senior High School",
+        alt: "Matungulu Girls Senior Senior School",
       },
     ],
   },
@@ -98,7 +98,7 @@ export const metadata = {
   /* Twitter Card */
   twitter: {
     card: "summary_large_image",
-    title: "Matungulu Girls Senior High School",
+    title: "Matungulu Girls Senior Senior School",
     description: "Empowering students through education and faith in Machakos County.",
     images: ["/MatG.jpg"],
   },
@@ -133,8 +133,8 @@ export default function RootLayout({ children }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "School",
-    "name": "Matungulu Girls Senior High School",
-    "alternateName": "Matungulu Girls High School",
+    "name": "Matungulu Girls Senior Senior School",
+    "alternateName": "Matungulu Girls Senior School",
     "url": "https://matungulu-girls.vercel.app",
     "logo": "https://matungulu-girls.vercel.app/MatG.jpg",
     "image": "https://matungulu-girls.vercel.app/MatG.jpg",

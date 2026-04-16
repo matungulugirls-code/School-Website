@@ -137,7 +137,7 @@ export default function StaffProfilePage() {
       `${schoolName} teachers`,
       `${schoolName} faculty`,
       'teacher at Matungulu Girls',
-      'Matungulu GirlsHigh School staff',
+      'Matungulu GirlsSenior School staff',
       'Matungulu Girlsteachers',
       'MatG teachers',
       ...(staff.expertise || []),
@@ -196,7 +196,7 @@ export default function StaffProfilePage() {
               worksFor: {
                 '@type': 'EducationalOrganization',
                 name: schoolName,
-                alternateName: ['Matungulu GirlsHigh School', 'SA Matungulu Girls', 'Katz School'],
+                alternateName: ['Matungulu GirlsSenior School', 'SA Matungulu Girls', 'Katz School'],
                 description: schoolDescription,
                 url: 'https://kinyui-senior.vercel.app',
                 address: {

@@ -1301,7 +1301,7 @@ export default function AdminLoginPage() {
                     1. Authorized Use
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
-                    This administrative portal is exclusively for authorized Matungulu Girls' High School personnel. Access credentials are personal and non-transferable. Any sharing of credentials constitutes a security breach and will result in immediate revocation of access privileges and potential legal action.
+                    This administrative portal is exclusively for authorized Matungulu Girls' Senior School personnel. Access credentials are personal and non-transferable. Any sharing of credentials constitutes a security breach and will result in immediate revocation of access privileges and potential legal action.
                   </p>
                 </div>
                 
@@ -1341,7 +1341,7 @@ export default function AdminLoginPage() {
                     5. Institutional Compliance
                   </h5>
                   <p className="text-xs sm:text-sm leading-relaxed">
-                    By accessing this portal, you acknowledge your understanding of and compliance with all Matungulu Girls' High School ICT policies and applicable Kenyan laws.
+                    By accessing this portal, you acknowledge your understanding of and compliance with all Matungulu Girls' Senior School ICT policies and applicable Kenyan laws.
                   </p>
                 </div>
               </div>

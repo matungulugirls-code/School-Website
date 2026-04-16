@@ -337,7 +337,7 @@ const handleSubmit = async (e) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Matungulu Girls High School Admission - ${applicationNumber}`,
+          title: `Matungulu Girls Senior School Admission - ${applicationNumber}`,
           text: `I've submitted my admission application to Matungulu Girls High  School. Application Number: ${applicationNumber}`,
           url: window.location.href,
         });
@@ -1658,7 +1658,7 @@ const handleSubmit = async (e) => {
             className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 rounded focus:ring-blue-500 mt-0.5 sm:mt-1"
           />
           <span className="text-xs sm:text-sm md:text-base text-gray-800 font-semibold">
-            I agree to the terms and conditions of Katwanyaa High School's admission process.
+            I agree to the terms and conditions of Katwanyaa Senior School's admission process.
           </span>
         </label>
         <label className="flex items-start space-x-2 sm:space-x-3 cursor-pointer">
@@ -1795,7 +1795,7 @@ const handleSubmit = async (e) => {
   <div className="max-w-2xl mx-auto space-y-3 opacity-80">
     <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
       <p className="text-gray-800 text-[9px] md:text-xs font-bold uppercase tracking-wider">
-        © {new Date().getFullYear()} Matungulu Girls High School
+        © {new Date().getFullYear()} Matungulu Girls Senior School
       </p>
       <p className="text-blue-600 text-[9px] md:text-xs font-medium italic">
         "Excellence Through Discipline"

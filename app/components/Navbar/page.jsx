@@ -245,7 +245,7 @@ export default function ModernNavbar() {
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
                 <Image
                   src="/MatG.jpg"
-                  alt="Matungulu Girls High School Logo"
+                  alt="Matungulu Girls Senior School Logo"
                   width={48}
                   height={48}
                   className="relative z-10 cursor-pointer filter drop-shadow-sm group-hover:scale-100 transition-transform duration-300 w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14"

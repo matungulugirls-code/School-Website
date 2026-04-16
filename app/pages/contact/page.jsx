@@ -270,7 +270,7 @@ export default function ContactPage() {
 
           {/* Refined Title */}
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-6 tracking-tighter leading-none">
-            Matungulu Girls <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-white/70">High School.</span>
+            Matungulu Girls <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-white/70">Senior School.</span>
           </h1>
 
           {/* Rich Description */}

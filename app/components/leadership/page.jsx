@@ -445,7 +445,7 @@ const ModernStaffLeadership = () => {
           </h1>
           
           <p className="text-xs sm:text-base md:text-lg text-emerald-100 max-w-xl sm:max-w-3xl mx-auto font-light leading-relaxed px-4">
-            Meet the passionate educators and administrators committed to excellence at Matungulu Girls High School
+            Meet the passionate educators and administrators committed to excellence at Matungulu Girls Senior School
           </p>
         </div>
       </div>

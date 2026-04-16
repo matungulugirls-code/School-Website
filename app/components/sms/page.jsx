@@ -1533,7 +1533,7 @@ const handleSendCampaign = async () => {
           <div className="h-7 w-1 bg-gradient-to-b from-cyan-500 to-emerald-500 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)]" />
           <div>
             <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-cyan-400">
-              Matungulu Girls High School
+              Matungulu Girls Senior School
             </h2>
             <p className="text-[9px] italic font-medium text-white/40 tracking-widest uppercase">
               "Strive to Excel"
@@ -1570,7 +1570,7 @@ const handleSendCampaign = async () => {
             <Zap className="w-3 h-3" />
             Celcom
           </span>
-          . Fast, reliable, and built for Matungulu Girls High School.
+          . Fast, reliable, and built for Matungulu Girls Senior School.
         </p>
         
         {/* Quick Stats Pills */}

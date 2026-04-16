@@ -101,7 +101,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "grid" }) => {
       try {
         await navigator.share({
           title: issue.title,
-          text: `Check out ${issue.title} magazine from Matungulu Girls High School!`,
+          text: `Check out ${issue.title} magazine from Matungulu Girls Senior School!`,
           url: window.location.href
         });
       } catch (err) {
@@ -175,7 +175,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "grid" }) => {
             </div>
 
             <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-              {issue.description || "Annual magazine showcasing school achievements, events, and student stories from Matungulu Girls High School."}
+              {issue.description || "Annual magazine showcasing school achievements, events, and student stories from Matungulu Girls Senior School."}
             </p>
 
             <div className="flex items-center justify-between">
@@ -234,7 +234,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "grid" }) => {
         </h3>
         
         <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-          {issue.description || "Annual magazine showcasing school achievements, events, and student stories from Matungulu Girls High School."}
+          {issue.description || "Annual magazine showcasing school achievements, events, and student stories from Matungulu Girls Senior School."}
         </p>
         
         <div className="flex items-center justify-between mb-4">
@@ -437,7 +437,7 @@ export default function MagazineArchive() {
               Loading School Magazines
             </p>
             <p className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">
-              Matungulu Girls High School
+              Matungulu Girls Senior School
             </p>
           </div>
         </Stack>
@@ -472,7 +472,7 @@ export default function MagazineArchive() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-purple-100 max-w-2xl mx-auto leading-relaxed">
-              Discover the rich history, achievements, and inspiring stories of Matungulu Girls High School through our digital magazine collection.
+              Discover the rich history, achievements, and inspiring stories of Matungulu Girls Senior School through our digital magazine collection.
             </p>
           </motion.div>
 

@@ -166,7 +166,7 @@ const CareerSearchPage = () => {
   const [expandedDept, setExpandedDept] = useState(null);
   const deptsPerPage = 3; // Show 3 departments per page
   
-  // Enhanced high school departments with more career paths
+  // Enhanced Senior School departments with more career paths
   const highSchoolDepartments = [
     {
       department: 'MATHEMATICS',
@@ -470,7 +470,7 @@ const CareerSearchPage = () => {
             Career <span className="text-[#1a1a2e]">Explorer</span>
           </h1>
           <p className="text-slate-700 font-semibold text-xs md:text-sm uppercase tracking-[0.2em] mb-6">
-            Browse careers by high school department
+            Browse careers by Senior School department
           </p>
 
           {/* SEARCH & FILTER BAR */}

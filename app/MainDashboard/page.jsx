@@ -433,7 +433,7 @@ const loadingMessages = [
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                 <img 
                   src="/MatG.jpg" 
-                  alt="Matungulu Girls High School Logo" 
+                  alt="Matungulu Girls Senior School Logo" 
                   className="w-[85%] h-[85%] object-cover rounded-full relative z-10"
                 />
               </div>

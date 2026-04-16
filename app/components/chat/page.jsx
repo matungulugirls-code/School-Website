@@ -314,7 +314,7 @@ Steps:
 • Admissions: katwanyaaschool@yahoo.com
 
 **Physical Address:**
-Matungulu Girls High School
+Matungulu Girls Senior School
 Matungulu Sub-County
 Machakos County
 P.O. Box 363 – 90131 Tala, Kenya
@@ -943,7 +943,7 @@ ${schoolData ? 'For the most current information, choose a category below! 👇'
 
                 <div className="min-w-0 flex flex-col">
                   <h3 className="text-sm sm:text-base font-black text-white truncate leading-tight">
-                    {schoolData?.name || 'Matungulu Girls High School'}
+                    {schoolData?.name || 'Matungulu Girls Senior School'}
                   </h3>
                   <p className="text-blue-200 text-[10px] sm:text-xs truncate opacity-80 font-medium">
                     {schoolData?.motto || 'Strive to Excel'}

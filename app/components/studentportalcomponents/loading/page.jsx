@@ -1,4 +1,4 @@
-// LoadingSpinner.jsx - Modern Loading Component for Matungulu Girls High School
+// LoadingSpinner.jsx - Modern Loading Component for Matungulu Girls Senior School
 "use client";
 import React, { useState, useEffect } from 'react';
 import { FaFeatherAlt, FaBookOpen, FaStar, FaGraduationCap } from 'react-icons/fa';
