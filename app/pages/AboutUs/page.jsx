@@ -212,20 +212,22 @@ export default function AboutPage() {
               and the standard we grow into together.
             </p>
           </div>
+{/* Parent Container: Changed flex-col to flex-row and items-stretch to items-center */}
+<div className="flex flex-row items-center justify-center gap-2 px-1 sm:gap-4 sm:px-2">
+  
+  <Link href="/pages/admissions" className="flex-1 sm:flex-none">
+    <button className="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-3 py-3 text-[10px] font-black text-white shadow-lg shadow-emerald-900/20 transition-transform active:scale-95 sm:gap-2 sm:rounded-2xl sm:px-10 sm:text-sm">
+      Admission <ArrowRight size={14} className="shrink-0 sm:size-[16px]" />
+    </button>
+  </Link>
 
-          <div className="flex w-full flex-col items-stretch justify-center gap-3 px-1 sm:flex-row sm:items-center sm:gap-4 sm:px-2">
-            <Link href="/pages/apply-for-admissions" className="w-full sm:w-auto sm:flex-none">
-              <button className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-3 text-[11px] font-black text-white shadow-lg shadow-emerald-900/20 transition-transform active:scale-95 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-sm">
-                Admission <ArrowRight size={16} className="shrink-0" />
-              </button>
-            </Link>
-
-            <Link href="/pages/admissions" className="w-full sm:w-auto sm:flex-none">
-              <button className="w-full whitespace-nowrap rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-[11px] font-black text-white shadow-xl transition-transform active:scale-95 sm:w-auto sm:rounded-2xl sm:px-10 sm:text-sm">
-                Curriculum
-              </button>
-            </Link>
-          </div>
+  <Link href="/pages/contact" className="flex-1 sm:flex-none">
+    <button className="w-full whitespace-nowrap rounded-xl border border-white/10 bg-slate-900 px-3 py-3 text-[10px] font-black text-white shadow-xl transition-transform active:scale-95 sm:rounded-2xl sm:px-10 sm:text-sm">
+      Contact
+    </button>
+  </Link>
+  
+</div>
 
           <div className="mt-10 flex flex-wrap justify-center gap-4 opacity-80 sm:mt-12 sm:gap-8">
             <span className="text-[10px] font-bold uppercase tracking-widest text-white">
@@ -475,7 +477,7 @@ export default function AboutPage() {
               </div>
 
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Matungulu+Girls+High+School+Machakos+County"
+                href="https://maps.app.goo.gl/WqjeNfi78asowHx7A"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-black text-[#14382d] transition-transform active:scale-95"
