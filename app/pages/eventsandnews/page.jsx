@@ -1176,7 +1176,7 @@ export default function ModernEventsNewsPage() {
     <div className="min-h-screen bg-[#f4efe7] p-4 md:p-6">
       <Toaster position="top-right" richColors />
       
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full md:w-[85%] mx-auto space-y-6">
         
 {/* Modern Hero Header - Staff/Team aligned theme */}
 <div className="relative mb-8 overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
