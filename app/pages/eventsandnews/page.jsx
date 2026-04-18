@@ -1215,7 +1215,13 @@ export default function ModernEventsNewsPage() {
      Stay connected with the moments that define our School MatG. From the excitement of game day and the brilliance of our seasonal concerts to the essential updates that keep our families informed, this is your home for everything happening on and off campus. Explore our latest headlines and mark your calendars for the milestones ahead.        </p>
       </div>
 
-     {/* Refresh & View Toggle Group */}
+
+      </div>
+    </div>
+
+    <div className="border-t border-white/10 p-6 md:p-10 lg:border-t-0">
+      <div className="flex h-full flex-col justify-between">
+         {/* Refresh & View Toggle Group */}
 <div className="flex flex-nowrap items-center gap-2 sm:gap-3 w-auto">
   {/* Refresh Button - Moderate & Proportional */}
   <button
@@ -1263,24 +1269,6 @@ export default function ModernEventsNewsPage() {
     </button>
   </div>
 </div>
-      </div>
-    </div>
-
-    <div className="border-t border-white/10 p-6 md:p-10 lg:border-t-0">
-      <div className="flex h-full flex-col justify-between">
-        {/* Stats Summary - Matching the fee structure style */}
-        <div className="mb-6 px-1">
-          <p className="text-white/78 text-xs sm:text-base font-medium leading-relaxed sm:leading-loose">
-            <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-emerald-500/50 underline-offset-4 mr-1">
-              {eventsData.length}
-            </span> 
-            <span className="tracking-tight sm:tracking-normal">upcoming events and</span>
-            <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-[#f2c357]/60 underline-offset-4 ml-1 mr-1">
-              {newsData.length}
-            </span>
-            <span className="tracking-tight sm:tracking-normal">news articles this month</span>
-          </p>
-        </div>
 
 
         {/* Additional Info */}
