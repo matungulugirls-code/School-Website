@@ -558,7 +558,7 @@ const ModernStaffLeadership = () => {
                       <span className={`inline-flex items-center gap-2 rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] backdrop-blur-sm ${featuredMeta.badge}`}>
                         {featuredRoleBadge.icon}
                         <span className="hidden xs:inline">{featuredStaff?.position || featuredStaff?.role || 'Staff Member'}</span>
-                        <span className="xs:hidden">{featuredStaff?.role?.substring(0, 10) || 'Staff'}</span>
+                        <span className="xs:hidden">{featuredStaff?.position?.substring(0, 10) || 'Staff'}</span>
                       </span>
                       {viewMode === 'other' && (
                         <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
