@@ -600,22 +600,19 @@ const ModernStaffLeadership = () => {
                   <div className="bg-[linear-gradient(180deg,#ffffff_0%,#f7fffb_100%)] p-4 sm:p-5 lg:p-6 xl:p-8">
                     
                     {/* Stats Grid - Responsive columns */}
-                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                      <div className="rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
-                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Role</p>
-                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900">{featuredMeta.label}</p>
-                      </div>
-                      <div className="rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
-                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Department</p>
-                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900">{featuredStaff?.department || featuredStaff?.subject || 'School Leadership'}</p>
-                      </div>
-                      <div className="rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
-                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Contact</p>
-                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900 break-words">
-                          {featuredStaff?.phone ? formatPhone(featuredStaff.phone) : (featuredStaff?.email ? 'Email available' : 'Available on request')}
-                        </p>
-                      </div>
-                    </div>
+                 <div className="flex gap-3 sm:gap-4">
+  <div className="flex-1 rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
+    <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900">
+      {featuredMeta.label}
+    </p>
+  </div>
+
+  <div className="flex-1 rounded-2xl border border-emerald-100 bg-white p-3 sm:p-4">
+    <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-black text-slate-900">
+      {featuredStaff?.department || featuredStaff?.subject || 'School Leadership'}
+    </p>
+  </div>
+</div>
 
                     {/* Profile Details - Responsive layout */}
                     <div className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
