@@ -1471,6 +1471,62 @@ export default function ModernEventsNewsPage() {
 
         {/* Main Content Layout */}
         <div className="flex flex-col lg:flex-row gap-8">
+
+               {/* Right Column: News */}
+          <div className="lg:w-[380px] space-y-6">
+            <div className="lg:sticky lg:top-24 space-y-6">
+              
+              <div className="rounded-[32px] border border-[#d9d0c3] bg-white p-6 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.35)]">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6efe2]">
+                    <IoNewspaperOutline className="text-[#172033] text-xl" />
+                  </div>
+                  <h2 className="text-xl font-black text-[#172033]">Latest News</h2>
+                </div>
+
+                <div className="space-y-5">
+                  {filteredNews?.slice(0, 4).map((news, index) => (
+                    <ModernNewsCard 
+                      key={news.id || index} 
+                      news={news} 
+                      onView={setSelectedNews}
+                      onBookmark={handleBookmarkNews}
+                      viewMode="list"
+                      isBookmarked={bookmarkedNews.has(news.id)}
+                    />
+                  ))}
+                </div>
+
+                <div className="mt-6 rounded-[24px] border border-[#e8dfd3] bg-[#fcfaf6] p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Editor&apos;s Note</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    Important notices, celebrations, and campus milestones all live here in one easier-to-scan panel.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative overflow-hidden rounded-[32px] bg-[#172033] p-6 text-white">
+                <div className="absolute top-0 right-0 h-24 w-24 bg-[#f2c357]/15 blur-[50px]" />
+                <h4 className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f2c357]">Stats At A Glance</h4>
+                <div className="grid grid-cols-2 gap-4 relative z-10">
+                  <div>
+                    <p className="text-2xl font-bold">{eventsData?.length || 0}</p>
+                    <p className="text-[10px] uppercase font-bold text-white/45">Events</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{newsData?.length || 0}</p>
+                    <p className="text-[10px] uppercase font-bold text-white/45">Articles</p>
+                  </div>
+                  <div className="col-span-2 pt-2 border-t border-slate-800">
+                    <p className="text-sm font-bold text-[#f2c357]">
+                      {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    </p>
+                    <p className="text-[10px] uppercase font-bold tracking-widest text-white/45">Last Updated</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           
           {/* Left Column: Events */}
           <div className="flex-1 min-w-0 space-y-4 sm:space-y-8">
@@ -1554,61 +1610,7 @@ export default function ModernEventsNewsPage() {
             )}
           </div>
 
-          {/* Right Column: News */}
-          <div className="lg:w-[380px] space-y-6">
-            <div className="lg:sticky lg:top-24 space-y-6">
-              
-              <div className="rounded-[32px] border border-[#d9d0c3] bg-white p-6 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.35)]">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6efe2]">
-                    <IoNewspaperOutline className="text-[#172033] text-xl" />
-                  </div>
-                  <h2 className="text-xl font-black text-[#172033]">Latest News</h2>
-                </div>
-
-                <div className="space-y-5">
-                  {filteredNews?.slice(0, 4).map((news, index) => (
-                    <ModernNewsCard 
-                      key={news.id || index} 
-                      news={news} 
-                      onView={setSelectedNews}
-                      onBookmark={handleBookmarkNews}
-                      viewMode="list"
-                      isBookmarked={bookmarkedNews.has(news.id)}
-                    />
-                  ))}
-                </div>
-
-                <div className="mt-6 rounded-[24px] border border-[#e8dfd3] bg-[#fcfaf6] p-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Editor&apos;s Note</p>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">
-                    Important notices, celebrations, and campus milestones all live here in one easier-to-scan panel.
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative overflow-hidden rounded-[32px] bg-[#172033] p-6 text-white">
-                <div className="absolute top-0 right-0 h-24 w-24 bg-[#f2c357]/15 blur-[50px]" />
-                <h4 className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f2c357]">Stats At A Glance</h4>
-                <div className="grid grid-cols-2 gap-4 relative z-10">
-                  <div>
-                    <p className="text-2xl font-bold">{eventsData?.length || 0}</p>
-                    <p className="text-[10px] uppercase font-bold text-white/45">Events</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{newsData?.length || 0}</p>
-                    <p className="text-[10px] uppercase font-bold text-white/45">Articles</p>
-                  </div>
-                  <div className="col-span-2 pt-2 border-t border-slate-800">
-                    <p className="text-sm font-bold text-[#f2c357]">
-                      {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                    </p>
-                    <p className="text-[10px] uppercase font-bold tracking-widest text-white/45">Last Updated</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+     
         </div>
 
         {/* Footer Banner */}
