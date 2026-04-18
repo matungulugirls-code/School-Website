@@ -1539,18 +1539,27 @@ export default function ModernEventsNewsPage() {
                 const Icon = category.icon;
                 const isActive = activeTab === category.id;
                 return (
-                  <button
-                    key={category.id}
-                    onClick={() => { setActiveTab(category.id); setCurrentPage(1); }}
-                    className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap text-[11px] sm:text-sm font-bold transition-all border ${
-                      isActive 
-                        ? "bg-[#172033] border-[#172033] text-white shadow-md shadow-[#172033]/20" 
-                        : "bg-white border-[#d9d0c3] text-slate-600"
-                    }`}
-                  >
-                    {Icon && <Icon className={`${isActive ? "text-white" : "text-slate-400"} text-xs sm:text-base`} />}
-                    {category.name}
-                  </button>
+        <button
+      key={category.id}
+      onClick={() => {
+        setActiveTab(category.id);
+        setCurrentPage(1);
+      }}
+      className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap text-[11px] sm:text-sm font-bold transition-all duration-300 border ${
+        isActive
+          ? `${style.bg} ${style.border} ${style.text} shadow-lg shadow-black/5 scale-105`
+          : "bg-white border-[#d9d0c3] text-slate-500 hover:border-slate-400 hover:bg-slate-50"
+      }`}
+    >
+      {Icon && (
+        <Icon
+          className={`transition-colors ${
+            isActive ? style.iconColor : "text-slate-400"
+          } text-xs sm:text-base`}
+        />
+      )}
+      <span>{category.name}</span>
+    </button>
                 );
               })}
             </div>
