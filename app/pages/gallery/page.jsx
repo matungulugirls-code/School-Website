@@ -1398,7 +1398,10 @@ const categoryOptions = [
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0 space-y-6">
 
-                      <div className="lg:w-80 space-y-4">
+            
+            
+            <div className="flex items-center justify-between">
+                        <div className="lg:w-80 space-y-4">
             <div className="lg:sticky lg:top-24 space-y-4">
               
               <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
@@ -1492,8 +1495,7 @@ const categoryOptions = [
               </div>
             </div>
           </div>
-            
-            <div className="flex items-center justify-between">
+          
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-[#172033] p-3 shadow-lg">
                   <FiImage className="text-[#f2c357] text-lg" />
