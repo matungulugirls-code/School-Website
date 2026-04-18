@@ -42,6 +42,7 @@ import {
   Shield,
   ChevronDown
 } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 // Helper function for image URLs
 const getImageUrl = (imagePath) => {
@@ -180,6 +181,7 @@ const ModernStaffLeadership = () => {
     fetchStaff();
   }, []);
 
+  const router = useRouter();
   // Handle staff click
   const handleStaffClick = (staffMember) => {
     if (principal?.id === staffMember.id) {
@@ -892,7 +894,7 @@ const ModernStaffLeadership = () => {
                 </div>
                 
                 <button 
-                  onClick={() => setActiveTab('all')}
+                  onClick={() => router.push('/pages/SchoolTeam')}
                   className="w-full py-2.5 sm:py-3 bg-white/20 hover:bg-white/30 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-2"
                 >
                   View All Staff
