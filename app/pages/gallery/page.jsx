@@ -61,7 +61,7 @@ const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true 
 // Modern Hero Banner Component - Matungulu Girls Theme
 const ModernHeroBanner = ({ stats, onRefresh }) => {
   return (
-    <div className="relative mb-8 overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
+    <div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
       <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
       <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute inset-y-0 right-[37%] hidden w-px bg-white/10 lg:block" />
@@ -91,17 +91,17 @@ const ModernHeroBanner = ({ stats, onRefresh }) => {
               </h1>
             </div>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
-              Explore campus life, achievements, learning spaces, and student moments through a more refined Matungulu Girls gallery experience.
+              Explore School life, achievements, learning spaces, and student moments through a more refined Matungulu Girls gallery experience.
             </p>
           </div>
           
-          <button
-            onClick={onRefresh}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/10 px-4 py-2 font-black text-sm tracking-wide text-white backdrop-blur-xl hover:bg-white/20 sm:w-auto"
-          >
-            <FiRefreshCw className="text-lg" />
-            <span>REFRESH GALLERY</span>
-          </button>
+      <button
+  onClick={onRefresh}
+  className="flex w-full max-w-xs items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/10 px-6 py-3 font-black text-sm tracking-wide text-white backdrop-blur-xl transition-all hover:bg-white/20 sm:w-max sm:px-8"
+>
+  <FiRefreshCw className="text-lg" />
+  <span>REFRESH GALLERY</span>
+</button>
         </div>
         </div>
 
@@ -1379,7 +1379,7 @@ const categoryOptions = [
     <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
       <Toaster position="top-right" richColors />
       
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto space-y-6">
         <ModernHeroBanner 
           stats={{
             totalFiles: stats[0].number,
