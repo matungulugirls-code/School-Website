@@ -1379,7 +1379,7 @@ const categoryOptions = [
     <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
       <Toaster position="top-right" richColors />
       
-      <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto space-y-6">
+      <div className="w-full md:w-[90%] mx-auto space-y-6">
         <ModernHeroBanner 
           stats={{
             totalFiles: stats[0].number,
