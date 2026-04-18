@@ -1212,8 +1212,7 @@ export default function ModernEventsNewsPage() {
           </h1>
         </div>
         <p className="mt-5 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
-          A more refined Matungulu Girls updates hub with stronger structure, warmer editorial surfaces, and clearer visual hierarchy across events, stories, and highlights.
-        </p>
+     Stay connected with the moments that define our School MatG. From the excitement of game day and the brilliance of our seasonal concerts to the essential updates that keep our families informed, this is your home for everything happening on and off campus. Explore our latest headlines and mark your calendars for the milestones ahead.        </p>
       </div>
 
      {/* Refresh & View Toggle Group */}
