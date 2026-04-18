@@ -57,22 +57,22 @@ const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true 
   if (!open) return null;
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${blur ? 'backdrop-blur-md' : 'bg-black/50'}`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${blur ? 'backdrop-blur-md bg-[#172033]/40' : 'bg-black/50'}`}>
       <div 
-        className="relative bg-white/95 rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-white/40"
+        className="relative overflow-hidden rounded-[32px] border border-[#d9d0c3] bg-[#fcfaf6] shadow-2xl animate-in zoom-in-95 duration-300"
         style={{ 
           width: '90%',
           maxWidth: maxWidth,
           maxHeight: '90vh',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%)'
+          background: 'linear-gradient(135deg, rgba(252,250,246,0.98) 0%, rgba(244,239,231,0.96) 100%)'
         }}
       >
         <div className="absolute top-4 right-4 z-10">
           <button 
             onClick={onClose}
-            className="p-2 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white cursor-pointer border border-gray-200 shadow-sm"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d9d0c3] bg-white/90 text-[#172033] shadow-sm backdrop-blur-sm"
           >
-            <FiX className="text-gray-600 w-5 h-5" />
+            <FiX className="h-5 w-5" />
           </button>
         </div>
         {children}
@@ -154,22 +154,26 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
     return (
       <div 
         onClick={() => onView(event)}
-        className="relative bg-white rounded-2xl sm:rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+        className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-[#d9d0c3] bg-white shadow-[0_28px_70px_-52px_rgba(15,23,42,0.5)] transition-all duration-300 hover:-translate-y-1 sm:rounded-[30px] md:rounded-[34px]"
       >
-        <div className="relative h-40 sm:h-48 md:h-52 w-full shrink-0">
+        <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(135deg,#172033_0%,#2d4258_62%,#f2c357_160%)]" />
+
+        <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
+          <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 shadow-lg sm:h-48 md:h-52">
           <img
             src={event.image || '/default-event.jpg'}
             alt={event.title}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/78 via-[#172033]/14 to-transparent" />
           
           <div className="absolute top-3 sm:top-4 left-3 sm:left-4 flex flex-col gap-1.5 sm:gap-2">
             <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-sm border ${theme.bg} ${theme.text} ${theme.border}`}>
               {event.category || 'Event'}
             </span>
             {event.featured && (
-              <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-slate-900/90 backdrop-blur-md text-white rounded-full text-[7px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-1 shadow-sm">
-                <IoSparkles className="text-amber-400 text-[10px] sm:text-[12px]" /> Featured
+              <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#172033]/90 backdrop-blur-md text-white rounded-full text-[7px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-1 shadow-sm">
+                <IoSparkles className="text-[#f2c357] text-[10px] sm:text-[12px]" /> Featured
               </span>
             )}
           </div>
@@ -179,26 +183,50 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
               onClick={handleBookmarkClick}
               className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl backdrop-blur-md border shadow-sm transition-all ${
                 isBookmarked 
-                  ? 'bg-amber-500 border-amber-500 text-white' 
-                  : 'bg-white/90 border-white/10 text-slate-700'
+                  ? 'bg-[#172033] border-[#172033] text-white' 
+                  : 'bg-white/90 border-white/10 text-[#172033]'
               }`}
             >
               <FiBookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-current' : ''}`} />
             </button>
           </div>
+
+          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-3 sm:p-4">
+            <div className="rounded-[18px] bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm sm:px-4 sm:py-3">
+              <p className="text-[9px] font-black uppercase tracking-[0.22em] text-slate-400">Date</p>
+              <p className="mt-1 text-xs font-black text-[#172033] sm:text-sm">{formatDate(event.date)}</p>
+            </div>
+            <div className="rounded-[18px] border border-white/20 bg-[#172033]/78 px-3 py-2 text-white backdrop-blur-sm sm:px-4 sm:py-3">
+              <p className="text-[9px] font-black uppercase tracking-[0.22em] text-white/45">Venue</p>
+              <p className="mt-1 max-w-[110px] truncate text-xs font-black sm:max-w-[160px] sm:text-sm">{event.location || 'Main Campus Hall'}</p>
+            </div>
+          </div>
+          </div>
         </div>
 
         <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-1">
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-slate-900 mb-1.5 sm:mb-2 line-clamp-2 leading-tight">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${theme.iconBg}`}>
+                <FiCalendar className={`${theme.iconColor} h-4 w-4`} />
+              </div>
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Event Brief</p>
+                <p className="text-xs font-bold text-slate-500">{event.time || 'Time to be confirmed'}</p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="mb-2 line-clamp-2 text-base font-black leading-tight tracking-tight text-[#172033] sm:text-lg md:text-[1.35rem]">
             {event.title}
           </h3>
           
-          <p className="text-slate-500 text-xs sm:text-sm md:text-sm mb-4 sm:mb-6 line-clamp-2 sm:line-clamp-3 leading-relaxed">
+          <p className="mb-5 line-clamp-3 text-xs leading-relaxed text-slate-500 sm:mb-6 sm:text-sm md:text-sm">
             {event.description || 'Join us for this upcoming school event.'}
           </p>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
-            <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-lg sm:rounded-2xl bg-slate-50 border border-slate-100/50">
+            <div className="flex items-center gap-1.5 rounded-lg border border-[#e8dfd3] bg-[#fcfaf6] p-1.5 sm:gap-2 sm:rounded-2xl sm:p-2">
               <div className={`p-1 sm:p-1.5 rounded-lg sm:rounded-lg ${theme.iconBg}`}>
                 <FiCalendar className={`${theme.iconColor} w-3 h-3 sm:w-4 sm:h-4`} />
               </div>
@@ -207,7 +235,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-lg sm:rounded-2xl bg-slate-50 border border-slate-100/50">
+            <div className="flex items-center gap-1.5 rounded-lg border border-[#e8dfd3] bg-[#fcfaf6] p-1.5 sm:gap-2 sm:rounded-2xl sm:p-2">
               <div className={`p-1 sm:p-1.5 rounded-lg sm:rounded-lg ${theme.iconBg}`}>
                 <FiClock className={`${theme.iconColor} w-3 h-3 sm:w-4 sm:h-4`} />
               </div>
@@ -216,7 +244,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
               </span>
             </div>
 
-            <div className="col-span-2 flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-lg sm:rounded-2xl bg-slate-50 border border-slate-100/50">
+            <div className="col-span-2 flex items-center gap-1.5 rounded-lg border border-[#e8dfd3] bg-[#fcfaf6] p-1.5 sm:gap-2 sm:rounded-2xl sm:p-2">
               <div className={`p-1 sm:p-1.5 rounded-lg sm:rounded-lg ${theme.iconBg} flex-shrink-0`}>
                 <FiMapPin className={`${theme.iconColor} w-3 h-3 sm:w-4 sm:h-4`} />
               </div>
@@ -226,7 +254,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
             </div>
           </div>
 
-          <button className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-sm font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 hover:bg-slate-800">
+          <button className="flex w-full items-center justify-center gap-1.5 rounded-[18px] bg-[#172033] px-3 py-3 text-xs font-black uppercase tracking-[0.16em] text-white transition-all active:scale-95 sm:px-4 sm:text-sm md:text-sm">
             View details
           </button>
         </div>
@@ -238,10 +266,10 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
   return (
     <div 
       onClick={() => onView(event)}
-      className="group relative bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-200/60 p-3 sm:p-5 transition-all duration-300 cursor-pointer hover:shadow-xl hover:border-blue-200"
+      className="group relative cursor-pointer overflow-hidden rounded-[24px] border border-[#d9d0c3] bg-white transition-all duration-300 hover:shadow-xl sm:rounded-[28px]"
     >
-      <div className="flex items-start gap-2.5 sm:gap-4">
-        <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0">
+      <div className="flex items-start gap-3 p-3 sm:gap-5 sm:p-5">
+        <div className="relative h-20 w-20 overflow-hidden rounded-[18px] sm:h-28 sm:w-28 sm:rounded-[22px] flex-shrink-0">
           <img
             src={event.image || '/default-event.jpg'}
             alt={event.title}
@@ -262,18 +290,18 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
                   {event.category || 'Event'}
                 </span>
                 {event.featured && (
-                  <span className="px-1.5 sm:px-2 py-0.5 bg-gradient-to-r from-amber-100 to-orange-100 text-amber-700 text-[7px] sm:text-xs font-bold rounded-full">
+                  <span className="rounded-full bg-[#f6efe2] px-1.5 py-0.5 text-[7px] font-bold text-[#9a5b1f] sm:px-2 sm:text-xs">
                     Featured
                   </span>
                 )}
               </div>
-              <h3 className="text-sm sm:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+              <h3 className="line-clamp-2 text-sm font-black text-[#172033] transition-colors group-hover:text-[#214760] sm:text-lg">
                 {event.title}
               </h3>
             </div>
             <button
               onClick={handleBookmarkClick}
-              className={`p-1 sm:p-1.5 rounded-lg transition-colors ${isBookmarked ? 'text-amber-500 bg-amber-50' : 'text-slate-300 hover:text-slate-500'}`}
+              className={`p-1 rounded-lg transition-colors sm:p-1.5 ${isBookmarked ? 'bg-[#172033] text-white' : 'text-slate-300 hover:text-slate-500'}`}
             >
               <FiBookmark className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
             </button>
@@ -283,17 +311,17 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
             {event.description || 'Join us for an exciting event!'}
           </p>
 
-          <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-sm text-gray-700 flex-wrap">
-            <div className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
-              <FiCalendar className="text-blue-500 w-3 h-3 sm:w-4 sm:h-4" />
+          <div className="flex items-center gap-2 text-[10px] text-gray-700 flex-wrap sm:gap-4 sm:text-sm">
+            <div className="flex items-center gap-0.5 whitespace-nowrap sm:gap-1">
+              <FiCalendar className="h-3 w-3 text-[#172033] sm:h-4 sm:w-4" />
               <span className="font-medium">{formatDate(event.date)}</span>
             </div>
-            <div className="flex items-center gap-0.5 sm:gap-1 whitespace-nowrap">
-              <FiClock className="text-emerald-500 w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="flex items-center gap-0.5 whitespace-nowrap sm:gap-1">
+              <FiClock className="h-3 w-3 text-[#9a5b1f] sm:h-4 sm:w-4" />
               <span className="font-medium">{formatTime(event.time)}</span>
             </div>
-            <div className="flex items-center gap-0.5 sm:gap-1 truncate">
-              <FiMapPin className="text-rose-500 w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="flex items-center gap-0.5 truncate sm:gap-1">
+              <FiMapPin className="h-3 w-3 text-[#214760] sm:h-4 sm:w-4" />
               <span className="font-medium truncate max-w-[80px] sm:max-w-[120px]">{event.location || 'TBD'}</span>
             </div>
           </div>
@@ -370,13 +398,15 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
     return (
       <div 
         onClick={() => onView(news)}
-        className="flex flex-col bg-white rounded-2xl sm:rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+        className="group relative flex cursor-pointer flex-col overflow-hidden rounded-[28px] border border-[#d9d0c3] bg-white shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)] transition-all duration-300 hover:-translate-y-1 sm:rounded-[30px] md:rounded-[34px]"
       >
-        <div className="relative h-36 sm:h-44 md:h-48 w-full shrink-0">
+        <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(135deg,#efe4d0_0%,#ffffff_42%,#dce6ef_100%)]" />
+        <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
+        <div className="relative h-36 overflow-hidden rounded-[24px] border border-white shadow-lg sm:h-44 md:h-48 w-full shrink-0">
           <img
             src={news.image || '/default-news.jpg'}
             alt={news.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           
           <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
@@ -388,9 +418,9 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
           <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
             <button
               onClick={handleBookmarkClick}
-              className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl backdrop-blur-md bg-white/90 border border-white/20 text-slate-700 shadow-sm transition-all hover:bg-white"
+              className="rounded-lg border border-white/20 bg-white/90 p-1.5 text-[#172033] shadow-sm transition-all hover:bg-white sm:rounded-xl sm:p-2"
             >
-              <FiBookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-amber-500 text-amber-500' : ''}`} />
+              <FiBookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-[#172033] text-[#172033]' : ''}`} />
             </button>
           </div>
 
@@ -400,9 +430,22 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
             </span>
           </div>
         </div>
+        </div>
 
         <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-1">
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight tracking-tight">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#f6efe2] text-[#172033]">
+                <IoNewspaperOutline className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">School Desk</p>
+                <p className="text-xs font-bold text-slate-500">{news.author || 'School Admin'}</p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="mb-2 line-clamp-2 text-base font-black leading-tight tracking-tight text-[#172033] sm:mb-3 sm:text-lg md:text-xl">
             {news.title}
           </h3>
           
@@ -412,7 +455,7 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
 
           <div className="flex items-center justify-between mt-auto pt-3 sm:pt-4 border-t border-slate-50 gap-2">
             <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-slate-900 flex items-center justify-center text-white border border-slate-100 shadow-sm flex-shrink-0">
+              <div className="h-5 w-5 flex-shrink-0 rounded-full border border-[#d9d0c3] bg-[#172033] text-white shadow-sm sm:h-7 sm:w-7 flex items-center justify-center">
                 <span className="text-[8px] sm:text-[10px] font-black">{news.author?.charAt(0) || 'A'}</span>
               </div>
               <div className="flex flex-col min-w-0">
@@ -423,13 +466,13 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
               </div>
             </div>
 
-            <div className="flex items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-0.5 sm:py-1 bg-slate-50 rounded-lg border border-slate-100 flex-shrink-0">
-              <FiHeart className="text-rose-500 w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-[#e8dfd3] bg-[#fcfaf6] px-2 py-0.5 sm:gap-1 sm:px-3 sm:py-1">
+              <FiHeart className="h-3 w-3 text-[#9a5b1f] sm:h-4 sm:w-4" />
               <span className="text-[9px] sm:text-[11px] font-bold text-slate-600">{news.likes || 0}</span>
             </div>
           </div>
 
-          <button className="mt-3 sm:mt-5 w-full py-2.5 sm:py-3.5 bg-slate-50 text-slate-900 rounded-lg sm:rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 border border-slate-100 active:bg-slate-100 transition-colors">
+          <button className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-[18px] border border-[#d9d0c3] bg-[#fcfaf6] py-3 text-xs font-black uppercase tracking-[0.16em] text-[#172033] transition-colors active:bg-[#f6efe2] sm:mt-5 sm:text-sm">
             Read Full Story
             <FiArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
@@ -442,7 +485,7 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
   return (
     <div 
       onClick={() => onView(news)}
-      className="relative bg-white rounded-lg sm:rounded-[20px] border border-slate-100 p-3 sm:p-4 shadow-sm cursor-pointer transition-colors active:bg-slate-50"
+      className="relative cursor-pointer rounded-[24px] border border-[#d9d0c3] bg-white p-3 shadow-sm transition-colors active:bg-[#fcfaf6] sm:rounded-[26px] sm:p-4"
     >
       <div className="flex gap-3 sm:gap-5">
         
@@ -563,21 +606,29 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden">
-        <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full -mr-16 -mt-16" />
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#172033]/90 backdrop-blur-sm">
+      <div className="w-full max-w-md overflow-hidden rounded-[32px] border border-[#d9d0c3] bg-[#fcfaf6] shadow-2xl">
+        <div className="relative overflow-hidden bg-[#172033] p-8 text-white">
+          <div className="absolute -mr-16 -mt-16 h-32 w-32 rounded-full bg-[#f2c357]/12 blur-3xl right-0 top-0" />
+          <div className="absolute left-0 bottom-0 h-24 w-24 rounded-full bg-white/8 blur-3xl" />
           
           <div className="relative z-10 flex flex-col items-center text-center">
-            <div className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4 border border-white/10">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10 backdrop-blur-md">
               <IoShareSocialOutline className="text-2xl text-white" />
             </div>
             <h2 className="text-2xl font-black tracking-tight">Share {type === 'event' ? 'Event' : 'News'}</h2>
-            <p className="text-slate-400 text-sm mt-1">Invite others to join</p>
+            <p className="mt-1 text-sm text-white/55">Invite others to follow the update</p>
           </div>
         </div>
 
-        <div className="p-8 bg-white">
+        <div className="bg-[#fcfaf6] p-8">
+          <div className="mb-6 rounded-[24px] border border-[#e8dfd3] bg-white p-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+              {type === 'event' ? 'Selected Event' : 'Selected Story'}
+            </p>
+            <h3 className="mt-2 line-clamp-2 text-lg font-black tracking-tight text-[#172033]">{item.title}</h3>
+          </div>
+
           <div className="grid grid-cols-5 gap-4 mb-8">
             {socialPlatforms.map((platform, index) => {
               const Icon = platform.icon;
@@ -585,9 +636,9 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
                 <button
                   key={index}
                   onClick={platform.action}
-                  className="flex flex-col items-center gap-2 group"
+                  className="group flex flex-col items-center gap-2"
                 >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 text-slate-600 border border-slate-100 active:bg-slate-200">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-[#e8dfd3] bg-white text-slate-600 transition-transform duration-300 group-hover:-translate-y-1 ${platform.color} !text-white`}>
                     <Icon className="text-xl" />
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -604,7 +655,7 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
             </label>
             
             <div className="relative group">
-              <div className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 pr-32">
+              <div className="w-full rounded-2xl border border-[#e8dfd3] bg-white p-4 pr-32">
                 <p className="text-xs font-mono text-slate-500 truncate">
                   {window.location.href}
                 </p>
@@ -614,17 +665,21 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
                 onClick={copyToClipboard}
                 className={`absolute right-1.5 top-1.5 bottom-1.5 px-5 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center gap-2 ${
                   copied 
-                  ? 'bg-emerald-500 text-white' 
-                  : 'bg-slate-900 text-white active:scale-95'
+                  ? 'bg-[#214760] text-white' 
+                  : 'bg-[#172033] text-white active:scale-95'
                 }`}
               >
                 {copied ? 'Done!' : <><FiCopy /> Copy</>}
               </button>
-             
             </div>
-             <button onClick={onClose} className="absolute right-1.5 top-1.5 bottom-1.5 px-5 rounded-xl font-bold text-xs bg-slate-300 text-slate-700 active:bg-slate-400 transition-all shadow-sm flex items-center gap-2">
-                close
+            <div className="mt-5 flex justify-end">
+              <button
+                onClick={onClose}
+                className="rounded-full border border-[#d9d0c3] bg-white px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] text-[#172033] transition-colors active:bg-[#f6efe2]"
+              >
+                Close
               </button>
+            </div>
           </div>
         </div>
       </div>
@@ -660,12 +715,12 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-slate-900/90 backdrop-blur-sm">
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-3xl bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#172033]/85 p-0 backdrop-blur-sm sm:p-4">
+      <div className="relative flex h-full w-full flex-col overflow-hidden border border-[#d9d0c3] bg-[#fcfaf6] shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[40px]">
         
-        <button 
+          <button 
           onClick={onClose}
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-50 p-2 bg-black/20 backdrop-blur-md text-white rounded-full border border-white/20 transition-all active:scale-90"
+          className="absolute top-4 right-4 z-50 rounded-full border border-white/20 bg-black/20 p-2 text-white backdrop-blur-md transition-all active:scale-90 sm:top-5 sm:right-5"
         >
           <IoClose size={20} />
         </button>
@@ -676,15 +731,16 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
             alt={item.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#fcfaf6] via-[#172033]/15 to-black/20" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#172033]/55 to-transparent" />
           
           <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex gap-2">
             <span className={`px-3 py-1 sm:px-4 sm:py-1.5 bg-white shadow-xl rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-900`}>
               {item.category || type}
             </span>
             {item.featured && (
-              <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-slate-900 text-white rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1">
-                <IoSparkles className="text-amber-400 w-3 h-3 sm:w-4 sm:h-4" /> 
+              <span className="rounded-full bg-[#172033] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white sm:px-4 sm:py-1.5 sm:text-xs flex items-center gap-1">
+                <IoSparkles className="h-3 w-3 text-[#f2c357] sm:h-4 sm:w-4" /> 
                 <span className="hidden sm:inline">Featured</span>
                 <span className="sm:hidden">★</span>
               </span>
@@ -692,8 +748,8 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10 bg-white">
-          <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
+        <div className="flex-1 overflow-y-auto bg-[#fcfaf6] p-4 sm:p-6 md:p-10">
+          <div className="mx-auto max-w-2xl space-y-6 sm:space-y-8">
             
             <section className="space-y-3 sm:space-y-4">
               <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-slate-900 leading-tight tracking-tight">
@@ -702,18 +758,18 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
               
               <div className="flex flex-col sm:flex-row sm:flex-wrap gap-y-2 sm:gap-y-3 gap-x-6 text-xs sm:text-sm font-semibold text-slate-500">
                 <div className="flex items-center gap-2">
-                  <IoCalendarClearOutline className="text-blue-500 text-base sm:text-lg" />
+                  <IoCalendarClearOutline className="text-[#172033] text-base sm:text-lg" />
                   {formatFullDate(item.date)}
                 </div>
                 {type === 'event' && item.location && (
                   <div className="flex items-center gap-2">
-                    <IoLocationOutline className="text-rose-500 text-base sm:text-lg" />
+                    <IoLocationOutline className="text-[#9a5b1f] text-base sm:text-lg" />
                     {item.location}
                   </div>
                 )}
                 {type === 'news' && (
                   <div className="flex items-center gap-2">
-                    <IoPersonOutline className="text-purple-500 text-base sm:text-lg" />
+                    <IoPersonOutline className="text-[#172033] text-base sm:text-lg" />
                     By {item.author || 'School Admin'}
                   </div>
                 )}
@@ -724,12 +780,12 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
               <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-slate-400">
                 About this {type}
               </h3>
-              <div className="text-slate-700 leading-relaxed text-sm sm:text-base md:text-lg">
+              <div className="rounded-[28px] border border-[#e8dfd3] bg-white p-5 text-sm leading-relaxed text-slate-700 sm:p-6 sm:text-base md:text-lg">
                 {item.description || item.excerpt || 'No description available.'}
               </div>
               
               {type === 'news' && item.fullContent && (
-                <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-slate-100 text-slate-600 text-xs sm:text-sm md:text-base whitespace-pre-line italic">
+                <div className="mt-3 whitespace-pre-line rounded-[28px] border border-[#e8dfd3] bg-white p-5 text-xs italic text-slate-600 sm:mt-4 sm:p-6 sm:text-sm md:text-base">
                   {item.fullContent}
                 </div>
               )}
@@ -737,19 +793,19 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
 
             {type === 'event' && (
               <section className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-4">
-                <div className="p-3 sm:p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100">
-                  <IoTimeOutline className="text-blue-600 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
+                <div className="rounded-2xl border border-[#e8dfd3] bg-white p-3 sm:rounded-3xl sm:p-4">
+                  <IoTimeOutline className="mb-1 h-4 w-4 text-[#172033] sm:mb-2 sm:h-5 sm:w-5" />
                   <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Time</p>
                   <p className="font-bold text-slate-900 text-xs sm:text-sm md:text-base truncate">{item.time || 'All Day'}</p>
                 </div>
-                <div className="p-3 sm:p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100">
-                  <IoPersonOutline className="text-purple-600 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
+                <div className="rounded-2xl border border-[#e8dfd3] bg-white p-3 sm:rounded-3xl sm:p-4">
+                  <IoPersonOutline className="mb-1 h-4 w-4 text-[#172033] sm:mb-2 sm:h-5 sm:w-5" />
                   <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Attendees</p>
                   <p className="font-bold text-slate-900 text-xs sm:text-sm md:text-base truncate">{item.attendees || 'Open'}</p>
                 </div>
                 {item.speaker && (
-                  <div className="p-3 sm:p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100 col-span-2 sm:col-span-1">
-                    <IoSparkles className="text-amber-500 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
+                  <div className="col-span-2 rounded-2xl border border-[#e8dfd3] bg-white p-3 sm:col-span-1 sm:rounded-3xl sm:p-4">
+                    <IoSparkles className="mb-1 h-4 w-4 text-[#f2c357] sm:mb-2 sm:h-5 sm:w-5" />
                     <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Speaker</p>
                     <p className="font-bold text-slate-900 text-xs sm:text-sm md:text-base truncate">{item.speaker}</p>
                   </div>
@@ -759,19 +815,19 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
           </div>
         </div>
 
-        <div className="shrink-0 p-4 sm:p-6 bg-slate-50/80 backdrop-blur-md border-t border-slate-100">
+        <div className="shrink-0 border-t border-[#e8dfd3] bg-white/80 p-4 backdrop-blur-md sm:p-6">
           <div className="max-w-2xl mx-auto flex flex-row items-center gap-2 sm:gap-3">
             {type === 'event' ? (
               <button
                 onClick={onAddToCalendar}
-                className="flex-[2] min-w-0 h-11 sm:h-14 bg-slate-900 text-white rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                className="flex-[2] min-w-0 h-11 sm:h-14 rounded-xl bg-[#172033] text-white sm:rounded-2xl font-black text-[11px] sm:text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all uppercase tracking-[0.14em]"
               >
                 <IoCalendarClearOutline size={16} className="shrink-0 sm:size-[20px]" />
                 <span className="truncate">Add to Calendar</span>
               </button>
             ) : (
               <button
-                className="flex-[2] min-w-0 h-11 sm:h-14 bg-slate-900 text-white rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                className="flex-[2] min-w-0 h-11 sm:h-14 rounded-xl bg-[#172033] text-white sm:rounded-2xl font-black text-[11px] sm:text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all uppercase tracking-[0.14em]"
                 onClick={onClose}
               >
                 <IoNewspaperOutline size={16} className="shrink-0 sm:size-[20px]" />
@@ -781,7 +837,7 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
             
             <button
               onClick={onShare}
-              className="flex-1 min-w-0 h-11 sm:h-14 bg-white border-2 border-slate-200 text-slate-900 rounded-xl sm:rounded-2xl font-bold text-[11px] sm:text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+              className="flex-1 min-w-0 h-11 sm:h-14 rounded-xl border-2 border-[#d9d0c3] bg-[#fcfaf6] text-[#172033] sm:rounded-2xl font-black text-[11px] sm:text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all uppercase tracking-[0.14em]"
             >
               <IoShareOutline size={16} className="shrink-0 sm:size-[20px]" />
               <span className="truncate">Share</span>
@@ -830,11 +886,11 @@ const ModernPagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-8 pt-8 border-t border-gray-200">
+    <div className="mt-8 flex items-center justify-center gap-2 border-t border-[#e8dfd3] pt-8">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded-xl bg-white border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+        className="rounded-xl border border-[#d9d0c3] bg-white p-2 transition-colors hover:bg-[#fcfaf6] disabled:cursor-not-allowed disabled:opacity-50"
       >
         <FiChevronLeft className="w-5 h-5" />
       </button>
@@ -848,8 +904,8 @@ const ModernPagination = ({ currentPage, totalPages, onPageChange }) => {
               page === '...'
                 ? 'text-gray-500'
                 : currentPage === page
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                : 'text-gray-700 hover:bg-gray-100'
+                ? 'bg-[#172033] text-white shadow-lg'
+                : 'text-gray-700 hover:bg-[#fcfaf6]'
             }`}
             disabled={page === '...'}
           >
@@ -861,7 +917,7 @@ const ModernPagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded-xl bg-white border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+        className="rounded-xl border border-[#d9d0c3] bg-white p-2 transition-colors hover:bg-[#fcfaf6] disabled:cursor-not-allowed disabled:opacity-50"
       >
         <FiChevronRight className="w-5 h-5" />
       </button>
@@ -1059,7 +1115,7 @@ export default function ModernEventsNewsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 p-4">
+      <div className="min-h-screen bg-[#f4efe7] p-4">
         <div className="max-w-7xl mx-auto">
           <div className="min-h-[70vh] flex items-center justify-center">
             <Stack spacing={2} alignItems="center">
@@ -1069,25 +1125,25 @@ export default function ModernEventsNewsPage() {
                   value={100}
                   size={48}
                   thickness={4.5}
-                  sx={{ color: '#f1f5f9' }}
-                />
+                    sx={{ color: '#e8dfd3' }}
+                  />
                 <CircularProgress
                   variant="indeterminate"
                   disableShrink
                   size={48}
                   thickness={4.5}
                   sx={{
-                    color: '#0f172a',
+                    color: '#172033',
                     animationDuration: '1000ms',
                     position: 'absolute',
                   }}
                 />
                 <div className="absolute">
-                  <IoSparkles className="text-blue-600 text-sm animate-pulse" />
+                  <IoSparkles className="text-[#f2c357] text-sm animate-pulse" />
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-slate-900 font-medium text-sm sm:text-base tracking-tight italic">
+                <p className="text-[#172033] font-medium text-sm sm:text-base tracking-tight italic">
                   Loading events & news...
                 </p>
                 <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">
@@ -1102,28 +1158,30 @@ export default function ModernEventsNewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 p-4 md:p-6">
+    <div className="min-h-screen bg-[#f4efe7] p-4 md:p-6">
       <Toaster position="top-right" richColors />
       
       <div className="max-w-7xl mx-auto space-y-6">
         
-{/* Modern Hero Header - Emerald/Teal Theme */}
-<div className="relative bg-gradient-to-r from-emerald-900 to-teal-800 rounded-xl p-6 md:p-10 text-white overflow-hidden border border-emerald-700/30 mb-8">
+{/* Modern Hero Header - Staff/Team aligned theme */}
+<div className="relative mb-8 overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
   {/* Background Glows */}
-  <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-  <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
+  <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
+  <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
+  <div className="absolute inset-y-0 right-[36%] w-px bg-white/10 hidden lg:block" />
   
-  <div className="relative z-10">
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
+  <div className="relative z-10 grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="p-6 md:p-10">
+      <div className="flex flex-col justify-between gap-6 h-full">
       <div>
         {/* School Branding */}
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-8 w-1 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
+          <div className="h-8 w-1 rounded-full bg-[#f2c357] shadow-[0_0_15px_rgba(242,195,87,0.5)]" />
           <div>
-            <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-emerald-400">
+            <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#f2c357]">
               Matungulu Girls Senior School
             </h2>
-            <p className="text-[8px] sm:text-[10px] italic font-medium text-emerald-200/60 tracking-widest uppercase">
+            <p className="text-[8px] sm:text-[10px] italic font-medium text-white/45 tracking-widest uppercase">
               "Strive to Excel"
             </p>
           </div>
@@ -1131,13 +1189,16 @@ export default function ModernEventsNewsPage() {
         
         {/* Title */}
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/10">
-            <IoSchoolOutline className="text-xl sm:text-2xl md:text-3xl text-emerald-300" />
+          <div className="rounded-xl border border-white/10 bg-white/10 p-2 backdrop-blur-md">
+            <IoSchoolOutline className="text-xl text-[#f2c357] sm:text-2xl md:text-3xl" />
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
-            School <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300">Events & News</span>
+            School <span className="bg-gradient-to-r from-[#f2c357] to-[#fff3c4] bg-clip-text text-transparent">Events & News</span>
           </h1>
         </div>
+        <p className="mt-5 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
+          A more refined Matungulu Girls updates hub with stronger structure, warmer editorial surfaces, and clearer visual hierarchy across events, stories, and highlights.
+        </p>
       </div>
 
      {/* Refresh & View Toggle Group */}
@@ -1146,7 +1207,7 @@ export default function ModernEventsNewsPage() {
   <button
     onClick={refreshData}
     disabled={refreshing}
-    className="flex items-center justify-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 h-10 px-4 sm:px-5 rounded-xl font-bold text-[10px] sm:text-xs tracking-widest text-white hover:bg-white/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed shrink-0"
+    className="flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 font-bold text-[10px] tracking-widest text-white backdrop-blur-xl transition-all hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-70 sm:px-5 sm:text-xs"
   >
     {refreshing ? (
       <>
@@ -1165,13 +1226,13 @@ export default function ModernEventsNewsPage() {
   </button>
 
   {/* View Toggle - Compact & Matching Height */}
-  <div className="flex bg-white/10 backdrop-blur-xl rounded-xl p-1 border border-white/20 h-12 items-center">
+  <div className="flex h-12 items-center rounded-xl border border-white/20 bg-white/10 p-1 backdrop-blur-xl">
     <button
       onClick={() => setViewMode('grid')}
       className={`h-8 w-8 sm:w-10 flex items-center justify-center rounded-lg transition-all ${
         viewMode === 'grid' 
-          ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/40' 
-          : 'text-emerald-200/60 hover:text-white'
+          ? 'bg-[#f2c357] text-[#172033] shadow-lg shadow-[#172033]/30' 
+          : 'text-white/55 hover:text-white'
       }`}
     >
       <FiGrid size={12} className="sm:size-[16px]" />
@@ -1180,60 +1241,65 @@ export default function ModernEventsNewsPage() {
       onClick={() => setViewMode('list')}
       className={`h-8 w-8 sm:w-10 flex items-center justify-center rounded-lg transition-all ${
         viewMode === 'list' 
-          ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/40' 
-          : 'text-emerald-200/60 hover:text-white'
+          ? 'bg-[#f2c357] text-[#172033] shadow-lg shadow-[#172033]/30' 
+          : 'text-white/55 hover:text-white'
       }`}
     >
       <FiList size={12} className="sm:size-[16px]" />
     </button>
   </div>
 </div>
-    </div>
-
-    {/* Stats Summary - Matching the fee structure style */}
-    <div className="mb-4 sm:mb-6 px-1">
-      <p className="text-emerald-100/90 text-xs sm:text-base font-medium leading-relaxed sm:leading-loose">
-        <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-emerald-500/50 underline-offset-4 mr-1">
-          {eventsData.length}
-        </span> 
-        <span className="tracking-tight sm:tracking-normal">upcoming events and</span>
-        <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-teal-500/50 underline-offset-4 ml-1 mr-1">
-          {newsData.length}
-        </span>
-        <span className="tracking-tight sm:tracking-normal">news articles this month</span>
-      </p>
-    </div>
-
-    {/* Quick Stats Grid - Matching fee structure */}
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
-      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-        <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Events</p>
-        <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{eventsData.length}</p>
-      </div>
-      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-        <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">News</p>
-        <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{newsData.length}</p>
-      </div>
-      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-        <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Categories</p>
-        <p className="text-lg sm:text-xl md:text-2xl font-black text-white">
-          {new Set([...eventsData.map(e => e.category), ...newsData.map(n => n.category)]).size}
-        </p>
-      </div>
-      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-        <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Featured</p>
-        <p className="text-lg sm:text-xl md:text-2xl font-black text-white">
-          {(eventsData.filter(e => e.featured).length + newsData.filter(n => n.featured).length).toString()}
-        </p>
       </div>
     </div>
 
-    {/* Additional Info */}
-    <div className="mt-4 text-xs sm:text-sm text-emerald-200/80">
-      <span className="inline-flex items-center gap-1">
-        <IoSparkles className="text-emerald-300" size={14} />
-        Click on any event or news item for detailed information
-      </span>
+    <div className="border-t border-white/10 p-6 md:p-10 lg:border-t-0">
+      <div className="flex h-full flex-col justify-between">
+        {/* Stats Summary - Matching the fee structure style */}
+        <div className="mb-6 px-1">
+          <p className="text-white/78 text-xs sm:text-base font-medium leading-relaxed sm:leading-loose">
+            <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-emerald-500/50 underline-offset-4 mr-1">
+              {eventsData.length}
+            </span> 
+            <span className="tracking-tight sm:tracking-normal">upcoming events and</span>
+            <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-[#f2c357]/60 underline-offset-4 ml-1 mr-1">
+              {newsData.length}
+            </span>
+            <span className="tracking-tight sm:tracking-normal">news articles this month</span>
+          </p>
+        </div>
+
+        {/* Quick Stats Grid - Matching fee structure */}
+        <div className="grid grid-cols-2 gap-3 mt-4">
+          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
+            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">Events</p>
+            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{eventsData.length}</p>
+          </div>
+          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
+            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">News</p>
+            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{newsData.length}</p>
+          </div>
+          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
+            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">Categories</p>
+            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">
+              {new Set([...eventsData.map(e => e.category), ...newsData.map(n => n.category)]).size}
+            </p>
+          </div>
+          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
+            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">Featured</p>
+            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">
+              {(eventsData.filter(e => e.featured).length + newsData.filter(n => n.featured).length).toString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Additional Info */}
+        <div className="mt-5 text-xs sm:text-sm text-white/60">
+          <span className="inline-flex items-center gap-1">
+            <IoSparkles className="text-[#f2c357]" size={14} />
+            Click on any event or news item for detailed information
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1244,10 +1310,10 @@ export default function ModernEventsNewsPage() {
             return (
               <div 
                 key={index} 
-                className="relative flex flex-col justify-between overflow-hidden bg-white border border-slate-100 p-4 md:p-6 rounded-[24px] md:rounded-[32px] shadow-sm"
+                className="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-[#d9d0c3] bg-white p-4 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.4)] md:rounded-[32px] md:p-6"
               >
                 <div className="flex items-start justify-between mb-4 md:mb-8">
-                  <div className={`p-2 md:p-3 rounded-xl md:rounded-2xl bg-gradient-to-br ${stat.gradient} bg-opacity-[0.08] text-slate-700`}>
+                  <div className="rounded-xl bg-[#fcfaf6] p-2 text-[#172033] ring-1 ring-[#e8dfd3] md:rounded-2xl md:p-3">
                     <Icon className="text-lg md:text-2xl" />
                   </div>
                 </div>
@@ -1271,13 +1337,13 @@ export default function ModernEventsNewsPage() {
 
         {/* Search & Filters */}
         <div className="relative mb-6 sm:mb-8">
-          <div className="bg-white/80 backdrop-blur-md border border-slate-200/60 p-2 sm:p-3 rounded-2xl sm:rounded-[28px] md:rounded-full shadow-lg shadow-slate-200/40">
+          <div className="rounded-2xl border border-[#d9d0c3] bg-white/90 p-2 shadow-lg shadow-slate-200/20 backdrop-blur-md sm:rounded-[28px] md:rounded-full sm:p-3">
             <div className="flex flex-col md:flex-row items-center gap-2 sm:gap-3">
               
               <div className="relative w-full flex-1 group">
-                <div className="relative flex items-center bg-white border border-slate-200 rounded-xl sm:rounded-2xl shadow-sm transition-all focus-within:border-slate-900 focus-within:ring-2 sm:focus-within:ring-4 focus-within:ring-slate-900/5">
+                <div className="relative flex items-center rounded-xl border border-[#d9d0c3] bg-[#fcfaf6] shadow-sm transition-all focus-within:border-[#172033] focus-within:ring-2 focus-within:ring-[#172033]/10 sm:rounded-2xl sm:focus-within:ring-4">
                   <div className="pl-3 sm:pl-4 md:pl-5 pr-2 sm:pr-3 flex items-center justify-center pointer-events-none">
-                    <FiSearch className="text-slate-400 group-focus-within:text-slate-900 transition-colors" size={16} />
+                    <FiSearch className="text-slate-400 transition-colors group-focus-within:text-[#172033]" size={16} />
                   </div>
                   <input
                     type="text"
@@ -1293,7 +1359,7 @@ export default function ModernEventsNewsPage() {
                     {searchTerm ? (
                       <button
                         onClick={() => setSearchTerm('')}
-                        className="p-1.5 sm:p-2 bg-slate-100 text-slate-900 rounded-lg sm:rounded-xl active:scale-90 transition-transform"
+                        className="rounded-lg bg-white p-1.5 text-[#172033] ring-1 ring-[#e8dfd3] transition-transform active:scale-90 sm:rounded-xl sm:p-2"
                       >
                         <FiX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
@@ -1302,7 +1368,7 @@ export default function ModernEventsNewsPage() {
                 </div>
               </div>
 
-              <div className="flex items-center w-full md:w-auto gap-2 sm:gap-3 border-t border-slate-100 md:border-t-0 md:border-l md:border-slate-100 pt-2 sm:pt-3 md:pt-0 md:pl-3">
+              <div className="flex w-full items-center gap-2 border-t border-[#efe7da] pt-2 sm:gap-3 sm:pt-3 md:w-auto md:border-l md:border-t-0 md:border-[#efe7da] md:pl-3 md:pt-0">
                 
                 <div className="w-full md:w-auto">
   {/* Mobile dropdown */}
@@ -1319,12 +1385,12 @@ export default function ModernEventsNewsPage() {
         px-4 
         py-4 
         bg-white 
-        border-2 border-slate-200 
+        border-2 border-[#d9d0c3] 
         rounded-xl 
         font-medium 
         text-slate-700 text-base
         cursor-pointer 
-        focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500
+        focus:outline-none focus:ring-2 focus:ring-[#172033]/10 focus:border-[#172033]
         transition-all
         shadow-sm
       "
@@ -1342,9 +1408,9 @@ export default function ModernEventsNewsPage() {
     </select>
     
     {/* Custom dropdown arrow */}
-    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none bg-emerald-50 w-7 h-7 rounded-full flex items-center justify-center">
+    <div className="absolute right-4 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-[#f6efe2] pointer-events-none">
       <svg 
-        className="w-4 h-4 text-emerald-600" 
+        className="h-4 w-4 text-[#172033]" 
         fill="none" 
         stroke="currentColor" 
         viewBox="0 0 24 24"
@@ -1374,7 +1440,7 @@ export default function ModernEventsNewsPage() {
         font-semibold 
         text-slate-600 text-sm 
         cursor-pointer 
-        focus:ring-2 focus:ring-emerald-500/20 
+        focus:ring-2 focus:ring-[#172033]/10 
         transition-all
       "
     >
@@ -1400,7 +1466,7 @@ export default function ModernEventsNewsPage() {
                     setActiveTab('all');
                     setCurrentPage(1);
                   }}
-                  className="p-2.5 sm:p-3 md:px-6 md:py-3 bg-blue-600 text-white rounded-xl sm:rounded-2xl md:rounded-full font-bold text-xs sm:text-sm shadow-md shadow-blue-200 hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-1.5 sm:gap-2 flex-shrink-0"
+                  className="flex flex-shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#172033] p-2.5 text-xs font-black uppercase tracking-[0.14em] text-white shadow-md shadow-[#172033]/20 transition-all active:scale-95 sm:gap-2 sm:rounded-2xl sm:p-3 sm:text-sm md:rounded-full md:px-6 md:py-3"
                 >
                   <FiFilter className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="hidden md:inline">Reset</span>
@@ -1419,7 +1485,7 @@ export default function ModernEventsNewsPage() {
             
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 px-1">
               <div className="flex items-center gap-3 sm:gap-4">
-                <div className="p-2 sm:p-3 bg-slate-900 rounded-xl sm:rounded-2xl shadow-lg shrink-0">
+                <div className="shrink-0 rounded-xl bg-[#172033] p-2 shadow-lg sm:rounded-2xl sm:p-3">
                   <IoCalendarClearOutline className="text-white text-lg sm:text-2xl" />
                 </div>
                 <div>
@@ -1443,8 +1509,8 @@ export default function ModernEventsNewsPage() {
                     onClick={() => { setActiveTab(category.id); setCurrentPage(1); }}
                     className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap text-[11px] sm:text-sm font-bold transition-all border ${
                       isActive 
-                        ? "bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100" 
-                        : "bg-white border-slate-200 text-slate-600"
+                        ? "bg-[#172033] border-[#172033] text-white shadow-md shadow-[#172033]/20" 
+                        : "bg-white border-[#d9d0c3] text-slate-600"
                     }`}
                   >
                     {Icon && <Icon className={`${isActive ? "text-white" : "text-slate-400"} text-xs sm:text-base`} />}
@@ -1457,14 +1523,14 @@ export default function ModernEventsNewsPage() {
             <div className="relative">
               {!paginatedEvents || paginatedEvents.length === 0 ? (
                 <div className="bg-slate-50 rounded-[24px] sm:rounded-[32px] border-2 border-dashed border-slate-200 py-8 sm:py-16 text-center">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#fcfaf6] shadow-sm ring-1 ring-[#e8dfd3] sm:h-16 sm:w-16">
                     <IoCalendarClearOutline className="text-slate-300 text-xl sm:text-2xl" />
                   </div>
                   <h3 className="text-lg font-bold text-slate-900">No events found</h3>
                   <p className="text-slate-500 text-xs mt-1 mb-4">Try adjusting filters.</p>
                   <button 
                     onClick={() => { setSearchTerm(''); setActiveTab('all'); }}
-                    className="px-4 py-2 bg-white border border-slate-200 rounded-full font-bold text-slate-700 text-xs"
+                    className="rounded-full border border-[#d9d0c3] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#172033]"
                   >
                     Reset Filters
                   </button>
@@ -1500,12 +1566,12 @@ export default function ModernEventsNewsPage() {
           <div className="lg:w-[380px] space-y-6">
             <div className="lg:sticky lg:top-24 space-y-6">
               
-              <div className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
+              <div className="rounded-[32px] border border-[#d9d0c3] bg-white p-6 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.35)]">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
-                    <IoNewspaperOutline className="text-purple-600 text-xl" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6efe2]">
+                    <IoNewspaperOutline className="text-[#172033] text-xl" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900">Latest News</h2>
+                  <h2 className="text-xl font-black text-[#172033]">Latest News</h2>
                 </div>
 
                 <div className="space-y-5">
@@ -1520,25 +1586,32 @@ export default function ModernEventsNewsPage() {
                     />
                   ))}
                 </div>
+
+                <div className="mt-6 rounded-[24px] border border-[#e8dfd3] bg-[#fcfaf6] p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Editor&apos;s Note</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    Important notices, celebrations, and campus milestones all live here in one easier-to-scan panel.
+                  </p>
+                </div>
               </div>
 
-              <div className="bg-slate-900 rounded-[32px] p-6 text-white overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/20 blur-[50px]" />
-                <h4 className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-4">Stats At A Glance</h4>
+              <div className="relative overflow-hidden rounded-[32px] bg-[#172033] p-6 text-white">
+                <div className="absolute top-0 right-0 h-24 w-24 bg-[#f2c357]/15 blur-[50px]" />
+                <h4 className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f2c357]">Stats At A Glance</h4>
                 <div className="grid grid-cols-2 gap-4 relative z-10">
                   <div>
                     <p className="text-2xl font-bold">{eventsData?.length || 0}</p>
-                    <p className="text-[10px] text-slate-400 uppercase font-bold">Events</p>
+                    <p className="text-[10px] uppercase font-bold text-white/45">Events</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{newsData?.length || 0}</p>
-                    <p className="text-[10px] text-slate-400 uppercase font-bold">Articles</p>
+                    <p className="text-[10px] uppercase font-bold text-white/45">Articles</p>
                   </div>
                   <div className="col-span-2 pt-2 border-t border-slate-800">
-                    <p className="text-sm font-bold text-blue-400">
+                    <p className="text-sm font-bold text-[#f2c357]">
                       {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                     </p>
-                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Last Updated</p>
+                    <p className="text-[10px] uppercase font-bold tracking-widest text-white/45">Last Updated</p>
                   </div>
                 </div>
               </div>
@@ -1547,14 +1620,14 @@ export default function ModernEventsNewsPage() {
         </div>
 
         {/* Footer Banner */}
-        <div className="relative overflow-hidden bg-slate-900 rounded-3xl p-5 md:p-8 shadow-xl">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 blur-[80px] rounded-full -mr-24 -mt-24" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/5 blur-[80px] rounded-full -ml-24 -mb-24" />
+        <div className="relative overflow-hidden rounded-3xl bg-[#172033] p-5 shadow-xl md:p-8">
+          <div className="absolute -right-24 -top-24 h-48 w-48 rounded-full bg-[#f2c357]/10 blur-[80px]" />
+          <div className="absolute -bottom-24 -left-24 h-48 w-48 rounded-full bg-white/5 blur-[80px]" />
 
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
             <div className="shrink-0">
-              <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-white flex items-center justify-center shadow-lg">
-                <FiMessageCircle className="text-slate-900 text-2xl md:text-3xl" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-lg md:h-16 md:w-16">
+                <FiMessageCircle className="text-[#172033] text-2xl md:text-3xl" />
               </div>
             </div>
 
@@ -1568,10 +1641,10 @@ export default function ModernEventsNewsPage() {
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
                 {([
-                  { label: 'Sharing', icon: FiShare2, color: 'text-blue-400', bg: 'bg-blue-400/10' },
-                  { label: 'Sync', icon: FiCalendar, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-                  { label: 'Save', icon: FiBookmark, color: 'text-amber-400', bg: 'bg-amber-400/10' },
-                  { label: 'Alerts', icon: FiBell, color: 'text-purple-400', bg: 'bg-purple-400/10' }
+                  { label: 'Sharing', icon: FiShare2, color: 'text-[#f2c357]', bg: 'bg-[#f2c357]/10' },
+                  { label: 'Sync', icon: FiCalendar, color: 'text-white', bg: 'bg-white/10' },
+                  { label: 'Save', icon: FiBookmark, color: 'text-[#f2c357]', bg: 'bg-[#f2c357]/10' },
+                  { label: 'Alerts', icon: FiBell, color: 'text-white', bg: 'bg-white/10' }
                 ]).map((feature, idx) => (
                   <div 
                     key={idx} 
