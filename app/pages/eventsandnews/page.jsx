@@ -548,6 +548,11 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
 // Modern Share Modal
 const ModernShareModal = ({ item, type = 'event', onClose }) => {
   const [copied, setCopied] = useState(false);
+  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const previewImage = item?.image || (type === 'event' ? '/default-event.jpg' : '/default-news.jpg');
+  const previewMeta = type === 'event'
+    ? `${item?.time || 'Time TBA'} • ${item?.location || 'Matungulu Girls Senior School'}`
+    : `${item?.author || 'School Admin'} • ${item?.category || 'News'}`;
 
   const socialPlatforms = [
     {
@@ -555,7 +560,7 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
       icon: FaWhatsapp,
       color: 'bg-green-500',
       action: () => {
-        const text = `${item.title}\n\n${type === 'event' ? 'Event Details:' : 'News:'}\n${item.excerpt || item.description}\n\n${window.location.href}`;
+        const text = `${item.title}\n\n${type === 'event' ? 'Event Details:' : 'News:'}\n${item.excerpt || item.description}\n\n${pageUrl}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
       }
     },
@@ -564,7 +569,7 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
       icon: FaFacebookF,
       color: 'bg-blue-600',
       action: () => {
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`, '_blank');
       }
     },
     {
@@ -573,7 +578,7 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
       color: 'bg-sky-500',
       action: () => {
         const text = `${item.title} - Check out this ${type}!`;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(pageUrl)}`, '_blank');
       }
     },
     {
@@ -582,7 +587,7 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
       color: 'bg-blue-500',
       action: () => {
         const text = `${item.title}\n\n${item.excerpt || item.description}`;
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`, '_blank');
+        window.open(`https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(text)}`, '_blank');
       }
     },
     {
@@ -591,14 +596,22 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
       color: 'bg-gray-600',
       action: () => {
         const subject = `${item.title} - ${type === 'event' ? 'Event' : 'News'}`;
-        const body = `${item.excerpt || item.description}\n\n${window.location.href}`;
+        const body = `${item.excerpt || item.description}\n\n${pageUrl}`;
         window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       }
     }
   ];
 
+  const getPlatformColor = (color) => {
+    if (color === 'bg-green-500') return '#25D366';
+    if (color === 'bg-blue-600') return '#1877F2';
+    if (color === 'bg-sky-500') return '#1DA1F2';
+    if (color === 'bg-blue-500') return '#229ED9';
+    return '#4B5563';
+  };
+
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(window.location.href).then(() => {
+    navigator.clipboard.writeText(pageUrl).then(() => {
       setCopied(true);
       toast.success('Link copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
@@ -606,78 +619,80 @@ const ModernShareModal = ({ item, type = 'event', onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#172033]/90 backdrop-blur-sm">
-      <div className="w-full max-w-md overflow-hidden rounded-[32px] border border-[#d9d0c3] bg-[#fcfaf6] shadow-2xl">
-        <div className="relative overflow-hidden bg-[#172033] p-8 text-white">
-          <div className="absolute -mr-16 -mt-16 h-32 w-32 rounded-full bg-[#f2c357]/12 blur-3xl right-0 top-0" />
-          <div className="absolute left-0 bottom-0 h-24 w-24 rounded-full bg-white/8 blur-3xl" />
-          
-          <div className="relative z-10 flex flex-col items-center text-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10 backdrop-blur-md">
-              <IoShareSocialOutline className="text-2xl text-white" />
+    <div className="fixed inset-0 z-[200] flex items-end justify-center sm:items-center">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-w-md sm:rounded-2xl">
+        <div className="bg-[#1a1a2e] px-6 pb-5 pt-6">
+          <div className="mb-4 flex items-center justify-between">
+            <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/30">
+              Share {type === 'event' ? 'Event' : 'Content'}
+            </span>
+            <button
+              onClick={onClose}
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/60"
+            >
+              <FiX size={14} />
+            </button>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 overflow-hidden rounded-xl bg-white/10 ring-2 ring-white/10">
+              <img src={previewImage} alt={item.title} className="h-full w-full object-cover" />
             </div>
-            <h2 className="text-2xl font-black tracking-tight">Share {type === 'event' ? 'Event' : 'News'}</h2>
-            <p className="mt-1 text-sm text-white/55">Invite others to follow the update</p>
+            <div className="min-w-0">
+              <h3 className="truncate text-sm font-semibold text-white">{item.title}</h3>
+              <p className="text-[11px] font-medium text-white/40">{previewMeta}</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-[#fcfaf6] p-8">
-          <div className="mb-6 rounded-[24px] border border-[#e8dfd3] bg-white p-4">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-              {type === 'event' ? 'Selected Event' : 'Selected Story'}
-            </p>
-            <h3 className="mt-2 line-clamp-2 text-lg font-black tracking-tight text-[#172033]">{item.title}</h3>
-          </div>
-
-          <div className="grid grid-cols-5 gap-4 mb-8">
+        <div className="px-6 py-5">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Share via</p>
+          <div className="grid grid-cols-3 gap-3">
             {socialPlatforms.map((platform, index) => {
               const Icon = platform.icon;
               return (
                 <button
                   key={index}
                   onClick={platform.action}
-                  className="group flex flex-col items-center gap-2"
+                  className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-slate-100 py-3"
                 >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-[#e8dfd3] bg-white text-slate-600 transition-transform duration-300 group-hover:-translate-y-1 ${platform.color} !text-white`}>
+                  <div
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-white shadow-md"
+                    style={{ backgroundColor: getPlatformColor(platform.color) }}
+                  >
                     <Icon className="text-xl" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <span className="text-[10px] font-semibold text-slate-500">
                     {platform.name}
                   </span>
                 </button>
               );
             })}
+
+            <button
+              onClick={copyToClipboard}
+              className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-slate-100 py-3"
+            >
+              <div className={`flex h-11 w-11 items-center justify-center rounded-full shadow-md ${copied ? 'bg-emerald-500 text-white' : 'bg-[#1a1a2e] text-white'}`}>
+                <FiCopy size={18} />
+              </div>
+              <span className="text-[10px] font-semibold text-slate-500">{copied ? 'Copied!' : 'Copy'}</span>
+            </button>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-[11px] font-black uppercase tracking-widest text-slate-400">
-              Direct Link
-            </label>
-            
-            <div className="relative group">
-              <div className="w-full rounded-2xl border border-[#e8dfd3] bg-white p-4 pr-32">
-                <p className="text-xs font-mono text-slate-500 truncate">
-                  {window.location.href}
-                </p>
+          <div className="mt-5">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Direct Link</p>
+            <div className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-2">
+              <div className="min-w-0 flex-1 px-2">
+                <p className="truncate text-[11px] font-medium text-slate-500">{pageUrl}</p>
               </div>
-              
               <button
                 onClick={copyToClipboard}
-                className={`absolute right-1.5 top-1.5 bottom-1.5 px-5 rounded-xl font-bold text-xs transition-all shadow-sm flex items-center gap-2 ${
-                  copied 
-                  ? 'bg-[#214760] text-white' 
-                  : 'bg-[#172033] text-white active:scale-95'
+                className={`rounded-lg px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] transition-all ${
+                  copied ? 'bg-emerald-500 text-white' : 'bg-[#1a1a2e] text-white'
                 }`}
               >
-                {copied ? 'Done!' : <><FiCopy /> Copy</>}
-              </button>
-            </div>
-            <div className="mt-5 flex justify-end">
-              <button
-                onClick={onClose}
-                className="rounded-full border border-[#d9d0c3] bg-white px-5 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] text-[#172033] transition-colors active:bg-[#f6efe2]"
-              >
-                Close
+                {copied ? 'Done' : 'Copy'}
               </button>
             </div>
           </div>
