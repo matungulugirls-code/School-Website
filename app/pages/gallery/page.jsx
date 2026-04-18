@@ -1429,21 +1429,7 @@ const categoryOptions = [
                     <FiArrowRight className="text-[#172033]" size={14} />
                   </button>
 
-                  <button
-                    onClick={() => toast.info('Favorites feature coming soon!')}
-                    className="w-full p-3 bg-amber-50 text-amber-700 rounded-lg border border-amber-100 flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-amber-100 rounded-lg">
-                        <FiHeart className="text-amber-600" size={14} />
-                      </div>
-                      <div className="text-left">
-                        <p className="text-xs font-bold">My Favorites</p>
-                        <p className="text-[10px] text-amber-600">{favorites.size} saved</p>
-                      </div>
-                    </div>
-                    <FiArrowRight className="text-amber-400" size={14} />
-                  </button>
+
                 </div>
               </div>
 
