@@ -1380,7 +1380,7 @@ export default function ModernEventsNewsPage() {
       }}
     >
       {categories.map((category) => (
-        <option key={category.id} value={category.id} className="py-3">
+        <option key={category.id} value={category.id} className={`py-3 bg-${category.color} font-medium`}>
           {category.name}
         </option>
       ))}
