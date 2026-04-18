@@ -413,7 +413,7 @@ export default function ModernNavbar() {
                     aria-haspopup="true"
                   >
                     <FiGrid className="text-xs flex-shrink-0" />
-                    <span className="truncate">Resources</span>
+                    <span className="truncate">School Hub </span>
                     <FiChevronDown className={`text-xs transition-transform duration-200 ${
                       isResourcesDropdownOpen ? 'rotate-180' : ''
                     }`} />
