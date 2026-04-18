@@ -833,13 +833,13 @@ const ModernDetailModal = ({ session, onClose, onContact }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-slate-900/90 backdrop-blur-sm">
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-3xl bg-white sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-[#172033]/80 backdrop-blur-md">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#fcfaf6] shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[2.5rem] sm:border sm:border-[#d9d0c3]">
         
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-50 p-2 bg-black/20 backdrop-blur-md text-white rounded-full border border-white/20 transition-all active:scale-90"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-50 p-2 bg-[#172033]/70 backdrop-blur-md text-white rounded-full border border-white/20 transition-all active:scale-90"
         >
           <IoClose size={18} className="sm:size-[22px]" />
         </button>
@@ -855,30 +855,30 @@ const ModernDetailModal = ({ session, onClose, onContact }) => {
           ) : (
             <div className={`w-full h-full bg-gradient-to-r ${categoryStyle.gradient}`} />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#fcfaf6] via-transparent to-black/10" />
           
           {/* Badge Overlays */}
           <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex flex-wrap gap-2">
-            <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-white shadow-xl rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-900">
+            <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-white shadow-xl rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#172033] border border-[#d9d0c3]">
               {session.category || 'Counseling'}
             </span>
             {session.featured && (
-              <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-emerald-900 text-white rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                <IoSparkles className="text-emerald-400" size={12} /> Featured
+              <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-[#172033] text-white rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                <IoSparkles className="text-[#f2c357]" size={12} /> Featured
               </span>
             )}
           </div>
         </div>
 
         {/* 2. Content Area */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-10 bg-white">
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 bg-[#fcfaf6]">
           <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
             
             {/* Title & Category */}
             <section className="space-y-3 sm:space-y-4">
               <div className="flex items-center gap-3">
-                <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-r ${categoryStyle.gradient}`}>
-                  <CategoryIcon className="text-white text-xl sm:text-2xl" />
+                <div className="rounded-xl sm:rounded-2xl border border-[#e8dfd3] bg-white p-2 sm:p-3 shadow-sm">
+                  <CategoryIcon className="text-[#172033] text-xl sm:text-2xl" />
                 </div>
                 <div>
                   <h2 className="text-xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight">
@@ -891,15 +891,15 @@ const ModernDetailModal = ({ session, onClose, onContact }) => {
               {/* Quick Info Bar */}
               <div className="flex flex-wrap gap-y-2 gap-x-4 sm:gap-x-6 text-[10px] sm:text-xs font-black text-slate-500">
                 <div className="flex items-center gap-1.5 whitespace-nowrap">
-                  <IoCalendarClearOutline className="text-emerald-500 text-sm sm:text-base" />
+                  <IoCalendarClearOutline className="text-[#172033] text-sm sm:text-base" />
                   {formatFullDate(session.date)}
                 </div>
                 <div className="flex items-center gap-1.5 whitespace-nowrap">
-                  <IoTimeOutline className="text-emerald-500 text-sm sm:text-base" />
+                  <IoTimeOutline className="text-[#f2c357] text-sm sm:text-base" />
                   {session.time || 'Flexible'}
                 </div>
                 <div className="flex items-center gap-1.5 truncate">
-                  <IoPersonOutline className="text-emerald-500 text-sm sm:text-base" />
+                  <IoPersonOutline className="text-[#172033] text-sm sm:text-base" />
                   <span className="truncate max-w-[120px] sm:max-w-none">{session.counselor || 'Counselor'}</span>
                 </div>
               </div>
@@ -916,12 +916,12 @@ const ModernDetailModal = ({ session, onClose, onContact }) => {
             {/* Session Stats Grid */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pt-2">
               {[
-                { label: 'Priority', val: session.priority || 'medium', icon: null, color: session.priority === 'high' ? 'bg-emerald-500' : 'bg-emerald-400' },
-                { label: 'Status', val: session.status || 'scheduled', icon: <FiCalendar size={12} />, color: 'bg-emerald-100 text-emerald-600' },
-                { label: 'Security', val: 'Secure', icon: <FiShield size={12} />, color: 'bg-emerald-100 text-emerald-600' },
-                { label: 'Rating', val: '4.8/5.0', icon: <FiStar size={12} />, color: 'bg-emerald-100 text-emerald-600' }
+                { label: 'Priority', val: session.priority || 'medium', icon: null, color: session.priority === 'high' ? 'bg-[#b68424]' : 'bg-[#172033]' },
+                { label: 'Status', val: session.status || 'scheduled', icon: <FiCalendar size={12} />, color: 'bg-[#fcfaf6] text-[#172033]' },
+                { label: 'Security', val: 'Secure', icon: <FiShield size={12} />, color: 'bg-[#fcfaf6] text-[#172033]' },
+                { label: 'Rating', val: '4.8/5.0', icon: <FiStar size={12} />, color: 'bg-[#fcfaf6] text-[#b68424]' }
               ].map((stat, i) => (
-                <div key={i} className="p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
+                <div key={i} className="p-3 sm:p-4 bg-white rounded-xl sm:rounded-2xl border border-[#e8dfd3]">
                   <div className="flex items-center gap-2 mb-1 sm:mb-2">
                     {stat.icon ? (
                       <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl ${stat.color} flex items-center justify-center`}>
@@ -940,11 +940,11 @@ const ModernDetailModal = ({ session, onClose, onContact }) => {
         </div>
 
         {/* 3. Action Footer */}
-        <div className="shrink-0 p-4 sm:p-6 bg-slate-50/80 backdrop-blur-md border-t border-slate-100">
+        <div className="shrink-0 p-4 sm:p-6 bg-white/80 backdrop-blur-md border-t border-[#e8dfd3]">
           <div className="max-w-2xl mx-auto flex gap-2 sm:gap-3">
             <button
               onClick={session.isSupport ? onContact : addSessionToGoogleCalendar}
-              className="flex-[2] h-12 sm:h-14 bg-emerald-600 text-white rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-emerald-900/20"
+              className="flex-[2] h-12 sm:h-14 bg-[#172033] text-white rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg"
             >
               {session.isSupport ? <FiPhoneCall size={16} /> : <FiCalendar size={16} />}
               {session.isSupport ? 'Contact Support' : 'Join Session'}
@@ -952,7 +952,7 @@ const ModernDetailModal = ({ session, onClose, onContact }) => {
             
             <button
               onClick={onClose}
-              className="flex-1 h-12 sm:h-14 bg-white border-2 border-slate-200 text-slate-900 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-transform"
+              className="flex-1 h-12 sm:h-14 bg-[#fcfaf6] border-2 border-[#d9d0c3] text-[#172033] rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-transform"
             >
               <IoClose size={16} />
               Close
@@ -969,10 +969,10 @@ const ModernStatCard = ({ stat }) => {
   const Icon = stat.icon;
   
   return (
-    <div className="relative flex flex-col justify-between overflow-hidden bg-white border border-slate-100 p-4 md:p-6 rounded-[2rem] shadow-xl shadow-slate-900/5">
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-[#d9d0c3] bg-white p-4 md:p-6 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.4)]">
       {/* Top Section: Icon & Badge */}
       <div className="flex items-start justify-between mb-4 md:mb-6">
-        <div className="p-3 md:p-4 rounded-xl md:rounded-2xl bg-emerald-50 text-emerald-700">
+        <div className="p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#fcfaf6] text-[#172033] ring-1 ring-[#e8dfd3]">
           <Icon className="text-lg md:text-xl" />
         </div>
       </div>
@@ -1313,15 +1313,16 @@ export default function StudentCounseling() {
 
   if (loading) {
     return (
-      <Box className="min-h-[80vh] flex flex-col items-center justify-center p-4 bg-transparent">
-        <Stack spacing={2} alignItems="center" className="w-full max-w-xs">
+      <Box className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
+        <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto">
+          <Stack spacing={2} alignItems="center" className="mx-auto flex min-h-[70vh] w-full max-w-sm justify-center rounded-[30px] border border-[#d9d0c3] bg-white px-10 py-12 shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)]">
           <Box className="relative flex items-center justify-center scale-75 sm:scale-100 transition-transform">
             <CircularProgress
               variant="determinate"
               value={100}
               size={56}
               thickness={4}
-              sx={{ color: '#e2e8f0' }} 
+              sx={{ color: '#efe6d8' }} 
             />
             <CircularProgress
               variant="indeterminate"
@@ -1329,7 +1330,7 @@ export default function StudentCounseling() {
               size={56}
               thickness={4}
               sx={{
-                color: '#059669',
+                color: '#172033',
                 animationDuration: '800ms',
                 position: 'absolute',
                 left: 0,
@@ -1339,7 +1340,7 @@ export default function StudentCounseling() {
               }}
             />
             <Box className="absolute">
-              <IoSparkles className="text-emerald-600 text-lg animate-pulse" />
+              <IoSparkles className="text-[#b68424] text-lg animate-pulse" />
             </Box>
           </Box>
 
@@ -1351,48 +1352,51 @@ export default function StudentCounseling() {
               Fetching latest guidance and team info
             </p>
           </div>
-        </Stack>
+          </Stack>
+        </div>
       </Box>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white p-4 md:p-6">
+    <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
       <Toaster position="top-right" richColors />
       
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto space-y-6">
         
         {/* Modern Hero Header - Matungulu Girls Theme */}
-        <div className="relative bg-gradient-to-r from-emerald-900 to-teal-800 rounded-[2.5rem] p-6 md:p-10 text-white overflow-hidden border border-emerald-700/30 mb-8 shadow-2xl">
-          {/* Background Glows */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
+        <div className="relative mb-8 overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)] md:p-10">
+          <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute inset-y-0 right-[36%] hidden w-px bg-white/10 lg:block" />
           
-          <div className="relative z-10">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
+          <div className="relative z-10 grid gap-0 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="p-0 lg:pr-10">
+            <div className="flex flex-col justify-between gap-6 lg:min-h-[320px]">
               <div>
-                {/* School Branding */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="h-8 w-1 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
+                  <div className="h-8 w-1 rounded-full bg-[#f2c357] shadow-[0_0_15px_rgba(242,195,87,0.5)]" />
                   <div>
-                    <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-emerald-400">
+                    <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#f2c357]">
                       Matungulu Girls Senior School
                     </h2>
-                    <p className="text-[8px] sm:text-[10px] italic font-medium text-emerald-200/60 tracking-widest uppercase">
+                    <p className="text-[8px] sm:text-[10px] italic font-medium text-white/45 tracking-widest uppercase">
                       "Strive to Excel"
                     </p>
                   </div>
                 </div>
                 
-                {/* Title */}
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/10">
-                    <IoSchoolOutline className="text-xl sm:text-2xl md:text-3xl text-emerald-300" />
+                  <div className="rounded-xl border border-white/10 bg-white/10 p-2 backdrop-blur-md">
+                    <IoSchoolOutline className="text-xl sm:text-2xl md:text-3xl text-[#f2c357]" />
                   </div>
                   <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
-                    Guidance & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300">Counseling</span>
+                    Guidance & <span className="bg-gradient-to-r from-[#f2c357] to-[#fff3c4] bg-clip-text text-transparent">Counseling</span>
                   </h1>
                 </div>
+                <p className="mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
+                  A modern support hub for student well-being, mentorship, spiritual care, and professional guidance across the Matungulu Girls community.
+                </p>
               </div>
 
 <div className="flex flex-nowrap items-center gap-2 sm:gap-3">
@@ -1424,8 +1428,8 @@ export default function StudentCounseling() {
       onClick={() => setViewMode('grid')}
       className={`h-8 w-8  flex items-center justify-center rounded-lg transition-all ${
         viewMode === 'grid' 
-          ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/40' 
-          : 'text-emerald-200/60 hover:text-white'
+          ? 'bg-white text-[#172033] shadow-lg' 
+          : 'text-white/60 hover:text-white'
       }`}
     >
       <FiGrid size={14} className="sm:size-[16px]" />
@@ -1434,8 +1438,8 @@ export default function StudentCounseling() {
       onClick={() => setViewMode('list')}
       className={`h-8 w-8 flex items-center justify-center rounded-lg transition-all ${
         viewMode === 'list' 
-          ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/40' 
-          : 'text-emerald-200/60 hover:text-white'
+          ? 'bg-white text-[#172033] shadow-lg' 
+          : 'text-white/60 hover:text-white'
       }`}
     >
       <FiList size={14} className="sm:size-[16px]" />
@@ -1444,46 +1448,46 @@ export default function StudentCounseling() {
 </div>
             </div>
 
-            {/* Stats Summary */}
+            </div>
+            <div className="border-t border-white/10 p-0 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
             <div className="mb-4 sm:mb-6 px-1">
-              <p className="text-emerald-100/90 text-xs sm:text-base font-medium leading-relaxed sm:leading-loose">
-                <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-emerald-500/50 underline-offset-4 mr-1">
+              <p className="text-white/75 text-xs sm:text-base font-medium leading-relaxed sm:leading-loose">
+                <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-[#f2c357]/50 underline-offset-4 mr-1">
                   {counselingSessions.length}
                 </span> 
                 <span className="tracking-tight sm:tracking-normal">counseling sessions and</span>
-                <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-teal-500/50 underline-offset-4 ml-1 mr-1">
+                <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-[#fff3c4]/40 underline-offset-4 ml-1 mr-1">
                   {teamMembers.length}
                 </span>
                 <span className="tracking-tight sm:tracking-normal">team members available</span>
               </p>
             </div>
 
-            {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Sessions</p>
+              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] sm:text-xs font-bold text-white/40 uppercase tracking-wider mb-1">Sessions</p>
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{counselingSessions.length}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Team</p>
+              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] sm:text-xs font-bold text-white/40 uppercase tracking-wider mb-1">Team</p>
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{teamMembers.length}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Categories</p>
+              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] sm:text-xs font-bold text-white/40 uppercase tracking-wider mb-1">Categories</p>
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{categories.length}</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Support</p>
+              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] sm:text-xs font-bold text-white/40 uppercase tracking-wider mb-1">Support</p>
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-white">24/7</p>
               </div>
             </div>
 
-            {/* Additional Info */}
-            <div className="mt-4 text-xs sm:text-sm text-emerald-200/80">
+            <div className="mt-4 text-xs sm:text-sm text-white/70">
               <span className="inline-flex items-center gap-1">
-                <IoSparkles className="text-emerald-300" size={14} />
+                <IoSparkles className="text-[#f2c357]" size={14} />
                 Professional support for academic & emotional well-being
               </span>
+            </div>
             </div>
           </div>
         </div>
@@ -1496,11 +1500,11 @@ export default function StudentCounseling() {
         </div>
 
         {/* 24/7 Support Team Section - Dynamic from API */}
-        <div className="bg-gradient-to-br from-emerald-50 to-emerald-50 rounded-[2.5rem] p-6 md:p-8 border border-emerald-100 shadow-xl shadow-slate-900/5 mb-8">
+        <div className="mb-8 rounded-[34px] border border-[#d9d0c3] bg-white p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)] md:p-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8">
             <div className="flex items-center gap-4 mb-4 lg:mb-0">
-              <div className="p-3 bg-emerald-600 rounded-xl shadow-lg shadow-emerald-900/20">
-                <FiPhoneCall className="text-white text-xl" />
+              <div className="rounded-2xl bg-[#172033] p-3 shadow-lg">
+                <FiPhoneCall className="text-[#f2c357] text-xl" />
               </div>
               <div>
                 <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Guidance & Counseling Team</h2>
@@ -1512,8 +1516,8 @@ export default function StudentCounseling() {
           </div>
           
           {teamMembers.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 text-center border border-emerald-100">
-              <div className="text-emerald-300 text-4xl mb-4">
+            <div className="rounded-[28px] border border-dashed border-[#d9d0c3] bg-[#fcfaf6] p-8 text-center">
+              <div className="mb-4 text-[#b68424] text-4xl">
                 <FiUsers />
               </div>
               <h3 className="text-sm font-black text-slate-900 mb-2">No Team Members Available</h3>
@@ -1545,8 +1549,8 @@ export default function StudentCounseling() {
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-emerald-600 rounded-xl shadow-lg shadow-emerald-900/20">
-                  <FiHeart className="text-white text-xl" />
+                <div className="rounded-2xl bg-[#172033] p-3 shadow-lg">
+                  <FiHeart className="text-[#f2c357] text-xl" />
                 </div>
                 <div>
                   <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Counseling Sessions</h2>
@@ -1557,10 +1561,10 @@ export default function StudentCounseling() {
               </div>
             </div>
 
-            <div className="bg-white border border-slate-100 p-3 rounded-[2rem] shadow-xl shadow-slate-900/5">
+            <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-4 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
               <div className="flex flex-col md:flex-row items-center gap-3">
                 <div className="relative w-full flex-1">
-                  <div className="relative flex items-center bg-slate-50 border border-slate-200 rounded-xl transition-all focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/5">
+                  <div className="relative flex items-center rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] transition-all focus-within:border-[#172033]">
                     <div className="pl-4 pr-2 flex items-center justify-center pointer-events-none">
                       <FiSearch className="text-slate-400" size={16} />
                     </div>
@@ -1569,7 +1573,7 @@ export default function StudentCounseling() {
                       placeholder="Search sessions..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full py-3 bg-transparent text-slate-900 placeholder:text-slate-400 font-medium text-xs focus:outline-none"
+                      className="w-full py-3 bg-transparent text-[#172033] placeholder:text-slate-400 font-medium text-xs focus:outline-none"
                     />
                     {searchTerm && (
                       <button
@@ -1587,7 +1591,7 @@ export default function StudentCounseling() {
                   <select 
                     value={activeTab}
                     onChange={(e) => setActiveTab(e.target.value)}
-                    className="w-full appearance-none px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-600 text-xs cursor-pointer focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full appearance-none rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] px-4 py-3 font-semibold text-[#172033] text-xs uppercase tracking-[0.12em] cursor-pointer transition-all focus:border-[#172033]"
                   >
                     {categoryOptions.map((category) => (
                       <option key={category.id} value={category.id}>
@@ -1609,12 +1613,12 @@ export default function StudentCounseling() {
                   className="
                     px-4 sm:px-5 
                     py-3
-                    bg-emerald-600 text-white 
-                    rounded-xl 
+                    bg-[#172033] text-white 
+                    rounded-2xl 
                     font-black 
                     text-[9px] uppercase tracking-wider
-                    shadow-lg shadow-emerald-900/20 
-                    hover:bg-emerald-700 active:scale-95 transition-all 
+                    shadow-lg 
+                    hover:bg-[#101827] active:scale-95 transition-all 
                     flex items-center justify-center gap-1.5
                   "
                 >
@@ -1627,8 +1631,8 @@ export default function StudentCounseling() {
          {/* Modern Category Pills - Mobile Optimized */}
 <div className="relative -mx-4 sm:-mx-2 px-4 sm:px-2 mb-2">
   {/* Gradient fade indicators for scroll */}
-  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 md:hidden"></div>
-  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 md:hidden"></div>
+  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#f7f2ea] to-transparent pointer-events-none z-10 md:hidden"></div>
+  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#f7f2ea] to-transparent pointer-events-none z-10 md:hidden"></div>
   
   {/* Scrollable container */}
   <div 
@@ -1668,8 +1672,8 @@ export default function StudentCounseling() {
             select-none
             ${
               isActive 
-                ? "bg-emerald-600 border-emerald-600 text-white shadow-lg shadow-emerald-900/20 scale-105 sm:scale-100" 
-                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 active:bg-slate-100"
+                ? "bg-[#172033] border-[#172033] text-white shadow-lg scale-105 sm:scale-100" 
+                : "bg-white border-[#d9d0c3] text-slate-600 hover:bg-[#fcfaf6] active:bg-[#fcfaf6]"
             }
           `}
           aria-current={isActive ? 'true' : undefined}
@@ -1769,15 +1773,15 @@ export default function StudentCounseling() {
             {/* Sessions Grid */}
             <div className="relative">
               {filteredSessions.length === 0 ? (
-                <div className="bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 py-16 text-center">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <div className="rounded-[30px] border border-dashed border-[#d9d0c3] bg-white py-16 text-center shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#fcfaf6] shadow-sm ring-1 ring-[#e8dfd3]">
                     <FiHeart className="text-slate-300 text-xl" />
                   </div>
                   <h3 className="text-base font-black text-slate-900">No sessions found</h3>
                   <p className="text-slate-500 text-xs mt-1 mb-4">Try adjusting your filters or search.</p>
                   <button 
                     onClick={() => { setSearchTerm(''); setActiveTab('all'); }}
-                    className="px-5 py-2.5 bg-white border border-slate-200 rounded-full font-black text-slate-700 hover:bg-slate-50 transition-all text-[10px] uppercase tracking-wider"
+                    className="rounded-full border border-[#d9d0c3] bg-[#fcfaf6] px-5 py-2.5 font-black text-[#172033] transition-all text-[10px] uppercase tracking-wider"
                   >
                     Reset Filters
                   </button>
@@ -1804,10 +1808,10 @@ export default function StudentCounseling() {
             <div className="lg:sticky lg:top-24 space-y-6">
               
               {/* Quick Actions Card */}
-              <div className="bg-white border border-slate-100 rounded-[2rem] p-6 shadow-xl shadow-slate-900/5">
+              <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 bg-emerald-50 rounded-xl">
-                    <FiZap className="text-emerald-600 text-lg" />
+                  <div className="rounded-2xl bg-[#172033] p-2.5">
+                    <FiZap className="text-[#f2c357] text-lg" />
                   </div>
                   <h2 className="text-base font-black text-slate-900 tracking-tight">Quick Actions</h2>
                 </div>
@@ -1815,120 +1819,120 @@ export default function StudentCounseling() {
                 <div className="space-y-2">
                   <button
                     onClick={() => toast.info('Access emergency contacts via the Student Portal.')}
-                    className="w-full p-3.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 flex items-center justify-between hover:bg-emerald-100 transition-colors"
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-emerald-100 rounded-lg">
-                        <FiPhoneCall className="text-emerald-600" size={14} />
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiPhoneCall className="text-[#172033]" size={14} />
                       </div>
                       <div className="text-left">
                         <p className="font-black text-xs">Emergency Contact</p>
-                        <p className="text-[9px] text-emerald-600">Immediate assistance</p>
+                        <p className="text-[9px] text-[#b68424]">Immediate assistance</p>
                       </div>
                     </div>
-                    <FiArrowRight className="text-emerald-400" size={14} />
+                    <FiArrowRight className="text-[#172033]" size={14} />
                   </button>
 
                   <button
                     onClick={() => toast.info('Access schedule sessions via the Student Portal.')}
-                    className="w-full p-3.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 flex items-center justify-between hover:bg-emerald-100 transition-colors"
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-emerald-100 rounded-lg">
-                        <FiCalendar className="text-emerald-600" size={14} />
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiCalendar className="text-[#172033]" size={14} />
                       </div>
                       <div className="text-left">
                         <p className="font-black text-xs">Schedule Session</p>
-                        <p className="text-[9px] text-emerald-600">Book appointment</p>
+                        <p className="text-[9px] text-[#b68424]">Book appointment</p>
                       </div>
                     </div>
-                    <FiArrowRight className="text-emerald-400" size={14} />
+                    <FiArrowRight className="text-[#172033]" size={14} />
                   </button>
 
                   <button
                     onClick={() => toast.info('Access resources via the Student Portal.')}
-                    className="w-full p-3.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 flex items-center justify-between hover:bg-emerald-100 transition-colors"
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-emerald-100 rounded-lg">
-                        <FiBookOpen className="text-emerald-600" size={14} />
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiBookOpen className="text-[#172033]" size={14} />
                       </div>
                       <div className="text-left">
                         <p className="font-black text-xs">Resources</p>
-                        <p className="text-[9px] text-emerald-600">Self-help guides</p>
+                        <p className="text-[9px] text-[#b68424]">Self-help guides</p>
                       </div>
                     </div>
-                    <FiArrowRight className="text-emerald-400" size={14} />
+                    <FiArrowRight className="text-[#172033]" size={14} />
                   </button>
                 </div>
               </div>
 
               {/* Session Info Banner */}
-              <div className="bg-white border border-emerald-100 rounded-[2rem] p-6 shadow-xl shadow-slate-900/5">
+              <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 bg-emerald-50 rounded-xl">
-                    <FiBookOpen className="text-emerald-600" />
+                  <div className="rounded-2xl bg-[#172033] p-2.5">
+                    <FiBookOpen className="text-[#f2c357]" />
                   </div>
                   <h4 className="text-sm font-black text-slate-900">Session Types</h4>
                 </div>
                 
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
                       <span className="text-xs font-medium text-slate-700">Devotion Sessions</span>
                     </div>
-                    <span className="text-[9px] font-black text-emerald-600">Static</span>
+                    <span className="text-[9px] font-black text-[#172033]">Static</span>
                   </div>
                   
-                  <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
                       <span className="text-xs font-medium text-slate-700">24/7 Support</span>
                     </div>
-                    <span className="text-[9px] font-black text-emerald-600">Static</span>
+                    <span className="text-[9px] font-black text-[#172033]">Static</span>
                   </div>
                   
-                  <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
                   <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                       <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
                       <span className="text-xs font-medium text-slate-700">Guidance Sessions</span>
                     </div>
-                    <span className="text-[9px] font-black text-emerald-600">API ({guidanceSessions.length})</span>
+                    <span className="text-[9px] font-black text-[#172033]">API ({guidanceSessions.length})</span>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                      <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
                       <span className="text-xs font-medium text-slate-700">Team Members</span>
                     </div>
-                    <span className="text-[9px] font-black text-emerald-600">API ({teamMembers.length})</span>
+                    <span className="text-[9px] font-black text-[#172033]">API ({teamMembers.length})</span>
                   </div>
                 </div>
               </div>
 
               {/* Confidentiality Banner */}
-              <div className="bg-gradient-to-br from-emerald-900 to-emerald-800 rounded-[2rem] p-6 text-white overflow-hidden relative shadow-xl">
+              <div className="relative overflow-hidden rounded-[30px] border border-[#1f2a40] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 blur-[50px]" />
                 <div className="relative z-10">
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
                     <FiShield className="text-white text-xl" />
                   </div>
                   <h4 className="text-base font-black mb-2 tracking-tight">100% Confidential</h4>
-                  <p className="text-xs text-emerald-200 mb-4 leading-relaxed">
+                  <p className="text-xs text-white/70 mb-4 leading-relaxed">
                     All sessions are private and secure. Your information is protected.
                   </p>
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
                       <span className="text-[10px]">Secure conversations</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
                       <span className="text-[10px]">No judgment policy</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
                       <span className="text-[10px]">Professional ethics</span>
                     </div>
                   </div>
@@ -1939,16 +1943,16 @@ export default function StudentCounseling() {
         </div>
 
         {/* Feature Banner */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-emerald-900 to-emerald-800 rounded-[2.5rem] p-6 md:p-8 shadow-xl">
+        <div className="relative overflow-hidden rounded-[34px] border border-[#1f2a40] bg-[#172033] p-6 md:p-8 shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
           <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 blur-[80px] rounded-full -mr-24 -mt-24" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 blur-[80px] rounded-full -ml-24 -mb-24" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#f2c357]/10 blur-[80px] rounded-full -ml-24 -mb-24" />
 
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
             
             {/* Icon */}
             <div className="shrink-0">
               <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-white flex items-center justify-center shadow-lg">
-                <FiHeart className="text-emerald-600 text-2xl md:text-3xl" />
+                <FiHeart className="text-[#172033] text-2xl md:text-3xl" />
               </div>
             </div>
 
