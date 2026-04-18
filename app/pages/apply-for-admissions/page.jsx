@@ -438,100 +438,100 @@ const handleSubmit = async (e) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50/30 to-emerald-50/30 relative overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-[#f4efe7]">
       {/* Modern background with student image */}
       <div className="absolute inset-0 z-0">
-        {/* Fallback gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-emerald-50"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,195,87,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(23,32,51,0.08),transparent_30%),linear-gradient(180deg,#f8f3eb_0%,#f4efe7_100%)]"></div>
         
         {/* Student background image with low opacity */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.06]"
           style={{
             backgroundImage: `url('/hero/MatG8.jpeg')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            filter: 'grayscale(30%) blur(1px)'
+            filter: 'grayscale(25%) blur(1px)'
           }}
         ></div>
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#172033] via-[#172033]/70 to-transparent"></div>
       </div>
       
       <Toaster {...toasterConfig} />
 
       {/* Location Selection Modal */}
       {showLocationModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#172033]/55 p-4 backdrop-blur-sm">
+          <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-[30px] border border-[#d9d0c3] bg-[#fcfaf6] shadow-2xl">
             {/* Modal Header */}
-            <div className="p-6 border-b">
+            <div className="border-b border-[#e8dfd3] bg-[#172033] p-6 text-white">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-gray-800">
+                <h3 className="text-xl font-black tracking-tight">
                   {locationType === 'county' && 'Select County'}
                   {locationType === 'constituency' && `Select Constituency in ${formData.county}`}
                   {locationType === 'ward' && `Select Ward in ${formData.constituency}`}
                 </h3>
                 <button
                   onClick={() => setShowLocationModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="rounded-full bg-white/10 p-2 text-white/70 transition-colors hover:bg-white/15 hover:text-white"
                 >
-                  <FiX className="text-xl text-gray-600" />
+                  <FiX className="text-xl" />
                 </button>
               </div>
               
               {/* Search Bar */}
               <div className="mt-4">
                 <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
+                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/40 text-lg" />
                   <input
                     type="text"
                     value={locationSearch}
                     onChange={(e) => setLocationSearch(e.target.value)}
                     placeholder={`Search ${locationType}...`}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base font-bold"
+                    className="w-full rounded-xl border border-white/10 bg-white/10 py-3 pl-10 pr-4 text-base font-bold text-white placeholder:text-white/35 focus:border-[#f2c357] focus:ring-2 focus:ring-[#f2c357]/20"
                     autoFocus
                   />
                   {locationSearch && (
                     <button
                       onClick={() => setLocationSearch('')}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/45 hover:text-white"
                     >
                       <FiX className="text-lg" />
                     </button>
                   )}
                 </div>
-                <p className="text-sm text-gray-600 mt-2 font-bold">
+                <p className="mt-2 text-sm font-bold text-white/55">
                   {filteredLocations.length} {locationType}(s) found
                 </p>
               </div>
             </div>
 
             {/* Scrollable List */}
-            <div className="flex-1 overflow-y-auto p-2">
+            <div className="flex-1 overflow-y-auto bg-[#fcfaf6] p-3">
               {filteredLocations.length > 0 ? (
                 <div className="space-y-1">
                   {filteredLocations.map((location, index) => (
                     <button
                       key={`${location.name}-${index}`}
                       onClick={() => selectLocation(location.name)}
-                      className="w-full text-left p-4 hover:bg-blue-50 rounded-xl transition-colors flex items-center justify-between group"
+                      className="group flex w-full items-center justify-between rounded-[20px] border border-transparent bg-white p-4 text-left transition-all hover:border-[#d9d0c3] hover:bg-[#f8f3eb]"
                     >
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                          <FiMapPin className="text-blue-600" />
+                        <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6efe2]">
+                          <FiMapPin className="text-[#172033]" />
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-800 group-hover:text-blue-700">
+                          <div className="font-bold text-[#172033] group-hover:text-[#214760]">
                             {location.name}
                           </div>
                           {location.count && (
-                            <div className="text-sm text-gray-600 font-bold">
+                            <div className="text-sm font-bold text-slate-500">
                               {location.count} {locationType === 'county' ? 'constituencies' : 'wards'}
                             </div>
                           )}
                         </div>
                       </div>
-                      <FiChevronRight className="text-gray-400 group-hover:text-blue-600" />
+                      <FiChevronRight className="text-slate-400 group-hover:text-[#172033]" />
                     </button>
                   ))}
                 </div>
@@ -545,10 +545,10 @@ const handleSubmit = async (e) => {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t">
+            <div className="border-t border-[#e8dfd3] p-4">
               <button
                 onClick={() => setShowLocationModal(false)}
-                className="w-full py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                className="w-full rounded-xl border border-[#d9d0c3] bg-white py-3 font-black uppercase tracking-[0.16em] text-[#172033] transition-colors hover:bg-[#f8f3eb]"
               >
                 Cancel
               </button>
@@ -562,21 +562,53 @@ const handleSubmit = async (e) => {
    </div>
 
       {/* Progress Bar */}
-      <div className="container mx-auto px-4 py-6 relative z-10">
+      <div className="container relative z-10 mx-auto px-4 py-6">
+        <div className="mb-6 overflow-hidden rounded-[32px] border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-55px_rgba(15,23,42,0.82)]">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="p-6 md:p-8">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f2c357]">Admission Journey</p>
+              <h1 className="mt-3 text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">
+                Apply to join Matungulu Girls Senior School.
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
+                Complete the application in guided steps. We’ve kept the full admissions workflow intact while giving the page a cleaner Matungulu Girls presentation.
+              </p>
+            </div>
+            <div className="border-t border-white/10 p-6 lg:border-l lg:border-t-0 md:p-8">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Current Step</p>
+                  <p className="mt-2 text-3xl font-black text-white">{Math.min(step, 4)}</p>
+                </div>
+                <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Flow</p>
+                  <p className="mt-2 text-3xl font-black text-white">4</p>
+                </div>
+                <div className="col-span-2 rounded-[22px] border border-white/10 bg-white/5 p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Status</p>
+                  <p className="mt-2 text-sm font-bold text-[#f2c357]">
+                    {step === 5 ? 'Application complete' : 'Application in progress'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="relative mb-8">
-          <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200 -z-10"></div>
+          <div className="absolute top-5 left-0 right-0 h-1 rounded-full bg-[#e0d6c9] -z-10"></div>
           <div 
-            className="absolute top-5 left-0 h-1 bg-gradient-to-r from-blue-500 to-emerald-500 -z-10 transition-all duration-500"
+            className="absolute top-5 left-0 h-1 rounded-full bg-gradient-to-r from-[#172033] via-[#214760] to-[#f2c357] -z-10 transition-all duration-500"
             style={{ width: `${((step - 1) / 4) * 100}%` }}
           ></div>
           
           <div className="flex justify-between">
             {[1, 2, 3, 4, 5].map((stepNum) => (
               <div key={stepNum} className="flex flex-col items-center">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all duration-300 ${
+                <div className={`mb-2 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 ${
                   step >= stepNum 
-                    ? 'bg-gradient-to-br from-blue-500 to-emerald-500 text-white shadow-lg shadow-blue-200' 
-                    : 'bg-white border-2 border-gray-300 text-gray-400'
+                    ? 'bg-[#172033] text-white shadow-lg shadow-[#172033]/20' 
+                    : 'bg-white border-2 border-[#d9d0c3] text-gray-400'
                 }`}>
                   {step > stepNum ? (
                     <FiCheckCircle className="text-lg" />
@@ -587,7 +619,7 @@ const handleSubmit = async (e) => {
                   )}
                 </div>
                 <span className={`text-xs font-semibold transition-colors ${
-                  step >= stepNum ? 'text-gray-800' : 'text-gray-400'
+                  step >= stepNum ? 'text-[#172033]' : 'text-gray-400'
                 }`}>
                   {stepNum === 1 && 'Personal'}
                   {stepNum === 2 && 'Contact'}
@@ -603,12 +635,12 @@ const handleSubmit = async (e) => {
 <div className="max-w-7xl mx-auto px-2 sm:px-4">
   {step === 5 ? (
     /* Enhanced Success Screen */
-    <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-gray-100 relative z-10">
+    <div className="relative z-10 overflow-hidden rounded-[30px] border border-[#d9d0c3] bg-white shadow-[0_30px_80px_-55px_rgba(15,23,42,0.32)] sm:rounded-[34px]">
       
       {/* Header Section - Scale down for mobile */}
-      <div className="bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 p-6 sm:p-8 text-white">
+      <div className="bg-gradient-to-r from-[#172033] via-[#214760] to-[#f2c357] p-6 text-white sm:p-8">
         <div className="flex items-center justify-center mb-3 sm:mb-4">
-          <div className="w-16 h-16 sm:w-24 sm:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm sm:h-24 sm:w-24">
             <FiCheckCircle className="text-3xl sm:text-5xl" />
           </div>
         </div>
@@ -621,10 +653,10 @@ const handleSubmit = async (e) => {
       </div>
 
       <div className="p-4 sm:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 gap-4 sm:gap-8 lg:grid-cols-2">
           
           {/* 1. Application Details Card */}
-          <div className="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-xl p-4 sm:p-6 border border-blue-100 shadow-sm">
+          <div className="rounded-[24px] border border-[#d9d0c3] bg-[#fcfaf6] p-4 shadow-sm sm:p-6">
             <h3 className="font-bold text-gray-800 mb-4 text-base sm:text-lg flex items-center">
               <FiCheckCircle className="mr-2 text-blue-600 shrink-0" /> Details
             </h3>
@@ -640,7 +672,7 @@ const handleSubmit = async (e) => {
                   </div>
                   <button
                     onClick={() => copyToClipboard(applicationNumber)}
-                    className="p-2.5 bg-white text-blue-600 border border-blue-200 rounded-lg active:bg-blue-50 transition-colors shrink-0"
+                    className="shrink-0 rounded-lg border border-[#d9d0c3] bg-white p-2.5 text-[#172033] transition-colors active:bg-[#f6efe2]"
                   >
                     <FiCopy size={16} />
                   </button>
@@ -667,7 +699,7 @@ const handleSubmit = async (e) => {
           </div>
 
           {/* 2. Next Steps Card */}
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-100 shadow-sm">
+          <div className="rounded-[24px] border border-[#d9d0c3] bg-white p-4 shadow-sm sm:p-6">
             <h3 className="font-bold text-gray-800 mb-4 text-base sm:text-lg">📋 Next Steps</h3>
             <div className="space-y-4">
               {[
@@ -676,7 +708,7 @@ const handleSubmit = async (e) => {
                 { n: 3, c: 'purple', t: 'Documents', d: 'Prepare original certificates' }
               ].map((step) => (
                 <div key={step.n} className="flex items-start gap-3">
-                  <div className={`w-6 h-6 bg-${step.c}-100 text-${step.c}-600 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold`}>
+                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f6efe2] text-xs font-bold text-[#172033]">
                     {step.n}
                   </div>
                   <div>
@@ -702,7 +734,7 @@ const handleSubmit = async (e) => {
         <div className="mt-8 flex flex-row gap-2 sm:gap-4 justify-center">
           <button
             onClick={() => { setStep(1); setShowSuccess(false); }}
-            className="flex-1 sm:flex-none px-4 py-3 bg-blue-600 text-white rounded-xl font-bold text-[10px] sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#172033] px-4 py-3 text-[10px] font-black uppercase tracking-wider text-white shadow-lg transition-all active:scale-95 sm:flex-none sm:text-sm"
           >
             <FiUser className="w-4 h-4" />
             <span className="hidden xs:inline">Submit Another</span>
@@ -711,7 +743,7 @@ const handleSubmit = async (e) => {
 
           <button
             onClick={shareApplication}
-            className="flex-1 sm:flex-none px-4 py-3 bg-emerald-600 text-white rounded-xl font-bold text-[10px] sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#d9d0c3] bg-[#fcfaf6] px-4 py-3 text-[10px] font-black uppercase tracking-wider text-[#172033] shadow-lg transition-all active:scale-95 sm:flex-none sm:text-sm"
           >
             <FiShare2 className="w-4 h-4" />
             Share
@@ -722,17 +754,17 @@ const handleSubmit = async (e) => {
   ) : (
 <form
   onSubmit={handleSubmit}
-  className="w-full mx-auto bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-100 relative z-10"
+  className="relative z-10 mx-auto w-full overflow-hidden rounded-[30px] border border-[#d9d0c3] bg-white shadow-[0_30px_80px_-55px_rgba(15,23,42,0.28)]"
 >
   {/* Form Header with Step Indicator */}
-  <div className="bg-gradient-to-r from-blue-50 via-emerald-50 to-blue-50 p-4 sm:p-6 md:p-8 border-b border-gray-200">
+  <div className="border-b border-[#e8dfd3] bg-[linear-gradient(135deg,#fcfaf6_0%,#f8f3eb_52%,#eef3f8_100%)] p-4 sm:p-6 md:p-8">
     <div className="flex items-center justify-between">
       <div>
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">
-          {step === 1 && '👤 Personal Information'}
-          {step === 2 && '📱 Contact Details'}
-          {step === 3 && '🎓 Academic Information'}
-          {step === 4 && '📝 Review & Submit'}
+          {step === 1 && 'Personal Information'}
+          {step === 2 && 'Contact Details'}
+          {step === 3 && 'Academic Information'}
+          {step === 4 && 'Review & Submit'}
         </h2>
         <p className="text-xs sm:text-sm md:text-base text-gray-600 font-bold">
           {step === 1 && 'Tell us about the prospective student'}
@@ -743,7 +775,7 @@ const handleSubmit = async (e) => {
       </div>
       <div className="hidden lg:block">
         <div className="text-sm font-semibold text-gray-500">Progress</div>
-        <div className="text-2xl font-bold text-blue-600">{step}/4</div>
+        <div className="text-2xl font-black text-[#172033]">{step}/4</div>
       </div>
     </div>
   </div>
@@ -1470,16 +1502,16 @@ const handleSubmit = async (e) => {
 {step === 4 && (
   <div className="space-y-6 sm:space-y-8">
     {/* Review Header */}
-    <div className="bg-gradient-to-r from-green-50 to-emerald-100 rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8 border border-green-200">
+    <div className="rounded-[24px] border border-[#d9d0c3] bg-[linear-gradient(135deg,#fcfaf6_0%,#f8f3eb_100%)] p-4 sm:p-6 md:p-8">
       <div className="flex items-center">
-        <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center mr-3 sm:mr-4">
-          <FiEye className="text-lg sm:text-xl md:text-2xl text-green-600" />
+        <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#172033] sm:mr-4 sm:h-10 sm:w-10 md:h-12 md:w-12">
+          <FiEye className="text-lg text-white sm:text-xl md:text-2xl" />
         </div>
         <div>
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-green-800 mb-1 sm:mb-2">
+          <h3 className="mb-1 text-lg font-black text-[#172033] sm:mb-2 sm:text-xl md:text-2xl">
             Review Your Application
           </h3>
-          <p className="text-green-700 text-sm sm:text-base font-semibold">
+          <p className="text-sm font-semibold text-slate-600 sm:text-base">
             Please verify all information carefully. Once submitted, changes cannot be made.
           </p>
         </div>
@@ -1678,7 +1710,7 @@ const handleSubmit = async (e) => {
   </div>
 
   {/* Form Footer with Navigation */}
-  <div className="bg-gradient-to-r from-gray-50 to-slate-100 px-3 sm:px-4 md:px-8 py-3 sm:py-4 md:py-6 border-t border-gray-200">
+      <div className="border-t border-[#e8dfd3] bg-[linear-gradient(135deg,#fcfaf6_0%,#f8f3eb_100%)] px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
     <div className="flex flex-row justify-between items-center">
       {/* Step Indicator */}
       <div className="text-xs sm:text-sm text-gray-700 font-semibold mr-2">
@@ -1690,7 +1722,7 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             onClick={prevStep}
-            className="px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3 border-2 border-gray-300 text-gray-700 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-semibold hover:bg-gray-50 transition-all flex items-center whitespace-nowrap shadow-sm"
+            className="flex items-center whitespace-nowrap rounded-lg border-2 border-[#d9d0c3] px-2 py-1.5 text-xs font-black text-[#172033] shadow-sm transition-all hover:bg-white sm:rounded-xl sm:px-3 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
           >
             <FiArrowRight className="mr-1 sm:mr-2 rotate-180" /> Back
           </button>
@@ -1700,7 +1732,7 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             onClick={nextStep}
-            className="px-3 sm:px-4 md:px-8 py-1.5 sm:py-2 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-semibold hover:from-blue-700 hover:to-blue-800 transition-all flex items-center whitespace-nowrap shadow-md"
+            className="flex items-center whitespace-nowrap rounded-lg bg-[#172033] px-3 py-1.5 text-xs font-black text-white shadow-md transition-all hover:bg-[#22314d] sm:rounded-xl sm:px-4 sm:py-2 sm:text-sm md:px-8 md:py-3 md:text-base"
           >
             Continue <FiArrowRight className="ml-1 sm:ml-2" />
           </button>
@@ -1709,7 +1741,7 @@ const handleSubmit = async (e) => {
             <button
               type="button"
               onClick={prevStep}
-              className="px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3 border-2 border-gray-300 text-gray-700 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-semibold hover:bg-gray-50 transition-all flex items-center whitespace-nowrap shadow-sm"
+              className="flex items-center whitespace-nowrap rounded-lg border-2 border-[#d9d0c3] px-2 py-1.5 text-xs font-black text-[#172033] shadow-sm transition-all hover:bg-white sm:rounded-xl sm:px-3 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-base"
             >
               <FiEye className="mr-1 sm:mr-2" /> Preview
             </button>
@@ -1717,7 +1749,7 @@ const handleSubmit = async (e) => {
             <button
               type="submit"
               disabled={loading}
-              className="px-3 sm:px-4 md:px-10 py-1.5 sm:py-2 md:py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-semibold hover:from-green-700 hover:to-emerald-700 transition-all flex items-center disabled:opacity-70 disabled:cursor-not-allowed whitespace-nowrap shadow-md"
+              className="flex items-center whitespace-nowrap rounded-lg bg-[#172033] px-3 py-1.5 text-xs font-black text-white shadow-md transition-all disabled:cursor-not-allowed disabled:opacity-70 sm:rounded-xl sm:px-4 sm:py-2 sm:text-sm md:px-10 md:py-3 md:text-base"
             >
               {loading ? (
                 <>
@@ -1741,13 +1773,13 @@ const handleSubmit = async (e) => {
         </div>
 
 {/* --- Matungulu Girls MODERN RESPONSIVE FOOTER --- */}
-<div className="mt-8 md:mt-16 text-center relative z-10 px-4 mb-6">
-  <div className="max-w-4xl mx-auto bg-white/40 backdrop-blur-lg rounded-[1.5rem] md:rounded-[2.5rem] p-4 md:p-10 border border-white/60 shadow-xl shadow-blue-900/5 mb-6 transition-all duration-500">
+<div className="relative z-10 mb-6 mt-8 px-4 text-center md:mt-16">
+  <div className="mx-auto mb-6 max-w-4xl rounded-[1.5rem] border border-[#d9d0c3] bg-white/70 p-4 shadow-xl shadow-slate-900/5 backdrop-blur-lg transition-all duration-500 md:rounded-[2.5rem] md:p-10">
     
     {/* Floating Header - Compacted for Mobile */}
-    <div className="inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-gray-100 mb-6 -mt-10 md:-mt-16 transition-transform">
-      <FiPhone size={12} className="text-blue-600" />
-      <h3 className="text-[10px] md:text-sm font-bold text-gray-900 uppercase tracking-widest">
+    <div className="-mt-10 mb-6 inline-flex items-center gap-2 rounded-full border border-[#d9d0c3] bg-[#172033] px-4 py-1.5 shadow-sm transition-transform md:-mt-16">
+      <FiPhone size={12} className="text-[#f2c357]" />
+      <h3 className="text-[10px] font-bold uppercase tracking-widest text-white md:text-sm">
         Need Assistance?
       </h3>
     </div>
@@ -1756,8 +1788,8 @@ const handleSubmit = async (e) => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6">
       
       {/* Admissions Card */}
-      <div className="group flex flex-row md:flex-col items-center gap-3 p-3 rounded-xl bg-white/30 hover:bg-white transition-all duration-300 active:scale-95">
-        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+      <div className="group flex flex-row items-center gap-3 rounded-xl border border-[#e8dfd3] bg-white/80 p-3 transition-all duration-300 active:scale-95 md:flex-col">
+        <div className="h-8 w-8 shrink-0 rounded-lg bg-[#f6efe2] flex items-center justify-center text-[#172033]">
           <FiPhone size={14} />
         </div>
         <div className="text-left md:text-center min-w-0">
@@ -1767,8 +1799,8 @@ const handleSubmit = async (e) => {
       </div>
 
       {/* Email Card */}
-      <div className="group flex flex-row md:flex-col items-center gap-3 p-3 rounded-xl bg-white/30 hover:bg-white transition-all duration-300 active:scale-95">
-        <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-600 shrink-0">
+      <div className="group flex flex-row items-center gap-3 rounded-xl border border-[#e8dfd3] bg-white/80 p-3 transition-all duration-300 active:scale-95 md:flex-col">
+        <div className="h-8 w-8 shrink-0 rounded-lg bg-[#f6efe2] flex items-center justify-center text-[#172033]">
           <FiMail size={14} />
         </div>
         <div className="text-left md:text-center min-w-0 overflow-hidden">
@@ -1778,8 +1810,8 @@ const handleSubmit = async (e) => {
       </div>
 
       {/* Office Hours Card */}
-      <div className="group flex flex-row md:flex-col items-center gap-3 p-3 rounded-xl bg-white/30 hover:bg-white transition-all duration-300 active:scale-95">
-        <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+      <div className="group flex flex-row items-center gap-3 rounded-xl border border-[#e8dfd3] bg-white/80 p-3 transition-all duration-300 active:scale-95 md:flex-col">
+        <div className="h-8 w-8 shrink-0 rounded-lg bg-[#f6efe2] flex items-center justify-center text-[#172033]">
           <FiHome size={14} />
         </div>
         <div className="text-left md:text-center min-w-0">
@@ -1797,8 +1829,8 @@ const handleSubmit = async (e) => {
       <p className="text-gray-800 text-[9px] md:text-xs font-bold uppercase tracking-wider">
         © {new Date().getFullYear()} Matungulu Girls Senior School
       </p>
-      <p className="text-blue-600 text-[9px] md:text-xs font-medium italic">
-        "Excellence Through Discipline"
+      <p className="text-[#9a5b1f] text-[9px] md:text-xs font-medium italic">
+        "Strive to Excel"
       </p>
     </div>
     
