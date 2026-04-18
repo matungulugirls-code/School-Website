@@ -126,11 +126,6 @@ export default function ModernNavbar() {
       href: '/pages/eventsandnews', 
       icon: FiCalendar 
     },
-    { 
-      name: 'School Fees', 
-      href: '/pages/fees', 
-      icon: FiDollarSign 
-    },
   ];
 
   // Academic dropdown items - WITH DESCRIPTIONS (like Kinyui)
@@ -398,7 +393,6 @@ export default function ModernNavbar() {
                   );
                 })}
                 
-                {/* Resources Dropdown - With descriptions like Kinyui */}
                 <div 
                   className="relative"
                   ref={resourcesDropdownRef}
@@ -509,6 +503,24 @@ export default function ModernNavbar() {
                     </div>
                   )}
                 </div>
+
+                <a
+                  href="/pages/fees"
+                  className={`group flex items-center gap-0.5 xs:gap-1 font-bold transition-all text-[0.85rem] xs:text-[0.9rem] tracking-wide whitespace-nowrap px-1.5 xs:px-2 py-2 relative ${
+                    isActiveLink('/pages/fees')
+                      ? 'text-emerald-100'
+                      : 'text-white/80 hover:text-emerald-100'
+                  }`}
+                >
+                  <FiDollarSign className="text-xs flex-shrink-0" />
+                  <span className="truncate">School Fees</span>
+
+                  {isActiveLink('/pages/fees') && (
+                    <span className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-5 h-0.5 bg-emerald-300 rounded-full"></span>
+                  )}
+
+                  <span className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-emerald-300/50 rounded-full group-hover:w-5 transition-all duration-300"></span>
+                </a>
               </div>
             </div>
 
@@ -686,6 +698,20 @@ export default function ModernNavbar() {
                     </div>
                   )}
                 </div>
+
+                {/* School Fees Mobile Link */}
+                <a
+                  href="/pages/fees"
+                  className={`flex items-center gap-2 xs:gap-3 p-3 xs:p-4 rounded-lg xs:rounded-xl ${
+                    isActiveLink('/pages/fees')
+                      ? 'bg-white/10 text-emerald-200'
+                      : 'text-white/90 hover:bg-white/5'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FiDollarSign className="text-lg xs:text-xl" />
+                  <span className="font-bold text-base xs:text-lg tracking-wide">School Fees</span>
+                </a>
               </div>
 
               {/* Mobile Footer */}
