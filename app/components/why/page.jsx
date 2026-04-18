@@ -351,7 +351,7 @@ const getSchoolStats = () => {
         "Consistently ranked among top-performing girls' schools in Machakos County with impressive KCSE results and university placements. Our students achieve mean scores above 8.0 with over 80% qualifying for direct university entry.",
       metrics: "Top Performer",
       icon: <FiAward size={20} />,
-      image: "/hero/MatG1.jpg",
+      image: "/Matungulu/22.jpeg",
     },
     {
       id: 2,
