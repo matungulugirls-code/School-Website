@@ -504,7 +504,7 @@ const ModernStaffLeadership = () => {
             >
               <Crown className="w-3.5 h-3.5 sm:w-4" />
               <span className="hidden xs:inline">Leadership</span>
-              <span className="xs:hidden">Lead</span>
+              <span className="xs:hidden">Leadership</span>
             </button>
             <button
               onClick={() => setActiveTab('all')}
@@ -538,7 +538,7 @@ const ModernStaffLeadership = () => {
                       <img
                         src={getImageUrl(featuredStaff.image)}
                         alt={featuredStaff?.name}
-                        className="absolute inset-0 h-full w-full object-cover object-top"
+                        className="absolute inset-0 h-[70%] w-full object-cover object-top"
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(featuredStaff?.name || 'Staff')}&background=2d6a4f&color=fff&bold=true&size=256`;
