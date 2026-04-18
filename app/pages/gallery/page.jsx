@@ -1397,6 +1397,101 @@ const categoryOptions = [
 
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0 space-y-6">
+
+                      <div className="lg:w-80 space-y-4">
+            <div className="lg:sticky lg:top-24 space-y-4">
+              
+              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
+                    <FiZap className="text-[#f2c357] text-sm" />
+                  </div>
+                  <h2 className="text-base font-black text-[#172033]">Quick Actions</h2>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    onClick={() => {
+                      const mostRecent = filteredGalleries[0];
+                      if (mostRecent) {
+                        handleViewGallery(mostRecent);
+                      }
+                    }}
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiEye className="text-[#172033]" size={14} />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-xs font-black text-[#172033]">Latest Gallery</p>
+                        <p className="text-[10px] text-[#b68424]">View most recent</p>
+                      </div>
+                    </div>
+                    <FiArrowRight className="text-[#172033]" size={14} />
+                  </button>
+
+  
+  
+                </div>
+              </div>
+
+              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
+                    <FiCalendar className="text-[#f2c357] text-sm" />
+                  </div>
+                  <h2 className="text-base font-black text-[#172033]">Years</h2>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
+                    <div className="flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
+                      <span className="text-xs text-slate-600">All Years</span>
+                    </div>
+                    <span className="text-xs font-black text-[#172033]">{transformedGalleries.length}</span>
+                  </div>
+                  
+                  {years.slice(0, 3).map(year => (
+                    <div key={year} className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
+                        <span className="text-xs text-slate-600">{year}</span>
+                      </div>
+                      <span className="text-xs font-black text-[#172033]">
+                        {transformedGalleries.filter(g => g.year === year).length}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="overflow-hidden rounded-[28px] border border-[#1f2a40] bg-[#172033] p-5 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
+                  <FaLeaf className="text-white text-sm" />
+                </div>
+                <h4 className="mb-1 text-base font-black">School Memories</h4>
+                <p className="mb-4 text-xs leading-relaxed text-white/70">
+                  Preserving our school's legacy through photos and videos.
+                </p>
+                <div className="space-y-1 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
+                    <span>High quality media</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
+                    <span>Organized by category</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
+                    <span>Easy to download & share</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
             
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -1563,100 +1658,7 @@ const categoryOptions = [
             </div>
           </div>
 
-          <div className="lg:w-80 space-y-4">
-            <div className="lg:sticky lg:top-24 space-y-4">
-              
-              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
-                    <FiZap className="text-[#f2c357] text-sm" />
-                  </div>
-                  <h2 className="text-base font-black text-[#172033]">Quick Actions</h2>
-                </div>
 
-                <div className="space-y-2">
-                  <button
-                    onClick={() => {
-                      const mostRecent = filteredGalleries[0];
-                      if (mostRecent) {
-                        handleViewGallery(mostRecent);
-                      }
-                    }}
-                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
-                        <FiEye className="text-[#172033]" size={14} />
-                      </div>
-                      <div className="text-left">
-                        <p className="text-xs font-black text-[#172033]">Latest Gallery</p>
-                        <p className="text-[10px] text-[#b68424]">View most recent</p>
-                      </div>
-                    </div>
-                    <FiArrowRight className="text-[#172033]" size={14} />
-                  </button>
-
-  
-  
-                </div>
-              </div>
-
-              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
-                    <FiCalendar className="text-[#f2c357] text-sm" />
-                  </div>
-                  <h2 className="text-base font-black text-[#172033]">Years</h2>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-xs text-slate-600">All Years</span>
-                    </div>
-                    <span className="text-xs font-black text-[#172033]">{transformedGalleries.length}</span>
-                  </div>
-                  
-                  {years.slice(0, 3).map(year => (
-                    <div key={year} className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
-                        <span className="text-xs text-slate-600">{year}</span>
-                      </div>
-                      <span className="text-xs font-black text-[#172033]">
-                        {transformedGalleries.filter(g => g.year === year).length}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="overflow-hidden rounded-[28px] border border-[#1f2a40] bg-[#172033] p-5 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
-                  <FaLeaf className="text-white text-sm" />
-                </div>
-                <h4 className="mb-1 text-base font-black">School Memories</h4>
-                <p className="mb-4 text-xs leading-relaxed text-white/70">
-                  Preserving our school's legacy through photos and videos.
-                </p>
-                <div className="space-y-1 text-xs">
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
-                    <span>High quality media</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
-                    <span>Organized by category</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
-                    <span>Easy to download & share</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="relative overflow-hidden rounded-[30px] border border-[#1f2a40] bg-[#172033] p-6 shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
