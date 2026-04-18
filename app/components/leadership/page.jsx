@@ -523,10 +523,10 @@ const ModernStaffLeadership = () => {
 
         {activeTab === 'featured' ? (
           /* Featured Card View - Responsive Layout */
-          <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-6">
+          <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-16 lg:gap-6">
             
             {/* Featured Hero Card - Takes 8 columns on large screens, full width on mobile */}
-            <div id="featured-staff-card" className="lg:col-span-8 w-full">
+            <div id="featured-staff-card" className="lg:col-span-12 w-full">
               <div className="overflow-hidden rounded-[28px] border border-emerald-100 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.35)]">
                 
                 {/* Responsive Grid Layout inside card */}
