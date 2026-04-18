@@ -1145,36 +1145,36 @@ export default function ModernGallery() {
   const [galleryToShare, setGalleryToShare] = useState(null);
 
 const categoryOptions = [
-  { id: 'all', name: 'All Galleries', icon: FiGlobe },
-  { id: 'GENERAL', name: 'General', icon: FiGlobe },
-  { id: 'CLASSROOMS', name: 'Classrooms', icon: FiBookOpen },
-  { id: 'LABORATORIES', name: 'Laboratories', icon: FiTarget },
-  { id: 'DORMITORIES', name: 'Dormitories', icon: FiHome },
-  { id: 'DINING_HALL', name: 'Dining Hall', icon: FiUsers },
-  { id: 'SPORTS_FACILITIES', name: 'Sports Facilities', icon: FiAward },
-  { id: 'TEACHING', name: 'Teaching', icon: FiBook },
-  { id: 'SCIENCE_LAB', name: 'Science Lab', icon: FiTarget },
-  { id: 'COMPUTER_LAB', name: 'Computer Lab', icon: FiMonitor },
-  { id: 'SPORTS_DAY', name: 'Sports Day', icon: FiAward },
-  { id: 'MUSIC_FESTIVAL', name: 'Music Festival', icon: FiMusic },
-  { id: 'DRAMA_PERFORMANCE', name: 'Drama', icon: FiMic },
-  { id: 'ART_EXHIBITION', name: 'Art Exhibition', icon: FiCamera },
-  { id: 'DEBATE_COMPETITION', name: 'Debate', icon: FiMessageSquare },
-  { id: 'SCIENCE_FAIR', name: 'Science Fair', icon: FiTarget },
-  { id: 'ADMIN_OFFICES', name: 'Admin Offices', icon: FiFolder },
-  { id: 'STAFF', name: 'Staff', icon: FiUsers },
-  { id: 'PRINCIPAL', name: 'Principal', icon: FiUser },
-  { id: 'BOARD', name: 'Board', icon: FiUsers },
-  { id: 'GRADUATION', name: 'Graduation', icon: FiAward },
-  { id: 'AWARD_CEREMONY', name: 'Award Ceremony', icon: FiStar },
-  { id: 'PARENTS_DAY', name: 'Parents Day', icon: FiUsers },
-  { id: 'OPEN_DAY', name: 'Open Day', icon: FiGlobe },
-  { id: 'VISITORS', name: 'Visitors', icon: FiUserPlus },
-  { id: 'STUDENT_ACTIVITIES', name: 'Student Activities', icon: FiUsers },
-  { id: 'CLUBS', name: 'Clubs', icon: FiUsers },
-  { id: 'COUNCIL', name: 'Council', icon: FiUsers },
-  { id: 'LEADERSHIP', name: 'Leadership', icon: FiStar },
-  { id: 'OTHER', name: 'Other', icon: FiFolder }
+  { id: 'all', name: 'All Galleries', icon: FiGlobe, bg: 'bg-indigo-500/20' },
+  { id: 'GENERAL', name: 'General', icon: FiGlobe, bg: 'bg-slate-500/20' },
+  { id: 'CLASSROOMS', name: 'Classrooms', icon: FiBookOpen, bg: 'bg-blue-500/20' },
+  { id: 'LABORATORIES', name: 'Laboratories', icon: FiTarget, bg: 'bg-emerald-500/20' },
+  { id: 'DORMITORIES', name: 'Dormitories', icon: FiHome, bg: 'bg-orange-500/20' },
+  { id: 'DINING_HALL', name: 'Dining Hall', icon: FiUsers, bg: 'bg-amber-500/20' },
+  { id: 'SPORTS_FACILITIES', name: 'Sports Facilities', icon: FiAward, bg: 'bg-red-500/20' },
+  { id: 'TEACHING', name: 'Teaching', icon: FiBook, bg: 'bg-cyan-500/20' },
+  { id: 'SCIENCE_LAB', name: 'Science Lab', icon: FiTarget, bg: 'bg-lime-500/20' },
+  { id: 'COMPUTER_LAB', name: 'Computer Lab', icon: FiMonitor, bg: 'bg-sky-500/20' },
+  { id: 'SPORTS_DAY', name: 'Sports Day', icon: FiAward, bg: 'bg-rose-500/20' },
+  { id: 'MUSIC_FESTIVAL', name: 'Music Festival', icon: FiMusic, bg: 'bg-purple-500/20' },
+  { id: 'DRAMA_PERFORMANCE', name: 'Drama', icon: FiMic, bg: 'bg-fuchsia-500/20' },
+  { id: 'ART_EXHIBITION', name: 'Art Exhibition', icon: FiCamera, bg: 'bg-pink-500/20' },
+  { id: 'DEBATE_COMPETITION', name: 'Debate', icon: FiMessageSquare, bg: 'bg-blue-600/20' },
+  { id: 'SCIENCE_FAIR', name: 'Science Fair', icon: FiTarget, bg: 'bg-teal-500/20' },
+  { id: 'ADMIN_OFFICES', name: 'Admin Offices', icon: FiFolder, bg: 'bg-gray-500/20' },
+  { id: 'STAFF', name: 'Staff', icon: FiUsers, bg: 'bg-zinc-500/20' },
+  { id: 'PRINCIPAL', name: 'Principal', icon: FiUser, bg: 'bg-violet-600/20' },
+  { id: 'BOARD', name: 'Board', icon: FiUsers, bg: 'bg-indigo-600/20' },
+  { id: 'GRADUATION', name: 'Graduation', icon: FiAward, bg: 'bg-yellow-500/20' },
+  { id: 'AWARD_CEREMONY', name: 'Award Ceremony', icon: FiStar, bg: 'bg-amber-400/20' },
+  { id: 'PARENTS_DAY', name: 'Parents Day', icon: FiUsers, bg: 'bg-orange-400/20' },
+  { id: 'OPEN_DAY', name: 'Open Day', icon: FiGlobe, bg: 'bg-teal-400/20' },
+  { id: 'VISITORS', name: 'Visitors', icon: FiUserPlus, bg: 'bg-emerald-400/20' },
+  { id: 'STUDENT_ACTIVITIES', name: 'Student Activities', icon: FiUsers, bg: 'bg-sky-400/20' },
+  { id: 'CLUBS', name: 'Clubs', icon: FiUsers, bg: 'bg-indigo-400/20' },
+  { id: 'COUNCIL', name: 'Council', icon: FiUsers, bg: 'bg-blue-400/20' },
+  { id: 'LEADERSHIP', name: 'Leadership', icon: FiStar, bg: 'bg-purple-400/20' },
+  { id: 'OTHER', name: 'Other', icon: FiFolder, bg: 'bg-neutral-500/20' }
 ];
 
   const [stats, setStats] = useState([
@@ -1495,18 +1495,18 @@ const categoryOptions = [
                 const Icon = category.icon;
                 const isActive = activeCategory === category.id;
                 return (
-                  <button
-                    key={category.id}
-                    onClick={() => setActiveCategory(category.id)}
-                    className={`flex items-center gap-2 rounded-full border px-4 py-2.5 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.1em] ${
-                      isActive 
-                        ? "border-[#172033] bg-[#172033] text-white" 
-                        : "border-[#d9d0c3] bg-white text-slate-600"
-                    }`}
-                  >
-                    {Icon && <Icon size={12} />}
-                    {category.name}
-                  </button>
+<button
+  key={category.id}
+  onClick={() => setActiveCategory(category.id)}
+  className={`flex items-center gap-2 rounded-full border px-4 py-2.5 transition-all duration-300 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.1em] ${
+    isActive 
+      ? `border-slate-800 ${category.bg} text-slate-900 shadow-sm scale-105` 
+      : "border-[#d9d0c3] bg-white/50 text-slate-600 hover:bg-white hover:border-slate-400"
+  }`}
+>
+  {Icon && <Icon size={14} className={isActive ? "animate-pulse" : ""} />}
+  {category.name}
+</button>
                 );
               })}
             </div>
