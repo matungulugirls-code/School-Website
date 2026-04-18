@@ -1388,16 +1388,43 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
 
 
   if (loading) {
-  return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-        <div className="text-center">
-          <Spinner size={48} />
-          <p className="text-gray-700 text-lg mt-4 font-medium">
-            Loading Events and News
-          </p>
-          <p className="text-gray-800 text-sm mt-1">
-            Please wait while we fetch school Galleries.
-          </p>
+    return (
+      <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
+        <div className="w-full md:w-[80%] mx-auto">
+          <div className="flex min-h-[70vh] items-center justify-center">
+            <Stack
+              spacing={2}
+              alignItems="center"
+              className="rounded-[28px] border border-[#d9d0c3] bg-white px-10 py-12 shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)]"
+            >
+              <div className="relative flex items-center justify-center">
+                <CircularProgress
+                  variant="determinate"
+                  value={100}
+                  size={48}
+                  thickness={4.5}
+                  sx={{ color: '#efe6d8' }}
+                />
+                <CircularProgress
+                  variant="indeterminate"
+                  disableShrink
+                  size={48}
+                  thickness={4.5}
+                  sx={{
+                    color: '#172033',
+                    animationDuration: '1000ms',
+                    position: 'absolute',
+                  }}
+                />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-semibold text-[#172033]">Loading school galleries...</p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-widest text-[#b68424]">
+                  Matungulu Girls Senior School
+                </p>
+              </div>
+            </Stack>
+          </div>
         </div>
       </div>
     );
@@ -1425,15 +1452,26 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
 
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0 space-y-6">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-stretch">
+              <div className="flex-1 rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-[#172033] p-3 shadow-lg">
+                    <FiImage className="text-[#f2c357] text-lg" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-[#172033]">School Galleries</h2>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">
+                      {filteredGalleries.length} Galleries
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500">
+                  Browse academic life, campus spaces, and student memories in a gallery experience that now matches the Matungulu Girls events and team pages.
+                </p>
+              </div>
 
-            
-            
-            <div className="flex items-center justify-between">
-                        <div className="lg:w-80 space-y-4">
-            <div className="lg:sticky lg:top-24 space-y-4">
-              
-              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
-                <div className="flex items-center gap-3 mb-4">
+              <div className="xl:w-[320px] rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                <div className="mb-4 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
                     <FiZap className="text-[#f2c357] text-sm" />
                   </div>
@@ -1461,78 +1499,6 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
                     </div>
                     <FiArrowRight className="text-[#172033]" size={14} />
                   </button>
-
-  
-  
-                </div>
-              </div>
-
-              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
-                    <FiCalendar className="text-[#f2c357] text-sm" />
-                  </div>
-                  <h2 className="text-base font-black text-[#172033]">Years</h2>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-xs text-slate-600">All Years</span>
-                    </div>
-                    <span className="text-xs font-black text-[#172033]">{transformedGalleries.length}</span>
-                  </div>
-                  
-                  {years.slice(0, 3).map(year => (
-                    <div key={year} className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
-                        <span className="text-xs text-slate-600">{year}</span>
-                      </div>
-                      <span className="text-xs font-black text-[#172033]">
-                        {transformedGalleries.filter(g => g.year === year).length}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="overflow-hidden rounded-[28px] border border-[#1f2a40] bg-[#172033] p-5 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
-                  <FaLeaf className="text-white text-sm" />
-                </div>
-                <h4 className="mb-1 text-base font-black">School Memories</h4>
-                <p className="mb-4 text-xs leading-relaxed text-white/70">
-                  Preserving our school's legacy through photos and videos.
-                </p>
-                <div className="space-y-1 text-xs">
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
-                    <span>High quality media</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
-                    <span>Organized by category</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
-                    <span>Easy to download & share</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-              <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-[#172033] p-3 shadow-lg">
-                  <FiImage className="text-[#f2c357] text-lg" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-black text-[#172033]">School Galleries</h2>
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">
-                    {filteredGalleries.length} Galleries
-                  </p>
                 </div>
               </div>
             </div>
@@ -1688,7 +1654,64 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
             </div>
           </div>
 
+          <div className="lg:w-80 space-y-4">
+            <div className="lg:sticky lg:top-24 space-y-4">
+              <div className="rounded-[28px] border border-[#d9d0c3] bg-white p-5 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#172033]">
+                    <FiCalendar className="text-[#f2c357] text-sm" />
+                  </div>
+                  <h2 className="text-base font-black text-[#172033]">Years</h2>
+                </div>
 
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
+                    <div className="flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
+                      <span className="text-xs text-slate-600">All Years</span>
+                    </div>
+                    <span className="text-xs font-black text-[#172033]">{transformedGalleries.length}</span>
+                  </div>
+
+                  {years.slice(0, 3).map(year => (
+                    <div key={year} className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full bg-[#f2c357]"></div>
+                        <span className="text-xs text-slate-600">{year}</span>
+                      </div>
+                      <span className="text-xs font-black text-[#172033]">
+                        {transformedGalleries.filter(g => g.year === year).length}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="overflow-hidden rounded-[28px] border border-[#1f2a40] bg-[#172033] p-5 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10">
+                  <FaLeaf className="text-white text-sm" />
+                </div>
+                <h4 className="mb-1 text-base font-black">School Memories</h4>
+                <p className="mb-4 text-xs leading-relaxed text-white/70">
+                  Preserving our school's legacy through photos and videos.
+                </p>
+                <div className="space-y-1 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
+                    <span>High quality media</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
+                    <span>Organized by category</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1 w-1 rounded-full bg-[#f2c357]"></div>
+                    <span>Easy to download & share</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="relative overflow-hidden rounded-[30px] border border-[#1f2a40] bg-[#172033] p-6 shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
