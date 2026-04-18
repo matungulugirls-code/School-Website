@@ -1335,7 +1335,7 @@ const categoryOptions = [
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto">
           <div className="flex min-h-[70vh] items-center justify-center">
             <Stack
               spacing={2}
