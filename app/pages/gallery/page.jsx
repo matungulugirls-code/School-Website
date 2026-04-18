@@ -1332,44 +1332,72 @@ const categoryOptions = [
     }, 1000);
   };
 
+
+
+const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'indeterminate', value = 0 }) => {
+  return (
+    <div className="inline-flex items-center justify-center">
+      <svg 
+        className={`animate-spin ${variant === 'indeterminate' ? '' : ''}`} 
+        width={size} 
+        height={size} 
+        viewBox="0 0 44 44"
+      >
+        {variant === 'determinate' ? (
+          <>
+            <circle 
+              className="text-gray-200" 
+              stroke="currentColor" 
+              strokeWidth={thickness} 
+              fill="none" 
+              cx="22" 
+              cy="22" 
+              r="20"
+            />
+            <circle 
+              className="text-blue-600" 
+              stroke="currentColor" 
+              strokeWidth={thickness} 
+              strokeLinecap="round" 
+              fill="none" 
+              cx="22" 
+              cy="22" 
+              r="20" 
+              strokeDasharray="125.6" 
+              strokeDashoffset={125.6 - (125.6 * value) / 100}
+              transform="rotate(-90 22 22)"
+            />
+          </>
+        ) : (
+          <circle 
+            className="text-blue-600" 
+            stroke="currentColor" 
+            strokeWidth={thickness} 
+            strokeLinecap="round" 
+            fill="none" 
+            cx="22" 
+            cy="22" 
+            r="20" 
+            strokeDasharray="30 100"
+          />
+        )}
+      </svg>
+    </div>
+  );
+};
+
+
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
-        <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto">
-          <div className="flex min-h-[70vh] items-center justify-center">
-            <Stack
-              spacing={2}
-              alignItems="center"
-              className="rounded-[28px] border border-[#d9d0c3] bg-white px-10 py-12 shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)]"
-            >
-              <div className="relative flex items-center justify-center">
-                <CircularProgress
-                  variant="determinate"
-                  value={100}
-                  size={48}
-                  thickness={4.5}
-                  sx={{ color: '#efe6d8' }}
-                />
-                <CircularProgress
-                  variant="indeterminate"
-                  disableShrink
-                  size={48}
-                  thickness={4.5}
-                  sx={{
-                    color: '#172033',
-                    animationDuration: '1000ms',
-                    position: 'absolute',
-                  }}
-                />
-              </div>
-              <div className="text-center">
-                <p className="text-sm font-semibold text-[#172033]">Loading school galleries...</p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-widest text-[#b68424]">
-                  Matungulu Girls Senior School
-                </p>
-              </div>
-            </Stack>
-          </div>
+  return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+        <div className="text-center">
+          <Spinner size={48} />
+          <p className="text-gray-700 text-lg mt-4 font-medium">
+            Loading Events and News
+          </p>
+          <p className="text-gray-800 text-sm mt-1">
+            Please wait while we fetch school Galleries.
+          </p>
         </div>
       </div>
     );
@@ -1495,7 +1523,7 @@ const categoryOptions = [
               </div>
             </div>
           </div>
-          
+
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-[#172033] p-3 shadow-lg">
                   <FiImage className="text-[#f2c357] text-lg" />
