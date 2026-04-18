@@ -117,7 +117,7 @@ export default function ModernNavbar() {
       hasDropdown: true
     },
     { 
-      name: 'Memories', 
+      name: 'Gallery', 
       href: '/pages/gallery', 
       icon: FiImage 
     },
