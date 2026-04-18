@@ -1283,29 +1283,6 @@ export default function ModernEventsNewsPage() {
           </p>
         </div>
 
-        {/* Quick Stats Grid - Matching fee structure */}
-        <div className="grid grid-cols-2 gap-3 mt-4">
-          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
-            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">Events</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{eventsData.length}</p>
-          </div>
-          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
-            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">News</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{newsData.length}</p>
-          </div>
-          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
-            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">Categories</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">
-              {new Set([...eventsData.map(e => e.category), ...newsData.map(n => n.category)]).size}
-            </p>
-          </div>
-          <div className="rounded-[22px] border border-white/15 bg-white/5 p-4 backdrop-blur-sm">
-            <p className="mb-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#f2c357]">Featured</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">
-              {(eventsData.filter(e => e.featured).length + newsData.filter(n => n.featured).length).toString()}
-            </p>
-          </div>
-        </div>
 
         {/* Additional Info */}
         <div className="mt-5 text-xs sm:text-sm text-white/60">
