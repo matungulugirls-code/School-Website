@@ -298,6 +298,7 @@ const BookReader = ({ issue, onClose }) => {
               onClick={onClose}
               className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-white transition hover:bg-white/[0.1]"
             >
+              close
               <X className="h-5 w-5" />
             </button>
             <button
