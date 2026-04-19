@@ -2,7 +2,7 @@
 import { FiRefreshCw, FiArrowRight, FiTrendingUp, FiFileText, FiCheckCircle } from 'react-icons/fi';
 
 const PortalHeader = ({
-  stats = { today: 10 },
+  stats = null,
   refreshing = false,
   fetchEvents = () => {},
   handleNewEvent = () => {},
@@ -10,14 +10,15 @@ const PortalHeader = ({
   const handleRefresh = () => {
     if (refreshing) return;
     fetchEvents(true);
-    window.location.reload();
   };
+
+  const showTodayCount = stats && typeof stats.today === 'number';
 
   return (
     <header className="w-full font-sans">
-      <div className="relative bg-white border-b border-gray-100">
+      <div className="relative bg-white border-b border-[#e8dfd3]">
         {/* Left accent stripe */}
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-blue-600 via-indigo-600 to-blue-700" />
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#172033] via-[#214760] to-[#f2c357]" />
 
         <div className="max-w-7xl mx-auto pl-6 sm:pl-8 lg:pl-10 pr-4 sm:pr-6 lg:pr-8 py-5 sm:py-7 lg:py-9">
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5 lg:gap-8">
@@ -26,15 +27,15 @@ const PortalHeader = ({
             <div className="flex-1 min-w-0">
               {/* Tag row */}
               <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 border border-blue-100 rounded-md">
-                  <FiFileText className="w-3 h-3 text-blue-600" />
-                  <span className="text-[10px] sm:text-xs font-bold text-blue-700 uppercase tracking-[0.12em]">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#fcfaf6] border border-[#e8dfd3] rounded-md">
+                  <FiFileText className="w-3 h-3 text-[#9a5b1f]" />
+                  <span className="text-[10px] sm:text-xs font-bold text-[#172033] uppercase tracking-[0.12em]">
                     Admissions Portal
                   </span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-100 rounded-md">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[10px] sm:text-xs font-bold text-emerald-700">Open</span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#e8dfd3] rounded-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
+                  <span className="text-[10px] sm:text-xs font-bold text-[#214760]">Open</span>
                 </span>
               </div>
 
@@ -42,7 +43,7 @@ const PortalHeader = ({
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight leading-[1.08]">
                 Matungulu Girls
                 <br className="hidden sm:block" />{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#172033] to-[#214760]">
                   Senior School
                 </span>
               </h1>
@@ -80,14 +81,14 @@ const PortalHeader = ({
                         />
                       </div>
                     ))}
-                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-[1.5px] border-white bg-blue-600 flex items-center justify-center shadow-sm">
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-[1.5px] border-white bg-[#172033] flex items-center justify-center shadow-sm">
                       <span className="text-[8px] sm:text-[9px] font-black text-white">400+</span>
                     </div>
                   </div>
                   <div className="min-w-0">
                     <p className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1 truncate">
                       400+ Students Enrolled
-                      <FiTrendingUp className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                      <FiTrendingUp className="w-3 h-3 text-[#10b981] flex-shrink-0" />
                     </p>
                   </div>
                 </div>
@@ -98,21 +99,22 @@ const PortalHeader = ({
 <div className="flex items-stretch gap-2 sm:gap-3 w-full lg:w-auto lg:flex-shrink">
   
   {/* Stats card */}
-  <div className="flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl p-2.5 sm:p-3 flex items-center gap-2 sm:gap-3">
-    
-    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
-      <FiCheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-    </div>
+  {showTodayCount ? (
+    <div className="flex-1 min-w-0 bg-[#fcfaf6] border border-[#e8dfd3] rounded-xl p-2.5 sm:p-3 flex items-center gap-2 sm:gap-3">
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[#172033] flex items-center justify-center flex-shrink-0">
+        <FiCheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+      </div>
 
-    <div className="min-w-0">
-      <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">
-        Today&apos;s Applications
-      </p>
-      <p className="text-base sm:text-lg font-black text-gray-900 leading-none">
-        {stats.today || 0}
-      </p>
+      <div className="min-w-0">
+        <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wide truncate">
+          Today&apos;s Applications
+        </p>
+        <p className="text-base sm:text-lg font-black text-[#172033] leading-none">
+          {stats.today}
+        </p>
+      </div>
     </div>
-  </div>
+  ) : null}
 
   {/* Action buttons */}
   <div className="flex items-center gap-2 flex-shrink-0">
@@ -121,7 +123,7 @@ const PortalHeader = ({
     <button
       onClick={handleRefresh}
       disabled={refreshing}
-      className="p-2 sm:p-2.5 rounded-xl border border-gray-200 text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition active:scale-95 disabled:opacity-30"
+      className="p-2 sm:p-2.5 rounded-xl border border-[#e8dfd3] text-slate-500 hover:text-[#172033] hover:border-[#d9d0c3] hover:bg-[#fcfaf6] transition active:scale-95 disabled:opacity-30"
     >
       <FiRefreshCw
         className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`}
@@ -131,7 +133,7 @@ const PortalHeader = ({
     {/* CTA */}
     <button
       onClick={handleNewEvent}
-      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-900 text-white rounded-xl font-semibold text-[10px] sm:text-xs hover:bg-black transition active:scale-[0.97] whitespace-nowrap"
+      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-[#172033] text-white rounded-xl font-semibold text-[10px] sm:text-xs hover:bg-black transition active:scale-[0.97] whitespace-nowrap"
     >
       <span className="hidden xs:inline sm:inline">Start</span>
       <span className="xs:hidden sm:hidden">Apply</span>
