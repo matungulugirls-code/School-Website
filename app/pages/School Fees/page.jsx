@@ -512,26 +512,7 @@ export default function ModernFeesPage() {
                 })}
               </div>
 
-              <div className="mt-5">
-                <div className="relative">
-                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    placeholder={`Search ${activeTab} fees...`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full rounded-2xl border font-semibold border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                  />
-                  {searchTerm && (
-                    <button
-                      onClick={() => setSearchTerm('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg bg-slate-100 p-1.5 transition-colors hover:bg-slate-200"
-                    >
-                      <FiX size={14} className="text-slate-500" />
-                    </button>
-                  )}
-                </div>
-              </div>
+            
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
@@ -664,6 +645,33 @@ export default function ModernFeesPage() {
                 </div>
               </div>
             </div>
+
+
+
+
+  <div className="mt-5">
+                <div className="relative">
+                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder={`Search ${activeTab} fees...`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full rounded-2xl border font-semibold border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg bg-slate-100 p-1.5 transition-colors hover:bg-slate-200"
+                    >
+                      <FiX size={14} className="text-slate-500" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              
+
 
             <div className="space-y-4">
               {filteredItems.length === 0 ? (
