@@ -471,7 +471,7 @@ export default function ModernFeesPage() {
     <div className="min-h-screen bg-[#f6f7f3]">
       <Toaster position="top-right" richColors />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
+      <div className="w-full md:w-[90%] mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
         <FeesHero stats={bannerStats} activeTabLabel={currentTabLabel} onRefresh={refreshData} />
       </div>
 

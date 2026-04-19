@@ -1,98 +1,99 @@
 "use client";
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+
+import React, { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import {
-  BookOpen, Search, Calendar, FileText, Trophy, Users, Sparkles,
-  Clock, Filter, Grid3x3, List, TrendingUp, Award, Star,
-  ChevronDown, ChevronUp, Eye, Heart, Share2, Download,
-  Bookmark, BookmarkCheck, AlertCircle, X, Loader2, GraduationCap
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { IoSparkles } from 'react-icons/io5';
-import { CircularProgress, Box, Stack } from '@mui/material';
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowRight,
+  BookOpen,
+  Bookmark,
+  BookmarkCheck,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Clock3,
+  Download,
+  Eye,
+  FileText,
+  Filter,
+  Grid3x3,
+  Loader2,
+  Search,
+  Share2,
+  Sparkles,
+  Star,
+  Swipe,
+  Trophy,
+  Users,
+  LayoutPanelTop,
+  List,
+} from "lucide-react";
 
-// Matungulu Girls Color Palette
-const colors = {
-  primary: "#7B2D8E",    // Rich Purple
-  secondary: "#FF69B4",  // Hot Pink
-  accent: "#4CAF50",     // Fresh Green
-  light: "#F3E5F5",      // Light Purple tint
-  dark: "#4A148C",       // Deep Purple
-  gradient: "linear-gradient(135deg, #7B2D8E 0%, #FF69B4 50%, #4CAF50 100%)",
-  bgLight: "#FFF5F8",    // Soft pinkish white
-  textDark: "#2C1810",   // Dark brown-black for text
-  textLight: "#FFFFFF"
-};
-
-// Dynamic import for BookReader
 const BookReader = dynamic(() => import("../../components/book/BookReader"), {
+  ssr: false,
   loading: () => (
-    <div className="fixed inset-0 bg-white/95 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="relative">
-        <div className="w-16 h-16 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin"></div>
-        <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-purple-600" size={24} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#081712]/85 backdrop-blur-xl">
+      <div className="rounded-[2rem] border border-white/10 bg-white/5 px-8 py-7 text-center text-white shadow-2xl">
+        <Loader2 className="mx-auto mb-3 h-8 w-8 animate-spin text-[#d8b15a]" />
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/80">
+          Opening Reader
+        </p>
       </div>
     </div>
   ),
-  ssr: false
 });
 
-// Scroll to Top Component
 const ScrollToTop = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      setIsVisible(window.pageYOffset > 300);
-    };
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    const onScroll = () => setVisible(window.scrollY > 320);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {visible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-          style={{ background: colors.gradient }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 12 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-[#10392f] text-white shadow-[0_16px_40px_rgba(16,57,47,0.35)] transition-transform duration-300 hover:-translate-y-1"
         >
-          <ChevronUp size={20} className="text-white" />
+          <ChevronUp className="h-5 w-5" />
         </motion.button>
       )}
     </AnimatePresence>
   );
 };
 
-// Enhanced Magazine Card Component
-const MagazineCard = ({ issue, onOpen, viewMode = "grid" }) => {
+const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    const savedBookmarks = JSON.parse(localStorage.getItem('bookmarked_magazines') || '[]');
-    setIsBookmarked(savedBookmarks.includes(issue.id));
+    const saved = JSON.parse(localStorage.getItem("bookmarked_magazines") || "[]");
+    setIsBookmarked(saved.includes(issue.id));
   }, [issue.id]);
 
   const handleBookmark = (e) => {
     e.stopPropagation();
-    setIsBookmarked(!isBookmarked);
-    const saved = JSON.parse(localStorage.getItem('bookmarked_magazines') || '[]');
-    if (!isBookmarked) {
+    const next = !isBookmarked;
+    setIsBookmarked(next);
+    const saved = JSON.parse(localStorage.getItem("bookmarked_magazines") || "[]");
+
+    if (next && !saved.includes(issue.id)) {
       saved.push(issue.id);
-    } else {
-      const index = saved.indexOf(issue.id);
-      if (index > -1) saved.splice(index, 1);
     }
-    localStorage.setItem('bookmarked_magazines', JSON.stringify(saved));
+
+    if (!next) {
+      const idx = saved.indexOf(issue.id);
+      if (idx > -1) saved.splice(idx, 1);
+    }
+
+    localStorage.setItem("bookmarked_magazines", JSON.stringify(saved));
   };
 
   const handleShare = async (e) => {
@@ -101,207 +102,252 @@ const MagazineCard = ({ issue, onOpen, viewMode = "grid" }) => {
       try {
         await navigator.share({
           title: issue.title,
-          text: `Check out ${issue.title} magazine from Matungulu Girls Senior School!`,
-          url: window.location.href
+          text: `Explore ${issue.title} from Matungulu Girls Senior School.`,
+          url: window.location.href,
         });
-      } catch (err) {
-        console.log('Share cancelled');
+      } catch (error) {
+        console.log("Share cancelled");
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
     }
   };
 
+  const badgeTone = index % 3 === 0 ? "bg-[#10392f]" : index % 3 === 1 ? "bg-[#7c3450]" : "bg-[#7a5a1d]";
+  const accent = index % 3 === 0 ? "from-[#10392f]" : index % 3 === 1 ? "from-[#7c3450]" : "from-[#7a5a1d]";
+
   if (viewMode === "list") {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
+      <motion.article
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -4, boxShadow: "0 20px 25px -12px rgba(0, 0, 0, 0.1)" }}
+        whileHover={{ y: -4 }}
         onClick={() => onOpen(issue)}
-        className="bg-white rounded-2xl shadow-md cursor-pointer overflow-hidden border transition-all duration-300"
-        style={{ borderColor: colors.primary + '20' }}
+        className="group grid cursor-pointer gap-5 rounded-[2rem] border border-[#11281f1a] bg-[#fffaf0] p-5 shadow-[0_24px_60px_rgba(17,40,31,0.08)] transition-all duration-300 md:grid-cols-[220px_minmax(0,1fr)]"
       >
-        <div className="flex flex-col sm:flex-row">
-          <div className="relative w-full sm:w-48 h-48 sm:h-auto bg-gradient-to-br" style={{ background: colors.gradient + '10' }}>
-            {issue.thumbnail ? (
-              <Image
-                src={issue.thumbnail}
-                alt={issue.title}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <BookOpen className="w-12 h-12" style={{ color: colors.primary }} />
-              </div>
-            )}
-            <div className="absolute top-3 left-3 rounded-lg px-2 py-1" style={{ background: colors.gradient }}>
-              <span className="text-white text-xs font-bold">{issue.year}</span>
+        <div className="relative h-60 overflow-hidden rounded-[1.5rem] bg-[#e8dfcf] md:h-full">
+          {issue.thumbnail ? (
+            <Image
+              src={issue.thumbnail}
+              alt={issue.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-[linear-gradient(135deg,#10392f,#c89b3c)] text-white">
+              <BookOpen className="h-14 w-14 opacity-80" />
             </div>
-          </div>
-
-          <div className="flex-1 p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="text-xl font-bold mb-1" style={{ color: colors.dark }}>{issue.title}</h3>
-                <div className="flex items-center gap-3 text-sm mb-3" style={{ color: colors.primary }}>
-                  <span className="flex items-center gap-1 font-semibold">
-                    <Calendar size={14} />
-                    {issue.year}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <button 
-                  onClick={handleBookmark} 
-                  className={`p-1.5 rounded-full transition-all duration-300 ${
-                    isBookmarked ? 'bg-purple-100' : 'hover:bg-gray-100'
-                  }`}
-                  style={{ color: isBookmarked ? colors.primary : colors.textDark }}
-                >
-                  {isBookmarked ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
-                </button>
-                <button 
-                  onClick={handleShare} 
-                  className="p-1.5 rounded-full transition-all duration-300 hover:bg-gray-100"
-                  style={{ color: colors.textDark }}
-                >
-                  <Share2 size={18} />
-                </button>
-              </div>
-            </div>
-
-            <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-              {issue.description || "Annual magazine showcasing school achievements, events, and student stories from Matungulu Girls Senior School."}
-            </p>
-
-            <div className="flex items-center justify-between">
-              <span 
-                className="text-sm font-semibold flex items-center gap-1 transition-all duration-300 group-hover:gap-2"
-                style={{ color: colors.primary }}
-              >
-                Read Now →
-              </span>
-            </div>
+          )}
+          <div className="absolute inset-x-4 top-4 flex items-center justify-between">
+            <span className={`rounded-full ${badgeTone} px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white`}>
+              {issue.year || "Archive"}
+            </span>
+            <button
+              onClick={handleBookmark}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/85 text-[#10392f] backdrop-blur-md"
+            >
+              {isBookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+            </button>
           </div>
         </div>
-      </motion.div>
+
+        <div className="flex min-w-0 flex-col justify-between gap-5">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[#5f665e]">
+              <span className="rounded-full border border-[#11281f1a] px-3 py-1">Digital magazine</span>
+              <span className="rounded-full border border-[#11281f1a] px-3 py-1">
+                {issue.pages || 80} pages
+              </span>
+            </div>
+            <div>
+              <h3 className="text-2xl font-black text-[#11281f] sm:text-3xl">{issue.title}</h3>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#5f665e] sm:text-base">
+                {issue.description ||
+                  "An editorial snapshot of Matungulu Girls Senior School life, leadership, creativity, achievement, and student voice."}
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#5f665e]">Edition Year</p>
+                <p className="mt-1 text-lg font-black text-[#10392f]">{issue.year || "Current"}</p>
+              </div>
+              <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#5f665e]">Reader Views</p>
+                <p className="mt-1 text-lg font-black text-[#10392f]">{issue.views || "New"}</p>
+              </div>
+              <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#5f665e]">Downloads</p>
+                <p className="mt-1 text-lg font-black text-[#10392f]">{issue.downloads || "Open"}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button className="inline-flex items-center gap-2 rounded-full bg-[#10392f] px-5 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(16,57,47,0.22)]">
+              Open Edition
+              <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center gap-2 rounded-full border border-[#11281f1f] bg-white px-5 py-3 text-sm font-bold text-[#11281f]"
+            >
+              <Share2 className="h-4 w-4" />
+              Share
+            </button>
+            {issue.pdfUrl && (
+              <a
+                href={issue.pdfUrl}
+                download
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-2 rounded-full border border-[#11281f1f] bg-[#f2ead9] px-5 py-3 text-sm font-bold text-[#7a5a1d]"
+              >
+                <Download className="h-4 w-4" />
+                Save PDF
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.article>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+    <motion.article
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      whileHover={{ y: -6 }}
       onClick={() => onOpen(issue)}
-      className="bg-white rounded-2xl shadow-lg cursor-pointer overflow-hidden transition-all duration-300"
-      style={{ boxShadow: isHovered ? `0 20px 30px -12px ${colors.primary}40` : "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+      className="group relative flex min-h-[540px] w-[86vw] max-w-[400px] flex-shrink-0 snap-center cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d211c] text-white shadow-[0_35px_80px_rgba(6,18,15,0.36)] sm:w-[380px]"
     >
-      <div className="relative h-64 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br" style={{ background: colors.gradient + '20' }} />
-        {issue.thumbnail ? (
-          <Image src={issue.thumbnail} alt={issue.title} fill className="object-cover transition-transform duration-500" style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }} />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <BookOpen className="w-16 h-16" style={{ color: colors.primary }} />
-          </div>
-        )}
-        <div className="absolute top-3 left-3 rounded-lg px-2 py-1 shadow-lg" style={{ background: colors.gradient }}>
-          <span className="text-white text-xs font-bold">{issue.year}</span>
-        </div>
-        {isHovered && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-black/40 flex items-center justify-center"
-          >
-            <span className="text-white font-bold text-sm px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm">
-              Click to Read →
-            </span>
-          </motion.div>
-        )}
-      </div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(200,155,60,0.35),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(155,79,102,0.3),transparent_38%)]" />
+      <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accent} via-[#c89b3c] to-[#f7edd2]`} />
 
-      <div className="p-5">
-        <h3 className="font-bold text-lg mb-2 line-clamp-1" style={{ color: colors.dark }}>
-          {issue.title}
-        </h3>
-        
-        <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-          {issue.description || "Annual magazine showcasing school achievements, events, and student stories from Matungulu Girls Senior School."}
-        </p>
-        
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold" style={{ color: colors.primary }}>
-              📖 Digital Edition
+      <div className="relative p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-2">
+            <span className={`inline-flex rounded-full ${badgeTone} px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.3em] text-white`}>
+              {issue.year || "Archive"}
             </span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white/70">
+              <Sparkles className="h-3.5 w-3.5 text-[#d8b15a]" />
+              Signature Edition
+            </div>
           </div>
           <div className="flex gap-2">
-            <button 
-              onClick={handleBookmark} 
-              className={`p-1.5 rounded-full transition-all duration-300 ${
-                isBookmarked ? 'bg-purple-100' : 'hover:bg-gray-100'
-              }`}
-              style={{ color: isBookmarked ? colors.primary : colors.textDark }}
+            <button
+              onClick={handleBookmark}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/90 backdrop-blur-md"
             >
-              {isBookmarked ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
+              {isBookmarked ? <BookmarkCheck className="h-4 w-4 text-[#d8b15a]" /> : <Bookmark className="h-4 w-4" />}
             </button>
-            <button 
-              onClick={handleShare} 
-              className="p-1.5 rounded-full transition-all duration-300 hover:bg-gray-100"
-              style={{ color: colors.textDark }}
+            <button
+              onClick={handleShare}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/90 backdrop-blur-md"
             >
-              <Share2 size={18} />
+              <Share2 className="h-4 w-4" />
             </button>
           </div>
         </div>
-        
-        {issue.pdfUrl && (
-          <a
-            href={issue.pdfUrl}
-            download
-            onClick={e => e.stopPropagation()}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-xl font-bold text-xs transition-all duration-300 hover:shadow-lg hover:scale-105"
-            style={{ background: colors.gradient }}
-          >
-            <Download size={16} /> DOWNLOAD PDF
-          </a>
-        )}
       </div>
-    </motion.div>
+
+      <div className="relative mx-5 h-[300px] overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#18332b]">
+        {issue.thumbnail ? (
+          <Image
+            src={issue.thumbnail}
+            alt={issue.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center bg-[linear-gradient(135deg,#10392f,#7a5a1d)]">
+            <BookOpen className="h-16 w-16 text-white/75" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#081712] via-[#081712]/10 to-transparent" />
+        <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/10 bg-[#081712]/70 px-4 py-3 backdrop-blur-xl">
+          <div>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60">Curated for</p>
+            <p className="mt-1 text-sm font-bold text-white">Students, parents & alumnae</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60">Length</p>
+            <p className="mt-1 text-sm font-bold text-[#f5d998]">{issue.pages || 80} pages</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative flex flex-1 flex-col justify-between gap-5 p-5">
+        <div>
+          <h3 className="text-2xl font-black leading-tight">{issue.title}</h3>
+          <p className="mt-3 text-sm leading-7 text-white/72">
+            {issue.description ||
+              "A polished yearly showcase of campus life, student voice, leadership milestones, school memories, and growth stories across Matungulu Girls Senior School."}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/55">Year</p>
+            <p className="mt-1 text-base font-black">{issue.year || "-"}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/55">Views</p>
+            <p className="mt-1 text-base font-black">{issue.views || "Fresh"}</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/55">Downloads</p>
+            <p className="mt-1 text-base font-black">{issue.downloads || "Ready"}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-[#f5d998]">
+            Enter Reader
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </span>
+          {issue.pdfUrl && (
+            <a
+              href={issue.pdfUrl}
+              download
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white"
+            >
+              <Download className="h-4 w-4" />
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.article>
   );
 };
 
-// Feature Card Component
-const FeatureCard = ({ icon: Icon, title, description }) => (
-  <motion.div
-    whileHover={{ y: -8, scale: 1.02 }}
-    className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300"
-    style={{ borderBottom: `3px solid ${colors.secondary}` }}
-  >
-    <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md" style={{ background: colors.gradient }}>
-      <Icon className="text-white" size={24} />
-    </div>
-    <h3 className="font-bold mb-2" style={{ color: colors.dark }}>{title}</h3>
-    <p className="text-gray-600 text-sm">{description}</p>
-  </motion.div>
-);
+const InfoTile = ({ icon: Icon, eyebrow, title, text, tone = "emerald" }) => {
+  const toneMap = {
+    emerald: "from-[#10392f] to-[#0c2d25] text-white border-white/10",
+    ivory: "from-[#fffaf0] to-[#f4ecda] text-[#11281f] border-[#11281f12]",
+    rose: "from-[#7c3450] to-[#4f2032] text-white border-white/10",
+  };
 
-// Main Component
+  return (
+    <div className={`rounded-[2rem] border bg-gradient-to-br p-6 shadow-[0_24px_60px_rgba(17,40,31,0.08)] ${toneMap[tone]}`}>
+      <div className="mb-6 inline-flex rounded-2xl border border-current/10 bg-white/10 p-3">
+        <Icon className="h-6 w-6" />
+      </div>
+      <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] opacity-70">{eyebrow}</p>
+      <h3 className="mt-3 text-2xl font-black">{title}</h3>
+      <p className="mt-3 text-sm leading-7 opacity-85">{text}</p>
+    </div>
+  );
+};
+
 export default function MagazineArchive() {
   const [magazines, setMagazines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("all");
-  const [viewMode, setViewMode] = useState("grid");
+  const [viewMode, setViewMode] = useState("gallery");
   const [sortBy, setSortBy] = useState("year");
   const [sortOrder, setSortOrder] = useState("desc");
   const [showFilters, setShowFilters] = useState(false);
@@ -309,76 +355,68 @@ export default function MagazineArchive() {
     totalIssues: 0,
     totalPages: 0,
     earliestYear: null,
-    latestYear: null
+    latestYear: null,
   });
 
   useEffect(() => {
     const fetchMagazines = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/school');
+        const response = await fetch("/api/school");
         const data = await response.json();
-        
-        console.log("Fetched school data:", data);
-        
+
         let magazinesArray = [];
-        
+
         if (data.success && data.school) {
-          if (data.school.magazine) {
-            magazinesArray = [data.school.magazine];
-          } else if (data.school.Magazine) {
-            magazinesArray = [data.school.Magazine];
-          }
+          if (data.school.magazine) magazinesArray = [data.school.magazine];
+          else if (data.school.Magazine) magazinesArray = [data.school.Magazine];
         }
-        
+
         if (data.magazines && Array.isArray(data.magazines)) {
           magazinesArray = data.magazines;
         }
-        
-        console.log("Processed magazines:", magazinesArray);
-        
+
         setMagazines(magazinesArray);
 
         if (magazinesArray.length > 0) {
-          const years = magazinesArray.map(m => m.year).filter(y => y);
+          const years = magazinesArray.map((m) => m.year).filter(Boolean);
           const totalPages = magazinesArray.reduce((sum, m) => sum + (m.pages || 80), 0);
           setStats({
             totalIssues: magazinesArray.length,
-            totalPages: totalPages,
+            totalPages,
             earliestYear: years.length ? Math.min(...years) : null,
-            latestYear: years.length ? Math.max(...years) : null
+            latestYear: years.length ? Math.max(...years) : null,
           });
         }
       } catch (error) {
-        console.error('Error fetching school/magazines:', error);
+        console.error("Error fetching school/magazines:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchMagazines();
   }, []);
 
   const filteredAndSortedMagazines = useMemo(() => {
-    let filtered = [...magazines];
-
-    if (searchQuery) {
-      filtered = filtered.filter(m =>
-        m.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        m.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        m.year?.toString().includes(searchQuery)
-      );
-    }
-
-    if (selectedYear !== "all") {
-      filtered = filtered.filter(m => m.year === parseInt(selectedYear));
-    }
+    const filtered = [...magazines]
+      .filter((magazine) => {
+        if (!searchQuery) return true;
+        return (
+          magazine.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          magazine.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          magazine.year?.toString().includes(searchQuery)
+        );
+      })
+      .filter((magazine) => {
+        if (selectedYear === "all") return true;
+        return magazine.year === parseInt(selectedYear, 10);
+      });
 
     filtered.sort((a, b) => {
       let comparison = 0;
+
       switch (sortBy) {
-        case "year":
-          comparison = (a.year || 0) - (b.year || 0);
-          break;
         case "title":
           comparison = (a.title || "").localeCompare(b.title || "");
           break;
@@ -388,9 +426,12 @@ export default function MagazineArchive() {
         case "downloads":
           comparison = (a.downloads || 0) - (b.downloads || 0);
           break;
+        case "year":
         default:
           comparison = (a.year || 0) - (b.year || 0);
+          break;
       }
+
       return sortOrder === "asc" ? comparison : -comparison;
     });
 
@@ -398,237 +439,248 @@ export default function MagazineArchive() {
   }, [magazines, searchQuery, selectedYear, sortBy, sortOrder]);
 
   const years = useMemo(() => {
-    const uniqueYears = [...new Set(magazines.map(m => m.year).filter(y => y))];
+    const uniqueYears = [...new Set(magazines.map((m) => m.year).filter(Boolean))];
     return uniqueYears.sort((a, b) => b - a);
   }, [magazines]);
 
+  const leadIssue = filteredAndSortedMagazines[0];
+
   if (loading) {
     return (
-      <Box className="min-h-[70vh] flex items-center justify-center p-4" style={{ background: colors.bgLight }}>
-        <Stack spacing={2} alignItems="center" className="w-full transition-all duration-500">
-          <Box className="relative flex items-center justify-center scale-90 sm:scale-110">
-            <CircularProgress
-              variant="determinate"
-              value={100}
-              size={48}
-              thickness={4.5}
-              sx={{ color: colors.primary + '30' }}
-            />
-            <CircularProgress
-              variant="indeterminate"
-              disableShrink
-              size={48}
-              thickness={4.5}
-              sx={{
-                color: colors.primary,
-                animationDuration: '1000ms',
-                position: 'absolute',
-                '& .MuiCircularProgress-circle': {
-                  strokeLinecap: 'round',
-                },
-              }}
-            />
-            <Box className="absolute">
-              <Sparkles className="text-purple-600 text-sm animate-pulse" />
-            </Box>
-          </Box>
-          <div className="text-center px-4">
-            <p className="font-medium text-sm sm:text-base tracking-tight" style={{ color: colors.primary }}>
-              Loading School Magazines
-            </p>
-            <p className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">
-              Matungulu Girls Senior School
-            </p>
+      <div className="flex min-h-[75vh] items-center justify-center bg-[#f4f0e5] px-4">
+        <div className="w-full max-w-md rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] p-10 text-center shadow-[0_28px_80px_rgba(17,40,31,0.12)]">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#10392f] text-white">
+            <Loader2 className="h-7 w-7 animate-spin" />
           </div>
-        </Stack>
-      </Box>
+          <p className="mt-6 text-sm font-extrabold uppercase tracking-[0.35em] text-[#10392f]">
+            Preparing Archive
+          </p>
+          <h2 className="mt-3 text-3xl font-black text-[#11281f]">School Magazine Library</h2>
+          <p className="mt-3 text-sm leading-7 text-[#5f665e]">
+            Bringing the Matungulu Girls editorial collection into view.
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ background: colors.bgLight }}>
-      {/* Hero Section */}
-      <section className="relative text-white overflow-hidden" style={{ background: colors.gradient }}>
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        </div>
+    <div className="min-h-screen bg-[#f4f0e5] text-[#11281f]">
+      <section className="relative overflow-hidden bg-[#081712] text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(200,155,60,0.22),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(155,79,102,0.26),transparent_36%)]" />
+        <div className="absolute inset-y-0 right-0 hidden w-[38%] border-l border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] lg:block" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-4 py-1.5 mb-6">
-              <Sparkles className="w-4 h-4 text-pink-200" />
-              <span className="text-sm font-bold tracking-wide">Digital Archive</span>
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_380px] lg:gap-14 lg:py-20">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/8 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.32em] text-white/82 backdrop-blur-md">
+              <Sparkles className="h-4 w-4 text-[#d8b15a]" />
+              Matungulu Girls Editorial Archive
             </div>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-6 tracking-tight">
-              Matungulu Girls
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-purple-200">
-                Magazine Archive
-              </span>
-            </h1>
-            <p className="text-lg sm:text-xl text-purple-100 max-w-2xl mx-auto leading-relaxed">
-              Discover the rich history, achievements, and inspiring stories of Matungulu Girls Senior School through our digital magazine collection.
-            </p>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mt-16 flex flex-wrap justify-center gap-12"
-          >
-            <div className="text-center group">
-              <div className="text-4xl font-black text-white group-hover:text-pink-200 transition-colors">
-                {stats.totalIssues}
+            <div className="max-w-3xl">
+              <h1 className="text-4xl font-black leading-[0.95] sm:text-6xl lg:text-7xl">
+                A digital magazine experience with a more refined school story.
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
+                Explore school editions through a more immersive archive built around achievement,
+                student life, creative expression, and the signature confidence of Matungulu Girls Senior School.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Issues</p>
+                <p className="mt-3 text-4xl font-black text-[#f6df9f]">{stats.totalIssues}</p>
               </div>
-              <div className="text-purple-200 text-xs uppercase tracking-widest font-bold mt-1">Issues</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-4xl font-black text-white group-hover:text-pink-200 transition-colors">
-                {stats.totalPages}+
+              <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Pages</p>
+                <p className="mt-3 text-4xl font-black text-[#f6df9f]">{stats.totalPages}+</p>
               </div>
-              <div className="text-purple-200 text-xs uppercase tracking-widest font-bold mt-1">Pages</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-4xl font-black text-white group-hover:text-pink-200 transition-colors">
-                {stats.earliestYear || "-"} {stats.latestYear && stats.earliestYear !== stats.latestYear ? `- ${stats.latestYear}` : ""}
-              </div>
-              <div className="text-purple-200 text-xs uppercase tracking-widest font-bold mt-1">Timeline</div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Search & Filter Section */}
-      <section className="sticky top-0 z-30 bg-white/95 backdrop-blur-md shadow-lg py-4 px-2 sm:px-6 border-b" style={{ borderColor: colors.primary + '20' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row gap-4 w-full">
-            
-            {/* Search Input */}
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: colors.primary }} />
-              <input
-                type="text"
-                placeholder="Search by title, year, or description..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border-2 rounded-xl text-sm font-medium focus:outline-none focus:border-purple-400 transition-all"
-                style={{ borderColor: colors.primary + '30', color: colors.textDark }}
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-2 flex-wrap">
-              
-              {/* Filter Toggle */}
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="px-4 py-2.5 bg-white border-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:shadow-md"
-                style={{ borderColor: colors.primary + '30', color: colors.primary }}
-              >
-                <Filter size={16} />
-                Filters
-                {showFilters ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              </button>
-
-              {/* View Mode */}
-              <div className="flex bg-gray-100 rounded-xl p-1 border-2" style={{ borderColor: colors.primary + '30' }}>
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-lg transition-all duration-300 ${
-                    viewMode === "grid"
-                      ? "text-white shadow-md"
-                      : "text-gray-600 hover:bg-gray-200"
-                  }`}
-                  style={{ background: viewMode === "grid" ? colors.gradient : 'transparent' }}
-                >
-                  <Grid3x3 size={18} />
-                </button>
-
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-lg transition-all duration-300 ${
-                    viewMode === "list"
-                      ? "text-white shadow-md"
-                      : "text-gray-600 hover:bg-gray-200"
-                  }`}
-                  style={{ background: viewMode === "list" ? colors.gradient : 'transparent' }}
-                >
-                  <List size={18} />
-                </button>
+              <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Timeline</p>
+                <p className="mt-3 text-2xl font-black text-[#f6df9f]">
+                  {stats.earliestYear || "--"}
+                  {stats.latestYear && stats.latestYear !== stats.earliestYear ? ` to ${stats.latestYear}` : ""}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Filters */}
+          <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.32em] text-white/58">
+              Need To Know
+            </p>
+            <div className="mt-6 space-y-4">
+              <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
+                    <Swipe className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-white">Immersive browsing</p>
+                    <p className="mt-1 text-sm leading-6 text-white/68">
+                      Use the gallery rail or switch to ledger view for a different archive rhythm.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-white">Built for students and parents</p>
+                    <p className="mt-1 text-sm leading-6 text-white/68">
+                      Each edition captures academics, co-curricular highlights, student voice, and school identity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
+                    <Download className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-white">Keep an offline copy</p>
+                    <p className="mt-1 text-sm leading-6 text-white/68">
+                      Open any issue in the reader or download the PDF for later access.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {leadIssue && (
+              <div className="mt-6 rounded-[1.6rem] border border-[#d8b15a]/25 bg-[#f3e5bc]/10 p-5">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#f6df9f]">Featured edition</p>
+                <h2 className="mt-3 text-2xl font-black text-white">{leadIssue.title}</h2>
+                <p className="mt-2 text-sm leading-7 text-white/70">
+                  {leadIssue.description || "A showcase of campus stories, student excellence, and school milestones."}
+                </p>
+                <button
+                  onClick={() => setSelectedIssue(leadIssue)}
+                  className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#d8b15a] px-5 py-3 text-sm font-black text-[#11281f]"
+                >
+                  Open Highlight
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-20 -mt-8 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl rounded-[2.2rem] border border-[#11281f12] bg-[#fffaf0]/95 p-4 shadow-[0_24px_80px_rgba(17,40,31,0.1)] backdrop-blur-xl sm:p-6">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_180px_180px_180px]">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5f665e]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search editions, stories, or years"
+                  className="w-full rounded-[1.35rem] border border-[#11281f12] bg-white px-12 py-4 text-sm font-semibold text-[#11281f] outline-none transition focus:border-[#10392f]"
+                />
+              </div>
+
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4 text-sm font-bold text-[#11281f] outline-none transition focus:border-[#10392f]"
+              >
+                <option value="all">All Years</option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4 text-sm font-bold text-[#11281f] outline-none transition focus:border-[#10392f]"
+              >
+                <option value="year">Sort by Year</option>
+                <option value="title">Sort by Title</option>
+                <option value="views">Sort by Views</option>
+                <option value="downloads">Sort by Downloads</option>
+              </select>
+
+              <button
+                onClick={() => setSortOrder((current) => (current === "desc" ? "asc" : "desc"))}
+                className="inline-flex items-center justify-center gap-2 rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4 text-sm font-black text-[#11281f]"
+              >
+                <Filter className="h-4 w-4 text-[#10392f]" />
+                {sortOrder === "desc" ? "Newest First" : "Oldest First"}
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setViewMode("gallery")}
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black transition ${
+                  viewMode === "gallery"
+                    ? "bg-[#10392f] text-white shadow-[0_14px_28px_rgba(16,57,47,0.2)]"
+                    : "border border-[#11281f12] bg-white text-[#11281f]"
+                }`}
+              >
+                <LayoutPanelTop className="h-4 w-4" />
+                Gallery
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black transition ${
+                  viewMode === "list"
+                    ? "bg-[#10392f] text-white shadow-[0_14px_28px_rgba(16,57,47,0.2)]"
+                    : "border border-[#11281f12] bg-white text-[#11281f]"
+                }`}
+              >
+                <List className="h-4 w-4" />
+                Ledger
+              </button>
+              <button
+                onClick={() => setShowFilters((current) => !current)}
+                className="inline-flex items-center gap-2 rounded-full border border-[#11281f12] bg-[#f4ecda] px-5 py-3 text-sm font-black text-[#7a5a1d]"
+              >
+                <Grid3x3 className="h-4 w-4" />
+                Archive Notes
+                {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
           <AnimatePresence>
             {showFilters && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 pt-4 border-t-2"
-                style={{ borderColor: colors.primary + '20' }}
+                className="overflow-hidden"
               >
-                <div className="flex flex-wrap gap-4">
-                  
-                  {/* Year */}
-                  <div className="flex-1 min-w-[150px]">
-                    <label className="block text-xs font-semibold mb-1" style={{ color: colors.primary }}>
-                      Year
-                    </label>
-                    <select
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border-2 rounded-lg text-sm font-medium focus:outline-none focus:border-purple-400 transition-all"
-                      style={{ borderColor: colors.primary + '30', color: colors.textDark }}
-                    >
-                      <option value="all">All Years</option>
-                      {years.map((year) => (
-                        <option key={year} value={year}>{year}</option>
-                      ))}
-                    </select>
+                <div className="mt-5 grid gap-4 border-t border-[#11281f12] pt-5 md:grid-cols-3">
+                  <div className="rounded-[1.5rem] bg-white p-4">
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">What you will find</p>
+                    <p className="mt-3 text-sm leading-7 text-[#5f665e]">
+                      Annual school highlights, prize-giving moments, clubs, academics, trips, student writing, and leadership features.
+                    </p>
                   </div>
-
-                  {/* Sort */}
-                  <div className="flex-1 min-w-[150px]">
-                    <label className="block text-xs font-semibold mb-1" style={{ color: colors.primary }}>
-                      Sort By
-                    </label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border-2 rounded-lg text-sm font-medium focus:outline-none focus:border-purple-400 transition-all"
-                      style={{ borderColor: colors.primary + '30', color: colors.textDark }}
-                    >
-                      <option value="year">Year</option>
-                      <option value="title">Title</option>
-                      <option value="views">Most Viewed</option>
-                      <option value="downloads">Most Downloaded</option>
-                    </select>
+                  <div className="rounded-[1.5rem] bg-white p-4">
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Reader tip</p>
+                    <p className="mt-3 text-sm leading-7 text-[#5f665e]">
+                      The premium reader supports swipe, keyboard arrows, direct page jump, bookmarking, sharing, and downloads.
+                    </p>
                   </div>
-
-                  {/* Order */}
-                  <div className="flex-1 min-w-[150px]">
-                    <label className="block text-xs font-semibold mb-1" style={{ color: colors.primary }}>
-                      Order
-                    </label>
-                    <select
-                      value={sortOrder}
-                      onChange={(e) => setSortOrder(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border-2 rounded-lg text-sm font-medium focus:outline-none focus:border-purple-400 transition-all"
-                      style={{ borderColor: colors.primary + '30', color: colors.textDark }}
-                    >
-                      <option value="desc">Newest First</option>
-                      <option value="asc">Oldest First</option>
-                    </select>
+                  <div className="rounded-[1.5rem] bg-white p-4">
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Why it matters</p>
+                    <p className="mt-3 text-sm leading-7 text-[#5f665e]">
+                      Parents and students can quickly understand the school culture, achievements, values, and lived student experience.
+                    </p>
                   </div>
-
                 </div>
               </motion.div>
             )}
@@ -636,101 +688,169 @@ export default function MagazineArchive() {
         </div>
       </section>
 
-      {/* Magazine Grid/List */}
-      <section className="py-12 px-4 sm:px-6 max-w-7xl mx-auto">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+        {leadIssue && (
+          <div className="mb-10 grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+            <div className="rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] p-6 shadow-[0_24px_60px_rgba(17,40,31,0.08)] sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-[#10392f]">
+                    Editorial spotlight
+                  </p>
+                  <h2 className="mt-3 text-3xl font-black text-[#11281f] sm:text-4xl">
+                    {leadIssue.title}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setSelectedIssue(leadIssue)}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#10392f] px-5 py-3 text-sm font-black text-white"
+                >
+                  Read Issue
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-[1.5rem] border border-[#11281f12] bg-[#f7f2e7] p-5">
+                  <Calendar className="h-5 w-5 text-[#10392f]" />
+                  <p className="mt-4 text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Edition Year</p>
+                  <p className="mt-2 text-2xl font-black text-[#11281f]">{leadIssue.year || "Current"}</p>
+                </div>
+                <div className="rounded-[1.5rem] border border-[#11281f12] bg-[#f7f2e7] p-5">
+                  <FileText className="h-5 w-5 text-[#10392f]" />
+                  <p className="mt-4 text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Approx. Length</p>
+                  <p className="mt-2 text-2xl font-black text-[#11281f]">{leadIssue.pages || 80} pages</p>
+                </div>
+                <div className="rounded-[1.5rem] border border-[#11281f12] bg-[#f7f2e7] p-5">
+                  <Clock3 className="h-5 w-5 text-[#10392f]" />
+                  <p className="mt-4 text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Best Use</p>
+                  <p className="mt-2 text-2xl font-black text-[#11281f]">Reader or PDF</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[2rem] border border-[#11281f12] bg-[#10392f] p-6 text-white shadow-[0_30px_80px_rgba(16,57,47,0.2)] sm:p-8">
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-white/58">
+                Why this archive works
+              </p>
+              <div className="mt-6 space-y-4">
+                <div className="flex items-start gap-4 rounded-[1.35rem] border border-white/10 bg-white/8 p-4">
+                  <Star className="mt-1 h-5 w-5 text-[#f6df9f]" />
+                  <div>
+                    <p className="font-black text-white">More than a publication</p>
+                    <p className="mt-1 text-sm leading-7 text-white/72">
+                      It doubles as a school memory wall, a leadership record, and a celebration of girls' growth.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 rounded-[1.35rem] border border-white/10 bg-white/8 p-4">
+                  <Users className="mt-1 h-5 w-5 text-[#f6df9f]" />
+                  <div>
+                    <p className="font-black text-white">Useful for families</p>
+                    <p className="mt-1 text-sm leading-7 text-white/72">
+                      Parents can quickly see the school’s culture, visibility of student voice, and the breadth of activities.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 rounded-[1.35rem] border border-white/10 bg-white/8 p-4">
+                  <Trophy className="mt-1 h-5 w-5 text-[#f6df9f]" />
+                  <div>
+                    <p className="font-black text-white">Useful for students</p>
+                    <p className="mt-1 text-sm leading-7 text-white/72">
+                      Students see themselves reflected through stories of achievement, talent, participation, and belonging.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {filteredAndSortedMagazines.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <BookOpen className="mx-auto mb-4" size={64} style={{ color: colors.primary }} />
-            <h3 className="text-xl font-bold mb-2" style={{ color: colors.dark }}>No magazines found</h3>
-            <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+          <div className="rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] px-6 py-20 text-center shadow-[0_24px_60px_rgba(17,40,31,0.08)]">
+            <BookOpen className="mx-auto h-14 w-14 text-[#10392f]" />
+            <h3 className="mt-6 text-3xl font-black text-[#11281f]">No editions match this search</h3>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#5f665e]">
+              Try another year, title, or keyword to reopen the archive trail.
+            </p>
             <button
               onClick={() => {
                 setSearchQuery("");
                 setSelectedYear("all");
               }}
-              className="mt-4 px-4 py-2 text-white rounded-xl text-sm font-bold transition-all duration-300 hover:shadow-lg hover:scale-105"
-              style={{ background: colors.gradient }}
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#10392f] px-5 py-3 text-sm font-black text-white"
             >
-              Clear Filters
+              Reset Archive
+              <ArrowRight className="h-4 w-4" />
             </button>
-          </motion.div>
+          </div>
+        ) : viewMode === "gallery" ? (
+          <div className="space-y-6">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-[#10392f]">Gallery rail</p>
+                <h2 className="mt-3 text-3xl font-black text-[#11281f] sm:text-4xl">
+                  Explore editions in a cinematic flow
+                </h2>
+              </div>
+              <p className="hidden max-w-sm text-right text-sm leading-7 text-[#5f665e] lg:block">
+                Swipe or scroll horizontally to move between editions, then open any copy in the premium reader.
+              </p>
+            </div>
+            <div className="hide-scrollbar -mx-4 overflow-x-auto px-4 pb-4">
+              <div className="flex snap-x snap-mandatory gap-5">
+                {filteredAndSortedMagazines.map((issue, index) => (
+                  <MagazineCard
+                    key={issue.id || `${issue.title}-${index}`}
+                    issue={issue}
+                    onOpen={setSelectedIssue}
+                    viewMode="gallery"
+                    index={index}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
         ) : (
-          <div className={viewMode === "grid" 
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" 
-            : "space-y-4"
-          }>
+          <div className="space-y-5">
             {filteredAndSortedMagazines.map((issue, index) => (
               <MagazineCard
-                key={issue.id || index}
+                key={issue.id || `${issue.title}-${index}`}
                 issue={issue}
                 onOpen={setSelectedIssue}
-                viewMode={viewMode}
+                viewMode="list"
+                index={index}
               />
             ))}
           </div>
         )}
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-black mb-2" style={{ color: colors.dark }}>Why Read Our Magazine?</h2>
-            <p className="text-gray-600 mt-2">Every edition captures the essence of Matungulu Girls</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={Trophy}
-              title="Achievements"
-              description="Academic and co-curricular excellence recognized and celebrated"
-            />
-            <FeatureCard
-              icon={Users}
-              title="Student Stories"
-              description="Inspiring journeys and success stories of our young women"
-            />
-            <FeatureCard
-              icon={Calendar}
-              title="Events Coverage"
-              description="Memorable moments from school events and activities"
-            />
-          </div>
-        </div>
+      <section className="mx-auto grid max-w-7xl gap-5 px-4 pb-20 sm:px-6 md:grid-cols-3">
+        <InfoTile
+          icon={Eye}
+          eyebrow="For Parents"
+          title="See the school culture"
+          text="The archive helps families understand the rhythm of school life, student leadership, academic focus, and the confidence-building atmosphere of the school."
+          tone="ivory"
+        />
+        <InfoTile
+          icon={Users}
+          eyebrow="For Students"
+          title="Follow student voice"
+          text="Stories, photography, reports, and highlights make the editions feel personal while still documenting excellence and growth."
+          tone="emerald"
+        />
+        <InfoTile
+          icon={Sparkles}
+          eyebrow="For The Community"
+          title="Keep the school story alive"
+          text="Each edition becomes a living archive of memory, identity, and achievement, preserving the evolving story of Matungulu Girls Senior School."
+          tone="rose"
+        />
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="rounded-3xl p-10 shadow-2xl"
-            style={{ background: colors.gradient }}
-          >
-            <Sparkles className="text-white mx-auto mb-4" size={32} />
-            <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">
-              Missing an Edition?
-            </h2>
-            <p className="text-purple-100 mb-6">
-              Past magazines are being digitized. Check back soon for more issues!
-            </p>
-            <div className="inline-flex items-center gap-2 text-white/80 text-sm">
-              <Clock size={14} />
-              <span>New issues added annually after publication</span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Modal */}
-      {selectedIssue && (
-        <BookReader issue={selectedIssue} onClose={() => setSelectedIssue(null)} />
-      )}
-      
+      {selectedIssue && <BookReader issue={selectedIssue} onClose={() => setSelectedIssue(null)} />}
       <ScrollToTop />
     </div>
   );
