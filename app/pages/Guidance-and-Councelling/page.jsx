@@ -1313,7 +1313,7 @@ export default function StudentCounseling() {
 
   if (loading) {
     return (
-      <Box className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
+      <Box className="min-h-screen  p-4 md:p-6">
         <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto">
           <Stack spacing={2} alignItems="center" className="mx-auto flex min-h-[70vh] w-full max-w-sm justify-center rounded-[30px] border border-[#d9d0c3] bg-white px-10 py-12 shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)]">
           <Box className="relative flex items-center justify-center scale-75 sm:scale-100 transition-transform">
@@ -1362,10 +1362,10 @@ export default function StudentCounseling() {
     <div className="min-h-screen bg-[#f7f2ea] p-4 md:p-6">
       <Toaster position="top-right" richColors />
       
-      <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto space-y-6">
+      <div className="w-full md:w-[90%] lg:w-[90%] xl:w-[80%] mx-auto space-y-6">
         
         {/* Modern Hero Header - Matungulu Girls Theme */}
-        <div className="relative mb-8 overflow-hidden rounded-[34px] border border-[#d9d0c3] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)] md:p-10">
+        <div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)] md:p-10">
           <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
           <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute inset-y-0 right-[36%] hidden w-px bg-white/10 lg:block" />
@@ -1423,7 +1423,7 @@ export default function StudentCounseling() {
   </button>
 
   {/* View Toggle - Compact Size */}
-  <div className="flex bg-white/10 backdrop-blur-xl rounded-xl p-1 border border-white/20 h-10 items-center">
+  <div className="flex bg-white/10 backdrop-blur-xl rounded-xl p-1 border border-white/20 h-12 items-center">
     <button
       onClick={() => setViewMode('grid')}
       className={`h-8 w-8  flex items-center justify-center rounded-lg transition-all ${
@@ -1543,6 +1543,103 @@ export default function StudentCounseling() {
 
         {/* Main Content Layout */}
         <div className="flex flex-col lg:flex-row gap-8">
+
+
+               {/* Right Column: Quick Actions & Info */}
+          <div className="lg:w-[320px] space-y-6">
+            <div className="lg:sticky lg:top-24 space-y-6">
+              
+              {/* Quick Actions Card */}
+              <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="rounded-2xl bg-[#172033] p-2.5">
+                    <FiZap className="text-[#f2c357] text-lg" />
+                  </div>
+                  <h2 className="text-base font-black text-slate-900 tracking-tight">Quick Actions</h2>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    onClick={() => toast.info('Access emergency contacts via the Student Portal.')}
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiPhoneCall className="text-[#172033]" size={14} />
+                      </div>
+                      <div className="text-left">
+                        <p className="font-black text-xs">Emergency Contact</p>
+                        <p className="text-[9px] text-[#b68424]">Immediate assistance</p>
+                      </div>
+                    </div>
+                    <FiArrowRight className="text-[#172033]" size={14} />
+                  </button>
+
+                  <button
+                    onClick={() => toast.info('Access schedule sessions via the Student Portal.')}
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiCalendar className="text-[#172033]" size={14} />
+                      </div>
+                      <div className="text-left">
+                        <p className="font-black text-xs">Schedule Session</p>
+                        <p className="text-[9px] text-[#b68424]">Book appointment</p>
+                      </div>
+                    </div>
+                    <FiArrowRight className="text-[#172033]" size={14} />
+                  </button>
+
+                  <button
+                    onClick={() => toast.info('Access resources via the Student Portal.')}
+                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
+                        <FiBookOpen className="text-[#172033]" size={14} />
+                      </div>
+                      <div className="text-left">
+                        <p className="font-black text-xs">Resources</p>
+                        <p className="text-[9px] text-[#b68424]">Self-help guides</p>
+                      </div>
+                    </div>
+                    <FiArrowRight className="text-[#172033]" size={14} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Confidentiality Banner */}
+              <div className="relative overflow-hidden rounded-[30px] border border-[#1f2a40] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 blur-[50px]" />
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
+                    <FiShield className="text-white text-xl" />
+                  </div>
+                  <h4 className="text-base font-black mb-2 tracking-tight">100% Confidential</h4>
+                  <p className="text-xs text-white/70 mb-4 leading-relaxed">
+                    All sessions are private and secure. Your information is protected.
+                  </p>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
+                      <span className="text-[10px]">Secure conversations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
+                      <span className="text-[10px]">No judgment policy</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
+                      <span className="text-[10px]">Professional ethics</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
           {/* Left Column: Counseling Sessions */}
           <div className="flex-1 min-w-0 space-y-8">
             
@@ -1803,143 +1900,7 @@ export default function StudentCounseling() {
             </div>
           </div>
 
-          {/* Right Column: Quick Actions & Info */}
-          <div className="lg:w-[320px] space-y-6">
-            <div className="lg:sticky lg:top-24 space-y-6">
-              
-              {/* Quick Actions Card */}
-              <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="rounded-2xl bg-[#172033] p-2.5">
-                    <FiZap className="text-[#f2c357] text-lg" />
-                  </div>
-                  <h2 className="text-base font-black text-slate-900 tracking-tight">Quick Actions</h2>
-                </div>
-
-                <div className="space-y-2">
-                  <button
-                    onClick={() => toast.info('Access emergency contacts via the Student Portal.')}
-                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
-                        <FiPhoneCall className="text-[#172033]" size={14} />
-                      </div>
-                      <div className="text-left">
-                        <p className="font-black text-xs">Emergency Contact</p>
-                        <p className="text-[9px] text-[#b68424]">Immediate assistance</p>
-                      </div>
-                    </div>
-                    <FiArrowRight className="text-[#172033]" size={14} />
-                  </button>
-
-                  <button
-                    onClick={() => toast.info('Access schedule sessions via the Student Portal.')}
-                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
-                        <FiCalendar className="text-[#172033]" size={14} />
-                      </div>
-                      <div className="text-left">
-                        <p className="font-black text-xs">Schedule Session</p>
-                        <p className="text-[9px] text-[#b68424]">Book appointment</p>
-                      </div>
-                    </div>
-                    <FiArrowRight className="text-[#172033]" size={14} />
-                  </button>
-
-                  <button
-                    onClick={() => toast.info('Access resources via the Student Portal.')}
-                    className="flex w-full items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3.5 transition-colors hover:bg-white"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-xl bg-white p-2 ring-1 ring-[#e8dfd3]">
-                        <FiBookOpen className="text-[#172033]" size={14} />
-                      </div>
-                      <div className="text-left">
-                        <p className="font-black text-xs">Resources</p>
-                        <p className="text-[9px] text-[#b68424]">Self-help guides</p>
-                      </div>
-                    </div>
-                    <FiArrowRight className="text-[#172033]" size={14} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Session Info Banner */}
-              <div className="rounded-[30px] border border-[#d9d0c3] bg-white p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.38)]">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="rounded-2xl bg-[#172033] p-2.5">
-                    <FiBookOpen className="text-[#f2c357]" />
-                  </div>
-                  <h4 className="text-sm font-black text-slate-900">Session Types</h4>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-xs font-medium text-slate-700">Devotion Sessions</span>
-                    </div>
-                    <span className="text-[9px] font-black text-[#172033]">Static</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-xs font-medium text-slate-700">24/7 Support</span>
-                    </div>
-                    <span className="text-[9px] font-black text-[#172033]">Static</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                  <div className="flex items-center gap-2">
-                       <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-xs font-medium text-slate-700">Guidance Sessions</span>
-                    </div>
-                    <span className="text-[9px] font-black text-[#172033]">API ({guidanceSessions.length})</span>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-2xl border border-[#e8dfd3] bg-[#fcfaf6] p-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-xs font-medium text-slate-700">Team Members</span>
-                    </div>
-                    <span className="text-[9px] font-black text-[#172033]">API ({teamMembers.length})</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Confidentiality Banner */}
-              <div className="relative overflow-hidden rounded-[30px] border border-[#1f2a40] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 blur-[50px]" />
-                <div className="relative z-10">
-                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
-                    <FiShield className="text-white text-xl" />
-                  </div>
-                  <h4 className="text-base font-black mb-2 tracking-tight">100% Confidential</h4>
-                  <p className="text-xs text-white/70 mb-4 leading-relaxed">
-                    All sessions are private and secure. Your information is protected.
-                  </p>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-[10px]">Secure conversations</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-[10px]">No judgment policy</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#f2c357]"></div>
-                      <span className="text-[10px]">Professional ethics</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+     
         </div>
 
         {/* Feature Banner */}
