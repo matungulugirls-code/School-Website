@@ -505,7 +505,7 @@ export default function ModernNavbar() {
                 </div>
 
                 <a
-                  href="/pages/fees"
+                  href="/pages/School Fees"
                   className={`group flex items-center gap-0.5 xs:gap-1 font-bold transition-all text-[0.85rem] xs:text-[0.9rem] tracking-wide whitespace-nowrap px-1.5 xs:px-2 py-2 relative ${
                     isActiveLink('/pages/fees')
                       ? 'text-emerald-100'

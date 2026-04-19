@@ -632,7 +632,7 @@ export default function ModernFeesPage() {
                   <FaEnvelope className="mt-1 text-emerald-600" />
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Email</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">finance@matungulugirls.sc.ke</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">matungulugirls@gmail.com</p>
                   </div>
                 </div>
               </div>
