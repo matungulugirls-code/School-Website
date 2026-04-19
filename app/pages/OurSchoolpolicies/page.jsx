@@ -277,7 +277,7 @@ School Policies
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+            <div className="rounded-md border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Search Rules</p>
               <div className="mt-4 relative">
                 <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -289,7 +289,7 @@ School Policies
                     setCurrentPage(1);
                   }}
                   placeholder="Search rules, welfare, exams, boarding..."
-                  className="w-full rounded-2xl border border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full rounded-2xl  font-bold border border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   style={{ fontSize: "16px" }}
                 />
                 {searchTerm && (
@@ -302,23 +302,7 @@ School Policies
                 )}
               </div>
 
-              <div className="mt-5 rounded-[1.3rem] bg-[#f4f8f4] p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Live Status</p>
-                <div className="mt-3 space-y-2 text-sm text-slate-700">
-                  <div className="flex items-center justify-between">
-                    <span>Visible Rules</span>
-                    <span className="font-black text-slate-950">{currentTerms.length}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Total Matches</span>
-                    <span className="font-black text-slate-950">{filteredTerms.length}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Current Page</span>
-                    <span className="font-black text-slate-950">{currentPage} / {filteredPages}</span>
-                  </div>
-                </div>
-              </div>
+        
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">

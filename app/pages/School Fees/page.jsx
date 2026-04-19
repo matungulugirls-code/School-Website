@@ -51,7 +51,7 @@ import { useRouter } from 'next/navigation';
 
 const FeesHero = ({ stats, activeTabLabel, onRefresh }) => {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-[#d6e9df] bg-[#0d2f25] p-6 text-white sm:p-8 lg:p-10">
+    <section className="relative overflow-hidden rounded-lg border border-[#d6e9df] bg-[#0d2f25] p-6 text-white sm:p-8 lg:p-10">
       <div className="absolute -right-20 -top-16 h-72 w-72 rounded-full bg-emerald-400/15 blur-3xl" />
       <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-teal-400/10 blur-3xl" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_35%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_45%)]" />
@@ -63,21 +63,21 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh }) => {
             Fees & Finance Desk
           </div>
 
-          <div className="mt-5 max-w-3xl">
-            <p className="text-[11px] font-black uppercase tracking-[0.26em] text-emerald-300/80">
-              Matungulu Girls Senior School
-            </p>
-            <h1 className="mt-3 text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
-              School Fees,
-              <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
-                redesigned as a clear finance dashboard.
-              </span>
-            </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
-              Review {activeTabLabel.toLowerCase()} charges, download the latest fee document,
-              and see the totals, categories, and payment guidance in one calmer, easier-to-scan layout.
-            </p>
-          </div>
+       <div className="mt-5 max-w-3xl">
+  <p className="text-[11px] font-black uppercase tracking-[0.26em] text-emerald-300/80">
+    Matungulu Girls Senior School
+  </p>
+  <h1 className="mt-3 text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
+    School Fees,
+    <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
+      broken down simply and transparently.
+    </span>
+  </h1>
+  <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
+    View {activeTabLabel.toLowerCase()} fees, download the official fee structure,
+    and understand exactly what each payment covers — all in one clear, easy-to-navigate layout.
+  </p>
+</div>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
@@ -475,7 +475,7 @@ export default function ModernFeesPage() {
         <FeesHero stats={bannerStats} activeTabLabel={currentTabLabel} onRefresh={refreshData} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto  py-6 sm:py-8">
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
