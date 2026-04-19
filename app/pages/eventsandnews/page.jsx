@@ -198,7 +198,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
             </div>
             <div className="rounded-[18px] border border-white/20 bg-[#172033]/78 px-3 py-2 text-white backdrop-blur-sm sm:px-4 sm:py-3">
               <p className="text-[9px] font-black uppercase tracking-[0.22em] text-white/45">Venue</p>
-              <p className="mt-1 max-w-[110px] truncate text-xs font-black sm:max-w-[160px] sm:text-sm">{event.location || 'Main Campus Hall'}</p>
+              <p className="mt-1 max-w-[110px] truncate text-xs font-black sm:max-w-[160px] sm:text-sm">{event.location || 'Main School Hall'}</p>
             </div>
           </div>
           </div>
@@ -249,7 +249,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
                 <FiMapPin className={`${theme.iconColor} w-3 h-3 sm:w-4 sm:h-4`} />
               </div>
               <span className="text-[9px] sm:text-[10px] md:text-[11px] font-bold text-slate-700 uppercase tracking-tight truncate">
-                {event.location || 'Main Campus Hall'}
+                {event.location || 'Main School Hall'}
               </span>
             </div>
           </div>
@@ -1487,7 +1487,7 @@ export default function ModernEventsNewsPage() {
                 <div className="mt-6 rounded-[24px] border border-[#e8dfd3] bg-[#fcfaf6] p-4">
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Editor&apos;s Note</p>
                   <p className="mt-2 text-sm leading-7 text-slate-600">
-                    Important notices, celebrations, and campus milestones all live here in one easier-to-scan panel.
+                    Important notices, celebrations, and School milestones all live here in one easier-to-scan panel.
                   </p>
                 </div>
               </div>

@@ -280,7 +280,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
           <h3 className="text-2xl font-black leading-tight">{issue.title}</h3>
           <p className="mt-3 text-sm leading-7 text-white/72">
             {issue.description ||
-              "A polished yearly showcase of campus life, student voice, leadership milestones, school memories, and growth stories across Matungulu Girls Senior School."}
+              "A polished yearly showcase of School life, student voice, leadership milestones, school memories, and growth stories across Matungulu Girls Senior School."}
           </p>
         </div>
 
@@ -555,7 +555,7 @@ export default function MagazineArchive() {
                 <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#f6df9f]">Featured edition</p>
                 <h2 className="mt-3 text-2xl font-black text-white">{leadIssue.title}</h2>
                 <p className="mt-2 text-sm leading-7 text-white/70">
-                  {leadIssue.description || "A showcase of campus stories, student excellence, and school milestones."}
+                  {leadIssue.description || "A showcase of School stories, student excellence, and school milestones."}
                 </p>
                 <button
                   onClick={() => setSelectedIssue(leadIssue)}

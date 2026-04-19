@@ -1553,7 +1553,7 @@ function EventCard({ event, onViewDetails }) {
               <FiMapPin className={`${categoryStyle.iconColor}`} size={14} />
             </div>
             <span className="text-[11px] font-bold text-slate-700 uppercase tracking-tight truncate">
-              {event.location || 'Main Campus Hall'}
+              {event.location || 'Main School Hall'}
             </span>
           </div>
         </div>

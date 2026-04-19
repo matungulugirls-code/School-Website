@@ -62,7 +62,7 @@ const statsBase = [
     gradient: 'from-[#214d89] to-[#132746]',
   },
   {
-    label: 'Campus Focus',
+    label: 'School Focus',
     sublabel: 'Girls-centered professional impact',
     icon: FiHeart,
     gradient: 'from-[#7a3d55] to-[#4a2031]',
@@ -148,16 +148,24 @@ function StatPanel({ stat, value }) {
   const Icon = stat.icon;
 
   return (
-    <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.06] p-5 shadow-[0_18px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+    <div className="w-full rounded-[1.8rem] border border-white/10 bg-white/[0.06] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl transition-all duration-200 hover:border-white/20 sm:p-5">
       <div className="flex items-start justify-between">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.gradient} text-white`}>
-          <Icon className="h-5 w-5" />
+        <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.gradient} text-white sm:h-12 sm:w-12 sm:rounded-2xl`}>
+          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
         </div>
-        <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/35">Live</span>
+        <span className="text-[8px] font-extrabold uppercase tracking-[0.24em] text-white/35 sm:text-[10px] sm:tracking-[0.28em]">
+          Live
+        </span>
       </div>
-      <p className="mt-6 text-3xl font-black text-white">{value}</p>
-      <p className="mt-2 text-sm font-bold text-white/82">{stat.label}</p>
-      <p className="mt-1 text-xs leading-6 text-white/45">{stat.sublabel}</p>
+      <p className="mt-4 text-2xl font-black text-white sm:mt-6 sm:text-3xl">
+        {value}
+      </p>
+      <p className="mt-1 text-xs font-bold text-white/82 sm:mt-2 sm:text-sm">
+        {stat.label}
+      </p>
+      <p className="mt-1 text-[11px] leading-5 text-white/45 sm:text-xs sm:leading-6">
+        {stat.sublabel}
+      </p>
     </div>
   );
 }
@@ -321,12 +329,16 @@ function InfoCard({ icon: Icon, title, text, tone = 'default' }) {
   };
 
   return (
-    <div className={`rounded-[1.7rem] border p-5 ${tones[tone]}`}>
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
-        <Icon className="h-5 w-5 text-[#d4b15f]" />
+    <div className={`w-full rounded-2xl border p-4 transition-all duration-200 hover:border-white/20 hover:shadow-lg sm:rounded-[1.7rem] sm:p-5 ${tones[tone]}`}>
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 sm:h-12 sm:w-12 sm:rounded-2xl">
+        <Icon className="h-4 w-4 text-[#d4b15f] sm:h-5 sm:w-5" />
       </div>
-      <h3 className="mt-4 text-lg font-black">{title}</h3>
-      <p className="mt-2 text-sm leading-7 text-white/65">{text}</p>
+      <h3 className="mt-3 text-base font-black sm:mt-4 sm:text-lg">
+        {title}
+      </h3>
+      <p className="mt-1 text-xs leading-6 text-white/65 sm:mt-2 sm:text-sm sm:leading-7">
+        {text}
+      </p>
     </div>
   );
 }
@@ -727,29 +739,29 @@ export default function CareersPage() {
               text="This page is tailored for Matungulu Girls Senior School vacancies, with more emphasis on school culture, learner support, and professional fit."
               tone="gold"
             />
-            <div className="grid gap-4 sm:grid-cols-2">
-              <InfoCard
-                icon={FiMapPin}
-                title="Location"
-                text="Matungulu Sub County, Machakos County, Kenya."
-              />
-              <InfoCard
-                icon={FiMail}
-                title="HR Contact"
-                text="careers@matungulugirls.sc.ke for role-related submissions and inquiries."
-              />
-            </div>
+   <div className="grid gap-4 grid-cols-1">
+  <InfoCard
+    icon={FiMapPin}
+    title="Location"
+    text="Matungulu Sub County, Machakos County, Kenya."
+  />
+  <InfoCard
+    icon={FiMail}
+    title="HR Contact"
+    text="careers@matungulugirls.sc.ke for role-related submissions and inquiries."
+  />
+</div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {stats.map((stat) => (
-            <StatPanel key={stat.label} stat={stat} value={stat.value} />
-          ))}
-        </div>
-      </section>
+   <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {stats.map((stat) => (
+      <StatPanel key={stat.label} stat={stat} value={stat.value} />
+    ))}
+  </div>
+</section>
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-20 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="space-y-5">
@@ -789,7 +801,9 @@ export default function CareersPage() {
               <div className="flex items-start gap-3">
                 <FiMapPin className="mt-1 h-4 w-4 text-[#f6dd9b]" />
                 <div>
-                  <p className="text-sm font-black">Campus Location</p>
+                  <p className="text-sm font-black">School Location
+
+</p>
                   <p className="mt-1 text-sm text-white/70">Matungulu Sub County, Machakos, Kenya</p>
                 </div>
               </div>

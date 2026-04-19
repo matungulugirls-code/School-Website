@@ -1466,7 +1466,7 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
                   </div>
                 </div>
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500">
-                  Browse academic life, campus spaces, and student memories in a gallery experience that now matches the Matungulu Girls events and team pages.
+                  Browse academic life, School spaces, and student memories in a gallery experience that now matches the Matungulu Girls events and team pages.
                 </p>
               </div>
 

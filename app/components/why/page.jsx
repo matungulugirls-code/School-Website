@@ -417,7 +417,7 @@ const getSchoolStats = () => {
       title: "Modern Learning Environment",
       gradient: "from-emerald-600 to-emerald-500",
       description:
-        "Our campus features well-equipped science laboratories, computer labs, and digital resources in scenic Matungulu.",
+        "Our School features well-equipped science laboratories, computer labs, and digital resources in scenic Matungulu.",
       highlight: "Advanced Facilities",
       details: ["3 Science Labs", "2 Computer Labs", "Library", "Sports Fields"],
       metrics: ["3 Labs", "2 Comp Labs", "8,000 Books"],

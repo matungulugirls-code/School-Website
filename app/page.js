@@ -803,7 +803,7 @@ export default function ModernHero() {
             <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-r from-transparent to-black/80 p-4">
               <div className="flex items-center justify-between">
                 <div className="text-white/80 text-sm">
-                  {schoolData?.description?.substring(0, 100) + '...' || 'Experience our campus from anywhere'}
+                  {schoolData?.description?.substring(0, 100) + '...' || 'Experience our School from anywhere'}
                 </div>
                 <button
                   onClick={handleContactClick}

@@ -1264,7 +1264,7 @@ setGrowthMetrics({
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
                   <FiPlay className="text-4xl text-slate-500 mb-4" />
                   <h3 className="text-white font-bold text-lg mb-1">Tour Content Unavailable</h3>
-                  <p className="text-slate-500 text-xs md:text-sm max-w-xs">Please upload a campus video in settings.</p>
+                  <p className="text-slate-500 text-xs md:text-sm max-w-xs">Please upload a School video in settings.</p>
                 </div>
               )}
             </div>

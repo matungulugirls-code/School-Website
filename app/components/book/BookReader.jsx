@@ -379,7 +379,7 @@ const BookReader = ({ issue, onClose }) => {
                 </h1>
                 <p className="mt-3 text-sm leading-7 text-white/72">
                   {issue.description ||
-                    "A polished collection of student stories, school achievements, campus life, and the lived identity of Matungulu Girls Senior School."}
+                    "A polished collection of student stories, school achievements, School life, and the lived identity of Matungulu Girls Senior School."}
                 </p>
               </div>
 

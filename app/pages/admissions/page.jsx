@@ -1238,7 +1238,7 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
             </div>
             <div>
               <h3 className="text-xl md:text-3xl font-extrabold tracking-tight">Virtual School Tour</h3>
-              <p className="text-blue-100/90 text-sm md:text-base font-medium mt-1">Experience our campus in immersive detail</p>
+              <p className="text-blue-100/90 text-sm md:text-base font-medium mt-1">Experience our School in immersive detail</p>
             </div>
           </div>
           

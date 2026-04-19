@@ -1133,7 +1133,7 @@ export default function AdminLoginPage() {
                     {requiresPasswordAfterVerification ? 'Final Access' : 'Identity Check'}
                   </h3>
                   <p className="text-green-200 text-[10px] sm:text-xs font-semibold uppercase tracking-widest opacity-80">
-                    {requiresPasswordAfterVerification ? 'Portal Authorization' : 'Secure Campus Network'}
+                    {requiresPasswordAfterVerification ? 'Portal Authorization' : 'Secure School Network'}
                   </p>
                 </div>
               </div>
