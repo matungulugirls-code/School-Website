@@ -1,10 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { FiChevronLeft, FiChevronRight, FiMessageCircle } from "react-icons/fi";
-// Data for all terms and conditions with detailed descriptions for Matungulu Girls Senior School
+import {
+  FiAlertCircle,
+  FiBookOpen,
+  FiCheckCircle,
+  FiChevronLeft,
+  FiChevronRight,
+  FiClock,
+  FiGrid,
+  FiHome,
+  FiMessageCircle,
+  FiSearch,
+  FiShield,
+  FiUsers,
+} from "react-icons/fi";
+
 const allTerms = [
-  { 
+  {
     id: 1,
     title: "1. School Registration and Enrollment",
     intro: "Matungulu Girls Senior School maintains rigorous standards for student enrollment to ensure academic excellence and maintain our reputation as a leading educational institution for girls.",
@@ -14,7 +27,7 @@ const allTerms = [
       { subTitle: "1.3. Age Requirement:", content: "Students must be between 13-15 years at the time of admission to Form 1. Special consideration may be given for exceptional circumstances upon board review." }
     ]
   },
-  { 
+  {
     id: 2,
     title: "2. Academic Requirements and Expectations",
     intro: "Matungulu Girls Senior School is committed to academic excellence and expects students to maintain high standards of academic performance and conduct.",
@@ -24,7 +37,7 @@ const allTerms = [
       { subTitle: "2.3. Examination Rules:", content: "Strict adherence to KNEC examination rules during national exams. Any form of examination malpractice will result in immediate expulsion and blacklisting from national exams." }
     ]
   },
-  { 
+  {
     id: 3,
     title: "3. School Fees and Financial Obligations",
     intro: "Timely payment of school fees is essential for the smooth operation of the school and continued access to educational resources.",
@@ -34,7 +47,7 @@ const allTerms = [
       { subTitle: "3.3. Additional Charges:", content: "Extra charges apply for damage to school property, lost textbooks, and specialized activities. These must be settled before end of term." }
     ]
   },
-  { 
+  {
     id: 4,
     title: "4. Code of Conduct and Discipline",
     intro: "Matungulu Girls Senior School maintains high standards of discipline to create a conducive learning environment for all students.",
@@ -44,7 +57,7 @@ const allTerms = [
       { subTitle: "4.3. Disciplinary Actions:", content: "Minor offenses: Detention. Moderate offenses: Manual work. Serious offenses: Suspension or expulsion depending on severity and frequency." }
     ]
   },
-  { 
+  {
     id: 5,
     title: "5. Boarding School Regulations",
     intro: "As a boarding school, we provide structured residential facilities with specific rules to ensure safety and proper development of our girls.",
@@ -54,7 +67,7 @@ const allTerms = [
       { subTitle: "5.3. Health and Hygiene:", content: "Daily showers mandatory. Bedding washed weekly. Regular room cleaning. Medical check-ups monthly." }
     ]
   },
-  { 
+  {
     id: 6,
     title: "6. Academic Resources and Facilities",
     intro: "The school provides various academic resources to support student learning and development.",
@@ -64,7 +77,7 @@ const allTerms = [
       { subTitle: "6.3. Computer Lab:", content: "Computer lab available for ICT lessons and research. Internet access filtered for educational purposes only." }
     ]
   },
-  { 
+  {
     id: 7,
     title: "7. Extracurricular Activities",
     intro: "Participation in extracurricular activities is encouraged for holistic development of students.",
@@ -74,7 +87,7 @@ const allTerms = [
       { subTitle: "7.3. Cultural Activities:", content: "Music, drama, and art competitions held each term. Participation in annual music festival mandatory." }
     ]
   },
-  { 
+  {
     id: 8,
     title: "8. Health and Safety Regulations",
     intro: "Student health and safety are our top priorities with comprehensive policies in place.",
@@ -84,7 +97,7 @@ const allTerms = [
       { subTitle: "8.3. COVID-19 Protocols:", content: "Masks mandatory in crowded areas. Hand sanitizers at all entrances. Temperature checks daily. Isolation room for suspected cases." }
     ]
   },
-  { 
+  {
     id: 9,
     title: "9. Parent/Guardian Involvement",
     intro: "We believe in strong partnership between school and parents for student success.",
@@ -94,7 +107,7 @@ const allTerms = [
       { subTitle: "9.3. Visiting Days:", content: "Official visiting days: First Saturday of each month 9:00 AM - 4:00 PM. Special visits require prior approval." }
     ]
   },
-  { 
+  {
     id: 10,
     title: "10. Examination and Assessment Policy",
     intro: "Comprehensive assessment system to monitor and evaluate student progress.",
@@ -104,7 +117,7 @@ const allTerms = [
       { subTitle: "10.3. KCSE Preparation:", content: "Form 4 students: Special revision classes Saturday mornings. Past paper practice from Term 2." }
     ]
   },
-  { 
+  {
     id: 11,
     title: "11. Dress Code and Appearance",
     intro: "Maintaining proper appearance is part of instilling discipline and pride in the school.",
@@ -114,7 +127,7 @@ const allTerms = [
       { subTitle: "11.3. Sports Attire:", content: "Prescribed sports uniform for games. No personal sports gear allowed during school activities." }
     ]
   },
-  { 
+  {
     id: 12,
     title: "12. Technology and Internet Usage",
     intro: "Responsible use of technology to enhance learning while maintaining safety.",
@@ -124,7 +137,7 @@ const allTerms = [
       { subTitle: "12.3. Cyber Safety:", content: "No sharing of personal information online. Reporting of cyberbullying mandatory. Digital citizenship lessons monthly." }
     ]
   },
-  { 
+  {
     id: 13,
     title: "13. Transportation and Travel",
     intro: "Safety regulations for student movement within and outside school.",
@@ -134,7 +147,7 @@ const allTerms = [
       { subTitle: "13.3. Emergency Travel:", content: "School vehicle available for medical emergencies. Parents responsible for transport costs for non-emergencies." }
     ]
   },
-  { 
+  {
     id: 14,
     title: "14. Counseling and Guidance",
     intro: "Comprehensive support system for student welfare and career development.",
@@ -144,7 +157,7 @@ const allTerms = [
       { subTitle: "14.3. Peer Counseling:", content: "Trained peer counselors available. Anonymous reporting system for sensitive issues." }
     ]
   },
-  { 
+  {
     id: 15,
     title: "15. Environmental Conservation",
     intro: "Instilling responsibility towards the environment as part of holistic education.",
@@ -157,305 +170,356 @@ const allTerms = [
 ];
 
 const TERMS_PER_PAGE = 5;
-const totalPages = Math.ceil(allTerms.length / TERMS_PER_PAGE);
 
 export default function TermsAndConditions() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const startIndex = (currentPage - 1) * TERMS_PER_PAGE;
-  const endIndex = startIndex + TERMS_PER_PAGE;
-  
-  // Filter terms based on search
-  const filteredTerms = allTerms.filter(term => 
+
+  const filteredTerms = allTerms.filter((term) =>
     term.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     term.intro.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    term.subSections.some(sub => 
-      sub.subTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      sub.content.toLowerCase().includes(searchTerm.toLowerCase())
+    term.subSections.some(
+      (sub) =>
+        sub.subTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        sub.content.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
-  
-  const currentTerms = filteredTerms.slice(startIndex, endIndex);
-  const filteredPages = Math.ceil(filteredTerms.length / TERMS_PER_PAGE);
+
+  const filteredPages = Math.ceil(filteredTerms.length / TERMS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * TERMS_PER_PAGE;
+  const currentTerms = filteredTerms.slice(startIndex, startIndex + TERMS_PER_PAGE);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    // Scroll to top smoothly
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const quickFacts = [
+    { label: "Policy Sections", value: allTerms.length, icon: FiGrid, note: "Full handbook coverage" },
+    { label: "Current View", value: currentTerms.length, icon: FiBookOpen, note: "Visible on this page" },
+    { label: "Boarding Focus", value: "24/7", icon: FiHome, note: "Residential guidance" },
+    { label: "Student Support", value: "Active", icon: FiUsers, note: "Parents and learners" },
+  ];
+
+  const needToKnow = [
+    {
+      title: "Before Reporting",
+      body: "Review enrollment documents, fee obligations, uniform rules, and prohibited items before the first day of school.",
+      icon: FiCheckCircle,
+    },
+    {
+      title: "Discipline & Conduct",
+      body: "School discipline applies across academics, boarding life, dress code, digital behavior, and movement permissions.",
+      icon: FiShield,
+    },
+    {
+      title: "Parents & Guardians",
+      body: "Keep contact details updated, attend scheduled meetings, and follow official visiting and communication procedures.",
+      icon: FiMessageCircle,
+    },
+    {
+      title: "Safety & Welfare",
+      body: "Medical care, guidance, emergency response, and wellbeing rules are part of the student support system.",
+      icon: FiAlertCircle,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-emerald-100/95 via-teal-100/95 to-slate-100/95 p-4 sm:p-6 md:p-8">
-      {/* Modern Header */}
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8 sm:mb-12 md:mb-16">
-          {/* School Logo and Info */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-            <div className="text-center md:text-left">
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-emerald-100 to-emerald-100 rounded-2xl border border-emerald-200 mb-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-emerald-600/95 via-teal-600/95 to-slate-600/95  rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">MI</span>
-                </div>
-                <span className="text-sm font-bold text-emerald-900 uppercase tracking-wider">Matungulu Girls High</span>
+    <div className="min-h-screen bg-[#f5f7f2] px-4 py-4 sm:px-6 sm:py-6 md:px-8">
+      <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden rounded-[2rem] border border-[#d7e8dd] bg-[#102b23] p-6 text-white shadow-[0_24px_80px_-50px_rgba(15,23,42,0.55)] sm:p-8 lg:p-10">
+          <div className="absolute -right-16 top-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="absolute left-0 top-24 h-56 w-56 rounded-full bg-teal-400/10 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_30%),linear-gradient(140deg,rgba(255,255,255,0.05),transparent_45%)]" />
+
+          <div className="relative z-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+                <FiShield className="text-sm" />
+                Policy Dashboard
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 leading-tight">
-                School Rules & Regulations
+              <p className="mt-5 text-[11px] font-black uppercase tracking-[0.28em] text-emerald-300/80">
+                Matungulu Girls Senior School
+              </p>
+              <h1 className="mt-3 max-w-4xl text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
+                School rules,
+                <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
+                  rebuilt as a modern policy command centre.
+                </span>
               </h1>
-              <p className="text-sm sm:text-base text-slate-600 max-w-2xl">
-                Official policies and guidelines governing student conduct, academics, and school operations at Matungulu Girls Senior School
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
+                A redesigned handbook experience for students and parents: search the rules,
+                review the most important policy zones, and scan every section in a cleaner,
+                more premium layout built for mobile and desktop.
               </p>
             </div>
-            
-            {/* Stats */}
+
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm text-center">
-                <div className="text-xl sm:text-2xl font-bold text-emerald-700">{allTerms.length}</div>
-                <div className="text-xs font-medium text-slate-500">Total Sections</div>
-              </div>
-              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm text-center">
-                <div className="text-xl sm:text-2xl font-bold text-emerald-700">{new Date().getFullYear()}</div>
-                <div className="text-xs font-medium text-slate-500">Academic Year</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-6">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
-                placeholder="Search rules and regulations..."
-                className="w-full px-4 py-3 pl-12 text-base sm:text-lg border-2 border-slate-300 rounded-2xl focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 bg-white shadow-sm"
-                style={{ fontSize: '16px' }}
-              />
-              <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Status Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-6 px-2">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                <span className="text-xs font-medium text-slate-600">Showing {currentTerms.length} of {filteredTerms.length} rules</span>
-              </div>
-              {searchTerm && (
-                <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
-                  Search: "{searchTerm}"
-                </span>
-              )}
-            </div>
-            <div className="text-xs text-slate-500 font-medium">
-              Page {currentPage} of {filteredPages}
-            </div>
-          </div>
-        </div>
-
-        {/* Terms Grid - Responsive */}
-        <div className="space-y-4 sm:space-y-6 mb-10">
-          {currentTerms.length > 0 ? (
-            currentTerms.map((term) => (
-              <div 
-                key={term.id} 
-                className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
-              >
-                {/* Term Header with Gradient */}
-                <div className="bg-gradient-to-r from-emerald-600 to-emerald-600 p-4 sm:p-6 text-white">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                          <span className="text-sm sm:text-lg font-bold">{term.id}</span>
-                        </div>
-                        <span className="text-xs font-bold uppercase tracking-wider text-white/80 bg-white/10 px-2 py-1 rounded-full">
-                          Section {term.id}
-                        </span>
+              {quickFacts.map((fact) => {
+                const Icon = fact.icon;
+                return (
+                  <div key={fact.label} className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+                    <div className="flex items-center justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-emerald-200">
+                        <Icon size={16} />
                       </div>
-                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">{term.title}</h2>
+                      <span className="text-[10px] font-black uppercase tracking-[0.18em] text-white/45">Info</span>
                     </div>
-                    <div className="hidden sm:block">
-                      <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                    </div>
+                    <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-emerald-200">{fact.label}</p>
+                    <p className="mt-1 text-2xl font-black text-white">{fact.value}</p>
+                    <p className="mt-1 text-xs leading-6 text-white/60">{fact.note}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Search Rules</p>
+              <div className="mt-4 relative">
+                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  placeholder="Search rules, welfare, exams, boarding..."
+                  className="w-full rounded-2xl border border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  style={{ fontSize: "16px" }}
+                />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg bg-slate-100 p-1.5 text-slate-500 transition-colors hover:bg-slate-200"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              <div className="mt-5 rounded-[1.3rem] bg-[#f4f8f4] p-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Live Status</p>
+                <div className="mt-3 space-y-2 text-sm text-slate-700">
+                  <div className="flex items-center justify-between">
+                    <span>Visible Rules</span>
+                    <span className="font-black text-slate-950">{currentTerms.length}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Total Matches</span>
+                    <span className="font-black text-slate-950">{filteredTerms.length}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Current Page</span>
+                    <span className="font-black text-slate-950">{currentPage} / {filteredPages}</span>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                {/* Term Content */}
-                <div className="p-4 sm:p-6 md:p-8">
-                  <div className="mb-4 sm:mb-6">
-                    <p className="text-slate-700 leading-relaxed text-sm sm:text-base">{term.intro}</p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {needToKnow.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-[0_16px_45px_-38px_rgba(15,23,42,0.28)]">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+                      <Icon size={18} />
+                    </div>
+                    <h3 className="mt-4 text-base font-black text-slate-950">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">{item.body}</p>
                   </div>
+                );
+              })}
+            </div>
 
-                  <div className="space-y-3 sm:space-y-4">
-                    {term.subSections.map((sub, index) => (
-                      <div 
-                        key={index} 
-                        className="p-3 sm:p-4 bg-gradient-to-r from-slate-50 to-white border border-slate-100 rounded-xl sm:rounded-2xl"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0">
-                            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                              <span className="text-xs font-bold">{index + 1}</span>
+            <div className="rounded-[1.8rem] bg-[#102b23] p-6 text-white">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">Need-To-Know</p>
+              <div className="mt-4 space-y-4 text-sm leading-7 text-white/78">
+                <p>These policies apply to academics, boarding life, health, discipline, technology, transport, and parent communication.</p>
+                <p>Parents should review this page together with students before reporting or returning for the new term.</p>
+                <p>Appeals and clarifications should be made through the school administration in writing.</p>
+              </div>
+            </div>
+          </aside>
+
+          <main className="space-y-5">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Rules Explorer</p>
+                  <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                    Student policy bento view
+                  </h2>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    Every section is presented as a policy card with a summary and supporting rule details for quick scanning.
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-[#f4f8f4] px-4 py-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Search Query</p>
+                  <p className="mt-1 text-sm font-black text-slate-950">
+                    {searchTerm ? `"${searchTerm}"` : "Showing all rules"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:gap-5 xl:grid-cols-2">
+              {currentTerms.length > 0 ? (
+                currentTerms.map((term, idx) => (
+                  <div
+                    key={term.id}
+                    className={`group overflow-hidden rounded-[1.9rem] border border-slate-200 bg-white shadow-[0_18px_55px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:border-emerald-200 hover:shadow-[0_22px_70px_-44px_rgba(5,150,105,0.28)] ${
+                      idx % 3 === 0 ? "xl:col-span-2" : ""
+                    }`}
+                  >
+                    <div className="border-b border-slate-100 bg-[linear-gradient(135deg,#102b23_0%,#185140_100%)] p-5 text-white sm:p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="mb-3 flex items-center gap-2">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm sm:h-10 sm:w-10">
+                              <span className="text-sm sm:text-lg font-bold">{term.id}</span>
+                            </div>
+                            <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-100">
+                              Section {term.id}
+                            </span>
+                          </div>
+                          <h2 className="max-w-2xl text-lg font-black leading-tight sm:text-xl md:text-2xl">{term.title}</h2>
+                        </div>
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10 backdrop-blur-sm">
+                          <FiCheckCircle className="text-xl text-emerald-200" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-5 sm:p-6 md:p-7">
+                      <div className="rounded-[1.5rem] bg-[#f7faf7] p-4 sm:p-5">
+                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">Section Overview</p>
+                        <p className="mt-3 text-sm leading-7 text-slate-700 sm:text-base">{term.intro}</p>
+                      </div>
+
+                      <div className="mt-5 grid gap-3 sm:gap-4">
+                        {term.subSections.map((sub, index) => (
+                          <div
+                            key={index}
+                            className="rounded-[1.3rem] border border-slate-100 bg-white p-4 transition-colors group-hover:border-emerald-100"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="shrink-0">
+                                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 sm:h-8 sm:w-8">
+                                  <span className="text-xs font-black">{index + 1}</span>
+                                </div>
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <h4 className="mb-1 text-sm font-black text-slate-900 sm:text-base">{sub.subTitle}</h4>
+                                <p className="text-sm leading-7 text-slate-600">{sub.content}</p>
+                              </div>
                             </div>
                           </div>
-                          <div className="flex-grow">
-                            <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1">{sub.subTitle}</h4>
-                            <p className="text-slate-600 text-sm leading-relaxed">{sub.content}</p>
-                          </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-[1.9rem] border-2 border-dashed border-slate-300 bg-white p-8 text-center sm:p-12 xl:col-span-2">
+                  <div className="max-w-md mx-auto">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-slate-100 to-slate-200 sm:h-20 sm:w-20">
+                      <FiSearch className="text-3xl text-slate-400 sm:text-4xl" />
+                    </div>
+                    <h3 className="mb-2 text-lg font-bold text-slate-900 sm:text-xl">No Rules Found</h3>
+                    <p className="mb-4 text-slate-600">Try searching with different keywords or browse all sections</p>
+                    <button
+                      onClick={() => setSearchTerm("")}
+                      className="rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 px-4 py-2 font-bold text-white transition-opacity hover:opacity-90"
+                    >
+                      Show All Rules
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {filteredPages > 1 && (
+              <div className="rounded-[1.8rem] border border-slate-200 bg-white p-4 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.25)]">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-800">Page {currentPage} of {filteredPages}</p>
+                    <p className="text-[11px] text-slate-500">{filteredTerms.length} rule sections available</p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      className="rounded-xl border border-slate-200 p-2 transition-colors hover:bg-slate-50 disabled:opacity-30"
+                    >
+                      <FiChevronLeft className="h-5 w-5" />
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(filteredPages > 4 ? 3 : 5, filteredPages) }, (_, i) => {
+                        let pageNum;
+                        if (filteredPages <= 5) pageNum = i + 1;
+                        else if (currentPage <= 3) pageNum = i + 1;
+                        else if (currentPage >= filteredPages - 2) pageNum = filteredPages - 4 + i;
+                        else pageNum = currentPage - 2 + i;
+
+                        if (!pageNum) return null;
+
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => handlePageChange(pageNum)}
+                            className={`h-10 w-10 rounded-xl text-sm font-black transition-all ${
+                              currentPage === pageNum
+                                ? "bg-slate-900 text-white"
+                                : "text-slate-600 hover:bg-slate-100"
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => handlePageChange(Math.min(filteredPages, currentPage + 1))}
+                      disabled={currentPage === filteredPages}
+                      className="rounded-xl border border-slate-200 p-2 transition-colors hover:bg-slate-50 disabled:opacity-30"
+                    >
+                      <FiChevronRight className="h-5 w-5" />
+                    </button>
                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-3xl border-2 border-dashed border-slate-300 p-8 sm:p-12 text-center">
-              <div className="max-w-md mx-auto">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-r from-slate-100 to-slate-200 flex items-center justify-center">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">No Rules Found</h3>
-                <p className="text-slate-600 mb-4">Try searching with different keywords or browse all sections</p>
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-600 text-white rounded-lg font-bold hover:opacity-90 transition-opacity"
-                >
-                  Show All Rules
-                </button>
+            )}
+
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="rounded-[1.6rem] border border-slate-200 bg-white p-5">
+                <h4 className="font-black text-emerald-900">Important Notice</h4>
+                <p className="mt-2 text-sm leading-7 text-slate-700">These rules are binding for all students. Parents and guardians should ensure learners understand and comply.</p>
+              </div>
+              <div className="rounded-[1.6rem] border border-slate-200 bg-white p-5">
+                <h4 className="font-black text-emerald-900">Review Cycle</h4>
+                <p className="mt-2 text-sm leading-7 text-slate-700">Rules are reviewed annually and may be updated to support academics, safety, student welfare, and school operations.</p>
+              </div>
+              <div className="rounded-[1.6rem] border border-slate-200 bg-white p-5 sm:col-span-2 xl:col-span-1">
+                <h4 className="font-black text-emerald-900">Enforcement</h4>
+                <p className="mt-2 text-sm leading-7 text-slate-700">Rules are enforced by the school administration. Appeals should be made formally through the Principal&apos;s office.</p>
               </div>
             </div>
-          )}
-        </div>
 
-     {/* Modern Pagination */}
-{filteredPages > 1 && (
-  <div className="sticky bottom-4 z-10 px-4">
-    <div className="bg-white/95 backdrop-blur-lg rounded-2xl border border-slate-200 shadow-xl p-4 max-w-2xl mx-auto">
-      {/* Container: Stacked on Mobile (col), Row on Desktop (sm:row) */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-4">
-        
-        {/* 1. Page Info - Smaller text on mobile */}
-        <div className="text-center sm:text-left shrink-0">
-          <div className="text-[11px] sm:text-sm font-black text-slate-800 uppercase tracking-tight">
-            Page {currentPage} of {filteredPages}
-          </div>
-          <div className="text-[10px] sm:text-xs text-slate-500 font-medium">
-            {filteredTerms.length} Rules available
-          </div>
-        </div>
-
-        {/* 2. Page Numbers - Reduced gap on mobile to fit */}
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-            className="p-1.5 sm:p-2 rounded-lg border border-slate-200 disabled:opacity-30 hover:bg-slate-50 transition-colors"
-          >
-            <FiChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
-          
-          <div className="flex items-center gap-1">
-            {Array.from({ length: Math.min(filteredPages > 4 ? 3 : 5, filteredPages) }, (_, i) => {
-              // Logic for page numbering stays the same, but we show fewer on tiny screens
-              let pageNum;
-              if (filteredPages <= 5) pageNum = i + 1;
-              else if (currentPage <= 3) pageNum = i + 1;
-              else if (currentPage >= filteredPages - 2) pageNum = filteredPages - 4 + i;
-              else pageNum = currentPage - 2 + i;
-              
-              if (!pageNum) return null;
-
-              return (
-                <button
-                  key={pageNum}
-                  onClick={() => handlePageChange(pageNum)}
-                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg text-[11px] sm:text-sm font-black transition-all ${
-                    currentPage === pageNum
-                      ? 'bg-slate-900 text-white shadow-md scale-105'
-                      : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
-          </div>
-          
-          <button
-            onClick={() => handlePageChange(Math.min(filteredPages, currentPage + 1))}
-            disabled={currentPage === filteredPages}
-            className="p-1.5 sm:p-2 rounded-lg border border-slate-200 disabled:opacity-30 hover:bg-slate-50 transition-colors"
-          >
-            <FiChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
-        </div>
-
-        {/* 3. Quick Jump - Hidden on very small screens or moved to a neat row */}
-        <div className="flex items-center gap-2 border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0 w-full sm:w-auto justify-center">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Jump:</span>
-          <select
-            value={currentPage}
-            onChange={(e) => handlePageChange(Number(e.target.value))}
-            className="pl-2 pr-8 py-1.5 border border-slate-200 rounded-lg text-[11px] font-bold bg-slate-50 focus:ring-2 focus:ring-blue-500/20 outline-none appearance-none cursor-pointer"
-            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='Length19l-7 7-7-7' /%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1em' }}
-          >
-            {Array.from({ length: filteredPages }, (_, i) => i + 1).map(page => (
-              <option key={page} value={page}>P. {page}</option>
-            ))}
-          </select>
-        </div>
-
-      </div>
-    </div>
-  </div>
-)}
-
-        {/* Footer */}
-        <div className="mt-12 pt-8 border-t border-slate-200">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-50 rounded-2xl p-4 border border-emerald-100">
-              <h4 className="font-bold text-emerald-900 mb-2">Important Notice</h4>
-              <p className="text-sm text-slate-700">These rules are binding for all students. Parents/guardians must ensure students understand and comply.</p>
+            <div className="pb-4 text-center">
+              <p className="text-xs text-slate-500">
+                © {new Date().getFullYear()} Matungulu Girls Senior School. All rights reserved.
+                <span className="mt-1 block">For policy queries, contact the administration office through official school channels.</span>
+              </p>
             </div>
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-4 border border-emerald-100">
-              <h4 className="font-bold text-emerald-900 mb-2">Last Updated</h4>
-              <p className="text-sm text-slate-700">January 6, {new Date().getFullYear()}. Rules are reviewed annually and may be updated.</p>
-            </div>
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4 border border-emerald-100">
-              <h4 className="font-bold text-emerald-900 mb-2">Enforcement</h4>
-              <p className="text-sm text-slate-700">Rules enforced by school administration. Appeals to be made in writing to Principal's office.</p>
-            </div>
-          </div>
-          
-          <div className="text-center mt-8">
-            <p className="text-xs text-slate-500">
-              © {new Date().getFullYear()} Matungulu Girls Senior School. All rights reserved. 
-              <span className="block mt-1">For queries, contact: principal@Matungulu Girls.sc.ke | Tel: +254 712 345 678 | Mweiga, Nyeri</span>
-            </p>
-          </div>
+          </main>
         </div>
       </div>
     </div>

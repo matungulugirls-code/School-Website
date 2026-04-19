@@ -454,7 +454,6 @@ export default function ModernFeesPage() {
   }
 
   const pdfInfo = getCurrentPDFInfo();
-  const currentItems = getCurrentFeeItems();
   const totalAmount = getCurrentTotal();
   const currentTabLabel = tabs.find((tab) => tab.id === activeTab)?.name || 'Fees';
 
@@ -463,7 +462,7 @@ export default function ModernFeesPage() {
     totalItems: filteredItems.length,
     totalAmount: totalAmount.toLocaleString(),
     categories: getUniqueCategories(),
-    pdfAvailable: pdfInfo?.url ? 'YES' : 'NO',
+    pdfAvailable: Boolean(pdfInfo?.url),
     lastUpdated: getLastUpdated(),
     refreshing: refreshing
   };
