@@ -1,20 +1,38 @@
 "use client";
-import React, { useState } from 'react';
-import { Mail, ShieldQuestion, LoaderCircle, Heart, School, ArrowLeft } from 'lucide-react';
-import { toast, Toaster } from 'sonner';
 
-const ForgotPasswordPage = () => {
+import React, { useState } from "react";
+import { Mail, LoaderCircle, ArrowLeft, School, ShieldCheck, Inbox } from "lucide-react";
+import { toast, Toaster } from "sonner";
+
+const infoCards = [
+  {
+    title: "Secure Recovery",
+    text: "Your account reset request is handled through the existing protected school reset flow.",
+    icon: <ShieldCheck className="h-5 w-5" />,
+  },
+  {
+    title: "School Email Access",
+    text: "Use the email registered to your account so the reset link reaches the correct inbox.",
+    icon: <Mail className="h-5 w-5" />,
+  },
+  {
+    title: "Check Inbox & Spam",
+    text: "After sending the request, review both your inbox and spam folder for the recovery message.",
+    icon: <Inbox className="h-5 w-5" />,
+  },
+];
+
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [gmailEnabled, setGmailEnabled] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const loadingToast = toast.loading('Sending reset link...', {
-      position: 'top-right',
+    const loadingToast = toast.loading("Sending reset link...", {
+      position: "top-right",
     });
 
     try {
@@ -28,61 +46,22 @@ const ForgotPasswordPage = () => {
 
       if (res.ok) {
         toast.dismiss(loadingToast);
-        toast.success(
-          <div className="flex flex-col gap-1">
-            <span className="font-bold">✅ Reset Link Sent!</span>
-            <span className="text-sm opacity-90">{data.message}</span>
-          </div>,
-          {
-            duration: 5000,
-            icon: '📧',
-            position: 'top-right',
-            style: {
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-              color: 'white',
-              border: 'none',
-            },
-          }
-        );
-        
+        toast.success(data.message || "Reset link sent successfully.", {
+          position: "top-right",
+        });
         setEmail("");
-        setGmailEnabled(true);
         setEmailSent(true);
       } else {
         toast.dismiss(loadingToast);
-        toast.error(
-          <div className="flex flex-col gap-1">
-            <span className="font-bold">❌ Failed to Send</span>
-            <span className="text-sm opacity-90">{data.message}</span>
-          </div>,
-          {
-            duration: 5000,
-            position: 'top-right',
-            style: {
-              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-              color: 'white',
-              border: 'none',
-            },
-          }
-        );
+        toast.error(data.message || "Failed to send reset link.", {
+          position: "top-right",
+        });
       }
     } catch (error) {
       toast.dismiss(loadingToast);
-      toast.error(
-        <div className="flex flex-col gap-1">
-          <span className="font-bold">❌ Network Error</span>
-          <span className="text-sm opacity-90">Failed to send reset link. Please try again.</span>
-        </div>,
-        {
-          duration: 5000,
-          position: 'top-right',
-          style: {
-            background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-            color: 'white',
-            border: 'none',
-          },
-        }
-      );
+      toast.error("Failed to send reset link. Please try again.", {
+        position: "top-right",
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -91,207 +70,154 @@ const ForgotPasswordPage = () => {
 
   const handleGmailClick = () => {
     if (!email && !emailSent) {
-      toast.warning('Please enter your email first', {
-        position: 'top-right',
-        style: {
-          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-          color: 'white',
-          border: 'none',
-        },
+      toast.warning("Please enter your email first", {
+        position: "top-right",
       });
       return;
     }
-    
-    toast.info('Opening Gmail...', {
-      position: 'top-right',
+
+    toast.info("Opening Gmail...", {
+      position: "top-right",
       duration: 2000,
-      style: {
-        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        color: 'white',
-        border: 'none',
-      },
     });
-    
-    const searchEmail = emailSent ? email : email;
-    window.open(`https://mail.google.com/mail/u/0/#search/${encodeURIComponent(searchEmail)}`, '_blank');
+
+    window.open(
+      `https://mail.google.com/mail/u/0/#search/${encodeURIComponent(email)}`,
+      "_blank"
+    );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white flex items-center justify-center p-3 sm:p-4 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 z-50"></div>
-      
-      {/* Solid Background Overlays */}
-      <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-500/5 rounded-full"></div>
-      <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/5 rounded-full"></div>
-      
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-                          linear-gradient(180deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-        backgroundSize: '40px 40px'
-      }}></div>
+    <div className="min-h-screen bg-[#061510] text-white">
+      <Toaster position="top-right" richColors expand />
 
-      {/* Back Button */}
-      <button
-        onClick={() => window.history.back()}
-        className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 px-3 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 text-white/80 hover:text-white hover:bg-white/10 transition-colors text-xs sm:text-sm"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span>Back to Login</span>
-      </button>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(205,171,87,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(14,86,73,0.26),transparent_34%)]" />
 
-      <Toaster 
-        position="top-right"
-        richColors
-        expand={true}
-        toastOptions={{
-          style: {
-            borderRadius: '12px',
-            padding: '16px',
-            fontSize: '14px',
-            fontWeight: '500',
-          },
-          success: {
-            style: {
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-              color: 'white',
-            },
-          },
-          error: {
-            style: {
-              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-              color: 'white',
-            },
-          },
-          warning: {
-            style: {
-              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-              color: 'white',
-            },
-          },
-          info: {
-            style: {
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-              color: 'white',
-            },
-          },
-        }}
-      />
+      <div className="relative mx-auto grid min-h-screen max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8">
+        <section className="order-2 space-y-6 lg:order-1">
+          <button
+            onClick={() => window.history.back()}
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Login
+          </button>
 
-      <div className="max-w-sm sm:max-w-md md:max-w-xl w-full mx-auto p-6 sm:p-8 md:p-10 backdrop-blur-lg bg-white/5 rounded-2xl sm:rounded-3xl shadow-2xl relative border border-white/10">
-        <div className="absolute top-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-emerald-500/20 rounded-full"></div>
-        <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-teal-500/20 rounded-full"></div>
-
-        <div className="relative z-10 text-center">
-          {/* School Logo/Badge */}
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-              <School className="text-white w-8 h-8" />
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/70">
+              <School className="h-4 w-4 text-[#d4b15f]" />
+              Account Recovery
             </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-center mb-3 sm:mb-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200">
-                Matungulu Girls
-              </span>
+            <h1 className="mt-5 text-4xl font-black leading-[0.95] text-white sm:text-5xl lg:text-6xl">
+              Reset access through a cleaner recovery workspace.
             </h1>
-            <div className="flex items-center gap-2">
-              <ShieldQuestion className="text-emerald-100 text-xl sm:text-2xl" />
-              <span className="text-lg sm:text-xl font-bold text-white">Password Recovery</span>
-            </div>
-          </div>
-          
-          <p className="text-sm sm:text-base text-emerald-100/80 mb-4 sm:mb-6 px-2">
-            Enter your registered email below and we'll send you a secure link to reset your password.
-          </p>
-          
-          <div className="flex justify-center flex-wrap gap-1 sm:gap-2 text-xs sm:text-sm font-medium mb-6 sm:mb-8">
-            <span className="bg-emerald-500/20 text-emerald-100 px-2 sm:px-3 py-1 rounded-full border border-emerald-500/30">#Security</span>
-            <span className="bg-emerald-500/20 text-emerald-100 px-2 sm:px-3 py-1 rounded-full border border-emerald-500/30">#AccountRecovery</span>
-            <span className="bg-emerald-500/20 text-emerald-100 px-2 sm:px-3 py-1 rounded-full border border-emerald-500/30">#SafeAccess</span>
+            <p className="mt-5 text-sm leading-7 text-white/68 sm:text-base">
+              Enter the school email attached to your account and we will send a secure password reset link using the existing backend recovery flow.
+            </p>
           </div>
 
-          {/* Status Message */}
-          {emailSent && (
-            <div className="mb-4 p-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl">
-              <p className="text-emerald-100 text-xs sm:text-sm">
-                ✓ Reset link sent! Check your inbox and spam folder.
-              </p>
-            </div>
-          )}
-        </div>
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+            {infoCards.map((card) => (
+              <div
+                key={card.title}
+                className="rounded-[1.6rem] border border-white/10 bg-white/[0.05] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.16)]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
+                  {card.icon}
+                </div>
+                <h2 className="mt-4 text-lg font-black text-white">{card.title}</h2>
+                <p className="mt-2 text-sm leading-7 text-white/60">{card.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        <form onSubmit={handleSubmit} className="relative z-10 space-y-4 sm:space-y-6">
-          <div>
-            <div className="relative">
-              <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-emerald-100 w-4 h-4 sm:w-5 sm:h-5" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@matungulugirls.sc.ke"
-                className="w-full h-12 sm:h-14 pl-10 sm:pl-12 pr-4 bg-white/10 text-white placeholder-emerald-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white/20 transition-colors text-sm sm:text-base border border-white/10"
-                required
-              />
+        <section className="order-1 lg:order-2">
+          <div className="rounded-[2rem] border border-white/10 bg-[#0b1d18]/95 p-6 shadow-[0_35px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl sm:p-8">
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white shadow-[0_18px_38px_rgba(15,91,76,0.35)]">
+                <Mail className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">
+                  Recovery Desk
+                </p>
+                <h2 className="mt-1 text-2xl font-black text-white sm:text-3xl">
+                  Forgot Password
+                </h2>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[1.4rem] border border-[#d4b15f]/20 bg-[#d4b15f]/10 p-4 text-sm leading-7 text-white/78">
+              Use your registered email to request a reset link. The API logic and delivery flow remain unchanged.
+            </div>
+
+            {emailSent && (
+              <div className="mt-5 rounded-[1.4rem] border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-100">
+                Reset link sent. Check your inbox and spam folder.
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+              <div>
+                <label className="mb-2 block text-sm font-bold text-white/75">
+                  School Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/35" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="admin@matungulugirls.sc.ke"
+                    className="h-14 w-full rounded-[1.3rem] border border-white/10 bg-white/[0.05] pl-12 pr-4 text-sm font-medium text-white outline-none placeholder:text-white/30 focus:border-[#d4b15f]/45"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`inline-flex h-14 items-center justify-center gap-2 rounded-[1.3rem] text-sm font-black transition ${
+                    loading
+                      ? "cursor-not-allowed bg-[#0f5b4c]/50 text-white/60"
+                      : "bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white shadow-[0_18px_40px_rgba(15,91,76,0.3)]"
+                  }`}
+                >
+                  {loading ? (
+                    <>
+                      <LoaderCircle className="h-5 w-5 animate-spin" />
+                      Sending Link...
+                    </>
+                  ) : (
+                    "Send Reset Link"
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleGmailClick}
+                  className={`inline-flex h-14 items-center justify-center gap-2 rounded-[1.3rem] border text-sm font-black transition ${
+                    !email && !emailSent
+                      ? "cursor-not-allowed border-white/10 bg-white/[0.03] text-white/30"
+                      : "border-white/10 bg-white/[0.05] text-white hover:bg-white/[0.08]"
+                  }`}
+                  disabled={!email && !emailSent}
+                >
+                  <Inbox className="h-5 w-5 text-[#d4b15f]" />
+                  Open Gmail
+                </button>
+              </div>
+            </form>
+
+            <div className="mt-6 border-t border-white/10 pt-5 text-xs font-bold uppercase tracking-[0.22em] text-white/40">
+              Matungulu Girls Senior School · Secure Recovery Portal
             </div>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full sm:flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-xl text-white font-semibold transition-colors ${
-                loading ? 'bg-emerald-600/50 cursor-not-allowed' :
-                'bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 shadow-lg shadow-emerald-500/30'
-              } text-sm sm:text-base`}
-            >
-              {loading ? (
-                <>
-                  <LoaderCircle className="animate-spin w-5 h-5 sm:w-6 sm:h-6" />
-                  <span>Sending Link...</span>
-                </>
-              ) : (
-                <span>Send Reset Link</span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={handleGmailClick}
-              className={`w-full sm:flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-xl font-semibold transition-colors ${
-                !email && !emailSent ? 'bg-white/5 text-white/30 cursor-not-allowed border border-white/10' :
-                'bg-white/10 text-white hover:bg-white/20 border border-white/20 hover:border-emerald-400/50'
-              } text-sm sm:text-base`}
-              disabled={!email && !emailSent}
-            >
-              <Mail size={18} />
-              <span>Open Gmail</span>
-            </button>
-          </div>
-        </form>
-
-        <div className="mt-6 sm:mt-8 text-center text-sm">
-          <p className="text-xs sm:text-sm text-emerald-100/70">
-            Remembered your password?{' '}
-            <span
-              onClick={() => window.history.back()}
-              className="text-emerald-100 font-medium hover:text-emerald-100 hover:underline cursor-pointer transition-colors"
-            >
-              Return to Login
-            </span>
-          </p>
-        </div>
-
-   {/* School Motto */}
-            <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-center gap-2">
-              <Heart className="w-3 h-3 text-emerald-100" />
-              <span className="text-[10px] sm:text-xs text-emerald-100/60">Strive to Excell</span>
-            </div>
+        </section>
       </div>
     </div>
   );
-};
-
-export default ForgotPasswordPage;
+}

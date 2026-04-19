@@ -23,10 +23,8 @@ import {
   Share2,
   Sparkles,
   Star,
-  Swipe,
   Trophy,
   Users,
-  LayoutPanelTop,
   List,
 } from "lucide-react";
 
@@ -514,7 +512,7 @@ export default function MagazineArchive() {
               <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
                 <div className="flex items-center gap-3">
                   <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
-                    <Swipe className="h-5 w-5" />
+                    <BookOpen className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-sm font-black text-white">Immersive browsing</p>
@@ -629,7 +627,7 @@ export default function MagazineArchive() {
                     : "border border-[#11281f12] bg-white text-[#11281f]"
                 }`}
               >
-                <LayoutPanelTop className="h-4 w-4" />
+                <Grid3x3 className="h-4 w-4" />
                 Gallery
               </button>
               <button

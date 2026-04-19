@@ -1,69 +1,69 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  LoaderCircle,
-  KeyRound,
+  AlertCircle,
+  ArrowLeft,
+  CheckCircle,
   Eye,
   EyeOff,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Heart,
+  KeyRound,
+  LoaderCircle,
   School,
-  ArrowLeft
+  ShieldCheck,
 } from "lucide-react";
 
-// Create a separate component that uses useSearchParams
-const ResetPasswordContent = () => {
+function ConditionRow({ condition, text }) {
+  return (
+    <div className="flex items-center gap-3 rounded-[1rem] border border-white/8 bg-white/[0.04] px-4 py-3">
+      {condition ? (
+        <CheckCircle className="h-4 w-4 text-emerald-300" />
+      ) : (
+        <AlertCircle className="h-4 w-4 text-white/35" />
+      )}
+      <span className={`text-sm font-medium ${condition ? "text-emerald-100" : "text-white/55"}`}>
+        {text}
+      </span>
+    </div>
+  );
+}
+
+function ResetPasswordContent() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-
-  // States to track password conditions
   const [hasMinLength, setHasMinLength] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
   const [hasLetter, setHasLetter] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(false);
 
-  // Check if token exists on component mount
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   useEffect(() => {
     if (!token) {
       setError("Invalid or missing reset token. Please request a new password reset link.");
-    } else {
-      console.log("Token from URL:", token);
     }
   }, [token]);
 
-  // This useEffect hook updates the password conditions in real-time
   useEffect(() => {
-    // Check for minimum length (at least 8 characters)
     setHasMinLength(newPassword.length >= 8);
-
-    // Check for at least one number using a regular expression
     setHasNumber(/[0-9]/.test(newPassword));
-
-    // Check for at least one letter (uppercase or lowercase)
     setHasLetter(/[a-zA-Z]/.test(newPassword));
-
-    // Check if the two password fields match
     setPasswordsMatch(newPassword === confirmPassword && newPassword !== "");
   }, [newPassword, confirmPassword]);
 
-  // Redirect to login after successful reset
   useEffect(() => {
     if (resetSuccess) {
       const timer = setTimeout(() => {
         router.push("/pages/adminLogin");
       }, 3000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [resetSuccess, router]);
@@ -73,14 +73,12 @@ const ResetPasswordContent = () => {
     setLoading(true);
     setError("");
 
-    // Check if token exists
     if (!token) {
       setError("Invalid reset token. Please request a new password reset link.");
       setLoading(false);
       return;
     }
 
-    // Check all conditions are met before attempting submission
     if (!hasMinLength || !hasNumber || !hasLetter || !passwordsMatch) {
       setError("Please meet all password requirements.");
       setLoading(false);
@@ -88,352 +86,242 @@ const ResetPasswordContent = () => {
     }
 
     try {
-      console.log("Submitting password reset request...");
-      console.log("Token being sent:", token);
-      
-      // Call the actual API endpoint - send raw token (backend will hash it)
-      const response = await fetch('/api/resetpassword', {
-        method: 'POST',
+      const response = await fetch("/api/resetpassword", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          token: token, // Send the raw UUID token - backend will hash it
-          newPassword: newPassword
+          token,
+          newPassword,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to reset password');
+        throw new Error(data.message || "Failed to reset password");
       }
 
-      console.log("Password reset successful!");
-      
-      // Set success state
       setResetSuccess(true);
-
-    } catch (error) {
-      console.error("Failed to reset password:", error);
-      setError(error.message || "Failed to reset password. Please try again.");
+    } catch (err) {
+      console.error("Failed to reset password:", err);
+      setError(err.message || "Failed to reset password. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper component for the list items to apply conditional styling
-  const ConditionItem = ({ condition, text }) => {
-    const iconClasses = condition ? "text-emerald-200" : "text-gray-400";
-    const textClasses = condition ? "text-emerald-200" : "text-gray-400";
-
-    return (
-      <li className="flex items-center gap-2 py-1">
-        {condition ? (
-          <CheckCircle size={16} className={iconClasses} />
-        ) : (
-          <XCircle size={16} className={iconClasses} />
-        )}
-        <span className={`${textClasses} text-sm sm:text-base`}>{text}</span>
-      </li>
-    );
-  };
-
-  // Error message component
-  const ErrorMessage = ({ message }) => (
-    <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
-      <div className="flex items-start sm:items-center gap-2 sm:gap-3">
-        <AlertCircle className="text-red-400 shrink-0 mt-0.5 sm:mt-0" size={18} />
-        <p className="text-red-300 text-sm sm:text-base">{message}</p>
-      </div>
-    </div>
-  );
-
-  // Success message component
-  const SuccessMessage = () => (
-    <div className="text-center py-6 sm:py-8 px-2">
-      <div className="flex justify-center mb-3 sm:mb-4">
-        <CheckCircle size={48} className="text-emerald-200 sm:w-16 sm:h-16" />
-      </div>
-      <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 px-2">
-        Password Reset Successful!
-      </h2>
-      <p className="text-gray-300 text-sm sm:text-base mb-3 sm:mb-4 px-2">
-        Your password has been successfully reset. Redirecting to login page...
-      </p>
-      <div className="flex justify-center items-center gap-2 mb-4">
-        <LoaderCircle className="animate-spin text-white" size={20} />
-        <span className="text-gray-300 text-xs sm:text-sm">Redirecting in 3 seconds</span>
-      </div>
-      
-      {/* Manual redirect option */}
-      <button
-        onClick={() => router.push("/pages/adminLogin")}
-        className="mt-4 sm:mt-6 bg-white/20 hover:bg-white/30 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl transition-colors text-sm sm:text-base w-full sm:w-auto"
-      >
-        Go to Login Now
-      </button>
-    </div>
-  );
-
-  // No token message component
-  const NoTokenMessage = () => (
-    <div className="text-center py-6 sm:py-8 px-2">
-      <div className="flex justify-center mb-3 sm:mb-4">
-        <AlertCircle size={48} className="text-red-500 sm:w-16 sm:h-16" />
-      </div>
-      <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-        Invalid Reset Link
-      </h2>
-      <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6 px-2">
-        This password reset link is invalid or has expired. Please request a new reset link.
-      </p>
-      <button
-        onClick={() => router.push("/pages/forgotpassword")}
-        className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white px-6 sm:px-8 py-3 rounded-xl font-semibold transition-colors text-sm sm:text-base w-full"
-      >
-        Request New Reset Link
-      </button>
-    </div>
-  );
-
   if (!token) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white flex items-center justify-center p-3 sm:p-4 relative overflow-hidden font-sans">
-        {/* Background Elements */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 z-50"></div>
-        <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-500/5 rounded-full"></div>
-        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/5 rounded-full"></div>
-        
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-                            linear-gradient(180deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }}></div>
+      <div className="rounded-[2rem] border border-white/10 bg-[#0b1d18]/95 p-8 shadow-[0_35px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl">
+        <div className="flex h-14 w-14 items-center justify-center rounded-[1.3rem] bg-[linear-gradient(135deg,#8b2f45,#d4b15f)] text-white">
+          <AlertCircle className="h-6 w-6" />
+        </div>
+        <h2 className="mt-5 text-3xl font-black text-white">Invalid Reset Link</h2>
+        <p className="mt-3 text-sm leading-7 text-white/68">
+          This password reset link is missing or expired. Request a new recovery email to continue.
+        </p>
+        <button
+          onClick={() => router.push("/pages/forgotpassword")}
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] px-5 py-3 text-sm font-black text-white"
+        >
+          Request New Reset Link
+        </button>
+      </div>
+    );
+  }
 
-        {/* Back Button */}
+  if (resetSuccess) {
+    return (
+      <div className="rounded-[2rem] border border-white/10 bg-[#0b1d18]/95 p-8 text-center shadow-[0_35px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
+          <CheckCircle className="h-8 w-8" />
+        </div>
+        <h2 className="mt-5 text-3xl font-black text-white">Password Reset Successful</h2>
+        <p className="mt-3 text-sm leading-7 text-white/68">
+          Your password has been updated successfully. Redirecting you back to login.
+        </p>
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-semibold text-white">
+          <LoaderCircle className="h-4 w-4 animate-spin text-[#d4b15f]" />
+          Redirecting in 3 seconds
+        </div>
         <button
           onClick={() => router.push("/pages/adminLogin")}
-          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 text-white/80 hover:text-white hover:bg-white/10 transition-colors text-xs sm:text-sm"
+          className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-black text-white"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Login</span>
+          Go to Login Now
         </button>
-
-        <div className="w-full max-w-md sm:max-w-xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-lg bg-white/5 rounded-2xl sm:rounded-3xl shadow-xl relative border border-white/10">
-          <NoTokenMessage />
-        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white flex items-center justify-center p-3 sm:p-4 relative overflow-hidden font-sans">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 z-50"></div>
-      <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-500/5 rounded-full"></div>
-      <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/5 rounded-full"></div>
-      
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-                          linear-gradient(180deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-        backgroundSize: '40px 40px'
-      }}></div>
+    <div className="rounded-[2rem] border border-white/10 bg-[#0b1d18]/95 p-6 shadow-[0_35px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl sm:p-8">
+      <div className="flex items-center gap-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white shadow-[0_18px_38px_rgba(15,91,76,0.35)]">
+          <KeyRound className="h-6 w-6" />
+        </div>
+        <div>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">
+            Password Reset
+          </p>
+          <h2 className="mt-1 text-2xl font-black text-white sm:text-3xl">Create a New Password</h2>
+        </div>
+      </div>
 
-      {/* Back Button */}
-      <button
-        onClick={() => router.push("/pages/adminLogin")}
-        className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 text-white/80 hover:text-white hover:bg-white/10 transition-colors text-xs sm:text-sm"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span>Back to Login</span>
-      </button>
+      <div className="mt-6 rounded-[1.4rem] border border-[#d4b15f]/20 bg-[#d4b15f]/10 p-4 text-sm leading-7 text-white/78">
+        This page keeps the existing token validation and reset API flow. Only the interface has been redesigned.
+      </div>
 
-      <div className="w-full max-w-md sm:max-w-xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-lg bg-white/5 rounded-2xl sm:rounded-3xl shadow-xl relative border border-white/10">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-emerald-500/20 rounded-full"></div>
-        <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-teal-500/20 rounded-full"></div>
+      {error && (
+        <div className="mt-5 rounded-[1.4rem] border border-rose-400/20 bg-rose-500/10 p-4 text-sm font-semibold text-rose-100">
+          {error}
+        </div>
+      )}
 
-        {resetSuccess ? (
-          <SuccessMessage />
-        ) : (
-          <>
-            {/* Header */}
-            <div className="relative z-10 text-center mb-4 sm:mb-6">
-              {/* School Logo */}
-              <div className="flex justify-center mb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                  <School className="text-white w-6 h-6" />
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center justify-center mb-2">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight mb-1">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200">
-                    Matungulu Girls
-                  </span>
-                </h1>
-                <div className="flex items-center gap-2">
-                  <KeyRound className="text-emerald-200 w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="text-lg sm:text-xl font-bold text-white">Reset Password</span>
-                </div>
-              </div>
-              
-              <p className="text-xs sm:text-sm text-emerald-100/80 mb-3 px-2">
-                Enter your new password below to reset your account password.
-              </p>
-              
-              <div className="flex justify-center flex-wrap gap-1 sm:gap-2 text-xs sm:text-sm font-medium mb-4">
-                <span className="bg-emerald-500/20 text-emerald-200 px-2 sm:px-3 py-1 rounded-full border border-emerald-500/30">#Security</span>
-                <span className="bg-emerald-500/20 text-emerald-200 px-2 sm:px-3 py-1 rounded-full border border-emerald-500/30">#AccountRecovery</span>
-              </div>
+      <form onSubmit={handleSubmit} className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.95fr]">
+        <div className="space-y-5">
+          <div>
+            <label className="mb-2 block text-sm font-bold text-white/75">New Password</label>
+            <div className="relative">
+              <KeyRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/35" />
+              <input
+                type={showPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter new password"
+                className="h-14 w-full rounded-[1.3rem] border border-white/10 bg-white/[0.05] pl-12 pr-12 text-sm font-medium text-white outline-none placeholder:text-white/30 focus:border-[#d4b15f]/45"
+                required
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/45 transition hover:text-white"
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
             </div>
+          </div>
 
-            {error && <ErrorMessage message={error} />}
-
-            <form onSubmit={handleSubmit} className="relative z-10 space-y-4 sm:space-y-6">
-              <div>
-                <label className="block text-sm sm:text-base font-medium text-emerald-200 mb-1 sm:mb-2">
-                  New Password
-                </label>
-                <div className="relative group">
-                  <KeyRound className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-emerald-200 w-4 h-4 sm:w-5 sm:h-5" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    className="w-full h-12 sm:h-14 pl-9 sm:pl-12 pr-10 sm:pr-12 bg-white/10 text-white placeholder-emerald-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white/20 transition-colors text-sm sm:text-base border border-white/10"
-                    required
-                    disabled={loading}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                    disabled={loading}
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="text-sm space-y-1 sm:space-y-2 p-3 sm:p-4 rounded-xl backdrop-blur-sm bg-white/5 border border-white/10">
-                <h3 className="text-base sm:text-lg font-bold text-white mb-1 sm:mb-2">
-                  Password Requirements:
-                </h3>
-                <ul className="space-y-1">
-                  <ConditionItem condition={hasMinLength} text="At least 8 characters" />
-                  <ConditionItem condition={hasNumber} text="Contains a number" />
-                  <ConditionItem condition={hasLetter} text="Contains a letter" />
-                </ul>
-                
-                <div className="mt-4 sm:mt-6">
-                  <label className="block text-sm sm:text-base font-medium text-emerald-200 mb-1 sm:mb-2">
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <KeyRound className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-emerald-200 w-4 h-4 sm:w-5 sm:h-5" />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Confirm new password"
-                      className="w-full h-12 sm:h-14 pl-9 sm:pl-12 pr-4 bg-white/10 text-white placeholder-emerald-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white/20 transition-colors text-sm sm:text-base border border-white/10"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mt-2">
-                  <ConditionItem condition={passwordsMatch} text="Passwords match" />
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  disabled={loading || !hasMinLength || !hasNumber || !hasLetter || !passwordsMatch}
-                  className={`w-full h-12 sm:h-14 rounded-xl text-white font-semibold transition-colors ${
-                    loading || !hasMinLength || !hasNumber || !hasLetter || !passwordsMatch
-                      ? "bg-emerald-600/50 cursor-not-allowed"
-                      : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 shadow-lg shadow-emerald-500/30"
-                  } text-sm sm:text-base`}
-                >
-                  {loading ? (
-                    <div className="flex items-center justify-center">
-                      <LoaderCircle className="animate-spin w-5 h-5 sm:w-6 sm:h-6" />
-                      <span className="ml-2">Resetting Password...</span>
-                    </div>
-                  ) : (
-                    <span>Reset Password</span>
-                  )}
-                </button>
-              </div>
-            </form>
-
-            {/* School Motto */}
-            <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-center gap-2">
-              <Heart className="w-3 h-3 text-emerald-200" />
-              <span className="text-[10px] sm:text-xs text-emerald-200/60">Prayer, Discipline & Hardwork</span>
+          <div>
+            <label className="mb-2 block text-sm font-bold text-white/75">Confirm Password</label>
+            <div className="relative">
+              <KeyRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/35" />
+              <input
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                className="h-14 w-full rounded-[1.3rem] border border-white/10 bg-white/[0.05] pl-12 pr-4 text-sm font-medium text-white outline-none placeholder:text-white/30 focus:border-[#d4b15f]/45"
+                required
+                disabled={loading}
+              />
             </div>
-          </>
-        )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || !hasMinLength || !hasNumber || !hasLetter || !passwordsMatch}
+            className={`inline-flex h-14 items-center justify-center gap-2 rounded-[1.3rem] text-sm font-black transition ${
+              loading || !hasMinLength || !hasNumber || !hasLetter || !passwordsMatch
+                ? "cursor-not-allowed bg-[#0f5b4c]/50 text-white/60"
+                : "bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white shadow-[0_18px_40px_rgba(15,91,76,0.3)]"
+            }`}
+          >
+            {loading ? (
+              <>
+                <LoaderCircle className="h-5 w-5 animate-spin" />
+                Resetting Password...
+              </>
+            ) : (
+              "Reset Password"
+            )}
+          </button>
+        </div>
+
+        <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-black text-white">Password Requirements</p>
+              <p className="text-xs text-white/52">Meet every condition before submission</p>
+            </div>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            <ConditionRow condition={hasMinLength} text="At least 8 characters" />
+            <ConditionRow condition={hasNumber} text="Contains a number" />
+            <ConditionRow condition={hasLetter} text="Contains a letter" />
+            <ConditionRow condition={passwordsMatch} text="Passwords match" />
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function ResetPasswordPageInner() {
+  const router = useRouter();
+
+  return (
+    <div className="min-h-screen bg-[#061510] text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(205,171,87,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(14,86,73,0.26),transparent_34%)]" />
+
+      <div className="relative mx-auto grid min-h-screen max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:px-8">
+        <section className="order-2 space-y-6 lg:order-1">
+          <button
+            onClick={() => router.push("/pages/adminLogin")}
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Login
+          </button>
+
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/70">
+              <School className="h-4 w-4 text-[#d4b15f]" />
+              Secure Password Setup
+            </div>
+            <h1 className="mt-5 text-4xl font-black leading-[0.95] text-white sm:text-5xl lg:text-6xl">
+              Create a stronger password in a cleaner reset workspace.
+            </h1>
+            <p className="mt-5 text-sm leading-7 text-white/68 sm:text-base">
+              Finish your password reset with a modern, easier-to-scan layout while keeping the original reset token and API behavior unchanged.
+            </p>
+          </div>
+        </section>
+
+        <section className="order-1 lg:order-2">
+          <ResetPasswordContent />
+        </section>
       </div>
     </div>
   );
-};
+}
 
-// Main component with Suspense boundary
-const ResetPasswordPage = () => {
-  const router = useRouter();
-  
+export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white flex items-center justify-center p-3 sm:p-4 relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 z-50"></div>
-        <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-500/5 rounded-full"></div>
-        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/5 rounded-full"></div>
-        
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-                            linear-gradient(180deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }}></div>
-
-        <button
-          onClick={() => router.push("/pages/adminLogin")}
-          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 text-white/80 hover:text-white hover:bg-white/10 transition-colors text-xs sm:text-sm"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Login</span>
-        </button>
-
-        <div className="w-full max-w-md sm:max-w-xl mx-auto p-4 sm:p-6 md:p-8 lg:p-10 backdrop-blur-lg bg-white/5 rounded-2xl sm:rounded-3xl shadow-xl relative border border-white/10">
-          <div className="text-center py-6 sm:py-8">
-            <div className="flex justify-center mb-3 sm:mb-4">
-              <LoaderCircle className="animate-spin text-white w-10 h-10 sm:w-12 sm:h-12" size={48} />
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[#061510] px-4 text-white">
+          <div className="rounded-[2rem] border border-white/10 bg-[#0b1d18]/95 p-8 text-center shadow-[0_35px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
+              <LoaderCircle className="h-6 w-6 animate-spin" />
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Loading...</h2>
-            <p className="text-gray-300 text-sm sm:text-base">Checking reset link validity</p>
-            
-            {/* School Motto */}
-            <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-center gap-2">
-              <Heart className="w-3 h-3 text-emerald-200" />
-              <span className="text-[10px] sm:text-xs text-emerald-200/60">Strive to Excell</span>
-            </div>
+            <h2 className="mt-5 text-2xl font-black text-white">Loading Reset Workspace</h2>
+            <p className="mt-3 text-sm leading-7 text-white/60">
+              Checking your reset link and preparing the secure password form.
+            </p>
           </div>
         </div>
-      </div>
-    }>
-      <ResetPasswordContent />
+      }
+    >
+      <ResetPasswordPageInner />
     </Suspense>
   );
-};
-
-export default ResetPasswordPage;
+}
