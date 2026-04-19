@@ -174,7 +174,7 @@ Steps:
 **Affordable quality education with flexible payment options!**`,
     links: [
       { label: 'Student Portal', path: '/pages/StudentPortal', icon: 'book' },
-            { label: 'Student Fees', path: '/pages/fees', icon: 'help' }
+            { label: 'Student Fees', path: '/pages/School Fees', icon: 'help' }
 
     ]
   },

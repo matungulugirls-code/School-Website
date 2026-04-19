@@ -21,7 +21,7 @@ Disallow: /private/
 Disallow: /secure/
 Disallow: /pages/adminLogin
 Disallow: /pages/forgotpassword
-Disallow: /pages/OurSchoolPolicies?*
+Disallow: /pagesSchool Policies?*
 
 # Disallow dynamic/duplicate content
 Disallow: /*?*

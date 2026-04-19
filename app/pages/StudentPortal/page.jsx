@@ -431,7 +431,7 @@ function GuestPortalLanding({ onOpenLogin, router }) {
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
-                onClick={() => router.push('/pages/OurSchoolpolicies')}
+                onClick={() => router.push('/pagesSchool Policies')}
                 className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-6 py-4 text-sm font-black text-white"
               >
                 View Policies
@@ -862,10 +862,10 @@ export default function ModernStudentPortalPage() {
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-white/45">
-                <button onClick={() => router.push('/pages/OurSchoolpolicies')} className="transition hover:text-white">
+                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-white">
                   Privacy
                 </button>
-                <button onClick={() => router.push('/pages/OurSchoolpolicies')} className="transition hover:text-white">
+                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-white">
                   Terms
                 </button>
                 <button onClick={() => router.push('/pages/contact')} className="transition hover:text-white">

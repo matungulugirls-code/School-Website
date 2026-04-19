@@ -51,7 +51,7 @@ import { FaLinkedin, FaTiktok, FaGraduationCap, FaChalkboardTeacher, FaFemale } 
 const QUICK_LINKS = [
   { name: 'Home', href: '/', icon: FiHome },
   { name: 'About Us', href: '/pages/AboutUs', icon: FiUsers },
-  { name: 'Fees Structure', href: '/pages/fees', icon: FiBook },
+  { name: 'Fees Structure', href: '/pages/School Fees', icon: FiBook },
   { name: 'Admissions', href: '/pages/admissions', icon: FiUserCheck },
   { name: 'Gallery', href: '/pages/gallery', icon: FiImage },
   { name: 'News & Events', href: '/pages/eventsandnews', icon: FiCalendar },
@@ -69,7 +69,7 @@ const RESOURCES = [
   },
   { name: 'Staff Directory', href: '/pages/SchoolTeam', icon: FiUsers },
   { name: 'Admin Login', href: '/pages/adminLogin', icon: FiLock },
-  { name: 'School Policies', href: '/pages/OurSchoolpolicies', icon: FiShield },
+  { name: 'School Policies', href: '/pagesSchool Policies', icon: FiShield },
   { name: 'E-Learning Platform', href: '/pages/e-learning', icon: FiCompass },
 ];
 

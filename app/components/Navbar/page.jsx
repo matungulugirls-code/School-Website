@@ -156,7 +156,7 @@ export default function ModernNavbar() {
     },
     {
       name: 'School Rules',
-      href: '/pages/OurSchoolpolicies',
+      href: '/pagesSchool Policies',
       icon: FiAward,
       description: 'Policies & student regulations'
     }
@@ -507,7 +507,7 @@ export default function ModernNavbar() {
                 <a
                   href="/pages/School Fees"
                   className={`group flex items-center gap-0.5 xs:gap-1 font-bold transition-all text-[0.85rem] xs:text-[0.9rem] tracking-wide whitespace-nowrap px-1.5 xs:px-2 py-2 relative ${
-                    isActiveLink('/pages/fees')
+                    isActiveLink('/pages/School Fees')
                       ? 'text-emerald-100'
                       : 'text-white/80 hover:text-emerald-100'
                   }`}
@@ -515,7 +515,7 @@ export default function ModernNavbar() {
                   <FiDollarSign className="text-xs flex-shrink-0" />
                   <span className="truncate">School Fees</span>
 
-                  {isActiveLink('/pages/fees') && (
+                  {isActiveLink('/pages/School Fees') && (
                     <span className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-5 h-0.5 bg-emerald-300 rounded-full"></span>
                   )}
 
@@ -701,9 +701,9 @@ export default function ModernNavbar() {
 
                 {/* School Fees Mobile Link */}
                 <a
-                  href="/pages/fees"
+                  href="/pages/School Fees"
                   className={`flex items-center gap-2 xs:gap-3 p-3 xs:p-4 rounded-lg xs:rounded-xl ${
-                    isActiveLink('/pages/fees')
+                    isActiveLink('/pages/School Fees')
                       ? 'bg-white/10 text-emerald-200'
                       : 'text-white/90 hover:bg-white/5'
                   }`}
