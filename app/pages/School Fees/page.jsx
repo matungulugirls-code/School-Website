@@ -520,7 +520,7 @@ export default function ModernFeesPage() {
                     placeholder={`Search ${activeTab} fees...`}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-2xl border font-semibold border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
                   {searchTerm && (
                     <button
@@ -594,6 +594,16 @@ export default function ModernFeesPage() {
               </div>
             </div>
 
+          </aside>
+
+
+
+
+          <section className="space-y-5">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
+
             <div className="rounded-[1.8rem] border border-slate-200 bg-white p-6">
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Payment Channels</p>
               <div className="mt-4 space-y-4">
@@ -635,11 +645,7 @@ export default function ModernFeesPage() {
                 Contact Bursar
               </button>
             </div>
-          </aside>
 
-          <section className="space-y-5">
-            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Fee Ledger</p>
                   <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
