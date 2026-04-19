@@ -478,7 +478,7 @@ export default function ModernFeesPage() {
       <div className="max-w-7xl mx-auto  py-6 sm:py-8">
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+            <div className="rounded-md border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-700">Browse Sections</p>
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 {tabs.map((tab) => {
@@ -585,7 +585,7 @@ export default function ModernFeesPage() {
               </div>
             )}
 
-            <div className="rounded-[1.8rem] bg-[#102d24] p-6 text-white">
+            <div className="rounded-md bg-[#102d24] p-6 text-white">
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">What To Know</p>
               <div className="mt-4 space-y-4 text-sm leading-7 text-white/78">
                 <p>Review the correct section before making payment so charges match the learner&apos;s status.</p>
@@ -644,7 +644,7 @@ export default function ModernFeesPage() {
               </button>
             </div>
 
-            
+
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
 
