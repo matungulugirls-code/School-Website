@@ -1,180 +1,201 @@
 'use client';
 
-import { 
-  FiHome, 
-  FiBarChart2, 
-  FiFolder, 
-  FiMessageSquare, 
+import { useMemo } from 'react';
+import {
+  FiArrowUpRight,
+  FiBookOpen,
+  FiCompass,
+  FiCreditCard,
+  FiGrid,
+  FiHome,
+  FiLayers,
   FiLogOut,
-  FiX,
   FiRefreshCw,
-  FiExternalLink
+  FiShield,
+  FiTrendingUp,
+  FiUser,
+  FiX,
 } from 'react-icons/fi';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
-export default function NavigationSidebar({ 
-  student, 
-  onLogout, 
-  currentView, 
+const navItems = [
+  { id: 'home', label: 'Workspace', helper: 'Overview and shortcuts', icon: <FiHome className="h-4 w-4" /> },
+  { id: 'results', label: 'Results', helper: 'Academic records', icon: <FiTrendingUp className="h-4 w-4" /> },
+  { id: 'resources', label: 'Resources', helper: 'Assignments and files', icon: <FiBookOpen className="h-4 w-4" /> },
+  { id: 'guidance', label: 'Guidance', helper: 'Support and events', icon: <FiCompass className="h-4 w-4" /> },
+  { id: 'fees', label: 'Fees', helper: 'Finance panel', icon: <FiCreditCard className="h-4 w-4" /> },
+];
+
+function getInitials(name) {
+  if (!name) return 'MG';
+  return name
+    .split(' ')
+    .map((part) => part[0]?.toUpperCase())
+    .slice(0, 2)
+    .join('');
+}
+
+export default function NavigationSidebar({
+  student,
+  feeBalance,
+  feeLoading,
+  feeError,
+  onLogout,
+  currentView,
   setCurrentView,
   onRefresh,
-  onMenuClose
+  onMenuClose,
 }) {
-  const navItems = [
-    { id: 'home', label: 'Dashboard', icon: <FiHome /> },
-    { id: 'results', label: 'Academic Results', icon: <FiBarChart2 /> },
-    { id: 'resources', label: 'Resources & Assignments', icon: <FiFolder /> },
-    { id: 'guidance', label: 'Guidance & Events', icon: <FiMessageSquare /> },
-  ];
-
-  const getInitials = (name) => {
-    return name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'ST';
-  };
-
-  const router = useRouter();
+  const statusText = useMemo(() => {
+    if (feeLoading) return 'Fee balance loading';
+    if (feeError) return 'Finance data needs refresh';
+    if (feeBalance?.balance !== undefined && feeBalance?.balance !== null) {
+      return `KES ${Number(feeBalance.balance).toLocaleString()}`;
+    }
+    return 'Open finance desk';
+  }, [feeBalance, feeLoading, feeError]);
 
   return (
-    <aside className="fixed lg:relative inset-y-0 left-0 z-50 h-full bg-white border-r border-gray-200 w-full max-w-[300px] lg:max-w-[280px] xl:max-w-[300px] flex flex-col">
-      <div className="flex flex-col">
-        {/* Header */}
-        <div className="p-4 sm:p-5 lg:p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {/* Logo - Using image like Admin sidebar */}
-              <div className="relative">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/30">
-                  <img 
-                    src="/MatG.jpg" 
-                    alt="School Logo" 
-                    className="w-full h-full object-contain p-2"
-                  />
-                </div>
-                <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-emerald-400 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
-              </div>
-              <div className="min-w-0">
-                <h2 className="font-bold text-gray-900 text-base sm:text-lg lg:text-xl truncate">
-                  Student Portal
-                </h2>
-                <p className="text-gray-500 text-xs sm:text-sm truncate">Matungulu Girls High </p>
-              </div>
+    <aside className="flex h-full flex-col border-r border-white/10 bg-[#081712]/96 text-white backdrop-blur-2xl">
+      <div className="border-b border-white/10 p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,#0f5b4c,#d6b25e)] shadow-[0_18px_38px_rgba(15,91,76,0.3)]">
+              <FiGrid className="h-6 w-6 text-white" />
             </div>
-            
-            {/* Mobile Close Button */}
-            <button
-              onClick={onMenuClose}
-              className="lg:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-              aria-label="Close sidebar"
-            >
-              <FiX size={20} className="text-gray-600" />
-            </button>
+            <div>
+              <p className="text-lg font-black tracking-tight text-white">Student Hub</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">
+                Matungulu Girls
+              </p>
+            </div>
           </div>
+          <button
+            onClick={onMenuClose}
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition hover:bg-white/[0.1] lg:hidden"
+            aria-label="Close sidebar"
+          >
+            <FiX className="h-5 w-5" />
+          </button>
         </div>
 
-        {/* Student Profile */}
-        <div className="p-4 sm:p-5 lg:p-6 border-b border-gray-200">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg sm:text-xl">
-                {getInitials(student?.fullName)}
-              </span>
+        <div className="mt-6 rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-4">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-[1.3rem] bg-[linear-gradient(135deg,#0f5b4c,#0b2f28)] text-lg font-black text-white">
+              {getInitials(student?.fullName)}
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-gray-900 text-sm sm:text-base lg:text-lg truncate">
-                {student?.fullName || 'Student Name'}
-              </h3>
-              <div className="flex items-center gap-1.5 sm:gap-2 mt-1">
-                <span className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs sm:text-sm font-semibold rounded-full whitespace-nowrap">
-                  {student?.form} {student?.stream}
-                </span>
-              </div>
-              <p className="text-gray-500 text-xs sm:text-sm mt-1.5 sm:mt-2 truncate">
-                {student?.admissionNumber || 'ADM-0000'}
+            <div className="min-w-0">
+              <p className="truncate text-base font-black text-white">{student?.fullName || 'Student Name'}</p>
+              <p className="mt-1 text-xs font-medium text-white/55">
+                {student?.form || 'Form'} · {student?.stream || 'Stream'}
+              </p>
+              <p className="mt-1 text-[11px] font-bold text-[#d6b25e]">
+                ADM {student?.admissionNumber || '----'}
               </p>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4 sm:p-5 lg:p-6 overflow-y-auto">
-          <div className="space-y-2 sm:space-y-4">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setCurrentView(item.id)}
-                className={`w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4 rounded-xl transition-all duration-200 ${
-                  currentView === item.id 
-                    ? 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 border-l-4 border-blue-600 shadow-lg shadow-blue-500/10 backdrop-blur-sm' 
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                }`}
-              >
-                <span className={`text-lg sm:text-xl ${
-                  currentView === item.id 
-                    ? 'text-blue-600' 
-                    : 'text-gray-500 group-hover:text-gray-700'
-                }`}>
-                  {item.icon}
-                </span>
-                <span className={`font-semibold text-left text-sm sm:text-base ${
-                  currentView === item.id 
-                    ? 'text-blue-700' 
-                    : 'text-gray-800 group-hover:text-gray-900'
-                }`}>
-                  {item.label}
-                </span>
-              </button>
-            ))}
+      <div className="flex-1 overflow-y-auto p-5 sm:p-6">
+        <div className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,rgba(15,91,76,0.2),rgba(255,255,255,0.02))] p-4">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">Navigation Hub</p>
+          <div className="mt-4 space-y-2">
+            {navItems.map((item) => {
+              const active = currentView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setCurrentView(item.id)}
+                  className={`group flex w-full items-center gap-3 rounded-[1.35rem] px-4 py-4 text-left transition ${
+                    active
+                      ? 'bg-[linear-gradient(135deg,#103f34,#0b231d)] text-white shadow-[0_16px_34px_rgba(0,0,0,0.22)]'
+                      : 'bg-white/[0.03] text-white/75 hover:bg-white/[0.06] hover:text-white'
+                  }`}
+                >
+                  <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
+                    active ? 'bg-[#d6b25e] text-[#11241d]' : 'bg-white/[0.06] text-white/70'
+                  }`}>
+                    {item.icon}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-black">{item.label}</p>
+                    <p className="text-xs font-medium text-inherit opacity-65">{item.helper}</p>
+                  </div>
+                  <FiArrowUpRight className={`h-4 w-4 transition ${active ? 'text-[#d6b25e]' : 'text-white/30 group-hover:text-white/70'}`} />
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-            {/* Zeraki Analytics Link - Added below navigation items */}
-            <a
-              href="https://analytics.zeraki.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4 rounded-xl transition-all duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 group"
-            >
-              <div className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center">
-                <img 
-                  src="/zeraki.jpg" 
-                  alt="Zeraki Analytics" 
-                  className="w-full h-full object-cover rounded-md border border-gray-300 group-hover:border-blue-400 transition-colors"
-                />
+        <div className="mt-5 rounded-[1.8rem] border border-white/10 bg-white/[0.04] p-4">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">Need To Know</p>
+          <div className="mt-4 space-y-3">
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+              <div className="flex items-center gap-3">
+                <FiShield className="h-5 w-5 text-[#d6b25e]" />
+                <div>
+                  <p className="text-sm font-black text-white">Secure Session</p>
+                  <p className="text-xs text-white/55">Protected student access remains active under the existing login flow.</p>
+                </div>
               </div>
-              <span className="font-semibold text-left text-sm sm:text-base flex-1">
-                Zeraki Analytics
-              </span>
-              <FiExternalLink className="text-gray-400 text-sm sm:text-base group-hover:text-blue-600 transition-colors" />
-            </a>
+            </div>
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+              <div className="flex items-center gap-3">
+                <FiCreditCard className="h-5 w-5 text-[#d6b25e]" />
+                <div>
+                  <p className="text-sm font-black text-white">Finance Snapshot</p>
+                  <p className="text-xs text-white/55">{statusText}</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+              <div className="flex items-center gap-3">
+                <FiLayers className="h-5 w-5 text-[#d6b25e]" />
+                <div>
+                  <p className="text-sm font-black text-white">Quick Identity</p>
+                  <p className="text-xs text-white/55">{student?.form || 'Form'} · {student?.stream || 'Stream'} · {student?.admissionNumber || 'Admission'}</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </nav>
+        </div>
 
-        <div className="p-3 sm:p-4 lg:p-6 mb-[12%] bg-white/50 backdrop-blur-sm border-t border-gray-100">
-          <div className="flex flex-row items-center gap-2 sm:gap-3 w-full">
-            {/* Refresh Button */}
-            <button
-              onClick={() => {
-                router.refresh();
-              }}
-              className="group flex-1 flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 
-              bg-white border border-blue-100 text-blue-600 rounded-xl sm:rounded-2xl 
-              text-xs sm:text-sm font-bold tracking-tight shadow-[0_4px_12px_rgba(59,130,246,0.08)] 
-              active:bg-blue-50 active:scale-95 transition-all duration-200 min-w-0"
-            >
-              <FiRefreshCw className="text-sm sm:text-lg group-active:animate-spin" />
-              <span className="truncate">Refresh</span>
-            </button>
-
-            {/* Logout Button */}
-            <button
-              onClick={onLogout}
-              className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 
-              bg-rose-50/50 border border-rose-100 text-rose-600 rounded-xl sm:rounded-2xl 
-              text-xs sm:text-sm font-bold tracking-tight shadow-[0_4px_12px_rgba(225,29,72,0.08)] 
-              active:bg-rose-100 active:scale-95 transition-all duration-200 min-w-0"
-            >
-              <FiLogOut className="text-sm sm:text-lg" />
-              <span className="truncate">Logout</span>
-            </button>
+        <a
+          href="https://analytics.zeraki.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 flex items-center justify-between rounded-[1.6rem] border border-white/10 bg-[linear-gradient(145deg,#10261f,#0a1714)] px-4 py-4 text-white transition hover:bg-[linear-gradient(145deg,#143228,#0d1d18)]"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.06]">
+              <FiTrendingUp className="h-4 w-4 text-[#d6b25e]" />
+            </div>
+            <div>
+              <p className="text-sm font-black">Zeraki Analytics</p>
+              <p className="text-xs text-white/55">Open external learning analytics</p>
+            </div>
           </div>
+          <FiArrowUpRight className="h-4 w-4 text-[#d6b25e]" />
+        </a>
+      </div>
+
+      <div className="border-t border-white/10 p-5 sm:p-6">
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={onRefresh}
+            className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-black text-white transition hover:bg-white/[0.08]"
+          >
+            <FiRefreshCw className="h-4 w-4 text-[#d6b25e]" />
+            Refresh
+          </button>
+          <button
+            onClick={onLogout}
+            className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] bg-[#d6b25e] px-4 py-3 text-sm font-black text-[#11241d]"
+          >
+            <FiLogOut className="h-4 w-4" />
+            Logout
+          </button>
         </div>
       </div>
     </aside>
