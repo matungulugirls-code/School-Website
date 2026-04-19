@@ -438,14 +438,14 @@ const handleSubmit = async (e) => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f4efe7]">
+    <div className="relative min-h-screen overflow-hidden bg-white">
       {/* Modern background with student image */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,195,87,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(23,32,51,0.08),transparent_30%),linear-gradient(180deg,#f8f3eb_0%,#f4efe7_100%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(242,195,87,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(23,32,51,0.04),transparent_30%),linear-gradient(180deg,#ffffff_0%,#fbfaf7_100%)]"></div>
         
         {/* Student background image with low opacity */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.06]"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.035]"
           style={{
             backgroundImage: `url('/hero/MatG8.jpeg')`,
             backgroundSize: 'cover',
@@ -454,7 +454,7 @@ const handleSubmit = async (e) => {
             filter: 'grayscale(25%) blur(1px)'
           }}
         ></div>
-        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-[#172033] via-[#172033]/70 to-transparent"></div>
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#faf7f0] via-[#faf7f0]/60 to-transparent"></div>
       </div>
       
       <Toaster {...toasterConfig} />
@@ -562,31 +562,31 @@ const handleSubmit = async (e) => {
    </div>
 
       {/* Progress Bar */}
-      <div className="container relative z-10 mx-auto px-4 py-6">
-        <div className="mb-6 overflow-hidden rounded-[32px] border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-55px_rgba(15,23,42,0.82)]">
+      <div className="container relative z-10 mx-auto px-3 py-4 sm:px-4 sm:py-6">
+        <div className="mb-5 overflow-hidden rounded-[28px] border border-[#d9d0c3] bg-white text-[#172033] shadow-[0_30px_80px_-55px_rgba(15,23,42,0.18)] sm:mb-6 sm:rounded-[32px]">
           <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="p-6 md:p-8">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#f2c357]">Admission Journey</p>
-              <h1 className="mt-3 text-2xl font-black tracking-tight sm:text-3xl md:text-4xl">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#9a5b1f] sm:tracking-[0.3em]">Admission Journey</p>
+              <h1 className="mt-3 text-xl font-black tracking-tight sm:text-3xl md:text-4xl">
                 Apply to join Matungulu Girls Senior School.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
                 Complete the application in guided steps. We’ve kept the full admissions workflow intact while giving the page a cleaner Matungulu Girls presentation.
               </p>
             </div>
-            <div className="border-t border-white/10 p-6 lg:border-l lg:border-t-0 md:p-8">
+            <div className="border-t border-[#e8dfd3] bg-[#fcfaf6] p-5 lg:border-l lg:border-t-0 sm:p-6 md:p-8">
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Current Step</p>
-                  <p className="mt-2 text-3xl font-black text-white">{Math.min(step, 4)}</p>
+                <div className="rounded-[20px] border border-[#e8dfd3] bg-white p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Current Step</p>
+                  <p className="mt-2 text-2xl font-black text-[#172033] sm:text-3xl">{Math.min(step, 4)}</p>
                 </div>
-                <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Flow</p>
-                  <p className="mt-2 text-3xl font-black text-white">4</p>
+                <div className="rounded-[20px] border border-[#e8dfd3] bg-white p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Flow</p>
+                  <p className="mt-2 text-2xl font-black text-[#172033] sm:text-3xl">4</p>
                 </div>
-                <div className="col-span-2 rounded-[22px] border border-white/10 bg-white/5 p-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Status</p>
-                  <p className="mt-2 text-sm font-bold text-[#f2c357]">
+                <div className="col-span-2 rounded-[20px] border border-[#e8dfd3] bg-white p-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Status</p>
+                  <p className="mt-2 text-sm font-bold text-[#172033]">
                     {step === 5 ? 'Application complete' : 'Application in progress'}
                   </p>
                 </div>
@@ -595,17 +595,17 @@ const handleSubmit = async (e) => {
           </div>
         </div>
 
-        <div className="relative mb-8">
-          <div className="absolute top-5 left-0 right-0 h-1 rounded-full bg-[#e0d6c9] -z-10"></div>
+        <div className="relative mb-6 sm:mb-8">
+          <div className="absolute top-4 left-0 right-0 h-1 rounded-full bg-[#e0d6c9] -z-10 sm:top-5"></div>
           <div 
-            className="absolute top-5 left-0 h-1 rounded-full bg-gradient-to-r from-[#172033] via-[#214760] to-[#f2c357] -z-10 transition-all duration-500"
+            className="absolute top-4 left-0 h-1 rounded-full bg-gradient-to-r from-[#172033] via-[#214760] to-[#f2c357] -z-10 transition-all duration-500 sm:top-5"
             style={{ width: `${((step - 1) / 4) * 100}%` }}
           ></div>
           
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-2">
             {[1, 2, 3, 4, 5].map((stepNum) => (
               <div key={stepNum} className="flex flex-col items-center">
-                <div className={`mb-2 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 ${
+                <div className={`mb-2 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 sm:h-12 sm:w-12 ${
                   step >= stepNum 
                     ? 'bg-[#172033] text-white shadow-lg shadow-[#172033]/20' 
                     : 'bg-white border-2 border-[#d9d0c3] text-gray-400'
@@ -618,7 +618,7 @@ const handleSubmit = async (e) => {
                     <span className="font-bold">{stepNum}</span>
                   )}
                 </div>
-                <span className={`text-xs font-semibold transition-colors ${
+                <span className={`text-[10px] sm:text-xs font-semibold transition-colors text-center ${
                   step >= stepNum ? 'text-[#172033]' : 'text-gray-400'
                 }`}>
                   {stepNum === 1 && 'Personal'}
