@@ -49,222 +49,187 @@ import { FaWhatsapp, FaLeaf, FaUniversity, FaPhone, FaEnvelope } from 'react-ico
 import { CircularProgress, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
-// Modern Hero Banner for Fees
-const ModernHeroBanner = ({ stats, onRefresh }) => {
+const FeesHero = ({ stats, activeTabLabel, onRefresh }) => {
   return (
-    <div className="relative bg-gradient-to-r from-emerald-900 to-teal-800 rounded-2xl p-6 md:p-10 text-white overflow-hidden border border-emerald-700/30 mb-8">
-      {/* Background Glows */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
-      
-      <div className="relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
-          <div>
-            {/* School Branding */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-8 w-1 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
-              <div>
-                <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-emerald-400">
-                  Matungulu Girls Senior School
-                </h2>
-                <p className="text-[8px] sm:text-[10px] italic font-medium text-emerald-200/60 tracking-widest uppercase">
-                  "Strive to Excel"
-                </p>
-              </div>
-            </div>
-            
-            {/* Title */}
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/10">
-                <IoSchoolOutline className="text-xl sm:text-2xl md:text-3xl text-emerald-300" />
-              </div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
-                Fee <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300">Structure</span>
-              </h1>
-            </div>
-          </div>
-     {/* Refresh Button */}
-<button
-  onClick={onRefresh}
-  disabled={stats.refreshing}
-  className="flex items-center justify-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold text-[11px] sm:text-sm tracking-widest text-white hover:bg-white/20 w-full sm:w-auto transition-all disabled:opacity-70 disabled:cursor-not-allowed"
->
-  {stats.refreshing ? (
-    <>
-      {/* Modern Spinner SVG */}
-      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      <span>REFRESHING...</span>
-    </>
-  ) : (
-    <>
-      <FiRefreshCw className="text-base sm:text-lg" />
-      <span>REFRESH FEES</span>
-    </>
-  )}
-</button>
-        </div>
-  {/* Stats Summary - Proportional & Balanced */}
-<div className="mb-4 sm:mb-6 px-1">
-  <p className="text-emerald-100/90 text-xs sm:text-base font-medium leading-relaxed sm:leading-loose">
-    <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-emerald-500/50 underline-offset-4 mr-1">
-      {stats.totalItems}
-    </span> 
-    <span className="tracking-tight sm:tracking-normal">fee items for annual fees totaling</span>
-    <span className="text-white font-black text-base sm:text-xl md:text-2xl underline decoration-teal-500/50 underline-offset-4 ml-1 whitespace-nowrap">
-      KSh {stats.totalAmount}
-    </span>
-  </p>
-</div>
+    <section className="relative overflow-hidden rounded-[2rem] border border-[#d6e9df] bg-[#0d2f25] p-6 text-white sm:p-8 lg:p-10">
+      <div className="absolute -right-20 -top-16 h-72 w-72 rounded-full bg-emerald-400/15 blur-3xl" />
+      <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-teal-400/10 blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_35%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_45%)]" />
 
-        {/* Quick Stats Grid - Bold & Responsive */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-            <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Total Items</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{stats.totalItems}</p>
+      <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+            <IoSparkles className="text-sm" />
+            Fees & Finance Desk
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-            <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Categories</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{stats.categories}</p>
+
+          <div className="mt-5 max-w-3xl">
+            <p className="text-[11px] font-black uppercase tracking-[0.26em] text-emerald-300/80">
+              Matungulu Girls Senior School
+            </p>
+            <h1 className="mt-3 text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
+              School Fees,
+              <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
+                redesigned as a clear finance dashboard.
+              </span>
+            </h1>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
+              Review {activeTabLabel.toLowerCase()} charges, download the latest fee document,
+              and see the totals, categories, and payment guidance in one calmer, easier-to-scan layout.
+            </p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-            <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">PDF Available</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{stats.pdfAvailable ? 'YES' : 'NO'}</p>
-          </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-            <p className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-wider mb-1">Last Updated</p>
-            <p className="text-lg sm:text-xl md:text-2xl font-black text-white">{stats.lastUpdated}</p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Fee Items</p>
+              <p className="mt-1 text-2xl font-black text-white">{stats.totalItems}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Annual Total</p>
+              <p className="mt-1 text-2xl font-black text-white">KSh {stats.totalAmount}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Updated</p>
+              <p className="mt-1 text-2xl font-black text-white">{stats.lastUpdated}</p>
+            </div>
           </div>
         </div>
 
-        {/* Additional Info */}
-        <div className="mt-4 text-xs sm:text-sm text-emerald-200/80">
-          <span className="inline-flex items-center gap-1">
-            <IoSparkles className="text-emerald-300" size={14} />
-            Click on any fee item for detailed information
-          </span>
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 backdrop-blur-sm sm:p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">
+                Quick Snapshot
+              </p>
+              <h2 className="mt-2 text-xl font-black text-white sm:text-2xl">
+                Finance status at a glance
+              </h2>
+            </div>
+            <button
+              onClick={onRefresh}
+              disabled={stats.refreshing}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.16em] text-white transition-all hover:bg-white/20 disabled:opacity-70"
+            >
+              <FiRefreshCw className={stats.refreshing ? 'animate-spin' : ''} />
+              {stats.refreshing ? 'Refreshing' : 'Refresh'}
+            </button>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl bg-black/15 p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Categories</p>
+              <p className="mt-2 text-2xl font-black text-white">{stats.categories}</p>
+            </div>
+            <div className="rounded-2xl bg-black/15 p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">PDF Ready</p>
+              <p className="mt-2 text-2xl font-black text-white">{stats.pdfAvailable ? 'Yes' : 'No'}</p>
+            </div>
+            <div className="rounded-2xl bg-black/15 p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Section</p>
+              <p className="mt-2 text-base font-black text-white">{activeTabLabel}</p>
+            </div>
+            <div className="rounded-2xl bg-black/15 p-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Tip</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-white/80">Tap any item for details and notices.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-// Modern Fee Card Component - Matungulu Girls Design
-const ModernFeeCard = ({ item, onInfo, index }) => {
-  const getCategoryColor = (name) => {
-    const colors = {
-      'Tuition': 'bg-emerald-100 text-emerald-700 border-emerald-200',
-      'Boarding': 'bg-teal-100 text-teal-700 border-teal-200',
-      'Uniform': 'bg-blue-100 text-blue-700 border-blue-200',
-      'Books': 'bg-amber-100 text-amber-700 border-amber-200',
-      'Medical': 'bg-rose-100 text-rose-700 border-rose-200',
-      'Activity': 'bg-pink-100 text-pink-700 border-pink-200',
-      'Application': 'bg-indigo-100 text-indigo-700 border-indigo-200',
-      'Registration': 'bg-cyan-100 text-cyan-700 border-cyan-200',
-      'Development': 'bg-orange-100 text-orange-700 border-orange-200',
-      'Deposit': 'bg-purple-100 text-purple-700 border-purple-200'
-    };
-    return colors[name] || 'bg-emerald-100 text-emerald-700 border-emerald-200';
-  };
+const FeeLedgerItem = ({ item, onInfo }) => {
+  const flags = [
+    item.optional ? { label: 'Optional', tone: 'bg-amber-50 text-amber-700 border-amber-200' } : null,
+    item.admissionOnly ? { label: 'One-time', tone: 'bg-violet-50 text-violet-700 border-violet-200' } : null,
+    item.boardingOnly ? { label: 'Boarders', tone: 'bg-teal-50 text-teal-700 border-teal-200' } : null,
+  ].filter(Boolean);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded ${getCategoryColor(item.name)} bg-opacity-20 flex items-center justify-center border`}>
-              <IoPricetagOutline className="text-emerald-700 w-4 h-4" />
+    <div className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-[0_12px_40px_-35px_rgba(15,23,42,0.35)] transition-all hover:border-emerald-200 hover:shadow-[0_20px_60px_-42px_rgba(5,150,105,0.35)] sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#eef8f2] text-emerald-700">
+              <IoPricetagOutline className="text-lg" />
             </div>
-            <div>
-              <h4 className="font-bold text-slate-900 text-sm">{item.name}</h4>
-              <p className="text-xs text-slate-500">Fee Item</p>
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Fee Line</p>
+              <h3 className="mt-1 text-lg font-black tracking-tight text-slate-950">{item.name}</h3>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                {item.description || 'This item appears in the current fee structure for the selected section.'}
+              </p>
             </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-start gap-3 sm:items-end">
+          <div className="rounded-2xl bg-[#0f3529] px-4 py-3 text-white">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Amount</p>
+            <p className="mt-1 text-2xl font-black">KSh {item.amount?.toLocaleString()}</p>
           </div>
           <button
             onClick={() => onInfo(item)}
-            className="p-1.5 bg-slate-100 rounded text-slate-600 hover:bg-slate-200 transition-colors"
-            title="View details"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-700 transition-colors hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
           >
             <FiInfo size={14} />
+            More Info
           </button>
         </div>
-
-        <div className="mb-3">
-          <p className="text-xs text-slate-500 mb-1">Amount</p>
-          <p className="text-xl font-bold text-emerald-800">
-            KSh {item.amount?.toLocaleString()}
-          </p>
-        </div>
-
-        {item.description && (
-          <p className="text-sm text-slate-600 mb-3 line-clamp-2 border-t border-slate-100 pt-3">
-            {item.description}
-          </p>
-        )}
-
-        <div className="flex flex-wrap gap-1.5">
-          {item.optional && (
-            <span className="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-xs font-medium border border-amber-200">
-              Optional
-            </span>
-          )}
-          {item.admissionOnly && (
-            <span className="px-2 py-0.5 bg-purple-50 text-purple-600 rounded text-xs font-medium border border-purple-200">
-              One-time
-            </span>
-          )}
-          {item.boardingOnly && (
-            <span className="px-2 py-0.5 bg-teal-50 text-teal-600 rounded text-xs font-medium border border-teal-200">
-              Boarders Only
-            </span>
-          )}
-        </div>
       </div>
+
+      {flags.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+          {flags.map((flag) => (
+            <span key={flag.label} className={`rounded-full border px-3 py-1 text-[11px] font-bold ${flag.tone}`}>
+              {flag.label}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-// Modern PDF Card - Matungulu Girls Design
-const ModernPDFCard = ({ title, pdfUrl, fileName, fileSize, uploadDate, description, onDownload, onView }) => {
+const FeesDocumentCard = ({ title, pdfUrl, fileName, fileSize, description, onDownload, onView }) => {
   return (
-    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div className="rounded-[1.6rem] border border-[#dbe7dc] bg-[#f6fbf7] p-5">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center">
-          <IoDocumentTextOutline className="text-emerald-700 text-xl" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-emerald-700 shadow-sm">
+          <IoDocumentTextOutline className="text-xl" />
         </div>
-        
-        <div className="flex-1">
-          <h4 className="font-bold text-slate-900 text-sm mb-1">{title}</h4>
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">Document Centre</p>
+          <h4 className="mt-1 text-base font-black text-slate-900">{title}</h4>
           {description && (
-            <p className="text-xs text-slate-600 mb-2">{description}</p>
+            <p className="mt-2 text-sm leading-7 text-slate-600">{description}</p>
           )}
-          
-          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mb-3">
-            <span className="flex items-center gap-1">
-              <FiFileText size={10} />
+
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-1">
+              <FiFileText size={12} />
               {fileName || 'PDF Document'}
             </span>
             {fileSize && (
-              <span className="flex items-center gap-1">
-                <FiClock size={10} />
+              <span className="inline-flex items-center gap-1">
+                <FiClock size={12} />
                 {fileSize < 1024 ? fileSize + ' B' : (fileSize / 1024).toFixed(1) + ' KB'}
               </span>
             )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="mt-5 flex gap-2">
             <button
               onClick={() => onView(pdfUrl)}
-              className="flex-1 py-2 bg-white text-emerald-700 rounded-lg text-xs font-medium flex items-center justify-center gap-1 border border-emerald-200 hover:bg-emerald-50 transition-colors"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-emerald-700 transition-colors hover:bg-emerald-50"
             >
               <IoEyeOutline size={14} />
               Preview
             </button>
             <button
               onClick={() => onDownload(pdfUrl, fileName)}
-              className="w-8 h-8 bg-emerald-700 text-white rounded-lg flex items-center justify-center hover:bg-emerald-800 transition-colors"
+              className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-700 text-white transition-colors hover:bg-emerald-800"
             >
               <FiDownload size={14} />
             </button>
@@ -275,20 +240,18 @@ const ModernPDFCard = ({ title, pdfUrl, fileName, fileSize, uploadDate, descript
   );
 };
 
-// Modern Stat Card - Matungulu Girls Design
-const ModernStatCard = ({ icon: Icon, label, value, sublabel }) => {
+const InsightCard = ({ icon: Icon, label, value, sublabel, tone = 'bg-white' }) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-center justify-between mb-2">
-        <div className="p-1.5 bg-emerald-100 rounded">
-          <Icon size={16} className="text-emerald-700" />
+    <div className={`rounded-[1.4rem] border border-slate-200 p-4 ${tone}`}>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+          <Icon size={16} />
         </div>
-        <span className="text-xs text-slate-400 uppercase tracking-wider">Total</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Insight</span>
       </div>
-      
-      <p className="text-xs text-slate-500 mb-0.5">{label}</p>
-      <p className="text-lg font-bold text-slate-900 mb-0.5">{value}</p>
-      <p className="text-xs text-slate-400">{sublabel}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <p className="mt-1 text-xl font-black text-slate-900">{value}</p>
+      <p className="mt-1 text-xs leading-6 text-slate-500">{sublabel}</p>
     </div>
   );
 };
@@ -493,6 +456,7 @@ export default function ModernFeesPage() {
   const pdfInfo = getCurrentPDFInfo();
   const currentItems = getCurrentFeeItems();
   const totalAmount = getCurrentTotal();
+  const currentTabLabel = tabs.find((tab) => tab.id === activeTab)?.name || 'Fees';
 
   // Banner stats
   const bannerStats = {
@@ -505,92 +469,214 @@ export default function ModernFeesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f6f7f3]">
       <Toaster position="top-right" richColors />
 
-      {/* Modern Hero Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
-        <ModernHeroBanner stats={bannerStats} onRefresh={refreshData} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
+        <FeesHero stats={bannerStats} activeTabLabel={currentTabLabel} onRefresh={refreshData} />
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-slate-200 sticky top-0 z-30 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex gap-1 overflow-x-auto pb-0.5 no-scrollbar">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setSearchTerm('');
-                  }}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
-                    isActive
-                      ? 'border-emerald-600 text-emerald-700'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span>{tab.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-700">Browse Sections</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        setSearchTerm('');
+                      }}
+                      className={`flex items-center justify-between rounded-[1.2rem] border px-4 py-4 text-left transition-all ${
+                        isActive
+                          ? 'border-emerald-200 bg-[#eef8f2] shadow-[0_14px_35px_-30px_rgba(5,150,105,0.45)]'
+                          : 'border-slate-200 bg-[#fbfcfa] hover:border-emerald-100 hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${isActive ? 'bg-emerald-700 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                          <Icon size={18} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-black text-slate-900">{tab.name}</p>
+                          <p className="text-xs text-slate-500">Open fee breakdown</p>
+                        </div>
+                      </div>
+                      <FiArrowRight className={`transition-transform ${isActive ? 'text-emerald-700 translate-x-1' : 'text-slate-400'}`} />
+                    </button>
+                  );
+                })}
+              </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder={`Search ${activeTab} fees...`}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 bg-slate-100 rounded hover:bg-slate-200 transition-colors"
-              >
-                <FiX size={14} className="text-slate-500" />
-              </button>
+              <div className="mt-5">
+                <div className="relative">
+                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder={`Search ${activeTab} fees...`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full rounded-2xl border border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-11 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg bg-slate-100 p-1.5 transition-colors hover:bg-slate-200"
+                    >
+                      <FiX size={14} className="text-slate-500" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <InsightCard
+                icon={IoWalletOutline}
+                label="Current Total"
+                value={`KSh ${totalAmount.toLocaleString()}`}
+                sublabel={`Combined estimated annual amount for ${currentTabLabel.toLowerCase()}.`}
+                tone="bg-white"
+              />
+              <InsightCard
+                icon={IoStatsChartOutline}
+                label="Visible Items"
+                value={filteredItems.length}
+                sublabel="Matches your current tab and search filter."
+                tone="bg-[#fbfcfa]"
+              />
+              <InsightCard
+                icon={IoReceiptOutline}
+                label="Fee Notes"
+                value={pdfInfo?.url ? 'PDF Ready' : 'No PDF'}
+                sublabel="Downloadable fee document appears below when available."
+                tone="bg-white"
+              />
+              <InsightCard
+                icon={IoTimeOutline}
+                label="Last Update"
+                value={bannerStats.lastUpdated}
+                sublabel="Based on the latest document update timestamp."
+                tone="bg-[#fbfcfa]"
+              />
+            </div>
+
+            {pdfInfo?.url ? (
+              <FeesDocumentCard
+                title={`${currentTabLabel} Fee Structure`}
+                pdfUrl={pdfInfo.url}
+                fileName={pdfInfo.name}
+                fileSize={pdfInfo.size}
+                description={pdfInfo.description}
+                onDownload={handleDownloadPDF}
+                onView={handleViewPDF}
+              />
+            ) : (
+              <div className="rounded-[1.6rem] border border-dashed border-slate-300 bg-white p-6 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+                  <IoDocumentTextOutline className="text-xl" />
+                </div>
+                <p className="mt-4 text-sm font-bold text-slate-700">No PDF available yet</p>
+                <p className="mt-1 text-xs leading-6 text-slate-500">The downloadable fee document for this section has not been uploaded.</p>
+              </div>
             )}
-          </div>
-        </div>
 
-        {/* Main Content - Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Fee Items */}
-          <div className="lg:col-span-2">
-            <div className="space-y-3">
+            <div className="rounded-[1.8rem] bg-[#102d24] p-6 text-white">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">What To Know</p>
+              <div className="mt-4 space-y-4 text-sm leading-7 text-white/78">
+                <p>Review the correct section before making payment so charges match the learner&apos;s status.</p>
+                <p>Use the downloadable fee structure for office reference, parent sharing, or record keeping.</p>
+                <p>For clarifications on balances, deadlines, or fee items, contact the bursar or school finance office.</p>
+              </div>
+            </div>
+
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Payment Channels</p>
+              <div className="mt-4 space-y-4">
+                <div className="flex items-start gap-3">
+                  <FaUniversity className="mt-1 text-emerald-600" />
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Bank Account</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">1234567890 - Equity Bank</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <IoCardOutline className="mt-1 text-emerald-600" />
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Paybill</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">522522 - Account: Student ID</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FaPhone className="mt-1 text-emerald-600" />
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Finance Office</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">+254 712 345 678</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <FaEnvelope className="mt-1 text-emerald-600" />
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Email</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">finance@matungulugirls.sc.ke</p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => router.push("/pages/contact")}
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
+              >
+                <FiArrowRight size={16} />
+                Contact Bursar
+              </button>
+            </div>
+          </aside>
+
+          <section className="space-y-5">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Fee Ledger</p>
+                  <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                    {currentTabLabel} fee breakdown
+                  </h2>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    A redesigned list of all available charges for the selected section, arranged for easier reading and quick review.
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-[#f4f8f4] px-4 py-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Annual Estimate</p>
+                  <p className="mt-1 text-2xl font-black text-slate-950">KSh {totalAmount.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
               {filteredItems.length === 0 ? (
-                <div className="bg-white border border-dashed border-slate-200 rounded-lg p-8 text-center">
-                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="rounded-[1.8rem] border border-dashed border-slate-300 bg-white p-10 text-center">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
                     <FiDollarSign className="text-slate-400 text-xl" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900">No fee items found</h3>
-                  <p className="text-sm text-slate-500 mt-1 mb-4">Try adjusting your search.</p>
+                  <h3 className="text-lg font-black text-slate-900">No fee items found</h3>
+                  <p className="mt-2 text-sm text-slate-500">Try adjusting your search or switch to another fee section.</p>
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
+                    className="mt-5 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-700"
                   >
                     Clear Search
                   </button>
                 </div>
               ) : (
                 filteredItems.map((item, index) => (
-                  <ModernFeeCard
+                  <FeeLedgerItem
                     key={item.id || index}
                     item={item}
-                    index={index}
                     onInfo={(item) => {
                       setSelectedFeeItem(item);
                       setShowInfoModal(true);
@@ -599,139 +685,51 @@ export default function ModernFeesPage() {
                 ))
               )}
             </div>
-          </div>
-
-          {/* Right Column - Info & Documents */}
-          <div className="space-y-4">
-            {/* PDF Card */}
-            {pdfInfo?.url ? (
-              <ModernPDFCard
-                title={`${tabs.find(t => t.id === activeTab)?.name} Fee Structure`}
-                pdfUrl={pdfInfo.url}
-                fileName={pdfInfo.name}
-                fileSize={pdfInfo.size}
-                uploadDate={pdfInfo.date}
-                description={pdfInfo.description}
-                onDownload={handleDownloadPDF}
-                onView={handleViewPDF}
-              />
-            ) : (
-              <div className="bg-white border border-dashed border-slate-200 rounded-lg p-6 text-center">
-                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <IoDocumentTextOutline className="text-slate-400 text-lg" />
-                </div>
-                <p className="text-sm font-medium text-slate-600">No PDF Available</p>
-                <p className="text-xs text-slate-400 mt-1">Check back later</p>
-              </div>
-            )}
-
-            {/* School Info Card */}
-            <div className="bg-white border border-slate-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-              <h3 className="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
-                <FaUniversity className="text-emerald-600" />
-                Payment Information
-              </h3>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <FaUniversity className="text-emerald-600 w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium">Bank Account</p>
-                    <p className="text-sm font-bold text-slate-900">1234567890 - Equity Bank</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <IoCardOutline className="text-emerald-600 w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium">Paybill</p>
-                    <p className="text-sm font-bold text-slate-900">522522 - Account: Student ID</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <FaPhone className="text-emerald-600 w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium">Finance Office</p>
-                    <p className="text-sm font-bold text-slate-900">+254 712 345 678</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <p className="text-xs text-slate-500 italic flex items-center gap-1">
-                  <FaLeaf className="text-emerald-600" size={10} />
-                  "Strive to Excel"
-                </p>
-              </div>
-            </div>
-
-            {/* Contact Card */}
-            <div className="bg-gradient-to-br from-emerald-800 to-teal-700 rounded-lg p-5 text-white hover:shadow-lg transition-shadow">
-              <h3 className="font-bold text-base mb-2">Need Help?</h3>
-              <p className="text-sm text-emerald-100 mb-4">
-                Contact our finance office for payment assistance
-              </p>
-              <div className="space-y-2 mb-4">
-                <a href="tel:+254712345678" className="flex items-center gap-2 text-sm text-emerald-100 hover:text-white transition-colors">
-                  <FaPhone size={12} />
-                  <span>+254 712 345 678</span>
-                </a>
-                <a href="mailto:finance@matungulugirls.sc.ke" className="flex items-center gap-2 text-sm text-emerald-100 hover:text-white transition-colors">
-                  <FaEnvelope size={12} />
-                  <span>finance@matungulugirls.sc.ke</span>
-                </a>
-              </div>
-              <button 
-                onClick={() => router.push("/pages/contact")}
-                className="w-full py-3 bg-white text-emerald-800 rounded-lg font-medium text-sm flex items-center justify-center gap-2 hover:bg-emerald-50 transition-colors"
-              >
-                <FiArrowRight size={16} />
-                Contact Bursar
-              </button>
-            </div>
-          </div>
+          </section>
         </div>
       </div>
 
       {/* Info Modal */}
       {showInfoModal && selectedFeeItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-xl animate-in fade-in zoom-in-95">
+          <div className="w-full max-w-md rounded-[1.8rem] border border-slate-200 bg-white p-6 shadow-xl animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-slate-900">{selectedFeeItem.name}</h3>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">Fee Detail</p>
+                <h3 className="mt-1 text-lg font-black text-slate-900">{selectedFeeItem.name}</h3>
+              </div>
               <button
                 onClick={() => setShowInfoModal(false)}
-                className="p-1.5 bg-slate-100 rounded hover:bg-slate-200 transition-colors"
+                className="rounded-xl bg-slate-100 p-2 transition-colors hover:bg-slate-200"
               >
                 <IoClose size={16} className="text-slate-600" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
-                <p className="text-sm text-slate-700">{selectedFeeItem.description || 'No description available'}</p>
+              <div className="rounded-[1.3rem] border border-emerald-100 bg-emerald-50 p-4">
+                <p className="text-sm leading-7 text-slate-700">{selectedFeeItem.description || 'No description available'}</p>
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-slate-50 rounded-lg border border-slate-100">
+              <div className="flex items-center justify-between rounded-[1.3rem] border border-slate-100 bg-slate-50 p-4">
                 <span className="text-sm font-medium text-slate-600">Amount</span>
-                <span className="text-xl font-bold text-emerald-700">
+                <span className="text-xl font-black text-emerald-700">
                   KSh {selectedFeeItem.amount?.toLocaleString()}
                 </span>
               </div>
 
               {selectedFeeItem.optional && (
-                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <div className="rounded-[1.1rem] border border-amber-200 bg-amber-50 p-3">
                   <p className="text-sm font-medium text-amber-700">This fee is optional</p>
                 </div>
               )}
               {selectedFeeItem.admissionOnly && (
-                <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                <div className="rounded-[1.1rem] border border-purple-200 bg-purple-50 p-3">
                   <p className="text-sm font-medium text-purple-700">One-time payment (admission only)</p>
                 </div>
               )}
               {selectedFeeItem.boardingOnly && (
-                <div className="p-3 bg-teal-50 rounded-lg border border-teal-200">
+                <div className="rounded-[1.1rem] border border-teal-200 bg-teal-50 p-3">
                   <p className="text-sm font-medium text-teal-700">Applicable to boarders only</p>
                 </div>
               )}
@@ -739,7 +737,7 @@ export default function ModernFeesPage() {
 
             <button
               onClick={() => setShowInfoModal(false)}
-              className="w-full mt-6 py-3 bg-emerald-700 text-white rounded-lg font-medium hover:bg-emerald-800 transition-colors"
+              className="mt-6 w-full rounded-2xl bg-emerald-700 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
             >
               Close
             </button>

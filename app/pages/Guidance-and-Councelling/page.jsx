@@ -1315,7 +1315,7 @@ export default function StudentCounseling() {
     return (
       <Box className="min-h-screen  p-4 md:p-6">
         <div className="w-full md:w-[90%] lg:w-[80%] xl:w-[70%] mx-auto">
-          <Stack spacing={2} alignItems="center" className="mx-auto flex min-h-[70vh] w-full max-w-sm justify-center rounded-[30px] border border-[#d9d0c3] bg-white px-10 py-12 shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)]">
+          <Stack spacing={2} alignItems="center" className="mx-auto flex min-h-[70vh] w-full max-w-sm justify-center rounded-[30px] border px-10 py-12 shadow-[0_28px_70px_-52px_rgba(15,23,42,0.48)]">
           <Box className="relative flex items-center justify-center scale-75 sm:scale-100 transition-transform">
             <CircularProgress
               variant="determinate"
@@ -1639,7 +1639,7 @@ export default function StudentCounseling() {
             </div>
           </div>
 
-          
+
           {/* Left Column: Counseling Sessions */}
           <div className="flex-1 min-w-0 space-y-8">
             
