@@ -1,805 +1,556 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useEffect, useMemo, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import {
-  FiBriefcase,
-  FiFilter,
-  FiCalendar,
-  FiUsers,
-  FiGraduationCap,
-  FiClock,
-  FiArrowUpRight,
-  FiMail,
-  FiPhone,
-  FiInfo,
   FiArrowRight,
-  FiHeart,
-  FiDownload,
-  FiShare2,
-  FiEye,
-  FiChevronDown,
-  FiChevronUp,
-  FiSearch,
-  FiX,
-  FiBookmark,
-  FiExternalLink,
   FiAward,
-  FiStar,
-  FiShield,
-  FiZap,
-  FiTrendingUp,
-  FiGlobe,
+  FiBookmark,
+  FiBriefcase,
+  FiCheckCircle,
   FiCopy,
-  FiBell,
+  FiFilter,
+  FiGrid,
+  FiHeart,
+  FiInfo,
   FiList,
-  FiMapPin, 
-  FiFileText,
+  FiMail,
+  FiMapPin,
+  FiPhone,
+  FiRefreshCw,
+  FiSearch,
   FiSend,
-  FiSun,
-  FiCloud
+  FiShield,
+  FiStar,
+  FiTrendingUp,
+  FiUsers,
+  FiX,
+  FiZap,
 } from 'react-icons/fi';
-import { FaGraduationCap, FaBuilding as FiBuilding, FaWhatsapp, FaLeaf } from 'react-icons/fa';
-import {
-  IoCalendarClearOutline,
-  IoSparkles,
-  IoRibbonOutline,
-  IoPeopleCircle,
-  IoStatsChart,
-  IoShareSocialOutline,
-  IoClose,
-  IoLocationOutline,
-  IoTimeOutline,
-  IoPersonOutline,
-  IoShareOutline,
-  IoNewspaperOutline,
-  IoSchoolOutline,
-  IoBusinessOutline
-} from 'react-icons/io5';
-import { CircularProgress, Box, Typography, Stack } from '@mui/material';
+import { FaGraduationCap, FaLeaf, FaWhatsapp } from 'react-icons/fa';
+import { IoSchoolOutline, IoSparkles } from 'react-icons/io5';
+import { CircularProgress, Box, Stack } from '@mui/material';
 
-// Modern Modal Component
-const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true }) => {
-  if (!open) return null;
-
-  return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${blur ? 'backdrop-blur-md' : 'bg-black/50'}`}>
-      <div 
-        className="relative bg-white rounded-3xl shadow-2xl overflow-hidden border border-emerald-100"
-        style={{ 
-          width: '90%',
-          maxWidth: maxWidth,
-          maxHeight: '90vh'
-        }}
-      >
-        <div className="absolute top-4 right-4 z-10">
-          <button 
-            onClick={onClose}
-            className="p-2 bg-white/80 backdrop-blur-sm rounded-full border border-emerald-200 shadow-sm"
-          >
-            <FiX className="text-emerald-700 w-5 h-5" />
-          </button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
+const categoryConfig = {
+  all: { name: 'All Openings', icon: FiGrid, tone: 'from-[#0f5b4c] to-[#0b2f28]' },
+  teaching: { name: 'Teaching', icon: FaGraduationCap, tone: 'from-[#0f5b4c] to-[#0b2f28]' },
+  administrative: { name: 'Administration', icon: FiBriefcase, tone: 'from-[#214d89] to-[#132746]' },
+  support: { name: 'Support Staff', icon: FiUsers, tone: 'from-[#7a3d55] to-[#4a2031]' },
+  technical: { name: 'Technical', icon: FiZap, tone: 'from-[#8a611b] to-[#4e3208]' },
+  medical: { name: 'Medical', icon: FiShield, tone: 'from-[#18605f] to-[#103737]' },
+  maintenance: { name: 'Maintenance', icon: FiTrendingUp, tone: 'from-[#5f6b20] to-[#30390f]' },
 };
 
-// Modern Job Card Component - No hover effects
-const ModernJobCard = ({ job, onView, onBookmark, onShare, viewMode = 'grid' }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+const jobTypeConfig = {
+  'full-time': { label: 'Full Time', accent: 'bg-[#0f5b4c]', soft: 'bg-[#0f5b4c]/10 text-[#0f5b4c]' },
+  'part-time': { label: 'Part Time', accent: 'bg-[#214d89]', soft: 'bg-[#214d89]/10 text-[#214d89]' },
+  contract: { label: 'Contract', accent: 'bg-[#7a3d55]', soft: 'bg-[#7a3d55]/10 text-[#7a3d55]' },
+  internship: { label: 'Internship', accent: 'bg-[#8a611b]', soft: 'bg-[#8a611b]/10 text-[#8a611b]' },
+};
 
-  const handleWhatsAppShare = (e) => {
-    e.stopPropagation();
-    const text = `Job Opening: ${job?.jobTitle} at Matungulu Girls Senior School. ${job?.jobType} position in ${job?.department || 'various departments'}.`;
-    const url = window.location.href;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-    window.open(whatsappUrl, '_blank');
+const statsBase = [
+  {
+    label: 'Open Roles',
+    sublabel: 'Live vacancies right now',
+    icon: FiBriefcase,
+    gradient: 'from-[#0f5b4c] to-[#0b2f28]',
+  },
+  {
+    label: 'Departments',
+    sublabel: 'Academic and operational teams',
+    icon: FiUsers,
+    gradient: 'from-[#214d89] to-[#132746]',
+  },
+  {
+    label: 'Campus Focus',
+    sublabel: 'Girls-centered professional impact',
+    icon: FiHeart,
+    gradient: 'from-[#7a3d55] to-[#4a2031]',
+  },
+  {
+    label: 'Application Routes',
+    sublabel: 'Email, phone, and direct contacts',
+    icon: FiSend,
+    gradient: 'from-[#8a611b] to-[#4e3208]',
+  },
+];
+
+function formatDeadline(dateString) {
+  if (!dateString) return 'Open until filled';
+
+  try {
+    const target = new Date(dateString);
+    const today = new Date();
+    const diff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+
+    if (diff < 0) return 'Closed';
+    if (diff === 0) return 'Closes today';
+    if (diff === 1) return 'Closes tomorrow';
+    if (diff < 7) return `${diff} days left`;
+
+    return target.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  } catch {
+    return 'Open';
+  }
+}
+
+function getCategoryMeta(category) {
+  return categoryConfig[category?.toLowerCase()] || {
+    name: category || 'School Opportunity',
+    icon: FiBriefcase,
+    tone: 'from-[#0f5b4c] to-[#0b2f28]',
   };
+}
 
-  const getJobTypeStyle = (type) => {
-    const styles = {
-      'full-time': { 
-        gradient: 'from-emerald-600 to-teal-600', 
-        bg: 'bg-emerald-50', 
-        text: 'text-emerald-700',
-        border: 'border-emerald-200'
-      },
-      'part-time': { 
-        gradient: 'from-blue-600 to-cyan-600', 
-        bg: 'bg-blue-50', 
-        text: 'text-blue-700',
-        border: 'border-blue-200'
-      },
-      'contract': { 
-        gradient: 'from-purple-600 to-pink-600', 
-        bg: 'bg-purple-50', 
-        text: 'text-purple-700',
-        border: 'border-purple-200'
-      },
-      'internship': { 
-        gradient: 'from-amber-600 to-orange-600', 
-        bg: 'bg-amber-50', 
-        text: 'text-amber-700',
-        border: 'border-amber-200'
-      }
-    };
-    return styles[type] || styles['full-time'];
-  };
+function getJobTypeMeta(type) {
+  return jobTypeConfig[type?.toLowerCase()] || jobTypeConfig['full-time'];
+}
 
-  const getCategoryIcon = (category) => {
-    const icons = {
-      'teaching': FaGraduationCap,
-      'administrative': FiBriefcase,
-      'support': FiUsers,
-      'technical': FiZap,
-      'medical': FiShield,
-      'maintenance': FiTrendingUp
-    };
-    return icons[category] || FiBriefcase;
-  };
-
-  const formatDate = (dateString) => {
-    try {
-      if (!dateString) return 'Open until filled';
-      const date = new Date(dateString);
-      const now = new Date();
-      const diff = Math.ceil((date - now) / (1000 * 60 * 60 * 24));
-      
-      if (diff === 0) return 'Today';
-      if (diff === 1) return 'Tomorrow';
-      if (diff < 0) return 'Closed';
-      if (diff < 7) return `${diff} days`;
-      
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      });
-    } catch {
-      return 'Open';
-    }
-  };
-
-  const CategoryIcon = getCategoryIcon(job?.category);
-
-  // Grid View
-  if (viewMode === 'grid') {
-    const theme = getJobTypeStyle(job?.jobType);
-    const daysLeft = formatDate(job?.applicationDeadline);
-    const isUrgent = daysLeft === 'Today' || daysLeft === 'Tomorrow';
-
-    return (
-      <div 
-        onClick={() => onView(job)}
-        className="relative bg-white rounded-[32px] border border-slate-200 overflow-hidden cursor-pointer"
-      >
-        {/* Header */}
-        <div className={`relative h-4 bg-gradient-to-r ${theme.gradient}`}>
-          {isUrgent && (
-            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 px-3 py-0.5 bg-red-500 text-white rounded-full text-[10px] font-bold uppercase tracking-widest">
-              Urgent
-            </div>
-          )}
+function LoadingView() {
+  return (
+    <Box className="min-h-[75vh] flex items-center justify-center px-4">
+      <Stack spacing={2.5} alignItems="center" className="w-full max-w-md rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] p-10 shadow-[0_28px_80px_rgba(17,40,31,0.12)]">
+        <Box className="relative flex items-center justify-center">
+          <CircularProgress variant="determinate" value={100} size={56} thickness={4.5} sx={{ color: '#e2e8f0' }} />
+          <CircularProgress
+            variant="indeterminate"
+            disableShrink
+            size={56}
+            thickness={4.5}
+            sx={{
+              color: '#0f5b4c',
+              animationDuration: '900ms',
+              position: 'absolute',
+              '& .MuiCircularProgress-circle': { strokeLinecap: 'round' },
+            }}
+          />
+          <Box className="absolute">
+            <IoSparkles className="text-[#d4b15f] text-lg" />
+          </Box>
+        </Box>
+        <div className="text-center">
+          <p className="text-sm font-extrabold uppercase tracking-[0.3em] text-[#0f5b4c]">Careers Desk</p>
+          <h2 className="mt-3 text-3xl font-black text-[#11281f]">Loading school opportunities</h2>
+          <p className="mt-3 text-sm leading-7 text-[#5f665e]">
+            Pulling current Matungulu Girls Senior School vacancies from the careers feed.
+          </p>
         </div>
+      </Stack>
+    </Box>
+  );
+}
 
-        {/* Content */}
-        <div className="p-6">
-          {/* Category and Bookmark */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className={`p-2 rounded-xl ${theme.bg} border ${theme.border}`}>
-                <CategoryIcon className={`${theme.text}`} size={18} />
+function StatPanel({ stat, value }) {
+  const Icon = stat.icon;
+
+  return (
+    <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.06] p-5 shadow-[0_18px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+      <div className="flex items-start justify-between">
+        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.gradient} text-white`}>
+          <Icon className="h-5 w-5" />
+        </div>
+        <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/35">Live</span>
+      </div>
+      <p className="mt-6 text-3xl font-black text-white">{value}</p>
+      <p className="mt-2 text-sm font-bold text-white/82">{stat.label}</p>
+      <p className="mt-1 text-xs leading-6 text-white/45">{stat.sublabel}</p>
+    </div>
+  );
+}
+
+function OpportunityCard({ job, viewMode, bookmarked, onBookmark, onView, onShareWhatsApp }) {
+  const category = getCategoryMeta(job?.category);
+  const type = getJobTypeMeta(job?.jobType);
+  const CategoryIcon = category.icon;
+  const deadlineText = formatDeadline(job?.applicationDeadline);
+
+  if (viewMode === 'list') {
+    return (
+      <article
+        onClick={() => onView(job)}
+        className="group grid cursor-pointer gap-5 rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] p-5 shadow-[0_24px_60px_rgba(17,40,31,0.08)] transition md:grid-cols-[120px_minmax(0,1fr)]"
+      >
+        <div className={`flex h-28 items-center justify-center rounded-[1.5rem] bg-gradient-to-br ${category.tone} text-white`}>
+          <CategoryIcon className="h-9 w-9" />
+        </div>
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={`rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.25em] ${type.soft}`}>
+                  {type.label}
+                </span>
+                <span className="rounded-full border border-[#11281f12] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#5f665e]">
+                  {category.name}
+                </span>
               </div>
-              <span className={`text-[11px] font-bold uppercase tracking-wider ${theme.text}`}>
-                {job?.category || 'General'}
-              </span>
+              <h3 className="mt-3 text-2xl font-black text-[#11281f]">{job?.jobTitle || 'School Opportunity'}</h3>
+              <p className="mt-2 text-sm font-semibold text-[#5f665e]">{job?.department || 'Matungulu Girls Senior School'}</p>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <button
-                onClick={handleWhatsAppShare}
-                className="p-2 rounded-lg text-emerald-600 border border-emerald-200"
-                title="Share on WhatsApp"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onShareWhatsApp(job);
+                }}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0f5b4c]/20 bg-[#0f5b4c]/10 text-[#0f5b4c]"
               >
-                <FaWhatsapp size={16} />
+                <FaWhatsapp className="h-4 w-4" />
               </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onBookmark(job);
                 }}
-                className={`p-2 rounded-lg border ${isBookmarked ? 'text-amber-500 bg-amber-50 border-amber-200' : 'text-slate-400 border-slate-200'}`}
+                className={`flex h-10 w-10 items-center justify-center rounded-full border ${
+                  bookmarked ? 'border-[#d4b15f]/30 bg-[#d4b15f]/10 text-[#8a611b]' : 'border-[#11281f12] bg-white text-[#5f665e]'
+                }`}
               >
-                <FiBookmark className={isBookmarked ? 'fill-current' : ''} size={16} />
+                <FiBookmark className={`h-4 w-4 ${bookmarked ? 'fill-current' : ''}`} />
               </button>
             </div>
           </div>
 
-          {/* Job Title */}
-          <h3 className="text-xl font-bold text-slate-900 mb-2 line-clamp-2 leading-tight">
-            {job?.jobTitle || 'Position Available'}
-          </h3>
-
-          {/* Department */}
-          <div className="flex items-center gap-2 mb-4">
-            <FiBuilding className="text-slate-400" size={14} />
-            <span className="text-sm font-medium text-slate-600">
-              {job?.department || 'School Department'}
-            </span>
-          </div>
-
-          {/* Description */}
-          <p className="text-slate-600 text-sm mb-6 line-clamp-2 leading-relaxed">
-            {job?.jobDescription || 'Join our dedicated team at Matungulu Girls Senior School.'}
+          <p className="mt-4 line-clamp-2 text-sm leading-7 text-[#5f665e]">
+            {job?.jobDescription || 'Join the Matungulu Girls Senior School team and help shape a strong, girls-centered learning environment.'}
           </p>
 
-          {/* Info Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <div className="flex items-center gap-2.5 p-2 rounded-2xl bg-slate-50 border border-slate-100">
-              <div className={`p-1.5 rounded-lg ${theme.bg}`}>
-                <FiCalendar className={`${theme.text}`} size={14} />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Deadline</p>
-                <p className="text-xs font-bold text-slate-900">{daysLeft}</p>
-              </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-[1.25rem] border border-[#11281f12] bg-white px-4 py-3">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Deadline</p>
+              <p className="mt-1 text-sm font-black text-[#11281f]">{deadlineText}</p>
             </div>
-
-            <div className="flex items-center gap-2.5 p-2 rounded-2xl bg-slate-50 border border-slate-100">
-              <div className={`p-1.5 rounded-lg ${theme.bg}`}>
-                <FiUsers className={`${theme.text}`} size={14} />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Positions</p>
-                <p className="text-xs font-bold text-slate-900">{job?.positionsAvailable || 1}</p>
-              </div>
+            <div className="rounded-[1.25rem] border border-[#11281f12] bg-white px-4 py-3">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Positions</p>
+              <p className="mt-1 text-sm font-black text-[#11281f]">{job?.positionsAvailable || 1}</p>
             </div>
-
-            <div className="col-span-2 flex items-center gap-2.5 p-2 rounded-2xl bg-slate-50 border border-slate-100">
-              <div className={`p-1.5 rounded-lg ${theme.bg}`}>
-                <FiClock className={`${theme.text}`} size={14} />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Type</p>
-                <p className="text-xs font-bold text-slate-900 capitalize">
-                  {job?.jobType?.replace('-', ' ') || 'Full-time'}
-                </p>
-              </div>
+            <div className="rounded-[1.25rem] border border-[#11281f12] bg-white px-4 py-3">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Experience</p>
+              <p className="mt-1 text-sm font-black text-[#11281f]">{job?.experience || 'Flexible'}</p>
             </div>
           </div>
-
-          {/* Experience */}
-          <div className="mb-6 p-3 bg-slate-50 rounded-2xl border border-slate-100">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FiAward className="text-amber-500" size={14} />
-                <span className="text-xs font-medium text-slate-600">Experience</span>
-              </div>
-              <span className="text-sm font-bold text-slate-900">{job?.experience || 'Not specified'}</span>
-            </div>
-          </div>
-
-          {/* Action Button */}
-          <button className="
-            w-fit sm:w-full 
-            mx-auto sm:mx-0
-            px-5 sm:px-4
-            py-2 sm:py-4 
-            bg-emerald-900 text-white 
-            rounded-full sm:rounded-2xl 
-            font-normal sm:font-bold 
-            text-xs sm:text-sm 
-            flex items-center justify-center gap-2
-          ">
-            View Details
-            <FiArrowRight size={14} className="sm:w-[18px] sm:h-[18px]" />
-          </button>
         </div>
-      </div>
+      </article>
     );
   }
 
-  // List View
   return (
-    <div 
+    <article
       onClick={() => onView(job)}
-      className="relative bg-white rounded-[24px] border border-slate-200 p-4 cursor-pointer"
+      className="group relative cursor-pointer overflow-hidden rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] shadow-[0_24px_60px_rgba(17,40,31,0.08)] transition"
     >
-      <div className="flex gap-5">
-        {/* Icon Container */}
-        <div className="relative w-16 h-16 rounded-2xl overflow-hidden shrink-0 shadow-sm">
-          <div className={`w-full h-full bg-gradient-to-br ${getJobTypeStyle(job?.jobType).gradient} flex items-center justify-center`}>
-            <CategoryIcon className="text-white text-2xl" />
+      <div className={`h-2 bg-gradient-to-r ${category.tone}`} />
+      <div className="p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div className={`flex h-14 w-14 items-center justify-center rounded-[1.3rem] bg-gradient-to-br ${category.tone} text-white`}>
+            <CategoryIcon className="h-6 w-6" />
           </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between">
-          <div>
-            {/* Metadata Row */}
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className={`px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${
-                  getJobTypeStyle(job?.jobType).bg
-                } ${getJobTypeStyle(job?.jobType).text} ${
-                  getJobTypeStyle(job?.jobType).border
-                }`}>
-                  {job?.jobType?.replace('-', ' ') || 'Full-time'}
-                </span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                  {formatDate(job?.applicationDeadline)}
-                </span>
-              </div>
-              
-              {/* Action Buttons */}
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={handleWhatsAppShare}
-                  className="p-1.5 rounded-lg text-emerald-600 border border-emerald-200"
-                  title="Share on WhatsApp"
-                >
-                  <FaWhatsapp size={14} />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onBookmark(job);
-                  }}
-                  className={`p-1.5 rounded-lg border ${isBookmarked ? 'text-amber-500 bg-amber-50 border-amber-200' : 'text-slate-400 border-slate-200'}`}
-                >
-                  <FiBookmark className={isBookmarked ? 'fill-current' : ''} size={14} />
-                </button>
-              </div>
-            </div>
-
-            <h3 className="text-base font-bold text-slate-900 leading-snug line-clamp-2 mb-2">
-              {job?.jobTitle || 'Position Available'}
-            </h3>
-
-            <div className="flex items-center gap-3 text-sm text-slate-600 mb-3">
-              <div className="flex items-center gap-1">
-                <FiBuilding size={12} />
-                <span>{job?.department || 'Department'}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FiUsers size={12} />
-                <span>{job?.positionsAvailable || 1} position(s)</span>
-              </div>
-            </div>
-
-            <p className="text-slate-600 text-xs line-clamp-2 mb-3">
-              {job?.jobDescription || 'Join our dedicated team at Matungulu Girls Senior School.'}
-            </p>
-          </div>
-
-          {/* Footer */}
-          <div className="flex items-center justify-between mt-auto">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 px-2 py-1 bg-slate-50 rounded-lg border border-slate-100">
-                <FiAward className="text-amber-500" size={12} />
-                <span className="text-[11px] font-bold text-slate-600">{job?.experience || 'Flexible'}</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-1 text-emerald-700 font-bold text-[11px] uppercase tracking-wider">
-              Apply Now
-              <FiArrowRight size={12} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Modern Stats Card Component
-const ModernStatCard = ({ stat }) => {
-  const Icon = stat.icon;
-  
-  return (
-    <div className="relative flex flex-col justify-between overflow-hidden bg-white border border-slate-200 p-4 md:p-6 rounded-[24px] md:rounded-[32px]">
-      {/* Top Section */}
-      <div className="flex items-start justify-between mb-4 md:mb-8">
-        <div className={`p-2 md:p-3 rounded-xl md:rounded-2xl bg-gradient-to-br ${stat.gradient} bg-opacity-10`}>
-          <Icon className={`text-lg md:text-2xl text-${stat.gradient.split(' ')[0].replace('from-', '')}`} />
-        </div>
-        <div className="hidden xs:block h-2 w-2 rounded-full bg-slate-200" />
-      </div>
-
-      {/* Content Section */}
-      <div className="space-y-1">
-        <p className="text-[9px] md:text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">
-          {stat.label}
-        </p>
-        
-        <div className="flex items-baseline gap-1">
-          <h3 className="text-xl md:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900">
-            {stat.number}
-          </h3>
-        </div>
-
-        <p className="text-[10px] md:text-sm font-medium text-slate-600 leading-tight line-clamp-1 md:line-clamp-none">
-          {stat.sublabel}
-        </p>
-      </div>
-    </div>
-  );
-};
-
-// Modern Job Detail Modal
-const ModernJobDetailModal = ({ job, onClose, onApply }) => {
-  if (!job) return null;
-
-  const handleWhatsAppShare = () => {
-    const text = `Check out this job opportunity at Matungulu Girls Senior School: ${job.jobTitle} - ${job.department || 'Various Departments'}`;
-    const url = window.location.href;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const getJobTypeStyle = (type) => {
-    const styles = {
-      'full-time': { gradient: 'from-emerald-600 to-teal-600' },
-      'part-time': { gradient: 'from-blue-600 to-cyan-600' },
-      'contract': { gradient: 'from-purple-600 to-pink-600' },
-      'internship': { gradient: 'from-amber-600 to-orange-600' }
-    };
-    return styles[type] || { gradient: 'from-emerald-600 to-teal-600' };
-  };
-
-  const formatFullDate = (dateString) => {
-    if (!dateString) return 'Open until filled';
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  const daysLeft = (dateString) => {
-    if (!dateString) return 'Open';
-    try {
-      const date = new Date(dateString);
-      const now = new Date();
-      const diff = Math.ceil((date - now) / (1000 * 60 * 60 * 24));
-      
-      if (diff === 0) return 'Ends today';
-      if (diff === 1) return 'Ends tomorrow';
-      if (diff < 0) return 'Closed';
-      return `${diff} days left`;
-    } catch {
-      return 'Open';
-    }
-  };
-
-  const theme = getJobTypeStyle(job.jobType);
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-slate-900/90 backdrop-blur-sm">
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-3xl bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
-        
-        {/* Close Button */}
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-50 p-2 bg-black/20 backdrop-blur-md text-white rounded-full border border-white/20"
-        >
-          <IoClose size={20}/>
-        </button>
-
-        {/* Header */}
-        <div className={`relative h-4 sm:h-6 bg-gradient-to-r ${theme.gradient}`} />
-
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10 bg-white">
-          <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
-            
-            {/* Title & Category */}
-            <section className="space-y-3 sm:space-y-4">
-              <div className="flex items-start sm:items-center gap-3 mb-2">
-                <div className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-r ${theme.gradient}`}>
-                  <FiBriefcase className="text-white text-xl sm:text-2xl" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 leading-tight tracking-tight">
-                    {job.jobTitle}
-                  </h2>
-                  <p className="text-slate-600 text-sm sm:text-base md:text-lg">{job.department || 'School Department'}</p>
-                </div>
-              </div>
-
-              {/* WhatsApp Share Button */}
-              <div className="flex items-center gap-2 mt-2">
-                <button
-                  onClick={handleWhatsAppShare}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl"
-                >
-                  <FaWhatsapp size={18} />
-                  <span className="text-sm font-medium">Share on WhatsApp</span>
-                </button>
-              </div>
-
-              {/* Quick Info Bar */}
-              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-y-2 sm:gap-y-3 gap-x-6 text-xs sm:text-sm font-semibold text-slate-600">
-                <div className="flex items-center gap-2">
-                  <IoCalendarClearOutline className="text-emerald-600 text-base sm:text-lg" />
-                  {formatFullDate(job.applicationDeadline)}
-                </div>
-                <div className="flex items-center gap-2">
-                  <IoTimeOutline className="text-emerald-600 text-base sm:text-lg" />
-                  {daysLeft(job.applicationDeadline)}
-                </div>
-                <div className="flex items-center gap-2">
-                  <IoBusinessOutline className="text-emerald-600 text-base sm:text-lg" />
-                  {job.jobType?.replace('-', ' ') || 'Full-time'}
-                </div>
-              </div>
-            </section>
-
-            {/* Stats Grid */}
-            <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-4">
-              <div className="p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl md:rounded-3xl border border-slate-200">
-                <FiUsers className="text-emerald-600 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
-                <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Positions</p>
-                <p className="font-bold text-slate-900 text-sm sm:text-base">{job.positionsAvailable || 1}</p>
-              </div>
-              <div className="p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl md:rounded-3xl border border-slate-200">
-                <FiAward className="text-amber-500 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
-                <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Experience</p>
-                <p className="font-bold text-slate-900 text-sm sm:text-base truncate">{job.experience || 'Flexible'}</p>
-              </div>
-              <div className="p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl md:rounded-3xl border border-slate-200">
-                <FiClock className="text-emerald-600 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
-                <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Type</p>
-                <p className="font-bold text-slate-900 text-sm sm:text-base capitalize">{job.jobType?.replace('-', ' ') || 'Full-time'}</p>
-              </div>
-              <div className="p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl md:rounded-3xl border border-slate-200">
-                <FaGraduationCap className="text-emerald-600 mb-1 sm:mb-2 w-4 h-4 sm:w-5 sm:h-5" />
-                <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mb-0.5 sm:mb-1">Category</p>
-                <p className="font-bold text-slate-900 text-sm sm:text-base">{job.category || 'General'}</p>
-              </div>
-            </section>
-
-            {/* Description Block */}
-            <section className="space-y-3 sm:space-y-4">
-              <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-slate-400">Job Description</h3>
-              <div className="text-slate-700 leading-relaxed text-sm sm:text-base md:text-lg bg-slate-50 p-3 sm:p-4 rounded-xl sm:rounded-2xl md:rounded-3xl border border-slate-200">
-                {job.jobDescription || 'Join our dedicated team at Matungulu Girls Senior School.'}
-              </div>
-            </section>
-
-            {/* Requirements */}
-            {job.requirements && (
-              <section className="space-y-3 sm:space-y-4">
-                <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-slate-400">Requirements</h3>
-                <div className="text-slate-700 leading-relaxed text-sm sm:text-base bg-emerald-50 p-3 sm:p-4 rounded-xl sm:rounded-2xl md:rounded-3xl border border-emerald-200">
-                  {job.requirements}
-                </div>
-              </section>
-            )}
-
-            {/* Qualifications */}
-            {job.qualifications && (
-              <section className="space-y-3 sm:space-y-4">
-                <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-slate-400">Qualifications</h3>
-                <div className="text-slate-700 leading-relaxed text-sm sm:text-base bg-emerald-50 p-3 sm:p-4 rounded-xl sm:rounded-2xl md:rounded-3xl border border-emerald-200">
-                  {job.qualifications}
-                </div>
-              </section>
-            )}
-
-            {/* Application Instructions */}
-            <section className="bg-gradient-to-r from-emerald-900 to-teal-900 rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 border border-emerald-800">
-              <div className="flex items-start sm:items-center gap-3 mb-3 sm:mb-4">
-                <div className="p-2.5 sm:p-3 bg-emerald-500 rounded-xl sm:rounded-2xl">
-                  <FiSend className="text-white text-xl sm:text-2xl" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg sm:text-xl font-bold text-white">How to Apply</h3>
-                  <p className="text-emerald-100 text-sm sm:text-base">Submit your application through any of the methods below</p>
-                </div>
-              </div>
-              
-              <div className="space-y-3 sm:space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="p-3 sm:p-4 bg-white/10 rounded-xl sm:rounded-2xl border border-white/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FiMail className="text-emerald-300 w-4 h-4 sm:w-5 sm:h-5" />
-                      <h4 className="font-bold text-white text-sm sm:text-base">Email Application</h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-emerald-100 mb-2 sm:mb-3">
-                      Send your CV, certificates, and cover letter to:
-                    </p>
-                    <a 
-                      href={`mailto:${job.contactEmail || 'careers@matungulugirls.sc.ke'}?subject=Job Application: ${job.jobTitle}`}
-                      className="text-emerald-300 font-medium text-sm sm:text-base break-all"
-                    >
-                      {job.contactEmail || 'careers@matungulugirls.sc.ke'}
-                    </a>
-                  </div>
-                  
-                  <div className="p-3 sm:p-4 bg-white/10 rounded-xl sm:rounded-2xl border border-white/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FiPhone className="text-emerald-300 w-4 h-4 sm:w-5 sm:h-5" />
-                      <h4 className="font-bold text-white text-sm sm:text-base">Phone Inquiry</h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-emerald-100 mb-2 sm:mb-3">
-                      Contact our HR department for inquiries:
-                    </p>
-                    <a 
-                      href={`tel:${job.contactPhone || '+254712345678'}`}
-                      className="text-emerald-300 font-medium text-sm sm:text-base"
-                    >
-                      {job.contactPhone || '+254 712 345 678'}
-                    </a>
-                  </div>
-                </div>
-                
-                <div className="pt-3 sm:pt-4 border-t border-emerald-700">
-                  <p className="text-xs sm:text-sm text-emerald-100">
-                    <strong className="text-white">Note:</strong> Please include all relevant documents and mention the position title in your application.
-                  </p>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="shrink-0 p-4 sm:p-6 bg-slate-50 border-t border-slate-200">
-          <div className="max-w-2xl mx-auto flex flex-row items-center justify-center px-4 sm:px-0">
+          <div className="flex items-center gap-2">
             <button
-              onClick={onClose}
-              className="flex-1 max-w-[200px] sm:max-w-none h-11 sm:h-14 bg-white border-2 border-slate-200 text-slate-900 rounded-xl sm:rounded-2xl font-bold text-[12px] sm:text-sm flex items-center justify-center gap-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                onShareWhatsApp(job);
+              }}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0f5b4c]/20 bg-[#0f5b4c]/10 text-[#0f5b4c]"
             >
-              <IoClose size={18} className="shrink-0" />
-              <span>Close</span>
+              <FaWhatsapp className="h-4 w-4" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onBookmark(job);
+              }}
+              className={`flex h-10 w-10 items-center justify-center rounded-full border ${
+                bookmarked ? 'border-[#d4b15f]/30 bg-[#d4b15f]/10 text-[#8a611b]' : 'border-[#11281f12] bg-white text-[#5f665e]'
+              }`}
+            >
+              <FiBookmark className={`h-4 w-4 ${bookmarked ? 'fill-current' : ''}`} />
             </button>
           </div>
         </div>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className={`rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.25em] ${type.soft}`}>
+            {type.label}
+          </span>
+          <span className="rounded-full border border-[#11281f12] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#5f665e]">
+            {category.name}
+          </span>
+        </div>
+
+        <h3 className="mt-4 text-2xl font-black leading-tight text-[#11281f]">
+          {job?.jobTitle || 'School Opportunity'}
+        </h3>
+        <p className="mt-2 text-sm font-semibold text-[#5f665e]">{job?.department || 'Matungulu Girls Senior School'}</p>
+        <p className="mt-4 line-clamp-3 text-sm leading-7 text-[#5f665e]">
+          {job?.jobDescription || 'Join the Matungulu Girls Senior School team and help shape a strong, girls-centered learning environment.'}
+        </p>
+
+        <div className="mt-5 grid gap-3">
+          <div className="flex items-center justify-between rounded-[1.25rem] border border-[#11281f12] bg-white px-4 py-3">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Deadline</span>
+            <span className="text-sm font-black text-[#11281f]">{deadlineText}</span>
+          </div>
+          <div className="flex items-center justify-between rounded-[1.25rem] border border-[#11281f12] bg-white px-4 py-3">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Positions</span>
+            <span className="text-sm font-black text-[#11281f]">{job?.positionsAvailable || 1}</span>
+          </div>
+          <div className="flex items-center justify-between rounded-[1.25rem] border border-[#11281f12] bg-white px-4 py-3">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Experience</span>
+            <span className="text-sm font-black text-[#11281f]">{job?.experience || 'Flexible'}</span>
+          </div>
+        </div>
+
+        <div className="mt-6 inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-[#0f5b4c]">
+          View details
+          <FiArrowRight className="h-4 w-4" />
+        </div>
       </div>
+    </article>
+  );
+}
+
+function InfoCard({ icon: Icon, title, text, tone = 'default' }) {
+  const tones = {
+    default: 'bg-white/[0.05] border-white/10 text-white',
+    gold: 'bg-[#d4b15f]/10 border-[#d4b15f]/20 text-white',
+  };
+
+  return (
+    <div className={`rounded-[1.7rem] border p-5 ${tones[tone]}`}>
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+        <Icon className="h-5 w-5 text-[#d4b15f]" />
+      </div>
+      <h3 className="mt-4 text-lg font-black">{title}</h3>
+      <p className="mt-2 text-sm leading-7 text-white/65">{text}</p>
     </div>
   );
-};
+}
 
-// Modern Empty State Component
-const ModernEmptyState = ({ onClearFilters }) => {
+function EmptyState({ onClear }) {
   return (
-    <div className="group bg-white rounded-[24px] md:rounded-[32px] border-2 border-dashed border-emerald-200 py-8 md:py-16 px-4 md:px-8 text-center">
-      
-      {/* Icon */}
-      <div className="w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-        <FiBriefcase className="text-emerald-600 text-2xl md:text-4xl" />
-      </div>
-
-      <h3 className="text-md md:text-xl font-black text-slate-900 mb-2 md:mb-3 tracking-tight italic uppercase">
-        No Openings
-      </h3>
-      
-      <p className="text-slate-600 text-[9px] md:text-lg mb-6 md:mb-8 max-w-[240px] md:max-w-md mx-auto leading-relaxed">
-        Currently no opportunities available at <span className="text-emerald-700 font-bold">Matungulu Girls Senior School</span>.
+    <div className="rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] px-6 py-20 text-center shadow-[0_24px_60px_rgba(17,40,31,0.08)]">
+      <FiBriefcase className="mx-auto h-14 w-14 text-[#0f5b4c]" />
+      <h3 className="mt-6 text-3xl font-black text-[#11281f]">No roles match this search</h3>
+      <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#5f665e]">
+        Try another category or keyword to reopen current Matungulu Girls Senior School opportunities.
       </p>
+      <button
+        onClick={onClear}
+        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#0f5b4c] px-5 py-3 text-sm font-black text-white"
+      >
+        Clear Filters
+        <FiArrowRight className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
 
-      <div className="flex justify-center mb-8">
-        <button 
-          onClick={onClearFilters}
-          className="w-full sm:w-auto px-6 py-3 bg-emerald-900 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] shadow-lg"
+function JobDetailModal({ job, onClose, onApply, onCopyEmail }) {
+  if (!job) return null;
+
+  const category = getCategoryMeta(job?.category);
+  const type = getJobTypeMeta(job?.jobType);
+  const CategoryIcon = category.icon;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#04100d]/82 p-4 backdrop-blur-md">
+      <div className="relative max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#fffaf0] shadow-[0_40px_110px_rgba(0,0,0,0.38)]">
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-[#11281f12] bg-white text-[#11281f]"
         >
-          Reset Filters
+          <FiX className="h-5 w-5" />
         </button>
-      </div>
-      
-      {/* Features Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-6 max-w-2xl mx-auto">
-        {[
-          { icon: FiBell, color: "text-emerald-600", title: "Notify", desc: "Get alerts" },
-          { icon: FiBookmark, color: "text-emerald-600", title: "Save", desc: "Check back" },
-          { icon: FiMail, color: "text-emerald-600", title: "Contact", desc: "Email HR" },
-          { icon: FiInfo, color: "text-emerald-600", title: "FAQ", desc: "View help" }
-        ].map((feature, i) => (
-          <div key={i} className="p-3 md:p-4 bg-slate-50 rounded-xl md:rounded-2xl border border-slate-200 flex flex-col items-center text-center">
-            <feature.icon className={`${feature.color} text-base md:text-xl mb-1 md:mb-2 flex-shrink-0`} />
+
+        <div className={`h-3 bg-gradient-to-r ${category.tone}`} />
+
+        <div className="max-h-[calc(92vh-12px)] overflow-y-auto p-6 sm:p-8">
+          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <h4 className="font-black text-slate-900 text-[9px] md:text-xs uppercase tracking-tighter">
-                {feature.title}
-              </h4>
-              <p className="hidden xs:block text-[8px] md:text-xs text-slate-600 leading-tight">
-                {feature.desc}
-              </p>
+              <div className="flex items-start gap-4">
+                <div className={`flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br ${category.tone} text-white`}>
+                  <CategoryIcon className="h-7 w-7" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap gap-2">
+                    <span className={`rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.25em] ${type.soft}`}>
+                      {type.label}
+                    </span>
+                    <span className="rounded-full border border-[#11281f12] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.25em] text-[#5f665e]">
+                      {category.name}
+                    </span>
+                  </div>
+                  <h2 className="mt-4 text-3xl font-black leading-tight text-[#11281f] sm:text-4xl">
+                    {job?.jobTitle || 'School Opportunity'}
+                  </h2>
+                  <p className="mt-2 text-base font-semibold text-[#5f665e]">
+                    {job?.department || 'Matungulu Girls Senior School'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Application Deadline</p>
+                  <p className="mt-2 text-base font-black text-[#11281f]">{formatDeadline(job?.applicationDeadline)}</p>
+                </div>
+                <div className="rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Positions Available</p>
+                  <p className="mt-2 text-base font-black text-[#11281f]">{job?.positionsAvailable || 1}</p>
+                </div>
+                <div className="rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Experience Level</p>
+                  <p className="mt-2 text-base font-black text-[#11281f]">{job?.experience || 'Flexible'}</p>
+                </div>
+                <div className="rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5f665e]">Institution</p>
+                  <p className="mt-2 text-base font-black text-[#11281f]">Matungulu Girls Senior School</p>
+                </div>
+              </div>
+
+              <div className="mt-8 space-y-6">
+                <section>
+                  <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#0f5b4c]">Role Overview</p>
+                  <p className="mt-3 text-sm leading-8 text-[#5f665e]">
+                    {job?.jobDescription || 'Join the Matungulu Girls Senior School team and help strengthen academic excellence, student support, and professional service delivery.'}
+                  </p>
+                </section>
+
+                {job?.requirements && (
+                  <section>
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#0f5b4c]">Requirements</p>
+                    <p className="mt-3 text-sm leading-8 text-[#5f665e]">{job.requirements}</p>
+                  </section>
+                )}
+
+                {job?.qualifications && (
+                  <section>
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#0f5b4c]">Qualifications</p>
+                    <p className="mt-3 text-sm leading-8 text-[#5f665e]">{job.qualifications}</p>
+                  </section>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <div className="rounded-[1.8rem] bg-[linear-gradient(145deg,#0f5b4c,#0b2f28)] p-6 text-white shadow-[0_24px_70px_rgba(15,91,76,0.22)]">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Need To Know</p>
+                <div className="mt-5 space-y-3">
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                    <div className="flex items-start gap-3">
+                      <FiStar className="mt-1 h-4 w-4 text-[#f6dd9b]" />
+                      <p className="text-sm leading-7 text-white/75">
+                        Roles here support a girls-centered school culture focused on discipline, growth, and excellence.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                    <div className="flex items-start gap-3">
+                      <FiInfo className="mt-1 h-4 w-4 text-[#f6dd9b]" />
+                      <p className="text-sm leading-7 text-white/75">
+                        Include relevant credentials, experience, and the exact position title in your application.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                    <div className="flex items-start gap-3">
+                      <FiCheckCircle className="mt-1 h-4 w-4 text-[#f6dd9b]" />
+                      <p className="text-sm leading-7 text-white/75">
+                        Strong applicants should demonstrate professionalism, learner support, and alignment with school values.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[1.8rem] border border-[#11281f12] bg-white p-6">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#0f5b4c]">Application Details</p>
+                <div className="mt-5 space-y-4">
+                  <a
+                    href={`mailto:${job?.contactEmail || 'careers@matungulugirls.sc.ke'}?subject=Job Application: ${job?.jobTitle || 'Matungulu Girls Role'}`}
+                    className="flex items-start gap-3 rounded-[1.2rem] border border-[#11281f12] bg-[#fffaf0] p-4"
+                  >
+                    <FiMail className="mt-1 h-4 w-4 text-[#0f5b4c]" />
+                    <div>
+                      <p className="text-sm font-black text-[#11281f]">Email Applications</p>
+                      <p className="mt-1 text-sm text-[#5f665e]">{job?.contactEmail || 'careers@matungulugirls.sc.ke'}</p>
+                    </div>
+                  </a>
+
+                  <a
+                    href={`tel:${job?.contactPhone || '+254712345678'}`}
+                    className="flex items-start gap-3 rounded-[1.2rem] border border-[#11281f12] bg-[#fffaf0] p-4"
+                  >
+                    <FiPhone className="mt-1 h-4 w-4 text-[#0f5b4c]" />
+                    <div>
+                      <p className="text-sm font-black text-[#11281f]">Phone Contact</p>
+                      <p className="mt-1 text-sm text-[#5f665e]">{job?.contactPhone || '+254 712 345 678'}</p>
+                    </div>
+                  </a>
+
+                  <button
+                    onClick={() => onCopyEmail(job?.contactEmail || 'careers@matungulugirls.sc.ke')}
+                    className="flex w-full items-start gap-3 rounded-[1.2rem] border border-[#11281f12] bg-[#fffaf0] p-4 text-left"
+                  >
+                    <FiCopy className="mt-1 h-4 w-4 text-[#0f5b4c]" />
+                    <div>
+                      <p className="text-sm font-black text-[#11281f]">Copy Application Email</p>
+                      <p className="mt-1 text-sm text-[#5f665e]">Copy the official contact address for quick use.</p>
+                    </div>
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => onApply(job)}
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0f5b4c] px-5 py-4 text-sm font-black text-white"
+                >
+                  Apply for This Role
+                  <FiArrowRight className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
-};
+}
 
-// Main Component
-export default function ModernCareersPage() {
+export default function CareersPage() {
   const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [search, setSearch] = useState('');
+  const [activeTab, setActiveTab] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [bookmarkedJobs, setBookmarkedJobs] = useState(new Set());
-  const [activeTab, setActiveTab] = useState('all');
-  const [refreshing, setRefreshing] = useState(false);
 
-  // Stats data
-  const stats = [
-    { 
-      icon: FiBriefcase, 
-      number: '0', 
-      label: 'Open Positions', 
-      sublabel: 'Currently available',
-      gradient: 'from-emerald-600 to-teal-600'
-    },
-    { 
-      icon: FiUsers, 
-      number: '65+', 
-      label: 'Staff Members', 
-      sublabel: 'Our dedicated team',
-      gradient: 'from-emerald-600 to-teal-600'
-    },
-    { 
-      icon: FaGraduationCap, 
-      number: '10', 
-      label: 'Departments', 
-      sublabel: 'Academic & support',
-      gradient: 'from-emerald-600 to-teal-600'
-    },
-    { 
-      icon: FaLeaf, 
-      number: '30+', 
-      label: 'Years Excellence', 
-      sublabel: 'Educational legacy',
-      gradient: 'from-emerald-600 to-teal-600'
-    }
-  ];
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('career_bookmarks') || '[]');
+    setBookmarkedJobs(new Set(saved));
+  }, []);
 
-  // Categories for filtering
-  const categories = [
-    { id: 'all', name: 'All Positions', icon: FiBriefcase, gradient: 'from-emerald-600 to-teal-600' },
-    { id: 'teaching', name: 'Teaching', icon: FaGraduationCap, gradient: 'from-emerald-600 to-teal-600' },
-    { id: 'administrative', name: 'Administrative', icon: FiBriefcase, gradient: 'from-emerald-600 to-teal-600' },
-    { id: 'support', name: 'Support Staff', icon: FiUsers, gradient: 'from-emerald-600 to-teal-600' },
-    { id: 'technical', name: 'Technical', icon: FiZap, gradient: 'from-emerald-600 to-teal-600' },
-    { id: 'medical', name: 'Medical', icon: FiShield, gradient: 'from-emerald-600 to-teal-600' }
-  ];
-
-  // Fetch jobs from API
   useEffect(() => {
     const fetchJobs = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
         const response = await fetch('/api/career');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
         const data = await response.json();
-        
+
         if (data.success && Array.isArray(data.jobs)) {
           setJobs(data.jobs);
-          setFilteredJobs(data.jobs);
-          stats[0].number = data.jobs.length.toString();
         } else {
-          console.error('Invalid API response format:', data);
-          toast.error('Invalid data format received from server');
           setJobs([]);
-          setFilteredJobs([]);
         }
       } catch (error) {
         console.error('Error fetching jobs:', error);
         toast.error('Failed to load job listings. Please try again.');
-        setJobs([]);
-        setFilteredJobs([]);
       } finally {
         setLoading(false);
       }
@@ -808,66 +559,55 @@ export default function ModernCareersPage() {
     fetchJobs();
   }, []);
 
-  // Filter jobs based on search and category
-  useEffect(() => {
+  const filteredJobs = useMemo(() => {
     let filtered = [...jobs];
-    
+
     if (activeTab !== 'all') {
-      filtered = filtered.filter(job => 
-        job?.category?.toLowerCase() === activeTab.toLowerCase()
+      filtered = filtered.filter(
+        (job) => job?.category?.toLowerCase() === activeTab.toLowerCase()
       );
     }
-    
-    if (search) {
-      filtered = filtered.filter(job => 
-        job?.jobTitle?.toLowerCase().includes(search.toLowerCase()) ||
-        job?.department?.toLowerCase().includes(search.toLowerCase()) ||
-        job?.jobDescription?.toLowerCase().includes(search.toLowerCase())
+
+    if (search.trim()) {
+      const query = search.toLowerCase();
+      filtered = filtered.filter(
+        (job) =>
+          job?.jobTitle?.toLowerCase().includes(query) ||
+          job?.department?.toLowerCase().includes(query) ||
+          job?.jobDescription?.toLowerCase().includes(query) ||
+          job?.requirements?.toLowerCase().includes(query)
       );
     }
-    
-    setFilteredJobs(filtered);
-  }, [jobs, search, activeTab]);
 
-  const handleBookmark = (job) => {
-    const newBookmarked = new Set(bookmarkedJobs);
-    if (newBookmarked.has(job.id)) {
-      newBookmarked.delete(job.id);
-      toast.success('Removed from bookmarks');
-    } else {
-      newBookmarked.add(job.id);
-      toast.success('Job saved to bookmarks');
-    }
-    setBookmarkedJobs(newBookmarked);
-  };
+    return filtered;
+  }, [jobs, activeTab, search]);
 
-  const handleShare = (job) => {
-    if (navigator.share) {
-      navigator.share({
-        title: `${job.jobTitle} - Matungulu Girls Senior School`,
-        text: `Check out this job opportunity at Matungulu Girls Senior School: ${job.jobTitle}`,
-        url: window.location.href,
-      });
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copied to clipboard!');
-    }
-  };
+  const categories = useMemo(() => {
+    const dynamicCategories = [...new Set(jobs.map((job) => job?.category?.toLowerCase()).filter(Boolean))];
+    return ['all', ...dynamicCategories];
+  }, [jobs]);
 
-  const handleApply = (job) => {
-    toast.success(`Application process for ${job.jobTitle} will open soon!`);
-  };
+  const stats = useMemo(() => {
+    const departmentCount = new Set(jobs.map((job) => job?.department).filter(Boolean)).size;
+    return [
+      { ...statsBase[0], value: jobs.length.toString() },
+      { ...statsBase[1], value: departmentCount ? departmentCount.toString() : '1' },
+      { ...statsBase[2], value: 'Girls First' },
+      { ...statsBase[3], value: '3+' },
+    ];
+  }, [jobs]);
 
   const refreshData = async () => {
-    setRefreshing(true);
     try {
+      setRefreshing(true);
       const response = await fetch('/api/career');
       const data = await response.json();
-      
+
       if (data.success && Array.isArray(data.jobs)) {
         setJobs(data.jobs);
-        setFilteredJobs(data.jobs);
-        toast.success(`Refreshed! ${data.jobs.length} positions loaded`);
+        toast.success(`Refreshed! ${data.jobs.length} opportunities loaded`);
+      } else {
+        toast.error('No career opportunities returned');
       }
     } catch (error) {
       console.error('Error refreshing jobs:', error);
@@ -877,396 +617,352 @@ export default function ModernCareersPage() {
     }
   };
 
+  const handleBookmark = (job) => {
+    const updated = new Set(bookmarkedJobs);
+    if (updated.has(job.id)) {
+      updated.delete(job.id);
+      toast.success('Removed from saved opportunities');
+    } else {
+      updated.add(job.id);
+      toast.success('Saved opportunity');
+    }
+    setBookmarkedJobs(updated);
+    localStorage.setItem('career_bookmarks', JSON.stringify([...updated]));
+  };
+
+  const handleShare = async (job) => {
+    const title = `${job?.jobTitle || 'Career Opportunity'} - Matungulu Girls Senior School`;
+    const text = `Check out this school opportunity at Matungulu Girls Senior School: ${job?.jobTitle || 'Career Role'}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url: window.location.href });
+      } catch (error) {
+        console.log('Share cancelled');
+      }
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success('Link copied to clipboard');
+    }
+  };
+
+  const handleShareAllJobs = () => {
+    const text = `Check out current opportunities at Matungulu Girls Senior School. ${filteredJobs.length} role(s) currently available.`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + window.location.href)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleShareWhatsApp = (job) => {
+    const text = `Job Opening: ${job?.jobTitle || 'School Role'} at Matungulu Girls Senior School. ${job?.jobType || 'Full-time'} position in ${job?.department || 'various departments'}.`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + window.location.href)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleApply = (job) => {
+    toast.success(`Application process for ${job?.jobTitle || 'this role'} is ready through the listed contact details.`);
+  };
+
+  const copyEmail = async (email) => {
+    try {
+      await navigator.clipboard.writeText(email);
+      toast.success('Application email copied');
+    } catch {
+      toast.error('Could not copy email');
+    }
+  };
+
   const clearFilters = () => {
     setSearch('');
     setActiveTab('all');
   };
 
-  const handleShareAllJobs = () => {
-    const text = `Check out current job openings at Matungulu Girls Senior School! ${filteredJobs.length} positions available.`;
-    const url = window.location.href;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
   if (loading) {
-    return (
-      <Box className="min-h-[70vh] flex items-center justify-center p-4 bg-transparent">
-        <Stack spacing={2.5} alignItems="center" className="w-full">
-          <Box className="relative flex items-center justify-center scale-90 sm:scale-100">
-            <CircularProgress
-              variant="determinate"
-              value={100}
-              size={52} 
-              thickness={4.5}
-              sx={{ color: '#f1f5f9' }} 
-            />
-            <CircularProgress
-              variant="indeterminate"
-              disableShrink
-              size={52}
-              thickness={4.5}
-              sx={{
-                color: '#0f172a',
-                animationDuration: '900ms',
-                position: 'absolute',
-                [`& .MuiCircularProgress-circle`]: {
-                  strokeLinecap: 'round',
-                },
-              }}
-            />
-            <Box className="absolute">
-              <IoSparkles className="text-emerald-600 text-base" />
-            </Box>
-          </Box>
-
-          <div className="text-center px-6">
-            <p className="text-slate-900 font-semibold text-sm sm:text-base tracking-tight leading-tight italic">
-              Searching for opportunities...
-            </p>
-            <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-[0.2em] font-black mt-1.5">
-              Careers at Matungulu Girls
-            </p>
-          </div>
-        </Stack>
-      </Box>
-    );
+    return <LoadingView />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-3 sm:p-4 md:p-6">
+    <div className="min-h-screen bg-[#061510] text-white">
       <Toaster position="top-right" richColors />
-      
-      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+
+      <section className="relative overflow-hidden border-b border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,177,95,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.32),transparent_38%)]" />
+        <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-18">
           <div>
-            <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-full border border-emerald-300 mb-2 sm:mb-3">
-              <IoSparkles className="text-emerald-700 w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="text-emerald-800 font-bold text-xs sm:text-sm uppercase tracking-wider">
-                Career Opportunities
-              </span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/70">
+              <IoSparkles className="h-4 w-4 text-[#d4b15f]" />
+              Careers at Matungulu Girls
             </div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-slate-900 tracking-tight mb-1 sm:mb-2">
-              Join Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 to-teal-700">Matungulu Girls</span> Family
+            <h1 className="mt-5 text-4xl font-black leading-[0.95] text-white sm:text-6xl">
+              A premium careers desk for school jobs and real opportunities.
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base md:text-lg max-w-2xl">
-              Shape the future of education at Matungulu Girls Senior School - Excellence Through Discipline and Hard Work
+            <p className="mt-5 max-w-2xl text-sm leading-8 text-white/68 sm:text-base">
+              Explore Matungulu Girls Senior School openings through a more modern recruitment workspace built for teachers, administrators, support teams, and professionals ready to contribute to a girls-centered institution.
             </p>
-          </div>
-          
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={refreshData}
-              disabled={refreshing}
-              className="
-                inline-flex items-center gap-1.5 sm:gap-2
-                px-3 sm:px-4 md:px-5
-                py-2 sm:py-2.5 md:py-3
-                rounded-lg sm:rounded-xl
-                bg-white text-slate-700
-                border border-slate-200
-                font-medium text-xs sm:text-sm md:text-base
-                disabled:opacity-50 disabled:cursor-not-allowed
-              "
-            >
-              {refreshing && (
-                <CircularProgress
-                  size={14}
-                  thickness={4}
-                  sx={{
-                    color: "#059669",
-                  }}
-                />
-              )}
 
-              <span className="whitespace-nowrap">
-                {refreshing ? "Refreshing..." : "Refresh"}
-              </span>
-            </button>
-            
-            <div className="flex bg-white rounded-lg sm:rounded-xl border border-slate-200 overflow-hidden">
+            <div className="mt-8 flex flex-wrap gap-3">
               <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 sm:p-3 ${viewMode === 'grid' ? 'bg-emerald-100 text-emerald-700' : 'text-slate-600'}`}
+                onClick={() => {
+                  const section = document.getElementById('careers-openings');
+                  if (section) section.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-[#d4b15f] px-5 py-3 text-sm font-black text-[#11241d]"
               >
-                <FiTrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                View Open Roles
+                <FiArrowRight className="h-4 w-4" />
               </button>
               <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 sm:p-3 ${viewMode === 'list' ? 'bg-emerald-100 text-emerald-700' : 'text-slate-600'}`}
+                onClick={handleShareAllJobs}
+                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-5 py-3 text-sm font-black text-white"
               >
-                <FiList className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <FaWhatsapp className="h-4 w-4 text-[#d4b15f]" />
+                Share Openings
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-6 sm:mb-8 md:mb-10">
-          {stats.map((stat, index) => {
-            const updatedStat = { ...stat };
-            if (index === 0) {
-              updatedStat.number = jobs.length.toString();
-            }
-            return <ModernStatCard key={index} stat={updatedStat} />;
-          })}
+          <div className="grid gap-4">
+            <InfoCard
+              icon={IoSchoolOutline}
+              title="School-specific recruitment"
+              text="This page is tailored for Matungulu Girls Senior School vacancies, with more emphasis on school culture, learner support, and professional fit."
+              tone="gold"
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <InfoCard
+                icon={FiMapPin}
+                title="Location"
+                text="Matungulu Sub County, Machakos County, Kenya."
+              />
+              <InfoCard
+                icon={FiMail}
+                title="HR Contact"
+                text="careers@matungulugirls.sc.ke for role-related submissions and inquiries."
+              />
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Main Content Layout */}
-        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8">
-          
-          {/* Left Column: Filters & Info */}
-          <div className="lg:w-1/4 space-y-4 sm:space-y-6">
-            {/* School Info Card */}
-            <div className="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl md:rounded-[32px] p-4 sm:p-5 md:p-6">
-              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-100 rounded-lg sm:rounded-xl flex items-center justify-center">
-                  <IoSchoolOutline className="text-emerald-700 text-lg sm:text-xl" />
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {stats.map((stat) => (
+            <StatPanel key={stat.label} stat={stat} value={stat.value} />
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-20 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <aside className="space-y-5">
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">Need To Know</p>
+            <div className="mt-5 space-y-3">
+              <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.04] p-4">
+                <div className="flex items-start gap-3">
+                  <FiStar className="mt-1 h-4 w-4 text-[#d4b15f]" />
+                  <p className="text-sm leading-7 text-white/68">
+                    Roles here support a girls’ school environment focused on discipline, growth, mentorship, and academic excellence.
+                  </p>
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900">Matungulu Girls Senior School</h2>
               </div>
-
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-200">
-                  <FiMapPin className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
-                  <div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-900">Location</p>
-                    <p className="text-[10px] sm:text-xs text-slate-600">Matungulu Sub County, Machakos, Kenya</p>
-                  </div>
+              <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.04] p-4">
+                <div className="flex items-start gap-3">
+                  <FiSend className="mt-1 h-4 w-4 text-[#d4b15f]" />
+                  <p className="text-sm leading-7 text-white/68">
+                    Applications should clearly state the exact position title and include relevant academic or professional documents.
+                  </p>
                 </div>
-
-                <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-200">
-                  <FiMail className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
-                  <div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-900">HR Email</p>
-                    <p className="text-[10px] sm:text-xs text-slate-600">careers@matungulugirls.sc.ke</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-200">
-                  <FiPhone className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
-                  <div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-900">Contact</p>
-                    <p className="text-[10px] sm:text-xs text-slate-600">+254 712 345 678</p>
-                  </div>
-                </div>
-
-                <div className="pt-3 sm:pt-4 border-t border-slate-200">
-                  <p className="text-xs text-slate-600 italic">
-                    "Prayer, Discipline and Hardwork"
+              </div>
+              <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.04] p-4">
+                <div className="flex items-start gap-3">
+                  <FiAward className="mt-1 h-4 w-4 text-[#d4b15f]" />
+                  <p className="text-sm leading-7 text-white/68">
+                    Strong applicants will usually show professionalism, educational impact, and alignment with school values.
                   </p>
                 </div>
               </div>
             </div>
-
-            {/* Quick Application Card */}
-            <div className="bg-gradient-to-r from-emerald-900 to-teal-900 rounded-2xl sm:rounded-3xl md:rounded-[32px] p-4 sm:p-5 md:p-6 text-white overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 bg-white/5 blur-[40px] sm:blur-[50px]" />
-              <div className="relative z-10">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
-                  <FiBriefcase className="text-white text-lg sm:text-xl" />
-                </div>
-                <h4 className="text-base sm:text-lg font-bold mb-1.5 sm:mb-2">Career Information</h4>
-                <p className="text-xs sm:text-sm text-emerald-100 mb-3 sm:mb-4">
-                  {jobs.length} positions currently available
-                </p>
-                <button
-                  onClick={() => toast.info('Contact HR for general inquiries')}
-                  className="w-full py-2.5 sm:py-3 bg-white text-emerald-900 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm"
-                >
-                  Contact HR
-                </button>
-              </div>
-            </div>
           </div>
 
-          {/* Right Column: Job Listings */}
-          <div className="lg:w-3/4 space-y-4 sm:space-y-6 md:space-y-8">
-            
-            {/* Header Section */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 px-1">
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="p-2 sm:p-3 bg-emerald-900 rounded-xl sm:rounded-2xl">
-                  <FiBriefcase className="text-white text-xl sm:text-2xl" />
-                </div>
+          <div className="rounded-[2rem] bg-[linear-gradient(145deg,#0f5b4c,#0b2f28)] p-6 text-white shadow-[0_24px_70px_rgba(15,91,76,0.22)]">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/55">School Contact</p>
+            <div className="mt-5 space-y-4">
+              <div className="flex items-start gap-3">
+                <FiMapPin className="mt-1 h-4 w-4 text-[#f6dd9b]" />
                 <div>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Current Openings</h2>
-                  <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider sm:tracking-widest">
-                    {filteredJobs.length} Positions Available
-                  </p>
+                  <p className="text-sm font-black">Campus Location</p>
+                  <p className="mt-1 text-sm text-white/70">Matungulu Sub County, Machakos, Kenya</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleShareAllJobs}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl"
-                >
-                  <FaWhatsapp size={18} />
-                  <span className="text-sm font-medium hidden sm:inline">Share All Jobs</span>
-                  <span className="text-sm font-medium sm:hidden">Share</span>
-                </button>
+              <div className="flex items-start gap-3">
+                <FiMail className="mt-1 h-4 w-4 text-[#f6dd9b]" />
+                <div>
+                  <p className="text-sm font-black">Careers Email</p>
+                  <p className="mt-1 text-sm text-white/70">careers@matungulugirls.sc.ke</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <FiPhone className="mt-1 h-4 w-4 text-[#f6dd9b]" />
+                <div>
+                  <p className="text-sm font-black">Phone Contact</p>
+                  <p className="mt-1 text-sm text-white/70">+254 712 345 678</p>
+                </div>
               </div>
             </div>
+            <div className="mt-6 rounded-[1.3rem] border border-white/10 bg-white/[0.06] p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/55">School Motto</p>
+              <p className="mt-2 text-sm font-black text-white">Prayer, Discipline and Hardwork</p>
+            </div>
+          </div>
+        </aside>
 
-            {/* Search & Filter Bar */}
-            <div className="bg-white border border-slate-200 p-2 sm:p-3 rounded-xl sm:rounded-2xl md:rounded-[28px]">
-              <div className="flex flex-col md:flex-row items-center gap-2 sm:gap-3">
-                {/* Search */}
-                <div className="relative w-full flex-1">
-                  <div className="relative flex items-center bg-white border border-slate-200 rounded-lg sm:rounded-xl md:rounded-2xl focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-600/5">
-                    <div className="pl-3 sm:pl-4 md:pl-5 pr-2 sm:pr-3 flex items-center justify-center">
-                      <FiSearch className="text-slate-400" size={16} />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Search positions..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      className="w-full py-2.5 sm:py-3 md:py-4 bg-transparent text-slate-900 placeholder:text-slate-400 font-medium sm:font-semibold text-sm focus:outline-none placeholder:text-xs sm:placeholder:text-sm"
-                    />
-                    {search && (
-                      <button
-                        onClick={() => setSearch('')}
-                        className="pr-3 sm:pr-4 text-slate-400"
-                      >
-                        <FiX size={16} />
-                      </button>
-                    )}
-                  </div>
+        <main id="careers-openings" className="space-y-6">
+          <div className="rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] p-4 shadow-[0_24px_60px_rgba(17,40,31,0.08)] sm:p-6">
+            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center">
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
+                <div className="relative">
+                  <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5f665e]" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search school roles, departments, or requirements"
+                    className="w-full rounded-[1.35rem] border border-[#11281f12] bg-white px-12 py-4 text-sm font-semibold text-[#11281f] outline-none transition focus:border-[#0f5b4c]"
+                  />
                 </div>
-
-                {/* Category Selector */}
-                <div className="relative w-full md:w-auto">
-                  <select 
-                    value={activeTab}
-                    onChange={(e) => setActiveTab(e.target.value)}
-                    className="w-full md:w-48 appearance-none px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 md:py-3.5 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl md:rounded-2xl font-medium sm:font-semibold text-slate-600 text-xs sm:text-sm cursor-pointer focus:ring-1 focus:ring-emerald-600/20"
+                <div className="flex gap-3">
+                  <button
+                    onClick={clearFilters}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[1.35rem] border border-[#11281f12] bg-white px-4 py-4 text-sm font-black text-[#11281f]"
                   >
-                    {categories.map((category) => {
-                      const Icon = category.icon;
-                      return (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-                  </div>
+                    <FiFilter className="h-4 w-4 text-[#0f5b4c]" />
+                    Reset
+                  </button>
+                  <button
+                    onClick={refreshData}
+                    disabled={refreshing}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[1.35rem] bg-[#0f5b4c] px-4 py-4 text-sm font-black text-white disabled:opacity-60"
+                  >
+                    {refreshing ? <CircularProgress size={16} thickness={5} sx={{ color: 'white' }} /> : <FiRefreshCw className="h-4 w-4" />}
+                    {refreshing ? 'Refreshing...' : 'Refresh'}
+                  </button>
                 </div>
+              </div>
 
-                {/* Reset Button */}
+              <div className="flex flex-wrap gap-3">
                 <button
-                  onClick={clearFilters}
-                  className="w-full md:w-auto px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-3.5 bg-emerald-600 text-white rounded-lg sm:rounded-xl md:rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2"
+                  onClick={() => setViewMode('grid')}
+                  className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black transition ${
+                    viewMode === 'grid' ? 'bg-[#0f5b4c] text-white' : 'border border-[#11281f12] bg-white text-[#11281f]'
+                  }`}
                 >
-                  <FiFilter size={14} />
-                  Reset
+                  <FiGrid className="h-4 w-4" />
+                  Grid
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black transition ${
+                    viewMode === 'list' ? 'bg-[#0f5b4c] text-white' : 'border border-[#11281f12] bg-white text-[#11281f]'
+                  }`}
+                >
+                  <FiList className="h-4 w-4" />
+                  Ledger
                 </button>
               </div>
             </div>
 
-            {/* Category Pills */}
-            <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-4 no-scrollbar -mx-2 px-2">
-              {categories.map((category) => {
-                const Icon = category.icon;
-                const isActive = activeTab === category.id;
+            <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
+              {categories.map((categoryId) => {
+                const config = getCategoryMeta(categoryId);
+                const Icon = config.icon;
+                const active = activeTab === categoryId;
+
                 return (
                   <button
-                    key={category.id}
-                    onClick={() => setActiveTab(category.id)}
-                    className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-full whitespace-nowrap text-xs sm:text-sm font-bold border ${
-                      isActive 
-                        ? "bg-emerald-600 border-emerald-600 text-white" 
-                        : "bg-white border-slate-200 text-slate-600"
+                    key={categoryId}
+                    onClick={() => setActiveTab(categoryId)}
+                    className={`inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-3 text-sm font-black transition ${
+                      active
+                        ? 'bg-[#11281f] text-white shadow-[0_14px_28px_rgba(17,40,31,0.18)]'
+                        : 'border border-[#11281f12] bg-white text-[#11281f]'
                     }`}
                   >
-                    {Icon && <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isActive ? "text-white" : "text-slate-400"}`} />}
-                    <span className="truncate">{category.name}</span>
+                    <Icon className="h-4 w-4" />
+                    {config.name}
                   </button>
                 );
               })}
             </div>
+          </div>
 
-            {/* Job Listings */}
-            <div className="relative">
-              {filteredJobs.length === 0 ? (
-                <ModernEmptyState onClearFilters={clearFilters} />
-              ) : (
-                <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6' : 'space-y-3 sm:space-y-4'}>
-                  {filteredJobs.map((job, index) => (
-                    <ModernJobCard 
-                      key={job.id || index} 
-                      job={job} 
-                      onView={setSelectedJob}
-                      onBookmark={handleBookmark}
-                      onShare={handleShare}
-                      viewMode={viewMode}
-                    />
-                  ))}
-                </div>
-              )}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">Recruitment Board</p>
+              <h2 className="mt-3 text-3xl font-black text-white sm:text-4xl">
+                Current school openings
+              </h2>
             </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-black text-white">
+              <FiBriefcase className="h-4 w-4 text-[#d4b15f]" />
+              {filteredJobs.length} role{filteredJobs.length === 1 ? '' : 's'} available
+            </div>
+          </div>
 
-            {/* Call to Action Banner */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-emerald-900 to-teal-900 rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8">
-              <div className="absolute top-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-white/5 blur-[40px] sm:blur-[60px] md:blur-[80px] rounded-full -mr-12 sm:-mr-16 md:-mr-24 -mt-12 sm:-mt-16 md:-mt-24" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-emerald-500/10 blur-[40px] sm:blur-[60px] md:blur-[80px] rounded-full -ml-12 sm:-ml-16 md:-ml-24 -mb-12 sm:-mb-16 md:-mb-24" />
+          {filteredJobs.length === 0 ? (
+            <EmptyState onClear={clearFilters} />
+          ) : (
+            <div className={viewMode === 'grid' ? 'grid gap-5 md:grid-cols-2' : 'space-y-5'}>
+              {filteredJobs.map((job, index) => (
+                <OpportunityCard
+                  key={job.id || index}
+                  job={job}
+                  viewMode={viewMode}
+                  bookmarked={bookmarkedJobs.has(job.id)}
+                  onBookmark={handleBookmark}
+                  onView={setSelectedJob}
+                  onShareWhatsApp={handleShareWhatsApp}
+                />
+              ))}
+            </div>
+          )}
 
-              <div className="relative z-10 flex flex-col md:flex-row items-center gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-                
-                {/* Icon */}
-                <div className="shrink-0">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-white flex items-center justify-center">
-                    <FiBriefcase className="text-emerald-900 text-xl sm:text-2xl md:text-3xl" />
-                  </div>
+          <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,#0f5b4c,#0b2f28)] p-6 shadow-[0_24px_70px_rgba(15,91,76,0.22)] sm:p-8">
+            <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+              <div>
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Why Join Us</p>
+                <h3 className="mt-4 text-3xl font-black text-white">Build your career inside a school community that shapes young women.</h3>
+                <p className="mt-4 text-sm leading-8 text-white/72">
+                  Matungulu Girls Senior School opportunities are not just jobs. They are openings to serve learners, strengthen systems, mentor girls, and help sustain a school culture built on purpose and excellence.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                  <FiTrendingUp className="h-5 w-5 text-[#f6dd9b]" />
+                  <p className="mt-3 text-sm font-black text-white">Professional Growth</p>
                 </div>
-
-                {/* Content */}
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-white mb-1.5 sm:mb-2 tracking-tight">
-                    Build Your Career With Us.
-                  </h3>
-                  <p className="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto md:mx-0">
-                    Join a team dedicated to educational excellence and student success at Matungulu Girls.
-                  </p>
-
-                  {/* Feature Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mt-4 sm:mt-6">
-                    {[
-                      { label: 'Professional Growth', icon: FiTrendingUp, color: 'text-emerald-100', bg: 'bg-emerald-400/10' },
-                      { label: 'Competitive Package', icon: FiAward, color: 'text-emerald-100', bg: 'bg-emerald-400/10' },
-                      { label: 'Supportive Environment', icon: FiUsers, color: 'text-emerald-100', bg: 'bg-emerald-400/10' },
-                      { label: 'Career Development', icon: FaGraduationCap, color: 'text-emerald-100', bg: 'bg-emerald-400/10' }
-                    ].map((feature, idx) => (
-                      <div 
-                        key={idx} 
-                        className="flex items-center gap-2 p-2 sm:p-3 bg-white/5 rounded-lg sm:rounded-xl border border-white/10"
-                      >
-                        <div className={`p-1 sm:p-1.5 rounded-md ${feature.bg} ${feature.color} shrink-0`}>
-                          <feature.icon className="w-3 h-3 sm:w-4 sm:h-4" />
-                        </div>
-                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-300 truncate">
-                          {feature.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                  <FiUsers className="h-5 w-5 text-[#f6dd9b]" />
+                  <p className="mt-3 text-sm font-black text-white">Supportive Teams</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                  <FaGraduationCap className="h-5 w-5 text-[#f6dd9b]" />
+                  <p className="mt-3 text-sm font-black text-white">Education Impact</p>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4">
+                  <FaLeaf className="h-5 w-5 text-[#f6dd9b]" />
+                  <p className="mt-3 text-sm font-black text-white">Values-led Culture</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </main>
+      </section>
 
-      {/* Job Detail Modal */}
       {selectedJob && (
-        <ModernJobDetailModal
+        <JobDetailModal
           job={selectedJob}
           onClose={() => setSelectedJob(null)}
           onApply={handleApply}
+          onCopyEmail={copyEmail}
         />
       )}
     </div>
