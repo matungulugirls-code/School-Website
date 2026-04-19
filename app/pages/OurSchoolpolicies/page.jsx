@@ -226,7 +226,7 @@ export default function TermsAndConditions() {
 
   return (
     <div className="min-h-screen bg-[#f5f7f2] px-4 py-4 sm:px-6 sm:py-6 md:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto w-full md:w-[90%]">
         <section className="relative overflow-hidden rounded-[2rem] border border-[#d7e8dd] bg-[#102b23] p-6 text-white shadow-[0_24px_80px_-50px_rgba(15,23,42,0.55)] sm:p-8 lg:p-10">
           <div className="absolute -right-16 top-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
           <div className="absolute left-0 top-24 h-56 w-56 rounded-full bg-teal-400/10 blur-3xl" />
@@ -236,22 +236,22 @@ export default function TermsAndConditions() {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
                 <FiShield className="text-sm" />
-                Policy Dashboard
+School Policies 
               </div>
               <p className="mt-5 text-[11px] font-black uppercase tracking-[0.28em] text-emerald-300/80">
                 Matungulu Girls Senior School
               </p>
-              <h1 className="mt-3 max-w-4xl text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
-                School rules,
-                <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
-                  rebuilt as a modern policy command centre.
-                </span>
-              </h1>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
-                A redesigned handbook experience for students and parents: search the rules,
-                review the most important policy zones, and scan every section in a cleaner,
-                more premium layout built for mobile and desktop.
-              </p>
+         <h1 className="mt-3 max-w-4xl text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
+  School policies,
+  <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
+    designed for transparency and everyday use.
+  </span>
+</h1>
+<p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
+  A fresh, searchable handbook for students, staff, and parents. Find the rules
+  that matter, understand expectations instantly, and navigate every section in
+  a layout that works beautifully on any device.
+</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
