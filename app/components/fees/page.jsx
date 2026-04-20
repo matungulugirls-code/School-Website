@@ -219,7 +219,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag, sh
     <div
       className={`border-3 border-dashed rounded-2xl p-8 sm:p-10 text-center cursor-pointer ${
         dragActive 
-          ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 ring-4 ring-blue-100' 
+          ? 'border-teal-600 bg-gradient-to-br from-teal-50 to-teal-100 ring-4 ring-teal-100' 
           : 'border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100'
       }`}
       onDragEnter={onDrag}
@@ -233,7 +233,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag, sh
       }}
       onClick={() => fileInputRef.current?.click()}
     >
-      <FiUpload className={`mx-auto text-3xl mb-4 ${dragActive ? 'text-blue-600' : 'text-gray-400'}`} />
+      <FiUpload className={`mx-auto text-3xl mb-4 ${dragActive ? 'text-teal-700' : 'text-gray-400'}`} />
       <p className="text-gray-800 mb-2 font-bold text-lg">
         {dragActive ? '📁 Drop file here!' : file ? 'Click to replace file' : 'Drag & drop or click to upload'}
       </p>
@@ -308,7 +308,7 @@ function ModernFeeDetailModal({ fee, student, onClose, onEdit, onDelete, showNot
           <div className="max-h-[calc(95vh-64px)] overflow-y-auto p-6 space-y-6">
             {/* Student Summary */}
             <div className="flex items-center gap-4 bg-white rounded-xl p-4 border shadow-sm">
-              <div className="w-12 h-12 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-lg bg-teal-700 flex items-center justify-center text-white">
                 <FiDollarSign />
               </div>
               <div className="flex-1">
@@ -336,14 +336,14 @@ function ModernFeeDetailModal({ fee, student, onClose, onEdit, onDelete, showNot
                 <h4 className="text-sm font-semibold text-gray-800">
                   Payment Progress
                 </h4>
-                <span className="text-sm font-semibold text-blue-600">
+                <span className="text-sm font-semibold text-teal-700">
                   {calculateProgress().toFixed(1)}%
                 </span>
               </div>
 
               <div className="h-2 bg-slate-200 rounded-full overflow-hidden mb-4">
                 <div
-                  className="h-full bg-blue-600 rounded-full transition-all"
+                  className="h-full bg-teal-700 rounded-full transition-all"
                   style={{ width: `${calculateProgress()}%` }}
                 />
               </div>
@@ -425,7 +425,7 @@ function ModernFeeDetailModal({ fee, student, onClose, onEdit, onDelete, showNot
             <div className="flex gap-3 pt-4 border-t">
               <button
                 onClick={onEdit}
-                className="flex-1 py-3 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition"
+                className="flex-1 py-3 rounded-xl bg-teal-700 text-white text-sm font-medium hover:bg-teal-800 transition"
               >
                 Edit Fee
               </button>
@@ -509,7 +509,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
         bgcolor: 'background.paper', borderRadius: 3, boxShadow: 24, overflow: 'hidden',
         background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
       }}>
-        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 p-6 text-white">
+        <div className="bg-gradient-to-r from-teal-700 via-emerald-700 to-teal-900 p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white bg-opacity-20 rounded-2xl">
@@ -517,7 +517,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
               </div>
               <div>
                 <h2 className="text-2xl font-bold">Edit School Fee</h2>
-                <p className="text-blue-100 opacity-90 text-sm mt-1">
+                <p className="text-emerald-100 opacity-90 text-sm mt-1">
                   Update fee details for {student ? `${student.firstName} ${student.lastName}` : 'Student'}
                 </p>
               </div>
@@ -578,7 +578,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                       required
                       value={formData.amount}
                       onChange={(e) => setFormData({...formData, amount: parseFloat(e.target.value) || 0})}
-                      className="w-full pl-14 pr-4 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-base"
+                      className="w-full pl-14 pr-4 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-base"
                     />
                   </div>
                 </div>
@@ -596,7 +596,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                       required
                       value={formData.amountPaid}
                       onChange={(e) => setFormData({...formData, amountPaid: parseFloat(e.target.value) || 0})}
-                      className="w-full pl-14 pr-4 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-base"
+                      className="w-full pl-14 pr-4 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-base"
                     />
                   </div>
                 </div>
@@ -649,7 +649,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                     required
                     value={formData.term}
                     onChange={(e) => setFormData({...formData, term: e.target.value})}
-                    className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-base"
+                    className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-base"
                   >
                     <option value="">Select Term</option>
                     <option value="Term 1">Term 1</option>
@@ -667,7 +667,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                     value={formData.academicYear}
                     onChange={(e) => setFormData({...formData, academicYear: e.target.value})}
                     placeholder="e.g., 2024/2025"
-                    className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-base"
+                    className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-base"
                   />
                 </div>
                 <div>
@@ -678,7 +678,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                     type="date"
                     value={formData.dueDate}
                     onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
-                    className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-base"
+                    className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-base"
                   />
                 </div>
               </div>
@@ -695,7 +695,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                 ].map(status => (
                   <label key={status.value} className={`flex items-center gap-3 p-4 rounded-xl border-3 cursor-pointer ${
                     formData.paymentStatus === status.value 
-                      ? `border-blue-600 bg-gradient-to-r ${status.color} text-white shadow-lg` 
+                      ? `border-teal-700 bg-gradient-to-r ${status.color} text-white shadow-lg` 
                       : 'border-gray-300'
                   }`}>
                     <input
@@ -703,7 +703,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                       value={status.value}
                       checked={formData.paymentStatus === status.value}
                       onChange={(e) => setFormData({...formData, paymentStatus: e.target.value})}
-                      className="text-blue-600 focus:ring-blue-500"
+                      className="text-teal-700 focus:ring-teal-600"
                     />
                     <div className="flex-1">
                       <div className="font-bold text-base">{status.label}</div>
@@ -730,7 +730,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl font-bold text-base shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                className="flex-1 px-6 py-4 bg-gradient-to-r from-teal-700 to-emerald-800 text-white rounded-2xl font-bold text-base shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
               >
                 {loading ? (
                   <>
@@ -1150,7 +1150,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
         flexDirection: 'column'
       }}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6 text-white">
+        <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-4 sm:p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-2 bg-white/20 rounded-xl">
@@ -1158,7 +1158,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold">Fees Upload Strategy</h2>
-                <p className="text-blue-100 opacity-90 text-sm sm:text-base">
+                <p className="text-emerald-100 opacity-90 text-sm sm:text-base">
                   {uploadType === 'new' 
                     ? 'Add new fees (term/year extracted from file)'
                     : 'Update existing fees (specify term/year)'}
@@ -1184,13 +1184,13 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                   onClick={() => setUploadType('new')}
                   className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${
                     uploadType === 'new'
-                      ? 'border-blue-500 bg-blue-50 shadow-lg'
-                      : 'border-gray-300 hover:border-blue-300'
+                      ? 'border-teal-600 bg-teal-50 shadow-lg'
+                      : 'border-gray-300 hover:border-teal-300'
                   }`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'new' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      <FiPlus className={`text-sm sm:text-lg ${uploadType === 'new' ? 'text-blue-600' : 'text-gray-500'}`} />
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'new' ? 'bg-teal-100' : 'bg-gray-100'}`}>
+                      <FiPlus className={`text-sm sm:text-lg ${uploadType === 'new' ? 'text-teal-700' : 'text-gray-500'}`} />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 text-sm sm:text-base">New Upload</h4>
@@ -1200,7 +1200,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     </div>
                   </div>
                   {uploadType === 'new' && (
-                    <div className="mt-2 text-xs sm:text-sm text-blue-700">
+                    <div className="mt-2 text-xs sm:text-sm text-teal-700">
                       <FiCheckCircle className="inline mr-1" />
                       Term and year extracted from file
                     </div>
@@ -1210,13 +1210,13 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                   onClick={() => setUploadType('update')}
                   className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all ${
                     uploadType === 'update'
-                      ? 'border-blue-500 bg-blue-50 shadow-lg'
-                      : 'border-gray-300 hover:border-blue-300'
+                      ? 'border-teal-600 bg-teal-50 shadow-lg'
+                      : 'border-gray-300 hover:border-teal-300'
                   }`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'update' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      <FiDatabase className={`text-sm sm:text-lg ${uploadType === 'update' ? 'text-blue-600' : 'text-gray-500'}`} />
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'update' ? 'bg-teal-100' : 'bg-gray-100'}`}>
+                      <FiDatabase className={`text-sm sm:text-lg ${uploadType === 'update' ? 'text-teal-700' : 'text-gray-500'}`} />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 text-sm sm:text-base">Update Upload</h4>
@@ -1226,7 +1226,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     </div>
                   </div>
                   {uploadType === 'update' && (
-                    <div className="mt-2 text-xs sm:text-sm text-blue-700">
+                    <div className="mt-2 text-xs sm:text-sm text-teal-700">
                       <FiAlertCircle className="inline mr-1" />
                       Term and year required
                     </div>
@@ -1689,9 +1689,9 @@ export default function ModernSchoolFeesManagement() {
   // Add this function to your component (or import it if it exists elsewhere)
 const getFormBadgeColor = (form) => {
   const formColors = {
-    '1': 'bg-blue-100 text-blue-800',
-    '2': 'bg-indigo-100 text-indigo-800',
-    '3': 'bg-purple-100 text-purple-800',
+    '1': 'bg-teal-100 text-teal-900',
+    '2': 'bg-emerald-100 text-emerald-900',
+    '3': 'bg-amber-100 text-amber-900',
     '4': 'bg-pink-100 text-pink-800',
     '5': 'bg-rose-100 text-rose-800',
     '6': 'bg-orange-100 text-orange-800',
@@ -1706,9 +1706,9 @@ const getFormBadgeColor = (form) => {
 // Also add this for mobile text colors if needed
 const getFormTextColor = (form) => {
   const formTextColors = {
-    '1': 'text-blue-700',
-    '2': 'text-indigo-700',
-    '3': 'text-purple-700',
+    '1': 'text-teal-800',
+    '2': 'text-emerald-800',
+    '3': 'text-amber-800',
     '4': 'text-pink-700',
     '5': 'text-rose-700',
     '6': 'text-orange-700',
@@ -1743,10 +1743,10 @@ const getFormTextColor = (form) => {
 
   const getFormColor = useCallback((form) => {
     switch (form) {
-      case 'Form 1': return 'from-blue-500 to-blue-700';
+      case 'Form 1': return 'from-teal-600 to-teal-800';
       case 'Form 2': return 'from-emerald-500 to-emerald-700';
       case 'Form 3': return 'from-amber-500 to-amber-700';
-      case 'Form 4': return 'from-purple-500 to-purple-700';
+      case 'Form 4': return 'from-emerald-600 to-emerald-800';
       default: return 'from-gray-500 to-gray-700';
     }
   }, []);
@@ -1810,7 +1810,7 @@ function FeeDuplicateValidationModal({
         <div className={`p-4 sm:p-6 text-white ${
           uploadType === 'update' 
             ? 'bg-gradient-to-r from-orange-500 to-red-600' 
-            : 'bg-gradient-to-r from-blue-600 to-indigo-600'
+            : 'bg-gradient-to-r from-teal-700 to-emerald-700'
         }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
@@ -2779,7 +2779,7 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
       <CustomToaster />
 
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-2xl p-8 text-white overflow-hidden">
+      <div className="relative bg-gradient-to-r from-teal-700 via-emerald-700 to-teal-900 rounded-2xl p-8 text-white overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-white/20 rounded-2xl">
@@ -2787,7 +2787,7 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
             </div>
             <div>
               <h1 className="text-3xl font-bold">School Fees Management System</h1>
-              <p className="text-blue-100 text-lg mt-2 max-w-2xl">
+              <p className="text-emerald-100 text-lg mt-2 max-w-2xl">
                 Comprehensive fee tracking, management, and analytics with structured upload strategy
               </p>
             </div>
@@ -2801,7 +2801,7 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
                 loadSchoolFees();
               }}
               disabled={loading}
-              className="bg-white text-blue-600 px-6 py-3 rounded-xl font-bold text-base flex items-center gap-2 shadow-lg disabled:opacity-60 hover:shadow-xl transition-all duration-300"
+              className="bg-white text-teal-700 px-6 py-3 rounded-xl font-bold text-base flex items-center gap-2 shadow-lg disabled:opacity-60 hover:shadow-xl transition-all duration-300"
             >
               {loading ? (
                 <CircularProgress size={16} color="inherit" thickness={6} />
@@ -2831,8 +2831,8 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
             onClick={() => setView('dashboard')}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'dashboard'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiBarChart2 className="text-sm" />
@@ -2846,8 +2846,8 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
             }}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'upload'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiUpload className="text-sm" />
@@ -2860,8 +2860,8 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
             }}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'fees'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <IoWallet className="text-sm" />
@@ -2874,8 +2874,8 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
             }}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'history'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiClock className="text-sm" />
