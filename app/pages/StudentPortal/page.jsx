@@ -206,13 +206,16 @@ function PortalWorkspaceHome({
         <div className="relative overflow-hidden rounded-[2rem] border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] sm:p-8">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(15,91,76,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(214,178,94,0.06),transparent_36%)]" />
           <div className="relative">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-100 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">
-              <FiCommand className="h-4 w-4 text-[#0f5b4c]" />
-              Student Workspace
-            </div>
-            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[0.95] text-gray-900 sm:text-5xl xl:text-6xl">
-              A premium command center for learning, finance, and student life.
-            </h1>
+         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2">
+  <FiCommand className="h-3 w-3 sm:h-4 sm:w-4 text-emerald-600" />
+  <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-700">
+    Student Portal
+  </span>
+</div>
+
+<h1 className="mt-4 sm:mt-5 max-w-3xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.2] sm:leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-emerald-700">
+  Your center for learning, finance, and student life.
+</h1>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-gray-600 sm:text-base">
               Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}. This portal is now organized like a focused digital workspace so you can move faster through academics, updates, and school essentials.
             </p>
