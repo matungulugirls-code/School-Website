@@ -485,23 +485,20 @@ export default function MagazineArchive() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Issues</p>
-                <p className="mt-3 text-4xl font-black text-[#f6df9f]">{stats.totalIssues}</p>
-              </div>
-              <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Pages</p>
-                <p className="mt-3 text-4xl font-black text-[#f6df9f]">{stats.totalPages}+</p>
-              </div>
-              <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Timeline</p>
-                <p className="mt-3 text-2xl font-black text-[#f6df9f]">
-                  {stats.earliestYear || "--"}
-                  {stats.latestYear && stats.latestYear !== stats.earliestYear ? ` to ${stats.latestYear}` : ""}
-                </p>
-              </div>
-            </div>
+         <div className="flex gap-4 flex-nowrap">
+  <div className="min-w-0 flex-1 rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Magazines</p>
+    <p className="mt-3 text-4xl font-black text-[#f6df9f]">{stats.totalIssues}</p>
+  </div>
+  
+  <div className="min-w-0 flex-1 rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Timeline</p>
+    <p className="mt-3 text-2xl font-black text-[#f6df9f]">
+      {stats.earliestYear || "--"}
+      {stats.latestYear && stats.latestYear !== stats.earliestYear ? ` to ${stats.latestYear}` : ""}
+    </p>
+  </div>
+</div>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl">
