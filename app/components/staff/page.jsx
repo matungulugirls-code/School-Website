@@ -1103,7 +1103,19 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
         </div>
 
         <div className="max-h-[calc(95vh-160px)] overflow-y-auto p-4 md:p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form 
+            onSubmit={handleSubmit}
+            onKeyDown={(e) => {
+              // Prevent form submission on Enter key in input fields
+              // Allow individual input handlers (like StyledTagInput) to handle Enter
+              if (e.key === 'Enter' && 
+                  e.target.tagName === 'INPUT' && 
+                  ['text', 'email', 'tel', 'url', 'search', 'number'].includes(e.target.type)) {
+                e.preventDefault();
+              }
+            }}
+            className="space-y-6"
+          >
             {/* Step 1: Basic Information */}
             {currentStep === 0 && (
               <div className="space-y-6">
