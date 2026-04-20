@@ -203,54 +203,54 @@ function PortalWorkspaceHome({
   return (
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[1.4fr_0.9fr]">
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a1f19] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.25)] sm:p-8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.22),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.36),transparent_36%)]" />
+        <div className="relative overflow-hidden rounded-[2rem] border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] sm:p-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(15,91,76,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(214,178,94,0.06),transparent_36%)]" />
           <div className="relative">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/70">
-              <FiCommand className="h-4 w-4 text-[#d6b25e]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-100 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">
+              <FiCommand className="h-4 w-4 text-[#0f5b4c]" />
               Student Workspace
             </div>
-            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[0.95] text-white sm:text-5xl xl:text-6xl">
+            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[0.95] text-gray-900 sm:text-5xl xl:text-6xl">
               A premium command center for learning, finance, and student life.
             </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/68 sm:text-base">
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-gray-600 sm:text-base">
               Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}. This portal is now organized like a focused digital workspace so you can move faster through academics, updates, and school essentials.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <button
                 onClick={() => onNavigate('results')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#d6b25e] px-5 py-3 text-sm font-black text-[#11241d]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0f5b4c] px-5 py-3 text-sm font-black text-white hover:bg-[#0d4a3a] transition"
               >
                 Open Results
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => onNavigate('resources')}
-                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-5 py-3 text-sm font-black text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-3 text-sm font-black text-gray-900 hover:bg-gray-50 transition"
               >
                 Enter Learning Vault
-                <FiArrowUpRight className="h-4 w-4 text-[#d6b25e]" />
+                <FiArrowUpRight className="h-4 w-4 text-[#0f5b4c]" />
               </button>
             </div>
           </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-          <div className="rounded-[2rem] border border-white/10 bg-[#0c1815] p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">Need To Know</p>
+          <div className="rounded-[2rem] border border-gray-200 bg-white p-6">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Need To Know</p>
             <div className="mt-5 space-y-3">
               {needToKnow.map((item, index) => (
-                <div key={index} className="rounded-[1.3rem] border border-white/8 bg-white/[0.04] px-4 py-4 text-sm font-semibold text-white/82">
+                <div key={index} className="rounded-[1.3rem] border border-gray-200 bg-gray-50 px-4 py-4 text-sm font-semibold text-gray-700">
                   {item}
                 </div>
               ))}
             </div>
           </div>
-          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,#123b31,#081712)] p-6 text-white">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/55">Live Session</p>
-            <h3 className="mt-4 text-2xl font-black">Secure student access is active</h3>
-            <p className="mt-3 text-sm leading-7 text-white/68">
+          <div className="rounded-[2rem] border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Live Session</p>
+            <h3 className="mt-4 text-2xl font-black text-gray-900">Secure student access is active</h3>
+            <p className="mt-3 text-sm leading-7 text-gray-600">
               Use the navigation hub to jump between modules. Refresh anytime to pull the latest portal data without leaving this workspace.
             </p>
           </div>
@@ -259,27 +259,27 @@ function PortalWorkspaceHome({
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {workspaceStats.map((stat) => (
-          <div key={stat.label} className="rounded-[1.7rem] border border-white/10 bg-white/[0.05] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+          <div key={stat.label} className="rounded-[1.7rem] border border-gray-200 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
             <div className="flex items-center justify-between">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d6b25e)] text-white">
                 {stat.icon}
               </div>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/35">Live</span>
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-gray-500">Live</span>
             </div>
-            <p className="mt-6 text-3xl font-black text-white">{stat.value}</p>
-            <p className="mt-2 text-sm font-semibold text-white/55">{stat.label}</p>
+            <p className="mt-6 text-3xl font-black text-gray-900">{stat.value}</p>
+            <p className="mt-2 text-sm font-semibold text-gray-600">{stat.label}</p>
           </div>
         ))}
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[2rem] border border-white/10 bg-[#0c1815] p-6">
+        <div className="rounded-[2rem] border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">Quick Actions</p>
-              <h2 className="mt-3 text-3xl font-black text-white">Open a module instantly</h2>
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Quick Actions</p>
+              <h2 className="mt-3 text-3xl font-black text-gray-900">Open a module instantly</h2>
             </div>
-            <div className="hidden rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-white/45 lg:block">
+            <div className="hidden rounded-full border border-gray-300 bg-gray-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-600 lg:block">
               Bento Actions
             </div>
           </div>
@@ -288,16 +288,16 @@ function PortalWorkspaceHome({
               <button
                 key={module.id}
                 onClick={() => onNavigate(module.id)}
-                className="group overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] text-left transition hover:-translate-y-1 hover:bg-white/[0.06]"
+                className="group overflow-hidden rounded-[1.8rem] border border-gray-200 bg-white text-left transition hover:-translate-y-1 hover:bg-gray-50"
               >
                 <div className={`bg-gradient-to-br ${module.tone} p-5 text-white`}>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
                     {module.icon}
                   </div>
                   <h3 className="mt-4 text-xl font-black">{module.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-white/72">{module.blurb}</p>
+                  <p className="mt-2 text-sm leading-7 text-white/85">{module.blurb}</p>
                 </div>
-                <div className="flex items-center justify-between px-5 py-4 text-sm font-black text-white">
+                <div className="flex items-center justify-between px-5 py-4 text-sm font-black text-gray-900">
                   Launch module
                   <FiArrowUpRight className="h-4 w-4 text-[#d6b25e] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </div>
