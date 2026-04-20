@@ -1893,13 +1893,13 @@ const handleDeleteSchool = async () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 p-4 md:p-6">
       <Toaster position="top-right" richColors />
-{/* Modern School Information Header */}
-<div className="group relative bg-gradient-to-br from-[#1e40af] via-[#7c3aed] to-[#2563eb] rounded-[2.5rem] shadow-[0_20px_50px_rgba(31,38,135,0.37)] p-6 md:p-10 mb-10 border border-white/20 overflow-hidden">
+{/* Modern School Information Header - Updated with Emerald/Teal/Dark Green */}
+<div className="group relative bg-gradient-to-br from-[#064e3b] via-[#0f5b4c] to-[#115e59] rounded-[2.5rem] shadow-[0_20px_50px_rgba(6,78,59,0.37)] p-6 md:p-10 mb-10 border border-white/20 overflow-hidden">
   
-  {/* Animated Gradient Orbs */}
+  {/* Animated Gradient Orbs - Updated to emerald/teal */}
   <div className="absolute top-[-10%] left-[-5%] w-64 h-64 bg-white/15 rounded-full blur-3xl animate-pulse" />
-  <div className="absolute bottom-[-20%] right-[-5%] w-80 h-80 bg-blue-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-1000" />
-  <div className="absolute top-[40%] left-[20%] w-40 h-40 bg-purple-400/20 rounded-full blur-3xl animate-ping opacity-20" />
+  <div className="absolute bottom-[-20%] right-[-5%] w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-1000" />
+  <div className="absolute top-[40%] left-[20%] w-40 h-40 bg-teal-400/20 rounded-full blur-3xl animate-ping opacity-20" />
   
   {/* Floating Particles */}
   <div className="absolute inset-0 opacity-10">
@@ -1967,7 +1967,7 @@ const handleDeleteSchool = async () => {
           
           <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter drop-shadow-sm leading-tight">
             School{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-200">
               Information
             </span>
           </h1>
@@ -1977,7 +1977,7 @@ const handleDeleteSchool = async () => {
       {/* Description with Icon */}
       <div className="flex items-start gap-2 max-w-2xl">
         <FiInfo className="w-4 h-4 text-white/50 mt-0.5 flex-shrink-0" />
-        <p className="text-blue-50/80 text-sm md:text-base font-medium leading-relaxed">
+        <p className="text-emerald-50/80 text-sm md:text-base font-medium leading-relaxed">
           {hasSchoolInfo 
             ? 'Manage your school profile, contact details, and institutional information'
             : 'Set up your school information to get started with the management system'}
@@ -1988,11 +1988,11 @@ const handleDeleteSchool = async () => {
       {hasSchoolInfo && (
         <div className="flex flex-wrap items-center gap-3 mt-4">
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-            <FiMapPin className="w-3 h-3 text-blue-300" />
+            <FiMapPin className="w-3 h-3 text-emerald-300" />
             <span className="text-[10px] font-bold text-white/80">Location Configured</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-            <FiUsers className="w-3 h-3 text-purple-300" />
+            <FiUsers className="w-3 h-3 text-teal-300" />
             <span className="text-[10px] font-bold text-white/80">Contact Info Set</span>
           </div>
         </div>
@@ -2040,10 +2040,10 @@ const handleDeleteSchool = async () => {
       {/* Dynamic Primary Button - Add/Edit */}
       <button 
         onClick={() => setShowModal(true)} 
-        className="group/btn relative overflow-hidden flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-xl hover:bg-white/90 transition-all duration-200 font-bold text-sm shadow-lg active:scale-[0.98] min-w-[160px]"
+        className="group/btn relative overflow-hidden flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-white text-emerald-700 px-8 py-3 rounded-xl hover:bg-white/90 transition-all duration-200 font-bold text-sm shadow-lg active:scale-[0.98] min-w-[160px]"
       >
         {/* Button Shine Effect */}
-        <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-blue-100 to-transparent" />
+        <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-emerald-100 to-transparent" />
         
         {hasSchoolInfo ? (
           <>
@@ -2057,8 +2057,8 @@ const handleDeleteSchool = async () => {
             
             {/* Pulse Indicator for Add Button */}
             <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-600 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
             </span>
           </>
         )}
@@ -2070,32 +2070,32 @@ const handleDeleteSchool = async () => {
   <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 </div>
 
-      {!hasSchoolInfo ? (
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-14 text-center my-8 transition-all duration-300">
-          <div className="w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-blue-50 to-purple-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-lg shadow-blue-200/50">
-            <FaSchool className="w-10 h-10 md:w-14 md:h-14 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600" />
-          </div>
+    {!hasSchoolInfo ? (
+  <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-14 text-center my-8 transition-all duration-300">
+    <div className="w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-lg shadow-emerald-200/50">
+      <FaSchool className="w-10 h-10 md:w-14 md:h-14 text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600" />
+    </div>
 
-          <h3 className="text-xl md:text-3xl font-black text-gray-900 mb-3 tracking-tight">
-            No School Information Yet
-          </h3>
-          
-          <p className="text-gray-500 text-sm md:text-lg mb-8 max-w-[280px] md:max-w-lg mx-auto font-medium leading-relaxed">
-            Start by adding your school details to showcase your institution to students and staff.
-          </p>
+    <h3 className="text-xl md:text-3xl font-black text-gray-900 mb-3 tracking-tight">
+      No School Information Yet
+    </h3>
+    
+    <p className="text-gray-500 text-sm md:text-lg mb-8 max-w-[280px] md:max-w-lg mx-auto font-medium leading-relaxed">
+      Start by adding your school details to showcase your institution to students and staff.
+    </p>
 
-          <button 
-            onClick={() => setShowModal(true)} 
-            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 
-                     text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-blue-200/50
-                     hover:shadow-indigo-300/50 hover:scale-[1.03] active:scale-95 
-                     transition-all duration-300 flex items-center justify-center gap-3 mx-auto text-base"
-          >
-            <FaPlus className="text-xl" /> 
-            <span>Create School Information</span>
-          </button>
-        </div>
-      ) : (
+    <button 
+      onClick={() => setShowModal(true)} 
+      className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 
+               text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-emerald-200/50
+               hover:shadow-teal-300/50 hover:scale-[1.03] active:scale-95 
+               transition-all duration-300 flex items-center justify-center gap-3 mx-auto text-base"
+    >
+      <FaPlus className="text-xl" /> 
+      <span>Create School Information</span>
+    </button>
+  </div>
+) : null}: (
         <div className="space-y-6">
           {/* QUICK STATS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
