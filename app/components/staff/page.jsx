@@ -1618,74 +1618,7 @@ function StyledTagInput({ label, value, onChange, placeholder, disabled, color =
     </div>
   );
 }
-// Styled Tag Input Component - ADD THIS AFTER ModernStaffModal
-function StyledTagInput({ label, value, onChange, placeholder, disabled, color = 'blue' }) {
-  const [inputValue, setInputValue] = useState('');
 
-  const colorClasses = {
-    blue: { bg: 'bg-blue-50', border: 'border-blue-200', focus: 'focus:ring-blue-500', tagBg: 'bg-blue-100', tagText: 'text-blue-700' },
-    green: { bg: 'bg-green-50', border: 'border-green-200', focus: 'focus:ring-green-500', tagBg: 'bg-green-100', tagText: 'text-green-700' },
-    orange: { bg: 'bg-orange-50', border: 'border-orange-200', focus: 'focus:ring-orange-500', tagBg: 'bg-orange-100', tagText: 'text-orange-700' }
-  };
-
-  const colors = colorClasses[color] || colorClasses.blue;
-
-  const addItem = () => {
-    if (inputValue.trim() && !value.includes(inputValue.trim())) {
-      onChange([...value, inputValue.trim()]);
-      setInputValue('');
-    }
-  };
-
-  const removeItem = (index) => {
-    onChange(value.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div>
-      <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
-        {label} ({value.length})
-      </label>
-      <div className="flex gap-2 mb-3">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder={placeholder}
-          disabled={disabled}
-          className={`flex-1 px-4 py-3 border-2 ${colors.border} rounded-xl focus:ring-2 ${colors.focus} focus:border-transparent bg-white text-base font-bold`}
-          onKeyPress={(e) => e.key === 'Enter' && addItem()}
-        />
-        <button
-          type="button"
-          onClick={addItem}
-          disabled={disabled || !inputValue.trim()}
-          className={`px-6 py-3 rounded-xl font-bold text-white transition-all ${
-            color === 'blue' ? 'bg-blue-600 hover:bg-blue-700' :
-            color === 'green' ? 'bg-green-600 hover:bg-green-700' :
-            'bg-orange-600 hover:bg-orange-700'
-          } disabled:opacity-50`}
-        >
-          Add
-        </button>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {value.map((item, index) => (
-          <div key={index} className={`flex items-center gap-2 ${colors.tagBg} ${colors.tagText} px-3 py-2 rounded-xl font-bold`}>
-            <span>{item}</span>
-            <button
-              type="button"
-              onClick={() => removeItem(index)}
-              className="hover:text-red-600 transition-colors"
-            >
-              <FaTimes className="text-xs" />
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 // Main Staff Manager Component
 export default function StaffManager() {
   const [staff, setStaff] = useState([]);
