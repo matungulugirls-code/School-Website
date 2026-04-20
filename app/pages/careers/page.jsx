@@ -924,7 +924,7 @@ export default function CareersPage() {
           {filteredJobs.length === 0 ? (
             <EmptyState onClear={clearFilters} />
           ) : (
-            <div className={viewMode === 'grid' ? 'grid gap-5 md:grid-cols-2' : 'space-y-5'}>
+            <div className={viewMode === 'grid' ? 'grid gap-5 grid-cols-2 md:grid-cols-2' : 'space-y-5'}>
               {filteredJobs.map((job, index) => (
                 <OpportunityCard
                   key={job.id || index}
@@ -942,9 +942,9 @@ export default function CareersPage() {
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,#0f5b4c,#0b2f28)] p-6 shadow-[0_24px_70px_rgba(15,91,76,0.22)] sm:p-8">
             <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
               <div>
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Why Join Us</p>
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white">Why Join Us</p>
                 <h3 className="mt-4 text-3xl font-black text-white">Build your career inside a school community that shapes young women.</h3>
-                <p className="mt-4 text-sm leading-8 text-white/72">
+                <p className="mt-4 text-sm leading-8 text-white">
                   Matungulu Girls Senior School opportunities are not just jobs. They are openings to serve learners, strengthen systems, mentor girls, and help sustain a school culture built on purpose and excellence.
                 </p>
               </div>
