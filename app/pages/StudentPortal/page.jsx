@@ -72,52 +72,52 @@ function StudentPortalHeader({
   const view = portalViews[currentView] || portalViews.home;
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/10 bg-[#071611]/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1600px] items-center gap-4 px-4 py-4 sm:px-6 xl:px-8">
         <button
           onClick={onMenuToggle}
-          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition hover:bg-white/[0.1] lg:hidden"
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gray-300 bg-gray-50 text-gray-900 transition hover:bg-gray-100 lg:hidden"
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMenuOpen ? <FaTimes className="h-4 w-4" /> : <FaBars className="h-4 w-4" />}
         </button>
 
-        <div className="hidden min-w-0 items-center gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.05] px-4 py-3 lg:flex">
+        <div className="hidden min-w-0 items-center gap-3 rounded-[1.5rem] border border-gray-200 bg-gray-50 px-4 py-3 lg:flex">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#cba14d)] text-white shadow-[0_14px_28px_rgba(15,91,76,0.35)]">
             {view.icon}
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/45">Current Zone</p>
-            <p className="truncate text-base font-black text-white">{view.label}</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-gray-500">Current Zone</p>
+            <p className="truncate text-base font-black text-gray-900">{view.label}</p>
           </div>
         </div>
 
         <div className="relative flex-1">
-          <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+          <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search your workspace"
-            className="w-full rounded-[1.4rem] border border-white/10 bg-white/[0.05] py-3 pl-11 pr-4 text-sm font-medium text-white outline-none placeholder:text-white/35 focus:border-[#d6b25e]/45"
+            className="w-full rounded-[1.4rem] border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm font-medium text-gray-900 outline-none placeholder:text-gray-400 focus:border-[#0f5b4c] focus:ring-2 focus:ring-[#0f5b4c]/20"
           />
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
           <button
             onClick={onRefresh}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-bold text-white transition hover:bg-white/[0.08]"
+            className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-50 px-4 py-3 text-sm font-bold text-gray-900 transition hover:bg-gray-100"
           >
-            <FiRefreshCw className="h-4 w-4 text-[#d6b25e]" />
+            <FiRefreshCw className="h-4 w-4 text-[#0f5b4c]" />
             Refresh
           </button>
-          <div className="flex items-center gap-3 rounded-[1.4rem] border border-white/10 bg-white/[0.05] px-4 py-3">
+          <div className="flex items-center gap-3 rounded-[1.4rem] border border-gray-300 bg-gray-50 px-4 py-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#0c3028)] text-sm font-black text-white">
               {getInitials(student?.fullName)}
             </div>
             <div>
-              <p className="text-sm font-black text-white">{student?.fullName || 'Student'}</p>
-              <p className="text-xs font-medium text-white/55">
+              <p className="text-sm font-black text-gray-900">{student?.fullName || 'Student'}</p>
+              <p className="text-xs font-medium text-gray-600">
                 {student?.form || 'Form'} · {student?.stream || 'Stream'}
               </p>
             </div>

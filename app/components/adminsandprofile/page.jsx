@@ -1698,18 +1698,18 @@ if (loading) {
           onClick={() => setShowAdminModal(false)}
         >
           <div 
-            className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200"
+            className="bg-white rounded-3xl w-full max-w-4xl max-h-[95vh] overflow-hidden shadow-2xl border border-gray-200 flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
                     <User className="text-2xl" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold">
+                    <h2 className="text-3xl font-bold">
                       {editingAdmin ? 'Edit Admin' : 'Add New Admin'}
                     </h2>
                     <p className="text-blue-100 opacity-90 mt-1">Manage admin details and permissions</p>
@@ -1717,210 +1717,232 @@ if (loading) {
                 </div>
                 <button
                   onClick={() => setShowAdminModal(false)}
-                  className="p-3 hover:bg-white/10 rounded-2xl transition-all duration-200 hover:scale-100"
+                  className="p-3 hover:bg-white/10 rounded-2xl transition-all duration-200 hover:scale-110"
                 >
-                  <FaX className="text-xl" />
+                  <FaX className="text-2xl" />
                 </button>
               </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSaveAdmin} className="p-8 space-y-6 max-h-[60vh] overflow-y-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-900 font-bold mb-3 text-sm">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={adminData.name}
-                    onChange={(e) => setAdminData({ ...adminData, name: e.target.value })}
-                    className="w-full px-4 py-4 font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-                    placeholder="Enter full name"
-                  />
-                </div>
+            {/* Form - Scrollable */}
+            <form onSubmit={handleSaveAdmin} className="flex-1 overflow-y-auto p-8 space-y-8">
+              {/* Basic Information Section */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
+                  Basic Information
+                </h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-5 border border-blue-200">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <User className="text-blue-600 text-lg" /> Full Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={adminData.name}
+                      onChange={(e) => setAdminData({ ...adminData, name: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-base font-bold"
+                      placeholder="Enter full name"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-gray-900 font-bold mb-3 text-sm">Email *</label>
-                  <input
-                    type="email"
-                    required
-                    value={adminData.email}
-                    onChange={(e) => setAdminData({ ...adminData, email: e.target.value })}
-                    className="w-full px-4 py-4 font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-                    placeholder="Enter email address"
-                  />
-                </div>
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-5 border border-green-200">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <Mail className="text-green-600 text-lg" /> Email Address <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={adminData.email}
+                      onChange={(e) => setAdminData({ ...adminData, email: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-green-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white text-base font-bold"
+                      placeholder="admin@school.edu"
+                    />
+                  </div>
 
-         <div>
-<div className="space-y-4">
-  {/* Password Field */}
-  <div>
-    <label className="block text-gray-900 font-bold mb-3 text-sm">
-      {editingAdmin ? 'New Password (optional)' : 'Password *'}
-      <span className="text-gray-500 text-xs font-normal ml-2">Must contain 8+ chars, uppercase, lowercase, number & special char</span>
-    </label>
-    <div className="relative">
-      <input
-        type={showPassword ? "text" : "password"}
-        required={!editingAdmin}
-        value={adminData.password}
-        onChange={(e) => handlePasswordChange(e.target.value)}
-        className="w-full px-4 py-4 pr-12 font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-        placeholder="Enter secure password"
-      />
-      <button
-        type="button"
-        onClick={() => setShowPassword(!showPassword)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-      >
-        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-      </button>
-    </div>
-  </div>
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-5 border border-purple-200">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <Phone className="text-purple-600 text-lg" /> Phone Number <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={adminData.phone}
+                      onChange={(e) => setAdminData({ ...adminData, phone: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white text-base font-bold"
+                      placeholder="+254700000000"
+                    />
+                  </div>
 
-  {/* Confirm Password Field (Only for new admin or password change) */}
-  {(adminData.password || !editingAdmin) && (
-    <div>
-      <label className="block text-gray-900 font-bold mb-3 text-sm">
-        Confirm Password *
-      </label>
-      <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          required={!editingAdmin || adminData.password}
-          value={confirmPassword}
-          onChange={(e) => handleConfirmPasswordChange(e.target.value)}
-          className="w-full px-4 py-4 pr-12 font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-          placeholder="Re-enter password"
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-        >
-          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-        </button>
-      </div>
-    </div>
-  )}
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-5 border border-orange-200">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <Shield className="text-orange-600 text-lg" /> Role <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      required
+                      value={adminData.role}
+                      onChange={(e) => setAdminData({ ...adminData, role: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-base font-bold"
+                    >
+                      <option value="ADMIN">Admin</option>
+                      <option value="SUPER_ADMIN">Super Admin</option>
+                      <option value="MODERATOR">Moderator</option>
+                    </select>
+                  </div>
 
-  {adminData.password && <PasswordStrengthIndicator />}
-</div>
-</div>
-
-
-                <div>
-                  <label className="block text-gray-900 font-bold mb-3 text-sm">Phone *</label>
-                  <input
-                    type="tel"
-                    required
-                    value={adminData.phone}
-                    onChange={(e) => setAdminData({ ...adminData, phone: e.target.value })}
-                    className="w-full px-4 py-4 font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-                    placeholder="+254700000000"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-900 font-bold mb-3 text-sm">Role *</label>
-                  <select
-                    required
-                    value={adminData.role}
-                    onChange={(e) => setAdminData({ ...adminData, role: e.target.value })}
-                    className="w-full px-4 py-4  font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-                  >
-                    <option value="ADMIN">Admin</option>
-                    <option value="SUPER_ADMIN">Super Admin</option>
-                    <option value="MODERATOR">Moderator</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-gray-900 font-bold mb-3 text-sm">Status *</label>
-                  <select
-                    required
-                    value={adminData.status}
-                    onChange={(e) => setAdminData({ ...adminData, status: e.target.value })}
-                    className="w-full px-4 py-4 font-bold bg-gray-50 border border-gray-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-5 border border-red-200">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <CheckCircle className="text-red-600 text-lg" /> Status <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      required
+                      value={adminData.status}
+                      onChange={(e) => setAdminData({ ...adminData, status: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-red-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white text-base font-bold"
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              {/* Permissions Grid */}
+              {/* Password Section */}
               <div>
-                <label className="block text-gray-900 font-bold mb-4 text-sm">Permissions</label>
+                <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <div className="w-1 h-6 bg-purple-600 rounded-full"></div>
+                  Security
+                </h3>
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-5 border border-indigo-200">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      🔐 {editingAdmin ? 'New Password (optional)' : 'Password <span className="text-red-500">*</span>'}
+                      <span className="text-gray-500 text-xs font-normal ml-2">8+ chars, uppercase, lowercase, number & special char</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required={!editingAdmin}
+                        value={adminData.password}
+                        onChange={(e) => handlePasswordChange(e.target.value)}
+                        className="w-full px-4 py-3 pr-12 border-2 border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-base font-bold"
+                        placeholder="Enter secure password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {(adminData.password || !editingAdmin) && (
+                    <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-5 border border-pink-200">
+                      <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        ✓ Confirm Password <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          required={!editingAdmin || adminData.password}
+                          value={confirmPassword}
+                          onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+                          className="w-full px-4 py-3 pr-12 border-2 border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white text-base font-bold"
+                          placeholder="Re-enter password"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {adminData.password && <PasswordStrengthIndicator />}
+                </div>
+              </div>
+
+              {/* Permissions Section */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <div className="w-1 h-6 bg-emerald-600 rounded-full"></div>
+                  Permissions
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                  <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 hover:border-blue-400 transition-colors">
                     <input
                       type="checkbox"
                       checked={adminData.permissions.manageUsers}
                       onChange={(e) => updatePermission('manageUsers', e.target.checked)}
-                      className="w-4 h-4 rounded  font-bold cursor-pointer border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-5 h-5 rounded font-bold cursor-pointer border-gray-300 text-blue-600 focus:ring-blue-500 mt-1"
                     />
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Manage Users</p>
-                      <p className="text-xs text-gray-600">Create, edit, and delete users</p>
+                      <p className="font-bold text-gray-900 text-base">Manage Users</p>
+                      <p className="text-sm text-gray-600">Create, edit, and delete users</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                  <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border border-green-200 hover:border-green-400 transition-colors">
                     <input
                       type="checkbox"
                       checked={adminData.permissions.manageContent}
                       onChange={(e) => updatePermission('manageContent', e.target.checked)}
-                      className="w-4 h-4 rounded  cursor-pointer border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-5 h-5 rounded cursor-pointer border-gray-300 text-green-600 focus:ring-green-500 mt-1"
                     />
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Manage Content</p>
-                      <p className="text-xs text-gray-600">Create and edit website content</p>
+                      <p className="font-bold text-gray-900 text-base">Manage Content</p>
+                      <p className="text-sm text-gray-600">Create and edit website content</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                  <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl border border-purple-200 hover:border-purple-400 transition-colors">
                     <input
                       type="checkbox"
                       checked={adminData.permissions.manageSettings}
                       onChange={(e) => updatePermission('manageSettings', e.target.checked)}
-                      className="w-4 h-4 rounded cursor-pointer border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-5 h-5 rounded cursor-pointer border-gray-300 text-purple-600 focus:ring-purple-500 mt-1"
                     />
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">Manage Settings</p>
-                      <p className="text-xs text-gray-600">Modify system settings</p>
+                      <p className="font-bold text-gray-900 text-base">Manage Settings</p>
+                      <p className="text-sm text-gray-600">Modify system settings</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                  <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl border border-orange-200 hover:border-orange-400 transition-colors">
                     <input
                       type="checkbox"
                       checked={adminData.permissions.viewReports}
                       onChange={(e) => updatePermission('viewReports', e.target.checked)}
-                      className="w-4 h-4 rounded cursor-pointer border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-5 h-5 rounded cursor-pointer border-gray-300 text-orange-600 focus:ring-orange-500 mt-1"
                     />
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">View Reports</p>
-                      <p className="text-xs text-gray-600">Access analytics and reports</p>
+                      <p className="font-bold text-gray-900 text-base">View Reports</p>
+                      <p className="text-sm text-gray-600">Access analytics and reports</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Form Actions */}
-              <div className="flex gap-4 pt-6 border-t border-gray-200">
+              {/* Form Actions - Sticky Footer */}
+              <div className="flex gap-4 pt-6 border-t border-gray-200 mt-8">
                 <button
                   type="button"
                   onClick={() => setShowAdminModal(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 px-6 py-4 rounded-2xl font-bold transition-all duration-200 flex items-center justify-center gap-3 hover:scale-100 active:scale-95 text-sm"
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 px-6 py-4 rounded-2xl font-bold transition-all duration-200 flex items-center justify-center gap-3 text-base"
                 >
-                  <X className="text-sm" />
+                  <X className="text-lg" />
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={savingAdmin}
-                  className="flex-1 cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-200 shadow-lg shadow-purple-500/25 disabled:opacity-50 flex items-center justify-center gap-3 hover:scale-100 active:scale-99 text-sm"
+                  className="flex-1 cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-200 shadow-lg shadow-purple-500/25 disabled:opacity-50 flex items-center justify-center gap-3 text-base"
                 >
                   {savingAdmin ? (
                     <>
@@ -1929,7 +1951,7 @@ if (loading) {
                     </>
                   ) : (
                     <>
-                      <Check className="text-sm" />
+                      <Check className="text-lg" />
                       {editingAdmin ? 'Update Admin' : 'Create Admin'}
                     </>
                   )}
@@ -1939,105 +1961,165 @@ if (loading) {
           </div>
         </div>
       )}
-{/* MODERN VIEW ADMIN MODAL - Compact & Refined */}
+{/* MODERN VIEW ADMIN MODAL - Detailed & Enhanced */}
 {showViewModal && viewingAdmin && (
   <div 
     className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 z-[100]"
     onClick={() => setShowViewModal(false)}
   >
     <div 
-      className="bg-white rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 animate-slide-up"
+      className="bg-white rounded-[2rem] w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200"
       onClick={(e) => e.stopPropagation()}
     >
-      {/* Header - Reduced Padding & Font */}
-      <div className="bg-slate-900 p-5 sm:p-6 text-white relative overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-6 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/5 bg-grid-16 opacity-50"></div>
         <div className="relative z-10">
-          <div className="flex items-center justify-between mb-4 gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                <User size={18} className="text-blue-400" />
+          <div className="flex items-center justify-between mb-6 gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                <User size={24} className="text-blue-400" />
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-black uppercase tracking-tight">Admin Profile</h2>
-                <p className="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Account Intelligence</p>
+                <h2 className="text-2xl font-bold text-white">{viewingAdmin.name}</h2>
+                <p className="text-slate-400 text-sm">Admin Account Details</p>
               </div>
             </div>
             <button
               onClick={() => setShowViewModal(false)}
               className="p-2 hover:bg-white/10 rounded-xl transition-colors text-slate-400 hover:text-white"
             >
-              <FaX size={14} />
+              <FaX size={18} />
             </button>
           </div>
           
-          {/* Quick Stats Bar - Compact Labels */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-[10px] font-bold">
-              <span className="text-slate-500 mr-1">ID:</span>
-              <span className="text-slate-200">{viewingAdmin.id.substring(0, 8)}</span>
-            </div>
-            <div className={`px-3 py-1 rounded-lg border text-[10px] font-black uppercase tracking-tighter ${
+          {/* Quick Status Bar */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className={`px-4 py-2 rounded-lg border text-sm font-bold uppercase tracking-tight ${
               viewingAdmin.status === 'active' 
                 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
                 : 'bg-red-500/10 text-red-400 border-red-500/20'
             }`}>
               {viewingAdmin.status}
             </div>
-            <div className="px-3 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-tighter">
+            <div className="px-4 py-2 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-sm font-bold uppercase tracking-tight">
               {viewingAdmin.role}
+            </div>
+            <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-slate-300 text-sm font-bold">
+              ID: {viewingAdmin.id?.substring(0, 12)}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Content - Scaled Down Padding & Typography */}
-      <div className="p-5 sm:p-7 space-y-5 overflow-y-auto max-h-[calc(90vh-160px)]">
+      {/* Content */}
+      <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-200px)]">
         
-        {/* Personal Info Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            { label: 'Full Name', val: viewingAdmin.name, icon: <User size={12}/> },
-            { label: 'Email Address', val: viewingAdmin.email, icon: <Mail size={12}/> },
-            { label: 'Phone Number', val: viewingAdmin.phone || 'N/A', icon: <Phone size={12}/> },
-            { label: 'Member Since', val: new Date(viewingAdmin.createdAt).toLocaleDateString(), icon: <Calendar size={12}/> }
-          ].map((field, i) => (
-            <div key={i} className="space-y-1.5">
-              <div className="flex items-center gap-2 px-1">
-                <span className="text-blue-500">{field.icon}</span>
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{field.label}</span>
-              </div>
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
-                <p className="text-xs font-bold text-slate-900 truncate">{field.val}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Permissions - Compact Grid */}
-        <div className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100">
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-            <Shield size={14} className="text-purple-500" /> System Permissions
+        {/* Personal Information Section */}
+        <div>
+          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
+            Personal Information
           </h3>
-          <div className="grid grid-cols-2 gap-2">
-            {viewingAdmin.permissions && Object.entries(viewingAdmin.permissions).map(([key, value]) => (
-              <div key={key} className={`flex items-center justify-between p-2.5 rounded-lg border text-[10px] font-bold ${
-                value ? 'bg-white border-emerald-100 text-slate-700' : 'bg-slate-50/50 border-slate-100 text-slate-400 grayscale'
-              }`}>
-                <span className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
-                <div className={`w-1.5 h-1.5 rounded-full ${value ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-300'}`} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { label: 'Full Name', val: viewingAdmin.name, icon: <User size={16}/> },
+              { label: 'Email Address', val: viewingAdmin.email, icon: <Mail size={16}/> },
+              { label: 'Phone Number', val: viewingAdmin.phone || 'N/A', icon: <Phone size={16}/> },
+              { label: 'Member Since', val: viewingAdmin.createdAt ? new Date(viewingAdmin.createdAt).toLocaleDateString() : 'N/A', icon: <Calendar size={16}/> }
+            ].map((field, i) => (
+              <div key={i} className="bg-slate-50 p-4 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-blue-600">{field.icon}</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{field.label}</span>
+                </div>
+                <p className="text-base font-bold text-slate-900">{field.val}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Activity Footer */}
-        <div className="flex items-center justify-between px-2 pt-2 border-t border-slate-100">
-          <div className="flex items-center gap-2">
-             <Clock size={12} className="text-slate-400" />
-             <span className="text-[9px] font-bold text-slate-400 uppercase">Last Sync: {viewingAdmin.updatedAt ? 'Just now' : 'Original'}</span>
+        {/* Account Settings Section */}
+        <div>
+          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="w-1 h-6 bg-purple-600 rounded-full"></div>
+            Account Settings
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
+              <div className="flex items-center gap-2 mb-2">
+                <Shield size={16} className="text-purple-600" />
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Role</span>
+              </div>
+              <p className="text-base font-bold text-slate-900">{viewingAdmin.role}</p>
+            </div>
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-xl border border-emerald-200">
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle size={16} className="text-emerald-600" />
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Status</span>
+              </div>
+              <p className="text-base font-bold text-slate-900 capitalize">{viewingAdmin.status}</p>
+            </div>
           </div>
-          <span className="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded">VERIFIED ADMIN</span>
+        </div>
+
+        {/* Permissions Section */}
+        <div>
+          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="w-1 h-6 bg-emerald-600 rounded-full"></div>
+            System Permissions
+          </h3>
+          {viewingAdmin.permissions ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {Object.entries(viewingAdmin.permissions).map(([key, value]) => {
+                const displayName = key
+                  .replace(/([A-Z])/g, ' $1')
+                  .trim()
+                  .split(' ')
+                  .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join(' ');
+                
+                const colorMap = {
+                  'manageUsers': 'blue',
+                  'manageContent': 'green',
+                  'manageSettings': 'purple',
+                  'viewReports': 'orange'
+                };
+                
+                const color = colorMap[key] || 'gray';
+                const colorClasses = {
+                  blue: 'bg-blue-50 border-blue-200 text-blue-700',
+                  green: 'bg-green-50 border-green-200 text-green-700',
+                  purple: 'bg-purple-50 border-purple-200 text-purple-700',
+                  orange: 'bg-orange-50 border-orange-200 text-orange-700',
+                  gray: 'bg-gray-50 border-gray-200 text-gray-700'
+                };
+
+                return (
+                  <div key={key} className={`flex items-center gap-3 p-4 rounded-xl border ${colorClasses[color]} transition-all ${value ? 'opacity-100' : 'opacity-60'}`}>
+                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${value ? `bg-${color}-600 shadow-lg shadow-${color}-500/50` : 'bg-gray-400'}`} />
+                    <span className="text-sm font-bold">{displayName}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="bg-slate-100 p-4 rounded-xl text-slate-600 text-center">No permissions data available</div>
+          )}
+        </div>
+
+        {/* Activity Info */}
+        <div className="bg-gradient-to-r from-slate-50 to-slate-100 p-4 rounded-xl border border-slate-200">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <FiClock size={18} className="text-slate-500" />
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Last Updated</p>
+                <p className="text-sm font-bold text-slate-900">{viewingAdmin.updatedAt ? new Date(viewingAdmin.updatedAt).toLocaleString() : 'N/A'}</p>
+              </div>
+            </div>
+            <span className="text-xs font-black text-blue-600 bg-blue-100 px-3 py-1 rounded-lg">VERIFIED ADMIN</span>
+          </div>
         </div>
       </div>
     </div>

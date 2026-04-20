@@ -1441,56 +1441,85 @@ const achievements = [
 
 
 
-{/* ===== PERFORMANCE METRICS CARD ===== */}
+{/* ===== PERFORMANCE METRICS SECTION ===== */}
 {!statsLoading && schoolStatsData && (
-  <section className="bg-gradient-to-r from-emerald-50 to-teal-50 py-8">
+  <section className="bg-[#f8fafc] py-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-2xl p-6 shadow-lg border border-emerald-100">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <FiTrendingUp className="text-emerald-600" />
-          Performance Metrics
-        </h3>
+      <div className="bg-white rounded-[32px] p-6 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100 relative overflow-hidden">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Header Section */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="space-y-1">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600/80">Academic Intelligence</p>
+            <h3 className="text-2xl font-black text-slate-900 flex items-center gap-2 tracking-tight">
+              <div className="p-2 bg-emerald-50 rounded-xl">
+                <FiTrendingUp className="text-emerald-600" size={20} />
+              </div>
+              Performance Metrics
+            </h3>
+          </div>
+          <div className="hidden md:block px-4 py-1.5 bg-slate-50 rounded-full border border-slate-100">
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Live Statistics</p>
+          </div>
+        </div>
+        
+        {/* The Grid: Forced 2-column layout on mobile */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          
+          {/* Last Year Mean Card */}
           {schoolStatsData.lastYearMean && (
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-              <p className="text-blue-600 text-sm font-bold">Last Year Mean</p>
-              <p className="text-3xl font-black text-blue-700">
-                {schoolStatsData.lastYearMean.toFixed(2)}
-              </p>
+            <div className="group relative rounded-2xl bg-slate-50/50 border border-slate-100 p-5 transition-all hover:bg-white hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200">
+              <p className="text-[11px] font-black uppercase tracking-wider text-blue-600 mb-2">Previous Year</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl sm:text-4xl font-black text-slate-800">{schoolStatsData.lastYearMean.toFixed(2)}</span>
+                <span className="text-[10px] font-bold text-slate-400">MEAN</span>
+              </div>
             </div>
           )}
           
+          {/* Current Mean Card - High Focus */}
           {schoolStatsData.meanScore && (
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4">
-              <p className="text-emerald-600 text-sm font-bold">Current Mean</p>
-              <p className="text-3xl font-black text-emerald-700">
-                {schoolStatsData.meanScore.toFixed(2)}
-              </p>
-              {schoolStatsData.lastYearMean && (
-                <p className={`text-sm font-bold mt-1 ${
-                  schoolStatsData.meanScore > schoolStatsData.lastYearMean 
-                    ? 'text-green-600' 
-                    : 'text-red-600'
-                }`}>
-                  {schoolStatsData.meanScore > schoolStatsData.lastYearMean ? '↑' : '↓'} 
-                  {(schoolStatsData.meanScore - schoolStatsData.lastYearMean).toFixed(2)} from last year
-                </p>
-              )}
+            <div className="group relative col-span-2 lg:col-span-1 rounded-2xl bg-emerald-50 border-2 border-emerald-100 p-5 transition-all hover:shadow-xl hover:shadow-emerald-500/10">
+              <p className="text-[11px] font-black uppercase tracking-wider text-emerald-700 mb-2">Current Standard</p>
+              <div className="flex items-center justify-between">
+                <span className="text-4xl sm:text-5xl font-black text-emerald-600 tracking-tighter">
+                  {schoolStatsData.meanScore.toFixed(2)}
+                </span>
+                {schoolStatsData.lastYearMean && (
+                  <div className={`flex items-center gap-0.5 text-[11px] font-black px-2 py-1 rounded-lg ${
+                    schoolStatsData.meanScore > schoolStatsData.lastYearMean 
+                      ? 'bg-emerald-600 text-white' 
+                      : 'bg-red-500 text-white'
+                  }`}>
+                    {schoolStatsData.meanScore > schoolStatsData.lastYearMean ? '↑' : '↓'}
+                    {Math.abs(schoolStatsData.meanScore - schoolStatsData.lastYearMean).toFixed(2)}
+                  </div>
+                )}
+              </div>
             </div>
           )}
           
+          {/* Target Mean Card */}
           {schoolStatsData.targetMean && (
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4">
-              <p className="text-amber-600 text-sm font-bold">Target Mean</p>
-              <p className="text-3xl font-black text-amber-700">
-                {schoolStatsData.targetMean.toFixed(2)}
-              </p>
-              {schoolStatsData.meanScore && (
-                <p className="text-sm font-bold mt-1 text-amber-600">
-                  {((schoolStatsData.meanScore / schoolStatsData.targetMean) * 100).toFixed(1)}% achieved
-                </p>
-              )}
+            <div className="group relative col-span-2 lg:col-span-1 rounded-2xl bg-slate-50/50 border border-slate-100 p-5 transition-all hover:bg-white hover:shadow-xl hover:shadow-amber-500/10 hover:border-amber-200">
+               <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-wider text-amber-600 mb-1">Strategic Goal</p>
+                    <span className="text-3xl font-black text-slate-800">{schoolStatsData.targetMean.toFixed(2)}</span>
+                  </div>
+                  <div className="bg-amber-100 px-2 py-1 rounded-md">
+                     <p className="text-xs font-black text-amber-700 leading-none">
+                        {((schoolStatsData.meanScore / schoolStatsData.targetMean) * 100).toFixed(0)}%
+                     </p>
+                  </div>
+               </div>
+               {/* Minimalist Progress Bar */}
+               <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-amber-500 transition-all duration-1000 ease-out" 
+                    style={{ width: `${(schoolStatsData.meanScore / schoolStatsData.targetMean) * 100}%` }}
+                  />
+               </div>
             </div>
           )}
         </div>
@@ -1498,7 +1527,6 @@ const achievements = [
     </div>
   </section>
 )}
-
 
 {/* ===== ACHIEVEMENTS TIMELINE ===== */}
 <section className="bg-white">

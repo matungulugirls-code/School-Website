@@ -131,30 +131,36 @@ export default function NavigationSidebar({
         <div className="mt-5 rounded-[1.8rem] border border-white/10 bg-white/[0.04] p-4">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">Need To Know</p>
           <div className="mt-4 space-y-3">
-            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+            <div className="rounded-[1.25rem] border border-[#0f5b4c]/30 bg-gradient-to-br from-[#0f5b4c]/20 to-[#0b2f28]/10 p-4 backdrop-blur-sm">
               <div className="flex items-center gap-3">
-                <FiShield className="h-5 w-5 text-[#d6b25e]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0f5b4c]/40 text-lg">
+                  🛡️
+                </div>
                 <div>
                   <p className="text-sm font-black text-white">Secure Session</p>
-                  <p className="text-xs text-white/55">Protected student access remains active under the existing login flow.</p>
+                  <p className="text-xs text-white/75">Protected student access remains active under the existing login flow.</p>
                 </div>
               </div>
             </div>
-            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+            <div className="rounded-[1.25rem] border border-[#214d89]/30 bg-gradient-to-br from-[#214d89]/20 to-[#132746]/10 p-4 backdrop-blur-sm">
               <div className="flex items-center gap-3">
-                <FiCreditCard className="h-5 w-5 text-[#d6b25e]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#214d89]/40 text-lg">
+                  💳
+                </div>
                 <div>
                   <p className="text-sm font-black text-white">Finance Snapshot</p>
-                  <p className="text-xs text-white/55">{statusText}</p>
+                  <p className="text-xs text-white/75">{statusText}</p>
                 </div>
               </div>
             </div>
-            <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+            <div className="rounded-[1.25rem] border border-[#7a3d55]/30 bg-gradient-to-br from-[#7a3d55]/20 to-[#4a2031]/10 p-4 backdrop-blur-sm">
               <div className="flex items-center gap-3">
-                <FiLayers className="h-5 w-5 text-[#d6b25e]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#7a3d55]/40 text-lg">
+                  📋
+                </div>
                 <div>
                   <p className="text-sm font-black text-white">Quick Identity</p>
-                  <p className="text-xs text-white/55">{student?.form || 'Form'} · {student?.stream || 'Stream'} · {student?.admissionNumber || 'Admission'}</p>
+                  <p className="text-xs text-white/75">{student?.form || 'Form'} · {student?.stream || 'Stream'} · {student?.admissionNumber || 'Admission'}</p>
                 </div>
               </div>
             </div>
