@@ -86,7 +86,15 @@ const GlassCard = ({ children, className = '' }) => (
 );
 
 const ModernStatCard = ({ stat }) => {
-  const Icon = stat.icon;
+  const iconMap = {
+    trophy: IoTrophyOutline,
+    trending: FiTrendingUp,
+    target: FiTarget,
+    award: FiAward
+  };
+  
+  const Icon = iconMap[stat.iconKey] || FiAward;
+  
   return (
     <div className="relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-[#d9d0c3] bg-white p-4 md:p-6 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.4)]">
       <div className="flex items-start justify-between mb-4 md:mb-6">
@@ -515,13 +523,13 @@ export default function StudentAchievements() {
 
   const statsCards = [
     {
-      icon: IoTrophyOutline,
+      iconKey: 'trophy',
       number: totalAchievements.toString(),
       label: 'Total Achievements',
       sublabel: `${featuredCount} featured`
     },
     {
-      icon: FiTrendingUp,
+      iconKey: 'trending',
       number: schoolStats?.meanScore ? schoolStats.meanScore.toFixed(2) : '—',
       label: 'Current Mean Score',
       sublabel: schoolStats?.lastYearMean
@@ -529,7 +537,7 @@ export default function StudentAchievements() {
         : 'Academic excellence'
     },
     {
-      icon: FiTarget,
+      iconKey: 'target',
       number: schoolStats?.targetMean ? schoolStats.targetMean.toFixed(2) : '—',
       label: 'Target Mean',
       sublabel: schoolStats?.meanScore
@@ -537,7 +545,7 @@ export default function StudentAchievements() {
         : 'Goal for the year'
     },
     {
-      icon: FiAward,
+      iconKey: 'award',
       number: Object.keys(achievementsByCategory).length.toString(),
       label: 'Categories',
       sublabel: 'Diverse excellence'
