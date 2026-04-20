@@ -142,6 +142,12 @@ export default function ModernNavbar() {
       icon: FiUsers,
       description: 'Student support & wellness services'
     },
+      {
+      name: 'School Achievements',
+      href: '/pages/Achievements',
+      icon: FiAward,
+      description: 'Celebrating our students\' successes & milestones'
+    },
     {
       name: 'School Magazine',
       href: '/pages/School Magazine',
