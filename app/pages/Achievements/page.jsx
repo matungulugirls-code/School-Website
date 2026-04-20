@@ -844,7 +844,7 @@ export default function StudentAchievements() {
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
                     <IoTrophyOutline className="text-white text-xl" />
                   </div>
-                  <h4 className="text-base font-black mb-2 tracking-tight">Our Motto</h4>
+                  <h4 className="text-base font-black mb-2 tracking-tight">Our Slogan</h4>
                   <p className="text-xs text-white/70 mb-4 leading-relaxed italic">
                     "{schoolStats?.slogan || 'Strive to Excel'}"
                   </p>
