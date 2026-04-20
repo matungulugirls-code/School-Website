@@ -55,7 +55,7 @@ import ApplicationsManager from '../components/applications/page';
 import Resources from '../components/resources/page';
 import Careers from "../components/career/page";
 import Student from "../components/student/page";
-import Fees from "../components/School Fees/page";
+import Fees from "../components/fees/page";
 import SchoolDocs from "../components/schooldocuments/page";
 import SMSManager from "../components/sms/page";
 import AchievementsManager from "../components/Achievements/page";
