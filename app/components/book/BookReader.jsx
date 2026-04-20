@@ -47,6 +47,7 @@ const BookReader = ({ issue, onClose }) => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showPageJump, setShowPageJump] = useState(false);
   const [jumpPage, setJumpPage] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const containerRef = useRef(null);
   const touchStartY = useRef(0);
@@ -292,13 +293,14 @@ const BookReader = ({ issue, onClose }) => {
       <div className="absolute inset-y-0 left-0 hidden w-[88px] border-r border-white/6 bg-white/[0.03] backdrop-blur-xl xl:block" />
 
       <div className="reader-shell relative flex h-full flex-col xl:grid xl:grid-cols-[88px_340px_minmax(0,1fr)]">
+        {/* Desktop Left Sidebar */}
         <div className="hidden xl:flex xl:flex-col xl:items-center xl:justify-between xl:py-8">
           <div className="space-y-4">
             <button
               onClick={onClose}
               className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-white transition hover:bg-white/[0.1]"
+              title="Close Magazine"
             >
-              close
               <X className="h-5 w-5" />
             </button>
             <button
@@ -335,29 +337,124 @@ const BookReader = ({ issue, onClose }) => {
           </div>
         </div>
 
-        <aside className="order-2 border-t border-white/8 bg-white/[0.03] backdrop-blur-xl xl:order-none xl:border-r xl:border-t-0">
-          <div className="flex items-center justify-between border-b border-white/8 px-4 py-4 sm:px-6 xl:hidden">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={onClose}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06]"
-              >
-                <X className="h-5 w-5" />
-              </button>
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Reader</p>
-                <p className="text-sm font-black text-white">Magazine Experience</p>
-              </div>
+        {/* Mobile Top Bar */}
+        <div className="flex lg:hidden items-center justify-between border-b border-white/8 bg-white/[0.02] backdrop-blur-xl px-4 py-3">
+          <button
+            onClick={onClose}
+            className="flex h-10 items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 text-white font-black text-sm transition hover:bg-white/[0.1]"
+          >
+            <X className="h-4 w-4" />
+            Close
+          </button>
+          <button
+            onClick={toggleFullscreen}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white transition hover:bg-white/[0.1]"
+          >
+            {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+          </button>
+        </div>
+
+        {/* Desktop & Tablet Sidebar */}
+        <aside className="hidden lg:flex lg:flex-col border-t border-white/8 bg-white/[0.03] backdrop-blur-xl lg:border-r lg:border-t-0 lg:order-2 xl:order-2">
+          <div className="flex items-center justify-between border-b border-white/8 px-4 py-4">
+            <div>
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.28em] text-white/55">Magazine</p>
+              <p className="text-xs font-black text-white">Details</p>
             </div>
             <button
               onClick={toggleFullscreen}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06]"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.06]"
             >
-              {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+              {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
             </button>
           </div>
 
-          <div className="max-h-full overflow-y-auto px-4 py-5 sm:px-6 xl:h-full xl:px-7 xl:py-8">
+          <div className="max-h-full overflow-y-auto px-4 py-5 lg:h-full lg:px-5 lg:py-6">
+            <div className="rounded-[1.5rem] border border-white/10 bg-[linear-gradient(160deg,rgba(18,59,49,0.96),rgba(8,23,18,0.98))] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+                  <GraduationCap className="h-5 w-5 text-[#f6df9f]" />
+                </div>
+                <div>
+                  <p className="text-[8px] font-extrabold uppercase tracking-[0.28em] text-white/55">
+                    School
+                  </p>
+                  <p className="text-xs font-black text-white">Magazine</p>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-[8px] font-extrabold uppercase tracking-[0.28em] text-[#f6df9f]">
+                  Edition
+                </p>
+                <h2 className="mt-2 text-lg font-black leading-tight text-white line-clamp-2">
+                  {issue.title}
+                </h2>
+                <p className="mt-2 text-xs leading-5 text-white/60 line-clamp-3">
+                  {issue.description || "School magazine edition."}
+                </p>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="rounded-lg border border-white/10 bg-white/[0.06] px-2 py-2">
+                  <p className="text-[8px] font-extrabold uppercase tracking-wider text-white/50">Year</p>
+                  <p className="mt-1 text-xs font-black text-white">{issue.year || "—"}</p>
+                </div>
+                <div className="rounded-lg border border-white/10 bg-white/[0.06] px-2 py-2">
+                  <p className="text-[8px] font-extrabold uppercase tracking-wider text-white/50">Pages</p>
+                  <p className="mt-1 text-xs font-black text-white">{numPages || "—"}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4">
+              <p className="text-[8px] font-extrabold uppercase tracking-widest text-white/50 mb-3">Actions</p>
+              <div className="space-y-2 flex flex-col">
+                <button
+                  onClick={handleLike}
+                  className={`w-full flex items-center justify-between rounded-lg border px-3 py-2 text-left transition text-xs ${
+                    isLiked ? "border-[#d8b15a]/45 bg-[#d8b15a]/12" : "border-white/10 bg-white/[0.03]"
+                  }`}
+                >
+                  <span className="font-black text-white">Like</span>
+                  <Heart className="h-4 w-4 text-[#f6df9f]" fill={isLiked ? "currentColor" : "none"} />
+                </button>
+
+                <button
+                  onClick={handleBookmark}
+                  className={`w-full flex items-center justify-between rounded-lg border px-3 py-2 text-left transition text-xs ${
+                    isBookmarked ? "border-[#d8b15a]/45 bg-[#d8b15a]/12" : "border-white/10 bg-white/[0.03]"
+                  }`}
+                >
+                  <span className="font-black text-white">Bookmark</span>
+                  {isBookmarked ? (
+                    <BookmarkCheck className="h-4 w-4 text-[#f6df9f]" />
+                  ) : (
+                    <Bookmark className="h-4 w-4 text-[#f6df9f]" />
+                  )}
+                </button>
+
+                <button
+                  onClick={handleShare}
+                  className="w-full flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-left transition hover:bg-white/[0.05] text-xs"
+                >
+                  <span className="font-black text-white">Share</span>
+                  <Share2 className="h-4 w-4 text-[#f6df9f]" />
+                </button>
+
+                <a
+                  href={issue.pdfUrl}
+                  download
+                  className="w-full flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-left transition hover:bg-white/[0.05] text-xs"
+                >
+                  <span className="font-black text-white">Download</span>
+                  <Download className="h-4 w-4 text-[#f6df9f]" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+        {/*
             <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(18,59,49,0.96),rgba(8,23,18,0.98))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
@@ -502,52 +599,54 @@ const BookReader = ({ issue, onClose }) => {
             </div>
           </div>
         </aside>
+        */}
 
-        <main className="order-1 flex min-h-0 flex-col xl:order-none">
-          <div className="border-b border-white/8 bg-white/[0.03] px-4 py-4 backdrop-blur-xl sm:px-6 xl:px-8">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06]">
-                  <BookOpen className="h-5 w-5 text-[#f6df9f]" />
+        <main className="order-1 flex min-h-0 flex-col lg:order-2 flex-1">
+          {/* Top Controls */}
+          <div className="border-b border-white/8 bg-white/[0.03] px-3 py-3 backdrop-blur-xl sm:px-4 lg:px-6">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl border border-white/10 bg-white/[0.06] shrink-0">
+                  <BookOpen className="h-5 w-5 sm:h-5 sm:w-5 text-[#f6df9f]" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/50">
-                    Digital Magazine Reader
+                  <p className="text-[8px] sm:text-[10px] font-extrabold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/50">
+                    Magazine
                   </p>
-                  <p className="truncate text-lg font-black text-white sm:text-2xl">
+                  <p className="truncate text-sm sm:text-lg font-black text-white">
                     {issue.title} {issue.year ? `- ${issue.year}` : ""}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center rounded-full border border-white/10 bg-white/[0.05] px-2 py-2">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div className="flex items-center rounded-full border border-white/10 bg-white/[0.05] px-2 py-1 gap-1">
                   <button
                     onClick={() => setScale((value) => Math.max(0.7, value - 0.1))}
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition hover:bg-white/[0.08]"
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-white/75 transition hover:bg-white/[0.08]"
                   >
-                    <ZoomOut className="h-4 w-4" />
+                    <ZoomOut className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
-                  <span className="w-16 text-center text-sm font-black text-white">{Math.round(scale * 100)}%</span>
+                  <span className="w-10 sm:w-12 text-center text-xs sm:text-sm font-black text-white">{Math.round(scale * 100)}%</span>
                   <button
                     onClick={() => setScale((value) => Math.min(1.8, value + 0.1))}
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition hover:bg-white/[0.08]"
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-white/75 transition hover:bg-white/[0.08]"
                   >
-                    <ZoomIn className="h-4 w-4" />
+                    <ZoomIn className="h-3 w-3 sm:h-4 sm:w-4" />
                   </button>
                 </div>
 
                 <button
                   onClick={() => setShowPageJump(true)}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-black text-white"
+                  className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-xs sm:text-sm font-black text-white"
                 >
-                  Page {currentPage} of {numPages || "..."}
-                  <ChevronDown className="h-4 w-4 text-[#f6df9f]" />
+                  <span>{currentPage}/{numPages || "..."}</span>
+                  <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 text-[#f6df9f]" />
                 </button>
               </div>
             </div>
 
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/8">
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
               <motion.div
                 className="h-full rounded-full bg-[linear-gradient(90deg,#d8b15a,#f6df9f,#2b7a68)]"
                 animate={{ width: `${progress}%` }}
@@ -558,31 +657,31 @@ const BookReader = ({ issue, onClose }) => {
 
           <div
             ref={containerRef}
-            className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4 py-5 sm:px-6 xl:px-8 xl:py-7"
+            className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-2 py-3 sm:px-3 sm:py-4 lg:px-6 lg:py-6"
             style={{ perspective: 1800 }}
           >
             <button
               onClick={goPrev}
               disabled={currentPage <= 1 || isFlipping}
-              className={`absolute left-3 top-1/2 z-20 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-xl transition lg:flex ${
+              className={`absolute left-2 sm:left-3 top-1/2 z-20 hidden h-10 w-10 sm:h-14 sm:w-14 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-xl transition md:flex ${
                 currentPage <= 1 || isFlipping
                   ? "cursor-not-allowed border-white/6 bg-white/[0.03] text-white/20"
                   : "border-white/10 bg-white/[0.08] text-white shadow-[0_18px_40px_rgba(0,0,0,0.28)] hover:bg-white/[0.12]"
               }`}
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
 
             <button
               onClick={goNext}
               disabled={!numPages || currentPage >= numPages || isFlipping}
-              className={`absolute right-3 top-1/2 z-20 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-xl transition lg:flex ${
+              className={`absolute right-2 sm:right-3 top-1/2 z-20 hidden h-10 w-10 sm:h-14 sm:w-14 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-xl transition md:flex ${
                 !numPages || currentPage >= numPages || isFlipping
                   ? "cursor-not-allowed border-white/6 bg-white/[0.03] text-white/20"
                   : "border-white/10 bg-white/[0.08] text-white shadow-[0_18px_40px_rgba(0,0,0,0.28)] hover:bg-white/[0.12]"
               }`}
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
 
             <AnimatePresence>
@@ -601,7 +700,7 @@ const BookReader = ({ issue, onClose }) => {
             </AnimatePresence>
 
             <div className="relative w-full">
-              <div className="absolute inset-0 mx-auto max-w-[1100px] rounded-[2.5rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_52%)] blur-3xl" />
+              <div className="absolute inset-0 mx-auto max-w-[1100px] rounded-[1.5rem] sm:rounded-[2.5rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_52%)] blur-3xl" />
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={currentPage}
@@ -610,7 +709,7 @@ const BookReader = ({ issue, onClose }) => {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  className="relative mx-auto overflow-hidden rounded-[2rem] border border-white/10 bg-[#f4ead4] shadow-[0_35px_110px_rgba(0,0,0,0.45)]"
+                  className="relative mx-auto overflow-hidden rounded-[1rem] sm:rounded-[1.5rem] lg:rounded-[2rem] border border-white/10 bg-[#f4ead4] shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:shadow-[0_35px_110px_rgba(0,0,0,0.45)]"
                   style={{ width: "fit-content", maxWidth: "100%", transformStyle: "preserve-3d" }}
                 >
                   <div className="absolute inset-x-0 top-0 z-10 h-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),transparent)]" />
@@ -659,39 +758,39 @@ const BookReader = ({ issue, onClose }) => {
             </div>
           </div>
 
-          <div className="border-t border-white/8 bg-white/[0.03] px-4 py-4 backdrop-blur-xl sm:px-6 xl:px-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex flex-wrap items-center gap-3">
+          <div className="border-t border-white/8 bg-white/[0.03] px-3 py-3 backdrop-blur-xl sm:px-4 lg:px-6">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex flex-wrap items-center gap-2 lg:gap-3">
                 <button
                   onClick={goPrev}
                   disabled={currentPage <= 1 || isFlipping}
-                  className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black transition ${
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs sm:text-sm font-black transition ${
                     currentPage <= 1 || isFlipping
                       ? "cursor-not-allowed border border-white/8 bg-white/[0.03] text-white/30"
                       : "bg-white/[0.08] text-white shadow-[0_14px_28px_rgba(0,0,0,0.2)]"
                   }`}
                 >
-                  <ArrowLeft className="h-4 w-4" />
-                  Previous
+                  <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Prev</span>
                 </button>
 
                 <button
                   onClick={goNext}
                   disabled={!numPages || currentPage >= numPages || isFlipping}
-                  className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black transition ${
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs sm:text-sm font-black transition ${
                     !numPages || currentPage >= numPages || isFlipping
                       ? "cursor-not-allowed border border-white/8 bg-white/[0.03] text-white/30"
                       : "bg-[#d8b15a] text-[#11281f] shadow-[0_14px_28px_rgba(216,177,90,0.22)]"
                   }`}
                 >
-                  Next
-                  <ArrowRight className="h-4 w-4" />
+                  <span className="hidden sm:inline">Next</span>
+                  <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
                 </button>
               </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-3">
-                  <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-white/50">Jump</span>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2">
+                  <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.1em] text-white/50">Pg</span>
                   <input
                     type="number"
                     min={1}
@@ -701,19 +800,19 @@ const BookReader = ({ issue, onClose }) => {
                       const nextPage = parseInt(e.target.value, 10);
                       if (!Number.isNaN(nextPage)) jumpToPage(nextPage);
                     }}
-                    className="w-16 bg-transparent text-center text-sm font-black text-white outline-none"
+                    className="w-12 bg-transparent text-center text-xs sm:text-sm font-black text-white outline-none"
                     disabled={isFlipping}
                   />
-                  <span className="text-sm font-bold text-white/65">/ {numPages || "..."}</span>
+                  <span className="text-xs sm:text-sm font-bold text-white/65">/{numPages || "."}</span>
                 </div>
 
                 <a
                   href={issue.pdfUrl}
                   download
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-black text-white"
+                  className="inline-flex items-center justify-center gap-1 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-xs sm:text-sm font-black text-white"
                 >
-                  <Download className="h-4 w-4 text-[#f6df9f]" />
-                  Download PDF
+                  <Download className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Download</span>
                 </a>
               </div>
             </div>
@@ -721,13 +820,15 @@ const BookReader = ({ issue, onClose }) => {
         </main>
       </div>
 
+
+
       <AnimatePresence>
         {showPageJump && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[60] flex items-center justify-center bg-black/45 px-4 backdrop-blur-md"
+            className="absolute inset-0 z-[60] flex items-center justify-center bg-black/45 px-3 sm:px-4 backdrop-blur-md"
             onClick={() => setShowPageJump(false)}
           >
             <motion.div
@@ -735,39 +836,39 @@ const BookReader = ({ issue, onClose }) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.98 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#0d211c] p-6 text-white shadow-[0_30px_90px_rgba(0,0,0,0.35)]"
+              className="w-full max-w-sm rounded-[1.5rem] sm:rounded-[2rem] border border-white/10 bg-[#0d211c] p-4 sm:p-6 text-white shadow-[0_30px_90px_rgba(0,0,0,0.35)]"
             >
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/55">Quick Navigation</p>
-              <h3 className="mt-3 text-3xl font-black">Jump to a page</h3>
-              <p className="mt-2 text-sm leading-7 text-white/62">
-                Enter any page number from 1 to {numPages || "..."} to move directly through the edition.
+              <p className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/55">Navigation</p>
+              <h3 className="mt-2 sm:mt-3 text-2xl sm:text-3xl font-black">Jump to Page</h3>
+              <p className="mt-1 sm:mt-2 text-xs sm:text-sm leading-6 sm:leading-7 text-white/62">
+                Enter a page number from 1 to {numPages || "..."}
               </p>
 
-              <form onSubmit={handleJumpSubmit} className="mt-6">
+              <form onSubmit={handleJumpSubmit} className="mt-4 sm:mt-6">
                 <input
                   type="number"
                   min={1}
                   max={numPages || 1}
                   value={jumpPage}
                   onChange={(e) => setJumpPage(e.target.value)}
-                  placeholder={`Type a page between 1 and ${numPages || "..."}`}
-                  className="w-full rounded-[1.4rem] border border-white/10 bg-white/[0.05] px-5 py-4 text-base font-bold text-white outline-none placeholder:text-white/35 focus:border-[#d8b15a]/45"
+                  placeholder={`1 to ${numPages || "..."}`}
+                  className="w-full rounded-[1rem] border border-white/10 bg-white/[0.05] px-4 py-3 sm:py-4 text-base sm:text-lg font-bold text-white outline-none placeholder:text-white/35 focus:border-[#d8b15a]/45"
                   autoFocus
                 />
 
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-4 sm:mt-5 flex flex-col gap-2 sm:flex-row sm:gap-3">
                   <button
                     type="button"
                     onClick={() => setShowPageJump(false)}
-                    className="flex-1 rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-black text-white"
+                    className="flex-1 rounded-lg sm:rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 sm:py-3 text-xs sm:text-sm font-black text-white"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 rounded-full bg-[#d8b15a] px-5 py-3 text-sm font-black text-[#11281f]"
+                    className="flex-1 rounded-lg sm:rounded-full bg-[#d8b15a] px-4 py-2 sm:py-3 text-xs sm:text-sm font-black text-[#11281f]"
                   >
-                    Go to Page
+                    Go
                   </button>
                 </div>
               </form>

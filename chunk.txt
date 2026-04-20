@@ -1,0 +1,144 @@
+﻿            <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(18,59,49,0.96),rgba(8,23,18,0.98))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+                  <GraduationCap className="h-6 w-6 text-[#f6df9f]" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/55">
+                    Matungulu Girls
+                  </p>
+                  <p className="text-lg font-black text-white">Premium Reader</p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#f6df9f]">
+                  Current Edition
+                </p>
+                <h1 className="mt-3 text-3xl font-black leading-tight text-white">
+                  {issue.title}
+                </h1>
+                <p className="mt-3 text-sm leading-7 text-white/72">
+                  {issue.description ||
+                    "A polished collection of student stories, school achievements, School life, and the lived identity of Matungulu Girls Senior School."}
+                </p>
+              </div>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.06] px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Year</p>
+                  <p className="mt-2 text-xl font-black text-white">{issue.year || "Current"}</p>
+                </div>
+                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.06] px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Pages</p>
+                  <p className="mt-2 text-xl font-black text-white">{numPages || issue.pages || "--"}</p>
+                </div>
+                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.06] px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Views</p>
+                  <p className="mt-2 text-xl font-black text-white">{issue.views || "Live"}</p>
+                </div>
+                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.06] px-4 py-4">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Likes</p>
+                  <p className="mt-2 text-xl font-black text-white">{likesCount}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-white/10 bg-white/[0.04] p-5">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Reader Controls</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                <button
+                  onClick={handleLike}
+                  className={`flex items-center justify-between rounded-[1.3rem] border px-4 py-4 text-left transition ${
+                    isLiked ? "border-[#d8b15a]/45 bg-[#d8b15a]/12" : "border-white/10 bg-white/[0.03]"
+                  }`}
+                >
+                  <span>
+                    <span className="block text-sm font-black text-white">Like Edition</span>
+                    <span className="mt-1 block text-xs text-white/58">Save your appreciation locally</span>
+                  </span>
+                  <Heart className="h-5 w-5 text-[#f6df9f]" fill={isLiked ? "currentColor" : "none"} />
+                </button>
+
+                <button
+                  onClick={handleBookmark}
+                  className={`flex items-center justify-between rounded-[1.3rem] border px-4 py-4 text-left transition ${
+                    isBookmarked ? "border-[#d8b15a]/45 bg-[#d8b15a]/12" : "border-white/10 bg-white/[0.03]"
+                  }`}
+                >
+                  <span>
+                    <span className="block text-sm font-black text-white">Bookmark Edition</span>
+                    <span className="mt-1 block text-xs text-white/58">Return to this issue faster</span>
+                  </span>
+                  {isBookmarked ? (
+                    <BookmarkCheck className="h-5 w-5 text-[#f6df9f]" />
+                  ) : (
+                    <Bookmark className="h-5 w-5 text-[#f6df9f]" />
+                  )}
+                </button>
+
+                <button
+                  onClick={handleShare}
+                  className="flex items-center justify-between rounded-[1.3rem] border border-white/10 bg-white/[0.03] px-4 py-4 text-left transition hover:bg-white/[0.05]"
+                >
+                  <span>
+                    <span className="block text-sm font-black text-white">Share Reader</span>
+                    <span className="mt-1 block text-xs text-white/58">Send this issue to another reader</span>
+                  </span>
+                  <Share2 className="h-5 w-5 text-[#f6df9f]" />
+                </button>
+
+                <a
+                  href={issue.pdfUrl}
+                  download
+                  className="flex items-center justify-between rounded-[1.3rem] border border-white/10 bg-white/[0.03] px-4 py-4 text-left transition hover:bg-white/[0.05]"
+                >
+                  <span>
+                    <span className="block text-sm font-black text-white">Download PDF</span>
+                    <span className="mt-1 block text-xs text-white/58">Keep an offline copy of the magazine</span>
+                  </span>
+                  <Download className="h-5 w-5 text-[#f6df9f]" />
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-[2rem] border border-white/10 bg-white/[0.04] p-5">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/55">Need To Know</p>
+              <div className="mt-4 space-y-3">
+                <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+                  <div className="flex items-start gap-3">
+                    <Info className="mt-1 h-4 w-4 text-[#f6df9f]" />
+                    <div>
+                      <p className="text-sm font-black text-white">Navigation</p>
+                      <p className="mt-1 text-xs leading-6 text-white/60">
+                        Use swipe, mouse wheel, or arrow keys to move through pages. Press <span className="font-bold text-white">F</span> for fullscreen.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+                  <div className="flex items-start gap-3">
+                    <Eye className="mt-1 h-4 w-4 text-[#f6df9f]" />
+                    <div>
+                      <p className="text-sm font-black text-white">Why the magazine matters</p>
+                      <p className="mt-1 text-xs leading-6 text-white/60">
+                        It gives parents, students, and alumnae a fuller picture of school life, growth, achievement, and student voice.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.03] p-4">
+                  <div className="flex items-start gap-3">
+                    <Sparkles className="mt-1 h-4 w-4 text-[#f6df9f]" />
+                    <div>
+                      <p className="text-sm font-black text-white">Best experience</p>
+                      <p className="mt-1 text-xs leading-6 text-white/60">
+                        Open on a larger screen for the full editorial feel, then download if you want a quick offline read later.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
