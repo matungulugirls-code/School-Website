@@ -836,6 +836,7 @@ const getImageUrl = (imagePath) => {
 }
 
 // REPLACE YOUR ModernStaffModal WITH THIS - SAME STYLING AS ModernSchoolModal
+// REPLACE YOUR ModernStaffModal WITH THIS - EXACT SAME STYLE AS ModernSchoolModal
 function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCounts }) {
   const isUpdateMode = !!staff && staff.id;
   const [currentStep, setCurrentStep] = useState(0);
@@ -1031,10 +1032,20 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="w-full max-w-5xl max-h-[95vh] bg-white rounded-lg shadow-xl overflow-hidden">
+    <Modal open={true} onClose={onClose}>
+      <Box sx={{
+        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        width: '95vw',
+        maxWidth: '1200px',
+        maxHeight: '95vh',
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 24,
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
+      }}>
         {/* DYNAMIC HEADER - Green for CREATE, Blue for UPDATE */}
-        <div className={`p-5 text-white ${isUpdateMode ? 'bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700' : 'bg-gradient-to-r from-green-600 via-emerald-700 to-teal-700'}`}>
+        <div className={`p-4 text-white ${isUpdateMode ? 'bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700' : 'bg-gradient-to-r from-green-600 via-emerald-700 to-teal-700'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
@@ -1422,7 +1433,7 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                     value={formData.expertise}
                     onChange={(items) => handleArrayChange('expertise', items)}
                     placeholder="e.g., Data Analysis"
-                    disabled={loading}
+                    disabled={actionLoading}
                     color="blue"
                   />
                 </div>
@@ -1433,7 +1444,7 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                     value={formData.responsibilities}
                     onChange={(items) => handleArrayChange('responsibilities', items)}
                     placeholder="e.g., Team Lead"
-                    disabled={loading}
+                    disabled={actionLoading}
                     color="green"
                   />
                 </div>
@@ -1444,7 +1455,7 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                     value={formData.achievements}
                     onChange={(items) => handleArrayChange('achievements', items)}
                     placeholder="e.g., Award Winner"
-                    disabled={loading}
+                    disabled={actionLoading}
                     color="orange"
                   />
                 </div>
@@ -1519,7 +1530,7 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                   >
                     {actionLoading ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <CircularProgress size={16} className="text-white" />
                         <span>{isUpdateMode ? 'Updating...' : 'Saving...'}</span>
                       </>
                     ) : (
@@ -1534,11 +1545,79 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
             </div>
           </form>
         </div>
+      </Box>
+    </Modal>
+  );
+}
+
+// Styled Tag Input Component - ADD THIS AFTER ModernStaffModal
+function StyledTagInput({ label, value, onChange, placeholder, disabled, color = 'blue' }) {
+  const [inputValue, setInputValue] = useState('');
+
+  const colorClasses = {
+    blue: { bg: 'bg-blue-50', border: 'border-blue-200', focus: 'focus:ring-blue-500', tagBg: 'bg-blue-100', tagText: 'text-blue-700' },
+    green: { bg: 'bg-green-50', border: 'border-green-200', focus: 'focus:ring-green-500', tagBg: 'bg-green-100', tagText: 'text-green-700' },
+    orange: { bg: 'bg-orange-50', border: 'border-orange-200', focus: 'focus:ring-orange-500', tagBg: 'bg-orange-100', tagText: 'text-orange-700' }
+  };
+
+  const colors = colorClasses[color] || colorClasses.blue;
+
+  const addItem = () => {
+    if (inputValue.trim() && !value.includes(inputValue.trim())) {
+      onChange([...value, inputValue.trim()]);
+      setInputValue('');
+    }
+  };
+
+  const removeItem = (index) => {
+    onChange(value.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div>
+      <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+        {label} ({value.length})
+      </label>
+      <div className="flex gap-2 mb-3">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={`flex-1 px-4 py-3 border-2 ${colors.border} rounded-xl focus:ring-2 ${colors.focus} focus:border-transparent bg-white text-base font-bold`}
+          onKeyPress={(e) => e.key === 'Enter' && addItem()}
+        />
+        <button
+          type="button"
+          onClick={addItem}
+          disabled={disabled || !inputValue.trim()}
+          className={`px-6 py-3 rounded-xl font-bold text-white transition-all ${
+            color === 'blue' ? 'bg-blue-600 hover:bg-blue-700' :
+            color === 'green' ? 'bg-green-600 hover:bg-green-700' :
+            'bg-orange-600 hover:bg-orange-700'
+          } disabled:opacity-50`}
+        >
+          Add
+        </button>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {value.map((item, index) => (
+          <div key={index} className={`flex items-center gap-2 ${colors.tagBg} ${colors.tagText} px-3 py-2 rounded-xl font-bold`}>
+            <span>{item}</span>
+            <button
+              type="button"
+              onClick={() => removeItem(index)}
+              className="hover:text-red-600 transition-colors"
+            >
+              <FaTimes className="text-xs" />
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
-
 // Styled Tag Input Component - ADD THIS AFTER ModernStaffModal
 function StyledTagInput({ label, value, onChange, placeholder, disabled, color = 'blue' }) {
   const [inputValue, setInputValue] = useState('');
