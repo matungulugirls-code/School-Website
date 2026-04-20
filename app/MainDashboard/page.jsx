@@ -1226,34 +1226,56 @@ const handleLogout = () => {
     },
   ];
 
-  const CompactSchoolHeader = () => {
-    return (
-      <div className="group cursor-default py-4">
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <div className="h-10 w-1 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full shadow-sm " />
+const CompactSchoolHeader = () => {
+  return (
+    <div className="group cursor-default py-6 px-4">
+      <div className="flex items-center gap-5">
+        {/* 1. Dynamic Vertical Indicator */}
+        <div className="relative flex items-center justify-center">
+          <div className="h-12 w-[3px] bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-full w-full bg-[#172033] transform -translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-in-out" />
+          </div>
+          {/* Subtle pulse dot at the top */}
+          <div className="absolute -top-1 w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse" />
+        </div>
 
-          <div className="flex flex-col">
-            <h1 className="text-lg md:text-xl font-black text-gray-900 tracking-tight leading-none uppercase italic">
-              Matungulu Girls 
-            </h1>
-            
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">
-                  School
-              </span>
-              <div className="h-[1px] w-4 bg-gray-200" />
-              <p className="text-[10px] md:text-xs font-bold text-gray-500 italic">
+        {/* 2. Text Stack */}
+        <div className="flex flex-col">
+          {/* Top Label Layer */}
+          <div className="flex items-center gap-3 mb-1">
+            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-[0.4em]">
+              Official Institution
+            </span>
+            <div className="h-[1px] w-8 bg-emerald-500/20" />
+          </div>
+
+          {/* Primary Identity */}
+          <h1 className="text-xl md:text-2xl font-black text-[#172033] tracking-tighter leading-none flex items-center gap-2">
+            MATUNGULU GIRLS
+            <span className="hidden md:inline-block">
+              <IoSparkles className="text-amber-400 text-sm scale-0 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500" />
+            </span>
+          </h1>
+          
+          {/* Motto / Slogan Plate */}
+          <div className="mt-2 inline-flex items-center">
+            <div className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-100">
+               <p className="text-[10px] md:text-[11px] font-black text-slate-400 italic tracking-wide">
                 "Strive to Excel"
               </p>
             </div>
           </div>
+        </div>
 
-          <IoSparkles className="hidden md:block text-yellow-400 text-sm opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-500" />
+        {/* 3. Decorative Accent (Right Side) */}
+        <div className="hidden lg:flex flex-col gap-1 ml-auto opacity-20 group-hover:opacity-100 transition-opacity duration-700">
+           <div className="h-[2px] w-4 bg-[#172033]" />
+           <div className="h-[2px] w-2 bg-emerald-500" />
         </div>
       </div>
-    );
-  };
-
+    </div>
+  );
+};
   // Show loading screen
   if (loading) {
     return <LoadingSpinner />;
