@@ -671,17 +671,17 @@ const handleCreateAdmin = () => {
     name: '',
     email: '',
     password: '',
-    phone: '+254',
+    phone: '',
     role: 'ADMIN',
     permissions: {
       manageUsers: false,
-      manageContent: true,
+      manageContent: false,
       manageSettings: false,
-      viewReports: true
+      viewReports: false
     },
     status: 'active'
   });
-  setConfirmPassword(''); // ADD THIS
+  setConfirmPassword('');
   setPasswordStrength({
     score: 0,
     hasMinLength: false,
@@ -701,17 +701,17 @@ const handleEditAdmin = (admin) => {
     name: admin.name || '',
     email: admin.email || '',
     password: '',
-    phone: admin.phone || '+254',
+    phone: admin.phone || '',
     role: admin.role || 'ADMIN',
     permissions: admin.permissions || {
       manageUsers: false,
-      manageContent: true,
+      manageContent: false,
       manageSettings: false,
-      viewReports: true
+      viewReports: false
     },
     status: admin.status || 'active'
   });
-  setConfirmPassword(''); // ADD THIS
+  setConfirmPassword('');
   setPasswordStrength({
     score: 0,
     hasMinLength: false,
