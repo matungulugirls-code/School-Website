@@ -413,7 +413,7 @@ function GuestPortalLanding({ onOpenLogin, router }) {
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">
               <FaStar className="h-3.5 w-3.5 text-[#d6b25e]" />
-              Secure Student Workspace
+              Secure Student Portal
             </div>
             <h1 className="max-w-4xl text-5xl font-black leading-[0.92] text-gray-900 sm:text-6xl xl:text-7xl">
               A complete digital workspace for student academics and school life.
@@ -440,19 +440,23 @@ function GuestPortalLanding({ onOpenLogin, router }) {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {features.map((feature) => (
-              <div key={feature.title} className="overflow-hidden rounded-[1.8rem] border border-gray-200 bg-white shadow-sm">
-                <div className={`bg-gradient-to-br ${feature.tone} p-5 text-white`}>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
-                    {feature.icon}
-                  </div>
-                  <h3 className="mt-4 text-xl font-black text-white">{feature.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-white/70">{feature.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
+  {features.map((feature) => (
+    <div key={feature.title} className="overflow-hidden rounded-[1.5rem] sm:rounded-[1.8rem] border border-gray-200 bg-white shadow-sm">
+      <div className={`bg-gradient-to-br ${feature.tone} p-3 sm:p-5 text-white`}>
+        <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl bg-white/15">
+          {feature.icon}
+        </div>
+        <h3 className="mt-3 sm:mt-4 text-sm sm:text-xl font-black text-white line-clamp-2 sm:line-clamp-none">
+          {feature.title}
+        </h3>
+        <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-5 sm:leading-7 text-white/70 line-clamp-3 sm:line-clamp-none">
+          {feature.text}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
         </section>
       </main>
     </div>
