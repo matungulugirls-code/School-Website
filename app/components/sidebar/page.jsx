@@ -315,7 +315,7 @@ const handleLogout = () => {
     return (
       <div className="fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50 w-full max-w-[320px] lg:max-w-[280px] xl:max-w-[320px] bg-white shadow-xl border-r border-gray-200 backdrop-blur-xl overflow-hidden flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4 animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4 animate-spin"></div>
           <p className="text-gray-600 text-sm">Checking authentication...</p>
         </div>
       </div>
@@ -329,7 +329,7 @@ const handleLogout = () => {
 
   return (
     <>
-      {/* Support Modal */}
+      {/* Support Modal - Updated with emerald/teal colors */}
       {showSupportModal && (
         <div 
           className="fixed inset-0 bg-black/60 backdrop-blur-lg z-50 flex items-center justify-center p-4 transition-all duration-300"
@@ -341,7 +341,7 @@ const handleLogout = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <FiHelpCircle className="text-blue-500" />
+                <FiHelpCircle className="text-emerald-500" />
                 Technical Support
               </h3>
               <button
@@ -358,8 +358,8 @@ const handleLogout = () => {
               </p>
               
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200 hover:border-blue-300 transition-colors duration-200">
-                  <div className="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                <div className="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-200 hover:border-emerald-300 transition-colors duration-200">
+                  <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white">
                     <FiMessageCircle className="text-lg" />
                   </div>
                   <div>
@@ -368,8 +368,8 @@ const handleLogout = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-xl border border-purple-200 hover:border-purple-300 transition-colors duration-200">
-                  <div className="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center text-white">
+                <div className="flex items-center gap-3 p-3 bg-teal-50 rounded-xl border border-teal-200 hover:border-teal-300 transition-colors duration-200">
+                  <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white">
                     <FiMail className="text-lg" />
                   </div>
                   <div>
@@ -395,10 +395,9 @@ const handleLogout = () => {
               </button>
               <button
                 onClick={() => {
-                  // Open WhatsApp
                   window.open('https://wa.me/25479347260', '_blank');
                 }}
-                className="flex-1 px-4 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all duration-200 font-semibold"
+                className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all duration-200 font-semibold"
               >
                 Contact WhatsApp
               </button>
@@ -432,11 +431,11 @@ const handleLogout = () => {
         `}</style>
         
         <div className="flex flex-col h-full">
-          {/* Header */}
+          {/* Header - Updated with emerald/teal gradient */}
           <div className="flex items-center justify-between p-4 lg:p-5 border-b border-gray-200 flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/30">
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 rounded-2xl flex items-center justify-center shadow-2xl shadow-emerald-500/30">
                   <img 
                     src="/MatG.jpg" 
                     alt="School Logo" 
@@ -454,17 +453,17 @@ const handleLogout = () => {
             </div>
             
             {/* Close button - only show on mobile */}
-            {isMobile && (
+            if (isMobile && (
               <button
                 onClick={() => setSidebarOpen(false)}
                 className="p-2 rounded-xl transition-all duration-200 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
               >
                 <FiX className="text-xl" />
               </button>
-            )}
+            ))
           </div>
 
-          {/* Navigation */}
+          {/* Navigation - Updated active tab colors to emerald/teal */}
           <nav className="flex-1 p-4 lg:p-5 overflow-y-auto hide-scrollbar">
             <div className="space-y-1 lg:space-y-2">
               {safeTabs.map((tab) => {
@@ -475,19 +474,19 @@ const handleLogout = () => {
                    onClick={() => handleTabClick(tab.id)}
                    className={`w-full flex items-center gap-3 lg:gap-4 px-3 lg:px-4 py-3 lg:py-4 rounded-2xl transition-all duration-200 group relative overflow-hidden ${
                      activeTab === tab.id
-                       ? 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 shadow-lg shadow-blue-500/10 backdrop-blur-sm border border-blue-200'
+                       ? 'bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 shadow-lg shadow-emerald-500/10 backdrop-blur-sm border border-emerald-200'
                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                    }`}
                  >
-                  {/* Active indicator */}
+                  {/* Active indicator - Updated to emerald gradient */}
                   {activeTab === tab.id && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 lg:h-10 bg-gradient-to-b from-blue-500 to-purple-500 rounded-r-full shadow-lg shadow-blue-400/50"></div>
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 lg:h-10 bg-gradient-to-b from-emerald-600 to-teal-600 rounded-r-full shadow-lg shadow-emerald-400/50"></div>
                   )}
                   
-                  {/* Icon */}
+                  {/* Icon - Updated active state colors */}
                   <div className={`relative p-2 rounded-xl transition-all duration-200 ${
                     activeTab === tab.id 
-                      ? 'bg-gradient-to-br from-blue-500 to-purple-500 text-white shadow-lg' 
+                      ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-lg' 
                       : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200 group-hover:text-gray-800'
                   }`}>
                     <TabIcon className="text-sm lg:text-lg relative z-10" />
@@ -500,9 +499,9 @@ const handleLogout = () => {
                     </span>
                   </div>
 
-                  {/* Active chevron */}
+                  {/* Active chevron - Updated color */}
                   {activeTab === tab.id && (
-                    <div className="text-blue-500">
+                    <div className="text-emerald-600">
                       <FiChevronRight className="text-sm lg:text-lg" />
                     </div>
                   )}
@@ -514,13 +513,13 @@ const handleLogout = () => {
 
           {/* Footer */}
           <div className="p-4 lg:p-5 border-t border-gray-200 flex-shrink-0">
-            {/* User Profile */}
+            {/* User Profile - Updated hover to emerald */}
             <div 
-              className="flex items-center gap-2 lg:gap-3 p-2 lg:p-3 rounded-2xl border border-gray-200 mb-3 lg:mb-4 cursor-pointer transition-all duration-200 hover:bg-blue-50 hover:border-blue-200"
+              className="flex items-center gap-2 lg:gap-3 p-2 lg:p-3 rounded-2xl border border-gray-200 mb-3 lg:mb-4 cursor-pointer transition-all duration-200 hover:bg-emerald-50 hover:border-emerald-200"
               onClick={() => handleTabClick('admins-profile')}
             >
               <div className="relative">
-                <div className="w-8 h-8 lg:w-12 lg:h-12 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
+                <div className="w-8 h-8 lg:w-12 lg:h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-bold shadow-lg">
                   {user.name?.charAt(0) || 'A'}
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-2 h-2 lg:w-3 lg:h-3 bg-emerald-400 rounded-full border-2 border-white animate-pulse"></div>
@@ -533,15 +532,15 @@ const handleLogout = () => {
                   {user.email}
                 </p>
                 <div className="flex items-center gap-1 mt-0.5 lg:mt-1">
-                  <FiShield className="text-emerald-500 text-[10px] lg:text-xs" />
-                  <span className="text-emerald-600 text-[10px] lg:text-xs font-medium capitalize truncate">
+                  <FiShield className="text-emerald-600 text-[10px] lg:text-xs" />
+                  <span className="text-emerald-700 text-[10px] lg:text-xs font-medium capitalize truncate">
                     {user.role?.replace('_', ' ') || 'administrator'}
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Updated hover colors */}
             <div className="grid grid-cols-2 gap-1 lg:gap-2 mb-2 lg:mb-3">
               <button
                 className="flex items-center gap-1 lg:gap-2 px-2 lg:px-3 py-1 lg:py-2 text-gray-600 hover:text-gray-800 rounded-xl transition-all duration-200 text-xs lg:text-sm hover:bg-gray-100"
@@ -559,7 +558,7 @@ const handleLogout = () => {
               </button>
             </div>
 
-            {/* Logout Button */}
+            {/* Logout Button - Kept red for logout (standard UX) */}
             <button
               onClick={handleLogout}
               className="w-full flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 text-red-600 hover:text-red-700 rounded-xl transition-all duration-200 border border-red-200 hover:border-red-300 hover:bg-red-50 group"
@@ -571,7 +570,7 @@ const handleLogout = () => {
             {/* Version Info */}
             <div className="text-center mt-3 lg:mt-4 pt-3 lg:pt-4 border-t border-gray-200">
               <p className="text-gray-400 text-[10px] lg:text-xs">
-                v2.1.0 • Matungulu Girls High  School
+                v2.1.0 • Matungulu Girls High School
               </p>
             </div>
           </div>

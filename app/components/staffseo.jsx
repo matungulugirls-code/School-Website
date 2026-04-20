@@ -479,7 +479,7 @@ if (loading) {
                 We believe that educating a girl is educating a nation. By integrating 
                 rigorous academic standards with strong moral values and modern learning 
                 resources, we provide a nurturing environment where our girls don't 
-                just study—they thrive. Our mission is to transform young learners into 
+                just study  they thrive. Our mission is to transform young learners into 
                 confident, innovative, and principled global leaders who are ready to 
                 excel in the competitive world of tomorrow.
               </p>
