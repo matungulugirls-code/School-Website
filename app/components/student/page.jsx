@@ -101,10 +101,10 @@ import { IoPeopleCircle, IoNewspaper, IoClose, IoStatsChart } from 'react-icons/
 // Helper function for form colors
 function getFormColor(form) {
   switch (form) {
-    case 'Form 1': return 'from-blue-500 to-blue-700';
+    case 'Form 1': return 'from-teal-600 to-teal-800';
     case 'Form 2': return 'from-emerald-500 to-emerald-700';
     case 'Form 3': return 'from-amber-500 to-amber-700';
-    case 'Form 4': return 'from-purple-500 to-purple-700';
+    case 'Form 4': return 'from-emerald-600 to-emerald-800';
     default: return 'from-gray-400 to-gray-600';
   }
 }
@@ -112,10 +112,10 @@ function getFormColor(form) {
 // Helper function for form badge colors (NEW - ADD THIS)
 function getFormBadgeColor(form) {
   switch (form) {
-    case 'Form 1': return 'bg-gradient-to-r from-blue-500 to-blue-700 text-white';
+    case 'Form 1': return 'bg-gradient-to-r from-teal-600 to-teal-800 text-white';
     case 'Form 2': return 'bg-gradient-to-r from-emerald-500 to-emerald-700 text-white';
     case 'Form 3': return 'bg-gradient-to-r from-amber-500 to-amber-700 text-white';
-    case 'Form 4': return 'bg-gradient-to-r from-purple-500 to-purple-700 text-white';
+    case 'Form 4': return 'bg-gradient-to-r from-emerald-600 to-emerald-800 text-white';
     default: return 'bg-gradient-to-r from-gray-400 to-gray-600 text-white';
   }
 }
@@ -123,10 +123,10 @@ function getFormBadgeColor(form) {
 // Helper function for form text colors (NEW - ADD THIS)
 function getFormTextColor(form) {
   switch (form) {
-    case 'Form 1': return 'text-blue-700';
+    case 'Form 1': return 'text-teal-700';
     case 'Form 2': return 'text-emerald-700';
     case 'Form 3': return 'text-amber-700';
-    case 'Form 4': return 'text-purple-700';
+    case 'Form 4': return 'text-emerald-700';
     default: return 'text-gray-700';
   }
 }
@@ -357,7 +357,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
     <div
       className={`border-3 border-dashed rounded-2xl p-10 text-center transition-all duration-300 cursor-pointer ${
         dragActive 
-          ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 ring-4 ring-blue-100' 
+          ? 'border-teal-500 bg-gradient-to-br from-teal-50 to-teal-100 ring-4 ring-teal-100' 
           : 'border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100'
       }`}
       onDragEnter={handleDragEvent}
@@ -375,7 +375,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
       onClick={() => fileInputRef.current?.click()}
     >
       <FiUpload className={`mx-auto text-3xl mb-4 ${
-        dragActive ? 'text-blue-600' : 'text-gray-400'
+        dragActive ? 'text-teal-700' : 'text-gray-400'
       }`} />
       <p className="text-gray-800 mb-2 font-bold text-lg">
         {dragActive ? '📁 Drop file here!' : file ? 'Click to replace file' : 'Drag & drop or click to upload'}
@@ -447,7 +447,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
           }}
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+          <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-6 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white/20 rounded-xl">
@@ -455,7 +455,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold">Student Details</h2>
-                  <p className="text-blue-100 opacity-90">
+                  <p className="text-emerald-100 opacity-90">
                     Complete student information
                   </p>
                 </div>
@@ -473,9 +473,9 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
           <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
             {/* Profile Section */}
             <div className="flex items-center gap-6 mb-8">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <FiUser className="text-white text-3xl" />
-              </div>
+            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center">
+              <FiUser className="text-white text-3xl" />
+            </div>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
                   {student.firstName} {student.middleName || ''} {student.lastName}
@@ -486,7 +486,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                     {student.form}
                   </span>
                   {student.stream && (
-                    <span className="px-3 py-1 rounded-lg text-sm font-bold bg-purple-100 text-purple-700">
+                    <span className="px-3 py-1 rounded-lg text-sm font-bold bg-teal-100 text-teal-800">
                       {student.stream}
                     </span>
                   )}
@@ -506,7 +506,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
               {/* Personal Info */}
               <div className="bg-gray-50 p-6 rounded-2xl">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FiUser className="text-blue-600" />
+                  <FiUser className="text-teal-700" />
                   Personal Information
                 </h4>
                 <div className="space-y-3">
@@ -528,7 +528,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
               {/* Academic Info */}
               <div className="bg-gray-50 p-6 rounded-2xl">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FiBook className="text-blue-600" />
+                  <FiBook className="text-teal-700" />
                   Academic Information
                 </h4>
                 <div className="space-y-3">
@@ -550,7 +550,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
               {/* Contact Info */}
               <div className="bg-gray-50 p-6 rounded-2xl md:col-span-2">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FiPhone className="text-blue-600" />
+                  <FiPhone className="text-teal-700" />
                   Contact Information
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -627,7 +627,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
         }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+        <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white/20 rounded-xl">
@@ -635,7 +635,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
               </div>
               <div>
                 <h2 className="text-2xl font-bold">Edit Student</h2>
-                <p className="text-blue-100 opacity-90">Update student information</p>
+                <p className="text-emerald-100 opacity-90">Update student information</p>
               </div>
             </div>
             <button
@@ -663,7 +663,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     required
                     value={formData.firstName}
                     onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
                   />
                 </div>
                 <div>
@@ -674,7 +674,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     type="text"
                     value={formData.middleName}
                     onChange={(e) => setFormData({...formData, middleName: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
                 <div>
@@ -686,7 +686,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     required
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
                 <div>
@@ -696,7 +696,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                   <select
                     value={formData.gender}
                     onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   >
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
@@ -712,7 +712,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     type="date"
                     value={formData.dateOfBirth}
                     onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
               </div>
@@ -731,7 +731,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     required
                     value={formData.admissionNumber}
                     onChange={(e) => setFormData({...formData, admissionNumber: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
                 <div>
@@ -742,7 +742,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     required
                     value={formData.form}
                     onChange={(e) => setFormData({...formData, form: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   >
                     <option value="Form 1">Form 1</option>
                     <option value="Form 2">Form 2</option>
@@ -757,7 +757,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                   <select
                     value={formData.stream}
                     onChange={(e) => setFormData({...formData, stream: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   >
                     <option value="">Select Stream</option>
                     <option value="A">A</option>
@@ -778,7 +778,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     required
                     value={formData.status}
                     onChange={(e) => setFormData({...formData, status: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   >
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -801,7 +801,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
                 <div>
@@ -812,7 +812,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     type="tel"
                     value={formData.parentPhone}
                     onChange={(e) => setFormData({...formData, parentPhone: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -823,7 +823,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     value={formData.address}
                     onChange={(e) => setFormData({...formData, address: e.target.value})}
                     rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
               </div>
@@ -841,7 +841,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-lg transition-all"
+                className="flex-1 py-3 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-lg transition-all"
               >
                 {loading ? (
                   <>
@@ -914,8 +914,8 @@ function StudentsChart({
   type = 'pie', 
   title, 
   colors = [
-    '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', 
-    '#6366F1', '#EC4899', '#14B8A6', '#F97316', '#8B5CF6'
+    '#0D9488', '#10B981', '#F59E0B', '#22C55E', '#EF4444', 
+    '#059669', '#EC4899', '#14B8A6', '#F97316', '#047857'
   ],
   height = 400
 }) {
@@ -935,7 +935,7 @@ function StudentsChart({
                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
                 outerRadius={120}
                 innerRadius={60}
-                fill="#8884d8"
+                fill="#0D9488"
                 dataKey="value"
                 paddingAngle={5}
               >
@@ -1047,7 +1047,7 @@ function StudentsChart({
                 labelLine={false}
                 label={({ name, value }) => `${name}: ${value}`}
                 outerRadius={120}
-                fill="#8884d8"
+                fill="#0D9488"
                 dataKey="value"
               >
                 {data.map((entry, index) => (
@@ -1067,12 +1067,12 @@ function StudentsChart({
 
   return (
     <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-2xl relative overflow-hidden">
-      <div className="absolute -top-10 -right-10 w-60 h-60 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-full blur-3xl opacity-60" />
+      <div className="absolute -top-10 -right-10 w-60 h-60 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-full blur-3xl opacity-60" />
       
       <div className="relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-700 via-blue-600 to-indigo-500 flex items-center justify-center shadow-2xl ring-4 ring-blue-100">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-800 via-teal-700 to-emerald-600 flex items-center justify-center shadow-2xl ring-4 ring-teal-100">
               {type === 'pie' && <FiPieChart className="text-white text-xl" />}
               {type === 'bar' && <FiBarChart2 className="text-white text-xl" />}
               {type === 'radial' && <FiTrendingUp className="text-white text-xl" />}
@@ -1101,11 +1101,11 @@ function StudentsChart({
         {data && data.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
-                <div className="text-2xl font-bold text-blue-700">
+              <div className="text-center p-3 bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl">
+                <div className="text-2xl font-bold text-teal-700">
                   {data.reduce((sum, d) => sum + d.value, 0).toLocaleString()}
                 </div>
-                <div className="text-sm font-semibold text-blue-900">Total Students</div>
+                <div className="text-sm font-semibold text-teal-900">Total Students</div>
               </div>
               <div className="text-center p-3 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl">
                 <div className="text-2xl font-bold text-emerald-700">
@@ -1119,11 +1119,11 @@ function StudentsChart({
                 </div>
                 <div className="text-sm font-semibold text-amber-900">Lowest</div>
               </div>
-              <div className="text-center p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
-                <div className="text-2xl font-bold text-purple-700">
+              <div className="text-center p-3 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl">
+                <div className="text-2xl font-bold text-emerald-700">
                   {data.length}
                 </div>
-                <div className="text-sm font-semibold text-purple-900">Categories</div>
+                <div className="text-sm font-semibold text-emerald-900">Categories</div>
               </div>
             </div>
           </div>
@@ -1170,8 +1170,8 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
     <div className="bg-white rounded-2xl p-6 border-2 border-gray-300 shadow-2xl">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-gradient-to-r from-blue-100 to-blue-200 rounded-2xl">
-            <FiBarChart2 className="text-blue-700 text-2xl" />
+          <div className="p-3 bg-gradient-to-r from-teal-100 to-teal-200 rounded-2xl">
+            <FiBarChart2 className="text-teal-800 text-2xl" />
           </div>
           <div>
             <h3 className="text-2xl font-bold text-gray-900">Statistics Overview</h3>
@@ -1182,7 +1182,7 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
         </div>
         <button
           onClick={onRefresh}
-          className="px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl font-bold flex items-center gap-3 text-sm hover:shadow-xl transition-all duration-300"
+          className="px-5 py-3 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-bold flex items-center gap-3 text-sm hover:shadow-xl transition-all duration-300"
         >
           <FiRefreshCw className="text-sm" />
           Refresh Stats
@@ -1190,16 +1190,16 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
       </div>
       
       {/* Total Students Card */}
-      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 mb-6">
+      <div className="bg-gradient-to-r from-teal-50 to-teal-100 rounded-2xl p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-blue-700 font-bold text-sm mb-2">TOTAL STUDENTS</p>
+            <p className="text-teal-700 font-bold text-sm mb-2">TOTAL STUDENTS</p>
             <h4 className="text-4xl font-bold text-gray-900">
               {totalStudents.toLocaleString()}
             </h4>
           </div>
           <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-            <FiUsers className="text-blue-600 text-3xl" />
+            <FiUsers className="text-teal-700 text-3xl" />
           </div>
         </div>
       </div>
@@ -1207,7 +1207,7 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
       {/* Form Distribution Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {formDistribution.map((form, index) => (
-          <div key={index} className="bg-white rounded-xl p-4 border-2 border-gray-200 hover:border-blue-300 transition-all duration-300">
+          <div key={index} className="bg-white rounded-xl p-4 border-2 border-gray-200 hover:border-teal-300 transition-all duration-300">
             <div className="flex items-center justify-between mb-3">
               <span className="font-bold text-gray-900">{form.name}</span>
               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: form.color }} />
@@ -1239,11 +1239,11 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
           </div>
           <div className="text-sm font-semibold text-emerald-900">Male Students</div>
         </div>
-        <div className="text-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl hover:shadow-lg transition-all duration-300">
-          <div className="text-2xl font-bold text-purple-700">
+        <div className="text-center p-4 bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl hover:shadow-lg transition-all duration-300">
+          <div className="text-2xl font-bold text-teal-700">
             {(demographics.gender?.find(g => g.name === 'Female')?.value || 0).toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-purple-900">Female Students</div>
+          <div className="text-sm font-semibold text-teal-900">Female Students</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-amber-50 to-amber-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-amber-700">
@@ -1321,13 +1321,13 @@ function EnhancedFilterPanel({
     <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-xl mb-6 overflow-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
         <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-          <FiFilter className="text-blue-600" />
+          <FiFilter className="text-teal-700" />
           Advanced Filters
         </h3>
         <div className="flex items-center gap-3">
           <button
             onClick={onToggleAdvanced}
-            className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-blue-600 transition-colors"
+            className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-teal-700 transition-colors"
           >
             {showAdvanced ? 'Hide Advanced' : 'Show Advanced'}
           </button>
@@ -1352,7 +1352,7 @@ function EnhancedFilterPanel({
               value={localFilters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               placeholder="Name, admission, email..."
-              className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+              className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
             />
           </div>
         </div>
@@ -1364,7 +1364,7 @@ function EnhancedFilterPanel({
           <select
             value={localFilters.form}
             onChange={(e) => handleFilterChange('form', e.target.value)}
-            className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+            className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
           >
             <option value="">All Forms</option>
             {['Form 1', 'Form 2', 'Form 3', 'Form 4'].map(form => (
@@ -1380,7 +1380,7 @@ function EnhancedFilterPanel({
           <select
             value={localFilters.stream}
             onChange={(e) => handleFilterChange('stream', e.target.value)}
-            className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+            className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
           >
             <option value="">All Streams</option>
             {['A', 'B', 'C', 'D', 'E', 'East', 'West', 'North', 'South', 'Science', 'Arts', 'Commercial'].map(stream => (
@@ -1396,7 +1396,7 @@ function EnhancedFilterPanel({
           <select
             value={localFilters.status}
             onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+            className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
           >
             <option value="">All Status</option>
             {['active', 'inactive', 'graduated', 'transferred'].map(status => (
@@ -1415,7 +1415,7 @@ function EnhancedFilterPanel({
             <select
               value={localFilters.gender}
               onChange={(e) => handleFilterChange('gender', e.target.value)}
-              className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+              className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
             >
               <option value="">All Genders</option>
               {['Male', 'Female', 'Other'].map(gender => (
@@ -1436,7 +1436,7 @@ function EnhancedFilterPanel({
                 value={localFilters.minAge}
                 onChange={(e) => handleFilterChange('minAge', e.target.value)}
                 placeholder="Min"
-                className="flex-1 px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+                className="flex-1 px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
               />
               <input
                 type="number"
@@ -1445,7 +1445,7 @@ function EnhancedFilterPanel({
                 value={localFilters.maxAge}
                 onChange={(e) => handleFilterChange('maxAge', e.target.value)}
                 placeholder="Max"
-                className="flex-1 px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+                className="flex-1 px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
               />
             </div>
           </div>
@@ -1457,7 +1457,7 @@ function EnhancedFilterPanel({
             <select
               value={localFilters.sortBy}
               onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-              className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-base"
+              className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
             >
               <option value="createdAt">Date Created</option>
               <option value="admissionNumber">Admission Number</option>
@@ -1532,7 +1532,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
         }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6 text-white">
+        <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-4 sm:p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-2 bg-white/20 rounded-xl">
@@ -1540,7 +1540,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
               </div>
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold">Upload Strategy</h2>
-                <p className="text-blue-100 opacity-90 text-sm sm:text-base">
+                <p className="text-emerald-100 opacity-90 text-sm sm:text-base">
                   Choose how you want to upload students
                 </p>
               </div>
@@ -1565,13 +1565,13 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                   onClick={() => setUploadType('new')}
                   className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                     uploadType === 'new'
-                      ? 'border-blue-500 bg-blue-50 shadow-lg'
-                      : 'border-gray-300 hover:border-blue-300'
+                      ? 'border-teal-600 bg-teal-50 shadow-lg'
+                      : 'border-gray-300 hover:border-teal-300'
                   }`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'new' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      <FiPlus className={`text-sm sm:text-lg ${uploadType === 'new' ? 'text-blue-600' : 'text-gray-500'}`} />
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'new' ? 'bg-teal-100' : 'bg-gray-100'}`}>
+                      <FiPlus className={`text-sm sm:text-lg ${uploadType === 'new' ? 'text-teal-700' : 'text-gray-500'}`} />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 text-sm sm:text-base">New Upload</h4>
@@ -1579,7 +1579,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     </div>
                   </div>
                   {uploadType === 'new' && (
-                    <div className="mt-2 text-xs sm:text-sm text-blue-700">
+                    <div className="mt-2 text-xs sm:text-sm text-teal-700">
                       <FiCheckCircle className="inline mr-1" />
                       Prevents duplicates by admission number
                     </div>
@@ -1590,13 +1590,13 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                   onClick={() => setUploadType('update')}
                   className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                     uploadType === 'update'
-                      ? 'border-blue-500 bg-blue-50 shadow-lg'
-                      : 'border-gray-300 hover:border-blue-300'
+                      ? 'border-teal-600 bg-teal-50 shadow-lg'
+                      : 'border-gray-300 hover:border-teal-300'
                   }`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'update' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      <FiDatabase className={`text-sm sm:text-lg ${uploadType === 'update' ? 'text-blue-600' : 'text-gray-500'}`} />
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${uploadType === 'update' ? 'bg-teal-100' : 'bg-gray-100'}`}>
+                      <FiDatabase className={`text-sm sm:text-lg ${uploadType === 'update' ? 'text-teal-700' : 'text-gray-500'}`} />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 text-sm sm:text-base">Update Upload</h4>
@@ -1604,7 +1604,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     </div>
                   </div>
                   {uploadType === 'update' && (
-                    <div className="mt-2 text-xs sm:text-sm text-blue-700">
+                    <div className="mt-2 text-xs sm:text-sm text-teal-700">
                       <FiCheckCircle className="inline mr-1" />
                       Replaces entire form batch safely
                     </div>
@@ -1626,8 +1626,8 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                       onClick={() => handleFormToggle(form)}
                       className={`p-2 sm:p-3 border-2 rounded-lg cursor-pointer transition-all duration-300 ${
                         selectedForms.includes(form)
-                          ? `border-blue-500 bg-gradient-to-r ${getFormColor(form)} text-white shadow-lg`
-                          : 'border-gray-300 hover:border-blue-300'
+                          ? `border-teal-600 bg-gradient-to-r ${getFormColor(form)} text-white shadow-lg`
+                          : 'border-gray-300 hover:border-teal-300'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -1636,7 +1636,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                           <FiCheckCircle className="text-white text-sm sm:text-base" />
                         )}
                       </div>
-                      <div className={`text-xs mt-0.5 sm:mt-1 ${selectedForms.includes(form) ? 'text-blue-100' : 'text-gray-500'}`}>
+                      <div className={`text-xs mt-0.5 sm:mt-1 ${selectedForms.includes(form) ? 'text-emerald-100' : 'text-gray-500'}`}>
                         Students will be added to {form}
                       </div>
                     </div>
@@ -1661,8 +1661,8 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                       onClick={() => setTargetForm(form)}
                       className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                         targetForm === form
-                          ? `border-blue-500 bg-gradient-to-r ${getFormColor(form)} text-white shadow-lg`
-                          : 'border-gray-300 hover:border-blue-300'
+                          ? `border-teal-600 bg-gradient-to-r ${getFormColor(form)} text-white shadow-lg`
+                          : 'border-gray-300 hover:border-teal-300'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -1672,7 +1672,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                           </div>
                           <div>
                             <h4 className="font-bold text-sm sm:text-base">{form}</h4>
-                            <p className={`text-xs sm:text-sm ${targetForm === form ? 'text-blue-100' : 'text-gray-500'}`}>
+                            <p className={`text-xs sm:text-sm ${targetForm === form ? 'text-emerald-100' : 'text-gray-500'}`}>
                               Replace all students in {form}
                             </p>
                           </div>
@@ -1683,12 +1683,12 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                   ))}
                 </div>
                 {targetForm && (
-                  <div className="mt-3 p-2 sm:p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="mt-3 p-2 sm:p-3 bg-teal-50 rounded-lg border border-teal-200">
                     <div className="flex items-start gap-2">
-                      <FiInfo className="text-blue-600 mt-0.5 text-sm sm:text-base" />
+                      <FiInfo className="text-teal-700 mt-0.5 text-sm sm:text-base" />
                       <div>
-                        <p className="text-xs sm:text-sm text-blue-800 font-bold">Update Strategy:</p>
-                        <ul className="text-xs text-blue-700 mt-1 space-y-0.5 sm:space-y-1">
+                        <p className="text-xs sm:text-sm text-teal-900 font-bold">Update Strategy:</p>
+                        <ul className="text-xs text-teal-800 mt-1 space-y-0.5 sm:space-y-1">
                           <li>• Matches students by admission number</li>
                           <li>• Updates existing records</li>
                           <li>• Creates new students if not exists</li>
@@ -1716,7 +1716,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
             <button
               onClick={handleConfirm}
               disabled={loading || (uploadType === 'new' && selectedForms.length === 0) || (uploadType === 'update' && !targetForm)}
-              className="flex-1 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-lg transition-all text-sm sm:text-base"
+              className="flex-1 py-2 sm:py-3 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 hover:shadow-lg transition-all text-sm sm:text-base"
             >
               {loading ? (
                 <>
@@ -1865,13 +1865,13 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                     onClick={() => setAction('skip')}
                     className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                       action === 'skip'
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-300 hover:border-blue-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-300 hover:border-teal-300'
                     }`}
                   >
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className={`p-1.5 sm:p-2 rounded-lg ${action === 'skip' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                        <FiCheckCircle className={`text-sm sm:text-base ${action === 'skip' ? 'text-blue-600' : 'text-gray-500'}`} />
+                      <div className={`p-1.5 sm:p-2 rounded-lg ${action === 'skip' ? 'bg-teal-100' : 'bg-gray-100'}`}>
+                        <FiCheckCircle className={`text-sm sm:text-base ${action === 'skip' ? 'text-teal-700' : 'text-gray-500'}`} />
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 text-sm sm:text-base">Skip Duplicates</h4>
@@ -1886,13 +1886,13 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                     onClick={() => setAction('replace')}
                     className={`p-3 sm:p-4 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
                       action === 'replace'
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-300 hover:border-blue-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-300 hover:border-teal-300'
                     }`}
                   >
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className={`p-1.5 sm:p-2 rounded-lg ${action === 'replace' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                        <FiDatabase className={`text-sm sm:text-base ${action === 'replace' ? 'text-blue-600' : 'text-gray-500'}`} />
+                      <div className={`p-1.5 sm:p-2 rounded-lg ${action === 'replace' ? 'bg-teal-100' : 'bg-gray-100'}`}>
+                        <FiDatabase className={`text-sm sm:text-base ${action === 'replace' ? 'text-teal-700' : 'text-gray-500'}`} />
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 text-sm sm:text-base">Replace Existing</h4>
@@ -1913,7 +1913,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                 {uploadType === 'new' ? (
                   <>
                     <li className="flex items-center gap-1.5 sm:gap-2">
-                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full"></div>
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full"></div>
                       <span>Total students in file: {duplicates.length + (duplicates.length * 2)}</span>
                     </li>
                     <li className="flex items-center gap-1.5 sm:gap-2">
@@ -1928,7 +1928,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                 ) : (
                   <>
                     <li className="flex items-center gap-1.5 sm:gap-2">
-                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full"></div>
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full"></div>
                       <span>Updating form: {targetForm}</span>
                     </li>
                     <li className="flex items-center gap-1.5 sm:gap-2">
@@ -1936,7 +1936,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                       <span>Students to update: {duplicates.length}</span>
                     </li>
                     <li className="flex items-center gap-1.5 sm:gap-2">
-                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-500 rounded-full"></div>
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-600 rounded-full"></div>
                       <span>Existing students not in file will be marked inactive</span>
                     </li>
                   </>
@@ -1959,7 +1959,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
             <button
               onClick={() => onProceed(action)}
               disabled={loading}
-              className="flex-1 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all disabled:opacity-50 text-sm sm:text-base"
+              className="flex-1 py-2 sm:py-3 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all disabled:opacity-50 text-sm sm:text-base"
             >
               {loading ? (
                 <>
@@ -2810,9 +2810,9 @@ const downloadExcelTemplate = () => {
 
   const getFormBgColor = (form) => {
   const themes = {
-    'Form 1': 'bg-gradient-to-b from-emerald-500 to-green-500',
-    'Form 2': 'bg-gradient-to-b from-blue-500 to-indigo-500',
-    'Form 3': 'bg-gradient-to-b from-indigo-500 to-purple-500',
+    'Form 1': 'bg-gradient-to-b from-teal-500 to-teal-700',
+    'Form 2': 'bg-gradient-to-b from-emerald-500 to-emerald-700',
+    'Form 3': 'bg-gradient-to-b from-emerald-600 to-green-700',
     'Form 4': 'bg-gradient-to-b from-rose-500 to-pink-500',
   };
   return themes[form] || 'bg-gradient-to-b from-slate-500 to-gray-500';
@@ -2828,7 +2828,7 @@ const downloadExcelTemplate = () => {
       <CustomToaster />
 
       {/* Welcome Section */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-2xl p-8 text-white overflow-hidden">
+      <div className="relative bg-gradient-to-r from-teal-700 via-emerald-700 to-teal-900 rounded-2xl p-8 text-white overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-white/20 rounded-2xl">
@@ -2836,7 +2836,7 @@ const downloadExcelTemplate = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">Student Bulk Upload & Analytics</h1>
-              <p className="text-blue-100 text-lg mt-2 max-w-2xl">
+              <p className="text-emerald-100 text-lg mt-2 max-w-2xl">
                 Comprehensive student management with structured upload strategy, 
                 duplicate prevention, and real-time analytics.
               </p>
@@ -2850,7 +2850,7 @@ const downloadExcelTemplate = () => {
                 loadStats();
               }}
               disabled={loading}
-              className="bg-white text-blue-600 px-6 py-3 rounded-xl font-bold text-base flex items-center gap-2 shadow-lg disabled:opacity-60 hover:shadow-xl transition-all duration-300"
+              className="bg-white text-teal-700 px-6 py-3 rounded-xl font-bold text-base flex items-center gap-2 shadow-lg disabled:opacity-60 hover:shadow-xl transition-all duration-300"
             >
               {loading ? (
                 <CircularProgress size={16} color="inherit" thickness={6} />
@@ -2879,8 +2879,8 @@ const downloadExcelTemplate = () => {
             onClick={() => setView('upload')}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'upload'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiUpload className="text-sm" />
@@ -2893,8 +2893,8 @@ const downloadExcelTemplate = () => {
             }}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'students'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiUsers className="text-sm" />
@@ -2907,8 +2907,8 @@ const downloadExcelTemplate = () => {
             }}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'demographics'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiPieChart className="text-sm" />
@@ -2921,8 +2921,8 @@ const downloadExcelTemplate = () => {
             }}
             className={`px-6 py-3 rounded-xl font-bold flex items-center gap-3 text-base transition-all duration-300 ${
               view === 'history'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-xl'
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-xl'
+                : 'text-gray-700 hover:text-teal-700'
             }`}
           >
             <FiClock className="text-sm" />
@@ -2940,14 +2940,14 @@ const downloadExcelTemplate = () => {
                 title="Total Students"
                 value={stats.totalStudents}
                 icon={FiUsers}
-                color="from-purple-500 to-purple-700"
+                color="from-emerald-600 to-emerald-800"
                 trend={8.5}
               />
               <StudentStatisticsCard
                 title="Form 1 Students"
                 value={stats.globalStats?.form1 || 0}
                 icon={IoSchool}
-                color="from-blue-500 to-blue-700"
+                color="from-teal-600 to-teal-800"
                 trend={5.2}
               />
               <StudentStatisticsCard
@@ -2962,7 +2962,7 @@ const downloadExcelTemplate = () => {
                 value={demographics.gender?.length > 0 ? 
                   `${((demographics.gender.find(g => g.name === 'Male')?.value || 0) / stats.totalStudents * 100).toFixed(1)}%` : '0%'}
                 icon={FiPercent}
-                color="from-indigo-500 to-indigo-700"
+                color="from-emerald-600 to-green-700"
                 trend={2.1}
               />
             </div>
@@ -2970,14 +2970,14 @@ const downloadExcelTemplate = () => {
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-8">
                 {/* Upload Strategy Info */}
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-300">
+                <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl p-6 border-2 border-emerald-300">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-bold text-blue-900 flex items-center gap-3">
-                      <FiLayers className="text-blue-700 text-2xl" />
+                    <h3 className="text-xl font-bold text-emerald-900 flex items-center gap-3">
+                      <FiLayers className="text-emerald-700 text-2xl" />
                       Upload Strategy
                     </h3>
                     {uploadStrategy && (
-                      <span className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm">
+                      <span className="px-4 py-2 bg-teal-700 text-white rounded-lg font-bold text-sm">
                         {uploadStrategy.uploadType === 'new' 
                           ? `New Upload for ${uploadStrategy.selectedForms.join(', ')}`
                           : `Update Upload for ${uploadStrategy.targetForm}`
@@ -2988,15 +2988,15 @@ const downloadExcelTemplate = () => {
                   
                   {!uploadStrategy ? (
                     <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <FiUpload className="text-blue-600 text-2xl" />
+                      <div className="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <FiUpload className="text-teal-700 text-2xl" />
                       </div>
-                      <p className="text-blue-800 font-bold text-lg mb-4">
+                      <p className="text-teal-800 font-bold text-lg mb-4">
                         No upload strategy selected
                       </p>
                       <button
                         onClick={() => setShowStrategyModal(true)}
-                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl font-bold flex items-center gap-3 mx-auto hover:shadow-xl transition-all duration-300"
+                        className="px-6 py-3 bg-gradient-to-r from-teal-700 to-emerald-800 text-white rounded-xl font-bold flex items-center gap-3 mx-auto hover:shadow-xl transition-all duration-300"
                       >
                         <FiSettings className="text-base" />
                         Select Upload Strategy
@@ -3005,13 +3005,13 @@ const downloadExcelTemplate = () => {
                   ) : (
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-white rounded-xl p-4 border border-blue-200">
+                        <div className="bg-white rounded-xl p-4 border border-emerald-200">
                           <h4 className="font-bold text-gray-900 mb-2">Upload Type</h4>
                           <div className="flex items-center gap-2">
                             <div className={`p-2 rounded-lg ${
                               uploadStrategy.uploadType === 'new' 
-                                ? 'bg-blue-100 text-blue-700' 
-                                : 'bg-purple-100 text-purple-700'
+                                ? 'bg-teal-100 text-teal-800' 
+                                : 'bg-emerald-100 text-emerald-800'
                             }`}>
                               {uploadStrategy.uploadType === 'new' ? <FiPlus /> : <FiDatabase />}
                             </div>
@@ -3021,7 +3021,7 @@ const downloadExcelTemplate = () => {
                           </div>
                         </div>
                         
-                        <div className="bg-white rounded-xl p-4 border border-blue-200">
+                        <div className="bg-white rounded-xl p-4 border border-emerald-200">
                           <h4 className="font-bold text-gray-900 mb-2">Target Forms</h4>
                           <div className="flex flex-wrap gap-2">
                             {uploadStrategy.uploadType === 'new' 
@@ -3040,7 +3040,7 @@ const downloadExcelTemplate = () => {
                         </div>
                       </div>
                       
-                      <div className="bg-white rounded-xl p-4 border border-blue-200">
+                      <div className="bg-white rounded-xl p-4 border border-emerald-200">
                         <h4 className="font-bold text-gray-900 mb-2">Strategy Details</h4>
                         <ul className="text-sm text-gray-700 space-y-1">
                           {uploadStrategy.uploadType === 'new' ? (
@@ -3080,7 +3080,7 @@ const downloadExcelTemplate = () => {
                       <div className="flex gap-3">
                         <button
                           onClick={() => setShowStrategyModal(true)}
-                          className="px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:border-blue-500 hover:text-blue-600 transition-all duration-300"
+                          className="px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-lg font-bold hover:border-teal-600 hover:text-teal-700 transition-all duration-300"
                         >
                           Change Strategy
                         </button>
@@ -3108,9 +3108,9 @@ const downloadExcelTemplate = () => {
                   <div className="bg-white rounded-2xl p-6 border-2 border-gray-300 shadow-2xl">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                       <div className="flex items-center gap-6">
-                        <div className="p-4 bg-gradient-to-r from-blue-100 to-blue-200 rounded-2xl">
+                        <div className="p-4 bg-gradient-to-r from-teal-100 to-teal-200 rounded-2xl">
                           {file.name.endsWith('.csv') ? (
-                            <FiFile className="text-blue-700 text-3xl" />
+                            <FiFile className="text-teal-800 text-3xl" />
                           ) : (
                             <IoDocumentText className="text-green-700 text-3xl" />
                           )}
@@ -3173,7 +3173,7 @@ const downloadExcelTemplate = () => {
                       onClick={downloadCSVTemplate}
                       className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
                     >
-                      <FiFile className="text-blue-600 text-2xl" />
+                      <FiFile className="text-teal-700 text-2xl" />
                       <span className="font-bold text-gray-900 text-base">CSV Template</span>
                     </button>
                     <button
@@ -3187,55 +3187,55 @@ const downloadExcelTemplate = () => {
                 </div>
 
                 {/* Guidelines Section */}
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-300 p-6 shadow-xl">
-                  <h3 className="text-xl font-bold text-blue-900 mb-6">Upload Guidelines</h3>
+                <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl border-2 border-teal-300 p-6 shadow-xl">
+                  <h3 className="text-xl font-bold text-teal-900 mb-6">Upload Guidelines</h3>
                   <ul className="space-y-4">
                     <li className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-700 font-bold text-base">1</span>
+                      <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-teal-800 font-bold text-base">1</span>
                       </div>
-                      <span className="text-blue-800 font-semibold text-base">Select upload strategy first (New or Update)</span>
+                      <span className="text-teal-800 font-semibold text-base">Select upload strategy first (New or Update)</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-700 font-bold text-base">2</span>
+                      <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-teal-800 font-bold text-base">2</span>
                       </div>
-                      <span className="text-blue-800 font-semibold text-base">Admission numbers must be unique (4-10 digits)</span>
+                      <span className="text-teal-800 font-semibold text-base">Admission numbers must be unique (4-10 digits)</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-700 font-bold text-base">3</span>
+                      <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-teal-800 font-bold text-base">3</span>
                       </div>
-                      <span className="text-blue-800 font-semibold text-base">For updates, only students in selected form will be processed</span>
+                      <span className="text-teal-800 font-semibold text-base">For updates, only students in selected form will be processed</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-700 font-bold text-base">4</span>
+                      <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-teal-800 font-bold text-base">4</span>
                       </div>
-                      <span className="text-blue-800 font-semibold text-base">System checks for duplicates before uploading</span>
+                      <span className="text-teal-800 font-semibold text-base">System checks for duplicates before uploading</span>
                     </li>
                   </ul>
                 </div>
 
                 {/* Quick Stats */}
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl border-2 border-purple-300 p-6 shadow-xl">
-                  <h3 className="text-xl font-bold text-purple-900 mb-6">Quick Stats</h3>
+                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl border-2 border-emerald-300 p-6 shadow-xl">
+                  <h3 className="text-xl font-bold text-emerald-900 mb-6">Quick Stats</h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-purple-800 font-bold">Total Forms</span>
-                      <span className="text-2xl font-bold text-purple-700">4</span>
+                      <span className="text-emerald-800 font-bold">Total Forms</span>
+                      <span className="text-2xl font-bold text-emerald-700">4</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-purple-800 font-bold">Unique Identifier</span>
-                      <span className="font-bold text-purple-700">Admission #</span>
+                      <span className="text-emerald-800 font-bold">Unique Identifier</span>
+                      <span className="font-bold text-emerald-700">Admission #</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-purple-800 font-bold">Max File Size</span>
-                      <span className="font-bold text-purple-700">10 MB</span>
+                      <span className="text-emerald-800 font-bold">Max File Size</span>
+                      <span className="font-bold text-emerald-700">10 MB</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-purple-800 font-bold">Supported Formats</span>
-                      <span className="font-bold text-purple-700">CSV, Excel</span>
+                      <span className="text-emerald-800 font-bold">Supported Formats</span>
+                      <span className="font-bold text-emerald-700">CSV, Excel</span>
                     </div>
                   </div>
                 </div>
@@ -3267,7 +3267,7 @@ const downloadExcelTemplate = () => {
                       onChange={(e) => handleFilterChange('search', e.target.value)}
                       onKeyDown={handleSearch}
                       placeholder="Search students by name, admission number, email, or address"
-                      className="w-full pl-14 pr-4 py-4 bg-white border-2 border-gray-400 rounded-2xl focus:ring-4 focus:ring-blue-500 focus:border-blue-600 transition-all duration-300 text-base"
+                      className="w-full pl-14 pr-4 py-4 bg-white border-2 border-gray-400 rounded-2xl focus:ring-4 focus:ring-teal-600 focus:border-teal-700 transition-all duration-300 text-base"
                     />
                   </div>
                 </div>
@@ -3275,7 +3275,7 @@ const downloadExcelTemplate = () => {
                 <div className="flex items-center gap-4 w-full lg:w-auto mt-4 lg:mt-0">
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex-1 lg:flex-none px-6 py-4 bg-white border-2 border-gray-400 rounded-2xl text-gray-700 font-bold flex items-center justify-center gap-3 text-base hover:border-blue-500 hover:text-blue-600 transition-all duration-300"
+                    className="flex-1 lg:flex-none px-6 py-4 bg-white border-2 border-gray-400 rounded-2xl text-gray-700 font-bold flex items-center justify-center gap-3 text-base hover:border-teal-600 hover:text-teal-700 transition-all duration-300"
                   >
                     <FiFilter />
                     {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -3284,13 +3284,13 @@ const downloadExcelTemplate = () => {
                   <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-2xl">
                     <button
                       onClick={() => setDisplayMode('grid')}
-                      className={`p-3 rounded-xl transition-all duration-300 ${displayMode === 'grid' ? 'bg-white text-blue-700 shadow-lg' : 'text-gray-600 hover:text-blue-600'}`}
+                      className={`p-3 rounded-xl transition-all duration-300 ${displayMode === 'grid' ? 'bg-white text-teal-800 shadow-lg' : 'text-gray-600 hover:text-teal-700'}`}
                     >
                       <FiGrid size={18} />
                     </button>
                     <button
                       onClick={() => setDisplayMode('list')}
-                      className={`p-3 rounded-xl transition-all duration-300 ${displayMode === 'list' ? 'bg-white text-blue-700 shadow-lg' : 'text-gray-600 hover:text-blue-600'}`}
+                      className={`p-3 rounded-xl transition-all duration-300 ${displayMode === 'list' ? 'bg-white text-teal-800 shadow-lg' : 'text-gray-600 hover:text-teal-700'}`}
                     >
                       <FiList size={18} />
                     </button>
@@ -3299,7 +3299,7 @@ const downloadExcelTemplate = () => {
                   <button
                     onClick={() => handleSearch({ type: 'click' })}
                     disabled={loading}
-                    className="flex-1 lg:flex-none px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl font-bold flex items-center justify-center gap-3 text-base shadow-xl disabled:opacity-50 hover:shadow-2xl transition-all duration-300"
+                    className="flex-1 lg:flex-none px-6 py-4 bg-gradient-to-r from-teal-700 to-emerald-800 text-white rounded-2xl font-bold flex items-center justify-center gap-3 text-base shadow-xl disabled:opacity-50 hover:shadow-2xl transition-all duration-300"
                   >
                     {loading ? (
                       <>
@@ -3416,7 +3416,7 @@ const downloadExcelTemplate = () => {
     <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white backdrop-blur-sm">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 shadow-lg">
             <FiUsers className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -3432,7 +3432,7 @@ const downloadExcelTemplate = () => {
           <button
             onClick={() => loadStudents(pagination.page)}
             disabled={loading}
-            className="group px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-semibold flex items-center gap-3 text-sm shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-300"
+            className="group px-5 py-3 bg-gradient-to-r from-teal-700 to-emerald-700 hover:from-teal-800 hover:to-emerald-800 text-white rounded-2xl font-semibold flex items-center gap-3 text-sm shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-300"
           >
             {loading ? (
               <CircularProgress size={16} className="text-white" />
@@ -3454,15 +3454,15 @@ const downloadExcelTemplate = () => {
             <th className="sticky top-0 z-10 px-6 py-5 text-left">
               <button
                 onClick={() => handleSort('firstName')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-blue-600 transition-colors"
+                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
               >
                 <div className="flex items-center gap-1.5">
                   Student
                   {filters.sortBy === 'firstName' ? (
                     filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-blue-500" />
+                      <FiChevronUp className="w-3 h-3 text-teal-600" />
                     ) : (
-                      <FiChevronDown className="w-3 h-3 text-blue-500" />
+                      <FiChevronDown className="w-3 h-3 text-teal-600" />
                     )
                   ) : (
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -3477,15 +3477,15 @@ const downloadExcelTemplate = () => {
             <th className="sticky top-0 z-10 px-6 py-5 text-left">
               <button
                 onClick={() => handleSort('form')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-blue-600 transition-colors"
+                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
               >
                 <div className="flex items-center gap-1.5">
                   Form
                   {filters.sortBy === 'form' ? (
                     filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-blue-500" />
+                      <FiChevronUp className="w-3 h-3 text-teal-600" />
                     ) : (
-                      <FiChevronDown className="w-3 h-3 text-blue-500" />
+                      <FiChevronDown className="w-3 h-3 text-teal-600" />
                     )
                   ) : (
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -3500,15 +3500,15 @@ const downloadExcelTemplate = () => {
             <th className="sticky top-0 z-10 px-6 py-5 text-left">
               <button
                 onClick={() => handleSort('stream')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-blue-600 transition-colors"
+                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
               >
                 <div className="flex items-center gap-1.5">
                   Stream
                   {filters.sortBy === 'stream' ? (
                     filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-blue-500" />
+                      <FiChevronUp className="w-3 h-3 text-teal-600" />
                     ) : (
-                      <FiChevronDown className="w-3 h-3 text-blue-500" />
+                      <FiChevronDown className="w-3 h-3 text-teal-600" />
                     )
                   ) : (
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -3523,15 +3523,15 @@ const downloadExcelTemplate = () => {
             <th className="sticky top-0 z-10 px-6 py-5 text-left">
               <button
                 onClick={() => handleSort('status')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-blue-600 transition-colors"
+                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
               >
                 <div className="flex items-center gap-1.5">
                   Status
                   {filters.sortBy === 'status' ? (
                     filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-blue-500" />
+                      <FiChevronUp className="w-3 h-3 text-teal-600" />
                     ) : (
-                      <FiChevronDown className="w-3 h-3 text-blue-500" />
+                      <FiChevronDown className="w-3 h-3 text-teal-600" />
                     )
                   ) : (
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -3553,13 +3553,13 @@ const downloadExcelTemplate = () => {
           {students.map((student, index) => (
             <tr
               key={student.id}
-              className="group hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-emerald-50/30 transition-all duration-300"
+              className="group hover:bg-gradient-to-r hover:from-teal-50/30 hover:to-emerald-50/30 transition-all duration-300"
             >
               {/* Student Cell */}
               <td className="px-6 py-5">
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center shadow-lg">
                       <FiUser className="w-5 h-5 text-white" />
                     </div>
                     <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
@@ -3567,7 +3567,7 @@ const downloadExcelTemplate = () => {
                   
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      <h4 className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors">
                         {student.firstName} {student.middleName ? `${student.middleName} ` : ''}{student.lastName}
                       </h4>
                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded-full">
@@ -3594,7 +3594,7 @@ const downloadExcelTemplate = () => {
               {/* Stream Cell */}
               <td className="px-6 py-5">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-indigo-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
                   <span className="font-semibold text-gray-800">
                     {student.stream || <span className="text-gray-400">—</span>}
                   </span>
@@ -3616,7 +3616,7 @@ const downloadExcelTemplate = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedStudent(student)}
-                    className="group/btn flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 text-blue-700 hover:text-blue-800 font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow"
+                    className="group/btn flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-50 to-teal-100 hover:from-teal-100 hover:to-teal-200 text-teal-800 hover:text-teal-900 font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow"
                   >
                     <FiEye className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
                     View
@@ -3643,7 +3643,7 @@ const downloadExcelTemplate = () => {
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center shadow-lg">
                   <FiUser className="w-5 h-5 text-white" />
                 </div>
                 <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
@@ -3675,7 +3675,7 @@ const downloadExcelTemplate = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setSelectedStudent(student)}
-              className="flex-1 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold text-sm"
+              className="flex-1 py-2.5 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-semibold text-sm"
             >
               View Profile
             </button>
@@ -3699,7 +3699,7 @@ const downloadExcelTemplate = () => {
                     {(filters.search || filters.form || filters.stream) && (
                       <button
                         onClick={handleClearFilters}
-                        className="text-blue-600 font-bold text-lg hover:text-blue-800 transition-colors"
+                        className="text-teal-700 font-bold text-lg hover:text-teal-900 transition-colors"
                       >
                         Clear filters to see all students
                       </button>
@@ -3716,7 +3716,7 @@ const downloadExcelTemplate = () => {
                       <button
                         onClick={() => handlePageChange(pagination.page - 1)}
                         disabled={pagination.page === 1}
-                        className="p-3 rounded-xl border-2 border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:border-blue-500 hover:text-blue-600 transition-colors"
+                        className="p-3 rounded-xl border-2 border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:border-teal-600 hover:text-teal-700 transition-colors"
                       >
                         <FiArrowLeft className="text-base" />
                       </button>
@@ -3737,8 +3737,8 @@ const downloadExcelTemplate = () => {
                             onClick={() => handlePageChange(pageNum)}
                             className={`w-12 h-12 rounded-xl font-bold text-sm transition-all duration-300 ${
                               pagination.page === pageNum
-                                ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-2xl'
-                                : 'border-2 border-gray-400 hover:border-blue-500 hover:text-blue-600'
+                                ? 'bg-gradient-to-r from-teal-700 to-emerald-800 text-white shadow-2xl'
+                                : 'border-2 border-gray-400 hover:border-teal-600 hover:text-teal-700'
                             }`}
                           >
                             {pageNum}
@@ -3748,7 +3748,7 @@ const downloadExcelTemplate = () => {
                       <button
                         onClick={() => handlePageChange(pagination.page + 1)}
                         disabled={pagination.page === pagination.pages}
-                        className="p-3 rounded-xl border-2 border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:border-blue-500 hover:text-blue-600 transition-colors"
+                        className="p-3 rounded-xl border-2 border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:border-teal-600 hover:text-teal-700 transition-colors"
                       >
                         <FiArrowRight className="text-base" />
                       </button>
@@ -3768,7 +3768,7 @@ const downloadExcelTemplate = () => {
                 title="Total Students"
                 value={stats.totalStudents}
                 icon={FiUsers}
-                color="from-purple-500 to-purple-700"
+                color="from-emerald-600 to-emerald-800"
                 trend={8.5}
               />
               <StudentStatisticsCard
@@ -3782,7 +3782,7 @@ const downloadExcelTemplate = () => {
                 title="Male Students"
                 value={demographics.gender?.find(g => g.name === 'Male')?.value || 0}
                 icon={FiUser}
-                color="from-blue-500 to-blue-700"
+                color="from-teal-600 to-teal-800"
                 trend={5.2}
               />
               <StudentStatisticsCard
@@ -3943,8 +3943,8 @@ const downloadExcelTemplate = () => {
                         <tr key={upload.id} className="bg-white hover:bg-gray-50 transition-colors">
                           <td className="px-8 py-6">
                             <div className="flex items-center gap-4">
-                              <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl">
-                                <FiFile className="text-blue-700 text-xl" />
+                              <div className="p-4 bg-gradient-to-r from-teal-50 to-teal-100 rounded-2xl">
+                                <FiFile className="text-teal-800 text-xl" />
                               </div>
                               <div>
                                 <div className="font-bold text-gray-900 text-base truncate max-w-[250px] lg:max-w-md">
@@ -3963,8 +3963,8 @@ const downloadExcelTemplate = () => {
                                   <div className="mt-2">
                                     <span className={`px-2 py-1 rounded text-xs font-bold ${
                                       upload.metadata.uploadType === 'new' 
-                                        ? 'bg-blue-100 text-blue-700' 
-                                        : 'bg-purple-100 text-purple-700'
+                                        ? 'bg-teal-100 text-teal-800' 
+                                        : 'bg-emerald-100 text-emerald-800'
                                     }`}>
                                       {upload.metadata.uploadType === 'new' ? 'New Upload' : 'Update Upload'}
                                     </span>

@@ -99,7 +99,7 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
               r="20"
             />
             <circle 
-              className="text-blue-600" 
+              className="text-teal-600" 
               stroke="currentColor" 
               strokeWidth={thickness} 
               strokeLinecap="round" 
@@ -114,7 +114,7 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
           </>
         ) : (
           <circle 
-            className="text-blue-600" 
+            className="text-teal-600" 
             stroke="currentColor" 
             strokeWidth={thickness} 
             strokeLinecap="round" 
@@ -297,12 +297,12 @@ function Notification({
         };
       case 'info':
         return {
-          bg: 'from-blue-50 to-cyan-50',
-          border: 'border-blue-200',
-          icon: 'text-blue-600',
-          iconBg: 'bg-blue-100',
-          progress: 'bg-blue-500',
-          title: 'text-blue-800'
+          bg: 'from-emerald-50 to-teal-50',
+          border: 'border-teal-200',
+          icon: 'text-teal-700',
+          iconBg: 'bg-teal-100',
+          progress: 'bg-teal-600',
+          title: 'text-teal-800'
         };
       default:
         return {
@@ -363,10 +363,10 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'completed': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'bg-green-500' };
-      case 'in progress': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200', icon: 'bg-blue-500' };
+      case 'in progress': return { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-200', icon: 'bg-teal-600' };
       case 'pending': return { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-200', icon: 'bg-yellow-500' };
       case 'overdue': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'bg-red-500' };
-      case 'assigned': return { bg: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-200', icon: 'bg-indigo-500' };
+      case 'assigned': return { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-200', icon: 'bg-emerald-600' };
       default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'bg-gray-500' };
     }
   };
@@ -376,7 +376,7 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
     switch (priority?.toLowerCase()) {
       case 'high': return { bg: 'bg-red-100', text: 'text-red-800' };
       case 'medium': return { bg: 'bg-orange-100', text: 'text-orange-800' };
-      case 'low': return { bg: 'bg-blue-100', text: 'text-blue-800' };
+      case 'low': return { bg: 'bg-teal-100', text: 'text-teal-800' };
       default: return { bg: 'bg-gray-100', text: 'text-gray-800' };
     }
   };
@@ -415,10 +415,10 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
           <div className="flex justify-between items-start">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="bg-indigo-600 text-white p-1.5 rounded-lg">
+                <span className="bg-teal-700 text-white p-1.5 rounded-lg">
                   <FiClipboard size={16} />
                 </span>
-                <span className="text-xs font-black uppercase tracking-widest text-indigo-600/70">Academic Assignment</span>
+                <span className="text-xs font-black uppercase tracking-widest text-teal-700/70">Academic Assignment</span>
               </div>
               <h1 className="text-3xl font-black text-slate-900 tracking-tight">
                 {assignment.title}
@@ -439,7 +439,7 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
               {assignment.status?.charAt(0).toUpperCase() + assignment.status?.slice(1) || 'Pending'}
             </div>
             {assignment.priority && (
-              <div className="px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-purple-50 to-pink-50 text-purple-600 border border-purple-100">
+              <div className="px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-emerald-50 to-teal-50 text-teal-700 border border-teal-100">
                 {assignment.priority} Priority
               </div>
             )}
@@ -466,7 +466,7 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
               {/* Description Section */}
               <section className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700">
                     <IoDocumentTextOutline />
                   </div>
                   <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">Assignment Description</h3>
@@ -482,12 +482,12 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
               {assignment.instructions && (
                 <section className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                    <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-700">
                       <FiBookOpen />
                     </div>
                     <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">Instructions</h3>
                   </div>
-                  <div className="bg-blue-50/50 p-6 rounded-[24px] border border-blue-100">
+                  <div className="bg-teal-50/50 p-6 rounded-[24px] border border-teal-100">
                     <p className="text-slate-600 leading-relaxed text-base">
                       {assignment.instructions}
                     </p>
@@ -512,8 +512,8 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
                       const fileExt = fileName.split('.').pop()?.toLowerCase();
                       
                       return (
-                        <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 group">
-                          <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                        <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 hover:border-teal-500/30 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 group">
+                          <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 group-hover:bg-teal-700 group-hover:text-white transition-colors">
                             {getFileIcon(fileExt)}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -600,20 +600,20 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
 
                 {/* Learning Objectives Card */}
                 {assignment.learningObjectives?.length > 0 && (
-                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-[24px] p-6 border border-purple-100">
+                  <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-[24px] p-6 border border-teal-100">
                     <div className="flex items-center gap-2 mb-4">
-                      <FiTarget className="text-purple-600" />
-                      <h3 className="text-sm font-bold text-purple-900">Learning Objectives</h3>
+                      <FiTarget className="text-teal-700" />
+                      <h3 className="text-sm font-bold text-teal-900">Learning Objectives</h3>
                     </div>
                     <div className="space-y-3">
                       {assignment.learningObjectives.slice(0, 3).map((objective, idx) => (
                         <div key={idx} className="flex items-start gap-2">
-                          <FiCheck className="text-purple-500 mt-1 flex-shrink-0" size={12} />
-                          <p className="text-xs text-purple-800 font-medium">{objective}</p>
+                          <FiCheck className="text-teal-600 mt-1 flex-shrink-0" size={12} />
+                          <p className="text-xs text-teal-800 font-medium">{objective}</p>
                         </div>
                       ))}
                       {assignment.learningObjectives.length > 3 && (
-                        <p className="text-[10px] font-bold text-purple-600/70 uppercase tracking-wider mt-2">
+                        <p className="text-[10px] font-bold text-teal-700/70 uppercase tracking-wider mt-2">
                           +{assignment.learningObjectives.length - 3} more objectives
                         </p>
                       )}
@@ -633,12 +633,12 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
           >
             Dismiss
           </button>
-          <button 
-            onClick={() => onEdit(assignment)}
-            className="flex items-center justify-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black transition-all duration-300 shadow-lg shadow-slate-200"
-          >
-            <FiEdit size={18} /> Edit Assignment
-          </button>
+            <button 
+              onClick={() => onEdit(assignment)}
+              className="flex items-center justify-center gap-3 bg-slate-900 hover:bg-teal-700 text-white px-10 py-4 rounded-2xl font-black transition-all duration-300 shadow-lg shadow-slate-200"
+            >
+              <FiEdit size={18} /> Edit Assignment
+            </button>
         </div>
       </Box>
     </Modal>
@@ -998,14 +998,14 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
         borderRadius: 3,
         boxShadow: 24,
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, #f8fafc 0%, #faf5ff 100%)'
+        background: 'linear-gradient(135deg, #f8fafc 0%, #ecfdf5 100%)'
       }}>
    {/* Modern Assignment Modal Header */}
-<div className="group relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 text-white overflow-hidden">
+ <div className="group relative bg-gradient-to-br from-teal-700 via-emerald-700 to-green-700 p-6 text-white overflow-hidden">
   
   {/* Animated Gradient Orbs */}
   <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-white/20 to-transparent rounded-full blur-3xl animate-pulse" />
-  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-pink-400/20 to-transparent rounded-full blur-3xl animate-pulse delay-1000" />
+  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-3xl animate-pulse delay-1000" />
   
   {/* Floating Particles */}
   <div className="absolute inset-0 opacity-10">
@@ -1055,7 +1055,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
           {/* Title with Gradient */}
           <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-tight">
             {assignment ? 'Edit' : 'Create'}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-pink-100">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-teal-100">
               Assignment
             </span>
           </h2>
@@ -1325,7 +1325,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                     type="button"
                     onClick={handleAddObjective}
                     disabled={loading || !newObjective.trim()}
-                    className="px-4 py-3 bg-purple-600 text-white rounded-xl font-bold disabled:opacity-50"
+                    className="px-4 py-3 bg-teal-700 text-white rounded-xl font-bold disabled:opacity-50"
                   >
                     Add
                   </button>
@@ -1334,9 +1334,9 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 {learningObjectives.length > 0 && (
                   <div className="space-y-2 max-h-40 overflow-y-auto">
                     {learningObjectives.map((objective, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-purple-50 rounded-xl border border-purple-200">
+                      <div key={index} className="flex items-center justify-between p-3 bg-teal-50 rounded-xl border border-teal-200">
                         <div className="flex items-center gap-2">
-                          <FiCheckCircle className="text-purple-500" />
+                          <FiCheckCircle className="text-teal-600" />
                           <span className="text-sm font-medium text-gray-800">{objective}</span>
                         </div>
                         <button
@@ -1403,7 +1403,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
             </div>
 
             {/* File Upload Section */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200">
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-teal-200">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
                   <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1474,7 +1474,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 <div className="relative w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                   <div 
                     className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out ${
-                      totalSizeMB > 4.5 ? 'bg-red-500' : totalSizeMB > 3.5 ? 'bg-amber-500' : 'bg-indigo-600'
+                      totalSizeMB > 4.5 ? 'bg-red-500' : totalSizeMB > 3.5 ? 'bg-amber-500' : 'bg-teal-700'
                     }`}
                     style={{ width: `${Math.min((totalSizeMB / 4.5) * 100, 100)}%` }}
                   />
@@ -1495,13 +1495,13 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                     className={`cursor-pointer w-full py-12 border-2 border-dashed rounded-[32px] flex flex-col items-center justify-center text-center px-6 transition-all duration-300 ${
                       totalSizeMB > 4.5
                         ? 'border-slate-200 bg-slate-50/50 opacity-50 cursor-not-allowed'
-                        : 'border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/30'
+                        : 'border-slate-200 bg-white hover:border-teal-400 hover:bg-teal-50/30'
                     }`}
                   >
                     <div className={`p-5 rounded-3xl mb-4 transition-all duration-300 ${
                       totalSizeMB > 4.5 
                         ? 'bg-slate-100 text-slate-400' 
-                        : 'bg-slate-50 text-indigo-600 group-hover:scale-110 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-indigo-100'
+                        : 'bg-slate-50 text-teal-700 group-hover:scale-110 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-teal-100'
                     }`}>
                       <FiUpload size={32} />
                     </div>
@@ -1536,7 +1536,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                           >
                             <div className="flex items-center gap-4 min-w-0">
                               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                                file.isExisting ? 'bg-indigo-50 text-indigo-600' : 'bg-emerald-50 text-emerald-600'
+                                file.isExisting ? 'bg-teal-50 text-teal-700' : 'bg-emerald-50 text-emerald-700'
                               }`}>
                                 <FiFileText size={20} />
                               </div>
@@ -1546,7 +1546,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
                                   <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
-                                    file.isExisting ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'
+                                    file.isExisting ? 'bg-teal-100 text-teal-800' : 'bg-emerald-100 text-emerald-800'
                                   }`}>
                                     {file.isExisting ? 'Cloud' : 'New'}
                                   </span>
@@ -1578,7 +1578,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                           >
                             <div className="flex items-center gap-4 min-w-0">
                               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                                file.isExisting ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'
+                                file.isExisting ? 'bg-teal-50 text-teal-700' : 'bg-amber-50 text-amber-700'
                               }`}>
                                 <FiPaperclip size={20} />
                               </div>
@@ -1588,7 +1588,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
                                   <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
-                                    file.isExisting ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'
+                                    file.isExisting ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800'
                                   }`}>
                                     {file.isExisting ? 'Cloud' : 'New'}
                                   </span>
@@ -1629,7 +1629,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               <button 
                 type="submit"
                 disabled={loading || totalSizeMB > 4.5 || !formData.title.trim() || !formData.subject || !formData.className || !formData.dueDate}
-                className="px-6 py-3 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-sm hover:from-indigo-700 hover:to-purple-700 transition-all"
+                className="px-6 py-3 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 bg-gradient-to-r from-teal-700 to-emerald-700 text-sm hover:from-teal-800 hover:to-emerald-800 transition-all"
               >
                 {loading ? (
                   <>
@@ -2301,7 +2301,7 @@ export default function AssignmentsManager() {
                 onClick={() => paginate(page)}
                 className={`px-3 py-2 rounded-xl font-bold ${
                   currentPage === page
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg'
                     : 'text-gray-700'
                 }`}
               >
@@ -2325,7 +2325,7 @@ export default function AssignmentsManager() {
   // Loading state
   if (loading && assignments.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-50 via-indigo-50 to-purple-50">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50">
         <div className="text-center">
           <Spinner size={48} />
           <p className="text-gray-700 text-lg mt-4 font-medium">
@@ -2340,7 +2340,7 @@ export default function AssignmentsManager() {
   }
 
   return (
-    <div className="space-y-6 p-4 min-h-screen bg-gradient-to-br from-gray-50 via-indigo-50 to-purple-50">
+    <div className="space-y-6 p-4 min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50">
       {/* Custom Notification */}
       <Notification
         open={notification.open}
@@ -2364,21 +2364,21 @@ export default function AssignmentsManager() {
 
  {/* Modern Responsive Header – Assignments Theme */}
 <div className="relative mb-6 sm:mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
-                bg-gradient-to-br from-indigo-700 via-purple-700 to-violet-700
+                bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800
                 p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
 
   {/* Abstract Gradient Orbs - Purple/Blue Theme */}
   <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px] 
-                  bg-gradient-to-br from-purple-500/30 via-indigo-500/20 to-violet-500/30 
+                  bg-gradient-to-br from-emerald-500/30 via-teal-500/20 to-green-500/30 
                   rounded-full blur-[100px] pointer-events-none animate-pulse" />
   
   <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px] 
-                  bg-gradient-to-tr from-indigo-500/20 via-purple-500/10 to-violet-500/20 
+                  bg-gradient-to-tr from-teal-500/20 via-emerald-500/10 to-green-500/20 
                   rounded-full blur-[80px] pointer-events-none" />
   
   {/* Central Floating Orb */}
   <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px] 
-                  bg-gradient-to-r from-indigo-500/20 to-purple-500/20 
+                  bg-gradient-to-r from-teal-500/20 to-emerald-500/20 
                   rounded-full blur-[70px] pointer-events-none animate-pulse" />
   
   {/* Subtle Grid Pattern */}
@@ -2402,8 +2402,8 @@ export default function AssignmentsManager() {
         
         {/* Premium Institution Badge */}
         <div className="flex items-center gap-2.5 mb-4">
-          <div className="h-7 w-1 bg-gradient-to-b from-purple-400 via-indigo-400 to-violet-400 
-                          rounded-full shadow-[0_0_15px_rgba(139,92,246,0.5)]" />
+          <div className="h-7 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-green-400 
+                          rounded-full shadow-[0_0_15px_rgba(20,184,166,0.5)]" />
           <div>
             <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-200">
               Matungulu Girls Senior School
@@ -2418,9 +2418,9 @@ export default function AssignmentsManager() {
 
           {/* Icon with Multi-layer Glow */}
           <div className="relative shrink-0 self-start">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-500
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500 to-emerald-500
                             rounded-xl sm:rounded-2xl blur-md sm:blur-lg opacity-70" />
-            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-indigo-600 to-purple-600
+            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-teal-700 to-emerald-700
                             rounded-xl sm:rounded-2xl shadow-2xl transform group-hover:scale-105 
                             group-hover:rotate-3 transition-all duration-500">
               <FiClipboard className="text-white w-5 h-5 sm:w-6 sm:h-6" />
@@ -2432,7 +2432,7 @@ export default function AssignmentsManager() {
 
             {/* Security Badge */}
             <div className="hidden xs:inline-flex items-center gap-1.5 px-2.5 py-1 
-                            bg-gradient-to-r from-indigo-500/20 to-purple-500/20 
+                            bg-gradient-to-r from-teal-500/20 to-emerald-500/20 
                             backdrop-blur-sm rounded-full mb-2 sm:mb-3 max-w-max 
                             border border-white/10">
               <FiShield className="w-2.5 h-2.5 text-indigo-300" />
@@ -2446,7 +2446,7 @@ export default function AssignmentsManager() {
                            font-black text-white tracking-tight leading-tight">
               Assignments <span className="block sm:inline">& </span>
               <span className="text-transparent bg-clip-text
-                               bg-gradient-to-r from-purple-200 to-indigo-200">
+                               bg-gradient-to-r from-emerald-200 to-teal-200">
                 Manager
               </span>
             </h1>
@@ -2533,18 +2533,18 @@ export default function AssignmentsManager() {
           </button>
 
           {/* Create Button - Gradient Primary */}
-          <button
-            onClick={handleCreate}
-            className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
+           <button
+             onClick={handleCreate}
+             className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
                        px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-gradient-to-r from-indigo-500 via-purple-500 to-violet-500
-                       hover:from-indigo-600 hover:via-purple-600 hover:to-violet-600
+                       bg-gradient-to-r from-teal-600 via-emerald-600 to-green-600
+                       hover:from-teal-700 hover:via-emerald-700 hover:to-green-700
                        text-white rounded-xl sm:rounded-2xl font-semibold
                        active:scale-95 transition-all
-                       shadow-[0_8px_20px_rgba(139,92,246,0.3)] 
-                       hover:shadow-[0_12px_30px_rgba(139,92,246,0.4)]
+                       shadow-[0_8px_20px_rgba(20,184,166,0.3)] 
+                       hover:shadow-[0_12px_30px_rgba(20,184,166,0.4)]
                        w-full xs:w-auto"
-          >
+           >
             {/* Button Shine Effect */}
             <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full 
                             transition-transform duration-1000 
@@ -2666,7 +2666,7 @@ export default function AssignmentsManager() {
                 <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Total</p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.total}</p>
               </div>
-              <div className="p-3 bg-indigo-100 text-indigo-600 rounded-2xl">
+              <div className="p-3 bg-teal-100 text-teal-700 rounded-2xl">
                 <IoDocumentTextOutline className="text-lg" />
               </div>
             </div>
@@ -2678,7 +2678,7 @@ export default function AssignmentsManager() {
                 <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">This Week</p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.thisWeek}</p>
               </div>
-              <div className="p-3 bg-cyan-100 text-cyan-600 rounded-2xl">
+              <div className="p-3 bg-emerald-100 text-emerald-700 rounded-2xl">
                 <IoCalendarOutline className="text-lg" />
               </div>
             </div>
@@ -2690,7 +2690,7 @@ export default function AssignmentsManager() {
                 <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Form 1</p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.form1 || 0}</p>
               </div>
-              <div className="p-3 bg-blue-100 text-blue-600 rounded-2xl">
+              <div className="p-3 bg-teal-100 text-teal-700 rounded-2xl">
                 <FiUsers className="text-lg" />
               </div>
             </div>
@@ -2714,7 +2714,7 @@ export default function AssignmentsManager() {
                 <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Form 3</p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.form3 || 0}</p>
               </div>
-              <div className="p-3 bg-purple-100 text-purple-600 rounded-2xl">
+              <div className="p-3 bg-emerald-100 text-emerald-700 rounded-2xl">
                 <FiUsers className="text-lg" />
               </div>
             </div>
@@ -2806,9 +2806,9 @@ export default function AssignmentsManager() {
       {/* Modern Assignments Table - Using ResourcesManager Style */}
       {filteredAssignments.length > 0 ? (
         <>
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-indigo-500/5 border border-slate-200/50 overflow-hidden relative">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-500/5 border border-slate-200/50 overflow-hidden relative">
             {/* Glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent pointer-events-none"></div>
             
             {/* Enhanced Table Header */}
             <div className="border-b border-slate-200/50">
@@ -2829,13 +2829,13 @@ export default function AssignmentsManager() {
                           setSelectedAssignments(newSelection);
                         }
                       }}
-                      className="w-5 h-5 rounded-xl border-2 border-slate-300 bg-white checked:bg-gradient-to-r checked:from-indigo-500 checked:to-purple-600 checked:border-0 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all duration-200"
+                      className="w-5 h-5 rounded-xl border-2 border-slate-300 bg-white checked:bg-gradient-to-r checked:from-teal-500 checked:to-emerald-600 checked:border-0 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all duration-200"
                     />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">
                       Academic Assignments
-                      <span className="ml-2 px-2.5 py-0.5 bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 text-xs font-semibold rounded-full">
+                      <span className="ml-2 px-2.5 py-0.5 bg-gradient-to-r from-teal-100 to-emerald-100 text-teal-800 text-xs font-semibold rounded-full">
                         {filteredAssignments.length} items
                       </span>
                     </h3>
@@ -2901,10 +2901,10 @@ export default function AssignmentsManager() {
                     const getStatusColor = (status) => {
                       switch (status?.toLowerCase()) {
                         case 'completed': return 'bg-green-100 text-green-800';
-                        case 'in progress': return 'bg-blue-100 text-blue-800';
+                        case 'in progress': return 'bg-teal-100 text-teal-800';
                         case 'pending': return 'bg-yellow-100 text-yellow-800';
                         case 'overdue': return 'bg-red-100 text-red-800';
-                        case 'assigned': return 'bg-indigo-100 text-indigo-800';
+                        case 'assigned': return 'bg-emerald-100 text-emerald-800';
                         default: return 'bg-gray-100 text-gray-800';
                       }
                     };
@@ -2914,7 +2914,7 @@ export default function AssignmentsManager() {
                       switch (priority?.toLowerCase()) {
                         case 'high': return 'bg-red-100 text-red-700';
                         case 'medium': return 'bg-orange-100 text-orange-700';
-                        case 'low': return 'bg-blue-100 text-blue-700';
+                        case 'low': return 'bg-teal-100 text-teal-700';
                         default: return 'bg-gray-100 text-gray-700';
                       }
                     };
@@ -2922,8 +2922,8 @@ export default function AssignmentsManager() {
                     return (
                       <tr 
                         key={assignment.id} 
-                        className={`group hover:bg-gradient-to-r hover:from-indigo-50/30 hover:to-purple-50/20 transition-all duration-300  ${
-                          selectedAssignments.has(assignment.id) ? 'bg-gradient-to-r from-indigo-50/50 to-purple-50/30' : ''
+                        className={`group hover:bg-gradient-to-r hover:from-emerald-50/30 hover:to-teal-50/20 transition-all duration-300  ${
+                          selectedAssignments.has(assignment.id) ? 'bg-gradient-to-r from-emerald-50/50 to-teal-50/30' : ''
                         }`}
                       >
                         {/* Checkbox Column */}
@@ -2933,7 +2933,7 @@ export default function AssignmentsManager() {
                               type="checkbox"
                               checked={selectedAssignments.has(assignment.id)}
                               onChange={(e) => handleAssignmentSelect(assignment.id, e.target.checked)}
-                              className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer transition-colors"
+                              className="w-5 h-5 rounded border-gray-300 text-teal-700 focus:ring-teal-600 cursor-pointer transition-colors"
                             />
                           </div>
                         </td>
@@ -2947,13 +2947,13 @@ export default function AssignmentsManager() {
                                 : assignment.priority === 'medium' 
                                 ? 'bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 shadow-sm shadow-orange-500/10'
                                 : assignment.priority === 'low' 
-                                ? 'bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 shadow-sm shadow-blue-500/10'
+                                ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-teal-100 shadow-sm shadow-teal-500/10'
                                 : 'bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-100 shadow-sm shadow-slate-500/10'
                             }`}>
                               <IoDocumentTextOutline className={`text-xl ${
                                 assignment.priority === 'high' ? 'text-red-600' :
                                 assignment.priority === 'medium' ? 'text-orange-600' :
-                                assignment.priority === 'low' ? 'text-blue-600' :
+                                assignment.priority === 'low' ? 'text-teal-700' :
                                 'text-gray-600'
                               }`} />
                               {assignment.status === 'overdue' && (
@@ -2964,7 +2964,7 @@ export default function AssignmentsManager() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-start justify-between gap-2 mb-2">
-                                <h4 className="font-bold text-slate-900 text-sm leading-tight group-hover:text-indigo-600 transition-colors">
+                                <h4 className="font-bold text-slate-900 text-sm leading-tight group-hover:text-teal-700 transition-colors">
                                   {assignment.title || 'Untitled Assignment'}
                                 </h4>
                               </div>
@@ -2989,7 +2989,7 @@ export default function AssignmentsManager() {
                                 <FiBookOpen className="w-3 h-3" />
                                 {assignment.subject || 'General Studies'}
                               </span>
-                              <span className="inline-block px-3 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 text-xs font-bold rounded-xl border border-blue-100">
+                              <span className="inline-block px-3 py-1.5 bg-gradient-to-r from-emerald-50 to-teal-50 text-teal-800 text-xs font-bold rounded-xl border border-teal-100">
                                 <FiUsers className="w-3 h-3" />
                                 {assignment.className || 'All Classes'}
                               </span>
@@ -3001,7 +3001,7 @@ export default function AssignmentsManager() {
                         <td className="py-5 px-8">
                           <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                              <FiCalendar className="text-indigo-500" />
+                              <FiCalendar className="text-teal-700" />
                               <span className="text-sm font-medium text-slate-900">
                                 {new Date(assignment.dueDate).toLocaleDateString('en-GB', {
                                   day: 'numeric',
@@ -3014,10 +3014,10 @@ export default function AssignmentsManager() {
                               <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold ${getStatusColor(assignment.status)}`}>
                                 <div className={`w-1.5 h-1.5 rounded-full ${
                                   assignment.status === 'completed' ? 'bg-green-500' :
-                                  assignment.status === 'in progress' ? 'bg-blue-500' :
+                                  assignment.status === 'in progress' ? 'bg-teal-600' :
                                   assignment.status === 'pending' ? 'bg-yellow-500' :
                                   assignment.status === 'overdue' ? 'bg-red-500' :
-                                  assignment.status === 'assigned' ? 'bg-indigo-500' :
+                                  assignment.status === 'assigned' ? 'bg-emerald-600' :
                                   'bg-gray-500'
                                 }`}></div>
                                 {assignment.status?.charAt(0).toUpperCase() + assignment.status?.slice(1) || 'Pending'}
@@ -3067,7 +3067,7 @@ export default function AssignmentsManager() {
                           <div className="flex items-center gap-2">
                             <div className={`p-2 rounded-lg ${
                               (assignment.assignmentFiles?.length || 0) + (assignment.attachments?.length || 0) > 0 
-                                ? 'bg-blue-50 text-blue-600' 
+                                ? 'bg-teal-50 text-teal-700' 
                                 : 'bg-slate-50 text-slate-400'
                             }`}>
                               <FiPaperclip className="w-4 h-4" />
@@ -3137,7 +3137,7 @@ export default function AssignmentsManager() {
                           onClick={() => paginate(page)}
                           className={`px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200 ${
                             currentPage === page 
-                              ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25' 
+                              ? 'bg-gradient-to-r from-teal-700 to-emerald-700 text-white shadow-lg shadow-teal-500/25' 
                               : 'text-slate-700 hover:bg-slate-100'
                           }`}
                         >
@@ -3149,9 +3149,9 @@ export default function AssignmentsManager() {
                   <button
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-teal-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
                   >
-                    <FiChevronRight className="w-5 h-5 text-slate-800 group-hover:text-indigo-600" />
+                    <FiChevronRight className="w-5 h-5 text-slate-800 group-hover:text-teal-700" />
                   </button>
                 </div>
               </div>
@@ -3160,15 +3160,15 @@ export default function AssignmentsManager() {
         </>
       ) : (
         /* Modern Empty State */
-        <div className="relative bg-gradient-to-br from-white/90 to-indigo-50/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-indigo-500/5 border border-indigo-100/50 text-center py-16 px-8 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-white/90 to-emerald-50/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-500/5 border border-teal-100/50 text-center py-16 px-8 overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-400"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-emerald-400"></div>
           </div>
           
           <div className="relative">
-            <div className="w-24 h-24 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/10">
-              <IoDocumentTextOutline className="text-4xl text-gradient-to-r from-indigo-500 to-purple-500" />
+            <div className="w-24 h-24 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-teal-500/10">
+              <IoDocumentTextOutline className="text-4xl text-gradient-to-r from-teal-500 to-emerald-500" />
             </div>
             
             <h3 className="text-2xl font-bold text-slate-900 mb-3">
@@ -3186,7 +3186,7 @@ export default function AssignmentsManager() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button 
                 onClick={handleCreate} 
-                className="group relative bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3.5 rounded-2xl font-bold shadow-xl shadow-indigo-500/25 hover:shadow-2xl hover:shadow-indigo-500/30 flex items-center gap-2 mx-auto transition-all duration-300 hover:-translate-y-0.5"
+                className="group relative bg-gradient-to-r from-teal-700 to-emerald-700 text-white px-8 py-3.5 rounded-2xl font-bold shadow-xl shadow-teal-500/25 hover:shadow-2xl hover:shadow-teal-500/30 flex items-center gap-2 mx-auto transition-all duration-300 hover:-translate-y-0.5"
               >
                 <FiPlus className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 Create Assignment
@@ -3199,7 +3199,7 @@ export default function AssignmentsManager() {
                   setSelectedSubject('all');
                   setSelectedClass('all');
                 }}
-                className="px-6 py-3.5 rounded-2xl font-semibold border-2 border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-white transition-all duration-300"
+                className="px-6 py-3.5 rounded-2xl font-semibold border-2 border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-700 hover:bg-white transition-all duration-300"
               >
                 Clear Filters
               </button>

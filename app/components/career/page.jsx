@@ -77,8 +77,8 @@ function ModernJobCard({ job, onEdit, onDelete, onView }) {
   const getJobTypeColor = (type) => {
     switch(type) {
       case 'full-time': return 'from-emerald-500 to-green-600';
-      case 'part-time': return 'from-blue-500 to-cyan-600';
-      case 'contract': return 'from-purple-500 to-pink-600';
+      case 'part-time': return 'from-teal-600 to-emerald-600';
+      case 'contract': return 'from-emerald-600 to-green-700';
       case 'internship': return 'from-amber-500 to-orange-600';
       default: return 'from-gray-500 to-gray-700';
     }
@@ -104,16 +104,16 @@ function ModernJobCard({ job, onEdit, onDelete, onView }) {
   return (
     <div className="group relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-300">
       {/* Gradient Border Effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 via-teal-50 to-green-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       
       <div className="relative p-6">
         {/* Header with Icon */}
         <div className="flex items-start justify-between mb-5">
           <div className="flex items-start gap-4">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-20"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-emerald-700 rounded-xl blur opacity-20"></div>
               <div className="relative p-3 bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-100 shadow-sm">
-                <div className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <div className="text-2xl bg-gradient-to-r from-teal-700 to-emerald-700 bg-clip-text text-transparent">
                   {getCategoryIcon(job.category)}
                 </div>
               </div>
@@ -135,7 +135,7 @@ function ModernJobCard({ job, onEdit, onDelete, onView }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => onView(job)}
-              className="p-2 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 rounded-lg border border-blue-200 shadow-sm"
+              className="p-2 bg-gradient-to-r from-teal-50 to-teal-100 text-teal-700 rounded-lg border border-teal-200 shadow-sm"
             >
               <FaExpandAlt />
             </button>
@@ -147,7 +147,7 @@ function ModernJobCard({ job, onEdit, onDelete, onView }) {
           <span className={`px-4 py-1.5 bg-gradient-to-r ${getJobTypeColor(job.jobType)} text-white rounded-full text-xs font-bold shadow-sm`}>
             {job.jobType.replace('-', ' ').toUpperCase()}
           </span>
-          <span className="px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-full text-xs font-bold shadow-sm flex items-center gap-1.5">
+          <span className="px-4 py-1.5 bg-gradient-to-r from-teal-600 to-emerald-700 text-white rounded-full text-xs font-bold shadow-sm flex items-center gap-1.5">
             <FaUsers /> {job.positionsAvailable} position{job.positionsAvailable > 1 ? 's' : ''}
           </span>
           <span className={`px-4 py-1.5 rounded-full text-xs font-bold shadow-sm flex items-center gap-1.5 ${
@@ -203,7 +203,7 @@ function ModernJobCard({ job, onEdit, onDelete, onView }) {
           </div>
           <button
             onClick={() => onView(job)}
-            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-bold text-sm shadow flex items-center gap-2"
+            className="px-5 py-2.5 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-lg font-bold text-sm shadow flex items-center gap-2"
           >
             View Details <FaArrowRight />
           </button>
@@ -232,8 +232,8 @@ function ModernJobModal({ open, onClose, onSave, job, loading }) {
 
   const jobTypes = [
     { value: 'full-time', label: 'Full Time', color: 'from-emerald-500 to-green-600' },
-    { value: 'part-time', label: 'Part Time', color: 'from-blue-500 to-cyan-600' },
-    { value: 'contract', label: 'Contract', color: 'from-purple-500 to-pink-600' },
+    { value: 'part-time', label: 'Part Time', color: 'from-teal-600 to-emerald-600' },
+    { value: 'contract', label: 'Contract', color: 'from-emerald-600 to-green-700' },
     { value: 'internship', label: 'Internship', color: 'from-amber-500 to-orange-600' }
   ];
 
@@ -293,7 +293,7 @@ const categories = [
       }}>
         {/* Modern Header with Gradient */}
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-90"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-800 via-emerald-800 to-green-800 opacity-90"></div>
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black opacity-20"></div>
           <div className="relative p-6 text-white">
             <div className="flex items-center justify-between">
@@ -303,7 +303,7 @@ const categories = [
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold">{job ? 'Edit Job Listing' : 'Create New Job'}</h2>
-                  <p className="text-blue-100 opacity-90 text-sm mt-1">
+                  <p className="text-emerald-100 opacity-90 text-sm mt-1">
                     {job ? 'Update existing opportunity' : 'Add new career position'}
                   </p>
                 </div>
@@ -348,7 +348,7 @@ const categories = [
                   <select
                     value={formData.department}
                     onChange={(e) => handleChange('department', e.target.value)}
-                    className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
                     required
                   >
                     <option value="">Select Department</option>
@@ -372,7 +372,7 @@ const categories = [
                       onClick={() => handleChange('category', categories.value)}
                       className={`p-4 rounded-xl border-2 text-center transition-all ${
                         formData.category === categories.value
-                          ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100'
+                          ? 'border-teal-600 bg-gradient-to-br from-teal-50 to-teal-100'
                           : 'border-gray-200 bg-white'
                       }`}
                     >
@@ -453,16 +453,16 @@ const categories = [
             </div>
 
             {/* Job Description */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-5 border border-blue-200">
+            <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-5 border border-teal-200">
               <label className=" text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                <FaFileAlt className="text-blue-600" /> Job Description
+                <FaFileAlt className="text-teal-700" /> Job Description
               </label>
               <TextareaAutosize 
                 minRows={4} 
                 value={formData.jobDescription} 
                 onChange={(e) => handleChange('jobDescription', e.target.value)}
                 placeholder="Describe the role, responsibilities, and impact..."
-                className="w-full p-4 border-2 border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white font-medium text-sm"
+                className="w-full p-4 border-2 border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 resize-none bg-white font-medium text-sm"
                 required
               />
             </div>
@@ -484,9 +484,9 @@ const categories = [
 
             {/* Experience & Qualifications Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-5 border border-purple-200">
+              <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-5 border border-emerald-200">
                 <label className=" text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                  <FaGraduationCap className="text-purple-600" /> Required Experience
+                  <FaGraduationCap className="text-emerald-700" /> Required Experience
                 </label>
                 <TextField 
                   fullWidth 
@@ -535,7 +535,7 @@ const categories = [
                       value={formData.contactEmail}
                       onChange={(e) => handleChange('contactEmail', e.target.value)}
                       placeholder="careers@school.edu"
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
                     />
                   </div>
                 </div>
@@ -549,7 +549,7 @@ const categories = [
                       value={formData.contactPhone}
                       onChange={(e) => handleChange('contactPhone', e.target.value)}
                       placeholder="+254 700 000 000"
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
                     />
                   </div>
                 </div>
@@ -559,8 +559,8 @@ const categories = [
             {/* Action Buttons */}
             <div className="flex items-center justify-between pt-6 border-t border-gray-200">
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="flex items-center gap-2 bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-2 rounded-full">
-                  <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
+                <div className="flex items-center gap-2 bg-gradient-to-r from-teal-50 to-teal-100 px-4 py-2 rounded-full">
+                  <div className="w-2 h-2 bg-gradient-to-r from-teal-600 to-emerald-700 rounded-full"></div>
                   <span className="font-bold">Required fields marked with *</span>
                 </div>
               </div>
@@ -576,7 +576,7 @@ const categories = [
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-sm shadow-lg disabled:opacity-50 flex items-center gap-3"
+                  className="px-8 py-3 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-bold text-sm shadow-lg disabled:opacity-50 flex items-center gap-3"
                 >
                   {loading ? (
                     <>
@@ -606,8 +606,8 @@ function ModernJobDetailsModal({ open, onClose, job }) {
   const getJobTypeColor = (type) => {
     switch(type) {
       case 'full-time': return 'from-emerald-500 to-green-600';
-      case 'part-time': return 'from-blue-500 to-cyan-600';
-      case 'contract': return 'from-purple-500 to-pink-600';
+      case 'part-time': return 'from-teal-600 to-emerald-600';
+      case 'contract': return 'from-emerald-600 to-green-700';
       case 'internship': return 'from-amber-500 to-orange-600';
       default: return 'from-gray-500 to-gray-700';
     }
@@ -630,7 +630,7 @@ function ModernJobDetailsModal({ open, onClose, job }) {
       }}>
         {/* Modern Header */}
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-800 via-emerald-800 to-green-800"></div>
           <div className="relative p-8 text-white">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
@@ -639,7 +639,7 @@ function ModernJobDetailsModal({ open, onClose, job }) {
                 </div>
                 <div>
                   <h2 className="text-3xl font-bold">{job.jobTitle}</h2>
-                  <p className="text-blue-100 opacity-90 text-lg mt-2">
+                  <p className="text-emerald-100 opacity-90 text-lg mt-2">
                     {job.department} • {job.category}
                   </p>
                 </div>
@@ -654,7 +654,7 @@ function ModernJobDetailsModal({ open, onClose, job }) {
               <span className={`px-6 py-2.5 bg-gradient-to-r ${getJobTypeColor(job.jobType)} text-white rounded-full text-sm font-bold shadow-lg`}>
                 {job.jobType.replace('-', ' ').toUpperCase()}
               </span>
-              <span className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+              <span className="px-6 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-700 text-white rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
                 <FaUsers /> {job.positionsAvailable} position{job.positionsAvailable > 1 ? 's' : ''}
               </span>
               <span className={`px-6 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 ${
@@ -673,9 +673,9 @@ function ModernJobDetailsModal({ open, onClose, job }) {
           <div className="space-y-8">
             {/* Experience & Timeline */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+              <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-6 border border-teal-200">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl text-white">
+                  <div className="p-3 bg-gradient-to-r from-teal-600 to-teal-700 rounded-xl text-white">
                     <FaGraduationCap className="text-xl" />
                   </div>
                   <div>
@@ -685,9 +685,9 @@ function ModernJobDetailsModal({ open, onClose, job }) {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+              <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl text-white">
+                  <div className="p-3 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-xl text-white">
                     <FaCalendar className="text-xl" />
                   </div>
                   <div>
@@ -726,7 +726,7 @@ function ModernJobDetailsModal({ open, onClose, job }) {
             {/* Job Description */}
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-white">
+                <div className="p-2 bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg text-white">
                   <FaFileAlt />
                 </div>
                 Job Description
@@ -756,12 +756,12 @@ function ModernJobDetailsModal({ open, onClose, job }) {
             {/* Qualifications */}
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg text-white">
+                <div className="p-2 bg-gradient-to-r from-teal-700 to-emerald-700 rounded-lg text-white">
                   <FaAward />
                 </div>
                 Qualifications
               </h3>
-              <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-2xl p-6 border border-purple-200">
+              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-teal-200">
                 <div className="text-gray-700 whitespace-pre-line leading-relaxed">
                   {job.qualifications}
                 </div>
@@ -772,20 +772,20 @@ function ModernJobDetailsModal({ open, onClose, job }) {
             {(job.contactEmail || job.contactPhone) && (
               <div className="space-y-4">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-white">
+                  <div className="p-2 bg-gradient-to-r from-teal-600 to-emerald-700 rounded-lg text-white">
                     <FaEnvelope />
                   </div>
                   Contact Information
                 </h3>
-                <div className="bg-gradient-to-br from-cyan-50 to-blue-100 rounded-2xl p-6 border border-cyan-200">
+                <div className="bg-gradient-to-br from-teal-50 to-emerald-50 rounded-2xl p-6 border border-teal-200">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {job.contactEmail && (
                       <div className="bg-white rounded-xl p-4 border border-gray-200">
                         <div className="flex items-center gap-3 mb-2">
-                          <FaEnvelope className="text-cyan-600 text-xl" />
+                          <FaEnvelope className="text-teal-700 text-xl" />
                           <h4 className="font-bold text-gray-900">Email</h4>
                         </div>
-                        <a href={`mailto:${job.contactEmail}`} className="text-cyan-600 hover:text-cyan-800 font-medium">
+                        <a href={`mailto:${job.contactEmail}`} className="text-teal-700 hover:text-teal-900 font-medium">
                           {job.contactEmail}
                         </a>
                       </div>
@@ -793,10 +793,10 @@ function ModernJobDetailsModal({ open, onClose, job }) {
                     {job.contactPhone && (
                       <div className="bg-white rounded-xl p-4 border border-gray-200">
                         <div className="flex items-center gap-3 mb-2">
-                          <FaPhone className="text-blue-600 text-xl" />
+                          <FaPhone className="text-teal-700 text-xl" />
                           <h4 className="font-bold text-gray-900">Phone</h4>
                         </div>
-                        <a href={`tel:${job.contactPhone}`} className="text-blue-600 hover:text-blue-800 font-medium">
+                        <a href={`tel:${job.contactPhone}`} className="text-teal-700 hover:text-teal-900 font-medium">
                           {job.contactPhone}
                         </a>
                       </div>
@@ -1263,12 +1263,12 @@ if (loading && jobs.length === 0) {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 p-4 md:p-6 lg:p-8">
       <Toaster position="top-right" richColors />
 
       {/* Modern Header */}
       <div className="relative overflow-hidden rounded-2xl mb-8">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-90"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-800 via-emerald-800 to-green-800 opacity-90"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black opacity-30"></div>
         <div className="relative p-8 text-white">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
@@ -1279,17 +1279,17 @@ if (loading && jobs.length === 0) {
                 </div>
                 <div>
                   <h1 className="text-3xl lg:text-4xl font-bold">Career Management</h1>
-                  <p className="text-blue-100 opacity-90 text-lg mt-2">Manage job opportunities and positions</p>
+                  <p className="text-emerald-100 opacity-90 text-lg mt-2">Manage job opportunities and positions</p>
                 </div>
               </div>
               
               <div className="flex flex-wrap items-center gap-4 mt-4">
                 <span className="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
-                  <FaUsers className="text-blue-200" />
+                  <FaUsers className="text-emerald-200" />
                   <span className="font-bold">{pagination.total} Total Jobs</span>
                 </span>
                 <span className="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full backdrop-blur-sm">
-                  <FaBuilding className="text-purple-200" />
+                  <FaBuilding className="text-teal-200" />
                   <span className="font-bold">{[...new Set(jobs.map(job => job.department))].length} Departments</span>
                 </span>
               </div>
@@ -1305,7 +1305,7 @@ if (loading && jobs.length === 0) {
                   setSelectedJob(null);
                   setShowJobModal(true);
                 }} 
-                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-xl font-bold shadow-lg flex items-center gap-2"
+               className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-xl font-bold shadow-lg flex items-center gap-2"
               >
                 <FaPlus /> Create New Job
               </button>
@@ -1337,7 +1337,7 @@ if (loading && jobs.length === 0) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by title, department..."
-                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
               />
             </div>
           </div>
@@ -1350,7 +1350,7 @@ if (loading && jobs.length === 0) {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
               >
                 <option value="">All Categories</option>
                 {categories.map(cat => (
@@ -1368,7 +1368,7 @@ if (loading && jobs.length === 0) {
               <select
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
               >
                 <option value="">All Departments</option>
                 {departments.map(dept => (
@@ -1386,7 +1386,7 @@ if (loading && jobs.length === 0) {
               <select
                 value={jobType}
                 onChange={(e) => setJobType(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm font-medium"
+                className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-sm font-medium"
               >
                 <option value="">All Job Types</option>
                 {jobTypes.map(type => (
@@ -1402,7 +1402,7 @@ if (loading && jobs.length === 0) {
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <button
             onClick={handleResetFilters}
-            className="text-sm text-blue-600 hover:text-blue-800 font-bold flex items-center gap-2"
+            className="text-sm text-teal-700 hover:text-teal-900 font-bold flex items-center gap-2"
           >
             <FaTimesCircle /> Clear All Filters
           </button>
@@ -1415,8 +1415,8 @@ if (loading && jobs.length === 0) {
       {/* Modern Jobs Grid */}
       {jobs.length === 0 ? (
         <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-12 text-center">
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-blue-200">
-            <FaBriefcase className="w-10 h-10 text-gradient-to-r from-blue-600 to-purple-600" />
+          <div className="w-20 h-20 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-teal-200">
+            <FaBriefcase className="w-10 h-10 text-gradient-to-r from-teal-700 to-emerald-700" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-3">No Job Listings Found</h3>
           <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
@@ -1436,7 +1436,7 @@ if (loading && jobs.length === 0) {
                 setSelectedJob(null);
                 setShowJobModal(true);
               }} 
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2"
             >
               <FaPlus /> Create First Job
             </button>
@@ -1495,7 +1495,7 @@ if (loading && jobs.length === 0) {
                           onClick={() => handlePageChange(pageNum)}
                           className={`w-10 h-10 rounded-xl text-sm font-bold ${
                             pagination.page === pageNum
-                              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                              ? 'bg-gradient-to-r from-teal-700 to-emerald-700 text-white shadow-lg'
                               : 'text-gray-700 hover:bg-gray-100 border border-gray-200'
                           }`}
                         >

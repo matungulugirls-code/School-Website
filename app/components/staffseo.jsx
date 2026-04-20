@@ -332,56 +332,75 @@ export default function StaffProfilePage() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex flex-col items-center justify-center p-4 sm:p-6">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#1a1a2e]/5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#d7a73d]/5 rounded-full blur-3xl animate-pulse delay-1000" />
+if (loading) {
+  return (
+    <div className="min-h-screen bg-[#fafafa] flex flex-col items-center justify-center p-8">
+      {/* Container for the Branding Reveal */}
+      <div className="relative flex flex-col items-center">
+        
+        {/* The "Shield" Loader - High Performance Aesthetic */}
+        <div className="relative w-32 h-32 flex items-center justify-center mb-8">
+          {/* Rotating Geometric Border */}
+          <div className="absolute inset-0 border-[1px] border-slate-200 rounded-full" />
+          <div className="absolute inset-0 border-t-2 border-blue-700 rounded-full animate-spin [animation-duration:1.5s]" />
+          
+          {/* Central Branding - Minimalist Square Bento */}
+          <div className="w-20 h-20 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-2xl flex items-center justify-center border border-slate-100 transform -rotate-3 transition-transform hover:rotate-0">
+             <span className="text-3xl font-serif font-bold text-slate-900">M</span>
+             <span className="text-blue-700 text-3xl font-serif font-bold -ml-1">G</span>
+          </div>
         </div>
 
-        <div className="relative bg-white/60 backdrop-blur-sm rounded-3xl shadow-xl p-6 sm:p-10 border border-white/50">
-          <div className="relative mb-6 sm:mb-8">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] animate-spin" />
-            <div className="absolute inset-[3px] bg-white rounded-full flex items-center justify-center">
-              <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#1a1a2e] to-[#34556d] flex items-center justify-center animate-pulse">
-                <Image 
-                  src="/MatG.jpeg" 
-                  alt="Logo" 
-                  width={28} 
-                  height={28} 
-                  className="sm:w-8 sm:h-8 brightness-0 invert opacity-90"
+        {/* Textual Hierarchy */}
+        <div className="text-center space-y-4">
+          <div className="overflow-hidden">
+             <h2 className="text-[11px] font-black tracking-[0.5em] text-slate-400 uppercase animate-pulse">
+                Establishing Secure Link
+             </h2>
+          </div>
+          
+          <h1 className="text-xl font-medium tracking-tight text-slate-900">
+            Matungulu Girls <span className="text-slate-400">Senior School</span>
+          </h1>
+
+          {/* New Bento-Style Progress Indicator */}
+          <div className="flex gap-1.5 justify-center mt-6">
+            {[0, 1, 2, 3].map((i) => (
+              <div 
+                key={i}
+                className="h-1 w-8 bg-slate-200 rounded-full overflow-hidden relative"
+              >
+                <div 
+                  className="absolute inset-0 bg-blue-700"
+                  style={{
+                    animation: 'progressFill 2s infinite ease-in-out',
+                    animationDelay: `${i * 0.2}s`
+                  }}
                 />
               </div>
-            </div>
-          </div>
-
-          <div className="text-center mb-3 sm:mb-4">
-            <h2 className="text-base sm:text-xl font-black bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]">
-              Matungulu Girls Senior School
-            </h2>
-          </div>
-
-          <div className="flex items-center justify-center gap-1">
-            <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
-              Loading Staff Profile
-            </p>
-            <div className="flex gap-1">
-              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#1a1a2e] rounded-full animate-bounce [animation-delay:-0.3s]" />
-              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#34556d] rounded-full animate-bounce [animation-delay:-0.15s]" />
-              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#d7a73d] rounded-full animate-bounce" />
-            </div>
+            ))}
           </div>
         </div>
 
-        <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 w-32 sm:w-48">
-          <div className="h-0.5 bg-slate-200 rounded-full overflow-hidden">
-            <div className="h-full w-1/2 bg-gradient-to-r from-[#1a1a2e] via-[#34556d] to-[#d7a73d] rounded-full animate-progress" />
-          </div>
+        {/* Footer Meta */}
+        <div className="absolute bottom-[-100px] flex items-center gap-4 opacity-50">
+           <div className="h-[1px] w-8 bg-slate-300" />
+           <span className="text-[9px] font-bold tracking-widest uppercase text-slate-500">
+             Professional Portal 2026
+           </span>
+           <div className="h-[1px] w-8 bg-slate-300" />
         </div>
       </div>
-    );
-  }
+
+      <style jsx>{`
+        @keyframes progressFill {
+          0% { transform: translateX(-100%); }
+          50%, 100% { transform: translateX(100%); }
+        }
+      `}</style>
+    </div>
+  );
+}
 
   if (error || !staff) {
     return (
