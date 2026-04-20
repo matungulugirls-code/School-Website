@@ -279,7 +279,7 @@ const ModernGalleryCard = ({ gallery, onView, onFavorite, viewMode = 'grid', onS
   };
 
   const getImageAltText = (gallery, index = 0) => {
-    const schoolName = "Kinyui Boys Senior School";
+    const schoolName = "Matungulu Girls Senior School";
     const category = gallery.category?.replace(/_/g, ' ') || 'School';
     const year = gallery.year || new Date().getFullYear();
     const title = gallery.title || 'Gallery';
@@ -313,9 +313,9 @@ const ModernGalleryCard = ({ gallery, onView, onFavorite, viewMode = 'grid', onS
                   onError={() => setImageError(true)}
                   itemProp="image"
                 />
-                <meta itemProp="caption" content={gallery.description || `Photos from ${gallery.title} at Kinyui Boys Senior School`} />
+                <meta itemProp="caption" content={gallery.description || `Photos from ${gallery.title} at Matungulu Girls Senior School`} />
                 <meta itemProp="datePublished" content={gallery.date} />
-                <meta itemProp="contentLocation" content="Kinyui Boys Senior School, Matungulu, Machakos County, Kenya" />
+                <meta itemProp="contentLocation" content="Matungulu Girls Senior School, Matungulu, Machakos County, Kenya" />
               </>
             ) : (
               <div className={`w-full h-full bg-gradient-to-br ${theme.gradient} flex items-center justify-center`}>
@@ -375,7 +375,7 @@ const ModernGalleryCard = ({ gallery, onView, onFavorite, viewMode = 'grid', onS
             </h3>
             
             <p className="text-slate-500 text-xs sm:text-sm mb-4 sm:mb-6 line-clamp-2 leading-relaxed" itemProp="abstract">
-              {gallery.description || `${gallery.title} - ${gallery.category?.replace(/_/g, ' ')} gallery at Kinyui Boys Senior School.`}
+              {gallery.description || `${gallery.title} - ${gallery.category?.replace(/_/g, ' ')} gallery at Matungulu Girls Senior School.`}
             </p>
 
             {/* Info Grid */}
@@ -538,7 +538,7 @@ const ModernGalleryDetailModal = ({ gallery, onClose, onShare }) => {
   };
 
   const getImageAltText = (gallery, index) => {
-    const schoolName = "Kinyui Boys Senior School";
+    const schoolName = "Matungulu Girls Senior School";
     const category = gallery.category?.replace(/_/g, ' ') || 'School';
     const year = gallery.year || new Date().getFullYear();
     const title = gallery.title || 'Gallery';
@@ -662,7 +662,7 @@ const ModernGalleryDetailModal = ({ gallery, onClose, onShare }) => {
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
                   <IoLocationOutline className="text-rose-500 text-sm sm:text-lg" />
-                  Kinyui Boys, Machakos
+                  Matungulu Girls, Machakos
                 </div>
               </div>
             </section>
@@ -933,11 +933,11 @@ export default function ModernGallery() {
   const gallerySchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Kinyui Boys Senior School Gallery",
-    "description": "Official photo and video gallery of Kinyui Boys Senior School in Matungulu, Machakos County, Kenya",
+    "name": "Matungulu Girls Senior School Gallery",
+    "description": "Official photo and video gallery of Matungulu Girls Senior School in Matungulu, Machakos County, Kenya",
     "url": "https://kinyui-senior.vercel.app/pages/gallery",
-    "isPartOf": { "@type": "School", "name": "Kinyui Boys Senior School" },
-    "about": { "@type": "EducationalOrganization", "name": "Kinyui Boys Senior School", "address": { "@type": "PostalAddress", "addressLocality": "Matungulu", "addressRegion": "Machakos County", "addressCountry": "KE" } }
+    "isPartOf": { "@type": "School", "name": "Matungulu Girls Senior School" },
+    "about": { "@type": "EducationalOrganization", "name": "Matungulu Girls Senior School", "address": { "@type": "PostalAddress", "addressLocality": "Matungulu", "addressRegion": "Machakos County", "addressCountry": "KE" } }
   };
 
   if (loading) {
@@ -951,7 +951,7 @@ export default function ModernGallery() {
           </Box>
           <div className="text-center px-4">
             <p className="text-slate-900 font-medium text-sm sm:text-base tracking-tight italic">Loading school galleries...</p>
-            <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">Kinyui Boys Senior School</p>
+            <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">Matungulu Girls Senior School</p>
           </div>
         </Stack>
       </Box>
@@ -964,43 +964,140 @@ export default function ModernGallery() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 p-4 md:p-6">
         <Toaster position="top-right" richColors />
         <div className="max-w-7xl mx-auto space-y-6">
-
-          {/* ========== HERO BANNER (Matches Events/News Page) ========== */}
-          <div className="relative bg-slate-950 p-4 sm:p-8 overflow-hidden rounded-md md:rounded-lg">
-            <div className="absolute top-0 left-1/4 w-64 h-64 bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="max-w-7xl mx-auto relative z-10">
-              <div className="flex flex-col gap-4 mb-6 sm:mb-10">
-                <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-md border border-white/20">
-                    <IoSparkles className="text-amber-400 text-sm" />
-                    <span className="text-slate-200 font-normal text-xs uppercase tracking-widest">Visual Chronicles</span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="max-w-full">
-                      <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
-                        Kinyui Boys Senior School 
-                        <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"> Gallery</span>
-                      </h1>
-                      <p className="text-slate-300 text-sm sm:text-base mt-2 font-normal leading-relaxed max-w-2xl">
-                        Explore our rich collection of moments — from classrooms and labs to sports days, graduations, and everyday school life.
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3 w-full sm:w-auto mt-4">
-                      <button onClick={refreshData} disabled={refreshing} className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-slate-900 font-medium text-sm transition-all active:scale-95 disabled:opacity-70 shadow-sm">
-                        {refreshing ? <div className="w-3.5 h-3.5 border-2 border-slate-900/20 border-t-slate-900 rounded-full animate-spin" /> : <FiRotateCw className="text-sm" />}
-                        <span>{refreshing ? "Updating..." : "Refresh Gallery"}</span>
-                      </button>
-                      <div className="flex bg-white/10 backdrop-blur-md rounded-lg p-1 border border-white/10">
-                        <button onClick={() => setViewMode('grid')} className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white text-slate-900' : 'text-slate-300 hover:text-white'}`}><FiGrid size={18} /></button>
-                        <button onClick={() => setViewMode('list')} className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white text-slate-900' : 'text-slate-300 hover:text-white'}`}><FiList size={18} /></button>
-                      </div>
-                    </div>
-                  </div>
+{/* ========== MODERN HERO BANNER - Matungulu Girls Gallery ========== */}
+<div className="relative mx-auto overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl w-full md:w-[90%] lg:w-[85%] xl:w-[80%]">
+  <div className="relative bg-gradient-to-br from-[#064e3b] via-[#0f5b4c] to-[#115e59] p-6 sm:p-10 overflow-hidden">
+    
+    {/* Animated Background Elements */}
+    <div className="absolute top-0 left-1/4 w-64 h-64 bg-emerald-400/20 rounded-full blur-[120px] animate-pulse pointer-events-none" />
+    <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-teal-400/15 rounded-full blur-[120px] animate-pulse animation-delay-2000 pointer-events-none" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-[150px] pointer-events-none" />
+    
+    {/* Subtle Grid Pattern */}
+    <div className="absolute inset-0 opacity-[0.03]" style={{ 
+      backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+      backgroundSize: '40px 40px'
+    }} />
+    
+    {/* Shine Effect Overlay */}
+    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full" style={{ transform: 'skewX(-20deg)' }} />
+    
+    <div className="relative z-10">
+      <div className="flex flex-col gap-6">
+        
+        {/* Top Section with Logo Integration */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 w-fit">
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+              <span className="text-[8px] font-black text-white">MG</span>
+            </div>
+            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.15em]">Matungulu Girls</span>
+          </div>
+          
+          {/* Quick Stats Badge */}
+          <div className="flex items-center gap-2">
+            <div className="flex -space-x-2">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="w-6 h-6 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                  <span className="text-[8px] font-bold text-white/60">📸</span>
                 </div>
+              ))}
+            </div>
+            <span className="text-white/50 text-[9px] font-bold uppercase tracking-wider">Moments Archive</span>
+          </div>
+        </div>
+        
+        {/* Main Content */}
+        <div className="space-y-5">
+          {/* Title with Gradient */}
+          <div className="max-w-full">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
+              <span className="text-white">Matungulu Girls</span>
+              <span className="block sm:inline text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-emerald-400">
+                {" "}Visual Chronicles
+              </span>
+            </h1>
+            
+            <div className="w-20 h-1 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full mt-4 mb-5" />
+            
+            <p className="text-emerald-50/80 text-sm sm:text-base font-medium leading-relaxed max-w-2xl">
+              Explore our rich collection of moments — from classrooms and labs to sports days, 
+              graduations, and everyday school life at Matungulu Girls Senior School.
+            </p>
+          </div>
+          
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-3 pt-3">
+            {/* Primary Refresh Button */}
+            <button 
+              onClick={refreshData} 
+              disabled={refreshing} 
+              className="group relative overflow-hidden flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-[#0f5b4c] font-black text-sm shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95 disabled:opacity-50"
+            >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-emerald-100 to-transparent" />
+              {refreshing ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-[#0f5b4c]/20 border-t-[#0f5b4c] rounded-full animate-spin" />
+                  <span>Updating Gallery...</span>
+                </>
+              ) : (
+                <>
+                  <FiRotateCw className="text-sm group-hover:rotate-180 transition-transform duration-500" />
+                  <span>Refresh Gallery</span>
+                </>
+              )}
+            </button>
+            
+            {/* View Toggle - Modern Design */}
+            <div className="flex bg-white/10 backdrop-blur-md rounded-xl p-1 border border-white/20">
+              <button 
+                onClick={() => setViewMode('grid')} 
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-bold text-xs ${
+                  viewMode === 'grid' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg' 
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <FiGrid size={16} />
+                <span className="hidden sm:inline">Grid View</span>
+              </button>
+              <button 
+                onClick={() => setViewMode('list')} 
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-bold text-xs ${
+                  viewMode === 'list' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg' 
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <FiList size={16} />
+                <span className="hidden sm:inline">List View</span>
+              </button>
+            </div>
+            
+            {/* Stats Badge */}
+            <div className="flex items-center gap-2 ml-auto">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[9px] font-bold text-white/60 uppercase tracking-wider">Live Gallery</span>
               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Decorative Bottom Line */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* Add this to your global CSS or component for animation delay */}
+<style jsx>{`
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+`}</style>
 
           {/* ========== STATS CARDS ========== */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-10">
@@ -1074,34 +1171,105 @@ export default function ModernGallery() {
               </div>
             </div>
 
-            {/* Right Column: Sidebar */}
-            <div className="lg:w-[380px] space-y-6">
-              <div className="lg:sticky lg:top-24 space-y-6">
+         {/* Right Column: Sidebar */}
+<div className="lg:w-[380px] space-y-6">
+  <div className="lg:sticky lg:top-24 space-y-6">
 
-                {/* Year Info Banner */}
-                <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4"><div className="p-2 bg-blue-50 rounded-xl"><FiCalendar className="text-blue-600" /></div><div><h4 className="font-bold text-slate-900">Gallery Years</h4><p className="text-xs text-slate-500">Browse by year</p></div></div>
-                  <div className="space-y-3"><div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100"><div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div><span className="text-sm font-medium text-slate-700">All Years</span></div><span className="text-xs font-bold text-blue-600">{transformedGalleries.length}</span></div>{years.slice(0, 3).map(year => (<div key={year} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100"><div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div><span className="text-sm font-medium text-slate-700">{year}</span></div><span className="text-xs font-bold text-blue-600">{transformedGalleries.filter(g => g.year === year).length}</span></div>))}</div>
-                </div>
-
-                {/* About Our Gallery */}
-                <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-slate-50 rounded-xl"><FiCamera className="text-slate-700 text-lg" /></div>
-                    <h4 className="font-bold text-slate-900">About Our Gallery</h4>
-                  </div>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                    Welcome to the official Kinyui Boys Senior School photo gallery. A visual journey through our school&apos;s vibrant life in Matungulu, Machakos County.
-                  </p>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-4">
-                    From spirited sports days and proud graduation ceremonies to everyday classroom moments and hands-on laboratory sessions, these photos capture the heart of what makes Kinyui special.
-                  </p>
-                  <p className="text-slate-500 text-sm leading-relaxed">
-                    Browse through our collections, download your favourite memories, and share them with family and friends. Every image tells the story of academic excellence, discipline, and community.
-                  </p>
-                </div>
-              </div>
+    {/* Year Info Banner */}
+    <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 bg-emerald-50 rounded-xl">
+          <FiCalendar className="text-emerald-600" />
+        </div>
+        <div>
+          <h4 className="font-bold text-slate-900">Gallery Years</h4>
+          <p className="text-xs text-slate-500">Browse by year</p>
+        </div>
+      </div>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between p-3 bg-emerald-50/30 rounded-xl border border-emerald-100">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+            <span className="text-sm font-medium text-slate-700">All Years</span>
+          </div>
+          <span className="text-xs font-bold text-emerald-600">{transformedGalleries.length}</span>
+        </div>
+        {years.slice(0, 3).map(year => (
+          <div key={year} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 hover:bg-emerald-50/20 transition-colors duration-200">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+              <span className="text-sm font-medium text-slate-700">{year}</span>
             </div>
+            <span className="text-xs font-bold text-emerald-600">{transformedGalleries.filter(g => g.year === year).length}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* About Our Gallery - Matungulu Girls Description */}
+    <div className="bg-gradient-to-br from-white to-emerald-50/20 rounded-[32px] p-6 border border-emerald-100 shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl shadow-md">
+          <FiCamera className="text-white text-lg" />
+        </div>
+        <div>
+          <h4 className="font-bold text-slate-900">About Our Gallery</h4>
+          <p className="text-[10px] font-black uppercase tracking-wider text-emerald-600">Matungulu Girls</p>
+        </div>
+      </div>
+      
+      <div className="space-y-4">
+        <p className="text-slate-700 text-sm leading-relaxed font-medium">
+          Welcome to the official <span className="font-black text-emerald-700">Matungulu Girls Senior School</span> photo gallery. 
+          A visual journey through our school's vibrant life in Matungulu, Machakos County.
+        </p>
+        
+        <div className="relative pl-3 border-l-2 border-emerald-300">
+          <p className="text-slate-600 text-sm leading-relaxed italic">
+            "From spirited sports days and proud graduation ceremonies to everyday classroom 
+            moments and hands-on laboratory sessions — these photos capture the heart of what 
+            makes Matungulu Girls special."
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-2 pt-2">
+          <div className="flex items-center gap-2 p-2 bg-emerald-50/50 rounded-xl">
+            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Academic Excellence</span>
+          </div>
+          <div className="flex items-center gap-2 p-2 bg-teal-50/50 rounded-xl">
+            <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+            <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider">Discipline</span>
+          </div>
+          <div className="flex items-center gap-2 p-2 bg-emerald-50/50 rounded-xl">
+            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Community</span>
+          </div>
+          <div className="flex items-center gap-2 p-2 bg-teal-50/50 rounded-xl">
+            <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+            <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider">Excellence</span>
+          </div>
+        </div>
+        
+        <p className="text-slate-600 text-sm leading-relaxed pt-2 border-t border-emerald-100 mt-2">
+          Browse through our collections, download your favourite memories, and share them with 
+          family and friends. <span className="font-bold text-emerald-700">Every image tells a story.</span>
+        </p>
+        
+        {/* Decorative Quote Footer */}
+        <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center gap-1">
+            <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+              <span className="text-[8px] font-black text-emerald-600">MG</span>
+            </div>
+            <span className="text-[9px] font-black text-emerald-600/60 uppercase tracking-wider">Est. 2024</span>
+          </div>
+          <div className="text-[9px] font-bold text-emerald-500">Strive to Excel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
           </div>
 
         </div>
