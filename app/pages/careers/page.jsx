@@ -148,22 +148,22 @@ function StatPanel({ stat, value }) {
   const Icon = stat.icon;
 
   return (
-    <div className="w-full rounded-[1.8rem] border border-white/10 bg-white/[0.06] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl transition-all duration-200 hover:border-white/20 sm:p-5">
+    <div className="w-full rounded-[1.8rem] border border-gray-200 bg-gray-50 p-4 shadow-[0_18px_40px_rgba(0,0,0,0.06)] transition-all duration-200 hover:border-gray-300 hover:shadow-md sm:p-5">
       <div className="flex items-start justify-between">
         <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.gradient} text-white sm:h-12 sm:w-12 sm:rounded-2xl`}>
           <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
         </div>
-        <span className="text-[8px] font-extrabold uppercase tracking-[0.24em] text-white/35 sm:text-[10px] sm:tracking-[0.28em]">
+        <span className="text-[8px] font-extrabold uppercase tracking-[0.24em] text-gray-500 sm:text-[10px] sm:tracking-[0.28em]">
           Live
         </span>
       </div>
-      <p className="mt-4 text-2xl font-black text-white sm:mt-6 sm:text-3xl">
+      <p className="mt-4 text-2xl font-black text-black sm:mt-6 sm:text-3xl">
         {value}
       </p>
-      <p className="mt-1 text-xs font-bold text-white/82 sm:mt-2 sm:text-sm">
+      <p className="mt-1 text-xs font-bold text-gray-800 sm:mt-2 sm:text-sm">
         {stat.label}
       </p>
-      <p className="mt-1 text-[11px] leading-5 text-white/45 sm:text-xs sm:leading-6">
+      <p className="mt-1 text-[11px] leading-5 text-gray-600 sm:text-xs sm:leading-6">
         {stat.sublabel}
       </p>
     </div>
@@ -324,19 +324,19 @@ function OpportunityCard({ job, viewMode, bookmarked, onBookmark, onView, onShar
 
 function InfoCard({ icon: Icon, title, text, tone = 'default' }) {
   const tones = {
-    default: 'bg-white/[0.05] border-white/10 text-white',
-    gold: 'bg-[#d4b15f]/10 border-[#d4b15f]/20 text-white',
+    default: 'bg-gray-100 border-gray-200 text-gray-900',
+    gold: 'bg-amber-50 border-amber-200 text-gray-900',
   };
 
   return (
-    <div className={`w-full rounded-2xl border p-4 transition-all duration-200 hover:border-white/20 hover:shadow-lg sm:rounded-[1.7rem] sm:p-5 ${tones[tone]}`}>
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 sm:h-12 sm:w-12 sm:rounded-2xl">
-        <Icon className="h-4 w-4 text-[#d4b15f] sm:h-5 sm:w-5" />
+    <div className={`w-full rounded-2xl border p-4 transition-all duration-200 hover:border-gray-300 hover:shadow-md sm:rounded-[1.7rem] sm:p-5 ${tones[tone]}`}>
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#0f5b4c] to-[#0b2f28] sm:h-12 sm:w-12 sm:rounded-2xl">
+        <Icon className="h-4 w-4 text-amber-300 sm:h-5 sm:w-5" />
       </div>
       <h3 className="mt-3 text-base font-black sm:mt-4 sm:text-lg">
         {title}
       </h3>
-      <p className="mt-1 text-xs leading-6 text-white/65 sm:mt-2 sm:text-sm sm:leading-7">
+      <p className="mt-1 text-xs leading-6 text-gray-600 sm:mt-2 sm:text-sm sm:leading-7">
         {text}
       </p>
     </div>
@@ -693,21 +693,21 @@ export default function CareersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#061510] text-white">
+    <div className="min-h-screen bg-white text-black">
       <Toaster position="top-right" richColors />
 
-      <section className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,177,95,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.32),transparent_38%)]" />
+      <section className="relative overflow-hidden border-b border-gray-200">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,177,95,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.12),transparent_38%)]" />
         <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-18">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/70">
-              <IoSparkles className="h-4 w-4 text-[#d4b15f]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-700">
+              <IoSparkles className="h-4 w-4 text-[#0f5b4c]" />
               Careers at Matungulu Girls
             </div>
-            <h1 className="mt-5 text-4xl font-black leading-[0.95] text-white sm:text-6xl">
+            <h1 className="mt-5 text-4xl font-black leading-[0.95] text-black sm:text-6xl">
               A premium careers desk for school jobs and real opportunities.
             </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-8 text-white/68 sm:text-base">
+            <p className="mt-5 max-w-2xl text-sm leading-8 text-gray-600 sm:text-base">
               Explore Matungulu Girls Senior School openings through a more modern recruitment workspace built for teachers, administrators, support teams, and professionals ready to contribute to a girls-centered institution.
             </p>
 
