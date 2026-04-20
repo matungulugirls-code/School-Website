@@ -307,43 +307,43 @@ function PortalWorkspaceHome({
         </div>
 
         <div className="grid gap-4">
-          <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,#173228,#0b1714)] p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">Portal Rhythm</p>
+          <div className="rounded-[2rem] border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Portal Rhythm</p>
             <div className="mt-5 grid gap-3">
-              <div className="rounded-[1.3rem] border border-white/8 bg-white/[0.04] p-4">
+              <div className="rounded-[1.3rem] border border-gray-200 bg-white p-4">
                 <div className="flex items-center gap-3">
-                  <FiClock className="h-5 w-5 text-[#d6b25e]" />
+                  <FiClock className="h-5 w-5 text-[#0f5b4c]" />
                   <div>
-                    <p className="text-sm font-black text-white">Session Window</p>
-                    <p className="text-xs text-white/58">Secure sign-in stays active for about 2 hours.</p>
+                    <p className="text-sm font-black text-gray-900">Session Window</p>
+                    <p className="text-xs text-gray-500">Secure sign-in stays active for about 2 hours.</p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-[1.3rem] border border-white/8 bg-white/[0.04] p-4">
+              <div className="rounded-[1.3rem] border border-gray-200 bg-white p-4">
                 <div className="flex items-center gap-3">
-                  <FiBell className="h-5 w-5 text-[#d6b25e]" />
+                  <FiBell className="h-5 w-5 text-[#0f5b4c]" />
                   <div>
-                    <p className="text-sm font-black text-white">Refresh Often</p>
-                    <p className="text-xs text-white/58">Pull the latest assignments, results, and finance updates from one button.</p>
+                    <p className="text-sm font-black text-gray-900">Refresh Often</p>
+                    <p className="text-xs text-gray-500">Pull the latest assignments, results, and finance updates from one button.</p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-[1.3rem] border border-white/8 bg-white/[0.04] p-4">
+              <div className="rounded-[1.3rem] border border-gray-200 bg-white p-4">
                 <div className="flex items-center gap-3">
-                  <FaShieldAlt className="h-5 w-5 text-[#d6b25e]" />
+                  <FaShieldAlt className="h-5 w-5 text-[#0f5b4c]" />
                   <div>
-                    <p className="text-sm font-black text-white">Student Safe Space</p>
-                    <p className="text-xs text-white/58">Academic records and fee tools remain tied to the existing protected flow.</p>
+                    <p className="text-sm font-black text-gray-900">Student Safe Space</p>
+                    <p className="text-xs text-gray-500">Academic records and fee tools remain tied to the existing protected flow.</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/10 bg-[#0c1815] p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/45">Workspace Lens</p>
-            <h3 className="mt-4 text-2xl font-black text-white">Designed for momentum</h3>
-            <p className="mt-3 text-sm leading-7 text-white/68">
+          <div className="rounded-[2rem] border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Workspace Lens</p>
+            <h3 className="mt-4 text-2xl font-black text-gray-900">Designed for momentum</h3>
+            <p className="mt-3 text-sm leading-7 text-gray-600">
               This home screen is intentionally faster to scan, more tactile on mobile, and more app-like across desktop so the portal feels like a living workspace rather than a static website.
             </p>
           </div>
@@ -382,11 +382,11 @@ function GuestPortalLanding({ onOpenLogin, router }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#061510] text-white">
+    <div className="min-h-screen bg-white text-gray-900">
       <Toaster position="top-right" expand richColors theme="light" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.22),transparent_32%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.06),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.08),transparent_32%)]" />
       <main className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 xl:px-8">
-        <nav className="flex items-center justify-between rounded-[2rem] border border-white/10 bg-white/[0.04] px-4 py-4 backdrop-blur-xl sm:px-6">
+        <nav className="flex items-center justify-between rounded-[2rem] border border-gray-200 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6">
           <div className="flex items-center gap-3">
             <Image
               src="/MatG.jpg"
@@ -397,13 +397,13 @@ function GuestPortalLanding({ onOpenLogin, router }) {
               priority
             />
             <div>
-              <p className="text-lg font-black tracking-tight text-white">Matungulu Girls</p>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">Student Portal</p>
+              <p className="text-lg font-black tracking-tight text-gray-900">Matungulu Girls</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-gray-500">Student Portal</p>
             </div>
           </div>
           <button
             onClick={() => router.push('/pages/contact')}
-            className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-black text-white"
+            className="rounded-full border border-gray-200 bg-white px-4 py-3 text-sm font-black text-gray-700 hover:bg-gray-50"
           >
             Help Desk
           </button>
@@ -411,39 +411,39 @@ function GuestPortalLanding({ onOpenLogin, router }) {
 
         <section className="grid flex-1 items-center gap-8 py-10 lg:grid-cols-[1.1fr_0.9fr] lg:py-16">
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/70">
+            <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">
               <FaStar className="h-3.5 w-3.5 text-[#d6b25e]" />
               Secure Student Workspace
             </div>
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.92] text-white sm:text-6xl xl:text-7xl">
+            <h1 className="max-w-4xl text-5xl font-black leading-[0.92] text-gray-900 sm:text-6xl xl:text-7xl">
               A complete digital workspace for student academics and school life.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-white/68 sm:text-lg">
+            <p className="max-w-2xl text-base leading-8 text-gray-600 sm:text-lg">
               The portal has been rebuilt as a modern app-like environment for results, resources, guidance, and finance while keeping the same secure school data flow underneath.
             </p>
 
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={onOpenLogin}
-                className="inline-flex items-center gap-2 rounded-full bg-[#d6b25e] px-6 py-4 text-sm font-black text-[#11241d]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0f5b4c] px-6 py-4 text-sm font-black text-white hover:bg-[#0d4a3a]"
               >
                 Access Portal
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => router.push('/pagesSchool Policies')}
-                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-6 py-4 text-sm font-black text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-4 text-sm font-black text-gray-700 hover:bg-gray-50"
               >
                 View Policies
-                <FiArrowUpRight className="h-4 w-4 text-[#d6b25e]" />
+                <FiArrowUpRight className="h-4 w-4 text-[#0f5b4c]" />
               </button>
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             {features.map((feature) => (
-              <div key={feature.title} className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04]">
-                <div className={`bg-gradient-to-br ${feature.tone} p-5`}>
+              <div key={feature.title} className="overflow-hidden rounded-[1.8rem] border border-gray-200 bg-white shadow-sm">
+                <div className={`bg-gradient-to-br ${feature.tone} p-5 text-white`}>
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
                     {feature.icon}
                   </div>
@@ -765,7 +765,7 @@ export default function ModernStudentPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#061510] text-white">
+    <div className="min-h-screen bg-white text-gray-900">
       <Toaster position="top-right" expand richColors theme="light" />
       <StudentLoginModal
         isOpen={showLoginModal}
@@ -853,22 +853,22 @@ export default function ModernStudentPortalPage() {
             {currentView === 'fees' && <FeesView student={student} token={token} />}
           </main>
 
-          <footer className="border-t border-white/10 bg-[#081712]/85 px-4 py-5 backdrop-blur-xl sm:px-6 xl:px-8">
+          <footer className="border-t border-gray-200 bg-white/95 px-4 py-5 backdrop-blur-xl sm:px-6 xl:px-8">
             <div className="mx-auto flex max-w-[1600px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-sm font-black text-white">© {new Date().getFullYear()} Matungulu Girls Senior School</p>
-                <p className="mt-1 text-xs font-medium text-white/45">
+                <p className="text-sm font-black text-gray-900">© {new Date().getFullYear()} Matungulu Girls Senior School</p>
+                <p className="mt-1 text-xs font-medium text-gray-500">
                   Student Portal Workspace · Secure school data integrations preserved
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-white/45">
-                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-white">
+              <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-gray-900">
                   Privacy
                 </button>
-                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-white">
+                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-gray-900">
                   Terms
                 </button>
-                <button onClick={() => router.push('/pages/contact')} className="transition hover:text-white">
+                <button onClick={() => router.push('/pages/contact')} className="transition hover:text-gray-900">
                   Help Desk
                 </button>
               </div>

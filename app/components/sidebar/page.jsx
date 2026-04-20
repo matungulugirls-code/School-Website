@@ -431,37 +431,37 @@ const handleLogout = () => {
         `}</style>
         
         <div className="flex flex-col h-full">
-          {/* Header - Updated with emerald/teal gradient */}
-          <div className="flex items-center justify-between p-4 lg:p-5 border-b border-gray-200 flex-shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 rounded-2xl flex items-center justify-center shadow-2xl shadow-emerald-500/30">
-                  <img 
-                    src="/MatG.jpg" 
-                    alt="School Logo" 
-                    className="w-full h-full object-contain p-2"
-                  />
-                </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
-              </div>
-              <div className="min-w-0">
-                <h1 className="text-sm lg:text-lg font-bold text-gray-800 truncate">
-                  MatG Senior School
-                </h1>
-                <p className="text-gray-600 text-xs lg:text-sm font-medium truncate">Admin Portal</p>
-              </div>
-            </div>
-            
-            {/* Close button - only show on mobile */}
-            if (isMobile && (
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="p-2 rounded-xl transition-all duration-200 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-              >
-                <FiX className="text-xl" />
-              </button>
-            ))
-          </div>
+     {/* Header - Updated with emerald/teal gradient */}
+<div className="flex items-center justify-between p-4 lg:p-5 border-b border-gray-200 flex-shrink-0">
+  <div className="flex items-center gap-3">
+    <div className="relative">
+      <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 rounded-2xl flex items-center justify-center shadow-2xl shadow-emerald-500/30">
+        <img 
+          src="/MatG.jpg" 
+          alt="School Logo" 
+          className="w-full h-full object-contain p-2"
+        />
+      </div>
+      <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
+    </div>
+    <div className="min-w-0">
+      <h1 className="text-sm lg:text-lg font-bold text-gray-800 truncate">
+        MatG Senior School
+      </h1>
+      <p className="text-gray-600 text-xs lg:text-sm font-medium truncate">Admin Portal</p>
+    </div>
+  </div>
+  
+  {/* Close button - only show on mobile */}
+  {isMobile && (
+    <button
+      onClick={() => setSidebarOpen(false)}
+      className="p-2 rounded-xl transition-all duration-200 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+    >
+      <FiX className="text-xl" />
+    </button>
+  )}
+</div>
 
           {/* Navigation - Updated active tab colors to emerald/teal */}
           <nav className="flex-1 p-4 lg:p-5 overflow-y-auto hide-scrollbar">
