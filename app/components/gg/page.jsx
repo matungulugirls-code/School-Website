@@ -963,7 +963,7 @@ export default function ModernGallery() {
       <Head><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(gallerySchema) }} /></Head>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 p-4 md:p-6">
         <Toaster position="top-right" richColors />
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="md:w-[85%] w-full  mx-auto space-y-6">
 {/* ========== MODERN HERO BANNER - Matungulu Girls Gallery ========== */}
 <div className="relative mx-auto overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl w-full md:w-[90%] lg:w-[85%] xl:w-[80%]">
   <div className="relative bg-gradient-to-br from-[#064e3b] via-[#0f5b4c] to-[#115e59] p-6 sm:p-10 overflow-hidden">
