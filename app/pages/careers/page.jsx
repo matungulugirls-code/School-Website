@@ -702,10 +702,10 @@ export default function CareersPage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-700">
               <IoSparkles className="h-4 w-4 text-[#0f5b4c]" />
-              Careers at Matungulu Girls
+              Open Jobs at Matungulu Girls
             </div>
             <h1 className="mt-5 text-4xl font-black leading-[0.95] text-black sm:text-6xl">
-              A premium careers desk for school jobs and real opportunities.
+              A careers desk for school jobs and real opportunities.
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-8 text-gray-600 sm:text-base">
               Explore Matungulu Girls Senior School openings through a more modern recruitment workspace built for teachers, administrators, support teams, and professionals ready to contribute to a girls-centered institution.
