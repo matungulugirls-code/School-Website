@@ -604,7 +604,7 @@ export default function CareersPage() {
     return [
       { ...statsBase[0], value: jobs.length.toString() },
       { ...statsBase[1], value: departmentCount ? departmentCount.toString() : '1' },
-      { ...statsBase[2], value: 'Girls First' },
+      { ...statsBase[2], value: 'Academic First' },
       { ...statsBase[3], value: '3+' },
     ];
   }, [jobs]);
@@ -724,9 +724,9 @@ export default function CareersPage() {
               </button>
               <button
                 onClick={handleShareAllJobs}
-                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-5 py-3 text-sm font-black text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white px-5 py-3 text-sm font-black text-white"
               >
-                <FaWhatsapp className="h-4 w-4 text-[#d4b15f]" />
+                <FaWhatsapp className="h-4 w-4 text-[#0b4516]" />
                 Share Openings
               </button>
             </div>
