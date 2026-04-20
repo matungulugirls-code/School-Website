@@ -440,7 +440,7 @@ function GuestPortalLanding({ onOpenLogin, router }) {
             </div>
           </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
+      <div className="grid md:grid-cols-2 gap-3 grid-cols-2 lg:gap-6">
   {features.map((feature) => (
     <div key={feature.title} className="overflow-hidden rounded-[1.5rem] sm:rounded-[1.8rem] border border-gray-200 bg-white shadow-sm">
       <div className={`bg-gradient-to-br ${feature.tone} p-3 sm:p-5 text-white`}>
