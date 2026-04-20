@@ -1528,88 +1528,87 @@ const achievements = [
   </section>
 )}
 
-{/* ===== ACHIEVEMENTS TIMELINE ===== */}
-<section className="bg-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18">
-    <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-      <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 mb-3">
-        Our Journey
-      </span>
-      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
-        Recent <span className="text-emerald-800">Achievements</span>
+{/* ===== ACHIEVEMENTS TIMELINE: MODERNIZED ===== */}
+<section className="bg-[#fcfcfd] py-20 overflow-hidden">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {/* Header: Centered & Minimalist */}
+    <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 mb-4">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">Chronicle of Success</span>
+      </div>
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">
+        Milestones of <span className="text-emerald-600">Excellence</span>
       </h2>
-      <p className="text-gray-900 text-base sm:text-base">
-        Milestones that showcase our commitment to excellence (2019–{new Date().getFullYear()})
+      <p className="text-slate-500 text-base sm:text-lg font-medium leading-relaxed">
+        A legacy built on innovation and character, charting our progress from 2019 to the present.
       </p>
     </div>
 
     {achievementsLoading ? (
-      <div className="text-center py-12">
-        <FiLoader className="w-8 h-8 animate-spin mx-auto mb-4 text-emerald-600" />
-        <p className="text-gray-500">Loading achievements...</p>
+      <div className="flex flex-col items-center justify-center py-20">
+        <FiLoader className="w-10 h-10 animate-spin text-emerald-600 mb-4" />
+        <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Syncing Data...</p>
       </div>
     ) : (
       <div className="relative">
-        {/* Timeline Line */}
-        <div className="absolute left-8 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-300 to-emerald-200"></div>
+        {/* Timeline Path: Thin & Sophisticated */}
+        <div className="absolute left-4 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-px bg-slate-200"></div>
 
-        <div className="space-y-10">
+        <div className="space-y-12">
           {getAchievements().map((item, idx) => (
             <div
               key={idx}
-              className={`relative flex flex-col sm:flex-row items-start gap-6 sm:gap-10 ${
-                idx % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+              className={`relative flex items-center justify-between w-full mb-8 ${
+                idx % 2 === 0 ? "sm:flex-row-reverse" : "sm:flex-row"
               }`}
             >
-              {/* Timeline Dot */}
-              <div className="absolute left-6 sm:left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 border-4 border-white shadow-xl flex items-center justify-center z-10">
-                <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+              {/* Spacer for Desktop */}
+              <div className="hidden sm:block w-[45%]" />
+
+              {/* Timeline Indicator */}
+              <div className="absolute left-4 sm:left-1/2 transform -translate-x-1/2 z-20">
+                <div className="w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                </div>
               </div>
 
-              {/* Content */}
-              <div
-                className={`ml-14 sm:ml-0 ${
-                  idx % 2 === 0 ? "sm:pr-14 sm:text-right" : "sm:pl-14"
-                } sm:w-1/2`}
-              >
-                <div
-                  className={`group bg-white/90 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${
-                    idx % 2 === 0 ? "sm:mr-auto" : "sm:ml-auto"
-                  }`}
-                >
-                  {/* Header */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <div
-                      className={`w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-md ${
-                        idx % 2 === 0 ? "order-first" : "sm:order-last"
-                      }`}
-                    >
-                      {item.icon || <FiAward className="w-5 h-5" />}
-                    </div>
-
-                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full tracking-wide">
+              {/* Card Content */}
+              <div className="w-full sm:w-[45%] pl-12 sm:pl-0 group">
+                <div className="relative p-6 sm:p-8 rounded-[28px] bg-white border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] transition-all duration-500 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1">
+                  
+                  {/* Floating Year Tag */}
+                  <div className={`absolute top-0 -translate-y-1/2 flex items-center gap-2 ${
+                    idx % 2 === 0 ? "sm:right-8" : "sm:left-8"
+                  }`}>
+                    <span className="px-4 py-1 rounded-full bg-[#172033] text-white text-[11px] font-black tracking-widest uppercase shadow-lg">
                       {item.year}
                     </span>
                   </div>
 
-                  {/* Title */}
-                  <h4 className="font-bold text-gray-900 text-base mb-1.5 tracking-tight">
-                    {item.title}
-                  </h4>
+                  <div className={`flex flex-col ${idx % 2 === 0 ? "sm:items-start" : "sm:items-end"} text-left ${idx % 2 === 0 ? "sm:text-left" : "sm:text-right"}`}>
+                    {/* Icon Plate */}
+                    <div className="mb-4 p-3 rounded-2xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-600 group-hover:text-white">
+                      {item.icon || <FiAward size={20} />}
+                    </div>
 
-                  {/* Short Description */}
-                  <p className="text-gray-700 text-sm leading-relaxed font-medium mb-3">
-                    {item.shortDescription || (item.description && item.description.substring(0, 120) + '...')}
-                  </p>
+                    <h4 className="text-xl font-black text-slate-900 mb-2 leading-tight">
+                      {item.title}
+                    </h4>
 
-                  {/* Read More Button */}
-                  <button
-                    onClick={() => openAchievementModal(item)}
-                    className="inline-flex items-center gap-1.5 text-emerald-600 text-xs font-semibold hover:text-emerald-700 transition-colors"
-                  >
-                    Read Full Story
-                    <FiArrowRight size={12} />
-                  </button>
+                    <p className="text-slate-500 text-sm leading-relaxed font-medium mb-5 line-clamp-3">
+                      {item.shortDescription || (item.description && item.description.substring(0, 120) + '...')}
+                    </p>
+
+                    <button
+                      onClick={() => openAchievementModal(item)}
+                      className="group/btn inline-flex items-center gap-2 text-emerald-600 text-xs font-black uppercase tracking-widest hover:text-emerald-700 transition-colors"
+                    >
+                      View Intelligence
+                      <FiArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
