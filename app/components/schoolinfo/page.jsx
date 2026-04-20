@@ -2095,7 +2095,7 @@ const handleDeleteSchool = async () => {
       <span>Create School Information</span>
     </button>
   </div>
-) : null}: (
+) : (
         <div className="space-y-6">
           {/* QUICK STATS */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
