@@ -347,7 +347,7 @@ function EmptyState({ onClear }) {
   return (
     <div className="rounded-[2rem] border border-[#11281f12] bg-[#fffaf0] px-6 py-20 text-center shadow-[0_24px_60px_rgba(17,40,31,0.08)]">
       <FiBriefcase className="mx-auto h-14 w-14 text-[#0f5b4c]" />
-      <h3 className="mt-6 text-3xl font-black text-[#11281f]">No roles match this search</h3>
+      <h3 className="mt-6 text-3xl font-black text-[#11281f]">No roles available</h3>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#5f665e]">
         Try another category or keyword to reopen current Matungulu Girls Senior School opportunities.
       </p>
@@ -711,7 +711,7 @@ export default function CareersPage() {
               Explore Matungulu Girls Senior School openings through a more modern recruitment workspace built for teachers, administrators, support teams, and professionals ready to contribute to a girls-centered institution.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-nowrap gap-3">
               <button
                 onClick={() => {
                   const section = document.getElementById('careers-openings');
@@ -756,7 +756,7 @@ export default function CareersPage() {
       </section>
 
    <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
     {stats.map((stat) => (
       <StatPanel key={stat.label} stat={stat} value={stat.value} />
     ))}
