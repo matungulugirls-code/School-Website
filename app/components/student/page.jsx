@@ -2170,17 +2170,17 @@ const getAuthHeaders = (isProtected = false) => {
           const genderChartData = Object.entries(genderDistribution).map(([name, value]) => ({
             name,
             value,
-            color: name === 'Male' ? '#3B82F6' : name === 'Female' ? '#EC4899' : '#8B5CF6'
+            color: name === 'Male' ? '#0D9488' : name === 'Female' ? '#EC4899' : '#047857'
           }));
           
           const formChartData = Object.entries(formDistribution).map(([name, value]) => ({
             name,
             value,
             color: 
-              name === 'Form 1' ? '#3B82F6' :
+              name === 'Form 1' ? '#0D9488' :
               name === 'Form 2' ? '#10B981' :
               name === 'Form 3' ? '#F59E0B' :
-              '#8B5CF6'
+              '#047857'
           }));
           
           const streamChartData = Object.entries(streamDistribution)
@@ -2191,8 +2191,8 @@ const getAuthHeaders = (isProtected = false) => {
               fullName: name,
               value,
               color: [
-                '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444',
-                '#6366F1', '#EC4899', '#14B8A6', '#F97316', '#8B5CF6'
+                '#0D9488', '#10B981', '#F59E0B', '#22C55E', '#EF4444',
+                '#059669', '#EC4899', '#14B8A6', '#F97316', '#047857'
               ][index % 10]
             }));
           
@@ -2201,13 +2201,13 @@ const getAuthHeaders = (isProtected = false) => {
             .map(([name, value], index) => ({
               name,
               value,
-              color: ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444'][index % 5]
+              color: ['#0D9488', '#10B981', '#F59E0B', '#047857', '#EF4444'][index % 5]
             }));
           
           const statusChartData = [
             { name: 'Active', value: statusDistribution.active || 0, color: '#10B981' },
             { name: 'Inactive', value: statusDistribution.inactive || 0, color: '#EF4444' },
-            { name: 'Graduated', value: statusDistribution.graduated || 0, color: '#8B5CF6' },
+            { name: 'Graduated', value: statusDistribution.graduated || 0, color: '#047857' },
             { name: 'Transferred', value: statusDistribution.transferred || 0, color: '#F59E0B' }
           ];
           
@@ -2276,10 +2276,10 @@ const handleAuthError = (error) => {
           }));
           
           const formChartData = [
-            { name: 'Form 1', value: apiStats.form1 || 0, color: '#3B82F6' },
+            { name: 'Form 1', value: apiStats.form1 || 0, color: '#0D9488' },
             { name: 'Form 2', value: apiStats.form2 || 0, color: '#10B981' },
             { name: 'Form 3', value: apiStats.form3 || 0, color: '#F59E0B' },
-            { name: 'Form 4', value: apiStats.form4 || 0, color: '#8B5CF6' }
+            { name: 'Form 4', value: apiStats.form4 || 0, color: '#047857' }
           ];
           
           setDemographics(prev => ({
@@ -3807,14 +3807,14 @@ const downloadExcelTemplate = () => {
                 data={demographics.formDistribution}
                 type="pie"
                 title="Form Distribution"
-                colors={['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6']}
+                colors={['#0D9488', '#10B981', '#F59E0B', '#047857']}
                 height={400}
               />
               <StudentsChart
                 data={demographics.gender}
                 type="bar"
                 title="Gender Distribution"
-                colors={['#3B82F6', '#EC4899', '#8B5CF6']}
+                colors={['#0D9488', '#EC4899', '#047857']}
                 height={400}
               />
             </div>
@@ -3830,7 +3830,7 @@ const downloadExcelTemplate = () => {
                 data={demographics.ageGroups}
                 type="pie"
                 title="Age Distribution"
-                colors={['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6']}
+                colors={['#0D9488', '#10B981', '#F59E0B', '#047857']}
                 height={400}
               />
             </div>
@@ -3896,7 +3896,7 @@ const downloadExcelTemplate = () => {
               <button
                 onClick={() => loadUploadHistory(1)}
                 disabled={historyLoading}
-                className="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl font-bold flex items-center justify-center gap-3 text-base shadow-xl disabled:opacity-50 hover:shadow-2xl transition-all duration-300"
+                className="px-6 py-4 bg-gradient-to-r from-teal-700 to-emerald-800 text-white rounded-2xl font-bold flex items-center justify-center gap-3 text-base shadow-xl disabled:opacity-50 hover:shadow-2xl transition-all duration-300"
               >
                 {historyLoading ? (
                   <>

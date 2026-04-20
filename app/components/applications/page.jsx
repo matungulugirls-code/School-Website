@@ -104,7 +104,7 @@ const ModernCalendar = ({ value, onChange, placeholder = "Select date" }) => {
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent transition-all duration-200"
         placeholder={placeholder}
       />
     </div>
@@ -1824,7 +1824,7 @@ const EmptyState = () => (
             border-none rounded-2xl 
             text-xs font-bold text-gray-600 
             appearance-none 
-            focus:ring-2 focus:ring-blue-500/20 
+            focus:ring-2 focus:ring-teal-600/20 
             cursor-pointer 
             hover:from-gray-200/50 hover:to-gray-200/30 
             transition-all duration-200
@@ -1950,7 +1950,7 @@ const EmptyState = () => (
             rounded-2xl 
             text-xs font-bold 
             appearance-none 
-            focus:ring-4 focus:ring-blue-500/20 
+            focus:ring-4 focus:ring-teal-600/20 
             cursor-pointer 
             hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-900 
             transition-all duration-200
@@ -2356,7 +2356,7 @@ const EmptyState = () => (
                     value={decisionData.admissionClass}
                     onChange={(e) => setDecisionData({...decisionData, admissionClass: e.target.value})}
                     placeholder="e.g. Form 1A"
-                    className="w-full text-md font-semibold px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                    className="w-full text-md font-semibold px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all"
                   />
                 </div>
                 <div>
@@ -2386,7 +2386,7 @@ const EmptyState = () => (
           type="time"
           value={decisionData.interviewTime}
           onChange={(e) => setDecisionData({...decisionData, interviewTime: e.target.value})}
-          className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all"
         />
       </div>
     </div>
@@ -2420,7 +2420,7 @@ const EmptyState = () => (
         value={decisionData.conditions}
         onChange={(e) => setDecisionData({...decisionData, conditions: e.target.value})}
         placeholder="Specify the conditions that must be met..."
-        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all min-h-[100px]"
+        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all min-h-[100px]"
       />
     </div>
     <div>
@@ -2442,7 +2442,7 @@ const EmptyState = () => (
         value={decisionData.waitlistPosition}
         onChange={(e) => setDecisionData({...decisionData, waitlistPosition: e.target.value})}
         placeholder="e.g. 5"
-        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all"
       />
     </div>
     <div>
@@ -2451,7 +2451,7 @@ const EmptyState = () => (
         value={decisionData.waitlistNotes}
         onChange={(e) => setDecisionData({...decisionData, waitlistNotes: e.target.value})}
         placeholder="Additional notes about waitlist..."
-        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all min-h-[100px]"
+        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all min-h-[100px]"
       />
     </div>
   </div>

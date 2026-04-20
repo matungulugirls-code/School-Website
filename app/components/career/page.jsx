@@ -431,7 +431,7 @@ const categories = [
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                <label className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
                   <FaCalendar /> Application Deadline
                 </label>
                 <TextField 
@@ -469,7 +469,7 @@ const categories = [
 
             {/* Requirements */}
             <div className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-2xl p-5 border border-emerald-200">
-              <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+              <label className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
                 <FaShieldAlt className="text-emerald-600" /> Requirements
               </label>
               <TextareaAutosize 

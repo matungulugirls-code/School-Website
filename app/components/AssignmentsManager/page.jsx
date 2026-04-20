@@ -542,7 +542,7 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
                     {/* Teacher */}
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
-                        <FiUserCheck className="text-blue-400" />
+                        <FiUserCheck className="text-teal-400" />
                       </div>
                       <div>
                         <p className="text-[10px] font-bold text-white/40 uppercase">Teacher</p>
@@ -1125,7 +1125,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
             <div>
               <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
                 <span className="text-red-500">*</span>
-                <FiTag className="text-indigo-500" />
+                <FiTag className="text-emerald-600" />
                 Assignment Title
               </label>
               <input
@@ -1133,7 +1133,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 required
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
-                className="w-full font-bold px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+                className="w-full font-bold px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-gray-50"
                 placeholder="Enter assignment title"
                 disabled={loading}
               />
@@ -1144,14 +1144,14 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               <div>
                 <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
                   <span className="text-red-500">*</span>
-                  <FiBookOpen className="text-purple-500" />
+                  <FiBookOpen className="text-emerald-600" />
                   Subject
                 </label>
                 <select
                   required
                   value={formData.subject}
                   onChange={(e) => handleChange('subject', e.target.value)}
-                  className="w-full  px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-50"
+                  className="w-full  px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
                   disabled={loading}
                 >
                   <option value="">Select Subject</option>
@@ -1202,7 +1202,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
             <div>
               <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
                 <span className="text-red-500">*</span>
-                <FiFileText className="text-blue-500" />
+                <FiFileText className="text-teal-700" />
                 Description
               </label>
               <textarea
@@ -1210,7 +1210,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 value={formData.description}
                 onChange={(e) => handleChange('description', e.target.value)}
                 rows="4"
-                className="w-full font-bold px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+                className="w-full font-bold px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-gray-50"
                 placeholder="Describe the assignment..."
                 disabled={loading}
               />
@@ -1221,7 +1221,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               <div>
                 <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
                   <span className="text-red-500">*</span>
-                  <FiCalendar className="text-indigo-500" />
+                  <FiCalendar className="text-emerald-600" />
                   Due Date
                 </label>
                 <input
@@ -1229,21 +1229,21 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                   required
                   value={formData.dueDate}
                   onChange={(e) => handleChange('dueDate', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
                   disabled={loading}
                 />
               </div>
               
               <div>
                 <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <FiCalendar className="text-indigo-500" />
+                  <FiCalendar className="text-emerald-600" />
                   Date Assigned
                 </label>
                 <input
                   type="date"
                   value={formData.dateAssigned}
                   onChange={(e) => handleChange('dateAssigned', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
                   disabled={loading}
                 />
               </div>
@@ -1307,7 +1307,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
             {/* Learning Objectives */}
             <div>
               <label className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiTarget className="text-purple-500" />
+                <FiTarget className="text-emerald-600" />
                 Learning Objectives
               </label>
               <div className="space-y-3">
@@ -1317,7 +1317,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                     value={newObjective}
                     onChange={(e) => setNewObjective(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddObjective())}
-                    className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-50"
+                    className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
                     placeholder="Enter learning objective..."
                     disabled={loading}
                   />
@@ -1373,14 +1373,14 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
             {/* Additional Work - Full Width */}
             <div>
               <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiFileText className="text-blue-500" />
+                <FiFileText className="text-teal-700" />
                 Additional Work
               </label>
               <textarea
                 value={formData.additionalWork}
                 onChange={(e) => handleChange('additionalWork', e.target.value)}
                 rows="3"
-                className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+                className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-gray-50"
                 placeholder="Any additional work or extra credit..."
                 disabled={loading}
               />
@@ -1407,7 +1407,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
                   <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-                    <FiUpload className="text-blue-500" />
+                    <FiUpload className="text-teal-700" />
                     <span>File Upload</span>
                   </h3>
                   <p className="text-sm text-gray-600">
@@ -1532,7 +1532,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                         return (
                           <div 
                             key={file.id || idx} 
-                            className="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-indigo-200 hover:shadow-md hover:shadow-indigo-50/50 transition-all duration-200"
+                            className="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-emerald-200 hover:shadow-md hover:shadow-emerald-50/50 transition-all duration-200"
                           >
                             <div className="flex items-center gap-4 min-w-0">
                               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
@@ -1574,7 +1574,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                         return (
                           <div 
                             key={`attach-${file.id || idx}`} 
-                            className="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-blue-200 hover:shadow-md hover:shadow-blue-50/50 transition-all duration-200"
+                            className="group flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-teal-200 hover:shadow-md hover:shadow-teal-50/50 transition-all duration-200"
                           >
                             <div className="flex items-center gap-4 min-w-0">
                               <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
@@ -2405,7 +2405,7 @@ export default function AssignmentsManager() {
           <div className="h-7 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-green-400 
                           rounded-full shadow-[0_0_15px_rgba(20,184,166,0.5)]" />
           <div>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-200">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-200">
               Matungulu Girls Senior School
             </h2>
             <p className="text-[9px] italic font-medium text-white/40 tracking-widest uppercase">
@@ -2435,8 +2435,8 @@ export default function AssignmentsManager() {
                             bg-gradient-to-r from-teal-500/20 to-emerald-500/20 
                             backdrop-blur-sm rounded-full mb-2 sm:mb-3 max-w-max 
                             border border-white/10">
-              <FiShield className="w-2.5 h-2.5 text-indigo-300" />
-              <span className="text-[9px] font-bold text-indigo-300 uppercase tracking-wider">
+              <FiShield className="w-2.5 h-2.5 text-emerald-300" />
+              <span className="text-[9px] font-bold text-emerald-300 uppercase tracking-wider">
                 Academic Portal
               </span>
             </div>
@@ -2453,7 +2453,7 @@ export default function AssignmentsManager() {
 
             {/* Description */}
             <p className="mt-2 sm:mt-3 text-sm xs:text-base sm:text-lg
-                          text-indigo-100/90 font-medium
+                          text-emerald-100/90 font-medium
                           max-w-2xl leading-relaxed
                           line-clamp-2 sm:line-clamp-none">
               Create, organize, distribute, and track student assignments across classes and subjects.
@@ -2470,7 +2470,7 @@ export default function AssignmentsManager() {
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
                               bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <FiClipboard className="w-3 h-3 text-indigo-400" />
+                <FiClipboard className="w-3 h-3 text-emerald-400" />
                 <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
                   {stats?.total || 0} Assignments
                 </span>
@@ -2564,7 +2564,7 @@ export default function AssignmentsManager() {
 
         {/* Today's Stats - Desktop */}
         <div className="hidden lg:flex flex-col items-end">
-          <span className="text-[9px] font-bold text-indigo-300/70 uppercase tracking-widest">
+          <span className="text-[9px] font-bold text-emerald-300/70 uppercase tracking-widest">
             Due This Week
           </span>
           <span className="text-2xl font-black text-white">
@@ -2588,16 +2588,16 @@ export default function AssignmentsManager() {
       
       {/* Security Badge */}
       <div className="flex items-center gap-2">
-        <FiShield className="w-3 h-3 text-indigo-400" />
+        <FiShield className="w-3 h-3 text-emerald-400" />
         <span className="text-white/40">Security:</span>
-        <span className="text-indigo-400">Encrypted</span>
+        <span className="text-emerald-400">Encrypted</span>
       </div>
       
       {/* Total Assignments */}
       <div className="flex items-center gap-2">
-        <FiClipboard className="w-3 h-3 text-purple-400" />
+        <FiClipboard className="w-3 h-3 text-emerald-400" />
         <span className="text-white/40">Total:</span>
-        <span className="text-purple-400 font-black">{stats?.total || 0} Tasks</span>
+        <span className="text-emerald-400 font-black">{stats?.total || 0} Tasks</span>
       </div>
       
       {/* Last Updated */}
@@ -2744,14 +2744,14 @@ export default function AssignmentsManager() {
               placeholder="Search assignments by title, description, or subject..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-gray-50"
+              className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm bg-gray-50"
             />
           </div>
 
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 cursor-pointer text-sm"
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-gray-50 cursor-pointer text-sm"
           >
             <option value="all">All Status</option>
             {statusOptions.map(option => (
@@ -2764,7 +2764,7 @@ export default function AssignmentsManager() {
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-50 cursor-pointer text-sm"
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50 cursor-pointer text-sm"
           >
             <option value="all">All Subjects</option>
             {subjectOptions.map(subject => (
@@ -2857,7 +2857,7 @@ export default function AssignmentsManager() {
                     </th>
                     <th className="py-5 px-8 text-left text-xs font-bold text-slate-800 uppercase tracking-[0.2em] min-w-[300px]">
                       <div className="flex items-center gap-2">
-                        <HiOutlineSparkles className="w-4 h-4 text-indigo-500" />
+                        <HiOutlineSparkles className="w-4 h-4 text-emerald-600" />
                         Assignment
                       </div>
                     </th>
@@ -2881,7 +2881,7 @@ export default function AssignmentsManager() {
                     </th>
                     <th className="py-5 px-8 text-left text-xs font-bold text-slate-800 uppercase tracking-[0.2em]">
                       <div className="flex items-center gap-2">
-                        <FiPaperclip className="w-4 h-4 text-blue-500" />
+                        <FiPaperclip className="w-4 h-4 text-teal-700" />
                         Resources
                       </div>
                     </th>
@@ -3042,7 +3042,7 @@ export default function AssignmentsManager() {
                                 {assignment.teacher?.split(' ').map(n => n[0]).join('') || 'A'}
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-xs font-bold text-slate-900 group-hover/author:text-indigo-600 transition-colors">
+                                <span className="text-xs font-bold text-slate-900 group-hover/author:text-emerald-700 transition-colors">
                                   {assignment.teacher || 'System Admin'}
                                 </span>
                                 <span className="text-xs text-slate-800 font-medium">
@@ -3054,7 +3054,7 @@ export default function AssignmentsManager() {
                               <FiTarget className={`w-3 h-3 ${
                                 assignment.priority === 'high' ? 'text-red-600' :
                                 assignment.priority === 'medium' ? 'text-orange-600' :
-                                assignment.priority === 'low' ? 'text-blue-600' :
+                                assignment.priority === 'low' ? 'text-teal-700' :
                                 'text-gray-600'
                               }`} />
                               {assignment.priority || 'medium'} priority
@@ -3088,7 +3088,7 @@ export default function AssignmentsManager() {
                           <div className="flex items-center justify-end gap-4">
                             <button
                               onClick={() => handleView(assignment)}
-                              className="flex items-center gap-1.5 text-indigo-600 font-bold text-sm cursor-pointer"
+                              className="flex items-center gap-1.5 text-emerald-700 font-bold text-sm cursor-pointer"
                             >
                               <FiEye className="w-4 h-4" />
                               <span>View</span>
@@ -3121,9 +3121,9 @@ export default function AssignmentsManager() {
                   <button
                     onClick={() => paginate(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
                   >
-                    <FiChevronLeft className="w-5 h-5 text-slate-800 group-hover:text-indigo-600" />
+                    <FiChevronLeft className="w-5 h-5 text-slate-800 group-hover:text-emerald-700" />
                   </button>
                   
                   {Array.from({ length: totalPages }, (_, i) => i + 1)

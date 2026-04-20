@@ -64,27 +64,27 @@ function ModernLoadingSpinner({ message = "Loading fee data...", size = "medium"
   const { outer, inner } = sizes[size]
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-blue-50/30 to-emerald-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-teal-50/30 to-emerald-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="text-center">
         <div className="relative inline-block">
           <div className="relative">
             <CircularProgress 
               size={outer} 
               thickness={5}
-              className="text-indigo-600"
+              className="text-teal-700"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full" style={{ width: inner, height: inner }}></div>
+              <div className="bg-gradient-to-r from-teal-600 to-emerald-700 rounded-full" style={{ width: inner, height: inner }}></div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-indigo-100 to-violet-100 rounded-full blur-xl opacity-30" />
+          <div className="absolute -inset-6 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-full blur-xl opacity-30" />
         </div>
         
         <div className="mt-8 space-y-3">
           <span className="block text-lg font-semibold text-gray-800">{message}</span>
           <div className="flex justify-center space-x-1.5">
             {[0, 1, 2].map(i => (
-              <div key={i} className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+              <div key={i} className="w-2 h-2 bg-teal-600 rounded-full"></div>
             ))}
           </div>
         </div>
