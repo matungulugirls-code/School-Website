@@ -724,7 +724,7 @@ export default function CareersPage() {
               </button>
               <button
                 onClick={handleShareAllJobs}
-                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white px-5 py-3 text-sm font-black text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white px-5 py-3 text-sm font-black text-[#0b4516]"
               >
                 <FaWhatsapp className="h-4 w-4 text-[#0b4516]" />
                 Share Openings
