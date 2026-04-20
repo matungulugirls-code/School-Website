@@ -153,7 +153,7 @@ export default function AboutPage() {
             src="/Matungulu/29.jpeg"
             alt="Matungulu Girls Senior School"
             fill
-            className="object-cover opacity-60 scale-[1.02] sm:opacity-65"
+            className="object-cover opacity-35 scale-[1.02] sm:opacity-40"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a241b]/45 via-[#124635]/30 to-[#09131e]/48" />
@@ -172,9 +172,9 @@ export default function AboutPage() {
             </span>
           </div>
 
-          <h1 className="mb-5 text-3xl font-black leading-none tracking-tighter text-white sm:mb-6 sm:text-4xl md:text-5xl">
+          <h1 className="mb-5 text-4xl font-black leading-none tracking-tighter text-white sm:mb-6 sm:text-4xl md:text-5xl">
             Matungulu Girls
-            <span className="bg-gradient-to-r from-emerald-300 via-emerald-200 to-white/80 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-white/80 bg-clip-text text-transparent">
               {" "}Senior School
             </span>
           </h1>
