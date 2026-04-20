@@ -83,6 +83,8 @@ import {
   IoSparkles // Used for the "Gallery/New" sparkle effect
 } from 'react-icons/io5';
 import CircularProgress from '@mui/material/CircularProgress';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 // Custom Spinner Component using Material-UI CircularProgress
 const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'indeterminate', value = 0 }) => {
