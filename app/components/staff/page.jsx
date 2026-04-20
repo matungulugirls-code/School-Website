@@ -1383,61 +1383,6 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   );
 }
 
-// Simple ItemInput component for arrays
-function ItemInput({ label, value, onChange, placeholder, disabled }) {
-  const [inputValue, setInputValue] = useState('');
-
-  const addItem = () => {
-    if (inputValue.trim()) {
-      onChange([...value, inputValue.trim()]);
-      setInputValue('');
-    }
-  };
-
-  const removeItem = (index) => {
-    onChange(value.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <div className="flex gap-2 mb-2">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder={placeholder}
-          disabled={disabled}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-          onKeyPress={(e) => e.key === 'Enter' && addItem()}
-        />
-        <button
-          type="button"
-          onClick={addItem}
-          disabled={disabled || !inputValue.trim()}
-          className="px-3 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
-        >
-          Add
-        </button>
-      </div>
-      <div className="space-y-1">
-        {value.map((item, index) => (
-          <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-            <span className="text-sm">{item}</span>
-            <button
-              type="button"
-              onClick={() => removeItem(index)}
-              className="text-sm text-red-600 hover:text-red-800"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // Main Staff Manager Component
 export default function StaffManager() {
   const [staff, setStaff] = useState([]);
