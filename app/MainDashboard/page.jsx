@@ -1228,7 +1228,7 @@ const handleLogout = () => {
 
 const CompactSchoolHeader = () => {
   return (
-    <div className="group cursor-default py-6 px-4">
+    <div className="group cursor-default py-3 px-4">
       <div className="flex items-center gap-5">
         {/* 1. Dynamic Vertical Indicator */}
         <div className="relative flex items-center justify-center">
@@ -1243,9 +1243,7 @@ const CompactSchoolHeader = () => {
         <div className="flex flex-col">
           {/* Top Label Layer */}
           <div className="flex items-center gap-3 mb-1">
-            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-[0.4em]">
-              Official Institution
-            </span>
+          
             <div className="h-[1px] w-8 bg-emerald-500/20" />
           </div>
 
