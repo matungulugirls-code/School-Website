@@ -830,8 +830,8 @@ export default function StudentAchievements() {
                   </div>
                   {schoolStats?.lastYearMean && (
                     <div className="flex items-center justify-between p-3.5 bg-[#fcfaf6] rounded-2xl border border-[#e8dfd3]">
-                      <span className="text-xs font-bold">Last Year Mean</span>
-                      <span className="font-black text-emerald-700">{schoolStats.lastYearMean.toFixed(2)}</span>
+                      <span className="text-xs font-bold">Current Year Mean</span>
+                      <span className="font-black text-emerald-700">{schoolStats.currentYearMean.toFixed(2)}</span>
                     </div>
                   )}
                 </div>
