@@ -1620,82 +1620,92 @@ const achievements = [
 </section>
 
       {/* ===== WHY CHOOSE US ===== */}
-      <section className="bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18 lg:py-22">
-          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 mb-3">
-              Why Choose Us
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 tracking-tight mb-3">
-              The Matungulu Girls Slogan---The Champions
-            </h2>
-            <p className="text-gray-500 text-sm sm:text-base">
-              Discover what makes Matungulu Girls the premier choice for your
-              daughter's education
-            </p>
-          </div>
+<section className="bg-white py-20">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {/* Header with your signature tracking */}
+    <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 mb-4">
+        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-700">The Institution of Choice</span>
+      </div>
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">
+        The Matungulu Girls Slogan—<span className="text-emerald-600">The Champions</span>
+      </h2>
+      <p className="text-slate-500 text-base sm:text-lg font-medium">
+        Discover what makes Matungulu Girls the premier choice for your daughter's future.
+      </p>
+    </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            {whyChooseUs.map((item) => {
-              const c = colorMap[item.color];
-              return (
-                <div
-                  key={item.id}
-                  className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-                >
-                  {item.image && (
-                    <div className="relative h-40 sm:h-48 overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                      <span
-                        className={`absolute top-3 left-3 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${c.bg} text-white`}
-                      >
-                        {item.metrics}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="p-5 sm:p-6">
-                    <div className="flex items-start gap-3 mb-3">
-                      {!item.image && (
-                        <div
-                          className={`w-10 h-10 rounded-xl ${c.light} ${c.text} flex items-center justify-center flex-shrink-0`}
-                        >
-                          {item.icon}
-                        </div>
-                      )}
-                      <h4 className="font-bold text-gray-900 text-base sm:text-lg leading-snug pt-1">
-                        {item.title}
-                      </h4>
-                    </div>
-
-                    <p className="text-gray-500 text-sm leading-relaxed mb-3">
-                      {expandedCards[item.id]
-                        ? item.description
-                        : item.shortDescription}
-                    </p>
-
-                    {item.description !== item.shortDescription && (
-                    <button
-                    onClick={() => openAchievementModal(item)}
-                    className="inline-flex items-center gap-1.5 text-emerald-600 text-xs font-semibold hover:text-emerald-700 mt-3 transition-colors"
-                  >
-                    Read Full Story
-                    <FiArrowRight size={12} />
-                  </button>
-                    )}
-                  </div>
+    {/* Modernized Grid: 2 columns on mobile, 4 on desktop */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {whyChooseUs.map((item) => {
+        const c = colorMap[item.color];
+        return (
+          <div
+            key={item.id}
+            className="group relative flex flex-col h-full bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.02)] transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/10 hover:-translate-y-2"
+          >
+            {/* 1. Image Layer with Metric Plate */}
+            {item.image && (
+              <div className="relative h-44 sm:h-52 overflow-hidden">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/80 via-transparent to-transparent" />
+                
+                {/* Floating Metric Tag */}
+                <div className="absolute top-4 left-4">
+                  <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl backdrop-blur-md shadow-lg ${c.bg} text-white border border-white/20`}>
+                    {item.metrics}
+                  </span>
                 </div>
-              );
-            })}
+              </div>
+            )}
+
+            {/* 2. Content Area */}
+            <div className="p-6 flex flex-col flex-1">
+              <div className="flex items-start gap-4 mb-4">
+                {!item.image && (
+                  <div className={`w-12 h-12 rounded-2xl ${c.light} ${c.text} flex items-center justify-center flex-shrink-0 shadow-inner`}>
+                    {item.icon}
+                  </div>
+                )}
+                <h4 className="font-black text-slate-900 text-lg leading-tight tracking-tight group-hover:text-emerald-600 transition-colors">
+                  {item.title}
+                </h4>
+              </div>
+
+              <p className="text-slate-500 text-sm leading-relaxed font-medium mb-6 line-clamp-3">
+                {expandedCards[item.id] ? item.description : item.shortDescription}
+              </p>
+
+              {/* 3. Action Layer (Bottom) */}
+              <div className="mt-auto">
+                {item.description !== item.shortDescription && (
+                  <button
+                    onClick={() => openAchievementModal(item)}
+                    className="group/btn inline-flex items-center gap-2 text-[#172033] text-[11px] font-black uppercase tracking-widest hover:text-emerald-600 transition-colors"
+                  >
+                    Explore Detail
+                    <div className="p-1.5 rounded-full bg-slate-50 group-hover/btn:bg-emerald-50 transition-colors">
+                      <FiArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
+                    </div>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Subtle inner border for glass effect */}
+            <div className="absolute inset-0 border border-white/10 rounded-[32px] pointer-events-none" />
           </div>
-        </div>
-      </section>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
       {/* CBC Pathways & Subjects Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
