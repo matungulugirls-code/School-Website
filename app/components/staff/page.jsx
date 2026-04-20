@@ -1575,6 +1575,13 @@ function StyledTagInput({ label, value, onChange, placeholder, disabled, color =
     onChange(value.filter((_, i) => i !== index));
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addItem();
+    }
+  };
+
   return (
     <div>
       <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
@@ -1588,7 +1595,7 @@ function StyledTagInput({ label, value, onChange, placeholder, disabled, color =
           placeholder={placeholder}
           disabled={disabled}
           className={`flex-1 px-4 py-3 border-2 ${colors.border} rounded-xl focus:ring-2 ${colors.focus} focus:border-transparent bg-white text-base font-bold`}
-          onKeyPress={(e) => e.key === 'Enter' && addItem()}
+          onKeyDown={handleKeyDown}
         />
         <button
           type="button"
