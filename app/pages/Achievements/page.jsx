@@ -532,7 +532,7 @@ export default function StudentAchievements() {
       iconKey: 'trending',
       number: schoolStats?.meanScore ? schoolStats.meanScore.toFixed(2) : '—',
       label: 'Current Mean Score',
-      sublabel: schoolStats?.lastYearMean
+      sublabel: schoolStats?.lastYearMean && schoolStats?.meanScore
         ? `${schoolStats.meanScore > schoolStats.lastYearMean ? '↑' : '↓'} ${Math.abs(schoolStats.meanScore - schoolStats.lastYearMean).toFixed(2)} from last year`
         : 'Academic excellence'
     },
@@ -540,7 +540,7 @@ export default function StudentAchievements() {
       iconKey: 'target',
       number: schoolStats?.targetMean ? schoolStats.targetMean.toFixed(2) : '—',
       label: 'Target Mean',
-      sublabel: schoolStats?.meanScore
+      sublabel: schoolStats?.meanScore && schoolStats?.targetMean
         ? `${((schoolStats.meanScore / schoolStats.targetMean) * 100).toFixed(1)}% achieved`
         : 'Goal for the year'
     },
@@ -699,7 +699,7 @@ export default function StudentAchievements() {
                 <div className="mt-4 text-xs sm:text-sm text-white/70">
                   <span className="inline-flex items-center gap-1">
                     <IoSparkles className="text-[#f2c357]" size={14} />
-                    "{schoolStats.slogan}" — {schoolStats.sloganAuthor || 'School Motto'}
+                    "{schoolStats?.slogan}" — {schoolStats?.sloganAuthor || 'School Motto'}
                   </span>
                 </div>
               )}
@@ -831,7 +831,7 @@ export default function StudentAchievements() {
                   {schoolStats?.lastYearMean && (
                     <div className="flex items-center justify-between p-3.5 bg-[#fcfaf6] rounded-2xl border border-[#e8dfd3]">
                       <span className="text-xs font-bold">Current Year Mean</span>
-                      <span className="font-black text-emerald-700">{schoolStats.currentYearMean.toFixed(2)}</span>
+                      <span className="font-black text-emerald-700">{schoolStats?.currentYearMean?.toFixed(2) || '—'}</span>
                     </div>
                   )}
                 </div>
