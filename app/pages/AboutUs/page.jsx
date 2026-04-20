@@ -243,53 +243,57 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative z-20 mx-auto -mt-10 max-w-6xl px-4 sm:-mt-14 sm:px-6">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-[2rem] border border-white/70 bg-white/95 p-5 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.28)] backdrop-blur-sm sm:p-6"
-            >
-              <p className="text-3xl font-black tracking-tight text-slate-950">{stat.value}</p>
-              <p className="mt-2 text-[11px] font-black uppercase tracking-[0.22em] text-emerald-700">
-                {stat.label}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">{stat.note}</p>
-            </div>
-          ))}
+      <section className="relative z-20 -mt-10 sm:-mt-14 w-full">
+        <div className="mx-auto max-w-6xl px-3 sm:px-4 lg:px-6">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-4 lg:gap-5">
+            {stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-2xl sm:rounded-[2rem] border border-white/70 bg-white/95 p-4 sm:p-5 lg:p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.28)] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_24px_70px_-30px_rgba(15,23,42,0.35)]"
+              >
+                <p className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950">{stat.value}</p>
+                <p className="mt-2 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] sm:tracking-[0.22em] text-emerald-700">
+                  {stat.label}
+                </p>
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">{stat.note}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
-        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-          <div className="rounded-[2rem] bg-[#14382d] p-7 text-white shadow-[0_24px_80px_-45px_rgba(15,23,42,0.5)] sm:p-10">
-            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
-              About The School
-            </span>
-            <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-5xl">
-              A girls&apos; school built around growth, discipline, and possibility.
-            </h2>
-            <p className="mt-5 text-sm leading-8 text-white/80 sm:text-base">
-              Matungulu Girls offers a focused boarding environment where young women can
-              learn with confidence, build strong values, and prepare for a future of
-              leadership, service, and academic excellence.
-            </p>
-          </div>
+      <section className="w-full py-14 sm:py-20">
+        <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+            <div className="rounded-2xl sm:rounded-[2rem] bg-[#14382d] p-5 sm:p-7 lg:p-10 text-white shadow-[0_24px_80px_-45px_rgba(15,23,42,0.5)]">
+              <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+                About The School
+              </span>
+              <h2 className="mt-4 sm:mt-5 text-2xl sm:text-3xl lg:text-5xl font-black tracking-tight">
+                A girls&apos; school built around growth, discipline, and possibility.
+              </h2>
+              <p className="mt-4 sm:mt-5 text-xs sm:text-sm lg:text-base leading-7 sm:leading-8 text-white/80">
+                Matungulu Girls offers a focused boarding environment where young women can
+                learn with confidence, build strong values, and prepare for a future of
+                leadership, service, and academic excellence.
+              </p>
+            </div>
 
-          <div className="grid gap-4">
-            {schoolDetails.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[1.7rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.28)] sm:p-7"
-              >
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">
-                  {item.title}
-                </p>
-                <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-[15px] sm:leading-8">
-                  {item.text}
-                </p>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 gap-3 sm:gap-4">
+              {schoolDetails.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl sm:rounded-[1.7rem] border border-slate-200 bg-white p-4 sm:p-6 lg:p-7 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.28)] transition-all duration-200 hover:shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]"
+                >
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">
+                    {item.title}
+                  </p>
+                  <p className="mt-2 sm:mt-3 text-xs sm:text-sm lg:text-[15px] leading-6 sm:leading-7 lg:leading-8 text-slate-600">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
