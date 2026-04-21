@@ -105,7 +105,7 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
               r="20"
             />
             <circle 
-              className="text-blue-600" 
+              className="text-teal-600" 
               stroke="currentColor" 
               strokeWidth={thickness} 
               strokeLinecap="round" 
@@ -120,7 +120,7 @@ const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'ind
           </>
         ) : (
           <circle 
-            className="text-blue-600" 
+            className="text-teal-600" 
             stroke="currentColor" 
             strokeWidth={thickness} 
             strokeLinecap="round" 
@@ -303,12 +303,12 @@ function Notification({
         };
       case 'info':
         return {
-          bg: 'from-blue-50 to-cyan-50',
-          border: 'border-blue-200',
-          icon: 'text-blue-600',
-          iconBg: 'bg-blue-100',
-          progress: 'bg-blue-500',
-          title: 'text-blue-800'
+          bg: 'from-teal-50 to-green-50',
+          border: 'border-teal-200',
+          icon: 'text-teal-600',
+          iconBg: 'bg-teal-100',
+          progress: 'bg-teal-500',
+          title: 'text-teal-800'
         };
       default:
         return {
@@ -410,8 +410,8 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
   }} />
   
   {/* Decorative Gradient Orbs */}
-  <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
-  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-200/30 to-cyan-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
+  <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-teal-200/30 to-emerald -200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
+  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-200/30 to-green-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
   
   {/* Floating Icon Elements */}
   <div className="absolute top-10 right-20 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -430,16 +430,16 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
         <div className="flex items-center gap-3">
           {/* Icon Container with Glow */}
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl blur-md opacity-50 group-hover:opacity-70 transition-opacity" />
-            <div className="relative p-2.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-600 to-indigo-600 rounded-xl blur-md opacity-50 group-hover:opacity-70 transition-opacity" />
+            <div className="relative p-2.5 bg-gradient-to-br from-teal-600 to-indigo-600 rounded-xl shadow-lg transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
               <FiFolder className="text-white" size={18} />
             </div>
           </div>
           
           {/* Animated Badge */}
           <div className="relative">
-            <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-md" />
-            <span className="relative text-[10px] font-black uppercase tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div className="absolute inset-0 bg-teal-400/20 rounded-full blur-md" />
+            <span className="relative text-[10px] font-black uppercase tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-indigo-600">
               Educational Resource
             </span>
           </div>
@@ -493,10 +493,10 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
       
       {/* Category Tag */}
       {resource.category && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-purple-50 to-purple-100/50 text-purple-700 border border-purple-200 hover:border-purple-300 transition-all duration-300 hover:scale-105 hover:shadow-md">
+        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-emerald -50 to-emerald -100/50 text-emerald -700 border border-emerald -200 hover:border-emerald -300 transition-all duration-300 hover:scale-105 hover:shadow-md">
           <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
           
-          <Hash size={12} className="relative text-purple-500" />
+          <Hash size={12} className="relative text-emerald -500" />
           <span className="relative">{resource.category}</span>
         </div>
       )}
@@ -536,7 +536,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
       <div className="mt-6 flex items-center gap-4">
         <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000"
+            className="h-full bg-gradient-to-r from-teal-500 to-indigo-500 rounded-full transition-all duration-1000"
             style={{ width: `${resource.progress}%` }}
           />
         </div>
@@ -546,7 +546,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
   </div>
   
   {/* Bottom Accent Border */}
-  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
+  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
 </div>
 
         {/* Content Body */}
@@ -559,7 +559,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
               {/* Description Section */}
               <section className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                  <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
                     <IoDocumentTextOutline />
                   </div>
                   <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">Overview</h3>
@@ -582,8 +582,8 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {resource.files.map((file, idx) => (
-                      <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 group">
-                        <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <div key={idx} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 hover:border-teal-500/30 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300 group">
+                        <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 group-hover:bg-teal-600 group-hover:text-white transition-colors">
                           {getFileIcon(file.extension)}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -610,7 +610,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
-                        <FiUserCheck className="text-blue-400" />
+                        <FiUserCheck className="text-teal-400" />
                       </div>
                       <div>
                         <p className="text-[10px] font-bold text-white/40 uppercase">Instructor</p>
@@ -640,10 +640,10 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
                   </div>
                 </div>
 
-                <div className="p-6 bg-blue-50 rounded-[32px] border border-blue-100">
-                   <p className="text-[10px] font-black text-blue-600 uppercase mb-2">Security</p>
-                   <p className="text-xs font-bold text-blue-900/70 leading-relaxed">
-                     This resource is restricted to <span className="text-blue-600 underline font-black">{resource.accessLevel}</span> roles only.
+                <div className="p-6 bg-teal-50 rounded-[32px] border border-teal-100">
+                   <p className="text-[10px] font-black text-teal-600 uppercase mb-2">Security</p>
+                   <p className="text-xs font-bold text-teal-900/70 leading-relaxed">
+                     This resource is restricted to <span className="text-teal-600 underline font-black">{resource.accessLevel}</span> roles only.
                    </p>
                 </div>
               </div>
@@ -662,7 +662,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
           </button>
           <button 
             onClick={() => onEdit(resource)}
-            className="flex items-center justify-center gap-3 bg-slate-900 hover:bg-blue-600 text-white px-10 py-4 rounded-2xl font-black transition-all duration-300 shadow-lg shadow-slate-200"
+            className="flex items-center justify-center gap-3 bg-slate-900 hover:bg-teal-600 text-white px-10 py-4 rounded-2xl font-black transition-all duration-300 shadow-lg shadow-slate-200"
           >
             <FiEdit size={18} /> Edit Resource
           </button>
@@ -1012,7 +1012,7 @@ useEffect(() => {
         background: 'linear-gradient(135deg, #f8fafc 0%, #faf5ff 100%)'
       }}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-emerald-600 p-6 text-white">
+        <div className="bg-gradient-to-r from-teal-600 via-green-600 to-emerald-600 p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white bg-opacity-20 rounded-2xl">
@@ -1062,7 +1062,7 @@ useEffect(() => {
                 required
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
-                className="w-full px-4 font-bold py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+                className="w-full px-4 font-bold py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-gray-50"
                 placeholder="Enter resource title"
               />
             </div>
@@ -1077,7 +1077,7 @@ useEffect(() => {
                   required
                   value={formData.subject}
                   onChange={(e) => handleChange('subject', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-50"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald -500 focus:border-emerald -500 bg-gray-50"
                 >
                   <option value="">Select Subject</option>
                   {subjectOptions.map(subject => (
@@ -1128,7 +1128,7 @@ useEffect(() => {
                 value={formData.description}
                 onChange={(e) => handleChange('description', e.target.value)}
                 rows="4"
-                className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+                className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-gray-50"
                 placeholder="Describe the resource..."
               />
             </div>
@@ -1201,7 +1201,7 @@ useEffect(() => {
               <section className="bg-white rounded-[32px] p-2 sm:p-4">
                 <div className="flex items-center justify-between gap-3 mb-6 px-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+                    <div className="w-1.5 h-6 bg-teal-600 rounded-full" />
                     <label className="text-xl font-black text-slate-800 tracking-tight">
                       Upload Resources *
                     </label>
@@ -1283,7 +1283,7 @@ useEffect(() => {
                       className={`cursor-pointer w-full py-10 border-2 border-dashed rounded-[24px] flex flex-col items-center justify-center text-center px-6 transition-all ${
                         totalSizeMB > 4.5
                           ? 'border-red-300 bg-red-50/30 opacity-60'
-                          : 'border-slate-200 bg-slate-50/50 hover:bg-blue-50/30 hover:border-blue-400'
+                          : 'border-slate-200 bg-slate-50/50 hover:bg-teal-50/30 hover:border-teal-400'
                       }`}
                     >
                       <div className={`p-4 rounded-2xl mb-4 transition-transform ${
@@ -1292,7 +1292,7 @@ useEffect(() => {
                           : 'bg-white shadow-sm group-hover:scale-100'
                       }`}>
                         <FiUpload className={`text-3xl ${
-                          totalSizeMB > 4.5 ? 'text-red-600' : 'text-blue-600'
+                          totalSizeMB > 4.5 ? 'text-red-600' : 'text-teal-600'
                         }`} />
                       </div>
                       <p className={`text-lg font-bold mb-1 ${
@@ -1354,7 +1354,7 @@ useEffect(() => {
                             <div key={`new-${index}`} className={`group flex items-center justify-between p-4 rounded-2xl border transition-all ${
                               totalSizeMB > 4.5
                                 ? 'bg-red-50/50 border-red-200'
-                                : 'bg-white border-slate-100 hover:border-blue-200 hover:shadow-sm'
+                                : 'bg-white border-slate-100 hover:border-teal-200 hover:shadow-sm'
                             }`}>
                               <div className="flex items-center gap-4 min-w-0">
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
@@ -1400,7 +1400,7 @@ useEffect(() => {
                             <div key={`exist-${index}`} className={`group flex items-center justify-between p-4 rounded-2xl border transition-all ${
                               totalSizeMB > 4.5
                                 ? 'bg-red-50/30 border-red-200'
-                                : 'bg-blue-50/30 border-blue-100 hover:shadow-sm'
+                                : 'bg-teal-50/30 border-teal-100 hover:shadow-sm'
                             }`}>
                               <div className="flex items-center gap-4 min-w-0">
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
@@ -1408,7 +1408,7 @@ useEffect(() => {
                                     ? 'bg-red-600 text-white'
                                     : parseFloat(fileSizeMB) > 1
                                     ? 'bg-amber-600 text-white'
-                                    : 'bg-blue-600 text-white'
+                                    : 'bg-teal-600 text-white'
                                 }`}>
                                   <FiFileText className="text-lg" />
                                 </div>
@@ -1418,7 +1418,7 @@ useEffect(() => {
                                   </p>
                                   <div className="flex items-center gap-2 mt-1">
                                     <span className={`text-[11px] font-bold uppercase tracking-wider ${
-                                      totalSizeMB > 4.5 ? 'text-red-600' : 'text-blue-600'
+                                      totalSizeMB > 4.5 ? 'text-red-600' : 'text-teal-600'
                                     }`}>
                                       Stored in Cloud • {fileSizeMB}MB
                                     </span>
@@ -1456,7 +1456,7 @@ useEffect(() => {
               <button 
                 type="submit"
                 disabled={isSubmitDisabled}
-                className="px-6 py-3 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-md  hover:from-blue-700 hover:to-cyan-700 transition-all"
+                className="px-6 py-3 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 bg-gradient-to-r from-teal-600 to-green-600 text-md  hover:from-teal-700 hover:to-green-700 transition-all"
               >
                 {loading ? (
                   <>
@@ -1529,9 +1529,9 @@ export default function ResourcesManager() {
   // Type options
   const typeOptions = [
     { value: 'all', label: 'All Types', color: 'gray', icon: <FiFolder /> },
-    { value: 'document', label: 'Document', color: 'blue', icon: <FiFileText /> },
+    { value: 'document', label: 'Document', color: 'teal', icon: <FiFileText /> },
     { value: 'pdf', label: 'PDF', color: 'red', icon: <FiFileText /> },
-    { value: 'video', label: 'Video', color: 'purple', icon: <FiVideo /> },
+    { value: 'video', label: 'Video', color: 'emerald ', icon: <FiVideo /> },
     { value: 'presentation', label: 'Presentation', color: 'orange', icon: <FiBarChart /> },
     { value: 'spreadsheet', label: 'Spreadsheet', color: 'green', icon: <FiGrid /> },
     { value: 'image', label: 'Image', color: 'pink', icon: <FiImage /> },
@@ -1542,9 +1542,9 @@ export default function ResourcesManager() {
   // Priority options
   const accessOptions = [
     { value: 'all', label: 'All Access', color: 'gray' },
-    { value: 'student', label: 'Student', color: 'blue' },
+    { value: 'student', label: 'Student', color: 'teal' },
     { value: 'teacher', label: 'Teacher', color: 'green' },
-    { value: 'admin', label: 'Admin', color: 'purple' }
+    { value: 'admin', label: 'Admin', color: 'emerald ' }
   ];
 
   // Subject options
@@ -2056,7 +2056,7 @@ const handleSubmit = async (formData, id) => {
                 onClick={() => paginate(page)}
                 className={`px-3 py-2 rounded-xl font-bold ${
                   currentPage === page
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-teal-500 to-green-500 text-white shadow-lg'
                     : 'text-gray-700'
                 }`}
               >
@@ -2080,7 +2080,7 @@ const handleSubmit = async (formData, id) => {
   // Loading state
   if (loading && resources.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-50 via-blue-50 to-cyan-50">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-50 via-teal-50 to-green-50">
         <div className="text-center">
           <Spinner size={48} />
           <p className="text-gray-700 text-lg mt-4 font-medium">
@@ -2095,7 +2095,7 @@ const handleSubmit = async (formData, id) => {
   }
 
   return (
-    <div className="space-y-6 p-4 min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-cyan-50">
+    <div className="space-y-6 p-4 min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-green-50">
       {/* Custom Notification */}
       <Notification
         open={notification.open}
@@ -2121,21 +2121,21 @@ const handleSubmit = async (formData, id) => {
 {/* Modern Responsive Header with Bronze Gradient */}
 {/* Modern Responsive Header – Resources Theme */}
 <div className="relative mb-6 sm:mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
-                bg-gradient-to-br from-indigo-700 via-purple-700 to-violet-700
+                bg-gradient-to-br from-indigo-700 via-emerald -700 to-violet-700
                 p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
 
-  {/* Abstract Gradient Orbs - Purple/Indigo Theme */}
+  {/* Abstract Gradient Orbs - emerald /Indigo Theme */}
   <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px] 
-                  bg-gradient-to-br from-indigo-500/30 via-purple-500/20 to-violet-500/30 
+                  bg-gradient-to-br from-indigo-500/30 via-emerald -500/20 to-violet-500/30 
                   rounded-full blur-[100px] pointer-events-none animate-pulse" />
   
   <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px] 
-                  bg-gradient-to-tr from-purple-500/20 via-indigo-500/10 to-violet-500/20 
+                  bg-gradient-to-tr from-emerald -500/20 via-indigo-500/10 to-violet-500/20 
                   rounded-full blur-[80px] pointer-events-none" />
   
   {/* Central Floating Orb */}
   <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px] 
-                  bg-gradient-to-r from-indigo-500/20 to-purple-500/20 
+                  bg-gradient-to-r from-indigo-500/20 to-emerald -500/20 
                   rounded-full blur-[70px] pointer-events-none animate-pulse" />
   
   {/* Subtle Grid Pattern */}
@@ -2159,7 +2159,7 @@ const handleSubmit = async (formData, id) => {
         
         {/* Premium Institution Badge */}
         <div className="flex items-center gap-2.5 mb-4">
-          <div className="h-7 w-1 bg-gradient-to-b from-indigo-400 via-purple-400 to-violet-400 
+          <div className="h-7 w-1 bg-gradient-to-b from-indigo-400 via-emerald -400 to-violet-400 
                           rounded-full shadow-[0_0_15px_rgba(129,140,248,0.5)]" />
           <div>
             <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-200">
@@ -2175,9 +2175,9 @@ const handleSubmit = async (formData, id) => {
 
           {/* Icon with Multi-layer Glow */}
           <div className="relative shrink-0 self-start">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-500
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-emerald -500
                             rounded-xl sm:rounded-2xl blur-md sm:blur-lg opacity-70" />
-            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-indigo-600 to-purple-600
+            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-indigo-600 to-emerald -600
                             rounded-xl sm:rounded-2xl shadow-2xl transform group-hover:scale-105 
                             group-hover:rotate-3 transition-all duration-500">
               <FiFolder className="text-white w-5 h-5 sm:w-6 sm:h-6" />
@@ -2189,7 +2189,7 @@ const handleSubmit = async (formData, id) => {
 
             {/* Security Badge */}
             <div className="hidden xs:inline-flex items-center gap-1.5 px-2.5 py-1 
-                            bg-gradient-to-r from-indigo-500/20 to-purple-500/20 
+                            bg-gradient-to-r from-indigo-500/20 to-emerald -500/20 
                             backdrop-blur-sm rounded-full mb-2 sm:mb-3 max-w-max 
                             border border-white/10">
               <FiShield className="w-2.5 h-2.5 text-indigo-300" />
@@ -2203,7 +2203,7 @@ const handleSubmit = async (formData, id) => {
                            font-black text-white tracking-tight leading-tight">
               Resources <span className="block sm:inline">& </span>
               <span className="text-transparent bg-clip-text
-                               bg-gradient-to-r from-indigo-200 to-purple-200">
+                               bg-gradient-to-r from-indigo-200 to-emerald -200">
                 Manager
               </span>
             </h1>
@@ -2292,8 +2292,8 @@ const handleSubmit = async (formData, id) => {
             onClick={handleCreate}
             className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
                        px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-gradient-to-r from-indigo-500 via-purple-500 to-violet-500
-                       hover:from-indigo-600 hover:via-purple-600 hover:to-violet-600
+                       bg-gradient-to-r from-indigo-500 via-emerald -500 to-violet-500
+                       hover:from-indigo-600 hover:via-emerald -600 hover:to-violet-600
                        text-white rounded-xl sm:rounded-2xl font-semibold
                        active:scale-95 transition-all
                        shadow-[0_8px_20px_rgba(139,92,246,0.3)] 
@@ -2350,9 +2350,9 @@ const handleSubmit = async (formData, id) => {
       
       {/* Total Resources */}
       <div className="flex items-center gap-2">
-        <FiFolder className="w-3 h-3 text-purple-400" />
+        <FiFolder className="w-3 h-3 text-emerald -400" />
         <span className="text-white/40">Resources:</span>
-        <span className="text-purple-400 font-black">{stats?.total || 0}</span>
+        <span className="text-emerald -400 font-black">{stats?.total || 0}</span>
       </div>
       
       {/* Last Updated */}
@@ -2378,7 +2378,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Total</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.total}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-teal-50 to-teal-100 text-teal-600 rounded-2xl">
                 <FiFolder className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2391,7 +2391,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Total Files</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.totalFiles}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 text-purple-600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-emerald -50 to-emerald -100 text-emerald -600 rounded-2xl">
                 <FiFileText className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2404,7 +2404,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Form 1</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.form1 || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-teal-50 to-teal-100 text-teal-600 rounded-2xl">
                 <FiUsers className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2430,7 +2430,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Form 3</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.form3 || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 text-purple-600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-emerald -50 to-emerald -100 text-emerald -600 rounded-2xl">
                 <FiUsers className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2443,7 +2443,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Form 4</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.form4 || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-cyan-50 to-cyan-100 text-cyan-600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 text-green-600 rounded-2xl">
                 <FiUsers className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2507,14 +2507,14 @@ const handleSubmit = async (formData, id) => {
               placeholder="Search resources by title, description, or subject..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10    font-bold pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-md  bg-gray-50"
+              className="w-full pl-10    font-bold pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-md  bg-gray-50"
             />
           </div>
 
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 cursor-pointer text-md "
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-gray-50 cursor-pointer text-md "
           >
             <option value="all">All Types</option>
             {typeOptions.filter(opt => opt.value !== 'all').map(option => (
@@ -2527,7 +2527,7 @@ const handleSubmit = async (formData, id) => {
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-gray-50 cursor-pointer text-md "
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald -500 focus:border-emerald -500 bg-gray-50 cursor-pointer text-md "
           >
             {subjectOptions.map(subject => (
               <option key={subject} value={subject}>
@@ -2551,7 +2551,7 @@ const handleSubmit = async (formData, id) => {
           <select
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-gray-50 cursor-pointer text-md "
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50 cursor-pointer text-md "
           >
             {classOptions.map(className => (
               <option key={className} value={className}>
@@ -2612,9 +2612,9 @@ const handleSubmit = async (formData, id) => {
 
       {filteredResources.length > 0 ? (
         <>
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-blue-500/5 border border-slate-200/50 overflow-hidden relative">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-500/5 border border-slate-200/50 overflow-hidden relative">
             {/* Glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent pointer-events-none"></div>
             
             {/* Enhanced Table Header */}
             <div className="border-b border-slate-200/50">
@@ -2635,13 +2635,13 @@ const handleSubmit = async (formData, id) => {
                           setSelectedResources(newSelection);
                         }
                       }}
-                      className="w-5 h-5 rounded-xl border-2 border-slate-300 bg-white checked:bg-gradient-to-r checked:from-blue-500 checked:to-purple-600 checked:border-0 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all duration-200"
+                      className="w-5 h-5 rounded-xl border-2 border-slate-300 bg-white checked:bg-gradient-to-r checked:from-teal-500 checked:to-emerald -600 checked:border-0 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all duration-200"
                     />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">
                       Digital Resources
-                      <span className="ml-2 px-2.5 py-0.5 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 text-xs font-semibold rounded-full">
+                      <span className="ml-2 px-2.5 py-0.5 bg-gradient-to-r from-teal-100 to-emerald -100 text-teal-700 text-xs font-semibold rounded-full">
                         {filteredResources.length} items
                       </span>
                     </h3>
@@ -2664,7 +2664,7 @@ const handleSubmit = async (formData, id) => {
                     </th>
                     <th className="py-5 px-8 text-left text-xs font-bold text-slate-800  uppercase tracking-[0.2em] min-w-[300px]">
                       <div className="flex items-center gap-2">
-                        <HiOutlineSparkles className="w-4 h-4 text-blue-500" />
+                        <HiOutlineSparkles className="w-4 h-4 text-teal-500" />
                         Resource
                       </div>
                     </th>
@@ -2682,7 +2682,7 @@ const handleSubmit = async (formData, id) => {
                     </th>
                     <th className="py-5 px-8 text-left text-xs font-bold text-slate-800  uppercase tracking-[0.2em]">
                       <div className="flex items-center gap-2">
-                        <FiUserCheck className="w-4 h-4 text-purple-500" />
+                        <FiUserCheck className="w-4 h-4 text-emerald -500" />
                         Teacher
                       </div>
                     </th>
@@ -2698,8 +2698,8 @@ const handleSubmit = async (formData, id) => {
                   {currentItems.map((resource) => (
                     <tr 
                       key={resource.id} 
-                      className={`group hover:bg-gradient-to-r hover:from-blue-50/30 hover:to-purple-50/20 transition-all duration-300  ${
-                        selectedResources.has(resource.id) ? 'bg-gradient-to-r from-blue-50/50 to-purple-50/30' : ''
+                      className={`group hover:bg-gradient-to-r hover:from-teal-50/30 hover:to-emerald -50/20 transition-all duration-300  ${
+                        selectedResources.has(resource.id) ? 'bg-gradient-to-r from-teal-50/50 to-emerald -50/30' : ''
                       }`}
                     >
                       {/* Checkbox Column */}
@@ -2709,7 +2709,7 @@ const handleSubmit = async (formData, id) => {
     type="checkbox"
     checked={selectedResources.has(resource.id)}
     onChange={(e) => handleResourceSelect(resource.id, e.target.checked)}
-    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer transition-colors"
+    className="w-5 h-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500 cursor-pointer transition-colors"
   />
 </div>
                       </td>
@@ -2722,9 +2722,9 @@ const handleSubmit = async (formData, id) => {
                             resource.type?.toLowerCase() === 'pdf' 
                               ? 'bg-gradient-to-br from-red-50 to-pink-50 border border-red-100 shadow-sm shadow-red-500/10' 
                               : resource.type?.toLowerCase() === 'video' 
-                              ? 'bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 shadow-sm shadow-blue-500/10'
+                              ? 'bg-gradient-to-br from-teal-50 to-green-50 border border-teal-100 shadow-sm shadow-teal-500/10'
                               : resource.type?.toLowerCase() === 'image' 
-                              ? 'bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100 shadow-sm shadow-purple-500/10'
+                              ? 'bg-gradient-to-br from-emerald -50 to-violet-50 border border-emerald -100 shadow-sm shadow-emerald -500/10'
                               : resource.type?.toLowerCase() === 'document' 
                               ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 shadow-sm shadow-emerald-500/10'
                               : 'bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-100 shadow-sm shadow-slate-500/10'
@@ -2732,9 +2732,9 @@ const handleSubmit = async (formData, id) => {
                             {resource.type?.toLowerCase() === 'pdf' ? (
                               <HiOutlineDocumentText className="text-xl text-red-600" />
                             ) : resource.type?.toLowerCase() === 'video' ? (
-                              <FiVideo className="text-xl text-blue-600" />
+                              <FiVideo className="text-xl text-teal-600" />
                             ) : resource.type?.toLowerCase() === 'image' ? (
-                              <HiOutlinePhotograph className="text-xl text-purple-600" />
+                              <HiOutlinePhotograph className="text-xl text-emerald -600" />
                             ) : resource.type?.toLowerCase() === 'presentation' ? (
                               <HiOutlinePresentationChartBar className="text-xl text-amber-600" />
                             ) : (
@@ -2748,7 +2748,7 @@ const handleSubmit = async (formData, id) => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2 mb-2">
-                              <h4 className="font-bold text-slate-900 text-md  leading-tight group-hover:text-blue-600 transition-colors">
+                              <h4 className="font-bold text-slate-900 text-md  leading-tight group-hover:text-teal-600 transition-colors">
                                 {resource.title || 'Untitled Resource'}
                               </h4>
               
@@ -2770,7 +2770,7 @@ const handleSubmit = async (formData, id) => {
                       <td className="py-5 px-8">
                         <div className="space-y-3">
                           <div className="inline-flex flex-col gap-1.5">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 text-xs font-bold rounded-xl border border-blue-100">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-50 to-green-50 text-teal-700 text-xs font-bold rounded-xl border border-teal-100">
                               <FiUsers className="w-3 h-3" />
                               {resource.className || 'All Classes'}
                             </span>
@@ -2793,8 +2793,8 @@ const handleSubmit = async (formData, id) => {
                             <div className="flex items-center gap-2">
                               <div className={`w-2.5 h-2.5 rounded-full animate-pulse ${
                                 resource.type?.toLowerCase() === 'pdf' ? 'bg-gradient-to-r from-red-500 to-pink-500' :
-                                resource.type?.toLowerCase() === 'video' ? 'bg-gradient-to-r from-blue-500 to-cyan-500' :
-                                resource.type?.toLowerCase() === 'image' ? 'bg-gradient-to-r from-purple-500 to-violet-500' :
+                                resource.type?.toLowerCase() === 'video' ? 'bg-gradient-to-r from-teal-500 to-green-500' :
+                                resource.type?.toLowerCase() === 'image' ? 'bg-gradient-to-r from-emerald -500 to-violet-500' :
                                 resource.type?.toLowerCase() === 'document' ? 'bg-gradient-to-r from-emerald-500 to-teal-500' :
                                 'bg-gradient-to-r from-slate-500 to-gray-500'
                               }`} />
@@ -2804,11 +2804,11 @@ const handleSubmit = async (formData, id) => {
                             </div>
                             <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold ${
                               resource.accessLevel === 'student' 
-                                ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 border-blue-100' 
+                                ? 'bg-gradient-to-r from-teal-50 to-green-50 text-teal-700 border-teal-100' 
                                 : resource.accessLevel === 'teacher' 
                                 ? 'bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 border-emerald-100'
                                 : resource.accessLevel === 'admin' 
-                                ? 'bg-gradient-to-r from-purple-50 to-violet-50 text-purple-700 border-purple-100'
+                                ? 'bg-gradient-to-r from-emerald -50 to-violet-50 text-emerald -700 border-emerald -100'
                                 : 'bg-gradient-to-r from-slate-50 to-gray-50 text-slate-700 border-slate-100'
                             }`}>
                               {resource.accessLevel === 'admin' ? <FiLock className="w-3 h-3" /> : <FiUnlock className="w-3 h-3" />}
@@ -2822,13 +2822,13 @@ const handleSubmit = async (formData, id) => {
                       <td className="py-5 px-8">
                         <div className="flex items-center gap-3 group/author">
                           <div className="relative">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-md  shadow-md shadow-blue-500/25">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald -600 flex items-center justify-center text-white font-bold text-md  shadow-md shadow-teal-500/25">
                               {resource.teacher?.split(' ').map(n => n[0]).join('') || 'A'}
                             </div>
-                            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/0 to-purple-600/0 group-hover/author:from-blue-500/20 group-hover/author:to-purple-600/20 transition-all duration-300"></div>
+                            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-teal-500/0 to-emerald -600/0 group-hover/author:from-teal-500/20 group-hover/author:to-emerald -600/20 transition-all duration-300"></div>
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-md  font-bold text-slate-900 group-hover/author:text-blue-600 transition-colors">
+                            <span className="text-md  font-bold text-slate-900 group-hover/author:text-teal-600 transition-colors">
                               {resource.teacher || 'System Admin'}
                             </span>
                             <span className="text-xs text-slate-800  font-medium">
@@ -2860,7 +2860,7 @@ const handleSubmit = async (formData, id) => {
   <div className="flex items-center justify-end gap-4">
     <button
       onClick={() => handleView(resource)}
-      className="flex items-center gap-1.5 text-blue-600 font-bold text-sm cursor-pointer"
+      className="flex items-center gap-1.5 text-teal-600 font-bold text-sm cursor-pointer"
     >
       <FiEye className="w-4 h-4" />
       <span>View</span>
@@ -2892,9 +2892,9 @@ const handleSubmit = async (formData, id) => {
                   <button
                     onClick={() => paginate(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="p-2.5 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-teal-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
                   >
-                    <FiChevronLeft className="w-5 h-5 text-slate-800  group-hover:text-blue-600" />
+                    <FiChevronLeft className="w-5 h-5 text-slate-800  group-hover:text-teal-600" />
                   </button>
                   
                   {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -2908,7 +2908,7 @@ const handleSubmit = async (formData, id) => {
                           onClick={() => paginate(page)}
                           className={`px-4 py-2 rounded-xl font-medium text-md  transition-all duration-200 ${
                             currentPage === page 
-                              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
+                              ? 'bg-gradient-to-r from-teal-600 to-emerald -600 text-white shadow-lg shadow-teal-500/25' 
                               : 'text-slate-700 hover:bg-slate-100'
                           }`}
                         >
@@ -2920,9 +2920,9 @@ const handleSubmit = async (formData, id) => {
                   <button
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="p-2.5 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-teal-300 hover:bg-white hover:shadow-md disabled:opacity-30 transition-all duration-200 group"
                   >
-                    <FiChevronRight className="w-5 h-5 text-slate-800  group-hover:text-blue-600" />
+                    <FiChevronRight className="w-5 h-5 text-slate-800  group-hover:text-teal-600" />
                   </button>
                 </div>
               </div>
@@ -2931,15 +2931,15 @@ const handleSubmit = async (formData, id) => {
         </>
       ) : (
         /* Modern Empty State */
-        <div className="relative bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-blue-500/5 border border-blue-100/50 text-center py-16 px-8 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-white/90 to-teal-50/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-500/5 border border-teal-100/50 text-center py-16 px-8 overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-400"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-emerald -400"></div>
           </div>
           
           <div className="relative">
-            <div className="w-24 h-24 bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/10">
-              <FiFolder className="text-4xl text-gradient-to-r from-blue-500 to-purple-500" />
+            <div className="w-24 h-24 bg-gradient-to-r from-teal-100 to-emerald -100 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-teal-500/10">
+              <FiFolder className="text-4xl text-gradient-to-r from-teal-500 to-emerald -500" />
             </div>
             
             <h3 className="text-2xl font-bold text-slate-900 mb-3">
@@ -2957,7 +2957,7 @@ const handleSubmit = async (formData, id) => {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button 
                 onClick={handleCreate} 
-                className="group relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-3.5 rounded-2xl font-bold shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/30 flex items-center gap-2 mx-auto transition-all duration-300 hover:-translate-y-0.5"
+                className="group relative bg-gradient-to-r from-teal-600 to-green-600 text-white px-8 py-3.5 rounded-2xl font-bold shadow-xl shadow-teal-500/25 hover:shadow-2xl hover:shadow-teal-500/30 flex items-center gap-2 mx-auto transition-all duration-300 hover:-translate-y-0.5"
               >
                 <FiUpload className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 Upload Resource
@@ -2969,7 +2969,7 @@ const handleSubmit = async (formData, id) => {
                   setSelectedType('all');
                   setSelectedSubject('All Subjects');
                 }}
-                className="px-6 py-3.5 rounded-2xl font-semibold border-2 border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 hover:bg-white transition-all duration-300"
+                className="px-6 py-3.5 rounded-2xl font-semibold border-2 border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-600 hover:bg-white transition-all duration-300"
               >
                 Clear Filters
               </button>

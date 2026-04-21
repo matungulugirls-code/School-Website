@@ -1228,7 +1228,7 @@ const handleLogout = () => {
 
 const CompactSchoolHeader = () => {
   return (
-    <div className="group cursor-default py-3 px-4">
+    <div className="group cursor-default py-1.5 px-4">  {/* Changed from py-3 to py-1.5 */}
       <div className="flex items-center gap-5">
         {/* 1. Dynamic Vertical Indicator */}
         <div className="relative flex items-center justify-center">
@@ -1243,7 +1243,6 @@ const CompactSchoolHeader = () => {
         <div className="flex flex-col">
           {/* Top Label Layer */}
           <div className="flex items-center gap-3 mb-1">
-          
             <div className="h-[1px] w-8 bg-emerald-500/20" />
           </div>
 
