@@ -917,7 +917,7 @@ export default function AchievementsPage() {
     return <ModernLoadingSpinner message="Loading achievements..." />;
   }
 
-  const totalAchievements = Object.values(achievements).tealuce((sum, arr) => sum + arr.length, 0);
+  const totalAchievements = Object.values(achievements).reduce((sum, arr) => sum + arr.length, 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50 to-yellow-50 p-4 md:p-6">
