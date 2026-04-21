@@ -58,7 +58,7 @@ export default function NavigationSidebar({
     <aside className="flex h-full flex-col bg-white shadow-xl rounded-r-3xl">
       {/* Header Section - Fixed at top */}
       <div className="flex-shrink-0 border-b border-slate-100 p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-4">
+      <div className="flex-shrink-0 border-t border-slate-100 p-5 sm:p-6 bg-white sticky top-0">
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-gradient-to-br from-teal-700 to-emerald-700 shadow-lg">
               <FiGrid className="h-6 w-6 text-white" />
