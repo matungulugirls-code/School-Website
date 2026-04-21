@@ -410,7 +410,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
   }} />
   
   {/* Decorative Gradient Orbs */}
-  <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-teal-200/30 to-emerald -200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
+  <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-teal-200/30 to-green-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
   <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-200/30 to-green-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
   
   {/* Floating Icon Elements */}
@@ -493,10 +493,10 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
       
       {/* Category Tag */}
       {resource.category && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-emerald -50 to-emerald -100/50 text-emerald -700 border border-emerald -200 hover:border-emerald -300 transition-all duration-300 hover:scale-105 hover:shadow-md">
+        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-green-50 to-green-100/50 text-green-700 border border-green-200 hover:border-green-300 transition-all duration-300 hover:scale-105 hover:shadow-md">
           <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
           
-          <Hash size={12} className="relative text-emerald -500" />
+          <Hash size={12} className="relative text-green-500" />
           <span className="relative">{resource.category}</span>
         </div>
       )}
@@ -1077,7 +1077,7 @@ useEffect(() => {
                   required
                   value={formData.subject}
                   onChange={(e) => handleChange('subject', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald -500 focus:border-emerald -500 bg-gray-50"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
                 >
                   <option value="">Select Subject</option>
                   {subjectOptions.map(subject => (
@@ -1531,7 +1531,7 @@ export default function ResourcesManager() {
     { value: 'all', label: 'All Types', color: 'gray', icon: <FiFolder /> },
     { value: 'document', label: 'Document', color: 'teal', icon: <FiFileText /> },
     { value: 'pdf', label: 'PDF', color: 'red', icon: <FiFileText /> },
-    { value: 'video', label: 'Video', color: 'emerald ', icon: <FiVideo /> },
+    { value: 'video', label: 'Video', color: 'green', icon: <FiVideo /> },
     { value: 'presentation', label: 'Presentation', color: 'orange', icon: <FiBarChart /> },
     { value: 'spreadsheet', label: 'Spreadsheet', color: 'green', icon: <FiGrid /> },
     { value: 'image', label: 'Image', color: 'pink', icon: <FiImage /> },
@@ -1544,7 +1544,7 @@ export default function ResourcesManager() {
     { value: 'all', label: 'All Access', color: 'gray' },
     { value: 'student', label: 'Student', color: 'teal' },
     { value: 'teacher', label: 'Teacher', color: 'green' },
-    { value: 'admin', label: 'Admin', color: 'emerald ' }
+    { value: 'admin', label: 'Admin', color: 'green' }
   ];
 
   // Subject options
@@ -2121,21 +2121,21 @@ const handleSubmit = async (formData, id) => {
 {/* Modern Responsive Header with Bronze Gradient */}
 {/* Modern Responsive Header – Resources Theme */}
 <div className="relative mb-6 sm:mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
-                bg-gradient-to-br from-indigo-700 via-emerald -700 to-violet-700
+                bg-gradient-to-br from-indigo-700 via-green-700 to-violet-700
                 p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
 
-  {/* Abstract Gradient Orbs - emerald /Indigo Theme */}
+  {/* Abstract Gradient Orbs - green/Indigo Theme */}
   <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px] 
-                  bg-gradient-to-br from-indigo-500/30 via-emerald -500/20 to-violet-500/30 
+                  bg-gradient-to-br from-indigo-500/30 via-green-500/20 to-violet-500/30 
                   rounded-full blur-[100px] pointer-events-none animate-pulse" />
   
   <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px] 
-                  bg-gradient-to-tr from-emerald -500/20 via-indigo-500/10 to-violet-500/20 
+                  bg-gradient-to-tr from-green-500/20 via-indigo-500/10 to-violet-500/20 
                   rounded-full blur-[80px] pointer-events-none" />
   
   {/* Central Floating Orb */}
   <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px] 
-                  bg-gradient-to-r from-indigo-500/20 to-emerald -500/20 
+                  bg-gradient-to-r from-indigo-500/20 to-green-500/20 
                   rounded-full blur-[70px] pointer-events-none animate-pulse" />
   
   {/* Subtle Grid Pattern */}
@@ -2159,7 +2159,7 @@ const handleSubmit = async (formData, id) => {
         
         {/* Premium Institution Badge */}
         <div className="flex items-center gap-2.5 mb-4">
-          <div className="h-7 w-1 bg-gradient-to-b from-indigo-400 via-emerald -400 to-violet-400 
+          <div className="h-7 w-1 bg-gradient-to-b from-indigo-400 via-green-400 to-violet-400 
                           rounded-full shadow-[0_0_15px_rgba(129,140,248,0.5)]" />
           <div>
             <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-200">
@@ -2175,9 +2175,9 @@ const handleSubmit = async (formData, id) => {
 
           {/* Icon with Multi-layer Glow */}
           <div className="relative shrink-0 self-start">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-emerald -500
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-green-500
                             rounded-xl sm:rounded-2xl blur-md sm:blur-lg opacity-70" />
-            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-indigo-600 to-emerald -600
+            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-indigo-600 to-green-600
                             rounded-xl sm:rounded-2xl shadow-2xl transform group-hover:scale-105 
                             group-hover:rotate-3 transition-all duration-500">
               <FiFolder className="text-white w-5 h-5 sm:w-6 sm:h-6" />
@@ -2189,7 +2189,7 @@ const handleSubmit = async (formData, id) => {
 
             {/* Security Badge */}
             <div className="hidden xs:inline-flex items-center gap-1.5 px-2.5 py-1 
-                            bg-gradient-to-r from-indigo-500/20 to-emerald -500/20 
+                            bg-gradient-to-r from-indigo-500/20 to-green-500/20 
                             backdrop-blur-sm rounded-full mb-2 sm:mb-3 max-w-max 
                             border border-white/10">
               <FiShield className="w-2.5 h-2.5 text-indigo-300" />
@@ -2203,7 +2203,7 @@ const handleSubmit = async (formData, id) => {
                            font-black text-white tracking-tight leading-tight">
               Resources <span className="block sm:inline">& </span>
               <span className="text-transparent bg-clip-text
-                               bg-gradient-to-r from-indigo-200 to-emerald -200">
+                               bg-gradient-to-r from-indigo-200 to-green-200">
                 Manager
               </span>
             </h1>
@@ -2292,8 +2292,8 @@ const handleSubmit = async (formData, id) => {
             onClick={handleCreate}
             className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
                        px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-gradient-to-r from-indigo-500 via-emerald -500 to-violet-500
-                       hover:from-indigo-600 hover:via-emerald -600 hover:to-violet-600
+                       bg-gradient-to-r from-indigo-500 via-green-500 to-violet-500
+                       hover:from-indigo-600 hover:via-green-600 hover:to-violet-600
                        text-white rounded-xl sm:rounded-2xl font-semibold
                        active:scale-95 transition-all
                        shadow-[0_8px_20px_rgba(139,92,246,0.3)] 
@@ -2350,9 +2350,9 @@ const handleSubmit = async (formData, id) => {
       
       {/* Total Resources */}
       <div className="flex items-center gap-2">
-        <FiFolder className="w-3 h-3 text-emerald -400" />
+        <FiFolder className="w-3 h-3 text-green-400" />
         <span className="text-white/40">Resources:</span>
-        <span className="text-emerald -400 font-black">{stats?.total || 0}</span>
+        <span className="text-green-400 font-black">{stats?.total || 0}</span>
       </div>
       
       {/* Last Updated */}
@@ -2391,7 +2391,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Total Files</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.totalFiles}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-emerald -50 to-emerald -100 text-emerald -600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 text-green-600 rounded-2xl">
                 <FiFileText className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2430,7 +2430,7 @@ const handleSubmit = async (formData, id) => {
                 <p className="text-xs sm:text-md  font-semibold text-gray-600 mb-1 truncate">Form 3</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{stats.form3 || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-emerald -50 to-emerald -100 text-emerald -600 rounded-2xl">
+              <div className="flex-shrink-0 ml-3 p-2.5 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 text-green-600 rounded-2xl">
                 <FiUsers className="text-lg sm:text-xl" />
               </div>
             </div>
@@ -2527,7 +2527,7 @@ const handleSubmit = async (formData, id) => {
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald -500 focus:border-emerald -500 bg-gray-50 cursor-pointer text-md "
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50 cursor-pointer text-md "
           >
             {subjectOptions.map(subject => (
               <option key={subject} value={subject}>
@@ -2635,13 +2635,13 @@ const handleSubmit = async (formData, id) => {
                           setSelectedResources(newSelection);
                         }
                       }}
-                      className="w-5 h-5 rounded-xl border-2 border-slate-300 bg-white checked:bg-gradient-to-r checked:from-teal-500 checked:to-emerald -600 checked:border-0 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all duration-200"
+                      className="w-5 h-5 rounded-xl border-2 border-slate-300 bg-white checked:bg-gradient-to-r checked:from-teal-500 checked:to-green-600 checked:border-0 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all duration-200"
                     />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">
                       Digital Resources
-                      <span className="ml-2 px-2.5 py-0.5 bg-gradient-to-r from-teal-100 to-emerald -100 text-teal-700 text-xs font-semibold rounded-full">
+                      <span className="ml-2 px-2.5 py-0.5 bg-gradient-to-r from-teal-100 to-green-100 text-teal-700 text-xs font-semibold rounded-full">
                         {filteredResources.length} items
                       </span>
                     </h3>
@@ -2682,7 +2682,7 @@ const handleSubmit = async (formData, id) => {
                     </th>
                     <th className="py-5 px-8 text-left text-xs font-bold text-slate-800  uppercase tracking-[0.2em]">
                       <div className="flex items-center gap-2">
-                        <FiUserCheck className="w-4 h-4 text-emerald -500" />
+                        <FiUserCheck className="w-4 h-4 text-green-500" />
                         Teacher
                       </div>
                     </th>
@@ -2698,8 +2698,8 @@ const handleSubmit = async (formData, id) => {
                   {currentItems.map((resource) => (
                     <tr 
                       key={resource.id} 
-                      className={`group hover:bg-gradient-to-r hover:from-teal-50/30 hover:to-emerald -50/20 transition-all duration-300  ${
-                        selectedResources.has(resource.id) ? 'bg-gradient-to-r from-teal-50/50 to-emerald -50/30' : ''
+                      className={`group hover:bg-gradient-to-r hover:from-teal-50/30 hover:to-green-50/20 transition-all duration-300  ${
+                        selectedResources.has(resource.id) ? 'bg-gradient-to-r from-teal-50/50 to-green-50/30' : ''
                       }`}
                     >
                       {/* Checkbox Column */}
@@ -2724,7 +2724,7 @@ const handleSubmit = async (formData, id) => {
                               : resource.type?.toLowerCase() === 'video' 
                               ? 'bg-gradient-to-br from-teal-50 to-green-50 border border-teal-100 shadow-sm shadow-teal-500/10'
                               : resource.type?.toLowerCase() === 'image' 
-                              ? 'bg-gradient-to-br from-emerald -50 to-violet-50 border border-emerald -100 shadow-sm shadow-emerald -500/10'
+                              ? 'bg-gradient-to-br from-green-50 to-violet-50 border border-green-100 shadow-sm shadow-green-500/10'
                               : resource.type?.toLowerCase() === 'document' 
                               ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 shadow-sm shadow-emerald-500/10'
                               : 'bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-100 shadow-sm shadow-slate-500/10'
@@ -2734,7 +2734,7 @@ const handleSubmit = async (formData, id) => {
                             ) : resource.type?.toLowerCase() === 'video' ? (
                               <FiVideo className="text-xl text-teal-600" />
                             ) : resource.type?.toLowerCase() === 'image' ? (
-                              <HiOutlinePhotograph className="text-xl text-emerald -600" />
+                              <HiOutlinePhotograph className="text-xl text-green-600" />
                             ) : resource.type?.toLowerCase() === 'presentation' ? (
                               <HiOutlinePresentationChartBar className="text-xl text-amber-600" />
                             ) : (
@@ -2794,7 +2794,7 @@ const handleSubmit = async (formData, id) => {
                               <div className={`w-2.5 h-2.5 rounded-full animate-pulse ${
                                 resource.type?.toLowerCase() === 'pdf' ? 'bg-gradient-to-r from-red-500 to-pink-500' :
                                 resource.type?.toLowerCase() === 'video' ? 'bg-gradient-to-r from-teal-500 to-green-500' :
-                                resource.type?.toLowerCase() === 'image' ? 'bg-gradient-to-r from-emerald -500 to-violet-500' :
+                                resource.type?.toLowerCase() === 'image' ? 'bg-gradient-to-r from-green-500 to-violet-500' :
                                 resource.type?.toLowerCase() === 'document' ? 'bg-gradient-to-r from-emerald-500 to-teal-500' :
                                 'bg-gradient-to-r from-slate-500 to-gray-500'
                               }`} />
@@ -2808,7 +2808,7 @@ const handleSubmit = async (formData, id) => {
                                 : resource.accessLevel === 'teacher' 
                                 ? 'bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 border-emerald-100'
                                 : resource.accessLevel === 'admin' 
-                                ? 'bg-gradient-to-r from-emerald -50 to-violet-50 text-emerald -700 border-emerald -100'
+                                ? 'bg-gradient-to-r from-green-50 to-violet-50 text-green-700 border-green-100'
                                 : 'bg-gradient-to-r from-slate-50 to-gray-50 text-slate-700 border-slate-100'
                             }`}>
                               {resource.accessLevel === 'admin' ? <FiLock className="w-3 h-3" /> : <FiUnlock className="w-3 h-3" />}
@@ -2822,10 +2822,10 @@ const handleSubmit = async (formData, id) => {
                       <td className="py-5 px-8">
                         <div className="flex items-center gap-3 group/author">
                           <div className="relative">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald -600 flex items-center justify-center text-white font-bold text-md  shadow-md shadow-teal-500/25">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-green-600 flex items-center justify-center text-white font-bold text-md  shadow-md shadow-teal-500/25">
                               {resource.teacher?.split(' ').map(n => n[0]).join('') || 'A'}
                             </div>
-                            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-teal-500/0 to-emerald -600/0 group-hover/author:from-teal-500/20 group-hover/author:to-emerald -600/20 transition-all duration-300"></div>
+                            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-teal-500/0 to-green-600/0 group-hover/author:from-teal-500/20 group-hover/author:to-green-600/20 transition-all duration-300"></div>
                           </div>
                           <div className="flex flex-col">
                             <span className="text-md  font-bold text-slate-900 group-hover/author:text-teal-600 transition-colors">
@@ -2908,7 +2908,7 @@ const handleSubmit = async (formData, id) => {
                           onClick={() => paginate(page)}
                           className={`px-4 py-2 rounded-xl font-medium text-md  transition-all duration-200 ${
                             currentPage === page 
-                              ? 'bg-gradient-to-r from-teal-600 to-emerald -600 text-white shadow-lg shadow-teal-500/25' 
+                              ? 'bg-gradient-to-r from-teal-600 to-green-600 text-white shadow-lg shadow-teal-500/25' 
                               : 'text-slate-700 hover:bg-slate-100'
                           }`}
                         >
@@ -2934,12 +2934,12 @@ const handleSubmit = async (formData, id) => {
         <div className="relative bg-gradient-to-br from-white/90 to-teal-50/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-500/5 border border-teal-100/50 text-center py-16 px-8 overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-emerald -400"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-green-400"></div>
           </div>
           
           <div className="relative">
-            <div className="w-24 h-24 bg-gradient-to-r from-teal-100 to-emerald -100 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-teal-500/10">
-              <FiFolder className="text-4xl text-gradient-to-r from-teal-500 to-emerald -500" />
+            <div className="w-24 h-24 bg-gradient-to-r from-teal-100 to-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-teal-500/10">
+              <FiFolder className="text-4xl text-gradient-to-r from-teal-500 to-green-500" />
             </div>
             
             <h3 className="text-2xl font-bold text-slate-900 mb-3">
