@@ -55,40 +55,42 @@ export default function NavigationSidebar({
   }, [feeBalance, feeLoading, feeError]);
 
   return (
-    <aside className="flex h-full flex-col border-r border-white/10 bg-[#081712]/96 text-white backdrop-blur-2xl">
-      <div className="border-b border-white/10 p-5 sm:p-6">
+    <aside className="flex h-full flex-col bg-white shadow-xl rounded-r-3xl">
+      {/* Header Section */}
+      <div className="border-b border-slate-100 p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-[linear-gradient(135deg,#0f5b4c,#d6b25e)] shadow-[0_18px_38px_rgba(15,91,76,0.3)]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-gradient-to-br from-indigo-600 to-blue-600 shadow-lg">
               <FiGrid className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-lg font-black tracking-tight text-white">Student Hub</p>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">
+              <p className="text-lg font-black tracking-tight text-slate-800">Student Hub</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-indigo-500">
                 Matungulu Girls
               </p>
             </div>
           </div>
           <button
             onClick={onMenuClose}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition hover:bg-white/[0.1] lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 lg:hidden"
             aria-label="Close sidebar"
           >
             <FiX className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="mt-6 rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-4">
+        {/* Student Profile Card - Modern Style */}
+        <div className="mt-6 rounded-2xl bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 p-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-[1.3rem] bg-[linear-gradient(135deg,#0f5b4c,#0b2f28)] text-lg font-black text-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 text-lg font-black text-white shadow-md">
               {getInitials(student?.fullName)}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-base font-black text-white">{student?.fullName || 'Student Name'}</p>
-              <p className="mt-1 text-xs font-medium text-white/55">
+              <p className="truncate text-base font-black text-slate-800">{student?.fullName || 'Student Name'}</p>
+              <p className="mt-1 text-xs font-medium text-slate-500">
                 {student?.form || 'Form'} · {student?.stream || 'Stream'}
               </p>
-              <p className="mt-1 text-[11px] font-bold text-[#d6b25e]">
+              <p className="mt-1 text-[11px] font-bold text-indigo-600">
                 ADM {student?.admissionNumber || '----'}
               </p>
             </div>
@@ -96,9 +98,10 @@ export default function NavigationSidebar({
         </div>
       </div>
 
+      {/* Navigation Section */}
       <div className="flex-1 overflow-y-auto p-5 sm:p-6">
-        <div className="rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,rgba(15,91,76,0.2),rgba(255,255,255,0.02))] p-4">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">Navigation Hub</p>
+        <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-indigo-500">Navigation Hub</p>
           <div className="mt-4 space-y-2">
             {navItems.map((item) => {
               const active = currentView === item.id;
@@ -106,98 +109,109 @@ export default function NavigationSidebar({
                 <button
                   key={item.id}
                   onClick={() => setCurrentView(item.id)}
-                  className={`group flex w-full items-center gap-3 rounded-[1.35rem] px-4 py-4 text-left transition ${
+                  className={`group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all ${
                     active
-                      ? 'bg-[linear-gradient(135deg,#103f34,#0b231d)] text-white shadow-[0_16px_34px_rgba(0,0,0,0.22)]'
-                      : 'bg-white/[0.03] text-white/75 hover:bg-white/[0.06] hover:text-white'
+                      ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-200'
+                      : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-800'
                   }`}
                 >
-                  <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
-                    active ? 'bg-[#d6b25e] text-[#11241d]' : 'bg-white/[0.06] text-white/70'
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg transition-all ${
+                    active 
+                      ? 'bg-white/20 text-white' 
+                      : 'bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600'
                   }`}>
                     {item.icon}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-black">{item.label}</p>
-                    <p className="text-xs font-medium text-inherit opacity-65">{item.helper}</p>
+                    <p className={`text-xs font-medium ${active ? 'text-white/80' : 'text-slate-400'}`}>
+                      {item.helper}
+                    </p>
                   </div>
-                  <FiArrowUpRight className={`h-4 w-4 transition ${active ? 'text-[#d6b25e]' : 'text-white/30 group-hover:text-white/70'}`} />
+                  <FiArrowUpRight className={`h-4 w-4 transition ${active ? 'text-white' : 'text-slate-300 group-hover:text-indigo-500'}`} />
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="mt-5 rounded-[1.8rem] border border-white/10 bg-white/[0.04] p-4">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/45">Need To Know</p>
+        {/* Information Cards - Modern Style */}
+        <div className="mt-5 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-indigo-500">Need To Know</p>
           <div className="mt-4 space-y-3">
-            <div className="rounded-[1.25rem] border border-[#0f5b4c]/30 bg-gradient-to-br from-[#0f5b4c]/20 to-[#0b2f28]/10 p-4 backdrop-blur-sm">
+            <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0f5b4c]/40 text-lg">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-xl">
                   🛡️
                 </div>
                 <div>
-                  <p className="text-sm font-black text-white">Secure Session</p>
-                  <p className="text-xs text-white/75">Protected student access remains active under the existing login flow.</p>
+                  <p className="text-sm font-black text-slate-800">Secure Session</p>
+                  <p className="text-xs text-slate-500">Protected student access remains active</p>
                 </div>
               </div>
             </div>
-            <div className="rounded-[1.25rem] border border-[#214d89]/30 bg-gradient-to-br from-[#214d89]/20 to-[#132746]/10 p-4 backdrop-blur-sm">
+            
+            <div className="rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#214d89]/40 text-lg">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-xl">
                   💳
                 </div>
                 <div>
-                  <p className="text-sm font-black text-white">Finance Snapshot</p>
-                  <p className="text-xs text-white/75">{statusText}</p>
+                  <p className="text-sm font-black text-slate-800">Finance Snapshot</p>
+                  <p className="text-xs text-slate-500">{statusText}</p>
                 </div>
               </div>
             </div>
-            <div className="rounded-[1.25rem] border border-[#7a3d55]/30 bg-gradient-to-br from-[#7a3d55]/20 to-[#4a2031]/10 p-4 backdrop-blur-sm">
+            
+            <div className="rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#7a3d55]/40 text-lg">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-xl">
                   📋
                 </div>
                 <div>
-                  <p className="text-sm font-black text-white">Quick Identity</p>
-                  <p className="text-xs text-white/75">{student?.form || 'Form'} · {student?.stream || 'Stream'} · {student?.admissionNumber || 'Admission'}</p>
+                  <p className="text-sm font-black text-slate-800">Quick Identity</p>
+                  <p className="text-xs text-slate-500">
+                    {student?.form || 'Form'} · {student?.stream || 'Stream'} · {student?.admissionNumber || 'Admission'}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* External Link - Modern Style */}
         <a
           href="https://analytics.zeraki.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 flex items-center justify-between rounded-[1.6rem] border border-white/10 bg-[linear-gradient(145deg,#10261f,#0a1714)] px-4 py-4 text-white transition hover:bg-[linear-gradient(145deg,#143228,#0d1d18)]"
+          className="mt-5 flex items-center justify-between rounded-xl border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-4 text-slate-700 transition-all hover:border-indigo-200 hover:shadow-md"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.06]">
-              <FiTrendingUp className="h-4 w-4 text-[#d6b25e]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100">
+              <FiTrendingUp className="h-4 w-4 text-indigo-600" />
             </div>
             <div>
               <p className="text-sm font-black">Zeraki Analytics</p>
-              <p className="text-xs text-white/55">Open external learning analytics</p>
+              <p className="text-xs text-slate-400">Open external learning analytics</p>
             </div>
           </div>
-          <FiArrowUpRight className="h-4 w-4 text-[#d6b25e]" />
+          <FiArrowUpRight className="h-4 w-4 text-indigo-500" />
         </a>
       </div>
 
-      <div className="border-t border-white/10 p-5 sm:p-6">
+      {/* Footer Buttons - Modern Style */}
+      <div className="border-t border-slate-100 p-5 sm:p-6">
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={onRefresh}
-            className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] border border-white/10 bg-white/[0.05] px-4 py-3 text-sm font-black text-white transition hover:bg-white/[0.08]"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-600 transition-all hover:bg-slate-50 hover:border-indigo-200"
           >
-            <FiRefreshCw className="h-4 w-4 text-[#d6b25e]" />
+            <FiRefreshCw className="h-4 w-4 text-indigo-500" />
             Refresh
           </button>
           <button
             onClick={onLogout}
-            className="inline-flex items-center justify-center gap-2 rounded-[1.2rem] bg-[#d6b25e] px-4 py-3 text-sm font-black text-[#11241d]"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-sm font-black text-white shadow-md shadow-indigo-200 transition-all hover:shadow-lg"
           >
             <FiLogOut className="h-4 w-4" />
             Logout
