@@ -649,33 +649,23 @@ function ModernStaffDetailModal({ staff, onClose, onEdit }) {
   );
 }
 
-// Modern Staff Card Component - Complete Updated Version
 function ModernStaffCard({ staff, onEdit, onDelete, onView, selected, onSelect, actionLoading }) {
   const [imageError, setImageError] = useState(false);
 
-const getImageUrl = (imagePath) => {
-  if (!imagePath || typeof imagePath !== 'string') {
-    return staff?.gender === 'female' ? '/female.png' : '/male.png';
-  }
-  
-  // Handle different image path formats
-  if (imagePath.startsWith('http') || imagePath.startsWith('/')) {
-    return imagePath;
-  }
-  
-  if (imagePath.startsWith('data:image')) {
-    return imagePath;
-  }
-  
-  // Assume it's a relative path without leading slash
-  return `/${imagePath}`;
-};
+  const getImageUrl = (imagePath) => {
+    if (!imagePath || typeof imagePath !== 'string') {
+      return staff?.gender === 'female' ? '/female.png' : '/male.png';
+    }
+    if (imagePath.startsWith('http') || imagePath.startsWith('/')) return imagePath;
+    if (imagePath.startsWith('data:image')) return imagePath;
+    return `/${imagePath}`;
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 border-green-200';
-      case 'on-leave': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'active': return 'bg-emerald-500/10 text-emerald-600 border-emerald-100';
+      case 'on-leave': return 'bg-amber-500/10 text-amber-600 border-amber-100';
+      default: return 'bg-slate-100 text-slate-500 border-slate-200';
     }
   };
 
@@ -683,12 +673,12 @@ const getImageUrl = (imagePath) => {
   const isDefaultImage = !staff.image || staff.image === '';
 
   return (
-    <div className={`bg-white rounded-[2rem] shadow-xl border ${
-      selected ? 'border-orange-500 ring-2 ring-orange-500/20' : 'border-gray-100'
-    } w-full max-w-md overflow-hidden transition-none`}>
+    <div className={`bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border-2 ${
+      selected ? 'border-blue-600 ring-4 ring-blue-600/5' : 'border-transparent'
+    } w-full max-w-md overflow-hidden flex flex-col`}>
       
-      {/* Image Section */}
-      <div className="relative h-64 w-full bg-gray-50 overflow-hidden">
+      {/* Image Section - Increased Height for Profile Impact */}
+      <div className="relative h-72 w-full bg-slate-50 overflow-hidden">
         <div className="relative h-full w-full">
           {!imageError ? (
             <img 
@@ -701,133 +691,114 @@ const getImageUrl = (imagePath) => {
           ) : (
             <div 
               onClick={() => onView(staff)} 
-              className="w-full h-full flex flex-col items-center justify-center bg-slate-50 text-slate-300 cursor-pointer"
+              className="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-300 cursor-pointer"
             >
-              <FiUser className="text-5xl" />
-              <span className="text-xs mt-2">No image</span>
-            </div>
-          )}
-          {isDefaultImage && !imageError && (
-            <div className="absolute inset-0 bg-gray-50 flex items-center justify-center">
-              <FiUser className="text-gray-300 text-4xl" />
+              <FiUser className="text-6xl" />
+              <span className="text-[10px] font-black uppercase tracking-widest mt-3">Identity Pending</span>
             </div>
           )}
         </div>
 
-        {/* Overlay: Selection & Status */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-center pointer-events-none">
-          <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm pointer-events-auto">
+        {/* Floating UI Elements */}
+        <div className="absolute top-5 left-5 right-5 flex justify-between items-start pointer-events-none">
+          <div className="bg-white p-2.5 rounded-2xl shadow-xl pointer-events-auto border border-slate-100">
             <input 
               type="checkbox" 
               checked={selected} 
               onChange={(e) => onSelect(staff.id, e.target.checked)}
-              className="w-4 h-4 text-orange-600 border-gray-200 rounded-full focus:ring-0 cursor-pointer" 
+              className="w-5 h-5 text-blue-600 border-slate-200 rounded-lg focus:ring-0 cursor-pointer" 
             />
           </div>
           
-          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-sm border ${getStatusColor(staff.status)} pointer-events-auto`}>
+          <div className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] backdrop-blur-md border shadow-lg pointer-events-auto ${getStatusColor(staff.status)}`}>
             {staff.status || 'active'}
-          </span>
+          </div>
         </div>
       </div>
 
       {/* Information Section */}
-      <div className="p-6">
-        <div className="mb-6">
+      <div className="p-8">
+        <div className="mb-8">
           <h3 
             onClick={() => onView(staff)} 
-            className="text-2xl font-black text-slate-900 leading-tight cursor-pointer truncate"
+            className="text-3xl font-serif font-medium text-slate-900 leading-none tracking-tight cursor-pointer truncate"
           >
             {staff.name}
           </h3>
-          {/* Email Mapping */}
-          <p className="text-sm font-medium text-slate-400 mt-1 truncate">
-            {staff.email || 'no-email@company.com'}
+          <p className="text-[11px] font-bold text-slate-400 mt-2 uppercase tracking-widest flex items-center gap-2">
+            <FiMail className="text-blue-500" />
+            {staff.email || 'not-assigned@matungulugirls.sc.ke'}
           </p>
         </div>
         
-        {/* Grid Info Mapping */}
-        <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-8">
-          {/* Department Mapping */}
-          <div className="space-y-1">
-            <span className="block text-[9px] text-slate-400 font-black uppercase tracking-[0.1em]">Department</span>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></div>
-              <span className="text-xs font-bold text-slate-700 truncate">{staff.department}</span>
-            </div>
+        {/* Modern Bento Info Grid */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          {/* Department */}
+          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+            <span className="block text-[8px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">Department</span>
+            <span className="text-xs font-bold text-slate-800">{staff.department}</span>
           </div>
           
-<div className="space-y-1">
-  <span className="block text-[9px] text-slate-400 font-black uppercase tracking-[0.1em]">Role</span>
-  {staff.role === 'Deputy Principal' && staff.position ? (
-    <div className="flex flex-col">
-      <span className="text-xs font-bold text-slate-800 truncate block">
-        Deputy Principal
-      </span>
-      <span className={`text-[10px] font-black ${
-        staff.position.includes('Academics') ? 'text-emerald-600' : 'text-amber-600'
-      } truncate`}>
-        {staff.position.replace('Deputy Principal ', '')}
-      </span>
-    </div>
-  ) : (
-    <span className="text-xs font-bold text-slate-700 truncate block">{staff.role}</span>
-  )}
-</div>
+          {/* Role */}
+          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+            <span className="block text-[8px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">Position</span>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-slate-800 truncate leading-none">
+                {staff.role === 'Deputy Principal' ? 'Dep. Principal' : staff.role}
+              </span>
+              {staff.position && (
+                <span className="text-[9px] font-black text-blue-600 mt-1 uppercase tracking-tight">
+                  {staff.position.replace('Deputy Principal ', '')}
+                </span>
+              )}
+            </div>
+          </div>
 
-          {/* Phone Mapping */}
-          <div className="col-span-2 p-3 bg-slate-50 rounded-2xl flex items-center justify-between border border-slate-100/50">
+          {/* Contact Row */}
+          <div className="col-span-2 p-4 bg-slate-900 rounded-2xl flex items-center justify-between shadow-lg shadow-slate-900/10">
             <div className="flex flex-col min-w-0">
-              <span className="text-[9px] text-slate-400 font-black uppercase tracking-[0.1em]">Phone Number</span>
-              <span className="text-xs font-bold text-slate-800 truncate">{staff.phone}</span>
+              <span className="text-[8px] text-slate-500 font-black uppercase tracking-[0.2em]">Contact Primary</span>
+              <span className="text-xs font-bold text-white tracking-widest">{staff.phone}</span>
             </div>
-            <FiBriefcase className="text-slate-300 text-lg shrink-0 ml-2" />
+            <FiPhoneCall className="text-blue-400 text-lg" />
           </div>
-          
-          {/* Expertise Preview (if available) */}
-          {staff.expertise && staff.expertise.length > 0 && (
-            <div className="col-span-2 space-y-1">
-              <span className="block text-[9px] text-slate-400 font-black uppercase tracking-[0.1em]">Expertise</span>
-              <div className="flex flex-wrap gap-1">
-                {staff.expertise.slice(0, 2).map((exp, index) => (
-                  <span 
-                    key={index} 
-                    className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 py-1 rounded-lg text-xs font-bold"
-                  >
-                    {exp}
-                  </span>
-                ))}
-                {staff.expertise.length > 2 && (
-                  <span className="bg-gray-500 text-white px-2 py-1 rounded-lg text-xs font-bold">
-                    +{staff.expertise.length - 2} more
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Modern Action Bar */}
-        <div className="flex items-center gap-3">
+        {/* Expertise - Styled as Mini-Tags */}
+        {staff.expertise && staff.expertise.length > 0 && (
+          <div className="mb-8">
+            <span className="block text-[8px] text-slate-400 font-black uppercase tracking-[0.2em] mb-3 px-1">Core Expertise</span>
+            <div className="flex flex-wrap gap-2">
+              {staff.expertise.slice(0, 3).map((exp, index) => (
+                <span key={index} className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tight">
+                  {exp}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Static Action Bar */}
+        <div className="flex items-center gap-2">
           <button 
             onClick={() => onView(staff)} 
-            className="px-5 py-3 bg-slate-100 text-slate-600 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-none active:bg-slate-200"
+            className="h-14 px-6 bg-slate-50 text-slate-500 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border border-slate-100"
           >
-            View
+            Details
           </button>
           
           <button 
             onClick={() => onEdit(staff)} 
             disabled={actionLoading}
-            className="flex-1 bg-slate-900 text-white py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest disabled:opacity-50 transition-none active:scale-[0.98]"
+            className="h-14 flex-1 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-slate-900/20 disabled:opacity-50"
           >
-            Edit Staff
+            Manage Profile
           </button>
           
           <button 
             onClick={() => onDelete(staff)} 
             disabled={actionLoading}
-            className="p-3 bg-red-50 text-red-500 rounded-2xl border border-red-100 disabled:opacity-50 transition-none active:bg-red-100"
+            className="h-14 w-14 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl border border-red-100 disabled:opacity-50"
           >
             <FiTrash2 size={18} />
           </button>
