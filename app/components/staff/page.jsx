@@ -2149,156 +2149,119 @@ const handleSubmit = async (formData, id) => {
         loading={bulkDeleting}
       />
 
-<div className="relative bg-[#0F172A] rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 text-white overflow-hidden shadow-2xl border border-white/5 mb-6">
-  <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
-  <div className="absolute bottom-[-20%] left-[-10%] w-[300px] h-[300px] bg-orange-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-  <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-    <div className="space-y-6">
-      {/* Institutional Branding */}
-      <div className="flex items-center gap-4">
-        <div className="h-10 w-1.5 bg-orange-500 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.5)]" />
-        <div>
-          <h2 className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-orange-400">
-            Matungulu Girls Senior School 
-          </h2>
-          <p className="text-[9px] italic font-bold text-white/40 tracking-[0.2em] uppercase mt-1">
-            "Strive to Excel"
-          </p>
-        </div>
-      </div>
 
-      {/* Title Area */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-        <div className="p-3 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-inner w-fit">
-          <FiUsers className="text-3xl text-orange-400" />
-        </div>
-        <h1 className="text-lg md:text-2xl lg:text-3xl font-black tracking-tighter leading-none italic">
-          STAFF <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-white to-gray-500 text-shadow-sm">DIRECTORY</span>
-        </h1>
-      </div>
 
-      {/* Summary Sentence */}
-      <p className="max-w-2xl text-gray-400 text-sm md:text-base font-medium leading-relaxed">
-        Managing <span className="text-white font-bold border-b-2 border-orange-500/50 pb-0.5">{stats?.total || 0} Professional Profiles</span>. 
-        Current Status: <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-black ml-1 uppercase">
-          {stats?.active || 0} Active on School
-        </span>
-      </p>
-    </div>
 
-    {/* Action Group */}
-    <div className="flex flex-col sm:flex-row gap-4">
-      <button
-        onClick={() => fetchStaff(true)}
-        disabled={refreshing}
-        className="flex items-center justify-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-white/10 active:scale-95 disabled:opacity-50"
-      >
-        {refreshing ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <FiRotateCw />}
-        REFRESH
-      </button>
-      <button
-        onClick={handleCreate}
-        className="flex items-center justify-center gap-3 bg-white text-[#0F172A] px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all hover:bg-gray-100 shadow-xl shadow-white/5 active:scale-95"
-      >
-        <FiPlus className="text-lg" />
-        ADD STAFF
-      </button>
-    </div>
-  </div>
-</div>
-{/* --- ENLARGED SEARCH & FILTER ENGINE --- */}
-<div className="bg-white rounded-[2.5rem] p-6 shadow-2xl shadow-gray-200/50 border border-gray-100 mb-6">
-  <div className="flex flex-col gap-6">
-    <div className="flex items-center gap-3 px-2">
-      <div className="w-2 h-2 bg-orange-500 rounded-full" />
-      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">
-        Filter Engine & Search
-      </span>
-    </div>
-
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-      {/* Large Search Bar */}
-      <div className="lg:col-span-6 relative group">
-        <FiSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 text-2xl group-focus-within:text-orange-500 transition-colors" />
-        <input
-          type="text"
-          placeholder="Search by name, department or expertise..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-16 pr-8 py-6 border-black bg-gray-50 border-2 border-transparent rounded-[1.8rem] text-base font-bold placeholder:text-gray-400 focus:bg-white focus:border-orange-500/20 focus:ring-4 focus:ring-orange-500/5 transition-all outline-none"
-        />
-      </div>
-
-      {/* Dept Filter */}
-      <div className="lg:col-span-3 relative">
-        <label className="absolute -top-2.5 left-6 px-2 bg-white text-[9px] font-black text-gray-400 uppercase tracking-widest z-10">Department</label>
-        <select
-          value={selectedDepartment}
-          onChange={(e) => setSelectedDepartment(e.target.value)}
-          className="w-full px-6 py-6 bg-gray-50 border-2 border-transparent rounded-[1.8rem] text-xs font-black uppercase tracking-widest cursor-pointer hover:bg-gray-100 focus:bg-white focus:border-blue-500/20 transition-all appearance-none outline-none"
-        >
-          <option value="all">All Departments</option>
-          {departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}
-        </select>
-        <FiChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
-      </div>
-
-      {/* Role Filter */}
-      <div className="lg:col-span-3 relative">
-        <label className="absolute -top-2.5 left-6 px-2 bg-white text-[9px] font-black text-gray-400 uppercase tracking-widest z-10">Staff Role</label>
-        <select
-          value={selectedRole}
-          onChange={(e) => setSelectedRole(e.target.value)}
-          className="w-full px-6 py-6 bg-gray-50 border-2 border-transparent rounded-[1.8rem] text-xs font-black uppercase tracking-widest cursor-pointer hover:bg-gray-100 focus:bg-white focus:border-blue-500/20 transition-all appearance-none outline-none"
-        >
-          <option value="all">All Roles</option>
-          {roles.map(role => <option key={role} value={role}>{role}</option>)}
-        </select>
-        <FiChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
-      </div>
-<div className="lg:col-span-12">
-  <div className="border-t border-gray-100 pt-4">
-    <div 
-      onClick={() => {
-        setSearchTerm('');
-        setSelectedDepartment('all');
-        setSelectedRole('all');
-      }}
-      className="inline-flex items-center gap-2 text-xs font-black text-gray-500 uppercase tracking-widest cursor-pointer hover:text-orange-500 transition-colors"
-    >
-      <FiRefreshCcw className="text-sm" />
-      RESET FILTERS
-    </div>
-  </div>
-</div>
-
+  <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8 lg:p-12 font-sans text-slate-900">
+  <div className="max-w-7xl mx-auto space-y-6">
+    
+    {/* --- 1. MODERN EDITORIAL HEADER --- */}
+    <header className="relative bg-white rounded-[2.5rem] p-8 md:p-12 overflow-hidden border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]">
+      {/* Background Accent */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-slate-50 skew-x-12 translate-x-20 pointer-events-none" />
       
-    </div>
-  </div>
-</div>
+      <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+        <div className="space-y-6">
+          <div className="inline-flex items-center gap-3 px-4 py-2 bg-slate-900 rounded-full">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">
+              Institutional Registry Portal
+            </span>
+          </div>
 
-{/* --- STATS GRID --- */}
-{stats && (
-  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
-    {[
-      { label: "Teaching", val: stats.teaching, icon: FiBook, color: "from-blue-500 to-indigo-600" },
-      { label: "Admin", val: stats.administration, icon: FiAward, color: "from-emerald-500 to-teal-600" },
-      { label: "BOM Hub", val: stats.bom, icon: FiShield, color: "from-purple-500 to-pink-600" },
-      { label: "Total", val: stats.total, icon: FiTarget, color: "from-orange-500 to-red-600" },
-      { label: "Leave", val: stats.onLeave, icon: FiCalendar, color: "from-amber-400 to-orange-600" },
-      { label: "Active", val: stats.active, icon: FiCheckCircle, color: "from-green-400 to-emerald-600" },
-    ].map((item, i) => (
-      <div key={i} className="group bg-white p-6 rounded-[2rem] border border-gray-100 hover:shadow-xl transition-all duration-300">
-        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-          <item.icon className="text-xl" />
+          <div className="space-y-2">
+            <h1 className="text-4xl md:text-6xl font-serif font-medium tracking-tight text-slate-900">
+              Staff <span className="italic text-slate-400 font-light">Directory</span>
+            </h1>
+            <p className="text-slate-500 font-medium max-w-md leading-relaxed text-sm md:text-base">
+              Managing <span className="text-slate-900 font-bold">{stats?.total || 0} Professional Profiles</span> for Matungulu Girls Senior School.
+            </p>
+          </div>
         </div>
-        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{item.label}</p>
-        <p className="text-2xl font-black text-gray-900 mt-1">{item.val}</p>
+
+        <div className="flex items-center gap-3">
+          <button onClick={() => fetchStaff(true)} className="group flex items-center gap-3 px-6 py-4 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-2xl transition-all border border-slate-200 active:scale-95">
+            <FiRotateCw className={refreshing ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Sync Data</span>
+          </button>
+          <button onClick={handleCreate} className="flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl transition-all shadow-xl shadow-blue-600/20 active:scale-95">
+            <FiPlus className="text-lg" />
+            <span className="text-[10px] font-black uppercase tracking-widest">Add Staff</span>
+          </button>
+        </div>
       </div>
-    ))}
+    </header>
+
+    {/* --- 2. BENTO STATS GRID --- */}
+    <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      {[
+        { label: "Teaching", val: stats.teaching, icon: FiBook, size: "col-span-1" },
+        { label: "Admin", val: stats.administration, icon: FiAward, size: "col-span-1" },
+        { label: "Total Members", val: stats.total, icon: FiUsers, size: "col-span-2", highlight: true },
+        { label: "BOM Hub", val: stats.bom, icon: FiShield, size: "col-span-1" },
+        { label: "On Leave", val: stats.onLeave, icon: FiCalendar, size: "col-span-1" },
+      ].map((item, i) => (
+        <div key={i} className={`${item.size} p-6 rounded-[2rem] transition-all duration-300 flex flex-col justify-between min-h-[150px] ${item.highlight ? 'bg-slate-900 text-white shadow-2xl' : 'bg-white border border-slate-100 hover:shadow-lg'}`}>
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.highlight ? 'bg-white/10' : 'bg-slate-50 text-blue-600'}`}>
+            <item.icon className="text-lg" />
+          </div>
+          <div>
+            <p className={`text-[9px] font-black uppercase tracking-[0.2em] mb-1 ${item.highlight ? 'text-slate-400' : 'text-slate-400'}`}>{item.label}</p>
+            <p className="text-3xl font-serif font-bold italic">{item.val}</p>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    {/* --- 3. THE CONSOLE (SEARCH & FILTERS) --- */}
+    <section className="bg-white rounded-[2rem] p-3 shadow-xl border border-slate-100">
+      <div className="flex flex-col lg:flex-row items-center gap-2">
+        
+        {/* Search */}
+        <div className="relative flex-grow w-full group">
+          <FiSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors text-xl" />
+          <input
+            type="text"
+            placeholder="Search by name, expertise, or ID..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-16 pr-6 py-5 bg-slate-50 border border-transparent rounded-[1.5rem] text-sm font-bold placeholder:text-slate-400 focus:bg-white focus:border-blue-500/20 outline-none transition-all"
+          />
+        </div>
+
+        {/* Filter Dropdowns */}
+        <div className="flex items-center gap-2 w-full lg:w-auto">
+          <select
+            value={selectedDepartment}
+            onChange={(e) => setSelectedDepartment(e.target.value)}
+            className="flex-grow lg:w-48 pl-6 pr-10 py-5 bg-slate-50 hover:bg-slate-100 text-slate-900 text-[10px] font-black uppercase tracking-widest appearance-none rounded-[1.5rem] cursor-pointer transition-all border border-transparent outline-none"
+          >
+            <option value="all">All Departments</option>
+            {departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}
+          </select>
+
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="flex-grow lg:w-48 pl-6 pr-10 py-5 bg-slate-50 hover:bg-slate-100 text-slate-900 text-[10px] font-black uppercase tracking-widest appearance-none rounded-[1.5rem] cursor-pointer transition-all border border-transparent outline-none"
+          >
+            <option value="all">All Roles</option>
+            {roles.map(role => <option key={role} value={role}>{role}</option>)}
+          </select>
+          
+          <button 
+            onClick={() => {setSearchTerm(''); setSelectedDepartment('all'); setSelectedRole('all');}}
+            className="p-5 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-[1.5rem] transition-all"
+          >
+            <FiRefreshCcw className="text-lg" />
+          </button>
+        </div>
+      </div>
+    </section>
+
   </div>
-)}
+</div>    
 
       {/* Bulk Actions */}
       {selectedPosts.size > 0 && (
