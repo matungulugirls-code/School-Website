@@ -2151,117 +2151,270 @@ const handleSubmit = async (formData, id) => {
 
 
 
-
-
-  <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8 lg:p-12 font-sans text-slate-900">
-  <div className="max-w-7xl mx-auto space-y-6">
-    
-    {/* --- 1. MODERN EDITORIAL HEADER --- */}
-    <header className="relative bg-white rounded-[2.5rem] p-8 md:p-12 overflow-hidden border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]">
-      {/* Background Accent */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-slate-50 skew-x-12 translate-x-20 pointer-events-none" />
       
-      <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-        <div className="space-y-6">
-          <div className="inline-flex items-center gap-3 px-4 py-2 bg-slate-900 rounded-full">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">
-              Institutional Registry Portal
+
+<div className="relative bg-gradient-to-br from-[#0F172A] via-[#111827] to-[#0F172A] rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 text-white overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm transition-all duration-500 mb-8">
+  
+  {/* Animated Gradient Orbs */}
+  <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] bg-gradient-to-br from-blue-600/30 via-cyan-500/20 to-transparent rounded-full blur-[130px] animate-pulse pointer-events-none" />
+  <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-gradient-to-tr from-orange-500/20 via-amber-500/10 to-transparent rounded-full blur-[110px] animate-pulse delay-1000 pointer-events-none" />
+  <div className="absolute top-[40%] left-[20%] w-[200px] h-[200px] bg-purple-600/10 rounded-full blur-[80px] animate-pulse delay-700 pointer-events-none" />
+
+  {/* Glass Card Overlay */}
+  <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px] rounded-[inherit] pointer-events-none" />
+
+  <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+    <div className="space-y-7">
+      {/* Institutional Branding with animated bar */}
+      <div className="group flex items-center gap-5">
+        <div className="h-12 w-1.5 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.6)] animate-pulse" />
+        <div className="space-y-1.5">
+          <h2 className="text-[11px] md:text-xs font-black uppercase tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">
+            Matungulu Girls Senior School 
+          </h2>
+          <p className="text-[10px] italic font-bold text-white/50 tracking-[0.2em] uppercase flex items-center gap-2">
+            <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+            "Strive to Excel"
+          </p>
+        </div>
+      </div>
+
+      {/* Title Area with enhanced icon */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="p-3.5 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-xl group-hover:scale-105 transition-transform duration-300 w-fit">
+          <FiUsers className="text-3xl text-orange-400 drop-shadow-lg" />
+        </div>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter leading-none">
+          STAFF{" "}
+          <span className="bg-gradient-to-r from-blue-200 via-white to-blue-300 bg-clip-text text-transparent relative">
+            DIRECTORY
+            <svg className="absolute -bottom-2 left-0 w-full h-[2px]" viewBox="0 0 200 2" preserveAspectRatio="none">
+              <line x1="0" y1="0" x2="200" y2="0" stroke="url(#gradient)" strokeWidth="2" />
+              <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#3B82F6" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#F59E0B" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </span>
+        </h1>
+      </div>
+
+      {/* Enhanced Summary Sentence */}
+      <div className="max-w-2xl space-y-2">
+        <p className="text-gray-300 text-sm md:text-base font-medium leading-relaxed backdrop-blur-sm bg-white/[0.02] px-4 py-2 rounded-xl inline-block">
+          Managing{" "}
+          <span className="text-white font-black text-lg border-b-2 border-orange-500/60 pb-0.5 inline-block transition-all hover:border-orange-500">
+            {stats?.total || 0} Professional Profiles
+          </span>
+          .
+        </p>
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-gray-400 text-sm">Current Status:</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/15 to-teal-500/10 border border-emerald-500/30 shadow-lg">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-emerald-400 text-xs font-black uppercase tracking-wider">
+              {stats?.active || 0} Active on School
             </span>
           </div>
-
-          <div className="space-y-2">
-            <h1 className="text-4xl md:text-6xl font-serif font-medium tracking-tight text-slate-900">
-              Staff <span className="italic text-slate-400 font-light">Directory</span>
-            </h1>
-            <p className="text-slate-500 font-medium max-w-md leading-relaxed text-sm md:text-base">
-              Managing <span className="text-slate-900 font-bold">{stats?.total || 0} Professional Profiles</span> for Matungulu Girls Senior School.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button onClick={() => fetchStaff(true)} className="group flex items-center gap-3 px-6 py-4 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-2xl transition-all border border-slate-200 active:scale-95">
-            <FiRotateCw className={refreshing ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Sync Data</span>
-          </button>
-          <button onClick={handleCreate} className="flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl transition-all shadow-xl shadow-blue-600/20 active:scale-95">
-            <FiPlus className="text-lg" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Add Staff</span>
-          </button>
         </div>
       </div>
-    </header>
+    </div>
 
-    {/* --- 2. BENTO STATS GRID --- */}
-    <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-      {[
-        { label: "Teaching", val: stats.teaching, icon: FiBook, size: "col-span-1" },
-        { label: "Admin", val: stats.administration, icon: FiAward, size: "col-span-1" },
-        { label: "Total Members", val: stats.total, icon: FiUsers, size: "col-span-2", highlight: true },
-        { label: "BOM Hub", val: stats.bom, icon: FiShield, size: "col-span-1" },
-        { label: "On Leave", val: stats.onLeave, icon: FiCalendar, size: "col-span-1" },
-      ].map((item, i) => (
-        <div key={i} className={`${item.size} p-6 rounded-[2rem] transition-all duration-300 flex flex-col justify-between min-h-[150px] ${item.highlight ? 'bg-slate-900 text-white shadow-2xl' : 'bg-white border border-slate-100 hover:shadow-lg'}`}>
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.highlight ? 'bg-white/10' : 'bg-slate-50 text-blue-600'}`}>
-            <item.icon className="text-lg" />
-          </div>
-          <div>
-            <p className={`text-[9px] font-black uppercase tracking-[0.2em] mb-1 ${item.highlight ? 'text-slate-400' : 'text-slate-400'}`}>{item.label}</p>
-            <p className="text-3xl font-serif font-bold italic">{item.val}</p>
-          </div>
-        </div>
-      ))}
-    </section>
-
-    {/* --- 3. THE CONSOLE (SEARCH & FILTERS) --- */}
-    <section className="bg-white rounded-[2rem] p-3 shadow-xl border border-slate-100">
-      <div className="flex flex-col lg:flex-row items-center gap-2">
-        
-        {/* Search */}
-        <div className="relative flex-grow w-full group">
-          <FiSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors text-xl" />
-          <input
-            type="text"
-            placeholder="Search by name, expertise, or ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-16 pr-6 py-5 bg-slate-50 border border-transparent rounded-[1.5rem] text-sm font-bold placeholder:text-slate-400 focus:bg-white focus:border-blue-500/20 outline-none transition-all"
-          />
-        </div>
-
-        {/* Filter Dropdowns */}
-        <div className="flex items-center gap-2 w-full lg:w-auto">
-          <select
-            value={selectedDepartment}
-            onChange={(e) => setSelectedDepartment(e.target.value)}
-            className="flex-grow lg:w-48 pl-6 pr-10 py-5 bg-slate-50 hover:bg-slate-100 text-slate-900 text-[10px] font-black uppercase tracking-widest appearance-none rounded-[1.5rem] cursor-pointer transition-all border border-transparent outline-none"
-          >
-            <option value="all">All Departments</option>
-            {departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}
-          </select>
-
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="flex-grow lg:w-48 pl-6 pr-10 py-5 bg-slate-50 hover:bg-slate-100 text-slate-900 text-[10px] font-black uppercase tracking-widest appearance-none rounded-[1.5rem] cursor-pointer transition-all border border-transparent outline-none"
-          >
-            <option value="all">All Roles</option>
-            {roles.map(role => <option key={role} value={role}>{role}</option>)}
-          </select>
-          
-          <button 
-            onClick={() => {setSearchTerm(''); setSelectedDepartment('all'); setSelectedRole('all');}}
-            className="p-5 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-[1.5rem] transition-all"
-          >
-            <FiRefreshCcw className="text-lg" />
-          </button>
-        </div>
-      </div>
-    </section>
-
+    {/* Enhanced Action Group */}
+    <div className="flex flex-col sm:flex-row gap-4">
+      <button
+        onClick={() => fetchStaff(true)}
+        disabled={refreshing}
+        className="group relative flex items-center justify-center gap-3 bg-white/5 backdrop-blur-xl border border-white/15 px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+        {refreshing ? (
+          <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+        ) : (
+          <FiRotateCw className="text-base group-hover:rotate-180 transition-transform duration-500" />
+        )}
+        REFRESH
+      </button>
+      
+      <button
+        onClick={handleCreate}
+        className="group relative flex items-center justify-center gap-3 bg-gradient-to-r from-white to-gray-100 text-[#0F172A] px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden shadow-xl"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 via-transparent to-orange-400/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+        <FiPlus className="text-lg group-hover:rotate-90 transition-transform duration-300" />
+        ADD STAFF
+      </button>
+    </div>
   </div>
-</div>    
+</div>
+{/* --- ENLARGED SEARCH & FILTER ENGINE --- */}
+<div className="bg-gradient-to-br from-white via-gray-50/30 to-white rounded-[2.5rem] p-8 shadow-2xl shadow-gray-200/50 border border-gray-100/80 backdrop-blur-sm mb-8 transition-all duration-500 hover:shadow-3xl">
+  
+  {/* Animated background accent */}
+  <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
+    <div className="absolute -top-20 -right-20 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
+  </div>
+
+  <div className="relative z-10 flex flex-col gap-6">
+    {/* Enhanced Header */}
+    <div className="flex items-center justify-between px-2">
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-8 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-lg shadow-orange-500/30" />
+          <div className="w-1.5 h-6 bg-orange-400/60 rounded-full" />
+        </div>
+        <div className="space-y-1">
+          <span className="text-[11px] font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-400 uppercase tracking-[0.3em]">
+            Filter Engine & Search
+          </span>
+          <p className="text-[10px] text-gray-400 font-medium tracking-wide">Refine your staff directory results</p>
+        </div>
+      </div>
+      
+      {/* Quick stats chip */}
+      <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100">
+        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+        <span className="text-[9px] font-black text-gray-500 uppercase tracking-wider">Live Results</span>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      {/* Enhanced Search Bar */}
+      <div className="lg:col-span-6 relative group">
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10">
+          <FiSearch className="text-2xl text-gray-400 group-focus-within:text-orange-500 transition-all duration-300 group-focus-within:scale-110" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search by name, department or expertise..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-16 pr-8 py-6 bg-gradient-to-br from-gray-50 to-gray-50/50 border-2 border-gray-100 rounded-2xl text-base font-semibold placeholder:text-gray-400 focus:bg-white focus:border-orange-400/30 focus:ring-4 focus:ring-orange-500/10 transition-all duration-300 outline-none shadow-sm hover:shadow-md"
+        />
+        {/* Animated underline effect on focus */}
+        <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-300 group-focus-within:w-full rounded-full" />
+      </div>
+
+      {/* Enhanced Department Filter */}
+      <div className="lg:col-span-3 relative group">
+        <label className="absolute -top-3 left-5 px-2.5 bg-white text-[9px] font-black text-gray-500 uppercase tracking-widest z-10 group-hover:text-orange-500 transition-colors">
+          Department
+        </label>
+        <select
+          value={selectedDepartment}
+          onChange={(e) => setSelectedDepartment(e.target.value)}
+          className="w-full px-6 py-6 bg-gradient-to-br from-gray-50 to-gray-50/50 border-2 border-gray-100 rounded-2xl text-xs font-black uppercase tracking-wider cursor-pointer hover:bg-gray-100/50 focus:bg-white focus:border-orange-400/30 transition-all duration-300 appearance-none outline-none shadow-sm"
+        >
+          <option value="all">🎯 All Departments</option>
+          {departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}
+        </select>
+        <FiChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors group-hover:rotate-180 duration-300" />
+      </div>
+
+      {/* Enhanced Role Filter */}
+      <div className="lg:col-span-3 relative group">
+        <label className="absolute -top-3 left-5 px-2.5 bg-white text-[9px] font-black text-gray-500 uppercase tracking-widest z-10 group-hover:text-orange-500 transition-colors">
+          Staff Role
+        </label>
+        <select
+          value={selectedRole}
+          onChange={(e) => setSelectedRole(e.target.value)}
+          className="w-full px-6 py-6 bg-gradient-to-br from-gray-50 to-gray-50/50 border-2 border-gray-100 rounded-2xl text-xs font-black uppercase tracking-wider cursor-pointer hover:bg-gray-100/50 focus:bg-white focus:border-orange-400/30 transition-all duration-300 appearance-none outline-none shadow-sm"
+        >
+          <option value="all">👥 All Roles</option>
+          {roles.map(role => <option key={role} value={role}>{role}</option>)}
+        </select>
+        <FiChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-orange-500 transition-colors group-hover:rotate-180 duration-300" />
+      </div>
+
+      {/* Enhanced Reset Section */}
+      <div className="lg:col-span-12">
+        <div className="border-t border-gray-100/80 pt-5 flex items-center justify-between">
+          <div 
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedDepartment('all');
+              setSelectedRole('all');
+            }}
+            className="group flex items-center gap-2.5 text-xs font-black text-gray-500 uppercase tracking-widest cursor-pointer hover:text-orange-500 transition-all duration-300"
+          >
+            <div className="p-1.5 rounded-full bg-gray-50 group-hover:bg-orange-50 transition-colors duration-300">
+              <FiRefreshCcw className="text-sm group-hover:rotate-180 transition-transform duration-500" />
+            </div>
+            <span className="group-hover:tracking-[0.25em] transition-all duration-300">RESET FILTERS</span>
+          </div>
+          
+          {/* Active filters indicator */}
+          {(searchTerm || selectedDepartment !== 'all' || selectedRole !== 'all') && (
+            <div className="flex items-center gap-2 text-[9px] font-black text-orange-500 uppercase tracking-wider">
+              <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
+              <span>Active Filters Applied</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* --- ENHANCED STATS GRID --- */}
+{stats && (
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 mb-12">
+    {[
+      { label: "Teaching Staff", val: stats.teaching, icon: FiBook, color: "from-blue-500 to-indigo-600", gradient: "via-blue-400", description: "Faculty Members" },
+      { label: "Administration", val: stats.administration, icon: FiAward, color: "from-emerald-500 to-teal-600", gradient: "via-emerald-400", description: "Management Team" },
+      { label: "BOM Hub", val: stats.bom, icon: FiShield, color: "from-purple-500 to-pink-600", gradient: "via-purple-400", description: "Board Members" },
+      { label: "Total Strength", val: stats.total, icon: FiTarget, color: "from-orange-500 to-red-600", gradient: "via-orange-400", description: "Complete Roster" },
+      { label: "On Leave", val: stats.onLeave, icon: FiCalendar, color: "from-amber-400 to-orange-600", gradient: "via-amber-400", description: "Temporary Absence" },
+      { label: "Active Now", val: stats.active, icon: FiCheckCircle, color: "from-green-400 to-emerald-600", gradient: "via-green-400", description: "Currently Serving" },
+    ].map((item, i) => (
+      <div key={i} className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden">
+        {/* Animated gradient background */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+        
+        {/* Glossy effect */}
+        <div className="absolute -inset-full group-hover:inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
+        
+        <div className="relative z-10">
+          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-4 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300 group-hover:rotate-3`}>
+            <item.icon className="text-xl" />
+          </div>
+          <div className="space-y-1.5">
+            <div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider group-hover:text-gray-500 transition-colors">
+                {item.label}
+              </p>
+              <p className="text-[8px] text-gray-300 font-medium uppercase tracking-wider mt-0.5">
+                {item.description}
+              </p>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <p className="text-3xl font-black bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                {item.val}
+              </p>
+              {item.label === "Active Now" && (
+                <div className="flex items-center gap-1 ml-1">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-[7px] font-black text-green-500 uppercase">Live</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Bottom accent bar */}
+        <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r ${item.color} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-full`} />
+      </div>
+    ))}
+  </div>
+)}
 
       {/* Bulk Actions */}
       {selectedPosts.size > 0 && (
