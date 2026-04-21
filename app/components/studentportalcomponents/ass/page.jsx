@@ -77,12 +77,12 @@ const getFileIcon = (fileType, extension, size = 20) => {
   const type = fileType?.toLowerCase() || extension?.toLowerCase() || '';
   
   if (type.includes('pdf')) return <FiFileText className="text-red-500" size={size} />;
-  if (type.includes('word') || ['doc', 'docx'].includes(type)) return <IoDocument className="text-blue-500" size={size} />;
+  if (type.includes('word') || ['doc', 'docx'].includes(type)) return <IoDocument className="text-teal-500" size={size} />;
   if (type.includes('image') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(type)) return <IoImages className="text-pink-500" size={size} />;
-  if (type.includes('video') || ['mp4', 'mov', 'avi', 'wmv', 'flv', 'webm', 'mkv'].includes(type)) return <IoVideocam className="text-purple-500" size={size} />;
-  if (type.includes('audio') || ['mp3', 'wav', 'm4a', 'ogg', 'flac'].includes(type)) return <IoMusicalNotes className="text-indigo-500" size={size} />;
+  if (type.includes('video') || ['mp4', 'mov', 'avi', 'wmv', 'flv', 'webm', 'mkv'].includes(type)) return <IoVideocam className="text-green-500" size={size} />;
+  if (type.includes('audio') || ['mp3', 'wav', 'm4a', 'ogg', 'flac'].includes(type)) return <IoMusicalNotes className="text-emerald-500" size={size} />;
   if (type.includes('excel') || ['xls', 'xlsx', 'csv'].includes(type)) return <IoCalculator className="text-emerald-500" size={size} />;
-  if (type.includes('powerpoint') || ['ppt', 'pptx'].includes(type)) return <IoColorPalette className="text-orange-500" size={size} />;
+  if (type.includes('powerpoint') || ['ppt', 'pptx'].includes(type)) return <IoColorPalette className="text-aqua-500" size={size} />;
   if (type.includes('zip') || type.includes('rar') || type.includes('7z') || type.includes('tar')) return <IoFolderOpen className="text-amber-500" size={size} />;
   return <IoDocument className="text-gray-600" size={size} />;
 };
@@ -111,7 +111,7 @@ const downloadMultipleFiles = async (files) => {
   }
 
   const loadingAlert = document.createElement('div');
-  loadingAlert.className = 'fixed top-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-xl shadow-2xl z-[10000] backdrop-blur-sm border border-white/20';
+  loadingAlert.className = 'fixed top-4 right-4 bg-gradient-to-r from-teal-600 to-green-600 text-white px-4 py-3 rounded-xl shadow-2xl z-[10000] backdrop-blur-sm border border-white/20';
   loadingAlert.innerHTML = `
     <div class="flex items-center gap-3">
       <div class="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
@@ -171,14 +171,14 @@ const downloadMultipleFiles = async (files) => {
 
 function LoadingSpinner() {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-white to-teal-50/30 flex items-center justify-center z-50">
       <div className="text-center">
         <div className="relative">
           <div className="relative">
             <CircularProgress 
               size={80} 
               thickness={4}
-              className="text-blue-600"
+              className="text-teal-600"
               sx={{
                 '& .MuiCircularProgress-circle': {
                   strokeLinecap: 'round',
@@ -186,12 +186,12 @@ function LoadingSpinner() {
               }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full w-12 h-12 flex items-center justify-center">
+              <div className="bg-gradient-to-r from-teal-500 to-emerald-600 rounded-full w-12 h-12 flex items-center justify-center">
                 <IoDocumentsOutline className="text-white text-xl" />
               </div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full blur-xl opacity-30"></div>
+          <div className="absolute -inset-6 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-full blur-xl opacity-30"></div>
         </div>
         
         <div className="mt-8 space-y-3">
@@ -215,7 +215,7 @@ function LoadingSpinner() {
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
             transition={{ delay: 0.6, duration: 1.5 }}
-            className="h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+            className="h-1 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full"
           ></motion.div>
         </div>
       </div>
@@ -265,11 +265,11 @@ function StatusBadge({ status, size = "md" }) {
   const getStatusConfig = (status) => {
     const configs = {
       'completed': { bg: 'from-emerald-500 to-teal-400', text: 'Completed', icon: <IoCheckmarkCircle /> },
-      'assigned': { bg: 'from-blue-500 to-cyan-400', text: 'Assigned', icon: <IoTime /> },
+      'assigned': { bg: 'from-teal-500 to-teal-400', text: 'Assigned', icon: <IoTime /> },
       'pending': { bg: 'from-amber-500 to-orange-400', text: 'Pending', icon: <IoTime /> },
-      'reviewed': { bg: 'from-purple-500 to-violet-400', text: 'Reviewed', icon: <IoCheckmarkCircle /> },
+      'reviewed': { bg: 'from-green-500 to-violet-400', text: 'Reviewed', icon: <IoCheckmarkCircle /> },
       'overdue': { bg: 'from-rose-500 to-pink-400', text: 'Overdue', icon: <IoWarning /> },
-      'submitted': { bg: 'from-indigo-500 to-blue-400', text: 'Submitted', icon: <IoDocument /> }
+      'submitted': { bg: 'from-emerald-500 to-teal-400', text: 'Submitted', icon: <IoDocument /> }
     };
     return configs[status?.toLowerCase()] || configs.pending;
   };
@@ -317,14 +317,14 @@ function FilePreviewCard({ file, onDownload, onPreview, index }) {
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <button
             onClick={() => onPreview?.(file)}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg"
           >
             <IoEye size={16} />
             <span>Preview</span>
           </button>
           <button
             onClick={() => onDownload?.(file)}
-            className="flex items-center gap-2 px-3 py-2 text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-bold shadow-md"
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg font-bold shadow-md"
           >
             <IoCloudDownload size={16} />
             <span>Download</span>
@@ -350,10 +350,10 @@ function AssignmentResourceCard({ item, type, onView, onDownload, onBookmark, is
       {/* Card Header */}
       <div className={`p-4 sm:p-5 bg-gradient-to-r ${
         isResource 
-          ? 'from-blue-500 to-indigo-600' 
+          ? 'from-teal-500 to-emerald-600' 
           : isOverdue
           ? 'from-rose-500 to-pink-600'
-          : 'from-purple-500 to-violet-600'
+          : 'from-green-500 to-violet-600'
       } text-white`}>
         <div className="flex items-center justify-between mb-3 sm:mb-4">
           <div className="flex items-center gap-2 sm:gap-3">
@@ -415,7 +415,7 @@ function AssignmentResourceCard({ item, type, onView, onDownload, onBookmark, is
               {isResource ? 'Teacher' : 'Teacher'}
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 text-gray-900 font-bold">
-              <IoPerson className="text-purple-500 w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <IoPerson className="text-green-500 w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span className="truncate text-sm sm:text-base">{item.teacher || 'Not specified'}</span>
             </div>
           </div>
@@ -463,7 +463,7 @@ function AssignmentResourceCard({ item, type, onView, onDownload, onBookmark, is
           
           <button
             onClick={() => onDownload?.(item)}
-            className="px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg sm:rounded-xl font-bold shadow-md text-xs sm:text-sm"
+            className="px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg sm:rounded-xl font-bold shadow-md text-xs sm:text-sm"
             title={`Download ${totalFiles} ${totalFiles === 1 ? 'file' : 'files'}`}
           >
             <IoCloudDownload className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -486,10 +486,10 @@ function DetailModal({ item, type, onClose, onDownload }) {
         {/* Modal Header */}
         <div className={`p-4 sm:p-6 md:p-8 text-white ${
           isResource 
-            ? 'bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800' 
+            ? 'bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-800' 
             : isOverdue
             ? 'bg-gradient-to-r from-rose-600 via-rose-700 to-pink-800'
-            : 'bg-gradient-to-r from-purple-600 via-purple-700 to-violet-800'
+            : 'bg-gradient-to-r from-green-600 via-green-700 to-violet-800'
         }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -525,10 +525,10 @@ function DetailModal({ item, type, onClose, onDownload }) {
           {/* Status & Info */}
           <div className="flex flex-wrap gap-2 sm:gap-3">
             {!isResource && item.status && <StatusBadge status={item.status} size="md" />}
-            <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm font-bold">
+            <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-teal-100 text-teal-800 rounded-full text-xs sm:text-sm font-bold">
               {item.className || 'All Classes'}
             </span>
-            <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-indigo-100 text-indigo-800 rounded-full text-xs sm:text-sm font-bold">
+            <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-100 text-emerald-800 rounded-full text-xs sm:text-sm font-bold">
               {item.subject || 'General'}
             </span>
             {isResource && item.category && (
@@ -592,7 +592,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
               {item.description && (
                 <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-gray-200">
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4 flex items-center gap-2 sm:gap-3">
-                    <IoInformation className="text-blue-500 w-4 h-4 sm:w-5 sm:h-5" />
+                    <IoInformation className="text-teal-500 w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Description</span>
                   </h3>
                   <p className="text-gray-700 text-sm sm:text-base whitespace-pre-line">{item.description}</p>
@@ -600,9 +600,9 @@ function DetailModal({ item, type, onClose, onDownload }) {
               )}
               
               {!isResource && item.instructions && (
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-blue-200">
+                <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-teal-200">
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4 flex items-center gap-2 sm:gap-3">
-                    <IoDocument className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5" />
+                    <IoDocument className="text-teal-600 w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Instructions</span>
                   </h3>
                   <p className="text-gray-700 text-sm sm:text-base whitespace-pre-line">{item.instructions}</p>
@@ -614,10 +614,10 @@ function DetailModal({ item, type, onClose, onDownload }) {
           {/* Files Section */}
           <div className="space-y-3 sm:space-y-4 md:space-y-6">
             {isResource && item.files && item.files.length > 0 && (
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-purple-200">
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-green-200">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 md:mb-6 gap-2 sm:gap-0">
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
-                    <IoCloudDownload className="text-purple-600 w-4 h-4 sm:w-5 sm:h-5" />
+                    <IoCloudDownload className="text-green-600 w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Resource Files ({item.files.length})</span>
                   </h3>
                   <button
@@ -627,7 +627,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
                       fileType: file.fileType,
                       extension: file.extension
                     })))}
-                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg sm:rounded-xl font-bold shadow-md flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg sm:rounded-xl font-bold shadow-md flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                   >
                     <IoCloudDownload className="w-3 h-3 sm:w-4 sm:h-4" />
                     Download All
@@ -656,15 +656,15 @@ function DetailModal({ item, type, onClose, onDownload }) {
             {!isResource && (
               <>
                 {(item.assignmentFileAttachments?.length || 0) > 0 && (
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-blue-200">
+                  <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-teal-200">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 md:mb-6 gap-2 sm:gap-0">
                       <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
-                        <IoDocument className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5" />
+                        <IoDocument className="text-teal-600 w-4 h-4 sm:w-5 sm:h-5" />
                         <span>Assignment Files ({item.assignmentFileAttachments?.length || 0})</span>
                       </h3>
                       <button
                         onClick={() => downloadMultipleFiles(item.assignmentFileAttachments || [])}
-                        className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg sm:rounded-xl font-bold shadow-md flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                        className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg sm:rounded-xl font-bold shadow-md flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                       >
                         <IoCloudDownload className="w-3 h-3 sm:w-4 sm:h-4" />
                         Download All
@@ -728,7 +728,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
             
             <button
               onClick={() => onDownload?.(item)}
-              className="flex-[2] min-w-0 h-11 sm:h-14 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg sm:rounded-xl md:rounded-2xl font-bold text-[12px] sm:text-base md:text-lg shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 active:scale-95 transition-all"
+              className="flex-[2] min-w-0 h-11 sm:h-14 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg sm:rounded-xl md:rounded-2xl font-bold text-[12px] sm:text-base md:text-lg shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 active:scale-95 transition-all"
             >
               <IoCloudDownload className="shrink-0 w-4 h-4 sm:w-5 sm:h-5" />
               <span className="truncate sm:hidden">Download</span>
@@ -913,10 +913,10 @@ export default function ModernResourcesAssignmentsView({
   const statuses = useMemo(() => {
     return [
       { id: 'all', label: 'All Status', color: 'from-gray-500 to-gray-600' },
-      { id: 'assigned', label: 'Assigned', color: 'from-blue-500 to-blue-600' },
+      { id: 'assigned', label: 'Assigned', color: 'from-teal-500 to-teal-600' },
       { id: 'pending', label: 'Pending', color: 'from-amber-500 to-amber-600' },
       { id: 'completed', label: 'Completed', color: 'from-emerald-500 to-emerald-600' },
-      { id: 'reviewed', label: 'Reviewed', color: 'from-purple-500 to-purple-600' },
+      { id: 'reviewed', label: 'Reviewed', color: 'from-green-500 to-green-600' },
       { id: 'overdue', label: 'Overdue', color: 'from-rose-500 to-rose-600' }
     ];
   }, []);
@@ -1069,15 +1069,15 @@ export default function ModernResourcesAssignmentsView({
   const filteredCount = currentItems.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 p-2 sm:p-4 md:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50/30 p-2 sm:p-4 md:p-6">
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-900 rounded-3xl p-4 sm:p-6 md:p-8 text-white overflow-hidden mb-4 sm:mb-6 md:mb-8"
+        className="relative bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-900 rounded-3xl p-4 sm:p-6 md:p-8 text-white overflow-hidden mb-4 sm:mb-6 md:mb-8"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/20 rounded-full -ml-24 -mb-24 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/20 rounded-full -ml-24 -mb-24 blur-3xl"></div>
         
         <div className="relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
@@ -1088,7 +1088,7 @@ export default function ModernResourcesAssignmentsView({
                 </div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Learning Hub</h1>
               </div>
-              <p className="text-blue-100 text-sm sm:text-base max-w-2xl">
+              <p className="text-teal-100 text-sm sm:text-base max-w-2xl">
                 Access assignments, resources, and study materials all in one place
                 {student && (
                   <span className="ml-2 text-yellow-300 font-bold">
@@ -1116,7 +1116,7 @@ export default function ModernResourcesAssignmentsView({
           title="Total Assignments"
           value={stats.totalAssignments}
           icon={IoDocument}
-          color="from-purple-500 to-purple-600"
+          color="from-green-500 to-green-600"
           trend={5}
           description={`${stats.pendingAssignments} pending`}
         />
@@ -1125,7 +1125,7 @@ export default function ModernResourcesAssignmentsView({
           title="Learning Resources"
           value={stats.totalResources}
           icon={IoDocumentsOutline}
-          color="from-blue-500 to-blue-600"
+          color="from-teal-500 to-teal-600"
           trend={12}
           description="Available files"
         />
@@ -1160,7 +1160,7 @@ export default function ModernResourcesAssignmentsView({
               onClick={() => setActiveTab('assignments')}
               className={`flex-1 py-3 sm:py-4 px-2 rounded-xl flex items-center justify-center gap-2 sm:gap-3 ${
                 activeTab === 'assignments'
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 text-white'
+                  ? 'bg-gradient-to-r from-teal-500 to-emerald-600 shadow-lg shadow-teal-500/20 text-white'
                   : 'text-gray-600'
               }`}
             >
@@ -1176,7 +1176,7 @@ export default function ModernResourcesAssignmentsView({
               onClick={() => setActiveTab('resources')}
               className={`flex-1 py-3 sm:py-4 px-2 rounded-xl flex items-center justify-center gap-2 sm:gap-3 ${
                 activeTab === 'resources'
-                  ? 'bg-gradient-to-r from-purple-500 to-violet-600 shadow-lg shadow-purple-500/20 text-white'
+                  ? 'bg-gradient-to-r from-green-500 to-violet-600 shadow-lg shadow-green-500/20 text-white'
                   : 'text-gray-600'
               }`}
             >
@@ -1200,7 +1200,7 @@ export default function ModernResourcesAssignmentsView({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder={`Search ${activeTab === 'assignments' ? 'assignments...' : 'resources...'}`}
-                  className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-2.5 sm:py-3.5 text-sm sm:text-base border-2 border-gray-200 bg-white/80 backdrop-blur-sm rounded-2xl focus:outline-none focus:border-blue-500 placeholder:text-gray-400"
+                  className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-2.5 sm:py-3.5 text-sm sm:text-base border-2 border-gray-200 bg-white/80 backdrop-blur-sm rounded-2xl focus:outline-none focus:border-teal-500 placeholder:text-gray-400"
                 />
                 {searchTerm && (
                   <button
@@ -1258,7 +1258,7 @@ export default function ModernResourcesAssignmentsView({
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                 className={`p-2.5 sm:p-3 rounded-2xl border ${
                   showAdvancedFilters
-                    ? 'bg-gradient-to-r from-blue-50 to-indigo-50/50 border-blue-200 text-blue-600 shadow-lg shadow-blue-500/10'
+                    ? 'bg-gradient-to-r from-teal-50 to-emerald-50/50 border-teal-200 text-teal-600 shadow-lg shadow-teal-500/10'
                     : 'bg-white border-gray-200 text-gray-600'
                 }`}
               >
@@ -1281,13 +1281,13 @@ export default function ModernResourcesAssignmentsView({
                     {/* Class Filter */}
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                        <IoSchool className="text-blue-500" />
+                        <IoSchool className="text-teal-500" />
                         Class
                       </label>
                       <select
                         value={selectedClass}
                         onChange={(e) => setSelectedClass(e.target.value)}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 bg-white rounded-2xl focus:outline-none focus:border-blue-500"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 bg-white rounded-2xl focus:outline-none focus:border-teal-500"
                       >
                         {classes.map(cls => (
                           <option key={cls} value={cls}>
@@ -1300,13 +1300,13 @@ export default function ModernResourcesAssignmentsView({
                     {/* Subject Filter */}
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                        <FiBookOpen className="text-indigo-500" />
+                        <FiBookOpen className="text-emerald-500" />
                         Subject
                       </label>
                       <select
                         value={selectedSubject}
                         onChange={(e) => setSelectedSubject(e.target.value)}
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 bg-white rounded-2xl focus:outline-none focus:border-blue-500"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 bg-white rounded-2xl focus:outline-none focus:border-teal-500"
                       >
                         {subjects.map(subject => (
                           <option key={subject} value={subject}>
@@ -1326,7 +1326,7 @@ export default function ModernResourcesAssignmentsView({
                           </>
                         ) : (
                           <>
-                            <FiTag className="text-purple-500" />
+                            <FiTag className="text-green-500" />
                             Type
                           </>
                         )}
@@ -1338,7 +1338,7 @@ export default function ModernResourcesAssignmentsView({
                             ? setSelectedStatus(e.target.value)
                             : setSelectedResourceType(e.target.value)
                         }
-                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 bg-white rounded-2xl focus:outline-none focus:border-blue-500"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-200 bg-white rounded-2xl focus:outline-none focus:border-teal-500"
                       >
                         {activeTab === 'assignments' ? (
                           statuses.map(status => (
@@ -1379,19 +1379,19 @@ export default function ModernResourcesAssignmentsView({
                     <div className="flex flex-wrap gap-2">
                       <span className="text-sm text-gray-500">Active filters:</span>
                       {selectedClass !== 'all' && (
-                        <span className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-bold border border-blue-100">
+                        <span className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-teal-50 text-teal-700 rounded-full text-xs sm:text-sm font-bold border border-teal-100">
                           <IoSchool className="text-xs sm:text-sm" />
                           {selectedClass}
-                          <button onClick={() => setSelectedClass('all')} className="ml-1 text-blue-500">
+                          <button onClick={() => setSelectedClass('all')} className="ml-1 text-teal-500">
                             <IoClose className="text-xs sm:text-sm" />
                           </button>
                         </span>
                       )}
                       {selectedSubject !== 'all' && (
-                        <span className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-xs sm:text-sm font-bold border border-indigo-100">
+                        <span className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs sm:text-sm font-bold border border-emerald-100">
                           <FiBookOpen className="text-xs sm:text-sm" />
                           {selectedSubject}
-                          <button onClick={() => setSelectedSubject('all')} className="ml-1 text-indigo-500">
+                          <button onClick={() => setSelectedSubject('all')} className="ml-1 text-emerald-500">
                             <IoClose className="text-xs sm:text-sm" />
                           </button>
                         </span>
@@ -1406,10 +1406,10 @@ export default function ModernResourcesAssignmentsView({
                         </span>
                       )}
                       {activeTab === 'resources' && selectedResourceType !== 'all' && (
-                        <span className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-bold border border-purple-100">
+                        <span className="inline-flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-green-50 text-green-700 rounded-full text-xs sm:text-sm font-bold border border-green-100">
                           <FiTag className="text-xs sm:text-sm" />
                           {resourceTypes.find(t => t.id === selectedResourceType)?.label}
-                          <button onClick={() => setSelectedResourceType('all')} className="ml-1 text-purple-500">
+                          <button onClick={() => setSelectedResourceType('all')} className="ml-1 text-green-500">
                             <IoClose className="text-xs sm:text-sm" />
                           </button>
                         </span>
@@ -1445,7 +1445,7 @@ export default function ModernResourcesAssignmentsView({
               {searchTerm && ` • Search: "${searchTerm}"`}
               {showBookmarkedOnly && ` • Bookmarked only`}
               {student && (
-                <span className="text-blue-600 font-bold">
+                <span className="text-teal-600 font-bold">
                   • Filtered for {student.form} {student.stream}
                 </span>
               )}
@@ -1484,7 +1484,7 @@ export default function ModernResourcesAssignmentsView({
               selectedStatus !== 'all' || selectedResourceType !== 'all' || showBookmarkedOnly) && (
               <button
                 onClick={clearFilters}
-                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl font-bold shadow-lg"
+                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-2xl font-bold shadow-lg"
               >
                 Clear All Filters
               </button>
@@ -1531,11 +1531,11 @@ export default function ModernResourcesAssignmentsView({
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className={`p-2 sm:p-3 rounded-2xl ${
                       activeTab === 'assignments' 
-                        ? 'bg-gradient-to-r from-purple-100 to-purple-200' 
-                        : 'bg-gradient-to-r from-blue-100 to-blue-200'
+                        ? 'bg-gradient-to-r from-green-100 to-green-200' 
+                        : 'bg-gradient-to-r from-teal-100 to-teal-200'
                     }`}>
                       {activeTab === 'assignments' ? (
-                        <IoDocument className="text-purple-600 text-lg sm:text-xl" />
+                        <IoDocument className="text-green-600 text-lg sm:text-xl" />
                       ) : (
                         getFileIcon(item.type, item.files?.[0]?.extension, 20)
                       )}
@@ -1607,7 +1607,7 @@ export default function ModernResourcesAssignmentsView({
                     </button>
                     <button
                       onClick={() => handleDownload(item)}
-                      className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-bold shadow-md flex items-center gap-2"
+                      className="px-3 sm:px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-bold shadow-md flex items-center gap-2"
                     >
                       <IoCloudDownload />
                       <span className="hidden sm:inline">Download</span>

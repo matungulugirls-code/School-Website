@@ -18,7 +18,7 @@ import {
 import {
   IoSchool, IoDocumentText, IoStatsChart,
   IoAnalytics, IoSparkles, IoClose,
-  IoFilter as IoFilterIcon
+  IoFilter as IoFilterIcon, IoLeaf, IoFlower, IoShield, IoGlobe
 } from 'react-icons/io5';
 import {
   CircularProgress,
@@ -26,7 +26,151 @@ import {
   Box
 } from '@mui/material';
 
-// Loading Spinner Component
+// ==================== MATUNGULU GIRLS HERO HEADER ====================
+function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
+  const currentYear = new Date().getFullYear();
+  const foundingYear = 2008;
+  const yearsOfExcellence = currentYear - foundingYear;
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
+      {/* Main Header Container */}
+      <div className="relative bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-900 rounded-2xl sm:rounded-3xl shadow-2xl">
+        
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl"></div>
+          
+          {/* Leaf/Flower decorative patterns */}
+          <div className="absolute top-10 right-10 opacity-10">
+            <IoLeaf className="text-6xl text-emerald-300" />
+          </div>
+          <div className="absolute bottom-10 left-10 opacity-10">
+            <IoFlower className="text-6xl text-teal-300" />
+          </div>
+        </div>
+
+        {/* Content Container */}
+        <div className="relative z-10 px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
+          
+          {/* Top Row - School Name and Badge */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 sm:mb-8">
+            <div className="space-y-2 sm:space-y-3">
+              {/* School Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+                <IoShield className="text-emerald-300 text-sm sm:text-base" />
+                <span className="text-[10px] sm:text-xs font-bold text-emerald-100 uppercase tracking-wider">
+                  National C1 Girls' Boarding School
+                </span>
+              </div>
+              
+              {/* School Name */}
+              <div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
+                  Matungulu Girls
+                  <span className="block sm:inline-block sm:ml-2 text-emerald-300">
+                    Senior School
+                  </span>
+                </h1>
+              </div>
+              
+              {/* Motto */}
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-px bg-emerald-400/50"></div>
+                <p className="text-emerald-200 text-xs sm:text-sm italic font-medium">
+                  "Strive to Excel"
+                </p>
+                <div className="w-8 h-px bg-emerald-400/50"></div>
+              </div>
+            </div>
+
+            {/* Student Info Card */}
+            {student && (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20 shadow-lg">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                    <span className="text-white font-black text-sm sm:text-base">
+                      {student?.fullName?.charAt(0) || 'S'}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-white text-xs sm:text-sm font-medium opacity-80">Welcome back,</p>
+                    <p className="text-white font-bold text-sm sm:text-base truncate max-w-[150px] sm:max-w-[200px]">
+                      {student?.fullName || 'Student'}
+                    </p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-emerald-200 text-[10px] sm:text-xs font-semibold">
+                        {student?.form || 'Form'} • {student?.stream || 'Stream'}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-emerald-300"></span>
+                      <span className="text-emerald-200 text-[10px] sm:text-xs">
+                        ADM: {student?.admissionNumber || '----'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Middle Row - Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
+              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Founded</p>
+              <p className="text-white text-lg sm:text-xl md:text-2xl font-black">{foundingYear}</p>
+              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">{yearsOfExcellence}+ Years</p>
+            </div>
+            
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
+              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Students</p>
+              <p className="text-white text-lg sm:text-xl md:text-2xl font-black">1,500+</p>
+              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">Current Enrollment</p>
+            </div>
+            
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
+              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Subjects</p>
+              <p className="text-white text-lg sm:text-xl md:text-2xl font-black">12+</p>
+              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">Core & Electives</p>
+            </div>
+            
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
+              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Location</p>
+              <p className="text-white text-sm sm:text-base md:text-lg font-black">Machakos</p>
+              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">Matungulu Sub-County</p>
+            </div>
+          </div>
+
+          {/* Bottom Row - Quick Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <button
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white font-semibold text-sm transition-all duration-200 disabled:opacity-50"
+            >
+              <FiRefreshCw className={`text-emerald-300 text-sm ${isRefreshing ? 'animate-spin' : ''}`} />
+              <span>{isRefreshing ? 'Refreshing...' : 'Refresh Dashboard'}</span>
+            </button>
+            
+            <a
+              href="https://maps.app.goo.gl/WqjeNfi78asowHx7A"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white font-semibold text-sm transition-all duration-200"
+            >
+              <IoGlobe className="text-emerald-300 text-sm" />
+              <span>View on Map</span>
+              <FiExternalLink className="text-emerald-300 text-xs" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==================== LOADING SPINNER ====================
 function ResultsLoadingSpinner({ message = "Loading academic results...", size = "medium" }) {
   const sizes = {
     small: { outer: 48, inner: 24 },
@@ -37,20 +181,20 @@ function ResultsLoadingSpinner({ message = "Loading academic results...", size =
   const { outer, inner } = sizes[size];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-blue-50/30 to-emerald-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-emerald-50/30 to-teal-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="text-center">
         <div className="relative inline-block">
           <div className="relative">
             <CircularProgress 
               size={outer} 
               thickness={5}
-              className="text-purple-600"
+              className="text-emerald-600"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full" style={{ width: inner, height: inner }}></div>
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full" style={{ width: inner, height: inner }}></div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-full blur-xl opacity-30"></div>
+          <div className="absolute -inset-6 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-full blur-xl opacity-30"></div>
         </div>
         
         <div className="mt-8 space-y-3">
@@ -59,7 +203,7 @@ function ResultsLoadingSpinner({ message = "Loading academic results...", size =
           </span>
           <div className="flex justify-center space-x-1.5">
             {[0, 1, 2].map(i => (
-              <div key={i} className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+              <div key={i} className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
             ))}
           </div>
         </div>
@@ -68,7 +212,7 @@ function ResultsLoadingSpinner({ message = "Loading academic results...", size =
   );
 }
 
-// Grade Calculation Helper (kept but unused)
+// Grade Calculation Helper
 const calculateGrade = (score) => {
   const numericScore = parseFloat(score) || 0;
   if (numericScore >= 80) return 'A';
@@ -84,7 +228,7 @@ const calculateGrade = (score) => {
   return 'E';
 };
 
-// Grade Status Helper (kept but unused)
+// Grade Status Helper
 const getGradeStatus = (grade) => {
   const g = grade?.toUpperCase();
   if (['A'].includes(g)) return { 
@@ -96,12 +240,12 @@ const getGradeStatus = (grade) => {
     iconColor: 'text-emerald-500'
   };
   if (['A-'].includes(g)) return { 
-    color: 'text-green-600',
-    bgColor: 'from-green-500 to-green-700',
-    lightBg: 'bg-green-50',
+    color: 'text-teal-600',
+    bgColor: 'from-teal-500 to-teal-700',
+    lightBg: 'bg-teal-50',
     remark: 'Very Good. Excellent understanding.',
-    badgeColor: 'bg-green-100 text-green-800 border-green-200',
-    iconColor: 'text-green-500'
+    badgeColor: 'bg-teal-100 text-teal-800 border-teal-200',
+    iconColor: 'text-teal-500'
   };
   if (['B+'].includes(g)) return { 
     color: 'text-blue-600',
@@ -145,29 +289,7 @@ const getGradeStatus = (grade) => {
   };
 };
 
-// Statistics Card Component (kept but unused)
-function ResultsStatisticsCard({ title, value, icon: Icon, color, trend = 0, prefix = '', suffix = '' }) {
-  const formatValue = (val) => {
-    if (typeof val === 'number') {
-      return prefix + val.toLocaleString() + suffix;
-    }
-    return prefix + val + suffix;
-  };
-
-  return (
-    <div className="bg-white rounded-2xl p-4 md:p-6 border-2 border-gray-200 shadow-lg hover:shadow-md  transition-shadow duration-300">
-      <div className="flex items-center justify-between mb-3 md:mb-4">
-        <div className={`p-2 md:p-3 rounded-xl bg-gradient-to-r ${color}`}>
-          <Icon className="text-white text-xl md:text-2xl" />
-        </div>
-      </div>
-      <h4 className="text-xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">{formatValue(value)}</h4>
-      <p className="text-gray-600 text-xs md:text-sm font-semibold">{title}</p>
-    </div>
-  );
-}
-
-// Subject Details Modal Component (kept but unused)
+// Subject Details Modal Component
 function SubjectDetailsModal({ result, onClose }) {
   if (!result) return null;
 
@@ -181,7 +303,7 @@ function SubjectDetailsModal({ result, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden border-2 border-gray-300 shadow-2xl">
-        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 p-3 sm:p-4 md:p-6 text-white">
+        <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 p-3 sm:p-4 md:p-6 text-white">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
               <div className="p-2 md:p-3 bg-white/20 rounded-2xl flex-shrink-0 mt-1">
@@ -189,7 +311,7 @@ function SubjectDetailsModal({ result, onClose }) {
               </div>
               <div className="min-w-0 flex-1">
                 <h2 className="text-base sm:text-lg md:text-2xl font-bold truncate">Subject Performance Details</h2>
-                <p className="text-blue-100 opacity-90 text-xs sm:text-sm mt-1 truncate">
+                <p className="text-emerald-100 opacity-90 text-xs sm:text-sm mt-1 truncate">
                   Adm: {result.admissionNumber} • {result.term} {result.academicYear} • {result.form}
                 </p>
               </div>
@@ -204,28 +326,28 @@ function SubjectDetailsModal({ result, onClose }) {
         </div>
 
         <div className="max-h-[calc(90vh-70px)] overflow-y-auto p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-3 sm:p-4 md:p-6 border-2 border-blue-300">
+          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-3 sm:p-4 md:p-6 border-2 border-emerald-200">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-blue-200">
-                <div className="text-xs font-semibold text-blue-700 truncate">Avg Score</div>
+              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+                <div className="text-xs font-semibold text-emerald-700 truncate">Avg Score</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{averageScore.toFixed(2)}%</div>
               </div>
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-blue-200">
-                <div className="text-xs font-semibold text-blue-700 truncate">Total Score</div>
+              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+                <div className="text-xs font-semibold text-emerald-700 truncate">Total Score</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{totalScore}</div>
               </div>
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-blue-200">
-                <div className="text-xs font-semibold text-blue-700 truncate">Grade</div>
+              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+                <div className="text-xs font-semibold text-emerald-700 truncate">Grade</div>
                 <div className={`text-lg sm:text-xl md:text-2xl font-bold mt-1 truncate ${overallStatus.color}`}>
                   {result.overallGrade || 'N/A'}
                 </div>
               </div>
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-blue-200">
-                <div className="text-xs font-semibold text-blue-700 truncate">Subjects</div>
+              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+                <div className="text-xs font-semibold text-emerald-700 truncate">Subjects</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{subjectCount}</div>
               </div>
-              <div className="col-span-2 sm:col-span-3 md:col-span-1 text-center p-2 sm:p-3 bg-white rounded-lg border border-blue-200">
-                <div className="text-xs font-semibold text-blue-700 truncate">Form</div>
+              <div className="col-span-2 sm:col-span-3 md:col-span-1 text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+                <div className="text-xs font-semibold text-emerald-700 truncate">Form</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{result.form}</div>
               </div>
             </div>
@@ -236,7 +358,7 @@ function SubjectDetailsModal({ result, onClose }) {
               <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">Subject Performance</h3>
               <p className="text-gray-600 text-xs sm:text-sm truncate">Scores, grades, and comments per subject</p>
             </div>
-            <div className="overflow-x-auto -webkit-scrollbar-hide md:scrollbar-default">
+            <div className="overflow-x-auto">
               <table className="w-full min-w-[600px]">
                 <thead className="bg-gray-50">
                   <tr>
@@ -358,102 +480,6 @@ function SubjectDetailsModal({ result, onClose }) {
   );
 }
 
-  const handleZerakiClick = (e) => {
-    e.preventDefault();
-
-    // 1. Try to open the app using the custom URI scheme
-    window.location.href = "zeraki://";
-
-    // 2. Set a timer. If the app opens, this script pauses. 
-    // If the app is NOT installed, it redirects to the web login after 1.5 seconds.
-    const fallback = setTimeout(() => {
-      window.location.href = "https://zeraki.app/login"; 
-    }, 1500);
-
-    // Clean up timer if the user leaves the page/app opens
-    window.onblur = () => clearTimeout(fallback);
-  };
-
-// Result Card Component (kept but unused)
-function ResultCard({ result, studentAdmissionNumber, onViewSubjects }) {
-  const overallStatus = getGradeStatus(result.overallGrade);
-  const isStudentResult = result.admissionNumber === studentAdmissionNumber;
-  const averageScore = result.averageScore || 0;
-  const totalScore = result.totalScore || 0;
-
-  return (
-    <div 
-      className={`bg-white rounded-2xl border-2 ${
-        isStudentResult 
-          ? 'border-blue-500 border-l-4 shadow-lg' 
-          : 'border-gray-200'
-      } hover:shadow-md  transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group`}
-    >
-      {isStudentResult && (
-        <div className="absolute top-0 right-0">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-[10px] xs:text-xs px-2 py-0.5 sm:px-3 sm:py-1 rounded-bl-lg font-bold shadow-lg">
-            Your Result
-          </div>
-        </div>
-      )}
-      
-      <div className="p-3 sm:p-4 md:p-5">
-        <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4">
-          <div className="min-w-0 flex-1">
-            <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">{result.term}</h3>
-            <p className="text-xs text-gray-600 truncate">{result.academicYear}</p>
-          </div>
-          <div className={`px-2 py-1 sm:px-3 sm:py-1 md:px-4 md:py-2 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r ${overallStatus.bgColor} text-white shadow-lg flex-shrink-0 ml-2`}>
-            {result.overallGrade || 'N/A'}
-          </div>
-        </div>
-        
-        <div className="mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
-          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700">
-            <FiUser className="text-blue-500 text-xs sm:text-sm md:text-base flex-shrink-0" />
-            <span className="font-semibold truncate">Adm: {result.admissionNumber}</span>
-          </div>
-          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-600">
-            <IoSchool className="text-gray-400 text-xs sm:text-sm md:text-base flex-shrink-0" />
-            <span className="truncate">{result.form}</span>
-          </div>
-          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-600">
-            <FiBarChart2 className="text-gray-400 text-xs sm:text-sm md:text-base flex-shrink-0" />
-            <span>Avg:</span>
-            <span className="font-bold text-gray-900 truncate">{averageScore.toFixed(2)}%</span>
-          </div>
-          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-600">
-            <FiActivity className="text-gray-400 text-xs sm:text-sm md:text-base flex-shrink-0" />
-            <span>Total:</span>
-            <span className="font-bold text-gray-900 truncate">{totalScore}</span>
-          </div>
-        </div>
-        
-        <div className="mb-3 sm:mb-4">
-          <div className="flex justify-between text-xs font-semibold mb-1">
-            <span className="text-gray-700 truncate">Performance:</span>
-            <span className={overallStatus.color}>{averageScore.toFixed(1)}%</span>
-          </div>
-          <div className="w-full h-1.5 sm:h-2 md:h-3 bg-gray-200 rounded-full overflow-hidden">
-            <div 
-              className={`h-full rounded-full bg-gradient-to-r ${overallStatus.bgColor}`}
-              style={{ width: `${Math.min(averageScore, 100)}%` }}
-            />
-          </div>
-        </div>
-        
-        <button
-          onClick={() => onViewSubjects(result)}
-          className="w-full px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600 rounded-xl text-xs sm:text-sm font-semibold hover:from-blue-100 hover:to-blue-200 transition-all flex items-center justify-center gap-1 sm:gap-2 group-hover:shadow-md"
-        >
-          <FiEye className="text-xs sm:text-sm md:size-14" />
-          <span>View Details</span>
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // Helper function for PDF display
 const getDisplayablePdfUrl = (url) => {
   if (!url) return url;
@@ -473,12 +499,6 @@ const getDisplayablePdfUrl = (url) => {
   
   return url;
 };
-
-
-
-
-
-
 
 // Document Card Component
 function DocumentCard({ document, type = 'additional' }) {
@@ -546,7 +566,7 @@ function DocumentCard({ document, type = 'additional' }) {
               {fileName}
             </h5>
             {document.year && (
-              <span className="flex-shrink-0 text-[10px] xs:text-xs font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full ml-1">
+              <span className="flex-shrink-0 text-[10px] xs:text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full ml-1">
                 {document.year}
               </span>
             )}
@@ -603,7 +623,7 @@ function DocumentCard({ document, type = 'additional' }) {
             target="_blank"
             rel="noopener noreferrer"
             download={!isPdf}
-            className="flex items-center justify-center gap-1 sm:gap-2 w-full py-2 px-3 sm:py-2.5 sm:px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 shadow-md hover:shadow-blue-500/25 active:scale-[0.98]"
+            className="flex items-center justify-center gap-1 sm:gap-2 w-full py-2 px-3 sm:py-2.5 sm:px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 shadow-md hover:shadow-emerald-500/25 active:scale-[0.98]"
           >
             <FiDownload className="text-xs sm:text-sm" />
             <span>Download File</span>
@@ -614,6 +634,17 @@ function DocumentCard({ document, type = 'additional' }) {
   );
 }
 
+// Zeraki click handler
+const handleZerakiClick = (e) => {
+  e.preventDefault();
+  window.location.href = "zeraki://";
+  const fallback = setTimeout(() => {
+    window.location.href = "https://zeraki.app/login"; 
+  }, 1500);
+  window.onblur = () => clearTimeout(fallback);
+};
+
+// ==================== MAIN COMPONENT ====================
 export default function ModernResultsView({ 
   student, 
   studentResults, 
@@ -621,19 +652,20 @@ export default function ModernResultsView({
   resultsError, 
   onRefreshResults 
 }) {
-  // State for school documents only (results-related states are kept but unused)
+  // State for school documents only
   const [documentData, setDocumentData] = useState(null);
   const [documentLoading, setDocumentLoading] = useState(true);
   const [documentError, setDocumentError] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
-  // States for results (unused now, but kept to avoid breaking props)
+  // States for results
   const [selectedTerm, setSelectedTerm] = useState('all');
   const [selectedYear, setSelectedYear] = useState('all');
   const [viewMode, setViewMode] = useState('list');
   const [selectedResult, setSelectedResult] = useState(null);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  // Fetch school document data - ALWAYS FETCH
+  // Fetch school document data
   const fetchDocumentData = useCallback(async () => {
     try {
       setDocumentLoading(true);
@@ -691,6 +723,13 @@ export default function ModernResultsView({
   useEffect(() => {
     fetchDocumentData();
   }, [fetchDocumentData]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await onRefreshResults();
+    await fetchDocumentData();
+    setIsRefreshing(false);
+  };
 
   // Process exam results from documentData
   const prioritizedExamResults = useMemo(() => {
@@ -785,55 +824,21 @@ export default function ModernResultsView({
 
   return (
     <div className="space-y-3 sm:space-y-4 md:space-y-6 p-2 sm:p-3 md:p-6">
-      {/* Header */}
-      <div className="relative bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-800 rounded-2xl p-3 sm:p-4 md:p-6 text-white overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col gap-2 sm:gap-3 md:gap-0 md:flex-row md:items-center justify-between">
-            <div className="flex items-start sm:items-center gap-2 sm:gap-3">
-              <div className="p-1.5 sm:p-2 bg-white/20 rounded-2xl flex-shrink-0">
-                <FiAward className="text-lg sm:text-xl md:text-2xl text-yellow-300" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h1 className="text-lg sm:text-xl md:text-3xl font-bold truncate">Academic Resources</h1>
-                <p className="text-purple-100 text-xs sm:text-sm md:text-lg mt-0.5 truncate">
-                  Access school exam documents and learning tools
-                </p>
-              </div>
-            </div>
-           <button
-  onClick={fetchDocumentData}
-  disabled={documentLoading}
-  className="
-    mt-3 sm:mt-0 
-    px-5 py-2.5 sm:px-6 sm:py-3 
-    bg-white/10 hover:bg-white/10 
-    text-white font-semibold text-sm sm:text-base
-    rounded-full border border-white/10
-    backdrop-blur-sm
-    transition-all duration-200
-    disabled:opacity-50 
-    w-full sm:w-auto 
-    flex items-center justify-center
-    active:scale-98
-  "
->
-  <span>
-    {documentLoading ? 'Updating...' : 'Refresh Documents'}
-  </span>
-</button>
-          </div>
-        </div>
-      </div>
+      
+      {/* MATUNGULU GIRLS HERO HEADER */}
+      <MatunguluHeroHeader 
+        student={student}
+        onRefresh={handleRefresh}
+        isRefreshing={isRefreshing}
+      />
 
-      {/* NEW ZERAKI SECTION */}
-      <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl border-2 border-indigo-200 p-4 sm:p-6 md:p-8 shadow-lg">
+      {/* ZERAKI SECTION */}
+      <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 rounded-2xl border-2 border-emerald-200 p-4 sm:p-6 md:p-8 shadow-lg">
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-          {/* Icon/Illustration */}
-          <div className="flex-shrink-0 bg-gradient-to-br from-blue-600 to-indigo-700 p-4 rounded-2xl shadow-xl">
+          <div className="flex-shrink-0 bg-gradient-to-br from-emerald-600 to-teal-700 p-4 rounded-2xl shadow-xl">
             <IoSchool className="text-white text-4xl md:text-5xl" />
           </div>
           
-          {/* Content */}
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mb-2">
               Zeraki Learning Platform
@@ -843,40 +848,37 @@ export default function ModernResultsView({
               Zeraki helps you stay ahead with real-time progress reports and interactive study tools.
             </p>
             
-            {/* Instructions */}
             <div className="bg-white/70 backdrop-blur-sm rounded-xl p-3 mb-4 inline-block">
               <p className="text-xs sm:text-sm font-medium text-gray-800">
-                <span className="font-bold text-indigo-700">How to log in:</span> Use your school credentials 
+                <span className="font-bold text-emerald-700">How to log in:</span> Use your school credentials 
                 (admission number and default password). First-time users, click "Forgot Password" to set up your account.
               </p>
             </div>
-          {/* Login Button with Image */}
 
-<a
-      href="https://zeraki.app" // Fallback for SEO and right-clicks
-      onClick={handleZerakiClick}
-      className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-white text-gray-700 font-medium text-sm sm:text-base rounded-full border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 hover:scale-101 active:scale-98 transition-all duration-300 cursor-pointer"
-    >
-      <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
-        <img 
-          src="/zeraki.jpg" 
-          alt="Zeraki Login" 
-          className="w-full h-full object-contain rounded-full"
-        />
-      </div>
-      <span>Open Zeraki</span>
-      <FiExternalLink className="text-gray-400 text-sm sm:text-base" />
-    </a>
-
+            <a
+              href="https://zeraki.app"
+              onClick={handleZerakiClick}
+              className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-white text-gray-700 font-medium text-sm sm:text-base rounded-full border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 hover:scale-101 active:scale-98 transition-all duration-300 cursor-pointer"
+            >
+              <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
+                <img 
+                  src="/zeraki.jpg" 
+                  alt="Zeraki Login" 
+                  className="w-full h-full object-contain rounded-full"
+                />
+              </div>
+              <span>Open Zeraki</span>
+              <FiExternalLink className="text-gray-400 text-sm sm:text-base" />
+            </a>
           </div>
         </div>
       </div>
 
-      {/* SCHOOL DOCUMENTS SECTION - UNCHANGED */}
+      {/* SCHOOL DOCUMENTS SECTION */}
       <div className="mt-6 pt-6 border-t-2 border-gray-300">
         <div className="mb-2 sm:mb-3 md:mb-4">
           <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-            <IoDocumentText className="text-indigo-600 text-lg sm:text-xl" />
+            <IoDocumentText className="text-emerald-600 text-lg sm:text-xl" />
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">
               School Exam Results Documents
             </h3>
@@ -889,7 +891,7 @@ export default function ModernResultsView({
 
         {documentLoading ? (
           <div className="text-center py-6 sm:py-8">
-            <CircularProgress size={20} className="text-purple-600" />
+            <CircularProgress size={20} className="text-emerald-600" />
             <p className="text-gray-600 text-xs sm:text-sm mt-2">Loading exam documents...</p>
           </div>
         ) : (
@@ -925,7 +927,7 @@ export default function ModernResultsView({
               </div>
             )}
 
-            {/* Empty State for Documents - Show only if BOTH are empty */}
+            {/* Empty State for Documents */}
             {!documentLoading && prioritizedExamResults.length === 0 && additionalResultsFiles.length === 0 && (
               <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-300 p-4 sm:p-6 text-center">
                 <FiAward className="text-gray-300 text-2xl sm:text-3xl mx-auto mb-2 sm:mb-3" />
@@ -939,7 +941,7 @@ export default function ModernResultsView({
         )}
       </div>
 
-      {/* Subject Details Modal (unused but kept) */}
+      {/* Subject Details Modal */}
       {selectedResult && (
         <SubjectDetailsModal
           result={selectedResult}
