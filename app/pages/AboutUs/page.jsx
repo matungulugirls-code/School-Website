@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+
 import {
   ArrowRight,
   BookOpen,
@@ -18,7 +19,11 @@ import {
   Target,
   Trophy,
   Users,
+    Compass,  // or LocateFixed
+  ExternalLink,  // Add this import
+  Navigation,     // Also add Navigation if you're using it
 } from "lucide-react";
+
 import { SiGooglemaps } from "react-icons/si";
 
 export default function AboutPage() {
