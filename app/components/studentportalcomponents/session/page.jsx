@@ -86,20 +86,20 @@ const DEFAULT_SESSIONS = [
 // ==================== LOADING SPINNER ====================
 function LoadingSpinner({ message = "Loading content..." }) {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-green-50/30 to-teal-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="text-center">
         <div className="relative inline-block">
           <div className="relative">
             <CircularProgress 
               size={64} 
               thickness={5}
-              className="text-blue-600"
+              className="text-green-600"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full w-8 h-8"></div>
+              <div className="bg-gradient-to-r from-green-500 to-indigo-600 rounded-full w-8 h-8"></div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full blur-xl opacity-30"></div>
+          <div className="absolute -inset-6 bg-gradient-to-r from-green-100 to-indigo-100 rounded-full blur-xl opacity-30"></div>
         </div>
         
         <div className="mt-8 space-y-3">
@@ -108,7 +108,7 @@ function LoadingSpinner({ message = "Loading content..." }) {
           </span>
           <div className="flex justify-center space-x-1.5">
             {[0, 1, 2].map(i => (
-              <div key={i} className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <div key={i} className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             ))}
           </div>
         </div>
@@ -125,9 +125,9 @@ function TeamsSection({ teamMembers = [] }) {
   const getRoleGradient = (role) => {
     switch(role?.toLowerCase()) {
       case 'teacher':
-        return 'from-blue-500 to-cyan-600';
+        return 'from-green-500 to-teal-600';
       case 'matron':
-        return 'from-purple-500 to-pink-600';
+        return 'from-teal-500 to-green-600';
       case 'patron':
         return 'from-emerald-500 to-green-600';
       default:
@@ -160,7 +160,7 @@ function TeamsSection({ teamMembers = [] }) {
           <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900">
             Guidance & Counseling Team
           </h2>
-          <span className="px-2 md:px-3 py-1 md:py-1.5 bg-gradient-to-r from-purple-100 to-pink-200 text-purple-800 text-xs md:text-sm font-bold rounded-full">
+          <span className="px-2 md:px-3 py-1 md:py-1.5 bg-gradient-to-r from-teal-100 to-slate-200 text-teal-800 text-xs md:text-sm font-bold rounded-full">
             {teamMembers.length} Members
           </span>
         </div>
@@ -179,7 +179,7 @@ function TeamsSection({ teamMembers = [] }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {teamMembers.map((member) => (
               <div key={member.id} className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl md:rounded-2xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-slate-600 rounded-xl md:rounded-2xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                 <div className="relative bg-white rounded-xl md:rounded-2xl border border-gray-200 md:border-2 overflow-hidden shadow-sm md:shadow-lg hover:shadow-md md:hover:shadow-xl transition-all duration-300 mobile-scroll-hide">
                   {/* Team Member Image */}
                   <div className="relative h-48 md:h-56 overflow-hidden">
@@ -233,8 +233,8 @@ function TeamsSection({ teamMembers = [] }) {
                     <div className="space-y-2 mb-4 md:mb-6">
                       {member.phone && (
                         <div className="flex items-center gap-2 md:gap-3">
-                          <div className="p-1.5 md:p-2 bg-blue-50 rounded-lg flex-shrink-0">
-                            <FiPhone className="text-blue-500 text-sm md:text-base" />
+                          <div className="p-1.5 md:p-2 bg-green-50 rounded-lg flex-shrink-0">
+                            <FiPhone className="text-green-500 text-sm md:text-base" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="text-xs md:text-sm font-medium text-gray-900 truncate">
@@ -247,8 +247,8 @@ function TeamsSection({ teamMembers = [] }) {
                       
                       {member.email && (
                         <div className="flex items-center gap-2 md:gap-3">
-                          <div className="p-1.5 md:p-2 bg-purple-50 rounded-lg flex-shrink-0">
-                            <FiMail className="text-purple-500 text-sm md:text-base" />
+                          <div className="p-1.5 md:p-2 bg-teal-50 rounded-lg flex-shrink-0">
+                            <FiMail className="text-teal-500 text-sm md:text-base" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="text-xs md:text-sm font-medium text-gray-900 truncate">
@@ -263,7 +263,7 @@ function TeamsSection({ teamMembers = [] }) {
                     {/* View Button */}
                     <button
                       onClick={() => handleViewMember(member)}
-                      className="w-full px-3 md:px-4 py-2 md:py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xs md:text-sm font-bold rounded-lg md:rounded-xl hover:shadow-md md:hover:shadow-lg transition-all transform hover:-translate-y-0.5 mobile-touch-target"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 bg-gradient-to-r from-teal-500 to-slate-600 text-white text-xs md:text-sm font-bold rounded-lg md:rounded-xl hover:shadow-md md:hover:shadow-lg transition-all transform hover:-translate-y-0.5 mobile-touch-target"
                     >
                       View Details
                     </button>
@@ -348,8 +348,8 @@ function TeamsSection({ teamMembers = [] }) {
                 <div className="space-y-3 md:space-y-4">
                   {selectedMember.phone && (
                     <div className="flex items-center gap-3 md:gap-4">
-                      <div className="p-2 md:p-3 bg-blue-100 rounded-xl flex-shrink-0">
-                        <FiPhone className="text-blue-600 text-lg md:text-xl" />
+                      <div className="p-2 md:p-3 bg-green-100 rounded-xl flex-shrink-0">
+                        <FiPhone className="text-green-600 text-lg md:text-xl" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-700">Phone Number</p>
@@ -360,8 +360,8 @@ function TeamsSection({ teamMembers = [] }) {
                   
                   {selectedMember.email && (
                     <div className="flex items-center gap-3 md:gap-4">
-                      <div className="p-2 md:p-3 bg-purple-100 rounded-xl flex-shrink-0">
-                        <FiMail className="text-purple-600 text-lg md:text-xl" />
+                      <div className="p-2 md:p-3 bg-teal-100 rounded-xl flex-shrink-0">
+                        <FiMail className="text-teal-600 text-lg md:text-xl" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-700">Email Address</p>
@@ -374,7 +374,7 @@ function TeamsSection({ teamMembers = [] }) {
 
               {/* Bio */}
               {selectedMember.bio && (
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 md:p-6 border border-blue-300">
+                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-4 md:p-6 border border-green-300">
                   <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4">About</h3>
                   <div className="text-gray-700 whitespace-pre-line text-sm md:text-base leading-relaxed">
                     {selectedMember.bio}
@@ -509,9 +509,9 @@ function ModernDetailModal({ session, onClose, onContact }) {
 
   const getCategoryStyle = (category) => {
     const styles = {
-      academic: { gradient: 'from-blue-500 to-cyan-500', icon: FiCalendar },
-      emotional: { gradient: 'from-purple-500 to-pink-500', icon: FiMessageSquare },
-      devotion: { gradient: 'from-indigo-500 to-purple-500', icon: FiStar },
+      academic: { gradient: 'from-green-500 to-teal-500', icon: FiCalendar },
+      emotional: { gradient: 'from-teal-500 to-slate-500', icon: FiMessageSquare },
+      devotion: { gradient: 'from-indigo-500 to-teal-500', icon: FiStar },
       worship: { gradient: 'from-amber-500 to-orange-500', icon: FiStar },
       support: { gradient: 'from-emerald-500 to-green-500', icon: FiPhoneCall },
       drugs: { gradient: 'from-red-500 to-rose-500', icon: FiAlertTriangle }
@@ -586,7 +586,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
           
           {/* Badge Overlays */}
           <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex gap-2">
-            <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-white shadow-xl rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest text-blue-600">
+            <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-white shadow-xl rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest text-green-600">
               {session.category || 'Counseling'}
             </span>
             {session.featured && (
@@ -620,7 +620,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
               {/* Quick Info Bar - Responsive */}
               <div className="flex flex-col sm:flex-row sm:flex-wrap gap-y-2 sm:gap-y-3 gap-x-6 text-xs sm:text-sm font-semibold text-slate-500">
                 <div className="flex items-center gap-2">
-                  <FiCalendar className="text-blue-500 text-base sm:text-lg" />
+                  <FiCalendar className="text-green-500 text-base sm:text-lg" />
                   {formatFullDate(session.date)}
                 </div>
                 <div className="flex items-center gap-2">
@@ -628,7 +628,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
                   {session.time || 'Flexible'}
                 </div>
                 <div className="flex items-center gap-2">
-                  <FiUser className="text-purple-500 text-base sm:text-lg" />
+                  <FiUser className="text-teal-500 text-base sm:text-lg" />
                   {session.counselor || 'School Counselor'}
                 </div>
                 {session.location && (
@@ -674,7 +674,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
               <div className="p-3 sm:p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100">
                 <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-xl ${
                   session.status === 'active' ? 'bg-emerald-100 text-emerald-600' :
-                  session.status === 'completed' ? 'bg-blue-100 text-blue-600' :
+                  session.status === 'completed' ? 'bg-green-100 text-green-600' :
                   'bg-amber-100 text-amber-600'
                 } flex items-center justify-center mb-1 sm:mb-2`}>
                   <FiCalendar size={14} className="sm:w-4 sm:h-4" />
@@ -837,7 +837,7 @@ function EmergencyModal({ student, onClose, onSubmit }) {
       <style jsx global>{mobileStyles}</style>
       <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden border-2 border-red-300 shadow-2xl mobile-full-width">
         {/* Header */}
-        <div className="p-4 md:p-6 text-white bg-gradient-to-r from-red-500 to-pink-600">
+        <div className="p-4 md:p-6 text-white bg-gradient-to-r from-red-500 to-slate-600">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 md:gap-4">
               <div className="p-2 md:p-3 bg-white/20 rounded-2xl">
@@ -861,9 +861,9 @@ function EmergencyModal({ student, onClose, onSubmit }) {
         <div className="max-h-[calc(90vh-80px)] overflow-y-auto mobile-scroll-hide p-4 md:p-6 space-y-4 md:space-y-6">
           {/* Student Info */}
           {student && (
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-300">
+            <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-4 border border-green-300">
               <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
-                <FiUser className="text-blue-500" />
+                <FiUser className="text-green-500" />
                 Student Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
@@ -894,7 +894,7 @@ function EmergencyModal({ student, onClose, onSubmit }) {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-gradient-to-r from-red-100 to-pink-100 border border-red-300 rounded-xl p-4">
+            <div className="bg-gradient-to-r from-red-100 to-slate-100 border border-red-300 rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <FiAlertCircle className="text-red-600 text-xl" />
                 <div>
@@ -986,7 +986,7 @@ function EmergencyModal({ student, onClose, onSubmit }) {
                   value={formData.contactPhone}
                   onChange={handleChange}
                   placeholder="Enter phone number for immediate contact"
-                  className="w-full px-3 py-2 border font-bold border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full px-3 py-2 border font-bold border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -1001,7 +1001,7 @@ function EmergencyModal({ student, onClose, onSubmit }) {
                   onChange={handleChange}
                   required
                   placeholder="Enter email address"
-                  className="w-full px-3 py-2 font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full px-3 py-2 font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
@@ -1056,7 +1056,7 @@ function EmergencyModal({ student, onClose, onSubmit }) {
     className="
       w-full sm:w-auto
       px-4 py-3
-      bg-gradient-to-r from-red-600 to-pink-600
+      bg-gradient-to-r from-red-600 to-slate-600
       text-white
       rounded-xl
       font-bold text-sm
@@ -1110,60 +1110,60 @@ function ModernGuidanceHeader({
   const getGradientColor = (name) => {
     const char = name?.trim().charAt(0).toUpperCase() || 'S';
     const gradients = {
-      A: "bg-gradient-to-r from-red-500 to-pink-600",
-      B: "bg-gradient-to-r from-blue-500 to-cyan-600",
+      A: "bg-gradient-to-r from-red-500 to-slate-600",
+      B: "bg-gradient-to-r from-green-500 to-teal-600",
       C: "bg-gradient-to-r from-green-500 to-emerald-600",
-      D: "bg-gradient-to-r from-purple-500 to-pink-600",
+      D: "bg-gradient-to-r from-teal-500 to-slate-600",
       E: "bg-gradient-to-r from-emerald-500 to-teal-600",
-      F: "bg-gradient-to-r from-pink-500 to-rose-600",
+      F: "bg-gradient-to-r from-slate-500 to-rose-600",
       G: "bg-gradient-to-r from-orange-500 to-amber-600",
       H: "bg-gradient-to-r from-indigo-500 to-violet-600",
-      I: "bg-gradient-to-r from-cyan-500 to-blue-600",
+      I: "bg-gradient-to-r from-teal-500 to-green-600",
       J: "bg-gradient-to-r from-rose-500 to-red-600",
       K: "bg-gradient-to-r from-amber-500 to-yellow-600",
-      L: "bg-gradient-to-r from-violet-500 to-purple-600",
+      L: "bg-gradient-to-r from-violet-500 to-teal-600",
       M: "bg-gradient-to-r from-lime-500 to-green-600",
-      N: "bg-gradient-to-r from-sky-500 to-blue-600",
-      O: "bg-gradient-to-r from-fuchsia-500 to-purple-600",
+      N: "bg-gradient-to-r from-sky-500 to-green-600",
+      O: "bg-gradient-to-r from-fuchsia-500 to-teal-600",
       P: "bg-gradient-to-r from-teal-500 to-emerald-600",
       Q: "bg-gradient-to-r from-slate-600 to-gray-700",
-      R: "bg-gradient-to-r from-red-400 to-pink-500",
-      S: "bg-gradient-to-r from-blue-400 to-cyan-500",
+      R: "bg-gradient-to-r from-red-400 to-slate-500",
+      S: "bg-gradient-to-r from-green-400 to-teal-500",
       T: "bg-gradient-to-r from-emerald-400 to-green-500",
-      U: "bg-gradient-to-r from-indigo-400 to-purple-500",
-      V: "bg-gradient-to-r from-purple-400 to-pink-500",
+      U: "bg-gradient-to-r from-indigo-400 to-teal-500",
+      V: "bg-gradient-to-r from-teal-400 to-slate-500",
       W: "bg-gradient-to-r from-orange-400 to-amber-500",
       X: "bg-gradient-to-r from-gray-500 to-slate-600",
       Y: "bg-gradient-to-r from-yellow-400 to-amber-500",
       Z: "bg-gradient-to-r from-zinc-700 to-gray-900",
     };
-    return gradients[char] || "bg-gradient-to-r from-blue-500 to-purple-600";
+    return gradients[char] || "bg-gradient-to-r from-green-500 to-teal-600";
   };
 
   const getTabIcon = (tab) => {
     switch(tab) {
-      case 'events': return <FiCalendar className="text-blue-500" />;
-      case 'guidance': return <FiMessageSquare className="text-purple-500" />;
+      case 'events': return <FiCalendar className="text-green-500" />;
+      case 'guidance': return <FiMessageSquare className="text-teal-500" />;
       case 'news': return <FiBookOpen className="text-amber-500" />;
       case 'teams': return <FiUsers className="text-green-500" />;
-      default: return <FiCalendar className="text-blue-500" />;
+      default: return <FiCalendar className="text-green-500" />;
     }
   };
 
   const getTabColor = (tab) => {
     switch(tab) {
-      case 'events': return 'bg-gradient-to-r from-blue-500 to-blue-600';
-      case 'guidance': return 'bg-gradient-to-r from-purple-500 to-purple-600';
+      case 'events': return 'bg-gradient-to-r from-green-500 to-green-600';
+      case 'guidance': return 'bg-gradient-to-r from-teal-500 to-teal-600';
       case 'news': return 'bg-gradient-to-r from-amber-500 to-amber-600';
       case 'teams': return 'bg-gradient-to-r from-green-500 to-emerald-600';
-      default: return 'bg-gradient-to-r from-blue-500 to-blue-600';
+      default: return 'bg-gradient-to-r from-green-500 to-green-600';
     }
   };
 
   return (
     <>
       <style jsx global>{mobileStyles}</style>
-      <header className="bg-gradient-to-r from-white via-gray-50 to-blue-50 border-b border-gray-200/50 shadow-xl sticky top-0 z-30 backdrop-blur-sm bg-white/80">
+      <header className="bg-gradient-to-r from-white via-gray-50 to-green-50 border-b border-gray-200/50 shadow-xl sticky top-0 z-30 backdrop-blur-sm bg-white/80">
         <div className="container mx-auto px-3 sm:px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             
@@ -1192,7 +1192,7 @@ function ModernGuidanceHeader({
 
               {/* Desktop Logo/Title */}
               <div className="hidden lg:flex items-center gap-3">
-                <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
+                <div className="p-3 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl">
                   <FaCalendarCheck className="text-white text-xl" />
                 </div>
                 <div>
@@ -1230,7 +1230,7 @@ function ModernGuidanceHeader({
               {/* Emergency Button (Mobile) */}
               <button
                 onClick={onBookEmergency}
-                className="lg:hidden p-2.5 md:p-3 rounded-xl bg-gradient-to-r from-red-100 to-pink-200 shadow-sm hover:shadow-md transition-all mobile-touch-target"
+                className="lg:hidden p-2.5 md:p-3 rounded-xl bg-gradient-to-r from-red-100 to-slate-200 shadow-sm hover:shadow-md transition-all mobile-touch-target"
                 title="Emergency"
               >
                 <FaExclamationCircle className="text-red-600 text-base md:text-lg" />
@@ -1275,7 +1275,7 @@ function ModernGuidanceHeader({
                   onClick={() => setActiveTab(tab)}
                   className={`flex flex-col items-center gap-0.5 md:gap-1 px-2 md:px-4 py-1.5 md:py-2 rounded-lg transition-all mobile-touch-target mobile-full-width ${
                     activeTab === tab 
-                      ? 'bg-blue-50 text-blue-600' 
+                      ? 'bg-green-50 text-green-600' 
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
@@ -1336,13 +1336,13 @@ function StatisticsCards({ events, guidance, news, teams, activeTab }) {
     switch(activeTab) {
       case 'events':
         return [
-          { label: 'Total Events', value: stats.events.total, color: 'from-blue-500 to-blue-600', icon: <FiCalendar /> },
+          { label: 'Total Events', value: stats.events.total, color: 'from-green-500 to-green-600', icon: <FiCalendar /> },
           { label: 'Upcoming', value: stats.events.upcoming, color: 'from-emerald-500 to-emerald-600', icon: <FaCalendarCheck /> },
-          { label: 'With Images', value: stats.events.withImages, color: 'from-cyan-500 to-cyan-600', icon: <FiFileText /> }
+          { label: 'With Images', value: stats.events.withImages, color: 'from-teal-500 to-teal-600', icon: <FiFileText /> }
         ];
       case 'guidance':
         return [
-          { label: 'Total Sessions', value: stats.guidance.total, color: 'from-purple-500 to-purple-600', icon: <FiMessageSquare /> },
+          { label: 'Total Sessions', value: stats.guidance.total, color: 'from-teal-500 to-teal-600', icon: <FiMessageSquare /> },
           { label: 'High Priority', value: stats.guidance.highPriority, color: 'from-red-500 to-red-600', icon: <FiAlertCircle /> },
           { label: 'With Images', value: stats.guidance.withImages, color: 'from-indigo-500 to-indigo-600', icon: <FiFileText /> }
         ];
@@ -1350,13 +1350,13 @@ function StatisticsCards({ events, guidance, news, teams, activeTab }) {
         return [
           { label: 'Total News', value: stats.news.total, color: 'from-amber-500 to-amber-600', icon: <FiBookOpen /> },
           { label: 'Featured', value: stats.news.featured, color: 'from-rose-500 to-rose-600', icon: <FiStar /> },
-          { label: 'With Images', value: stats.news.withImages, color: 'from-pink-500 to-pink-600', icon: <FiFileText /> }
+          { label: 'With Images', value: stats.news.withImages, color: 'from-slate-500 to-slate-600', icon: <FiFileText /> }
         ];
       case 'teams':
         return [
           { label: 'Total Members', value: stats.teams.total, color: 'from-green-500 to-emerald-600', icon: <FiUsers /> },
-          { label: 'Teachers', value: stats.teams.teachers, color: 'from-blue-500 to-cyan-600', icon: <FiUser /> },
-          { label: 'Matrons & Patrons', value: stats.teams.matrons + stats.teams.patrons, color: 'from-purple-500 to-pink-600', icon: <FaUserFriends /> }
+          { label: 'Teachers', value: stats.teams.teachers, color: 'from-green-500 to-teal-600', icon: <FiUser /> },
+          { label: 'Matrons & Patrons', value: stats.teams.matrons + stats.teams.patrons, color: 'from-teal-500 to-slate-600', icon: <FaUserFriends /> }
         ];
       default:
         return [];
@@ -1377,9 +1377,9 @@ function StatisticsCards({ events, guidance, news, teams, activeTab }) {
         </div>
         
         <span className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider ${
-          index === 0 ? 'bg-blue-50 text-blue-600 border border-blue-200' :
+          index === 0 ? 'bg-green-50 text-green-600 border border-green-200' :
           index === 1 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
-          'bg-purple-50 text-purple-600 border border-purple-200'
+          'bg-teal-50 text-teal-600 border border-teal-200'
         }`}>
           {index === 0 ? 'All' : index === 1 ? 'Active' : 'Visual'}
         </span>
@@ -1404,9 +1404,9 @@ function StatisticsCards({ events, guidance, news, teams, activeTab }) {
       
       {/* Decorative Element */}
       <div className={`absolute -bottom-2 -right-2 w-12 h-12 md:w-16 md:h-16 opacity-[0.03] rounded-full bg-gradient-to-br ${
-        index === 0 ? 'from-blue-500 to-cyan-500' :
+        index === 0 ? 'from-green-500 to-teal-500' :
         index === 1 ? 'from-emerald-500 to-green-500' :
-        'from-purple-500 to-pink-500'
+        'from-teal-500 to-slate-500'
       } hidden md:block`} />
     </div>
   ))}
@@ -1430,20 +1430,20 @@ function EventCard({ event, onViewDetails }) {
         iconColor: 'text-red-600'
       },
       academic: { 
-        gradient: 'from-blue-500 to-cyan-500', 
-        bg: 'bg-blue-50', 
-        text: 'text-blue-700',
-        border: 'border-blue-200',
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600'
+        gradient: 'from-green-500 to-teal-500', 
+        bg: 'bg-green-50', 
+        text: 'text-green-700',
+        border: 'border-green-200',
+        iconBg: 'bg-green-100',
+        iconColor: 'text-green-600'
       },
       cultural: { 
-        gradient: 'from-purple-500 to-pink-500', 
-        bg: 'bg-purple-50', 
-        text: 'text-purple-700',
-        border: 'border-purple-200',
-        iconBg: 'bg-purple-100',
-        iconColor: 'text-purple-600'
+        gradient: 'from-teal-500 to-slate-500', 
+        bg: 'bg-teal-50', 
+        text: 'text-teal-700',
+        border: 'border-teal-200',
+        iconBg: 'bg-teal-100',
+        iconColor: 'text-teal-600'
       },
       workshop: { 
         gradient: 'from-amber-500 to-orange-500', 
@@ -1487,7 +1487,7 @@ function EventCard({ event, onViewDetails }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
             <FiCalendar className="text-white text-3xl" />
           </div>
         )}
@@ -1575,20 +1575,20 @@ function GuidanceCard({ session, onViewDetails }) {
   const getCategoryStyle = (category) => {
     const styles = {
       Academics: { 
-        gradient: 'from-blue-500 to-cyan-500', 
-        bg: 'bg-blue-50', 
-        text: 'text-blue-700',
-        border: 'border-blue-200',
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600'
+        gradient: 'from-green-500 to-teal-500', 
+        bg: 'bg-green-50', 
+        text: 'text-green-700',
+        border: 'border-green-200',
+        iconBg: 'bg-green-100',
+        iconColor: 'text-green-600'
       },
       Relationships: { 
-        gradient: 'from-purple-500 to-pink-500', 
-        bg: 'bg-purple-50', 
-        text: 'text-purple-700',
-        border: 'border-purple-200',
-        iconBg: 'bg-purple-100',
-        iconColor: 'text-purple-600'
+        gradient: 'from-teal-500 to-slate-500', 
+        bg: 'bg-teal-50', 
+        text: 'text-teal-700',
+        border: 'border-teal-200',
+        iconBg: 'bg-teal-100',
+        iconColor: 'text-teal-600'
       },
       Career: { 
         gradient: 'from-emerald-500 to-green-500', 
@@ -1606,7 +1606,7 @@ function GuidanceCard({ session, onViewDetails }) {
     const styles = {
       High: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
       Medium: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
-      Low: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' }
+      Low: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' }
     };
     return styles[priority] || styles.Medium;
   };
@@ -1641,7 +1641,7 @@ function GuidanceCard({ session, onViewDetails }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-teal-500 to-slate-600 flex items-center justify-center">
             <FiMessageSquare className="text-white text-3xl" />
           </div>
         )}
@@ -1660,7 +1660,7 @@ function GuidanceCard({ session, onViewDetails }) {
         {session.type && (
           <div className="absolute top-4 right-4">
             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${
-              session.type === 'Counseling' ? 'bg-purple-50 border border-purple-200 text-purple-700' :
+              session.type === 'Counseling' ? 'bg-teal-50 border border-teal-200 text-teal-700' :
               'bg-indigo-50 border border-indigo-200 text-indigo-700'
             }`}>
               {session.type}
@@ -1737,12 +1737,12 @@ function NewsCard({ newsItem, onViewDetails }) {
         iconColor: 'text-emerald-600'
       },
       academic: { 
-        gradient: 'from-blue-500 to-cyan-500', 
-        bg: 'bg-blue-50', 
-        text: 'text-blue-700',
-        border: 'border-blue-200',
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600'
+        gradient: 'from-green-500 to-teal-500', 
+        bg: 'bg-green-50', 
+        text: 'text-green-700',
+        border: 'border-green-200',
+        iconBg: 'bg-green-100',
+        iconColor: 'text-green-600'
       },
       sports: { 
         gradient: 'from-red-500 to-orange-500', 
@@ -2119,7 +2119,7 @@ const fetchAllData = useCallback(async () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50/30 to-teal-50/30">
       <style jsx global>{mobileStyles}</style>
       
       {/* Header */}
@@ -2135,7 +2135,7 @@ const fetchAllData = useCallback(async () => {
       <main className="container mx-auto px-3 sm:px-4 py-4 md:py-6 max-w-7xl">
         {/* Welcome Banner */}
         <div className="mb-6 md:mb-8">
-          <div className="relative overflow-hidden rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 mobile-scroll-hide">
+          <div className="relative overflow-hidden rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl bg-gradient-to-r from-green-600 via-teal-600 to-slate-600 mobile-scroll-hide">
             <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/30"></div>
             <div className="relative p-4 md:p-6 lg:p-8 text-white">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
@@ -2152,7 +2152,7 @@ const fetchAllData = useCallback(async () => {
                     {activeTab === 'news' && 'School News & Updates'}
                     {activeTab === 'teams' && 'Guidance & Counseling Team'}
                   </h1>
-                  <p className="text-blue-100 text-sm md:text-base lg:text-lg mobile-text-ellipsis">
+                  <p className="text-green-100 text-sm md:text-base lg:text-lg mobile-text-ellipsis">
                     {activeTab === 'events' && 'Stay informed about upcoming events, competitions, and school activities'}
                     {activeTab === 'guidance' && 'Access counseling sessions, career guidance, and support services'}
                     {activeTab === 'news' && 'Latest announcements, achievements, and important updates from school'}
@@ -2171,7 +2171,7 @@ const fetchAllData = useCallback(async () => {
                 </span>
                 {student && (
                   <span className="inline-flex items-center gap-1 md:gap-2 bg-white/20 px-3 md:px-4 py-1.5 md:py-2 rounded-full backdrop-blur-sm text-xs md:text-sm font-bold">
-                    <FaUserFriends className="text-blue-200 text-sm md:text-base" />
+                    <FaUserFriends className="text-green-200 text-sm md:text-base" />
                     Form {student.form} {student.stream}
                   </span>
                 )}
@@ -2193,7 +2193,7 @@ const fetchAllData = useCallback(async () => {
         <div className="mb-6 md:mb-8 flex justify-end">
           <button
             onClick={handleBookEmergency}
-            className="hidden md:flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all mobile-touch-target"
+            className="hidden md:flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-red-500 to-slate-600 text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all mobile-touch-target"
           >
             <FaExclamationCircle />
             Emergency Support
@@ -2224,7 +2224,7 @@ const fetchAllData = useCallback(async () => {
                 {activeTab === 'guidance' && 'Available Sessions'}
                 {activeTab === 'news' && 'Latest News'}
               </h2>
-              <span className="px-2 md:px-3 py-1 md:py-1.5 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 text-xs md:text-sm font-bold rounded-full">
+              <span className="px-2 md:px-3 py-1 md:py-1.5 bg-gradient-to-r from-green-100 to-green-200 text-green-800 text-xs md:text-sm font-bold rounded-full">
                 {activeTab === 'events' && `${events.length} Events`}
                 {activeTab === 'guidance' && `${guidance.length} Sessions`}
                 {activeTab === 'news' && `${news.length} News`}

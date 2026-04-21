@@ -29,143 +29,143 @@ import {
 // ==================== MATUNGULU GIRLS HERO HEADER ====================
 function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
   const currentYear = new Date().getFullYear();
-  const foundingYear = 2008;
+  const foundingYear = 1955;
   const yearsOfExcellence = currentYear - foundingYear;
 
   return (
     <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
       {/* Main Header Container */}
-      <div className="relative bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-900 rounded-2xl sm:rounded-3xl shadow-2xl">
-        
-        {/* Decorative Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl"></div>
-          
-          {/* Leaf/Flower decorative patterns */}
-          <div className="absolute top-10 right-10 opacity-10">
-            <IoLeaf className="text-6xl text-emerald-300" />
-          </div>
-          <div className="absolute bottom-10 left-10 opacity-10">
-            <IoFlower className="text-6xl text-teal-300" />
-          </div>
+   <div className="relative bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-900 rounded-2xl sm:rounded-3xl shadow-2xl">
+  
+  {/* Decorative Background Elements */}
+  <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
+    <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl"></div>
+    
+    {/* Leaf/Flower decorative patterns */}
+    <div className="absolute top-6 right-6 opacity-10">
+      <IoLeaf className="text-5xl text-emerald-300" />
+    </div>
+    <div className="absolute bottom-6 left-6 opacity-10">
+      <IoFlower className="text-5xl text-teal-300" />
+    </div>
+  </div>
+
+  {/* Content Container - REDUCED PADDING */}
+  <div className="relative z-10 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6">
+    
+    {/* Top Row - School Name and Badge - REDUCED MARGIN */}
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 sm:mb-5">
+      <div className="space-y-1.5 sm:space-y-2">
+        {/* School Badge - SMALLER */}
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+          <IoShield className="text-emerald-300 text-xs sm:text-sm" />
+          <span className="text-[9px] sm:text-[11px] font-bold text-emerald-100 uppercase tracking-wider">
+            National C1 Girls' Boarding School
+          </span>
         </div>
-
-        {/* Content Container */}
-        <div className="relative z-10 px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
-          
-          {/* Top Row - School Name and Badge */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 sm:mb-8">
-            <div className="space-y-2 sm:space-y-3">
-              {/* School Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-                <IoShield className="text-emerald-300 text-sm sm:text-base" />
-                <span className="text-[10px] sm:text-xs font-bold text-emerald-100 uppercase tracking-wider">
-                  National C1 Girls' Boarding School
-                </span>
-              </div>
-              
-              {/* School Name */}
-              <div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
-                  Matungulu Girls
-                  <span className="block sm:inline-block sm:ml-2 text-emerald-300">
-                    Senior School
-                  </span>
-                </h1>
-              </div>
-              
-              {/* Motto */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-px bg-emerald-400/50"></div>
-                <p className="text-emerald-200 text-xs sm:text-sm italic font-medium">
-                  "Strive to Excel"
-                </p>
-                <div className="w-8 h-px bg-emerald-400/50"></div>
-              </div>
-            </div>
-
-            {/* Student Info Card */}
-            {student && (
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20 shadow-lg">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-                    <span className="text-white font-black text-sm sm:text-base">
-                      {student?.fullName?.charAt(0) || 'S'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-white text-xs sm:text-sm font-medium opacity-80">Welcome back,</p>
-                    <p className="text-white font-bold text-sm sm:text-base truncate max-w-[150px] sm:max-w-[200px]">
-                      {student?.fullName || 'Student'}
-                    </p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-emerald-200 text-[10px] sm:text-xs font-semibold">
-                        {student?.form || 'Form'} • {student?.stream || 'Stream'}
-                      </span>
-                      <span className="w-1 h-1 rounded-full bg-emerald-300"></span>
-                      <span className="text-emerald-200 text-[10px] sm:text-xs">
-                        ADM: {student?.admissionNumber || '----'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Middle Row - Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
-              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Founded</p>
-              <p className="text-white text-lg sm:text-xl md:text-2xl font-black">{foundingYear}</p>
-              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">{yearsOfExcellence}+ Years</p>
-            </div>
-            
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
-              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Students</p>
-              <p className="text-white text-lg sm:text-xl md:text-2xl font-black">1,500+</p>
-              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">Current Enrollment</p>
-            </div>
-            
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
-              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Subjects</p>
-              <p className="text-white text-lg sm:text-xl md:text-2xl font-black">12+</p>
-              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">Core & Electives</p>
-            </div>
-            
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
-              <p className="text-emerald-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">Location</p>
-              <p className="text-white text-sm sm:text-base md:text-lg font-black">Machakos</p>
-              <p className="text-white/60 text-[9px] sm:text-[10px] mt-1">Matungulu Sub-County</p>
-            </div>
-          </div>
-
-          {/* Bottom Row - Quick Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white font-semibold text-sm transition-all duration-200 disabled:opacity-50"
-            >
-              <FiRefreshCw className={`text-emerald-300 text-sm ${isRefreshing ? 'animate-spin' : ''}`} />
-              <span>{isRefreshing ? 'Refreshing...' : 'Refresh Dashboard'}</span>
-            </button>
-            
-            <a
-              href="https://maps.app.goo.gl/WqjeNfi78asowHx7A"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl text-white font-semibold text-sm transition-all duration-200"
-            >
-              <IoGlobe className="text-emerald-300 text-sm" />
-              <span>View on Map</span>
-              <FiExternalLink className="text-emerald-300 text-xs" />
-            </a>
-          </div>
+        
+        {/* School Name - SMALLER TEXT */}
+        <div>
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
+            Matungulu Girls
+            <span className="block sm:inline-block sm:ml-2 text-emerald-300">
+              Senior School
+            </span>
+          </h1>
+        </div>
+        
+        {/* Motto - SMALLER */}
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-px bg-emerald-400/50"></div>
+          <p className="text-emerald-200 text-[10px] sm:text-xs italic font-medium">
+            "Strive to Excel"
+          </p>
+          <div className="w-6 h-px bg-emerald-400/50"></div>
         </div>
       </div>
+
+      {/* Student Info Card - COMPACT */}
+      {student && (
+        <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/20 shadow-lg">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+              <span className="text-white font-black text-xs sm:text-sm">
+                {student?.fullName?.charAt(0) || 'S'}
+              </span>
+            </div>
+            <div>
+              <p className="text-white text-[10px] sm:text-xs font-medium opacity-80">Welcome back,</p>
+              <p className="text-white font-bold text-xs sm:text-sm truncate max-w-[120px] sm:max-w-[180px]">
+                {student?.fullName || 'Student'}
+              </p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="text-emerald-200 text-[8px] sm:text-[10px] font-semibold">
+                  {student?.form || 'Form'} • {student?.stream || 'Stream'}
+                </span>
+                <span className="w-0.5 h-0.5 rounded-full bg-emerald-300"></span>
+                <span className="text-emerald-200 text-[8px] sm:text-[10px]">
+                  ADM: {student?.admissionNumber || '----'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Middle Row - Stats Grid - COMPACT */}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+        <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Founded</p>
+        <p className="text-white text-base sm:text-lg md:text-xl font-black">{foundingYear}</p>
+        <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">{yearsOfExcellence}+ Years</p>
+      </div>
+      
+      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+        <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Students</p>
+        <p className="text-white text-base sm:text-lg md:text-xl font-black">1,500+</p>
+        <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Current Enrollment</p>
+      </div>
+      
+      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+        <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Subjects</p>
+        <p className="text-white text-base sm:text-lg md:text-xl font-black">12+</p>
+        <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Core & Electives</p>
+      </div>
+      
+      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+        <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Location</p>
+        <p className="text-white text-xs sm:text-sm md:text-base font-black">Machakos</p>
+        <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Matungulu</p>
+      </div>
+    </div>
+
+    {/* Bottom Row - Quick Actions - COMPACT */}
+    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+      <button
+        onClick={onRefresh}
+        disabled={isRefreshing}
+        className="flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white font-semibold text-xs sm:text-sm transition-all duration-200 disabled:opacity-50"
+      >
+        <FiRefreshCw className={`text-emerald-300 text-xs sm:text-sm ${isRefreshing ? 'animate-spin' : ''}`} />
+        <span>{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+      </button>
+      
+      <a
+        href="https://maps.app.goo.gl/WqjeNfi78asowHx7A"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white font-semibold text-xs sm:text-sm transition-all duration-200"
+      >
+        <IoGlobe className="text-emerald-300 text-xs sm:text-sm" />
+        <span>Map</span>
+        <FiExternalLink className="text-emerald-300 text-[10px] sm:text-xs" />
+      </a>
+    </div>
+  </div>
+</div>
     </div>
   );
 }
