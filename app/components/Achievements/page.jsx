@@ -1016,9 +1016,6 @@ export default function AchievementsPage() {
             <p className="text-4xl font-serif font-bold text-white italic leading-none">
               {schoolStats.meanScore}
             </p>
-            <span className="text-[10px] font-bold text-emerald-400 font-sans tracking-tighter">
-              +0.2 pts
-            </span>
           </div>
         </div>
       </div>
