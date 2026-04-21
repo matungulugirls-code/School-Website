@@ -434,7 +434,7 @@ function GuestPortalLanding({ onOpenLogin, router }) {
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
-                onClick={() => router.push('/pagesSchool Policies')}
+                onClick={() => router.push('/pages/School Policies')}
                 className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-4 text-sm font-black text-gray-700 hover:bg-gray-50"
               >
                 View Policies
