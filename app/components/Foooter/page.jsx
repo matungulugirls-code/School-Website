@@ -123,8 +123,8 @@ const CONTACT_INFO = [
   },
   {
     icon: FiMail,
-    text: 'info@matungulugirls.sc.ke',
-    href: 'mailto:info@matungulugirls.sc.ke',
+    text: 'matungulugirls@gmail.com',
+    href: 'mailto:matungulugirls@gmail.com',
     detail: 'General Inquiries',
   },
   {

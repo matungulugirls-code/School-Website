@@ -17,7 +17,7 @@ const SCHOOL_NAME = 'Matungulu Girls High  School';
 const SCHOOL_LOCATION = 'Matungulu, Machakos County';
 const SCHOOL_MOTTO = 'Strive to Excel';
 const CONTACT_PHONE = '+254720123456';
-const CONTACT_EMAIL = 'info@MatunguluGirls.ke';
+const CONTACT_EMAIL = 'matungulugirls@gmail.com';
 
 // ====================================================================
 // UTILITY FUNCTIONS
