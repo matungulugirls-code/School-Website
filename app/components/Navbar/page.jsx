@@ -162,7 +162,7 @@ export default function ModernNavbar() {
     },
     {
       name: 'School Rules',
-      href: '/pagesSchool Policies',
+      href: '/pages/School Policies',
       icon: FiAward,
       description: 'Policies & student regulations'
     }

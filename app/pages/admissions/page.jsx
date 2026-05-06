@@ -3087,7 +3087,7 @@ return (
                   {step.title}
                 </h4>
               </div>
-              <div className="flex items-center gap-1.5 text-yellow-500/80 text-[10px] font-black uppercase tracking-widest">
+              <div className="flex items-center gap-1.5 text-yellow-500/80 text-[10px]  uppercase tracking-widest">
                 <FiClock className="text-xs" />
                 {step.duration}
               </div>
@@ -3128,7 +3128,7 @@ return (
           </div>
           <div>
             <h4 className="text-xl font-black text-white">Ready to Join Us?</h4>
-            <p className="text-slate-900 text-sm font-medium">Complete all steps for official admission approval</p>
+            <p className="text-slate-100 text-sm font-medium">Complete all steps for official admission approval</p>
           </div>
         </div>
       </div>
