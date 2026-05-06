@@ -965,7 +965,7 @@ export default function ModernGallery() {
         <Toaster position="top-right" richColors />
         <div className="md:w-[85%] w-full  mx-auto space-y-6">
 {/* ========== MODERN HERO BANNER - Matungulu Girls Gallery ========== */}
-<div className="relative mx-auto overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl w-full md:w-[90%] lg:w-[85%] xl:w-[80%]">
+<div className="relative mx-auto overflow-hidden rounded-2xl md:rounded-xl shadow-2xl w-full md:w-[90%] lg:w-[85%] xl:w-[80%]">
   <div className="relative bg-gradient-to-br from-[#064e3b] via-[#0f5b4c] to-[#115e59] p-6 sm:p-10 overflow-hidden">
     
     {/* Animated Background Elements */}

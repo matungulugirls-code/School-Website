@@ -290,6 +290,7 @@ const StaffCard = ({ staff, onContactClick }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
   const hierarchy = getStaffHierarchy(staff.position);
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
+  const contactDisabled = isContactModalDisabled(staff);
   
   return (
     <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
@@ -367,7 +368,10 @@ const StaffCard = ({ staff, onContactClick }) => {
         <div className="mt-auto flex gap-3 border-t border-slate-200 pt-4">
           <button
             onClick={() => onContactClick(staff)}
-            className="flex flex-1 items-center cursor-pointer justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[12px] font-extrabold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50"
+            disabled={contactDisabled}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-[12px] font-extrabold text-slate-800 transition-colors ${
+              contactDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:border-slate-400 hover:bg-slate-50'
+            }`}
           >
             <FiMail size={12} /> Contact
           </button>
@@ -389,6 +393,7 @@ const StaffListCard = ({ staff, onContactClick }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
   const hierarchy = getStaffHierarchy(staff.position);
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
+  const contactDisabled = isContactModalDisabled(staff);
   
   return (
     <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-7 rounded-[28px] border border-slate-300 bg-white p-7 shadow-md sm:flex-row sm:items-start sm:p-8">
@@ -440,7 +445,10 @@ const StaffListCard = ({ staff, onContactClick }) => {
       <div className="flex w-full shrink-0 gap-3 sm:w-auto sm:self-center">
         <button
           onClick={() => onContactClick(staff)}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-slate-100 px-5 py-3.5 text-sm font-extrabold text-slate-800 transition-colors sm:flex-none"
+          disabled={contactDisabled}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-slate-100 px-5 py-3.5 text-sm font-extrabold text-slate-800 transition-colors sm:flex-none ${
+            contactDisabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-slate-200'
+          }`}
         >
           <FiMail size={14} /> Contact
         </button>
@@ -453,6 +461,11 @@ const StaffListCard = ({ staff, onContactClick }) => {
       </div>
     </div>
   );
+};
+
+const isContactModalDisabled = (staff) => {
+  const position = (staff?.position || '').toLowerCase().trim();
+  return position === 'principal' || position === 'deputy principal';
 };
 
 // ==========================================
@@ -491,6 +504,7 @@ export default function StaffDirectory() {
 
   // Handle Contact Click
   const handleContactClick = (staff) => {
+    if (isContactModalDisabled(staff)) return;
     setSelectedStaff(staff);
     setConsultForm({
       ...consultForm,
@@ -515,6 +529,7 @@ export default function StaffDirectory() {
         message: consultForm.message,
         subject: consultForm.subject || `Consultation with ${selectedStaff.name}`,
         studentDetails: consultForm.studentGrade,
+        inquiryType: consultForm.inquiryType,
         contactMethod: consultForm.contactMethod,
         teacherId: selectedStaff.id,
         teacherName: selectedStaff.name,
@@ -522,7 +537,7 @@ export default function StaffDirectory() {
         teacherPosition: selectedStaff.position
       };
 
-      const response = await fetch('/api/teacher-consultation', {
+      const response = await fetch('/api/contactTeacher', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -531,7 +546,7 @@ export default function StaffDirectory() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        toast.success(`Consultation request sent! Reference: ${data.referenceNumber}`);
+        toast.success('Your inquiry has been received. The teacher will respond shortly.');
         setShowConsultModal(false);
         setConsultForm({
           name: '',

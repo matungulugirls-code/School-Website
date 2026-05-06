@@ -584,7 +584,7 @@ export default function StudentAchievements() {
 
       <div className="w-full md:w-[90%] lg:w-[90%] xl:w-[80%] mx-auto space-y-6">
         {/* Hero Header */}
-        <div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-[#172033] p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)] md:p-10">
+        <div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-teal-700 p-6 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)] md:p-10">
           <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
           <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute inset-y-0 right-[36%] hidden w-px bg-white/10 lg:block" />

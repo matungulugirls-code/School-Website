@@ -1216,7 +1216,7 @@ export default function ModernEventsNewsPage() {
       <div className="w-full md:w-[85%] mx-auto space-y-6">
         
 {/* Modern Hero Header - Staff/Team aligned theme */}
-<div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-[#172033] text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
+<div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-teal-700 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
   {/* Background Glows */}
   <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
   <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
