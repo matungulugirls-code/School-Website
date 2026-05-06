@@ -996,73 +996,7 @@ export default function AchievementsPage() {
           </div>
         </div>
         
-     {/* --- MODERN GLASS-BENTO STATS --- */}
-<div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10">
-  
-  {/* Achievements Card */}
-  <div className="relative group bg-white/5 backdrop-blur-xl rounded-[2rem] p-6 border border-white/10 overflow-hidden shadow-2xl">
-    {/* Decorative Soft Glow */}
-    <div className="absolute -top-10 -right-10 w-24 h-24 bg-emerald-500/20 blur-[40px] pointer-events-none" />
-    
-    <div className="relative z-10 flex flex-col gap-6">
-      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-        <FiAward className="text-emerald-400 text-xl" />
-      </div>
-      <div>
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200/60 mb-1">
-          Total Achievements
-        </p>
-        <p className="text-4xl font-serif font-bold text-white italic leading-none">
-          {totalAchievements}
-        </p>
-      </div>
-    </div>
-  </div>
 
-  {/* Mean Score Card */}
-  {schoolStats?.meanScore && (
-    <div className="relative bg-white/5 backdrop-blur-xl rounded-[2rem] p-6 border border-white/10 overflow-hidden shadow-2xl">
-      <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-500/20 blur-[40px] pointer-events-none" />
-      
-      <div className="relative z-10 flex flex-col gap-6">
-        <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-          <FiTrendingUp className="text-blue-400 text-xl" />
-        </div>
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-200/60 mb-1">
-            Current Mean Score
-          </p>
-          <div className="flex items-baseline gap-2">
-            <p className="text-4xl font-serif font-bold text-white italic leading-none">
-              {schoolStats.meanScore}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )}
-
-  {/* Target Mean Card */}
-  {schoolStats?.targetMean && (
-    <div className="relative bg-white/5 backdrop-blur-xl rounded-[2rem] p-6 border border-white/10 overflow-hidden shadow-2xl">
-      <div className="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/20 blur-[40px] pointer-events-none" />
-      
-      <div className="relative z-10 flex flex-col gap-6">
-        <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-          <FiTarget className="text-amber-400 text-xl" />
-        </div>
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-200/60 mb-1">
-            School Target
-          </p>
-          <p className="text-4xl font-serif font-bold text-white italic leading-none">
-            {schoolStats.targetMean}
-          </p>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
       </div>
       
 {/* --- MODERN PERFORMANCE METRICS BENTO --- */}

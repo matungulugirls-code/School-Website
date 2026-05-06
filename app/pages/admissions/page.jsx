@@ -2370,71 +2370,92 @@ return (
 })()}
 
         {/* Policies-style Structure: Sidebar + Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Left: Section Navigation */}
-          <aside className="lg:col-span-4">
-            <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-stone-200/60 overflow-hidden">
-              <div className="p-4 border-b border-stone-200/60 bg-gradient-to-br from-white via-teal-50/30 to-white">
-                <div className="flex items-center gap-2 mb-2">
-                  <FiSearch className="text-teal-700" size={16} />
-                  <span className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
-                    Browse Admissions
-                  </span>
-                </div>
+        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          {/* Left: Explorer Sidebar */}
+          <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Search Sections</p>
+              <div className="mt-4 relative">
+                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
+                  type="text"
                   value={sectionSearchTerm}
                   onChange={(e) => setSectionSearchTerm(e.target.value)}
-                  placeholder="Search sections..."
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-teal-300 focus:ring-4 focus:ring-teal-500/10"
+                  placeholder="Search fees, requirements, FAQ..."
+                  className="w-full rounded-2xl font-bold border border-slate-200 bg-[#f8faf8] py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  style={{ fontSize: "16px" }}
                 />
-                <p className="mt-2 text-[11px] text-slate-500">
-                  Tip: search "fees", "requirements", "career", "FAQ"...
-                </p>
               </div>
+            </div>
 
-              <div className="p-2">
-                {tabs
-                  .filter((t) => {
-                    const q = (sectionSearchTerm || '').toLowerCase().trim();
-                    if (!q) return true;
-                    return t.label.toLowerCase().includes(q) || t.id.toLowerCase().includes(q);
-                  })
-                  .map((tab) => {
-                    const TabIcon = tab.icon;
-                    const isActive = activeTab === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-3 text-left transition-colors ${
-                          isActive ? 'bg-teal-800 text-white shadow-sm' : 'text-slate-700 hover:bg-teal-50'
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-2 shadow-[0_18px_55px_-45px_rgba(15,23,42,0.22)]">
+              {tabs
+                .filter((t) => {
+                  const q = (sectionSearchTerm || "").toLowerCase().trim();
+                  if (!q) return true;
+                  return t.label.toLowerCase().includes(q) || t.id.toLowerCase().includes(q);
+                })
+                .map((tab) => {
+                  const TabIcon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`w-full flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors ${
+                        isActive ? "bg-[#102b23] text-white" : "text-slate-700 hover:bg-emerald-50"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-10 w-10 items-center justify-center rounded-2xl border ${
+                          isActive ? "bg-white/10 border-white/15" : "bg-white border-slate-200"
                         }`}
                       >
-                        <span
-                          className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
-                            isActive ? 'bg-white/10 border-white/15' : 'bg-white border-slate-200'
-                          }`}
-                        >
-                          <TabIcon className={isActive ? 'text-white' : 'text-teal-700'} />
-                        </span>
-                        <div className="min-w-0">
-                          <div className={`text-sm font-black ${isActive ? 'text-white' : 'text-slate-900'}`}>
-                            {tab.label}
-                          </div>
-                          <div className={`text-[11px] font-semibold ${isActive ? 'text-white/70' : 'text-slate-500'}`}>
-                            {tab.id.replace(/-/g, ' ')}
-                          </div>
+                        <TabIcon className={isActive ? "text-white" : "text-emerald-700"} />
+                      </span>
+                      <div className="min-w-0">
+                        <div className={`text-sm font-black ${isActive ? "text-white" : "text-slate-900"}`}>{tab.label}</div>
+                        <div className={`text-[11px] font-semibold ${isActive ? "text-white/70" : "text-slate-500"}`}>
+                          {tab.id.replace(/-/g, " ")}
                         </div>
-                      </button>
-                    );
-                  })}
+                      </div>
+                    </button>
+                  );
+                })}
+            </div>
+
+            <div className="rounded-[1.8rem] bg-[#102b23] p-6 text-white">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">Need-To-Know</p>
+              <div className="mt-4 space-y-3 text-sm leading-7 text-white/78">
+                <p>Admissions information is organized into sections for quick scanning, similar to the School Policies explorer.</p>
+                <p>Use the left sidebar to jump between sections and search instantly.</p>
               </div>
             </div>
           </aside>
 
-          {/* Right: Section Content */}
-          <main className="lg:col-span-8 space-y-5">
-            <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-stone-200/60 p-4 md:p-6">
+          {/* Right: Explorer Content */}
+          <main className="space-y-5">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Admissions Explorer</p>
+                  <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                    {tabs.find((t) => t.id === activeTab)?.label || "Admissions"}
+                  </h2>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    Browse the full admissions guide in a clean, card-based layout designed for fast reading on any device.
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-[#f4f8f4] px-4 py-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Search Query</p>
+                  <p className="mt-1 text-sm font-black text-slate-950">
+                    {sectionSearchTerm ? `"${sectionSearchTerm}"` : "Showing all sections"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-4 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6">
     {activeTab === 'overview' && (
   <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10 md:space-y-24">
     
