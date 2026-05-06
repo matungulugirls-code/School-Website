@@ -1974,9 +1974,9 @@ export default function ComprehensiveAdmissions() {
   // Admission paths - Updated based on your school's focus
   const admissionPaths = [
     {
-      title: 'Grade 9 & Form 1 Entry ',
+      title: 'Grade 10 Entry',
       icon: FiBookOpen,
-      description: 'Join our Form 1 program with comprehensive academic curriculum and extracurricular activities',
+      description: 'Join our Grade 10 program with a strong academic curriculum and enriching co-curricular activities',
       features: ['Academic Excellence', 'Extra-curricular Activities', 'Digital Literacy', 'Talent Development'],
       deadline: schoolData?.admissionCloseDate ? new Date(schoolData.admissionCloseDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'May 30, 2024',
       color: 'from-blue-500 to-cyan-500',
@@ -2158,7 +2158,7 @@ export default function ComprehensiveAdmissions() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 p-0 md:p-6">
       <Toaster position="top-right" richColors />
       
-      <div className="max-w-7xl mx-auto space-y-5 px-3 md:px-0">
+      <div className="mx-auto w-full space-y-5 px-3 md:px-0 lg:w-[95%]">
 
         {/* Modern Split Header with School Branding */}
 <header className="relative rounded-none md:rounded-2xl overflow-hidden shadow-sm border-b md:border border-slate-200/60 mb-6">
@@ -2174,13 +2174,13 @@ export default function ComprehensiveAdmissions() {
       <div className="relative z-10">
         {/* School Identity Row */}
         <div className="flex items-center gap-3 mb-5">
-          <img src="/Matg.jpg" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white p-1 border border-teal-100 shadow-sm" />
+          <img src="/MatG.jpg" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white p-1 border border-teal-100 shadow-sm" />
           <div className="flex flex-col min-w-0">
-            <h2 className="text-sm md:text-base font-bold text-slate-900 leading-tight truncate">
+            <h2 className="text-sm md:text-base font-extrabold text-slate-900 leading-tight truncate">
               {schoolData?.name || 'Matungulu Girls Senior School'}
             </h2>
-            <p className="text-[10px] md:text-xs text-slate-600 font-medium mt-0.5">
-              Commited to Excellence
+            <p className="text-[11px] md:text-sm text-slate-700 font-semibold mt-0.5">
+              Committed to Excellence
             </p>
           </div>
         </div>
@@ -2189,7 +2189,7 @@ export default function ComprehensiveAdmissions() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-none mb-3">
           Admissions <span className="text-teal-800">Portal</span>
         </h1>
-<p className="text-slate-700 text-xs md:text-sm leading-relaxed max-w-md mb-5">
+<p className="text-slate-800 text-sm md:text-base leading-relaxed max-w-2xl mb-5">
   Begin your academic journey. Explore programs, check requirements, and apply online. 
   Our smart admissions portal brings everything together in one place, allowing you to access information, submit applications, and track Our admissions from any device.
 </p>
@@ -2374,7 +2374,7 @@ return (
           {/* Left: Explorer Sidebar */}
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Search Sections</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-emerald-700">Search Sections</p>
               <div className="mt-4 relative">
                 <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -2415,7 +2415,7 @@ return (
                       </span>
                       <div className="min-w-0">
                         <div className={`text-sm font-black ${isActive ? "text-white" : "text-slate-900"}`}>{tab.label}</div>
-                        <div className={`text-[11px] font-semibold ${isActive ? "text-white/70" : "text-slate-500"}`}>
+                        <div className={`text-xs font-semibold ${isActive ? "text-white/70" : "text-slate-600"}`}>
                           {tab.id.replace(/-/g, " ")}
                         </div>
                       </div>
@@ -2425,7 +2425,7 @@ return (
             </div>
 
             <div className="rounded-[1.8rem] bg-[#102b23] p-6 text-white">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">Need-To-Know</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-emerald-200">Need-To-Know</p>
               <div className="mt-4 space-y-3 text-sm leading-7 text-white/78">
                 <p>Admissions information is organized into sections for quick scanning, similar to the School Policies explorer.</p>
                 <p>Use the left sidebar to jump between sections and search instantly.</p>
@@ -2438,7 +2438,7 @@ return (
             <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Admissions Explorer</p>
+                  <p className="text-[11px] font-black uppercase tracking-[0.22em] text-emerald-700">Admissions Explorer</p>
                   <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                     {tabs.find((t) => t.id === activeTab)?.label || "Admissions"}
                   </h2>
@@ -2447,7 +2447,7 @@ return (
                   </p>
                 </div>
                 <div className="rounded-2xl bg-[#f4f8f4] px-4 py-3">
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Search Query</p>
+                  <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-600">Search Query</p>
                   <p className="mt-1 text-sm font-black text-slate-950">
                     {sectionSearchTerm ? `"${sectionSearchTerm}"` : "Showing all sections"}
                   </p>
@@ -2511,7 +2511,7 @@ return (
         Choose Your Entry Track
       </h3>
       <p className="text-stone-500 text-sm md:text-base max-w-2xl mx-auto md:mx-0 font-medium leading-relaxed">
-        Whether joining as a fresh Form 1 student or transferring from another school, we have a clear path ready for you.
+        Whether joining as a fresh Grade 10 student or transferring from another school, we have a clear path ready for you.
       </p>
     </div>
 
