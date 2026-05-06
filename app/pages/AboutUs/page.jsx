@@ -486,7 +486,7 @@ export default function AboutPage() {
               </div>
 
               <a
-                href="https://maps.app.goo.gl/WqjeNfi78asowHx7A"
+                href="https://maps.app.goo.gl/XRVEem9NbpLeVYVSA"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-black text-[#14382d] transition-transform active:scale-95"
@@ -558,7 +558,7 @@ export default function AboutPage() {
                     <MapPin className="w-4 h-4 text-teal-600" />
                     <span className="text-sm font-medium">Matungulu, Machakos County</span>
                     <a 
-                      href="https://maps.app.goo.gl/q6ubZsEk5KWxzAUv9" 
+                      href="https://maps.app.goo.gl/XRVEem9NbpLeVYVSA" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="ml-2 p-1.5 bg-teal-100 text-teal-700 rounded-full hover:bg-teal-200 transition-colors"

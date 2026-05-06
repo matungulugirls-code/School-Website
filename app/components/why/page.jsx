@@ -251,19 +251,28 @@ const getAchievements = () => {
     Object.keys(grouped).forEach(category => {
       if (Array.isArray(grouped[category])) {
         grouped[category].forEach(achievement => {
+          const firstImage = Array.isArray(achievement.images) ? achievement.images[0] : null;
+          const imageUrl = typeof firstImage === 'string' ? firstImage : firstImage?.url;
+          const highlights = Array.isArray(achievement.recipients)
+            ? achievement.recipients
+                .map((recipient) => {
+                  if (typeof recipient === 'string') return recipient;
+                  return recipient?.name || recipient?.fullName || recipient?.title || '';
+                })
+                .filter(Boolean)
+            : [];
+
           allAchievements.push({
             ...achievement,
             year: achievement.year?.toString() || '',
             title: achievement.title || '',
-            shortDescription: achievement.description?.substring(0, 100) + '...' || '',
+            shortDescription: achievement.description ? `${achievement.description.substring(0, 100)}...` : '',
             description: achievement.description || '',
             impact: achievement.awardingBody || 'Achievement',
             stats: `${achievement.category} | ${achievement.year}`,
             icon: getCategoryIcon(achievement.category),
-            image: achievement.images && achievement.images.length > 0 
-              ? achievement.images[0].url 
-              : "/hero/MatG1.jpg",
-            highlights: achievement.recipients || []
+            image: imageUrl || "/hero/MatG1.jpg",
+            highlights
           });
         });
       }
