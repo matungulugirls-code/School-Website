@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   FiCalendar, FiClock, FiMapPin, FiShare2, FiArrowRight,
   FiBookOpen, FiUser, FiHeart, FiChevronRight, FiX,
