@@ -793,7 +793,7 @@ function ModernStaffCard({ staff, onEdit, onDelete, onView, selected, onSelect, 
             disabled={actionLoading}
             className="h-14 flex-1 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-slate-900/20 disabled:opacity-50"
           >
-            Manage Profile
+            edit
           </button>
           
           <button 
