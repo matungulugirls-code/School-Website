@@ -467,7 +467,7 @@ const CareerSearchPage = () => {
         {/* Header Section */}
         <div className="mb-8 text-center">
           <h1 className="text-xl md:text-3xl font-extrabold text-slate-900 uppercase tracking-tighter leading-none mb-3">
-            Career <span className="text-[#1a1a2e]">Explorer</span>
+            Career <span className="text-teal-800">Explorer</span>
           </h1>
           <p className="text-slate-700 font-semibold text-xs md:text-sm uppercase tracking-[0.2em] mb-6">
             Browse careers by Senior School department
@@ -1108,7 +1108,7 @@ const ModernFeeCard = ({
       /* Mobile: Full Screen / Desktop: Rounded Card */
       rounded-none md:rounded-[3rem] 
       border-x-0 md:border
-      ${isDark ? 'bg-[#1a1a2e] border-white/5 text-white' : 'bg-white border-slate-100 text-slate-900'}
+      ${isDark ? 'bg-teal-800 border-white/10 text-white' : 'bg-white border-slate-100 text-slate-900'}
     `}>
       
       {/* Top Header - Adjusted for Mobile Spacing */}
@@ -1432,13 +1432,13 @@ const VisionMissionSection = ({ vision, mission, motto, videoTour, videoType, vi
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center">
-              <FiAward className="text-emerald-600 text-xl" />
+            <div className="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center">
+              <FiAward className="text-teal-700 text-xl" />
             </div>
             
             <div>
               <span className="text-[8px] md:text-[9px] font-black text-slate-900 uppercase tracking-[0.2em] block mb-1">
-                The Spirit of Kinyui
+                The Spirit of Matungulu Girls
               </span>
            <h3 className="group flex items-center gap-2 text-lg md:text-xl font-black text-slate-900 tracking-tight">
   <span>School Motto</span>
@@ -1448,20 +1448,20 @@ const VisionMissionSection = ({ vision, mission, motto, videoTour, videoType, vi
           </div>
 
           <div className="md:text-right">
-            <p className="text-xl md:text-2xl lg:text-3xl font-black italic text-emerald-700 tracking-tight">
+            <p className="text-xl md:text-2xl lg:text-3xl font-black italic text-teal-800 tracking-tight">
               "{motto || "Strive for Excellence"}"
             </p>
             <div className="flex items-center justify-end gap-2 mt-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-600" />
+              <div className="w-2 h-2 rounded-full bg-teal-700" />
               <span className="text-[9px] font-black text-slate-900 uppercase tracking-wider">
-                Matungulu GirlsSenior School
+                Matungulu Girls Senior School
               </span>
             </div>
           </div>
         </div>
 
         {/* Decorative Element */}
-        <div className="absolute -top-3 right-0 text-emerald-200/30 text-6xl font-black select-none">
+        <div className="absolute -top-3 right-0 text-teal-200/30 text-6xl font-black select-none">
           "
         </div>
       </div>
@@ -1493,23 +1493,23 @@ const AcademicResultsSection = ({ documentData }) => {
     /* Responsive Wrapper: Full width (rounded-none) on mobile, Elegant Card on desktop */
     <div className="bg-white rounded-none md:rounded-[2.5rem] border-x-0 md:border border-slate-100 shadow-2xl overflow-hidden">
       
-      {/* Header Section - Edge-to-edge look */}
-      <div className="relative p-6 md:p-12 bg-[#1a1a2e] text-white">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/20 blur-[80px] md:blur-[100px] rounded-full -mr-32 -mt-32" />
+      {/* Header Section - Light modern header (MatG theme) */}
+      <div className="relative p-6 md:p-12 bg-gradient-to-br from-teal-50 via-white to-white text-slate-900 border-b border-slate-100">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-teal-600/10 blur-[80px] md:blur-[100px] rounded-full -mr-32 -mt-32" />
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shrink-0">
-              <IoStatsChartOutline className="text-blue-400 text-2xl md:text-3xl" />
+            <div className="p-3 bg-white rounded-2xl border border-teal-100 shrink-0 shadow-sm">
+              <IoStatsChartOutline className="text-teal-700 text-2xl md:text-3xl" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-lg md:text-3xl font-black uppercase tracking-tighter">Academic KCSE <span className="text-blue-400">Reports</span></h3>
-              <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mt-1">Official Performance Archives</p>
+              <h3 className="text-lg md:text-3xl font-black uppercase tracking-tighter">Academic KCSE <span className="text-teal-700">Reports</span></h3>
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mt-1">Official Performance Archives</p>
             </div>
           </div>
-          <div className="flex items-center self-start md:self-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
-            <FiAward className="text-amber-400" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-white/70">Verified Data</span>
+          <div className="flex items-center self-start md:self-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl shadow-sm">
+            <FiAward className="text-amber-600" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Verified Data</span>
           </div>
         </div>
       </div>
@@ -2167,7 +2167,7 @@ export default function ComprehensiveAdmissions() {
     {/* Left Panel - Dark Branded Section */}
     <div className="relative bg-slate-900 p-5 sm:p-6 md:p-8 md:w-[55%] overflow-hidden">
       {/* Logo Watermark Background */}
-      <img src="/kinyui.png" alt="" className="absolute right-0 bottom-0 w-40 md:w-56 opacity-[0.04] pointer-events-none select-none translate-x-8 translate-y-8" />
+      <img src="/MatG.jpg" alt="" className="absolute right-0 bottom-0 w-40 md:w-56 opacity-[0.04] pointer-events-none select-none translate-x-8 translate-y-8" />
       {/* Decorative Gradient Orb */}
       <div className="absolute -top-20 -left-20 w-52 h-52 bg-teal-500/15 blur-[80px] rounded-full" />
       
@@ -2177,7 +2177,7 @@ export default function ComprehensiveAdmissions() {
           <img src="/Matg.jpg" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white/10 p-1 border border-white/10" />
           <div className="flex flex-col min-w-0">
             <h2 className="text-sm md:text-base font-bold text-white leading-tight truncate">
-              {schoolData?.name || 'Matungulu GirlsSenior School'}
+              {schoolData?.name || 'Matungulu Girls Senior School'}
             </h2>
             <p className="text-[10px] md:text-xs text-slate-900 font-medium mt-0.5">
               Commited to Excellence
@@ -2226,7 +2226,7 @@ export default function ComprehensiveAdmissions() {
     {/* Right Panel - Admission Highlights */}
     <div className="relative bg-white p-5 sm:p-6 md:p-8 md:w-[45%] flex flex-col justify-center">
       {/* Logo Watermark */}
-      <img src="/kinyui.png" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 md:w-44 opacity-[0.03] pointer-events-none select-none" />
+      <img src="/MatG.jpg" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 md:w-44 opacity-[0.03] pointer-events-none select-none" />
       
       <div className="relative z-10 space-y-4">
         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-900 mb-1">Why Apply Here</p>
@@ -2400,7 +2400,7 @@ return (
     {/* 1. Hero / Introduction Section */}
     <div className="relative pt-4 pb-2 text-center px-4 overflow-hidden">
       {/* Logo watermark */}
-      <img src="/kinyui.png" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-44 md:w-56 opacity-[0.03] pointer-events-none select-none" />
+      <img src="/MatG.jpg" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-44 md:w-56 opacity-[0.03] pointer-events-none select-none" />
       
       <div className="relative z-10">
       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-200 mb-4 md:mb-6">
@@ -2436,7 +2436,7 @@ return (
 {/* 3. Admission Paths - Full Bleed on Mobile */}
 <section className="relative overflow-hidden py-12 md:py-16 bg-stone-50 rounded-none md:rounded-3xl md:mx-4 px-0 md:px-8">
   {/* Logo Watermark */}
-  <img src="/kinyui.png" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
+  <img src="/MatG.jpg" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
   <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-64 h-64 bg-teal-200/20 blur-3xl rounded-full" />
   
   <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-0">
@@ -2488,7 +2488,7 @@ return (
   {/* Large feature card — spans 7 cols */}
 <div className="md:col-span-7 group relative bg-slate-900 rounded-2xl md:rounded-3xl overflow-hidden p-6 md:p-8 min-h-[220px] flex flex-col justify-end">
   <div className="absolute top-0 right-0 w-48 h-48 bg-teal-500/10 blur-[60px] rounded-full -mr-16 -mt-16" />
-  <img src="/kinyui.png" alt="" className="absolute right-4 bottom-4 w-24 md:w-32 opacity-[0.04] pointer-events-none select-none" />
+  <img src="/MatG.jpg" alt="" className="absolute right-4 bottom-4 w-24 md:w-32 opacity-[0.04] pointer-events-none select-none" />
   <div className="relative z-10">
     <div className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/20 flex items-center justify-center mb-4">
       <IoBulbOutline className="text-teal-500 text-lg" />
@@ -2564,7 +2564,7 @@ return (
             Academic <span className="text-indigo-600">Programs</span>
           </h2>
        <p className="text-slate-900 text-md md:text-md font-medium ">
-  Matungulu GirlsSenior School offers a future-ready, holistic curriculum 
+  Matungulu Girls Senior School offers a future-ready, holistic curriculum 
   specifically designed to cultivate critical thinking, academic excellence, 
   and global leadership. We empower our students to navigate the complexities 
   of the modern world with integrity, innovation, and a commitment to excellence.
@@ -2577,9 +2577,9 @@ return (
             href={documentData.curriculumPDF}
             download={documentData.curriculumPdfName}
             target="_blank"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-4 px-6 py-4 bg-[#1a1a2e] text-white rounded-2xl active:scale-95 transition-all shadow-xl"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-4 px-6 py-4 bg-teal-700 hover:bg-teal-800 text-white rounded-2xl active:scale-95 transition-all shadow-xl"
           >
-            <FiDownload className="text-xl text-blue-400" />
+            <FiDownload className="text-xl text-teal-100" />
             <div className="text-left">
               <div className="font-bold text-xs md:text-sm tracking-tight">Download Curriculum</div>
               {documentData.curriculumYear && (
@@ -2655,16 +2655,16 @@ return (
 
 {/* Section 5: Stats & Calendar - Refined Responsive Dates */}
 {schoolData?.openDate && (
-  <div className="relative overflow-hidden bg-[#1a1a2e] md:rounded-[3rem] p-8 md:p-16 w-full">
+  <div className="relative overflow-hidden bg-white md:rounded-[3rem] p-8 md:p-16 w-full border border-slate-100 shadow-2xl">
     {/* Decorative Glow */}
-    <div className="absolute top-0 right-0 w-48 md:w-96 h-48 md:h-96 bg-blue-500/10 blur-[60px] md:blur-[100px] rounded-full -mr-24 -mt-24" />
+    <div className="absolute top-0 right-0 w-48 md:w-96 h-48 md:h-96 bg-teal-600/10 blur-[60px] md:blur-[100px] rounded-full -mr-24 -mt-24" />
     
     <div className="relative z-10 flex flex-col lg:flex-row justify-between items-center gap-8 md:gap-12">
       <div className="text-center lg:text-left max-w-sm">
-        <h3 className="text-white text-lg md:text-xl font-black tracking-tight mb-3 uppercase">
-          Academic <span className="text-emerald-500">Calendar</span>
+        <h3 className="text-slate-900 text-lg md:text-xl font-black tracking-tight mb-3 uppercase">
+          Academic <span className="text-teal-700">Calendar</span>
         </h3>
-        <p className="text-slate-900 text-xs md:text-md font-medium leading-relaxed">
+        <p className="text-slate-600 text-xs md:text-md font-medium leading-relaxed">
           Mark your journey. Stay ahead of the curve with our key enrollment dates.
         </p>
       </div>
@@ -2673,11 +2673,11 @@ return (
 <div className="grid grid-cols-2 gap-3 md:gap-8 w-full lg:w-auto">
         
   {/* Year Opens Card */}
-  <div className="bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-2xl border border-white/10 text-center min-w-0 flex flex-col justify-center">
-    <div className="text-blue-400 font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] mb-2 md:mb-3">
+  <div className="bg-teal-50 p-4 md:p-8 rounded-2xl border border-teal-100 text-center min-w-0 flex flex-col justify-center">
+    <div className="text-teal-700 font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] mb-2 md:mb-3">
       Year Opens
     </div>
-    <div className="text-white font-black tracking-tighter tabular-nums leading-tight">
+    <div className="text-slate-900 font-black tracking-tighter tabular-nums leading-tight">
       {/* On mobile, we use a slightly smaller, tighter font size 
          to ensure the "Ordinal Jan Year" format fits on one line.
       */}
@@ -2692,11 +2692,11 @@ return (
   </div>
 
   {/* Year Closes Card */}
-  <div className="bg-white/5 backdrop-blur-xl p-4 md:p-8 rounded-2xl border border-white/10 text-center min-w-0 flex flex-col justify-center">
-    <div className="text-rose-400 font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] mb-2 md:mb-3">
+  <div className="bg-white p-4 md:p-8 rounded-2xl border border-slate-200 text-center min-w-0 flex flex-col justify-center shadow-sm">
+    <div className="text-rose-600 font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] mb-2 md:mb-3">
       Year Closes
     </div>
-    <div className="text-white font-black tracking-tighter tabular-nums leading-tight">
+    <div className="text-slate-900 font-black tracking-tighter tabular-nums leading-tight">
       {/* Mobile View */}
       <span className="block md:hidden text-md whitespace-nowrap">
         {formatDateWithOrdinal(schoolData.closeDate)}
@@ -2720,7 +2720,7 @@ return (
     {/* Hero Section */}
     <div className="relative text-center px-4 overflow-hidden">
       {/* Logo watermark behind hero */}
-      <img src="/kinyui.png" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-64 opacity-[0.03] pointer-events-none select-none" />
+      <img src="/MatG.jpg" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-64 opacity-[0.03] pointer-events-none select-none" />
       <div className="relative z-10">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50 border border-teal-200 rounded-lg mb-6">
           <FiBriefcase className="text-teal-800 text-xs" />
@@ -2738,7 +2738,7 @@ return (
     {/* CBC Pathways & Subjects Section */}
     <section className="relative bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-2xl md:rounded-3xl border border-slate-200/60 p-5 md:p-10 overflow-hidden">
       {/* Logo watermark */}
-      <img src="/kinyui.png" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
+      <img src="/MatG.jpg" alt="" className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none" />
       
       <div className="relative z-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -2876,7 +2876,7 @@ return (
     {/* Career Guidance Banner - Full Width on Mobile */}
     <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 md:rounded-[2.5rem] p-8 md:p-12 text-white w-full">
       {/* Logo watermark */}
-      <img src="/kinyui.png" alt="" className="absolute right-6 bottom-6 w-32 md:w-48 opacity-[0.04] pointer-events-none select-none" />
+      <img src="/MatG.jpg" alt="" className="absolute right-6 bottom-6 w-32 md:w-48 opacity-[0.04] pointer-events-none select-none" />
       <div className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-teal-500/10 blur-[60px] md:blur-[100px] rounded-full -mr-32 -mt-32" />
       
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
@@ -2953,7 +2953,7 @@ return (
           </p>
         </div>
         
-        <div className="flex items-center gap-2 px-5 py-2.5 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100">
+        <div className="flex items-center gap-2 px-5 py-2.5 bg-teal-50 text-teal-800 rounded-2xl border border-teal-100">
           <IoCheckmarkCircleOutline className="text-lg" />
           <span className="text-[10px] font-black uppercase tracking-widest">Mandatory Set</span>
         </div>
@@ -2976,8 +2976,8 @@ return (
       <div className="flex items-center gap-4">
         {/* Icon & Counter */}
         <div className="relative shrink-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
-            <IoDocumentTextOutline className="text-emerald-600 text-xl" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-50 flex items-center justify-center">
+            <IoDocumentTextOutline className="text-teal-700 text-xl" />
           </div>
           <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-black border-4 border-white">
             {index + 1}
@@ -2990,7 +2990,7 @@ return (
             {doc}
           </h4>
           <div className="flex flex-wrap items-center gap-2 mt-2">
-            <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded uppercase tracking-wider">
+            <span className="text-[9px] font-black text-teal-700 bg-teal-50 px-2 py-0.5 rounded uppercase tracking-wider">
               Required
             </span>
             {index === 0 && (
@@ -3006,7 +3006,7 @@ return (
 </div>
 
       {/* Important Notes - Full-Screen Mobile Strategy */}
-      <div className="mt-8 md:mt-12 p-6 md:p-12 bg-[#1a1a2e] rounded-none md:rounded-[2.5rem] relative overflow-hidden border-y border-white/5 md:border shadow-2xl">
+      <div className="mt-8 md:mt-12 p-6 md:p-12 bg-white rounded-none md:rounded-[2.5rem] relative overflow-hidden border-y border-slate-100 md:border shadow-2xl">
         <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-amber-500/10 blur-[60px] md:blur-[80px] rounded-full -mr-24 -mt-24 md:-mr-32 md:-mt-32"></div>
         
         <div className="relative z-10">
@@ -3014,8 +3014,8 @@ return (
             <div className="p-2.5 bg-amber-500 rounded-xl shadow-lg shadow-amber-500/20">
               <FiAlertTriangle className="text-slate-900 text-lg md:text-xl" />
             </div>
-            <h4 className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-[0.3em] md:tracking-[0.4em]">
-              Important <span className="text-amber-500">Submission</span> Notes
+            <h4 className="text-[10px] md:text-[11px] font-black text-slate-900 uppercase tracking-[0.3em] md:tracking-[0.4em]">
+              Important <span className="text-teal-700">Submission</span> Notes
             </h4>
           </div>
           
@@ -3028,11 +3028,10 @@ return (
             ].map((note, i) => (
               <div key={i} className="flex items-start gap-4 group">
                 <div className="relative mt-1.5 shrink-0">
-                  <div className="w-2 h-2 rounded-full bg-amber-500 z-10 relative" />
-                  <div className="absolute inset-0 w-2 h-2 rounded-full bg-amber-500 animate-ping opacity-20" />
+                  <div className="w-2 h-2 rounded-full bg-teal-600 z-10 relative" />
                 </div>
                 
-                <p className="text-[12px] md:text-[13px] font-bold text-slate-100 leading-relaxed transition-colors group-hover:text-white">
+                <p className="text-[12px] md:text-[13px] font-bold text-slate-700 leading-relaxed transition-colors group-hover:text-slate-900">
                   {note}
                 </p>
               </div>
@@ -3043,9 +3042,9 @@ return (
     </div>
 
 {/* Transfer Process - Modern Timeline Optimized for All Screens */}
-<div className="bg-[#1a1a2e] rounded-none md:rounded-[3rem] p-6 md:p-12 text-white relative overflow-hidden">
+<div className="bg-white rounded-none md:rounded-[3rem] p-6 md:p-12 text-slate-900 relative overflow-hidden border-y border-slate-100 md:border shadow-2xl">
   {/* Decorative Background Glow */}
-  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full -mr-32 -mt-32 invisible md:visible" />
+  <div className="absolute top-0 right-0 w-64 h-64 bg-teal-600/10 blur-[100px] rounded-full -mr-32 -mt-32 invisible md:visible" />
 
   <div className="relative z-10">
     <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 md:mb-16 gap-4">
@@ -3055,16 +3054,16 @@ return (
             <FiArrowRight className="text-white text-xl" />
           </div>
           <h3 className="text-xl md:text-xl font-black uppercase tracking-tighter">
-            Transfer <span className="text-blue-400">Process</span>
+            Transfer <span className="text-teal-700">Process</span>
           </h3>
         </div>
-        <p className="text-slate-900 text-sm md:text-base font-medium">Seamless transition with 4-step verification</p>
+        <p className="text-slate-600 text-sm md:text-base font-medium">Seamless transition with 4-step verification</p>
       </div>
       
       {/* Time Badge - Styled for mobile */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full">
-        <FiClock className="text-yellow-400 text-sm" />
-        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-300">2-3 Weeks Total</span>
+      <div className="flex items-center gap-2 px-4 py-2 bg-teal-50 border border-teal-100 rounded-full">
+        <FiClock className="text-teal-700 text-sm" />
+        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-teal-800">2-3 Weeks Total</span>
       </div>
     </div>
 
@@ -3073,37 +3072,37 @@ return (
       {transferProcess.map((step, index) => (
         <div 
           key={index}
-          className="group relative bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 transition-all duration-500 hover:bg-white/[0.07]"
+          className="group relative bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 transition-all duration-500 hover:bg-white"
         >
           {/* Step Number Badge */}
-          <div className="absolute -top-3 -left-3 w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-xl shadow-blue-900/40 z-20">
+          <div className="absolute -top-3 -left-3 w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-teal-800 flex items-center justify-center text-white font-black text-lg shadow-xl shadow-teal-900/20 z-20">
             {step.step}
           </div>
           
           <div className="relative z-10 space-y-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
-                <h4 className="text-lg font-black uppercase tracking-tight text-white group-hover:text-blue-400 transition-colors">
+                <h4 className="text-lg font-black uppercase tracking-tight text-slate-900 group-hover:text-teal-800 transition-colors">
                   {step.title}
                 </h4>
               </div>
-              <div className="flex items-center gap-1.5 text-yellow-500/80 text-[10px]  uppercase tracking-widest">
+              <div className="flex items-center gap-1.5 text-teal-700 text-[10px] uppercase tracking-widest">
                 <FiClock className="text-xs" />
                 {step.duration}
               </div>
             </div>
             
-            <p className="text-slate-100 text-xs md:text-sm font-bold leading-relaxed">
+            <p className="text-slate-700 text-xs md:text-sm font-bold leading-relaxed">
               {step.description}
             </p>
             
             {/* Requirements List */}
-            <div className="pt-4 border-t border-white/5 space-y-3">
-              <span className="text-[9px] font-black text-slate-700 uppercase tracking-[0.2em]">Checklist</span>
+            <div className="pt-4 border-t border-slate-200 space-y-3">
+              <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Checklist</span>
               <ul className="space-y-2.5">
                 {step.requirements.map((req, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-[11px] md:text-xs text-slate-300 font-medium">
-                    <div className="mt-1 w-1.5 h-1.5 rounded-full bg-blue-500/50 shrink-0" />
+                  <li key={idx} className="flex items-start gap-3 text-[11px] md:text-xs text-slate-600 font-medium">
+                    <div className="mt-1 w-1.5 h-1.5 rounded-full bg-teal-600/60 shrink-0" />
                     <span>{req}</span>
                   </li>
                 ))}
@@ -3113,7 +3112,7 @@ return (
 
           {/* Desktop Connector Line */}
           {index < transferProcess.length - 1 && (
-            <div className="hidden lg:block absolute -right-3 top-1/2 w-6 h-[1px] bg-white/10 z-0" />
+            <div className="hidden lg:block absolute -right-3 top-1/2 w-6 h-[1px] bg-slate-200 z-0" />
           )}
         </div>
       ))}
@@ -3195,7 +3194,7 @@ return (
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700">Quick Answers</span>
                 </div>
                 <h2 className="text-xl sm:text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight mb-4 px-2">
-                  Frequently Asked <span className="text-[#1a1a2e]">Questions</span>
+                  Frequently Asked <span className="text-teal-800">Questions</span>
                 </h2>
                 <p className="text-slate-700 text-base md:text-lg max-w-3xl mx-auto leading-relaxed px-2">
                   Clear answers to common queries about admissions, curriculum, fees, and school policies.
@@ -3224,7 +3223,7 @@ return (
         <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl md:rounded-[24px] p-6 md:p-12 text-center shadow-2xl">
           
           {/* School Logo Watermark */}
-          <img src="/kinyui.png" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 md:w-64 opacity-[0.04] pointer-events-none select-none" />
+          <img src="/MatG.jpg" alt="" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 md:w-64 opacity-[0.04] pointer-events-none select-none" />
           {/* Decorative Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-2xl bg-teal-500/8 blur-[80px] rounded-full pointer-events-none" />
           
