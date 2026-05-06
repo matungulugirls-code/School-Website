@@ -375,7 +375,7 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm font-medium placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:border-transparent transition-all outline-none"
-                      placeholder="John Doe"
+                      placeholder="Mary Mwikali"
                     />
                   </div>
                   <div className="space-y-1 sm:space-y-2">
@@ -389,7 +389,7 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm font-medium placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:border-transparent transition-all outline-none"
-                      placeholder="john@example.com"
+                      placeholder="mary@example.com"
                     />
                   </div>
                 </div>
@@ -422,8 +422,9 @@ export default function ContactPage() {
                       className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none appearance-none"
                     >
                       <option value="">Select Grade</option>
-                      <option value="Form 1">Form 1</option>
-                      <option value="Form 2">Form 2</option>
+                      <option value="Grade 10">Grade 10</option>
+                      <option value="Grade 11">Grade 11</option>
+                      <option value="Grade 12">Grade 12</option>
                       <option value="Form 3">Form 3</option>
                       <option value="Form 4">Form 4</option>
                     </select>

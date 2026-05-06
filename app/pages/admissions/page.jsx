@@ -2174,7 +2174,7 @@ export default function ComprehensiveAdmissions() {
       <div className="relative z-10">
         {/* School Identity Row */}
         <div className="flex items-center gap-3 mb-5">
-          <img src="/kinyui.png" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white/10 p-1 border border-white/10" />
+          <img src="/Matg.jpg" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white/10 p-1 border border-white/10" />
           <div className="flex flex-col min-w-0">
             <h2 className="text-sm md:text-base font-bold text-white leading-tight truncate">
               {schoolData?.name || 'Matungulu GirlsSenior School'}
@@ -3032,7 +3032,7 @@ return (
                   <div className="absolute inset-0 w-2 h-2 rounded-full bg-amber-500 animate-ping opacity-20" />
                 </div>
                 
-                <p className="text-[12px] md:text-[13px] font-bold text-slate-900 leading-relaxed transition-colors group-hover:text-white">
+                <p className="text-[12px] md:text-[13px] font-bold text-slate-100 leading-relaxed transition-colors group-hover:text-white">
                   {note}
                 </p>
               </div>
@@ -3093,7 +3093,7 @@ return (
               </div>
             </div>
             
-            <p className="text-slate-900 text-xs md:text-sm font-bold leading-relaxed">
+            <p className="text-slate-100 text-xs md:text-sm font-bold leading-relaxed">
               {step.description}
             </p>
             
@@ -3242,7 +3242,7 @@ return (
               Start Your <span className="text-teal-400">Journey With Us</span>
             </h2>
             
-            <p className="text-slate-900 mb-6 md:mb-8 text-sm md:text-base leading-relaxed max-w-lg mx-auto text-balance">
+            <p className="text-slate-100 mb-6 md:mb-8 text-sm md:text-base leading-relaxed max-w-lg mx-auto text-balance">
               Have questions about enrollment, fees, or student life? Our admissions team is ready to guide you through every step.
             </p>
 
