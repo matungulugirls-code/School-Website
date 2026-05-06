@@ -118,7 +118,7 @@ export default function AboutPage() {
     {
       title: "Postal Address",
       icon: <MapPin className="h-5 w-5" />,
-      body: "P.O. Box 109 - 90131, Tala",
+      body: "P.O. Box 32, 90131 Tala",
       tone: "bg-[#eef4ff] text-[#1d4ed8]",
     },
     {

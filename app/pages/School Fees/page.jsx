@@ -604,14 +604,14 @@ export default function ModernFeesPage() {
                   <FaPhone className="mt-1 text-emerald-600" />
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Finance Office</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">+254 712 345 678</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">0734610130</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FaEnvelope className="mt-1 text-emerald-600" />
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Email</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">matungulugirls@gmail.com</p>
+                    <p className="mt-1 text-sm font-bold text-slate-900">matungulugirls@gmial.com</p>
                   </div>
                 </div>
               </div>

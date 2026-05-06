@@ -284,7 +284,7 @@ if (loading) {
                   </button>
                   
                   <button
-                    onClick={() => window.location.href = 'tel:+254700123456'}
+                    onClick={() => window.location.href = 'tel:0734610130'}
                     className="px-6 py-3 bg-white border-2 border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
                   >
                     <Phone className="w-4 h-4" />
@@ -537,7 +537,7 @@ if (loading) {
               }
             </p>
             <button
-              onClick={() => window.location.href = 'tel:+254700123456'}
+              onClick={() => window.location.href = 'tel:0734610130'}
               className="mt-4 text-xs font-bold text-indigo-600 hover:underline"
             >
               Contact Support

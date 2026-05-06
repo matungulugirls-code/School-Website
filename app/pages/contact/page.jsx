@@ -69,7 +69,7 @@ export default function ContactPage() {
       id: 'admissions',
       name: 'Admissions Office',
       email: 'admissions@matungulu-girls.sc.ke',
-      phone: '+254 720 123 456',
+      phone: '0734610130',
       description: 'For enrollment, applications, and admission inquiries. We guide students through the admission process.',
       icon: <User className="w-4 h-4" />,
       head: 'Mrs. Sarah Johnson',
@@ -611,7 +611,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-1">Call Us</p>
-                    <p className="text-xs font-bold text-slate-800">+254 720 123 456</p>
+                    <p className="text-xs font-bold text-slate-800">0734610130</p>
                   </div>
                 </div>
 
@@ -745,7 +745,7 @@ export default function ContactPage() {
             <Home className="w-5 h-5" />
             <span className="text-[8px] mt-1 font-black uppercase tracking-wider">Home</span>
           </Link>
-          <a href="tel:+254720123456" className="flex flex-col items-center text-slate-600 hover:text-emerald-600 transition-colors p-2">
+          <a href="tel:0734610130" className="flex flex-col items-center text-slate-600 hover:text-emerald-600 transition-colors p-2">
             <Phone className="w-5 h-5" />
             <span className="text-[8px] mt-1 font-black uppercase tracking-wider">Call</span>
           </a>

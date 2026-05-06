@@ -155,8 +155,8 @@ const transporter = nodemailer.createTransport({
 const SCHOOL_NAME = 'Matungulu Girls Senior School';
 const SCHOOL_LOCATION = 'Matungulu, Machakos County';
 const SCHOOL_MOTTO = 'Committed to Excellence';
-const SCHOOL_EMAIL = 'matungulugirls@gmail.com';
-const SCHOOL_PHONE = '+254720123456';
+const SCHOOL_EMAIL = 'matungulugirls@gmial.com';
+const SCHOOL_PHONE = '0734610130';
 
 // Format date function
 const formatDate = (dateString) => {

@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const SCHOOL_NAME = 'Matungulu Girls Senior School';
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || process.env.EMAIL_USER;
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'matungulugirls@gmial.com';
 
 // ====================================================================
 // UTILITY FUNCTIONS

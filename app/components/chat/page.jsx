@@ -89,9 +89,9 @@ School Type:
 • Competency-Based Curriculum (CBE)
 
 Contact:
-• Phone: +254 729 370 590
+• Phone: 0734610130
 • Email: matungulugirls@gmial.com
-• Address: P.O. Box 363 – 90131 Tala, Kenya
+• Address: P.O. Box 32, 90131 Tala
 
 Hours:
 • Mon-Fri: 7:30 AM - 5:00 PM
@@ -309,15 +309,15 @@ Steps:
     content: `📞 CONTACT US
 
 **Contact Information:**
-• Phone: +254 729 370 590
-• Email: matungulugirls@gmail.com
-• Admissions: matungulugirls@gmail.com
+• Phone: 0734610130
+• Email: matungulugirls@gmial.com
+• Admissions: matungulugirls@gmial.com
 
 **Physical Address:**
 Matungulu Girls Senior School
 Matungulu Sub-County
 Machakos County
-P.O. Box 363 – 90131 Tala, Kenya
+P.O. Box 32, 90131 Tala
 
 **Office Hours:**
 • Monday-Friday: 8:00 AM - 5:00 PM
@@ -411,8 +411,8 @@ ${schoolData.admissionDocumentsRequired && schoolData.admissionDocumentsRequired
   : '• KCPE Certificate\n• Birth Certificate\n• School Reports\n• Passport Photos\n• Medical Report'}
 
 **Contact Admissions:**
-• Email: ${schoolData.admissionContactEmail || 'matungulugirls@gmail.com'}
-• Phone: ${schoolData.admissionContactPhone || '+254 729 370 590'}
+• Email: ${schoolData.admissionContactEmail || 'matungulugirls@gmial.com'}
+• Phone: ${schoolData.admissionContactPhone || '0734610130'}
 • Location: ${schoolData.admissionLocation || 'Kambusu, Matungulu, Machakos County'}
 • Office Hours: ${schoolData.admissionOfficeHours || 'Mon-Fri: 8:00 AM - 5:00 PM'}
 
@@ -555,8 +555,8 @@ ${documentData?.kcseResultsPdf ? `**KCSE Examination Results:**
       content: `📞 CONTACT INFORMATION
 
 **School Contacts:**
-• Phone: ${schoolData.admissionContactPhone || '+254 729 370 590'}
-• Email: ${schoolData.admissionContactEmail || 'matungulugirls@gmail.com'}
+• Phone: ${schoolData.admissionContactPhone || '0734610130'}
+• Email: ${schoolData.admissionContactEmail || 'matungulugirls@gmial.com'}
 • Location: ${schoolData.admissionLocation || 'Kambusu, Matungulu, Machakos County'}
 • Website: ${schoolData.admissionWebsite || 'Contact office for details'}
 

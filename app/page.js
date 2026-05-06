@@ -390,13 +390,13 @@ export default function ModernHero() {
     description: 'A secondary school committed to academic excellence, integrity, and holistic student development.',
     address: {
       '@type': 'PostalAddress',
-      'streetAddress': 'Matungulu, P.O. Box 12345',
+      'streetAddress': 'P.O. Box 32, 90131 Tala',
       'addressLocality': 'Machakos',
       'addressRegion': 'Machakos County',
       'addressCountry': 'KE'
     },
     url: 'https://matungulu-girls.vercel.app',
-    telephone: '+254700000000',
+    telephone: '0734610130',
     sameAs: [
       'https://facebook.com/matungulugirls',
       'https://twitter.com/matungulugirls',

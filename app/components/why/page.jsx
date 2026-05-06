@@ -154,8 +154,8 @@ const [statsLoading, setStatsLoading] = useState(false);
     "To provide quality education that fosters academic excellence, moral integrity, and personal growth in a supportive Christian environment.";
   const description = schoolData?.description;
   const studentCount = schoolData?.studentCount || 1200;
-  const contactEmail = schoolData?.admissionContactEmail || "matungulugirls@gmail.com";
-  const contactPhone = schoolData?.admissionContactPhone || "+254 720 123 456";
+  const contactEmail = schoolData?.admissionContactEmail || "matungulugirls@gmial.com";
+  const contactPhone = schoolData?.admissionContactPhone || "0734610130";
 
   // Double images for seamless scrolling
   const scrollImages = [...uniImages, ...uniImages];
@@ -1323,7 +1323,7 @@ const achievements = [
         Email
       </p>
       <p className="text-[11px] sm:text-xs font-semibold text-gray-900 break-all">
-        matungulugirls@gmail.com
+        matungulugirls@gmial.com
       </p>
     </div>
   </div>

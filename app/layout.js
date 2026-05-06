@@ -34,21 +34,22 @@ export const metadata = {
   metadataBase: new URL("https://matungulu-girls.vercel.app"),
 
   title: {
-    default: "Matungulu Girls Senior School",
-    template: "%s | Matungulu Girls Senior Senior School",
+    default: "Matungulu Girls School",
+    template: "%s | Matungulu Girls Senior School",
   },
 
   description:
-    "The official website of Matungulu Girls Senior Senior School in Matungulu, Machakos County. Dedicated to academic excellence, Christian values, and holistic student development in Kenya.",
-  
+    "The official website of Matungulu Girls Senior School in Matungulu, Machakos County. Dedicated to academic excellence, Christian values, and holistic student development in Kenya.",
   keywords: [
-    "Matungulu Girls Senior Senior School",
+    "Matungulu Girls Senior School",
     "Matungulu Girls Secondary School",
     "Matungulu g",
     "Matungulu Girls school",
     "Matungulu Girls Senior School",
     "MatG school",
     "MatG",
+    "Mat G",
+    "national School matungulu",
     "Matungulu Girls Senior High",
     "MatG senior Senior School",
     "Matungulu Girls Senior School Matungulu",
@@ -67,11 +68,35 @@ export const metadata = {
     "Matungulu Girls school curriculum",
     "Matungulu Girls school fees",
     "Matungulu Girls school uniform",
-    "Matungulu Girls school alumni",    
-    
+    "Matungulu Girls school alumni",
+    "Matungulu Girls High School",
+    "Matungulu Girls Machakos",
+    "Matungulu Girls National School",
+    "Matungulu Girls extra county",
+    "Top girls schools Machakos",
+    "Matungulu Girls KCSE results",
+    "Matungulu Girls KCSE performance",
+    "Matungulu Girls mean score",
+    "Matungulu Girls ranking in Machakos",
+    "Matungulu Girls university placement",
+    "Matungulu Girls admission letter",
+    "Matungulu Girls joining instruction",
+    "Matungulu Girls fees structure",
+    "Matungulu Girls form one selection",
+    "Matungulu Girls phone number",
+    "Matungulu Girls email address",
+    "Matungulu Girls direction",
+    "Matungulu town Machakos",
+    "Matungulu Girls principal",
+    "Matungulu Girls old girls association",
+    "Girls boarding schools Machakos",
+    "KUCCPS Matungulu Girls",
+    "Matungulu Girls school logo",
+    "mat g official website",
+    "Matungulu girls Official Website",
   ],
-
-  authors: [{ name: "Matungulu Girls Senior Senior School" }],
+  
+  authors: [{ name: "Matungulu Girls Senior School" }],
   
   alternates: {
     canonical: "/",
@@ -79,7 +104,7 @@ export const metadata = {
 
   /* Open Graph (Social Media Sharing) */
   openGraph: {
-    title: "Matungulu Girls Senior School",
+    title: "Matungulu Girls School",
     description: "Official school website.",
     url: "https://matungulu-girls.vercel.app",
     siteName: "Matungulu Girls Senior School",
@@ -90,7 +115,7 @@ export const metadata = {
         url: "/MatG.jpg",
         width: 1200,
         height: 630,
-        alt: "Matungulu Girls Senior Senior School",
+        alt: "Matungulu Girls Senior School",
       },
     ],
   },
@@ -98,7 +123,7 @@ export const metadata = {
   /* Twitter Card */
   twitter: {
     card: "summary_large_image",
-    title: "Matungulu Girls Senior Senior School",
+    title: "Matungulu Girls Senior School",
     description: "Empowering students through education and faith in Machakos County.",
     images: ["/MatG.jpg"],
   },
@@ -133,7 +158,7 @@ export default function RootLayout({ children }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "School",
-    "name": "Matungulu Girls Senior Senior School",
+    "name": "Matungulu Girls School",
     "alternateName": "Matungulu Girls Senior School",
     "url": "https://matungulu-girls.vercel.app",
     "logo": "https://matungulu-girls.vercel.app/MatG.jpg",
@@ -151,7 +176,7 @@ export default function RootLayout({ children }) {
       "longitude": "37.2618"
     },
     "hasMap": "https://www.google.com/maps?q=matungulu+girls+School", 
-    "telephone": "+254-000-000000", // Update with official school phone
+    "telephone": "0734610130",
     "priceRange": "N/A"
   };
 

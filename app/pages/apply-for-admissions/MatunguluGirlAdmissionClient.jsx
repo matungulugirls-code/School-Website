@@ -722,7 +722,7 @@ const handleSubmit = async (e) => {
               <h4 className="text-[10px] font-black text-gray-400 mb-3 uppercase tracking-widest">Need Help?</h4>
               <div className="text-[11px] sm:text-sm text-gray-600 space-y-1">
                 <p>Office: <span className="text-gray-900 font-bold">0712 345 678</span></p>
-                <p className="truncate">Email: <span className="text-blue-600 font-bold">matungulugirls@gmail.com</span></p>
+                <p className="truncate">Email: <span className="text-blue-600 font-bold">matungulugirls@gmial.com</span></p>
               </div>
             </div>
           </div>
@@ -1803,7 +1803,7 @@ const handleSubmit = async (e) => {
         </div>
         <div className="text-left md:text-center min-w-0 overflow-hidden">
           <p className="text-[8px] font-bold text-gray-400 uppercase tracking-tight">Email Support</p>
-          <p className="text-[11px] md:text-xs font-semibold text-gray-900 truncate">matungulugirls@gmail.com</p>
+          <p className="text-[11px] md:text-xs font-semibold text-gray-900 truncate">matungulugirls@gmial.com</p>
         </div>
       </div>
 

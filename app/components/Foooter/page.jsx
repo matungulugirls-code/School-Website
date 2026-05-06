@@ -111,8 +111,8 @@ const CONTACT_INFO = [
   },
   {
     icon: FiPhone,
-    text: '+254 720 123 456',
-    href: 'tel:+254720123456',
+    text: '0734610130',
+    href: 'tel:0734610130',
     detail: 'Main Office Line',
   },
   {
@@ -123,8 +123,8 @@ const CONTACT_INFO = [
   },
   {
     icon: FiMail,
-    text: 'matungulugirls@gmail.com',
-    href: 'mailto:matungulugirls@gmail.com',
+    text: 'matungulugirls@gmial.com',
+    href: 'mailto:matungulugirls@gmial.com',
     detail: 'General Inquiries',
   },
   {
