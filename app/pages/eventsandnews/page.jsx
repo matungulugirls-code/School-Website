@@ -957,6 +957,43 @@ export default function ModernEventsNewsPage() {
   const [bookmarkedNews, setBookmarkedNews] = useState(new Set());
   const itemsPerPage = 9;
 
+  const getTabStyle = (category) => {
+    const styles = {
+      all: {
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        iconColor: 'text-blue-600'
+      },
+      academic: {
+        bg: 'bg-blue-50',
+        text: 'text-blue-700',
+        border: 'border-blue-200',
+        iconColor: 'text-blue-600'
+      },
+      cultural: {
+        bg: 'bg-purple-50',
+        text: 'text-purple-700',
+        border: 'border-purple-200',
+        iconColor: 'text-purple-600'
+      },
+      sports: {
+        bg: 'bg-emerald-50',
+        text: 'text-emerald-700',
+        border: 'border-emerald-200',
+        iconColor: 'text-emerald-600'
+      },
+      workshop: {
+        bg: 'bg-orange-50',
+        text: 'text-orange-700',
+        border: 'border-orange-200',
+        iconColor: 'text-orange-600'
+      }
+    };
+
+    return styles[category] || styles.all;
+  };
+
   const categories = [
     { id: 'all', name: 'All Events', icon: IoCalendarClearOutline, color: 'bg-gradient-to-r from-blue-500 to-cyan-500' },
     { id: 'academic', name: 'Academic', icon: IoNewspaperOutline, color: 'bg-gradient-to-r from-blue-500 to-purple-500' },
@@ -1538,11 +1575,12 @@ export default function ModernEventsNewsPage() {
               {categories.map((category) => {
                 const Icon = category.icon;
                 const isActive = activeTab === category.id;
+                const style = getTabStyle(category.id);
                 return (
-        <button
-      key={category.id}
-      onClick={() => {
-        setActiveTab(category.id);
+         <button
+       key={category.id}
+       onClick={() => {
+         setActiveTab(category.id);
         setCurrentPage(1);
       }}
       className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap text-[11px] sm:text-sm font-bold transition-all duration-300 border ${
