@@ -1029,8 +1029,8 @@ export default function AchievementsPage() {
         <div className="md:col-span-3 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 flex flex-col justify-between">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Prev. Cycle</p>
           <div>
-            <p className="text-4xl font-serif font-bold text-slate-400 italic">{schoolStats.lastYearMean}</p>
-            <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Last Year's Mean Score</p>
+            <p className="text-4xl font-serif font-bold text-slate-800 italic">{schoolStats.lastYearMean}</p>
+            <p className="text-[10px] font-bold text-slate-900 mt-1 uppercase">Last Year's Mean Score</p>
           </div>
         </div>
       )}
@@ -1058,7 +1058,7 @@ export default function AchievementsPage() {
               <p className="text-6xl font-serif font-bold tracking-tighter italic">
                 {schoolStats.meanScore}
               </p>
-              <p className="text-xs font-medium text-slate-400 mt-2">Current Institutional Mean</p>
+              <p className="text-xs font-medium text-slate-800 mt-2">Current Institutional Mean</p>
             </div>
           </div>
         </div>
