@@ -1010,7 +1010,7 @@ export default function AchievementsPage() {
           <FaChartLine className="text-xl" />
           <span className="text-[10px] font-black uppercase tracking-[0.3em]">Academic Analytics</span>
         </div>
-        <h2 className="text-3xl font-serif font-medium text-slate-900">
+        <h2 className="text-3xl font-serif font-bold text-black">
           Performance <span className="italic text-slate-400">Tracking</span>
         </h2>
       </div>
