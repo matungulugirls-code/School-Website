@@ -633,7 +633,7 @@ const CareerSearchPage = () => {
                           {dept.careerPaths.map((career, careerIndex) => (
                             <div key={careerIndex} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
                               <h5 className="font-bold text-slate-900 text-sm mb-2">{career.title}</h5>
-                              <p className="text-slate-700 text-xs font-semibold mb-3 leading-relaxed">{career.description}</p>
+                              <p className="text-slate-700 text-sm font-semibold mb-3 leading-relaxed">{career.description}</p>
                               <div className="text-xs text-slate-700 font-medium">
                                 <span className="font-bold text-slate-700">Examples:</span> {career.examples}
                               </div>
@@ -807,7 +807,7 @@ const ModernEducationSystemCard = ({ system, icon: Icon, color, description, fea
       <div className="p-5 md:p-7 space-y-6">
         
         {/* Description */}
-        <p className="text-slate-700 text-xs md:text-sm leading-relaxed">
+        <p className="text-slate-700 text-sm md:text-base font-semibold leading-relaxed">
           {description}
         </p>
 
@@ -1537,7 +1537,7 @@ const AcademicResultsSection = ({ documentData }) => {
               </h4>
               
               {result.description && (
-                <p className="text-slate-900 text-[10px] font-bold leading-relaxed mb-6 line-clamp-2 min-h-[30px]">
+                <p className="text-slate-900 text-xs md:text-sm font-semibold leading-relaxed mb-6 line-clamp-2 min-h-[30px]">
                   {result.description}
                 </p>
               )}
@@ -2251,7 +2251,7 @@ export default function ComprehensiveAdmissions() {
       <h4 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
         Holistic Learning Approach
       </h4>
-      <p className="text-xs md:text-sm text-slate-700 leading-relaxed mt-1">
+      <p className="text-sm md:text-base font-semibold text-slate-700 leading-relaxed mt-1">
         A well-rounded CBC-aligned curriculum that balances core academics with creative and critical thinking.
       </p>
     </div>
@@ -2266,7 +2266,7 @@ export default function ComprehensiveAdmissions() {
       <h4 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
         Personalized Mentoring
       </h4>
-      <p className="text-xs md:text-sm text-slate-700 leading-relaxed mt-1">
+      <p className="text-sm md:text-base font-semibold text-slate-700 leading-relaxed mt-1">
         Dedicated teachers and small class sizes ensure every student receives the individual attention they deserve.
       </p>
     </div>
@@ -2281,7 +2281,7 @@ export default function ComprehensiveAdmissions() {
       <h4 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
         Diverse Academic Tracks
       </h4>
-      <p className="text-xs md:text-sm text-slate-700 leading-relaxed mt-1">
+      <p className="text-sm md:text-base font-semibold text-slate-700 leading-relaxed mt-1">
         Expertly managed pathways for both 8-4-4 and CBC, tailored to the unique strengths of every learner.
       </p>
     </div>
@@ -2304,7 +2304,7 @@ export default function ComprehensiveAdmissions() {
               </div>
               <span className="text-xs font-bold text-slate-900 uppercase tracking-wide">About Admissions</span>
             </div>
-<p className="text-slate-900 text-xs md:text-sm lg:text-base leading-relaxed md:leading-loose">
+<p className="text-slate-900 text-sm md:text-base lg:text-lg font-semibold leading-relaxed md:leading-loose">
   Explore our academic programs, review entry requirements, download fee structures, and track your application from one easy-to-use portal. Navigate the tabs below to access each section, with all essential information available anytime in one place.
 </p>
           </div>
@@ -2573,7 +2573,7 @@ return (
       A School on the Rise
     </h4>
 
-    <p className="text-slate-700 text-xs md:text-sm leading-relaxed max-w-md">
+    <p className="text-slate-700 text-sm md:text-base font-semibold leading-relaxed max-w-md">
       Matungulu Girls' Senior School is steadily building a strong academic foundation, with consistent improvement in performance and a clear focus on excellence. Through dedicated teaching, structured learning, and student support, we are working towards achieving and surpassing a projected mean score of 5 and beyond. Our journey is defined by progress, discipline, and a shared commitment to unlocking every student’s potential.
     </p>
 
@@ -2599,7 +2599,7 @@ return (
           <span className="text-[9px] font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded">TSC Certified</span>
         </div>
         <h4 className="text-sm font-bold text-stone-900 mb-1.5">Dedicated Teaching Faculty</h4>
-        <p className="text-stone-700 text-xs font-semibold leading-relaxed">
+        <p className="text-stone-700 text-sm font-semibold leading-relaxed">
           Every educator brings years of classroom and mentoring experience. Small class ratios allow one-on-one guidance, ensuring no student falls through the cracks.
         </p>
       </div>
@@ -2613,7 +2613,7 @@ return (
           <span className="text-[9px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100 px-2 py-0.5 rounded">Modern Campus</span>
         </div>
         <h4 className="text-sm font-bold text-stone-900 mb-1.5">Future-Ready Learning Spaces</h4>
-        <p className="text-stone-700 text-xs font-semibold leading-relaxed">
+        <p className="text-stone-700 text-sm font-semibold leading-relaxed">
           Fully equipped science labs, high-speed computer rooms, a digital library, and smart classrooms — every facility is built to inspire curiosity and hands-on discovery.
         </p>
       </div>
@@ -2739,7 +2739,7 @@ return (
         <h3 className="text-slate-900 text-lg md:text-xl font-black tracking-tight mb-3 uppercase">
           Academic <span className="text-teal-700">Calendar</span>
         </h3>
-        <p className="text-slate-700 text-xs md:text-md font-semibold leading-relaxed">
+        <p className="text-slate-700 text-sm md:text-base font-semibold leading-relaxed">
           Mark your journey. Stay ahead of the curve with our key enrollment dates.
         </p>
       </div>
@@ -2901,7 +2901,7 @@ return (
           
           <div className={`pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
             <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-teal-200' : 'text-teal-800'}`}>Potential Career Outcomes</p>
-            <p className={`text-xs md:text-sm font-semibold leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+            <p className={`text-sm md:text-base font-semibold leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               {path.careers}
             </p>
           </div>
@@ -3167,7 +3167,7 @@ return (
               </div>
             </div>
             
-            <p className="text-slate-700 text-xs md:text-sm font-bold leading-relaxed">
+            <p className="text-slate-700 text-sm md:text-base font-semibold leading-relaxed">
               {step.description}
             </p>
             
@@ -3247,7 +3247,7 @@ return (
           <h4 className="font-black text-blue-900 text-sm md:text-lg uppercase tracking-tight">
             Results Archive Information
           </h4>
-          <p className="text-blue-700/80 text-xs md:text-base font-medium leading-relaxed">
+          <p className="text-blue-700/80 text-sm md:text-base font-semibold leading-relaxed">
             All examination results are available for download in PDF format. Results are typically uploaded 
             within <span className="text-blue-900 font-bold">2 weeks</span> after official release. For any missing results or technical issues, please contact 
             the academic office.
