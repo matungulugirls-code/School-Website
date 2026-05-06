@@ -464,13 +464,13 @@ export default function MagazineArchive() {
 
   return (
     <div className="min-h-screen bg-[#f4f0e5] text-[#11281f]">
-      <section className="relative overflow-hidden bg-[#081712] text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(200,155,60,0.22),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(155,79,102,0.26),transparent_36%)]" />
-        <div className="absolute inset-y-0 right-0 hidden w-[38%] border-l border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] lg:block" />
+      <section className="relative overflow-hidden border-b border-[#11281f12] bg-[#fffaf0]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(16,57,47,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(212,177,95,0.18),transparent_38%)]" />
+        <div className="absolute inset-y-0 right-0 hidden w-[38%] border-l border-[#11281f12] bg-[linear-gradient(180deg,rgba(255,255,255,0.65),rgba(255,255,255,0.22))] lg:block" />
 
         <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_380px] lg:gap-14 lg:py-20">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/8 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.32em] text-white/82 backdrop-blur-md">
+            <div className="inline-flex items-center gap-3 rounded-full border border-[#11281f12] bg-white px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.32em] text-[#5f665e] shadow-sm">
               <Sparkles className="h-4 w-4 text-[#d8b15a]" />
               Matungulu Girls Editorial Archive
             </div>
@@ -479,67 +479,67 @@ export default function MagazineArchive() {
               <h1 className="text-4xl font-black leading-[0.95] sm:text-6xl lg:text-7xl">
                 A digital magazine experience with a more refined school story.
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
+              <p className="mt-6 max-w-2xl text-base leading-8 text-[#5f665e] sm:text-lg">
                 Explore school editions through a more immersive archive built around achievement,
                 student life, creative expression, and the signature confidence of Matungulu Girls Senior School.
               </p>
             </div>
 
          <div className="flex gap-4 flex-nowrap">
-  <div className="min-w-0 flex-1 rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Magazines</p>
-    <p className="mt-3 text-4xl font-black text-[#f6df9f]">{stats.totalIssues}</p>
-  </div>
-  
-  <div className="min-w-0 flex-1 rounded-[1.6rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-white/58">Timeline</p>
-    <p className="mt-3 text-2xl font-black text-[#f6df9f]">
-      {stats.earliestYear || "--"}
-      {stats.latestYear && stats.latestYear !== stats.earliestYear ? ` to ${stats.latestYear}` : ""}
-    </p>
-  </div>
+   <div className="min-w-0 flex-1 rounded-[1.6rem] border border-[#11281f12] bg-white p-5 shadow-sm">
+     <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Magazines</p>
+     <p className="mt-3 text-4xl font-black text-[#10392f]">{stats.totalIssues}</p>
+   </div>
+   
+   <div className="min-w-0 flex-1 rounded-[1.6rem] border border-[#11281f12] bg-white p-5 shadow-sm">
+     <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#5f665e]">Timeline</p>
+     <p className="mt-3 text-2xl font-black text-[#10392f]">
+       {stats.earliestYear || "--"}
+       {stats.latestYear && stats.latestYear !== stats.earliestYear ? ` to ${stats.latestYear}` : ""}
+     </p>
+   </div>
 </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.32em] text-white/58">
+          <div className="rounded-[2rem] border border-[#11281f12] bg-white p-6 shadow-[0_24px_80px_rgba(17,40,31,0.10)]">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.32em] text-[#5f665e]">
               Need To Know
             </p>
             <div className="mt-6 space-y-4">
-              <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
+              <div className="rounded-[1.5rem] border border-[#11281f12] bg-[#fffaf0] p-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
+                  <div className="rounded-2xl bg-[#f4ecda] p-3 text-[#7a5a1d]">
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-black text-white">Immersive browsing</p>
-                    <p className="mt-1 text-sm leading-6 text-white/68">
+                    <p className="text-sm font-black text-[#11281f]">Immersive browsing</p>
+                    <p className="mt-1 text-sm leading-6 text-[#5f665e]">
                       Use the gallery rail or switch to ledger view for a different archive rhythm.
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
+              <div className="rounded-[1.5rem] border border-[#11281f12] bg-[#fffaf0] p-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
+                  <div className="rounded-2xl bg-[#f4ecda] p-3 text-[#7a5a1d]">
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-black text-white">Built for students and parents</p>
-                    <p className="mt-1 text-sm leading-6 text-white/68">
+                    <p className="text-sm font-black text-[#11281f]">Built for students and parents</p>
+                    <p className="mt-1 text-sm leading-6 text-[#5f665e]">
                       Each edition captures academics, co-curricular highlights, student voice, and school identity.
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-[1.5rem] border border-white/10 bg-[#0f241e] p-4">
+              <div className="rounded-[1.5rem] border border-[#11281f12] bg-[#fffaf0] p-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-white/10 p-3 text-[#f6df9f]">
+                  <div className="rounded-2xl bg-[#f4ecda] p-3 text-[#7a5a1d]">
                     <Download className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-black text-white">Keep an offline copy</p>
-                    <p className="mt-1 text-sm leading-6 text-white/68">
+                    <p className="text-sm font-black text-[#11281f]">Keep an offline copy</p>
+                    <p className="mt-1 text-sm leading-6 text-[#5f665e]">
                       Open any issue in the reader or download the PDF for later access.
                     </p>
                   </div>
@@ -547,11 +547,11 @@ export default function MagazineArchive() {
               </div>
             </div>
 
-            {leadIssue && (
-              <div className="mt-6 rounded-[1.6rem] border border-[#d8b15a]/25 bg-[#f3e5bc]/10 p-5">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#f6df9f]">Featured edition</p>
-                <h2 className="mt-3 text-2xl font-black text-white">{leadIssue.title}</h2>
-                <p className="mt-2 text-sm leading-7 text-white/70">
+              {leadIssue && (
+                <div className="mt-6 rounded-[1.6rem] border border-[#d8b15a]/25 bg-[#f3e5bc]/10 p-5">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-[#7a5a1d]">Featured edition</p>
+                <h2 className="mt-3 text-2xl font-black text-[#11281f]">{leadIssue.title}</h2>
+                <p className="mt-2 text-sm leading-7 text-[#5f665e]">
                   {leadIssue.description || "A showcase of School stories, student excellence, and school milestones."}
                 </p>
                 <button
@@ -724,34 +724,34 @@ export default function MagazineArchive() {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-[#11281f12] bg-[#10392f] p-6 text-white shadow-[0_30px_80px_rgba(16,57,47,0.2)] sm:p-8">
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-white/58">
+            <div className="rounded-[2rem] border border-[#11281f12] bg-white p-6 shadow-[0_24px_60px_rgba(17,40,31,0.08)] sm:p-8">
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-[#5f665e]">
                 Why this archive works
               </p>
               <div className="mt-6 space-y-4">
-                <div className="flex items-start gap-4 rounded-[1.35rem] border border-white/10 bg-white/8 p-4">
-                  <Star className="mt-1 h-5 w-5 text-[#f6df9f]" />
+                <div className="flex items-start gap-4 rounded-[1.35rem] border border-[#11281f12] bg-[#fffaf0] p-4">
+                  <Star className="mt-1 h-5 w-5 text-[#7a5a1d]" />
                   <div>
-                    <p className="font-black text-white">More than a publication</p>
-                    <p className="mt-1 text-sm leading-7 text-white/72">
+                    <p className="font-black text-[#11281f]">More than a publication</p>
+                    <p className="mt-1 text-sm leading-7 text-[#5f665e]">
                       It doubles as a school memory wall, a leadership record, and a celebration of girls' growth.
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 rounded-[1.35rem] border border-white/10 bg-white/8 p-4">
-                  <Users className="mt-1 h-5 w-5 text-[#f6df9f]" />
+                <div className="flex items-start gap-4 rounded-[1.35rem] border border-[#11281f12] bg-[#fffaf0] p-4">
+                  <Users className="mt-1 h-5 w-5 text-[#7a5a1d]" />
                   <div>
-                    <p className="font-black text-white">Useful for families</p>
-                    <p className="mt-1 text-sm leading-7 text-white/72">
+                    <p className="font-black text-[#11281f]">Useful for families</p>
+                    <p className="mt-1 text-sm leading-7 text-[#5f665e]">
                       Parents can quickly see the school’s culture, visibility of student voice, and the breadth of activities.
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 rounded-[1.35rem] border border-white/10 bg-white/8 p-4">
-                  <Trophy className="mt-1 h-5 w-5 text-[#f6df9f]" />
+                <div className="flex items-start gap-4 rounded-[1.35rem] border border-[#11281f12] bg-[#fffaf0] p-4">
+                  <Trophy className="mt-1 h-5 w-5 text-[#7a5a1d]" />
                   <div>
-                    <p className="font-black text-white">Useful for students</p>
-                    <p className="mt-1 text-sm leading-7 text-white/72">
+                    <p className="font-black text-[#11281f]">Useful for students</p>
+                    <p className="mt-1 text-sm leading-7 text-[#5f665e]">
                       Students see themselves reflected through stories of achievement, talent, participation, and belonging.
                     </p>
                   </div>
