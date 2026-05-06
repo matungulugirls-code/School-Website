@@ -57,6 +57,19 @@ async function sendTeacherInquiryEmail(payload, referenceNumber) {
     teacherPosition,
   } = payload;
 
+  const safeMessage = String(message || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const submittedAt = new Date().toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
   const mailOptions = {
     // Gmail will typically enforce the authenticated sender, so we use replyTo to
     // ensure the teacher can respond directly to the inquirer.
@@ -71,28 +84,118 @@ async function sendTeacherInquiryEmail(payload, referenceNumber) {
     to: teacherEmail,
     subject: `New Inquiry: ${subject} (${referenceNumber})`,
     html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
-        <h2 style="margin: 0 0 10px 0;">New Staff Inquiry</h2>
-        <p style="margin: 0 0 14px 0;">
-          You have received a new inquiry via the ${SCHOOL_NAME} staff directory.
-        </p>
+      <!doctype html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="x-apple-disable-message-reformatting" />
+          <title>New Inquiry</title>
+        </head>
+        <body style="margin:0; padding:0; background:#f3f4f6;">
+          <!-- Preheader (hidden) -->
+          <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:transparent; mso-hide:all;">
+            New inquiry for ${teacherName || 'staff'} — Ref ${referenceNumber}
+          </div>
 
-        <div style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; background: #ffffff;">
-          <p style="margin: 0 0 6px 0;"><strong>Reference:</strong> ${referenceNumber}</p>
-          <p style="margin: 0 0 6px 0;"><strong>To:</strong> ${teacherName || 'Staff'} (${teacherPosition || 'N/A'})</p>
-          <p style="margin: 0 0 6px 0;"><strong>From:</strong> ${name} (${email})</p>
-          <p style="margin: 0 0 6px 0;"><strong>Phone:</strong> ${phone}</p>
-          <p style="margin: 0 0 6px 0;"><strong>Inquiry Type:</strong> ${inquiryType || 'general'}</p>
-          <p style="margin: 0 0 6px 0;"><strong>Preferred Contact:</strong> ${contactMethod || 'email'}</p>
-          ${studentDetails ? `<p style="margin: 0 0 6px 0;"><strong>Student Details:</strong> ${studentDetails}</p>` : ''}
-          <p style="margin: 12px 0 6px 0;"><strong>Message:</strong></p>
-          <div style="white-space: pre-wrap; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px;">${String(message).replace(/</g, '&lt;')}</div>
-        </div>
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f3f4f6; padding:24px 12px;">
+            <tr>
+              <td align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:640px; background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden;">
+                  <!-- Header -->
+                  <tr>
+                    <td style="padding:22px 22px 18px 22px; background:#0f766e;">
+                      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color:#ffffff;">
+                        <div style="font-size:12px; letter-spacing:0.14em; font-weight:700; text-transform:uppercase; opacity:0.95;">
+                          ${SCHOOL_NAME}
+                        </div>
+                        <div style="margin-top:6px; font-size:20px; font-weight:800; line-height:1.2;">
+                          New inquiry received
+                        </div>
+                        <div style="margin-top:10px;">
+                          <span style="display:inline-block; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.18); padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+                            Ref: ${referenceNumber}
+                          </span>
+                          <span style="display:inline-block; margin-left:8px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.18); padding:6px 10px; border-radius:999px; font-size:12px; font-weight:600;">
+                            ${inquiryType || 'General'}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
 
-        <p style="margin: 14px 0 0 0; color: #6b7280; font-size: 12px;">
-          Replying to this email will respond to the inquirer (${email}).
-        </p>
-      </div>
+                  <!-- Body -->
+                  <tr>
+                    <td style="padding:22px;">
+                      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color:#111827; line-height:1.6;">
+                        <p style="margin:0 0 14px 0; color:#374151;">
+                          An inquiry was submitted through the staff directory.
+                        </p>
+
+                        <!-- Summary cards -->
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate; border-spacing:0; margin:0 0 14px 0;">
+                          <tr>
+                            <td style="padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; background:#fafafa;">
+                              <div style="font-size:12px; font-weight:800; color:#6b7280; text-transform:uppercase; letter-spacing:0.08em;">To</div>
+                              <div style="font-size:14px; font-weight:800; color:#111827;">
+                                ${teacherName || 'Staff'}${teacherPosition ? ` <span style="font-weight:600; color:#6b7280;">• ${teacherPosition}</span>` : ''}
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate; border-spacing:0; margin:0 0 14px 0;">
+                          <tr>
+                            <td style="padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; background:#ffffff;">
+                              <div style="font-size:12px; font-weight:800; color:#6b7280; text-transform:uppercase; letter-spacing:0.08em;">From</div>
+                              <div style="font-size:14px; font-weight:800; color:#111827;">${name}</div>
+                              <div style="font-size:13px; color:#374151; margin-top:2px;">
+                                ${email} <span style="color:#9ca3af;">•</span> ${phone}
+                              </div>
+                              <div style="font-size:12px; color:#6b7280; margin-top:8px;">
+                                Preferred contact: <strong style="color:#111827;">${contactMethod || 'email'}</strong>
+                                <span style="color:#9ca3af;">•</span> Submitted: ${submittedAt}
+                              </div>
+                              ${studentDetails ? `<div style="font-size:12px; color:#6b7280; margin-top:6px;">Student details: <strong style="color:#111827;">${String(studentDetails).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</strong></div>` : ''}
+                            </td>
+                          </tr>
+                        </table>
+
+                        <div style="margin:0 0 8px 0; font-size:12px; font-weight:800; color:#6b7280; text-transform:uppercase; letter-spacing:0.08em;">
+                          Subject
+                        </div>
+                        <div style="margin:0 0 16px 0; padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; background:#fafafa; font-weight:700; color:#111827;">
+                          ${String(subject || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                        </div>
+
+                        <div style="margin:0 0 8px 0; font-size:12px; font-weight:800; color:#6b7280; text-transform:uppercase; letter-spacing:0.08em;">
+                          Message
+                        </div>
+                        <div style="white-space:pre-wrap; border:1px solid #e5e7eb; border-radius:12px; background:#ffffff; padding:14px; color:#111827;">
+                          ${safeMessage}
+                        </div>
+
+                        <p style="margin:14px 0 0 0; color:#6b7280; font-size:12px;">
+                          Tip: hit “Reply” to respond directly to the inquirer (reply-to: ${email}).
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="padding:16px 22px; background:#f9fafb; border-top:1px solid #e5e7eb;">
+                      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size:12px; color:#6b7280; line-height:1.5;">
+                        This message was generated by ${SCHOOL_NAME}. If you received it in error, ignore it.
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>
     `,
   };
 
@@ -108,20 +211,78 @@ async function sendInquirerConfirmationEmail(toEmail, name, teacherName, referen
     to: toEmail,
     subject: `✅ Inquiry Received - ${SCHOOL_NAME}`,
     html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
-        <h2 style="margin: 0 0 10px 0;">Your inquiry has been received</h2>
-        <p style="margin: 0 0 10px 0;">Hello ${name || 'there'},</p>
-        <p style="margin: 0 0 10px 0;">
-          Thank you for reaching out. Your inquiry has been received${teacherName ? ` and forwarded to <strong>${teacherName}</strong>` : ''}.
-          The teacher will respond shortly.
-        </p>
-        <div style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; background: #f9fafb;">
-          <p style="margin: 0;"><strong>Reference:</strong> ${referenceNumber}</p>
-        </div>
-        <p style="margin: 12px 0 0 0; color: #6b7280; font-size: 12px;">
-          If you need follow-up, reply to this email or contact us at ${CONTACT_EMAIL}.
-        </p>
-      </div>
+      <!doctype html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="x-apple-disable-message-reformatting" />
+          <title>Inquiry Received</title>
+        </head>
+        <body style="margin:0; padding:0; background:#f3f4f6;">
+          <!-- Preheader (hidden) -->
+          <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:transparent; mso-hide:all;">
+            We’ve received your inquiry — Ref ${referenceNumber}
+          </div>
+
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f3f4f6; padding:24px 12px;">
+            <tr>
+              <td align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:640px; background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden;">
+                  <tr>
+                    <td style="padding:22px; background:#0f766e;">
+                      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color:#ffffff;">
+                        <div style="font-size:12px; letter-spacing:0.14em; font-weight:700; text-transform:uppercase; opacity:0.95;">
+                          ${SCHOOL_NAME}
+                        </div>
+                        <div style="margin-top:6px; font-size:20px; font-weight:800; line-height:1.2;">
+                          Inquiry received
+                        </div>
+                        <div style="margin-top:10px;">
+                          <span style="display:inline-block; background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.18); padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700;">
+                            Ref: ${referenceNumber}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding:22px;">
+                      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; color:#111827; line-height:1.6;">
+                        <p style="margin:0 0 10px 0; color:#111827; font-size:16px; font-weight:800;">
+                          Hello ${String(name || 'there').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')},
+                        </p>
+                        <p style="margin:0 0 14px 0; color:#374151;">
+                          Your inquiry has been received${teacherName ? ` and routed to <strong>${String(teacherName).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</strong>` : ''}.
+                          The teacher will respond shortly.
+                        </p>
+
+                        <div style="border:1px solid #e5e7eb; border-radius:12px; background:#fafafa; padding:14px;">
+                          <div style="font-size:12px; font-weight:800; color:#6b7280; text-transform:uppercase; letter-spacing:0.08em;">Reference</div>
+                          <div style="margin-top:4px; font-size:16px; font-weight:800; color:#111827;">${referenceNumber}</div>
+                        </div>
+
+                        <p style="margin:14px 0 0 0; color:#6b7280; font-size:12px;">
+                          If you need follow-up, reply to this email or contact us at ${CONTACT_EMAIL}.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding:16px 22px; background:#f9fafb; border-top:1px solid #e5e7eb;">
+                      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size:12px; color:#6b7280; line-height:1.5;">
+                        © ${new Date().getFullYear()} ${SCHOOL_NAME}. This is an automated confirmation.
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>
     `,
   };
 
@@ -196,4 +357,3 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Failed to submit inquiry' }, { status: 500 });
   }
 }
-
