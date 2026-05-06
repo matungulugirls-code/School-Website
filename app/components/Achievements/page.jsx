@@ -1027,7 +1027,7 @@ export default function AchievementsPage() {
       {/* 1. Last Year Mean (Compact) */}
       {schoolStats.lastYearMean && (
         <div className="md:col-span-3 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 flex flex-col justify-between">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Prev. Cycle</p>
+          <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Prev. Cycle</p>
           <div>
             <p className="text-4xl font-serif font-bold text-slate-800 italic">{schoolStats.lastYearMean}</p>
             <p className="text-[10px] font-bold text-slate-900 mt-1 uppercase">Last Year's Mean Score</p>
