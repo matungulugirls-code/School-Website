@@ -110,7 +110,7 @@ export default function ModernHero() {
             meanScore: 8.14,
             lastYearMean: 7.85,
             targetMean: 8.50,
-            studentCount: 1400,
+            studentCount: 1200,
             established: 1955,
             category: "National School",
             motto: "Committed to Excellence"
@@ -423,7 +423,7 @@ export default function ModernHero() {
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
             <span className="text-white font-semibold text-md">Enrollment</span>
             <span className="text-white font-bold text-md">
-              {getStatValue('studentCount', 1400)}+ Girls
+              {getStatValue('studentCount', 1200)}+ Girls
             </span>
           </div>
 
