@@ -1815,7 +1815,7 @@ export default function ComprehensiveAdmissions() {
   const [openFaq, setOpenFaq] = useState(null);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [sectionSearchTerm, setSectionSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [schoolData, setSchoolData] = useState(null);
   const [documentData, setDocumentData] = useState(null);
@@ -2369,31 +2369,72 @@ return (
 );
 })()}
 
-        {/* Navigation Tabs - Segment Style */}
-        <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-stone-200/60 overflow-hidden mb-5">
-          <div className="flex overflow-x-auto scrollbar-hide p-1.5">
-            {tabs.map((tab) => {
-              const TabIcon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 font-semibold transition-all whitespace-nowrap rounded-lg text-sm ${
-                    activeTab === tab.id
-                      ? 'bg-teal-800 text-white shadow-sm'
-                      : 'text-stone-500 hover:text-stone-700 hover:bg-teal-50'
-                  }`}
-                >
-                  <TabIcon className="text-base" />
-                  <span className="text-xs md:text-sm">{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        {/* Policies-style Structure: Sidebar + Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Left: Section Navigation */}
+          <aside className="lg:col-span-4">
+            <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-stone-200/60 overflow-hidden">
+              <div className="p-4 border-b border-stone-200/60 bg-gradient-to-br from-white via-teal-50/30 to-white">
+                <div className="flex items-center gap-2 mb-2">
+                  <FiSearch className="text-teal-700" size={16} />
+                  <span className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-600">
+                    Browse Admissions
+                  </span>
+                </div>
+                <input
+                  value={sectionSearchTerm}
+                  onChange={(e) => setSectionSearchTerm(e.target.value)}
+                  placeholder="Search sections..."
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 outline-none focus:border-teal-300 focus:ring-4 focus:ring-teal-500/10"
+                />
+                <p className="mt-2 text-[11px] text-slate-500">
+                  Tip: search "fees", "requirements", "career", "FAQ"...
+                </p>
+              </div>
 
-        {/* Tab Content */}
-        <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-stone-200/60 p-4 md:p-6">
+              <div className="p-2">
+                {tabs
+                  .filter((t) => {
+                    const q = (sectionSearchTerm || '').toLowerCase().trim();
+                    if (!q) return true;
+                    return t.label.toLowerCase().includes(q) || t.id.toLowerCase().includes(q);
+                  })
+                  .map((tab) => {
+                    const TabIcon = tab.icon;
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-3 text-left transition-colors ${
+                          isActive ? 'bg-teal-800 text-white shadow-sm' : 'text-slate-700 hover:bg-teal-50'
+                        }`}
+                      >
+                        <span
+                          className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
+                            isActive ? 'bg-white/10 border-white/15' : 'bg-white border-slate-200'
+                          }`}
+                        >
+                          <TabIcon className={isActive ? 'text-white' : 'text-teal-700'} />
+                        </span>
+                        <div className="min-w-0">
+                          <div className={`text-sm font-black ${isActive ? 'text-white' : 'text-slate-900'}`}>
+                            {tab.label}
+                          </div>
+                          <div className={`text-[11px] font-semibold ${isActive ? 'text-white/70' : 'text-slate-500'}`}>
+                            {tab.id.replace(/-/g, ' ')}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+          </aside>
+
+          {/* Right: Section Content */}
+          <main className="lg:col-span-8 space-y-5">
+            <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-stone-200/60 p-4 md:p-6">
     {activeTab === 'overview' && (
   <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10 md:space-y-24">
     
@@ -3264,7 +3305,7 @@ return (
             </p>
           </div>
         </div>
-      </div>
+      </main>
     </div>
  );
 };

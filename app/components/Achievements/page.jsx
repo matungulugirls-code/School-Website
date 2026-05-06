@@ -1096,7 +1096,7 @@ export default function AchievementsPage() {
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Prev. Cycle</p>
           <div>
             <p className="text-4xl font-serif font-bold text-slate-400 italic">{schoolStats.lastYearMean}</p>
-            <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">2025 Mean Score</p>
+            <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Last Year's Mean Score</p>
           </div>
         </div>
       )}
