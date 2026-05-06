@@ -1099,7 +1099,7 @@ const DEFAULT_SESSIONS = [
     description: 'Weekly devotion session to strengthen students in religious study and worship. Strengthen your faith and build spiritual resilience.',
     notes: 'Focus on spiritual growth and moral development. Bring your Bible and notebook.',
     priority: 'high',
-    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
+    image: '/Matungulu/26.jpeg',
     featured: true,
     location: 'A.I.C Matungulu Girls'
   },
@@ -1115,7 +1115,7 @@ const DEFAULT_SESSIONS = [
     description: 'Youth worship session with CU and YCS active worship groups. Experience powerful praise and worship with fellow students.',
     notes: 'Music, praise, and fellowship. All students welcome.',
     priority: 'high',
-    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+    image: '/Matungulu/28.jpeg',
     featured: true,
     location: 'Matungulu Girls'
   }
