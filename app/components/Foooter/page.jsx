@@ -143,9 +143,9 @@ const CONTACT_INFO = [
 
 // Achievements specific to Matungulu Girls
 const ACHIEVEMENTS = [
-  { value: 68, label: 'Years of Excellence', icon: FiAward },
-  { value: 98, label: 'KCSE Pass Rate', icon: FiTrendingUp },
-  { value: 1300, label: 'Students Enrolled', icon: FiUsers },
+  { value: 78, label: 'Years of Excellence', icon: FiAward },
+  { value: 90, label: 'KCSE Pass Rate', icon: FiTrendingUp },
+  { value: 1200, label: 'Students Enrolled', icon: FiUsers },
   { value: 45, label: 'Qualified Teachers', icon: FaChalkboardTeacher },
 ];
 

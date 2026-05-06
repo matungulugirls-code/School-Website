@@ -29,8 +29,8 @@ import { SiGooglemaps } from "react-icons/si";
 export default function AboutPage() {
   const stats = [
     { value: "70+", label: "Years of Service", note: "Building excellence since inception" },
-    { value: "1500+", label: "Current Students", note: "Girls from across Kenya" },
-    { value: "10+", label: "Faculty & Staff", note: "Dedicated educators and professionals" },
+    { value: "1200+", label: "Current Students", note: "Girls from across Kenya" },
+    { value: "40+", label: "Faculty & Staff", note: "Dedicated educators and professionals" },
     { value: "Best", label: "University Admission", note: "Graduates pursuing higher education" },
   ];
 
