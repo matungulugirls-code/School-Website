@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast, Toaster } from 'sonner';
 import { 
   FiUser, 
@@ -597,7 +597,7 @@ const CareerSearchPage = () => {
 
                     {/* Department Description (Always visible) */}
                     <div className="px-5 pb-4">
-                      <p className="text-slate-600 text-sm font-medium">
+                      <p className="text-slate-700 text-sm font-semibold">
                         {dept.description}
                       </p>
                       
@@ -633,7 +633,7 @@ const CareerSearchPage = () => {
                           {dept.careerPaths.map((career, careerIndex) => (
                             <div key={careerIndex} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
                               <h5 className="font-bold text-slate-900 text-sm mb-2">{career.title}</h5>
-                              <p className="text-slate-600 text-xs mb-3 leading-relaxed">{career.description}</p>
+                              <p className="text-slate-700 text-xs font-semibold mb-3 leading-relaxed">{career.description}</p>
                               <div className="text-xs text-slate-700 font-medium">
                                 <span className="font-bold text-slate-700">Examples:</span> {career.examples}
                               </div>
@@ -959,7 +959,7 @@ const FeatureCard = ({ feature, onLearnMore }) => {
       {/* Content */}
       <div className="p-4 md:p-5">
         <h3 className="font-bold text-gray-900 text-lg mb-3">{feature.title}</h3>
-        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+        <p className="text-slate-700 text-sm font-semibold mb-4 leading-relaxed">
           {feature.description}
         </p>
 
@@ -1327,7 +1327,7 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
       {/* Footer CTA */}
       <div className="p-6 md:p-8 border-t border-slate-100 bg-white">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <p className="text-slate-600 font-medium text-center sm:text-left">
+          <p className="text-slate-700 font-semibold text-center sm:text-left">
             Want a more detailed view? <span className="font-extrabold text-teal-800">Open the Interactive Map</span>
           </p>
           <button className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-3.5 bg-teal-700 hover:bg-teal-800 text-white rounded-2xl text-sm font-bold transition-all shadow-lg active:scale-95">
@@ -1622,7 +1622,7 @@ const ModernUniformRequirementsSection = ({
               <h3 className="text-xl md:text-2xl font-bold tracking-tight">
                 Admission <span className="text-teal-800">Breakdown</span>
               </h3>
-              <div className="flex items-center gap-2 mt-1 text-sm text-slate-600">
+              <div className="flex items-center gap-2 mt-1 text-sm font-semibold text-slate-700">
                 <span>{admissionFeeYear || '2026'} • {admissionFeeTerm || 'Full Session'}</span>
                 {admissionFeeDescription && (
                   <>
@@ -1785,7 +1785,7 @@ const ModernFAQItem = ({ faq, index, openFaq, setOpenFaq }) => {
                 <div className="h-px bg-gradient-to-r from-emerald-200 via-teal-200 to-transparent" />
 
                 <div className="mt-5">
-                  <p className="text-slate-600 font-medium leading-relaxed text-sm md:text-base">
+                  <p className="text-slate-700 font-semibold leading-relaxed text-sm md:text-base">
                     {faq.answer}
                   </p>
 
@@ -1821,6 +1821,7 @@ export default function ComprehensiveAdmissions() {
   const [documentData, setDocumentData] = useState(null);
 
   const router = useRouter();
+  const tabContentRef = useRef(null);
 
   // Data for Career Departments
  
@@ -2026,13 +2027,22 @@ export default function ComprehensiveAdmissions() {
 
   // Updated tabs based on your academic page design
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: FiBook },
-    { id: 'academics', label: 'Academics', icon: FiBookOpen },
-    { id: 'career-paths', label: 'Career compass', icon: FiBriefcase },
-    { id: 'requirements', label: 'Requirements', icon: FiFileText },
-    { id: 'results', label: 'Results', icon: IoStatsChartOutline }, // New Results tab
-    { id: 'faq', label: 'FAQ', icon: FiHelpCircle },
+    { id: 'overview', label: 'Overview', icon: FiBook, activeClass: 'bg-emerald-700 text-white' },
+    { id: 'academics', label: 'Academics', icon: FiBookOpen, activeClass: 'bg-teal-700 text-white' },
+    { id: 'career-paths', label: 'Career compass', icon: FiBriefcase, activeClass: 'bg-indigo-700 text-white' },
+    { id: 'requirements', label: 'Requirements', icon: FiFileText, activeClass: 'bg-amber-700 text-white' },
+    { id: 'results', label: 'Results', icon: IoStatsChartOutline, activeClass: 'bg-violet-700 text-white' },
+    { id: 'faq', label: 'FAQ', icon: FiHelpCircle, activeClass: 'bg-slate-900 text-white' },
   ];
+
+  const handleTabSelect = (tabId) => {
+    setActiveTab(tabId);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      window.setTimeout(() => {
+        tabContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  };
 
   // Process steps for transfer
   const transferProcess = [
@@ -2401,9 +2411,9 @@ return (
                   return (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => handleTabSelect(tab.id)}
                       className={`w-full flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-colors ${
-                        isActive ? "bg-[#102b23] text-white" : "text-slate-700 hover:bg-emerald-50"
+                        isActive ? tab.activeClass : "text-slate-700 hover:bg-emerald-50"
                       }`}
                     >
                       <span
@@ -2442,7 +2452,7 @@ return (
                   <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                     {tabs.find((t) => t.id === activeTab)?.label || "Admissions"}
                   </h2>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                  <p className="mt-2 text-sm font-semibold leading-7 text-slate-700">
                     Browse the full admissions guide in a clean, card-based layout designed for fast reading on any device.
                   </p>
                 </div>
@@ -2455,7 +2465,10 @@ return (
               </div>
             </div>
 
-            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-4 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6">
+            <div
+              ref={tabContentRef}
+              className="rounded-[1.8rem] border border-slate-200 bg-white p-4 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.25)] sm:p-6"
+            >
     {activeTab === 'overview' && (
   <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-10 md:space-y-24">
     
@@ -2510,7 +2523,7 @@ return (
       <h3 className="text-xl md:text-2xl font-extrabold text-stone-900 tracking-tight mb-3 leading-tight">
         Choose Your Entry Track
       </h3>
-      <p className="text-stone-500 text-sm md:text-base max-w-2xl mx-auto md:mx-0 font-medium leading-relaxed">
+      <p className="text-stone-700 text-sm md:text-base max-w-2xl mx-auto md:mx-0 font-semibold leading-relaxed">
         Whether joining as a fresh Grade 10 student or transferring from another school, we have a clear path ready for you.
       </p>
     </div>
@@ -2586,7 +2599,7 @@ return (
           <span className="text-[9px] font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded">TSC Certified</span>
         </div>
         <h4 className="text-sm font-bold text-stone-900 mb-1.5">Dedicated Teaching Faculty</h4>
-        <p className="text-stone-500 text-xs leading-relaxed">
+        <p className="text-stone-700 text-xs font-semibold leading-relaxed">
           Every educator brings years of classroom and mentoring experience. Small class ratios allow one-on-one guidance, ensuring no student falls through the cracks.
         </p>
       </div>
@@ -2600,7 +2613,7 @@ return (
           <span className="text-[9px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100 px-2 py-0.5 rounded">Modern Campus</span>
         </div>
         <h4 className="text-sm font-bold text-stone-900 mb-1.5">Future-Ready Learning Spaces</h4>
-        <p className="text-stone-500 text-xs leading-relaxed">
+        <p className="text-stone-700 text-xs font-semibold leading-relaxed">
           Fully equipped science labs, high-speed computer rooms, a digital library, and smart classrooms — every facility is built to inspire curiosity and hands-on discovery.
         </p>
       </div>
@@ -2726,7 +2739,7 @@ return (
         <h3 className="text-slate-900 text-lg md:text-xl font-black tracking-tight mb-3 uppercase">
           Academic <span className="text-teal-700">Calendar</span>
         </h3>
-        <p className="text-slate-600 text-xs md:text-md font-medium leading-relaxed">
+        <p className="text-slate-700 text-xs md:text-md font-semibold leading-relaxed">
           Mark your journey. Stay ahead of the curve with our key enrollment dates.
         </p>
       </div>
@@ -2888,7 +2901,7 @@ return (
           
           <div className={`pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
             <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-teal-200' : 'text-teal-800'}`}>Potential Career Outcomes</p>
-            <p className={`text-xs md:text-sm font-medium leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p className={`text-xs md:text-sm font-semibold leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
               {path.careers}
             </p>
           </div>
@@ -2949,7 +2962,7 @@ return (
             </div>
             <h3 className="text-xl md:text-2xl font-extrabold uppercase tracking-tight">Professional Development</h3>
           </div>
-          <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
+          <p className="text-slate-700 text-sm md:text-base leading-relaxed font-semibold">
             From personalized career mapping and university placement guidance to hands-on industry visits — 
             we equip every student with the clarity and confidence to pursue their chosen profession.
           </p>
@@ -3119,7 +3132,7 @@ return (
             Transfer <span className="text-teal-700">Process</span>
           </h3>
         </div>
-        <p className="text-slate-600 text-sm md:text-base font-medium">Seamless transition with 4-step verification</p>
+        <p className="text-slate-700 text-sm md:text-base font-semibold">Seamless transition with 4-step verification</p>
       </div>
       
       {/* Time Badge - Styled for mobile */}
@@ -3163,7 +3176,7 @@ return (
               <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Checklist</span>
               <ul className="space-y-2.5">
                 {step.requirements.map((req, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-[11px] md:text-xs text-slate-600 font-medium">
+                  <li key={idx} className="flex items-start gap-3 text-[11px] md:text-xs text-slate-700 font-semibold">
                     <div className="mt-1 w-1.5 h-1.5 rounded-full bg-teal-600/60 shrink-0" />
                     <span>{req}</span>
                   </li>
