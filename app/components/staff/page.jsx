@@ -2172,7 +2172,7 @@ const handleSubmit = async (formData, id) => {
 
       {/* Title Area with enhanced icon */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-        <div className="p-3.5 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-xl group-hover:scale-105 transition-transform duration-300 w-fit">
+        <div className="p-3.5 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-xl transition-transform duration-300 w-fit">
           <FiUsers className="text-3xl text-emerald-200 drop-shadow-lg" />
         </div>
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter leading-none">
@@ -2222,7 +2222,7 @@ const handleSubmit = async (formData, id) => {
       <button
         onClick={() => fetchStaff(true)}
         disabled={refreshing}
-        className="group relative flex items-center justify-center gap-3 bg-white/5 backdrop-blur-xl border border-white/15 px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 overflow-hidden"
+        className="group relative flex items-center justify-center gap-3 bg-white/5 backdrop-blur-xl border border-white/15 px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:bg-white/10 hover:border-white/30 active:scale-95 disabled:opacity-50 overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         {refreshing ? (
@@ -2235,7 +2235,7 @@ const handleSubmit = async (formData, id) => {
       
       <button
         onClick={handleCreate}
-        className="group relative flex items-center justify-center gap-3 bg-gradient-to-r from-white to-gray-100 text-[#0F172A] px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95 overflow-hidden shadow-xl"
+        className="group relative flex items-center justify-center gap-3 bg-gradient-to-r from-white to-gray-100 text-[#0F172A] px-8 py-4 rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:shadow-2xl active:scale-95 overflow-hidden shadow-xl"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 via-transparent to-orange-400/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         <FiPlus className="text-lg group-hover:rotate-90 transition-transform duration-300" />
@@ -2366,7 +2366,7 @@ const handleSubmit = async (formData, id) => {
       { label: "On Leave", val: stats.onLeave, icon: FiCalendar, color: "from-amber-400 to-orange-600", gradient: "via-amber-400", description: "Temporary Absence" },
       { label: "Active Now", val: stats.active, icon: FiCheckCircle, color: "from-green-400 to-emerald-600", gradient: "via-green-400", description: "Currently Serving" },
     ].map((item, i) => (
-      <div key={i} className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden">
+      <div key={i} className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-gray-200 transition-all duration-500 hover:shadow-2xl overflow-hidden">
         {/* Animated gradient background */}
         <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
         
@@ -2374,7 +2374,7 @@ const handleSubmit = async (formData, id) => {
         <div className="absolute -inset-full group-hover:inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
         
         <div className="relative z-10">
-          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-4 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300 group-hover:rotate-3`}>
+          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:rotate-3`}>
             <item.icon className="text-xl" />
           </div>
           <div className="space-y-1.5">
@@ -2401,7 +2401,7 @@ const handleSubmit = async (formData, id) => {
         </div>
         
         {/* Bottom accent bar */}
-        <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r ${item.color} scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-full`} />
+        <div className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r ${item.color} transition-transform duration-500 origin-left rounded-full`} />
       </div>
     ))}
   </div>

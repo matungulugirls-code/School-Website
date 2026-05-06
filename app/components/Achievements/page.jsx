@@ -1196,7 +1196,7 @@ export default function AchievementsPage() {
                             <img
                               src={achievement.images[0].url}
                               alt={achievement.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                              className="w-full h-full object-cover transition duration-300"
                             />
                           </div>
                         )}

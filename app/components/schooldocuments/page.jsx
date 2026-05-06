@@ -2512,7 +2512,7 @@ function DocumentDetailsModal({
               download={pdfName || `${title}.pdf`}
               className="order-1 sm:order-3 flex-1 sm:flex-none bg-gradient-to-r from-teal-600 to-indigo-700 
                        text-white px-8 py-3 rounded-xl shadow-lg shadow-teal-200 
-                       hover:shadow-teal-300 hover:scale-[1.02] active:scale-95 
+                       hover:shadow-teal-300 active:scale-95 
                        transition-all duration-200 flex items-center justify-center gap-2 font-bold"
             >
               <FaDownload />
@@ -3626,8 +3626,8 @@ const hasDocuments = documents && (
           <div className="absolute inset-0 bg-white/20 rounded-2xl blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
           
           {/* Main Icon */}
-          <div className="relative p-3.5 bg-white/10 backdrop-blur-md rounded-2xl ring-1 ring-white/40 shadow-inner transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
-            <FaFilePdf className="text-white text-3xl group-hover:scale-110 transition-transform" />
+          <div className="relative p-3.5 bg-white/10 backdrop-blur-md rounded-2xl ring-1 ring-white/40 shadow-inner transform group-hover:rotate-3 transition-all duration-500">
+            <FaFilePdf className="text-white text-3xl transition-transform" />
           </div>
           
           {/* Animated Ring */}
@@ -4121,7 +4121,7 @@ const hasDocuments = documents && (
   <button 
     onClick={() => setShowModal(true)} 
     className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-indigo-600 text-white px-8 py-4 rounded-2xl 
-               hover:from-teal-700 hover:to-indigo-700 hover:scale-[1.03] active:scale-95 
+               hover:from-teal-700 hover:to-indigo-700 active:scale-95 
                transition-all duration-200 font-bold shadow-teal-200 shadow-lg 
                flex items-center justify-center gap-3 mx-auto text-sm md:text-base"
   >
