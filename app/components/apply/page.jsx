@@ -96,7 +96,7 @@ const PortalHeader = ({
               )}
 
               {/* Action Buttons - Side by side on mobile */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full md:w-[50%]">
                 <button
                   onClick={handleRefresh}
                   disabled={refreshing}
