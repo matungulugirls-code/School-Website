@@ -1,5 +1,5 @@
 ### 1. Create Mathematics Teacher Job
-POST https://katwanyaa.vercel.app/api/career
+POST https://matungulu-girls.vercel.app/api/career
 Content-Type: application/json
 
 {
@@ -13,13 +13,13 @@ Content-Type: application/json
   "qualifications": "Bachelor of Education (Mathematics) with TSC registration. Master's degree preferred.",
   "requirements": "TSC registered, excellent communication skills, ability to use modern teaching aids, proven track record of improving student performance in Mathematics.",
   "applicationDeadline": "2026-03-15",
-  "contactEmail": "careers@katwanyaa.sch.ke",
+  "contactEmail": "matungulugirls@gmail.com",
   "contactPhone": "+254712345678",
-  "location": "Katwanyaa, Machakos County"
+  "location": "Matungulu, Machakos County"
 }
 
 ### 2. Create Laboratory Technician Job
-POST https://katwanyaa.vercel.app/api/career
+POST https://matungulu-girls.vercel.app/api/career
 Content-Type: application/json
 
 {
@@ -33,13 +33,13 @@ Content-Type: application/json
   "qualifications": "Diploma in Laboratory Technology or equivalent. Certificate in Laboratory Safety.",
   "requirements": "Knowledge of laboratory equipment, safety protocols, chemical handling, ability to work with students and staff.",
   "applicationDeadline": "2026-03-10",
-  "contactEmail": "hr@katwanyaa.sch.ke",
+  "contactEmail": "matungulugirls@gmail.com",
   "contactPhone": "+254723456789",
   "location": "Matungulu Girls Senior School, Matungulu Sub County"
 }
 
 ### 3. Create ICT Support Staff Job
-POST https://katwanyaa.vercel.app/api/career
+POST https://matungulu-girls.vercel.app/api/career
 Content-Type: application/json
 
 {
@@ -53,13 +53,13 @@ Content-Type: application/json
   "qualifications": "Diploma in IT/Computer Science. Certifications in networking or hardware maintenance preferred.",
   "requirements": "Knowledge of Windows/Linux systems, networking, hardware troubleshooting, excellent problem-solving skills.",
   "applicationDeadline": "2026-03-20",
-  "contactEmail": "ictsupport@katwanyaa.sch.ke",
+  "contactEmail": "matungulugirls@gmail.com",
   "contactPhone": "+254734567890",
   "location": "Matungulu Girls Senior School"
 }
 
 ### 4. Create Guidance and Counseling Intern
-POST https://katwanyaa.vercel.app/api/career
+POST https://matungulu-girls.vercel.app/api/career
 Content-Type: application/json
 
 {
@@ -73,13 +73,13 @@ Content-Type: application/json
   "qualifications": "Bachelor's degree in Guidance and Counseling or Psychology.",
   "requirements": "Strong interpersonal skills, empathy, confidentiality, ability to work with teenagers.",
   "applicationDeadline": "2026-02-28",
-  "contactEmail": "guidance@katwanyaa.sch.ke",
+  "contactEmail": "matungulugirls@gmail.com",
   "contactPhone": "+254745678901",
   "location": "Matungulu Girls Senior School"
 }
 
 ### 5. Create School Nurse (Part-time)
-POST https://katwanyaa.vercel.app/api/career
+POST https://matungulu-girls.vercel.app/api/career
 Content-Type: application/json
 
 {

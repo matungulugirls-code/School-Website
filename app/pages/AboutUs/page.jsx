@@ -579,7 +579,7 @@ export default function AboutPage() {
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="Katwanyaa Senior School Location"
+                    title="Matungulu Girls Senior School Location"
                     className="rounded-2xl"
                   ></iframe>
                 </div>

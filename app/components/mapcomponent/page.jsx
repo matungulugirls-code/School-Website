@@ -12,7 +12,7 @@ const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { 
 const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 const Circle = dynamic(() => import('react-leaflet').then(mod => mod.Circle), { ssr: false });
 
-// Standard coordinates for Katwanyaa/Kambusu area
+// Standard coordinates for Matungulu area
 const schoolLocation = [-1.3068, 37.3512]; 
 
 const nearbyLandmarks = [

@@ -156,8 +156,8 @@ const SCHOOL_NAME = process.env.SCHOOL_NAME || 'Matungulu Girls Senior School';
 const SCHOOL_LOCATION = process.env.SCHOOL_LOCATION || 'Matungulu, Machakos County';
 const SCHOOL_MOTTO = process.env.SCHOOL_MOTTO || 'Committed to Excellence';
 const CONTACT_PHONE = process.env.CONTACT_PHONE || '+254720123456';
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'admissions@katwanyaahighschool.sc.ke';
-const SCHOOL_WEBSITE = process.env.SCHOOL_WEBSITE || 'https://katwanyaa.vercel.app';
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'matungulugirls@gmail.com';
+const SCHOOL_WEBSITE = process.env.SCHOOL_WEBSITE || 'https://matungulu-girls.vercel.app';
 
 // Social Media Configuration
 const SOCIAL_MEDIA = {
@@ -166,7 +166,7 @@ const SOCIAL_MEDIA = {
     color: '#1877F2',
   },
   youtube: {
-    url: process.env.SCHOOL_YOUTUBE || 'https://youtube.com/c/katwanyaahighschool',
+    url: process.env.SCHOOL_YOUTUBE || 'https://matungulu-girls.vercel.app',
     color: '#FF0000',
   },
   linkedin: {
@@ -174,7 +174,7 @@ const SOCIAL_MEDIA = {
     color: '#0A66C2',
   },
   twitter: {
-    url: process.env.SCHOOL_TWITTER || 'https://twitter.com/katwanyaaschool',
+    url: process.env.SCHOOL_TWITTER || 'https://matungulu-girls.vercel.app',
     color: '#1DA1F2',
   }
 };

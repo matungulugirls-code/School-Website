@@ -310,8 +310,8 @@ Steps:
 
 **Contact Information:**
 • Phone: +254 729 370 590
-• Email: katwanyaaschool@yahoo.com
-• Admissions: katwanyaaschool@yahoo.com
+• Email: matungulugirls@gmail.com
+• Admissions: matungulugirls@gmail.com
 
 **Physical Address:**
 Matungulu Girls Senior School
@@ -411,7 +411,7 @@ ${schoolData.admissionDocumentsRequired && schoolData.admissionDocumentsRequired
   : '• KCPE Certificate\n• Birth Certificate\n• School Reports\n• Passport Photos\n• Medical Report'}
 
 **Contact Admissions:**
-• Email: ${schoolData.admissionContactEmail || 'katwanyaaschool@yahoo.com'}
+• Email: ${schoolData.admissionContactEmail || 'matungulugirls@gmail.com'}
 • Phone: ${schoolData.admissionContactPhone || '+254 729 370 590'}
 • Location: ${schoolData.admissionLocation || 'Kambusu, Matungulu, Machakos County'}
 • Office Hours: ${schoolData.admissionOfficeHours || 'Mon-Fri: 8:00 AM - 5:00 PM'}
@@ -556,7 +556,7 @@ ${documentData?.kcseResultsPdf ? `**KCSE Examination Results:**
 
 **School Contacts:**
 • Phone: ${schoolData.admissionContactPhone || '+254 729 370 590'}
-• Email: ${schoolData.admissionContactEmail || 'katwanyaaschool@yahoo.com'}
+• Email: ${schoolData.admissionContactEmail || 'matungulugirls@gmail.com'}
 • Location: ${schoolData.admissionLocation || 'Kambusu, Matungulu, Machakos County'}
 • Website: ${schoolData.admissionWebsite || 'Contact office for details'}
 

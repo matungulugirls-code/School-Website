@@ -1688,7 +1688,7 @@ const handleSubmit = async (e) => {
             className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 rounded focus:ring-blue-500 mt-0.5 sm:mt-1"
           />
           <span className="text-xs sm:text-sm md:text-base text-gray-800 font-semibold">
-            I agree to the terms and conditions of Katwanyaa Senior School's admission process.
+            I agree to the terms and conditions of Matungulu Girls Senior School's admission process.
           </span>
         </label>
         <label className="flex items-start space-x-2 sm:space-x-3 cursor-pointer">

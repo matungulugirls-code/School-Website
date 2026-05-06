@@ -476,7 +476,7 @@ export default function MagazineArchive() {
             </div>
 
             <div className="max-w-3xl">
-              <h1 className="text-4xl font-black leading-[0.95] sm:text-6xl lg:text-7xl">
+              <h1 className="text-2xl text-[#266c48]  sm:text-4xl lg:text-5xl">
                 A digital magazine experience with a more refined school story.
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-8 text-[#5f665e] sm:text-lg">

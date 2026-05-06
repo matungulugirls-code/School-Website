@@ -155,7 +155,7 @@ const transporter = nodemailer.createTransport({
 const SCHOOL_NAME = 'Matungulu Girls Senior School';
 const SCHOOL_LOCATION = 'Matungulu, Machakos County';
 const SCHOOL_MOTTO = 'Committed to Excellence';
-const SCHOOL_EMAIL = 'info@katwanyaahighschool.sc.ke';
+const SCHOOL_EMAIL = 'matungulugirls@gmail.com';
 const SCHOOL_PHONE = '+254720123456';
 
 // Format date function
@@ -289,7 +289,7 @@ const emailTemplates = {
               
               <!-- CTA Button -->
               <div style="text-align: center; margin: 8% 0;">
-                <a href="https://katwanyaa.vercel.app/pages/apply-for-admissions" 
+                <a href="https://matungulu-girls.vercel.app/pages/apply-for-admissions" 
                    style="display: inline-block; 
                           width: 100%; 
                           max-width: 280px; 

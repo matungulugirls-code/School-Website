@@ -74,7 +74,7 @@ export class FileManager {
     try {
       const cleanUrl = fileUrl.split('?')[0];
       const patterns = [
-        /storage\/v1\/object\/public\/Katwanyaa(?:%20| )High\/(.+)/
+        /storage\/v1\/object\/public\/Matungulu(?:%20| )Girls(?:%20| )High\/(.+)/
       ];
 
       for (const pattern of patterns) {
