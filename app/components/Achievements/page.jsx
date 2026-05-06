@@ -925,22 +925,41 @@ export default function AchievementsPage() {
       <Toaster position="top-right" richColors />
       
       {/* Header */}
-      <div className="bg-gradient-to-br from-green-600 via-teal-600 to-yellow-600 rounded-3xl shadow-xl p-6 md:p-8 mb-8">
+      <div className="group relative mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800 p-6 md:p-8 shadow-xl sm:shadow-2xl">
+        {/* Abstract Gradient Orbs */}
+        <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px] bg-gradient-to-br from-emerald-500/30 via-teal-500/20 to-green-500/30 rounded-full blur-[100px] pointer-events-none animate-pulse" />
+        <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px] bg-gradient-to-tr from-teal-500/20 via-emerald-500/10 to-green-500/20 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px] bg-gradient-to-r from-teal-500/20 to-emerald-500/20 rounded-full blur-[70px] pointer-events-none animate-pulse" />
+
+        {/* Subtle Grid Pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        {/* Shine Effect Overlay */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full"
+          style={{ transform: 'skewX(-20deg)' }}
+        />
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <FaTrophy className="text-white text-3xl" />
               <h1 className="text-3xl md:text-4xl font-black text-white">Achievements</h1>
             </div>
-            <p className="text-green-100">Celebrating our school's excellence and success stories</p>
+            <p className="text-emerald-100/90">Celebrating our school's excellence and success stories</p>
             
             {/* School Slogan */}
             {schoolStats?.slogan && (
               <div className="mt-4 bg-white/10 backdrop-blur-sm rounded-xl p-4 inline-block">
-                <FaQuoteRight className="text-green-200 mb-2" />
+                <FaQuoteRight className="text-emerald-200 mb-2" />
                 <p className="text-white text-lg font-bold italic">"{schoolStats.slogan}"</p>
                 {schoolStats.sloganAuthor && (
-                  <p className="text-green-200 text-sm mt-1">— {schoolStats.sloganAuthor}</p>
+                  <p className="text-emerald-200 text-sm mt-1">— {schoolStats.sloganAuthor}</p>
                 )}
               </div>
             )}
@@ -969,7 +988,7 @@ export default function AchievementsPage() {
                 setSelectedAchievement(null);
                 setShowAchievementModal(true);
               }}
-              className="bg-white text-green-700 px-6 py-3 rounded-xl hover:bg-green-50 transition font-bold flex items-center gap-2 shadow-lg"
+              className="bg-white text-teal-800 px-6 py-3 rounded-xl hover:bg-teal-50 transition font-bold flex items-center gap-2 shadow-lg"
             >
               <FaPlus />
               Add Achievement

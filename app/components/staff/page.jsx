@@ -2125,27 +2125,46 @@ const handleSubmit = async (formData, id) => {
 
       
 
-<div className="relative bg-gradient-to-br from-[#0F172A] via-[#111827] to-[#0F172A] rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 text-white overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm transition-all duration-500 mb-8">
-  
-  {/* Animated Gradient Orbs */}
-  <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] bg-gradient-to-br from-blue-600/30 via-cyan-500/20 to-transparent rounded-full blur-[130px] animate-pulse pointer-events-none" />
-  <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-gradient-to-tr from-orange-500/20 via-amber-500/10 to-transparent rounded-full blur-[110px] animate-pulse delay-1000 pointer-events-none" />
-  <div className="absolute top-[40%] left-[20%] w-[200px] h-[200px] bg-purple-600/10 rounded-full blur-[80px] animate-pulse delay-700 pointer-events-none" />
+<div className="group relative mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
+                bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800
+                p-8 md:p-12 text-white shadow-2xl border border-white/10 transition-all duration-500">
+  {/* Abstract Gradient Orbs */}
+  <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px]
+                  bg-gradient-to-br from-emerald-500/30 via-teal-500/20 to-green-500/30
+                  rounded-full blur-[100px] pointer-events-none animate-pulse" />
+  <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px]
+                  bg-gradient-to-tr from-teal-500/20 via-emerald-500/10 to-green-500/20
+                  rounded-full blur-[80px] pointer-events-none" />
+  <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px]
+                  bg-gradient-to-r from-teal-500/20 to-emerald-500/20
+                  rounded-full blur-[70px] pointer-events-none animate-pulse" />
 
-  {/* Glass Card Overlay */}
-  <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px] rounded-[inherit] pointer-events-none" />
+  {/* Subtle Grid Pattern */}
+  <div
+    className="absolute inset-0 opacity-[0.02]"
+    style={{
+      backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+      backgroundSize: '40px 40px',
+    }}
+  />
+
+  {/* Shine Effect Overlay */}
+  <div
+    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full"
+    style={{ transform: 'skewX(-20deg)' }}
+  />
 
   <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
     <div className="space-y-7">
       {/* Institutional Branding with animated bar */}
       <div className="group flex items-center gap-5">
-        <div className="h-12 w-1.5 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.6)] animate-pulse" />
+        <div className="h-12 w-1.5 bg-gradient-to-b from-emerald-400 via-teal-400 to-green-400 rounded-full shadow-[0_0_20px_rgba(20,184,166,0.5)] animate-pulse" />
         <div className="space-y-1.5">
-          <h2 className="text-[11px] md:text-xs font-black uppercase tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">
+          <h2 className="text-[11px] md:text-xs font-black uppercase tracking-[0.3em] text-emerald-200">
             Matungulu Girls Senior School 
           </h2>
           <p className="text-[10px] italic font-bold text-white/50 tracking-[0.2em] uppercase flex items-center gap-2">
-            <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+            <span className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse" />
             "Committed to Excellence"
           </p>
         </div>
@@ -2154,7 +2173,7 @@ const handleSubmit = async (formData, id) => {
       {/* Title Area with enhanced icon */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-6">
         <div className="p-3.5 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-xl group-hover:scale-105 transition-transform duration-300 w-fit">
-          <FiUsers className="text-3xl text-orange-400 drop-shadow-lg" />
+          <FiUsers className="text-3xl text-emerald-200 drop-shadow-lg" />
         </div>
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter leading-none">
           STAFF{" "}
@@ -2164,9 +2183,9 @@ const handleSubmit = async (formData, id) => {
               <line x1="0" y1="0" x2="200" y2="0" stroke="url(#gradient)" strokeWidth="2" />
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#3B82F6" stopOpacity="0" />
-                  <stop offset="50%" stopColor="#F59E0B" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#14B8A6" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#34D399" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#14B8A6" stopOpacity="0" />
                 </linearGradient>
               </defs>
             </svg>

@@ -950,7 +950,7 @@ function AdmissionFeeBreakdownModal({
         background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
       }}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-green -600 via-green -700 to-indigo-700 p-6 text-white">
+        <div className="bg-gradient-to-r from-green-600 via-green-700 to-indigo-700 p-6 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
@@ -1016,7 +1016,7 @@ function AdmissionFeeBreakdownModal({
                   <button
                     type="button"
                     onClick={loadPreset}
-                    className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green -500 to-green -600 text-white rounded-xl hover:from-green -600 hover:to-green -700 transition-colors"
+                    className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-colors"
                   >
                     <FaFileAlt className="inline mr-2" /> Load Admission Preset
                   </button>
@@ -1024,7 +1024,7 @@ function AdmissionFeeBreakdownModal({
                 <button
                   type="button"
                   onClick={handleAddCategory}
-                  className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green -600 to-indigo-600 text-white rounded-xl hover:from-green -700 hover:to-indigo-700 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green-600 to-indigo-600 text-white rounded-xl hover:from-green-700 hover:to-indigo-700 transition-colors flex items-center gap-2"
                 >
                   <FaPlus /> Add Category
                 </button>
@@ -1032,8 +1032,8 @@ function AdmissionFeeBreakdownModal({
             </div>
 
             {categories.length === 0 ? (
-              <div className="text-center py-12 bg-gradient-to-br from-green -50 to-green -100 rounded-2xl border-2 border-dashed border-green -300">
-                <FaUserCheck className="mx-auto text-4xl text-green -400 mb-4" />
+              <div className="text-center py-12 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-dashed border-green-300">
+                <FaUserCheck className="mx-auto text-4xl text-green-400 mb-4" />
                 <h4 className="text-lg font-bold text-gray-700 mb-2">
                   {isEditMode ? 'No Admission Fees Found' : 'Start Admission Fee Setup'}
                 </h4>
@@ -1046,14 +1046,14 @@ function AdmissionFeeBreakdownModal({
                   {!isEditMode && (
                     <button
                       onClick={loadPreset}
-                      className="bg-gradient-to-r from-green -500 to-green -600 text-white px-6 py-3 rounded-xl hover:from-green -600 hover:to-green -700 transition-colors font-bold shadow-lg flex items-center justify-center gap-2"
+                      className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-colors font-bold shadow-lg flex items-center justify-center gap-2"
                     >
                       <FaFileAlt /> Load Admission Preset
                     </button>
                   )}
                   <button
                     onClick={handleAddCategory}
-                    className="bg-gradient-to-r from-green -600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-green -700 hover:to-indigo-700 transition-colors font-bold shadow-lg flex items-center justify-center gap-2"
+                    className="bg-gradient-to-r from-green-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-indigo-700 transition-colors font-bold shadow-lg flex items-center justify-center gap-2"
                   >
                     <FaPlus /> Add First Category
                   </button>
@@ -1084,17 +1084,17 @@ function AdmissionFeeBreakdownModal({
                                 <FaSort className="text-gray-400" />
                               </div>
                               <div className="ml-8">
-                                <div className="bg-gradient-to-br from-green -50 to-green -100 rounded-2xl p-4 border-2 border-green -200">
+                                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border-2 border-green-200">
                                   <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-2">
-                                      <div className="p-2 bg-green -500 text-white rounded-xl">
+                                      <div className="p-2 bg-green-500 text-white rounded-xl">
                                         <FaMoneyBillWave className="text-sm" />
                                       </div>
                                       <div>
                                         <h4 className="text-sm font-bold text-gray-900">
                                           {category.name || `Admission Fee ${index + 1}`}
                                           {category.admissionOnly && (
-                                            <span className="text-xs text-green -600 ml-2 bg-green -100 px-2 py-0.5 rounded-full">
+                                            <span className="text-xs text-green-600 ml-2 bg-green-100 px-2 py-0.5 rounded-full">
                                               Admission
                                             </span>
                                           )}
@@ -1123,7 +1123,7 @@ function AdmissionFeeBreakdownModal({
                                         value={category.name || ''}
                                         onChange={(e) => handleCategoryChange(index, 'name', e.target.value)}
                                         placeholder="e.g., Application Fee, Registration Fee"
-                                        className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green -500 focus:border-green -500 outline-none text-sm font-bold"
+                                        className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-sm font-bold"
                                       />
                                     </div>
                                     <div>
@@ -1135,7 +1135,7 @@ function AdmissionFeeBreakdownModal({
                                         value={category.amount || ''}
                                         onChange={(e) => handleCategoryChange(index, 'amount', parseFloat(e.target.value) || 0)}
                                         placeholder="Enter amount"
-                                        className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green -500 focus:border-green -500 outline-none text-sm font-bold"
+                                        className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-sm font-bold"
                                       />
                                     </div>
                                   </div>
@@ -1147,7 +1147,7 @@ function AdmissionFeeBreakdownModal({
                                       onChange={(e) => handleCategoryChange(index, 'description', e.target.value)}
                                       placeholder="Description of this admission fee..."
                                       rows="2"
-                                      className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green -500 focus:border-green -500 outline-none text-sm font-bold resize-none"
+                                      className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-sm font-bold resize-none"
                                     />
                                   </div>
                                   
@@ -1157,11 +1157,11 @@ function AdmissionFeeBreakdownModal({
                                         type="checkbox"
                                         checked={category.optional || false}
                                         onChange={(e) => handleCategoryChange(index, 'optional', e.target.checked)}
-                                        className="w-4 h-4 text-green -600 rounded focus:ring-green -500"
+                                        className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
                                       />
                                       Optional Fee (Not required for admission)
                                     </label>
-                                    <div className="text-xs text-green -600 font-bold bg-green -50 px-2 py-1 rounded">
+                                    <div className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded">
                                       Admission Only
                                     </div>
                                   </div>
@@ -1180,10 +1180,10 @@ function AdmissionFeeBreakdownModal({
           </div>
 
           {/* Summary Section */}
-          <div className="bg-gradient-to-br from-green -50 to-green -100 rounded-2xl border-2 border-green -200 p-6">
+          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-green-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-green -500 text-white rounded-xl">
+                <div className="p-3 bg-green-500 text-white rounded-xl">
                   <FaCalculator className="text-lg" />
                 </div>
                 <div>
@@ -1195,7 +1195,7 @@ function AdmissionFeeBreakdownModal({
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-bold text-green -700">
+                <div className="text-3xl font-bold text-green-700">
                   KES {totalAmount.toLocaleString()}
                 </div>
                 <p className="text-xs text-gray-600 font-bold mt-1">
@@ -1205,7 +1205,7 @@ function AdmissionFeeBreakdownModal({
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-xl border border-green -200">
+              <div className="bg-white p-4 rounded-xl border border-green-200">
                 <p className="text-xs text-gray-600 font-bold uppercase tracking-wider mb-1">Required Fees</p>
                 <p className="text-lg font-bold text-gray-900">
                   KES {categories.filter(c => !c.optional).reduce((sum, cat) => sum + (cat.amount || 0), 0).toLocaleString()}
@@ -1214,7 +1214,7 @@ function AdmissionFeeBreakdownModal({
                   {categories.filter(c => !c.optional).length} categories
                 </p>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-green -200">
+              <div className="bg-white p-4 rounded-xl border border-green-200">
                 <p className="text-xs text-gray-600 font-bold uppercase tracking-wider mb-1">Optional Fees</p>
                 <p className="text-lg font-bold text-gray-900">
                   KES {categories.filter(c => c.optional).reduce((sum, cat) => sum + (cat.amount || 0), 0).toLocaleString()}
@@ -1226,7 +1226,7 @@ function AdmissionFeeBreakdownModal({
             </div>
             
             <div className="mt-4 text-center">
-              <div className="text-xs text-green -600 font-bold bg-green -50 inline-block px-3 py-1 rounded-full">
+              <div className="text-xs text-green-600 font-bold bg-green-50 inline-block px-3 py-1 rounded-full">
                 💰 Admission fees are completely separate from boarding fees
               </div>
             </div>
@@ -1251,7 +1251,7 @@ function AdmissionFeeBreakdownModal({
     type="button"
     onClick={handleSave}
     disabled={categories.length === 0}
-    className="px-5 py-2 bg-gradient-to-r from-green -600 to-indigo-600 text-white rounded-lg hover:from-green -700 hover:to-indigo-700 hover:shadow-md transition-all duration-200 font-medium text-sm tracking-wide disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+    className="px-5 py-2 bg-gradient-to-r from-green-600 to-indigo-600 text-white rounded-lg hover:from-green-700 hover:to-indigo-700 hover:shadow-md transition-all duration-200 font-medium text-sm tracking-wide disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
   >
     {isEditMode ? 'Update Fees' : 'Save Fees'}
   </button>
@@ -1261,7 +1261,7 @@ function AdmissionFeeBreakdownModal({
         <div className="border-t border-gray-200 p-6 bg-white ">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm text-gray-600 font-bold">
-              <p>Total Admission Fees: <span className="text-green -700">KES {totalAmount.toLocaleString()}</span></p>
+              <p>Total Admission Fees: <span className="text-green-700">KES {totalAmount.toLocaleString()}</span></p>
               <p className="text-xs mt-1 font-bold">
                 {categories.length} admission fee categories configured
                 {isEditMode ? <span className="text-teal-600 ml-2">(Edit Mode)</span> : <span className="text-green-600 ml-2">(New Setup)</span>}
@@ -1700,7 +1700,7 @@ function ModernPdfUpload({
             {type === 'curriculum' && <FaBook className="text-red-500" />}
             {type === 'day' && <FaMoneyBillWave className="text-green-500" />}
             {type === 'boarding' && <FaBuilding className="text-teal-500" />}
-            {type === 'admission' && <FaUserCheck className="text-green -500" />}
+            {type === 'admission' && <FaUserCheck className="text-green-500" />}
             {type === 'results' && <FaAward className="text-orange-500" />}
             <span className="text-base">{label}</span>
             {required && <span className="text-red-500 ml-1">*</span>}
@@ -1791,16 +1791,16 @@ function ModernPdfUpload({
         </div>
 
         {hasFeeBreakdown && (type === 'day' || type === 'boarding' || type === 'admission') && (
-          <div className={`mb-4 bg-gradient-to-br ${type === 'admission' ? 'from-green -50 to-green -100 border-green -200' : type === 'boarding' ? 'from-teal-50 to-teal-100 border-teal-200' : 'from-green-50 to-green-100 border-green-200'} rounded-2xl p-4 border-2`}>
+          <div className={`mb-4 bg-gradient-to-br ${type === 'admission' ? 'from-green-50 to-green-100 border-green-200' : type === 'boarding' ? 'from-teal-50 to-teal-100 border-teal-200' : 'from-green-50 to-green-100 border-green-200'} rounded-2xl p-4 border-2`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <FaMoneyBillWave className={type === 'admission' ? 'text-green -600' : type === 'boarding' ? 'text-teal-600' : 'text-green-600'} />
+                <FaMoneyBillWave className={type === 'admission' ? 'text-green-600' : type === 'boarding' ? 'text-teal-600' : 'text-green-600'} />
                 <h4 className="text-sm font-bold text-gray-900">
                   {type === 'admission' ? 'Admission Fees' : `${type.charAt(0).toUpperCase() + type.slice(1)} School Fees`}
                   {isEditMode && <span className="text-teal-600 text-xs ml-2">(Editing Existing)</span>}
                 </h4>
               </div>
-              <span className={`text-lg font-bold ${type === 'admission' ? 'text-green -700' : type === 'boarding' ? 'text-teal-700' : 'text-green-700'}`}>
+              <span className={`text-lg font-bold ${type === 'admission' ? 'text-green-700' : type === 'boarding' ? 'text-teal-700' : 'text-green-700'}`}>
                 KES {totalAmount.toLocaleString()}
               </span>
             </div>
@@ -1828,7 +1828,7 @@ function ModernPdfUpload({
                   <button
                     type="button"
                     onClick={type === 'admission' ? () => setShowAdmissionFeeModal(true) : () => setShowFeeModal(true)}
-                    className={`text-sm font-bold ${type === 'admission' ? 'text-green -600 hover:text-green -700' : type === 'boarding' ? 'text-teal-600 hover:text-teal-700' : 'text-green-600 hover:text-green-700'}`}
+                    className={`text-sm font-bold ${type === 'admission' ? 'text-green-600 hover:text-green-700' : type === 'boarding' ? 'text-teal-600 hover:text-teal-700' : 'text-green-600 hover:text-green-700'}`}
                   >
                     + {localFeeBreakdown.length - 3} more categories
                   </button>
@@ -1846,7 +1846,7 @@ function ModernPdfUpload({
             <div className={`relative overflow-hidden rounded-2xl border-2 ${fileSelected ? 'border-green-400 bg-green-50/20' : 'border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100'} shadow-lg transition-all duration-300 p-5`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`p-3 ${fileSelected ? 'bg-green-500' : type === 'curriculum' ? 'bg-red-500' : type === 'day' ? 'bg-green-500' : type === 'boarding' ? 'bg-teal-500' : type === 'admission' ? 'bg-green -500' : 'bg-orange-500'} rounded-xl text-white`}>
+                  <div className={`p-3 ${fileSelected ? 'bg-green-500' : type === 'curriculum' ? 'bg-red-500' : type === 'day' ? 'bg-green-500' : type === 'boarding' ? 'bg-teal-500' : type === 'admission' ? 'bg-green-500' : 'bg-orange-500'} rounded-xl text-white`}>
                     {fileSelected ? <FaCheck className="text-lg" /> : <FaFilePdf className="text-lg" />}
                   </div>
                   <div>
@@ -2117,7 +2117,7 @@ function ModernDocumentCard({
       <div className="bg-white rounded-2xl border-2 border-gray-200 p-5 shadow-lg hover:shadow-2xl transition-all duration-300 hover:border-teal-300">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className={`p-3 ${type.includes('curriculum') ? 'bg-red-500' : type.includes('day' ? 'bg-green-500' : type.includes('boarding') ? 'bg-teal-500' : type.includes('admission') ? 'bg-green -500' : 'bg-orange-500')} rounded-xl text-white`}>
+          <div className={`p-3 ${type.includes('curriculum') ? 'bg-red-500' : type.includes('day' ? 'bg-green-500' : type.includes('boarding') ? 'bg-teal-500' : type.includes('admission') ? 'bg-green-500' : 'bg-orange-500')} rounded-xl text-white`}>
               <FaFilePdf className="text-lg" />
             </div>
             <div className="flex-1 min-w-0">
@@ -2140,7 +2140,7 @@ function ModernDocumentCard({
               {breakdown && categoriesCount > 0 && (
                 <button
                   onClick={() => setShowBreakdown(!showBreakdown)}
-                  className="mt-2 flex items-center gap-2 text-xs font-bold text-green -600 hover:text-green -700"
+                  className="mt-2 flex items-center gap-2 text-xs font-bold text-green-600 hover:text-green-700"
                 >
                   <FaCalculator className="text-xs" />
                   {showBreakdown ? 'Hide' : 'Show'} {type.includes('admission') ? 'Admission Fees' : 'Fee Breakdown'} ({categoriesCount} categories)
@@ -2170,12 +2170,12 @@ function ModernDocumentCard({
         </div>
         
         {showBreakdown && breakdown && categoriesCount > 0 && (
-          <div className={`mb-4 bg-gradient-to-br ${type.includes('admission') ? 'from-green -50 to-green -100 border-green -200' : type.includes('boarding') ? 'from-teal-50 to-teal-100 border-teal-200' : 'from-green-50 to-green-100 border-green-200'} rounded-xl p-4 border`}>
+          <div className={`mb-4 bg-gradient-to-br ${type.includes('admission') ? 'from-green-50 to-green-100 border-green-200' : type.includes('boarding') ? 'from-teal-50 to-teal-100 border-teal-200' : 'from-green-50 to-green-100 border-green-200'} rounded-xl p-4 border`}>
             <div className="flex items-center justify-between mb-3">
               <h5 className="text-sm font-bold text-gray-900">
                 {type.includes('admission') ? 'Admission Fee' : 'Fee'} Breakdown
               </h5>
-              <span className={`text-lg font-bold ${type.includes('admission') ? 'text-green -700' : type.includes('boarding') ? 'text-teal-700' : 'text-green-700'}`}>
+              <span className={`text-lg font-bold ${type.includes('admission') ? 'text-green-700' : type.includes('boarding') ? 'text-teal-700' : 'text-green-700'}`}>
                 KES {totalAmount.toLocaleString()}
               </span>
             </div>
@@ -2205,7 +2205,7 @@ function ModernDocumentCard({
                 <div className="text-center pt-2">
                   <button
                     onClick={() => setShowDetailsModal(true)}
-                    className="text-xs text-green -600 hover:text-green -700 font-bold"
+                    className="text-xs text-green-600 hover:text-green-700 font-bold"
                   >
                     + {breakdown.length - 3} more categories (View all)
                   </button>
@@ -2272,7 +2272,7 @@ function DocumentDetailsModal({
       case 'curriculum': return <FaBook className="text-red-500" />;
       case 'day': return <FaMoneyBillWave className="text-green-500" />;
       case 'boarding': return <FaBuilding className="text-teal-500" />;
-      case 'admission': return <FaUserCheck className="text-green -500" />;
+      case 'admission': return <FaUserCheck className="text-green-500" />;
       case 'results': return <FaAward className="text-orange-500" />;
       default: return <FaFilePdf className="text-gray-500" />;
     }
@@ -2394,7 +2394,7 @@ function DocumentDetailsModal({
           {/* Fee Breakdown Section (if available) */}
           {breakdown && categoriesCount > 0 && (
             <div className={`mb-6 bg-gradient-to-br ${
-              type === 'admission' ? 'from-green -50 to-green -100 border-green -200' : 
+              type === 'admission' ? 'from-green-50 to-green-100 border-green-200' : 
               type === 'boarding' ? 'from-teal-50 to-teal-100 border-teal-200' : 
               type === 'day' ? 'from-green-50 to-green-100 border-green-200' : 
               'from-gray-50 to-gray-100 border-gray-200'
@@ -2405,7 +2405,7 @@ function DocumentDetailsModal({
                 </h3>
                 <div className="text-right">
                   <div className={`text-2xl font-bold ${
-                    type === 'admission' ? 'text-green -700' : 
+                    type === 'admission' ? 'text-green-700' : 
                     type === 'boarding' ? 'text-teal-700' : 
                     'text-green-700'
                   }`}>
@@ -3398,7 +3398,7 @@ const getExistingPdfData = (field) => {
                   <button 
                     type="button"
                     onClick={handleNextStep}
-                    className="px-8 py-3 bg-gradient-to-r from-teal-600 to-green -600 text-white rounded-xl hover:from-teal-700 hover:to-green -700 transition duration-200 font-bold shadow flex items-center justify-center gap-2 w-full sm:w-auto"
+    className="px-8 py-3 bg-gradient-to-r from-teal-600 to-green-600 text-white rounded-xl hover:from-teal-700 hover:to-green-700 transition duration-200 font-bold shadow flex items-center justify-center gap-2 w-full sm:w-auto"
                   >
                     Continue →
                   </button>
@@ -3578,41 +3578,38 @@ const hasDocuments = documents && (
 
   return (
     <FileSizeProvider>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-green -50 p-4 md:p-6">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50 to-green-50 p-4 md:p-6">
         <Toaster position="top-right" richColors />
         
  {/* Modern School Documents Header */}
-<div className="group relative bg-gradient-to-br from-teal-400 via-teal-500 to-green-500 rounded-[2.5rem] shadow-[0_20px_50px_rgba(31,38,135,0.37)] p-6 md:p-10 mb-10 border border-white/20 overflow-hidden transition-all duration-500">  
-  {/* Animated Gradient Orbs */}
-  <div className="absolute top-[-10%] left-[-5%] w-64 h-64 bg-white/15 rounded-full blur-3xl animate-pulse" />
-  <div className="absolute bottom-[-20%] right-[-5%] w-80 h-80 bg-teal-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-1000" />
-  <div className="absolute top-[30%] right-[20%] w-40 h-40 bg-green -400/20 rounded-full blur-3xl animate-ping opacity-20" />
-  <div className="absolute bottom-[40%] left-[15%] w-32 h-32 bg-green-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
-  
-  {/* Floating Particles */}
-  <div className="absolute inset-0 opacity-10">
-    {[...Array(8)].map((_, i) => (
-      <div 
-        key={i}
-        className="absolute w-1 h-1 bg-white rounded-full animate-ping"
-        style={{
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-          animationDelay: `${i * 0.3}s`,
-          animationDuration: `${2 + Math.random()}s`
-        }}
-      />
-    ))}
-  </div>
-  
+<div className="group relative mb-10 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
+                bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800
+                p-6 md:p-10 shadow-xl sm:shadow-2xl border border-white/10">
+  {/* Abstract Gradient Orbs */}
+  <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px]
+                  bg-gradient-to-br from-emerald-500/30 via-teal-500/20 to-green-500/30
+                  rounded-full blur-[100px] pointer-events-none animate-pulse" />
+  <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px]
+                  bg-gradient-to-tr from-teal-500/20 via-emerald-500/10 to-green-500/20
+                  rounded-full blur-[80px] pointer-events-none" />
+  <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px]
+                  bg-gradient-to-r from-teal-500/20 to-emerald-500/20
+                  rounded-full blur-[70px] pointer-events-none animate-pulse" />
+
   {/* Subtle Grid Pattern */}
-  <div className="absolute inset-0 opacity-[0.03]" style={{ 
-    backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-    backgroundSize: '40px 40px'
-  }} />
-  
+  <div
+    className="absolute inset-0 opacity-[0.02]"
+    style={{
+      backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+      backgroundSize: '40px 40px',
+    }}
+  />
+
   {/* Shine Effect Overlay */}
-  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full" style={{ transform: 'skewX(-20deg)' }} />
+  <div
+    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full"
+    style={{ transform: 'skewX(-20deg)' }}
+  />
   
   <div className="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8">
     
@@ -3696,7 +3693,7 @@ const hasDocuments = documents && (
           <span className="text-[9px] font-bold text-white/80">Fee Structure</span>
         </div>
         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-          <FiFileText className="w-3 h-3 text-green -300" />
+          <FiFileText className="w-3 h-3 text-green-300" />
           <span className="text-[9px] font-bold text-white/80">Admission Forms</span>
         </div>
         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
@@ -3801,7 +3798,7 @@ const hasDocuments = documents && (
 
         {!hasDocuments ? (
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center my-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-teal-100 to-green -100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-teal-200">
+            <div className="w-24 h-24 bg-gradient-to-br from-teal-100 to-green-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-teal-200">
               <FaFilePdf className="w-12 h-12 text-teal-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-3">No School Documents Yet</h3>
@@ -3810,7 +3807,7 @@ const hasDocuments = documents && (
             </p>
             <button 
               onClick={() => setShowModal(true)} 
-              className="bg-gradient-to-r from-teal-600 to-green -600 text-white px-8 py-4 rounded-xl hover:from-teal-700 hover:to-green -700 transition duration-200 font-bold shadow-lg flex items-center gap-3 mx-auto text-base"
+              className="bg-gradient-to-r from-teal-600 to-green-600 text-white px-8 py-4 rounded-xl hover:from-teal-700 hover:to-green-700 transition duration-200 font-bold shadow-lg flex items-center gap-3 mx-auto text-base"
             >
               <FaUpload className="text-lg" /> 
               <span>Upload School Documents</span>
@@ -3827,7 +3824,7 @@ const hasDocuments = documents && (
               </div>
               <button 
                 onClick={() => setShowModal(true)} 
-                className="bg-gradient-to-r from-teal-600 to-green -600 text-white px-6 py-3 rounded-xl hover:from-teal-700 hover:to-green -700 transition duration-200 font-bold shadow-lg flex items-center gap-2 text-sm"
+                className="bg-gradient-to-r from-teal-600 to-green-600 text-white px-6 py-3 rounded-xl hover:from-teal-700 hover:to-green-700 transition duration-200 font-bold shadow-lg flex items-center gap-2 text-sm"
               >
                 <FaPlus className="text-sm" /> 
                 <span>Add New Document</span>
