@@ -910,7 +910,7 @@ const AdmissionPathCard = ({ path, onApply, index }) => {
           {path.features.map((feature, idx) => (
             <div key={idx} className="flex items-center gap-2">
               <IoCheckmarkCircle className={`text-xs shrink-0 ${isEven ? 'text-teal-500' : 'text-teal-400'}`} />
-              <span className={`text-[11px] font-semibold ${isEven ? 'text-slate-600' : 'text-slate-300'}`}>{feature}</span>
+              <span className={`text-[11px] font-bold ${isEven ? 'text-slate-700' : 'text-slate-200'}`}>{feature}</span>
             </div>
           ))}
         </div>
@@ -967,18 +967,18 @@ const FeatureCard = ({ feature, onLearnMore }) => {
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="bg-gray-50/70 rounded-lg p-3 text-center">
             <div className="font-bold text-gray-900">{feature.stats.students}</div>
-            <div className="text-xs text-gray-500">Students</div>
+            <div className="text-xs font-semibold text-gray-700">Students</div>
           </div>
           <div className="bg-gray-50/70 rounded-lg p-3 text-center">
             <div className="font-bold text-gray-900">{feature.stats.success}</div>
-            <div className="text-xs text-gray-500">Success Rate</div>
+            <div className="text-xs font-semibold text-gray-700">Success Rate</div>
           </div>
         </div>
 
         {/* Features */}
         <div className="space-y-2 mb-4">
           {feature.features.map((feat, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-xs text-gray-600">
+            <div key={idx} className="flex items-center gap-2 text-xs font-semibold text-gray-700">
               <IoCheckmarkCircleOutline className="text-green-500 flex-shrink-0" />
               <span>{feat}</span>
             </div>
@@ -2343,11 +2343,11 @@ return (
       {/* Date Grid */}
       <div className="grid grid-cols-2 gap-3 p-3 bg-stone-50 rounded-xl border border-stone-100">
         <div className="px-3 border-r border-stone-200">
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-stone-400 mb-0.5">Opens</p>
+          <p className="text-[9px] font-bold uppercase tracking-wider text-stone-600 mb-0.5">Opens</p>
           <p className="font-bold text-sm text-stone-900">{formatDate(schoolData.admissionOpenDate)}</p>
         </div>
         <div className="px-3">
-          <p className="text-[9px] font-semibold uppercase tracking-wider text-stone-400 mb-0.5">Deadline</p>
+          <p className="text-[9px] font-bold uppercase tracking-wider text-stone-600 mb-0.5">Deadline</p>
           <p className="font-bold text-sm text-stone-900">{formatDate(schoolData.admissionCloseDate)}</p>
         </div>
       </div>
