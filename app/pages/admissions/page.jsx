@@ -366,7 +366,7 @@ const CareerSearchPage = () => {
     {
       department: 'COMMERCIAL STUDIES',
       icon: IoBusinessOutline,
-      color: 'from-indigo-600 to-blue-500',
+      color: 'from-teal-700 to-cyan-600',
       description: 'Master business principles and commercial operations',
       subjects: ['Commerce', 'Accounting', 'Economics', 'Entrepreneurship', 'Office Practice'],
       careerPaths: [
@@ -561,7 +561,7 @@ const CareerSearchPage = () => {
                       <div className="flex items-center gap-4">
                         <div className={`p-3 rounded-lg bg-gradient-to-br ${dept.color} bg-opacity-10`}>
                           <DepartmentIcon className={`text-xl ${
-                            dept.color.includes('blue') ? 'text-blue-600' : 
+                            dept.color.includes('blue') ? 'text-teal-700' : 
                             dept.color.includes('purple') ? 'text-purple-600' :
                             dept.color.includes('green') ? 'text-green-600' :
                             dept.color.includes('amber') ? 'text-amber-600' :
@@ -588,7 +588,7 @@ const CareerSearchPage = () => {
   {/* Interactive Toggle Circle */}
   <div className={`
     w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300
-    ${isExpanded ? 'bg-slate-900 text-white shadow-lg rotate-180' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}
+    ${isExpanded ? 'bg-teal-800 text-white shadow-lg rotate-180' : 'bg-slate-100 text-slate-700 hover:bg-teal-50'}
   `}>
     <FiChevronDown size={16} strokeWidth={3} />
   </div>
@@ -684,7 +684,7 @@ const CareerSearchPage = () => {
                             onClick={() => handlePageChange(pageNumber)}
                             className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
                               currentPage === pageNumber
-                                ? 'bg-blue-600 text-white'
+                                ? 'bg-teal-700 text-white'
                                 : 'text-slate-700 bg-white border border-slate-300'
                             }`}
                           >
@@ -732,7 +732,7 @@ const CareerSearchPage = () => {
             </p>
             <button 
               onClick={resetFilters}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm"
+              className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg font-bold text-sm"
             >
               Show All Departments
             </button>
@@ -866,7 +866,7 @@ const AdmissionPathCard = ({ path, onApply, index }) => {
     <div className={`group relative overflow-hidden rounded-2xl md:rounded-3xl border transition-all duration-300 hover:shadow-lg ${
       isEven 
         ? 'bg-white border-slate-200' 
-        : 'bg-slate-900 border-slate-700/50'
+        : 'bg-teal-900 border-teal-800/40'
     }`}>
       {/* Top accent */}
       <div className={`h-1 w-full bg-gradient-to-r ${path.color}`} />
@@ -928,7 +928,7 @@ const AdmissionPathCard = ({ path, onApply, index }) => {
             onClick={onApply}
             className={`text-[10px] font-bold px-4 py-2 rounded-lg uppercase tracking-wide transition-colors ${
               isEven 
-                ? 'bg-slate-900 text-white hover:bg-slate-800' 
+                ? 'bg-teal-800 text-white hover:bg-teal-900' 
                 : 'bg-white text-slate-900 hover:bg-slate-100'
             }`}
           >
@@ -988,7 +988,7 @@ const FeatureCard = ({ feature, onLearnMore }) => {
         {/* Action Button */}
         <button
           onClick={onLearnMore}
-          className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-semibold transition-all duration-200"
+          className="w-full py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg text-sm font-semibold transition-all duration-200"
         >
           Explore Feature
         </button>
@@ -1116,7 +1116,7 @@ const ModernFeeCard = ({
         <div className="flex items-start justify-between mb-8">
           <div className="flex items-center gap-4">
             <div className={`p-3 rounded-2xl border ${
-              isDark ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
+              isDark ? 'bg-white/5 border-white/10 text-teal-200' : 'bg-teal-50 border-teal-100 text-teal-700'
             }`}>
               <Icon className="text-xl md:text-2xl" />
             </div>
@@ -1131,7 +1131,7 @@ const ModernFeeCard = ({
           </div>
           {badge && (
             <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${
-              isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-600 text-white'
+              isDark ? 'bg-teal-500/20 text-teal-200' : 'bg-teal-700 text-white'
             }`}>
               {badge}
             </span>
@@ -1142,7 +1142,7 @@ const ModernFeeCard = ({
           <p className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest opacity-40`}>
             Total Payable Amount
           </p>
-          <div className={`text-2xl md:text-3xl font-black tracking-tighter tabular-nums ${isDark ? 'text-blue-400' : 'text-slate-900'}`}>
+          <div className={`text-2xl md:text-3xl font-black tracking-tighter tabular-nums ${isDark ? 'text-teal-200' : 'text-slate-900'}`}>
             KSh {total?.toLocaleString()}
           </div>
         </div>
@@ -1193,7 +1193,7 @@ const ModernFeeCard = ({
       font-black text-[10px] md:text-[11px] 
       uppercase tracking-[0.2em] 
       transition-all active:scale-95 shadow-xl
-      ${isDark ? 'bg-white text-slate-900 hover:bg-blue-50' : 'bg-slate-900 text-white hover:bg-slate-800'}
+      ${isDark ? 'bg-white text-slate-900 hover:bg-teal-50' : 'bg-teal-800 text-white hover:bg-teal-900'}
     `}
   >
     <IoCloudDownloadOutline size={20} className="shrink-0" />
@@ -1228,7 +1228,7 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
     <div className="bg-gradient-to-br from-white to-slate-50/50 rounded-2xl md:rounded-3xl border border-slate-100/80 shadow-2xl overflow-hidden transition-all duration-300">
       
       {/* Header Section */}
-      <div className="relative p-4 md:p-8 bg-gradient-to-r from-indigo-600 via-blue-500 to-cyan-500 text-white">
+      <div className="relative p-4 md:p-8 bg-gradient-to-r from-teal-700 via-teal-600 to-cyan-600 text-white">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[80px] rounded-full -mr-32 -mt-32"></div>
         
         <div className="relative z-10 flex items-center justify-between">
@@ -1238,7 +1238,7 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
             </div>
             <div>
               <h3 className="text-xl md:text-3xl font-extrabold tracking-tight">Virtual School Tour</h3>
-              <p className="text-blue-100/90 text-sm md:text-base font-medium mt-1">Experience our School in immersive detail</p>
+              <p className="text-teal-50/90 text-sm md:text-base font-medium mt-1">Experience our School in immersive detail</p>
             </div>
           </div>
           
@@ -1260,7 +1260,7 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
                 className="absolute inset-0 flex items-center justify-center z-20 cursor-pointer group-hover:bg-black/20 transition-all duration-500"
                 onClick={handlePlay}
               >
-                <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-blue-600/90 backdrop-blur-md border-4 border-white/30 flex items-center justify-center shadow-2xl transform group-110 transition-transform">
+                <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-teal-700/90 backdrop-blur-md border-4 border-white/30 flex items-center justify-center shadow-2xl transform group-110 transition-transform">
                   <FiPlay className="text-white text-xl md:text-2xl ml-1.5" />
                 </div>
                 
@@ -1303,7 +1303,7 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
           <div className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 px-2">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 bg-blue-50 rounded-lg"><FiClock className="text-blue-600 font-bold" /></div>
+                <div className="p-1.5 bg-teal-50 rounded-lg"><FiClock className="text-teal-700 font-bold" /></div>
                 <span className="text-sm font-bold text-slate-700">3:45 Duration</span>
               </div>
               <div className="flex items-center gap-2.5">
@@ -1328,9 +1328,9 @@ const VideoTourSection = ({ videoTour, videoType, videoThumbnail }) => {
       <div className="p-6 md:p-8 border-t border-slate-100 bg-white">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
           <p className="text-slate-600 font-medium text-center sm:text-left">
-            Want a more detailed view? <span className="font-extrabold text-indigo-600">Open the Interactive Map</span>
+            Want a more detailed view? <span className="font-extrabold text-teal-800">Open the Interactive Map</span>
           </p>
-          <button className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-3.5 bg-slate-900 hover:bg-indigo-600 text-white rounded-2xl text-sm font-bold transition-all shadow-lg active:scale-95">
+          <button className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-3.5 bg-teal-700 hover:bg-teal-800 text-white rounded-2xl text-sm font-bold transition-all shadow-lg active:scale-95">
             <FiMapPin className="text-lg" />
             <span>Launch School Map</span>
           </button>
@@ -1442,7 +1442,7 @@ const VisionMissionSection = ({ vision, mission, motto, videoTour, videoType, vi
               </span>
            <h3 className="group flex items-center gap-2 text-lg md:text-xl font-black text-slate-900 tracking-tight">
   <span>School Motto</span>
-  <FiArrowRight className="text-indigo-600 transition-transform duration-300 group-hover:translate-x-1" />
+  <FiArrowRight className="text-teal-700 transition-transform duration-300 group-hover:translate-x-1" />
 </h3>
             </div>
           </div>
@@ -1547,7 +1547,7 @@ const AcademicResultsSection = ({ documentData }) => {
                 download={result.pdfName}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 w-full py-4 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95"
+                className="flex items-center justify-center gap-3 w-full py-4 bg-teal-700 hover:bg-teal-800 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95"
               >
                 <IoCloudDownloadOutline size={16} />
                 <span>Get Report</span>
@@ -1566,8 +1566,8 @@ const AcademicResultsSection = ({ documentData }) => {
               {documentData.additionalDocuments.map((doc, index) => (
                 <div key={index} className="flex items-center justify-between p-4 md:p-6 bg-white rounded-2xl border border-slate-200 group transition-all">
                   <div className="flex items-center gap-4 min-w-0">
-                    <div className="p-3 bg-slate-100 rounded-xl group-hover:bg-blue-50 transition-colors shrink-0">
-                      <IoDocumentTextOutline className="text-slate-700 group-hover:text-blue-500" />
+                    <div className="p-3 bg-slate-100 rounded-xl group-hover:bg-teal-50 transition-colors shrink-0">
+                      <IoDocumentTextOutline className="text-slate-700 group-hover:text-teal-700" />
                     </div>
                     <div className="min-w-0">
                       <h5 className="font-black text-slate-900 text-[11px] uppercase tracking-wide truncate">
@@ -1583,7 +1583,7 @@ const AcademicResultsSection = ({ documentData }) => {
                     download={doc.filename}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-slate-900 text-white rounded-xl active:scale-90"
+                    className="p-3 bg-teal-700 hover:bg-teal-800 text-white rounded-xl active:scale-90"
                   >
                     <FiDownload size={14} />
                   </a>
@@ -1614,15 +1614,15 @@ const ModernUniformRequirementsSection = ({
     <div className="bg-white rounded-lg md:rounded-2xl border border-slate-200 overflow-hidden">
       
       {/* Header Section */}
-      <div className="p-6 md:p-8 bg-slate-900 text-white">
+      <div className="p-6 md:p-8 bg-gradient-to-br from-teal-50 via-white to-white text-slate-900 border-b border-slate-100">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <IoShirtOutline className="text-emerald-400 text-2xl md:text-3xl" />
+            <IoShirtOutline className="text-teal-700 text-2xl md:text-3xl" />
             <div>
               <h3 className="text-xl md:text-2xl font-bold tracking-tight">
-                Admission <span className="text-emerald-400">Breakdown</span>
+                Admission <span className="text-teal-800">Breakdown</span>
               </h3>
-              <div className="flex items-center gap-2 mt-1 text-sm text-slate-900">
+              <div className="flex items-center gap-2 mt-1 text-sm text-slate-600">
                 <span>{admissionFeeYear || '2026'} • {admissionFeeTerm || 'Full Session'}</span>
                 {admissionFeeDescription && (
                   <>
@@ -1640,7 +1640,7 @@ const ModernUniformRequirementsSection = ({
               download={admissionFeePdfName}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-medium transition-colors"
             >
               <IoCloudDownloadOutline className="text-lg" />
               <span>Download PDF</span>
@@ -1664,7 +1664,7 @@ const ModernUniformRequirementsSection = ({
                       {item.name}
                     </h4>
                     <div className={`px-2 py-1 rounded text-xs font-medium ${
-                      item.optional ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+                      item.optional ? 'bg-teal-100 text-teal-800' : 'bg-slate-100 text-slate-700'
                     }`}>
                       {item.optional ? 'Optional' : 'Required'}
                     </div>
@@ -1833,7 +1833,7 @@ export default function ComprehensiveAdmissions() {
         fullName: '8 Years Primary, 4 Years Secondary, 4 Years University'
       },
       icon: IoSchoolOutline,
-      color: 'from-indigo-600 to-purple-500',
+      color: 'from-teal-700 to-emerald-600',
       description: 'The 8-4-4 system focuses on providing students with practical skills alongside academic knowledge. It emphasizes technical subjects and prepares students for both higher education and immediate employment opportunities.',
       structure: [
         { years: '8', name: 'Primary' },
@@ -2165,7 +2165,7 @@ export default function ComprehensiveAdmissions() {
   <div className="flex flex-col md:flex-row">
     
     {/* Left Panel - Dark Branded Section */}
-    <div className="relative bg-slate-900 p-5 sm:p-6 md:p-8 md:w-[55%] overflow-hidden">
+    <div className="relative bg-gradient-to-br from-teal-50 via-white to-white p-5 sm:p-6 md:p-8 md:w-[55%] overflow-hidden">
       {/* Logo Watermark Background */}
       <img src="/MatG.jpg" alt="" className="absolute right-0 bottom-0 w-40 md:w-56 opacity-[0.04] pointer-events-none select-none translate-x-8 translate-y-8" />
       {/* Decorative Gradient Orb */}
@@ -2174,29 +2174,29 @@ export default function ComprehensiveAdmissions() {
       <div className="relative z-10">
         {/* School Identity Row */}
         <div className="flex items-center gap-3 mb-5">
-          <img src="/Matg.jpg" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white/10 p-1 border border-white/10" />
+          <img src="/Matg.jpg" alt="School Logo" className="w-10 h-10 md:w-11 md:h-11 rounded-xl object-contain bg-white p-1 border border-teal-100 shadow-sm" />
           <div className="flex flex-col min-w-0">
-            <h2 className="text-sm md:text-base font-bold text-white leading-tight truncate">
+            <h2 className="text-sm md:text-base font-bold text-slate-900 leading-tight truncate">
               {schoolData?.name || 'Matungulu Girls Senior School'}
             </h2>
-            <p className="text-[10px] md:text-xs text-slate-900 font-medium mt-0.5">
+            <p className="text-[10px] md:text-xs text-slate-600 font-medium mt-0.5">
               Commited to Excellence
             </p>
           </div>
         </div>
 
         {/* Title Block */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-none mb-3">
-          Admissions <span className="text-amber-800">Portal</span>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-none mb-3">
+          Admissions <span className="text-teal-800">Portal</span>
         </h1>
-<p className="text-white text-xs md:text-sm leading-relaxed max-w-md mb-5">
+<p className="text-slate-700 text-xs md:text-sm leading-relaxed max-w-md mb-5">
   Begin your academic journey. Explore programs, check requirements, and apply online. 
   Our smart admissions portal brings everything together in one place, allowing you to access information, submit applications, and track Our admissions from any device.
 </p>
 
         {/* Action Row */}
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-[9px] md:text-[10px] font-bold px-3 py-1.5 rounded-full bg-teal-500/15 text-teal-500 border border-teal-500/20 uppercase">
+          <span className="text-[9px] md:text-[10px] font-bold px-3 py-1.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200 uppercase">
             {schoolData?.academicYear || new Date().getFullYear()} Session
           </span>
           <button
@@ -2204,12 +2204,12 @@ export default function ComprehensiveAdmissions() {
             disabled={loading}
             className="flex items-center justify-center gap-2 h-8 px-3 rounded-lg
                        transition-all font-semibold text-[11px]
-                       bg-white/10 hover:bg-white/15 text-white border border-white/10
+                       bg-white hover:bg-teal-50 text-teal-900 border border-teal-200
                        active:scale-95 disabled:opacity-50"
           >
             {loading ? (
               <>
-                <CircularProgress size={10} thickness={6} sx={{ color: '#fff' }} />
+                <CircularProgress size={10} thickness={6} sx={{ color: '#0f766e' }} />
                 <span>fetching data...</span>
               </>
             ) : (
@@ -2265,7 +2265,7 @@ export default function ComprehensiveAdmissions() {
   {/* Dual Curriculum Tracks */}
   <div className="flex items-start gap-4 p-1">
     <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 mt-0.5">
-      <FiBookOpen className="text-indigo-600 text-base" />
+      <FiBookOpen className="text-teal-700 text-base" />
     </div>
     <div className="min-w-0">
       <h4 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
@@ -2380,8 +2380,8 @@ return (
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 font-semibold transition-all whitespace-nowrap rounded-lg text-sm ${
                     activeTab === tab.id
-                      ? 'bg-stone-900 text-white shadow-sm'
-                      : 'text-stone-500 hover:text-stone-700 hover:bg-stone-50'
+                      ? 'bg-teal-800 text-white shadow-sm'
+                      : 'text-stone-500 hover:text-stone-700 hover:bg-teal-50'
                   }`}
                 >
                   <TabIcon className="text-base" />
@@ -2486,27 +2486,27 @@ return (
   <div className="grid grid-cols-1 md:grid-cols-12 gap-4 px-4 md:px-0">
     
   {/* Large feature card — spans 7 cols */}
-<div className="md:col-span-7 group relative bg-slate-900 rounded-2xl md:rounded-3xl overflow-hidden p-6 md:p-8 min-h-[220px] flex flex-col justify-end">
+<div className="md:col-span-7 group relative bg-white rounded-2xl md:rounded-3xl overflow-hidden p-6 md:p-8 min-h-[220px] flex flex-col justify-end border border-slate-200 shadow-sm">
   <div className="absolute top-0 right-0 w-48 h-48 bg-teal-500/10 blur-[60px] rounded-full -mr-16 -mt-16" />
   <img src="/MatG.jpg" alt="" className="absolute right-4 bottom-4 w-24 md:w-32 opacity-[0.04] pointer-events-none select-none" />
   <div className="relative z-10">
-    <div className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/20 flex items-center justify-center mb-4">
-      <IoBulbOutline className="text-teal-500 text-lg" />
+    <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center mb-4">
+      <IoBulbOutline className="text-teal-700 text-lg" />
     </div>
 
-    <h4 className="text-base md:text-lg font-bold text-white mb-2">
+    <h4 className="text-base md:text-lg font-bold text-slate-900 mb-2">
       A School on the Rise
     </h4>
 
-    <p className="text-slate-100 text-xs md:text-sm leading-relaxed max-w-md">
+    <p className="text-slate-700 text-xs md:text-sm leading-relaxed max-w-md">
       Matungulu Girls' Senior School is steadily building a strong academic foundation, with consistent improvement in performance and a clear focus on excellence. Through dedicated teaching, structured learning, and student support, we are working towards achieving and surpassing a projected mean score of 5 and beyond. Our journey is defined by progress, discipline, and a shared commitment to unlocking every student’s potential.
     </p>
 
     <div className="flex items-center gap-3 mt-4">
-      <span className="text-[9px] font-bold uppercase tracking-wider text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded-md border border-teal-500/20">
+      <span className="text-[9px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100">
         Improving Every Year
       </span>
-      <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+      <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
         Future-Focused
       </span>
     </div>
@@ -2530,12 +2530,12 @@ return (
       </div>
 
       {/* Card 3 - Infrastructure */}
-      <div className="group flex-1 bg-gradient-to-br from-indigo-50 to-white rounded-2xl border border-indigo-100 p-5 md:p-6 hover:shadow-md transition-shadow">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-9 h-9 rounded-lg bg-indigo-100 border border-indigo-200 flex items-center justify-center shrink-0">
-            <FiCpu className="text-indigo-600 text-sm" />
+        <div className="group flex-1 bg-gradient-to-br from-teal-50 to-white rounded-2xl border border-teal-100 p-5 md:p-6 hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-3 mb-3">
+          <div className="w-9 h-9 rounded-lg bg-teal-100 border border-teal-200 flex items-center justify-center shrink-0">
+            <FiCpu className="text-teal-700 text-sm" />
           </div>
-          <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">Modern Campus</span>
+          <span className="text-[9px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100 px-2 py-0.5 rounded">Modern Campus</span>
         </div>
         <h4 className="text-sm font-bold text-stone-900 mb-1.5">Future-Ready Learning Spaces</h4>
         <p className="text-stone-500 text-xs leading-relaxed">
@@ -2556,12 +2556,12 @@ return (
     <div className="relative pt-2">
       <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-6 md:gap-8 border-b border-slate-100 pb-8 md:pb-12 px-2">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 rounded-lg mb-4 md:mb-6">
-            <FiBookOpen className="text-indigo-200 text-xs" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-700 rounded-lg mb-4 md:mb-6">
+            <FiBookOpen className="text-teal-100 text-xs" />
             <span className="text-[9px] md:text-[10px] text-white font-extrabold uppercase tracking-[0.2em]">Academic Excellence</span>
           </div>
           <h2 className="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tighter leading-[1.1] mb-4">
-            Academic <span className="text-indigo-600">Programs</span>
+            Academic <span className="text-teal-800">Programs</span>
           </h2>
        <p className="text-slate-900 text-md md:text-md font-medium ">
   Matungulu Girls Senior School offers a future-ready, holistic curriculum 
@@ -2596,7 +2596,7 @@ return (
     {/* Section 2: Education Systems */}
     <section className="px-2">
       <div className="flex flex-col mb-6 md:mb-12">
-        <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-1">Paths to Success</h3>
+        <h3 className="text-[10px] font-black text-teal-700 uppercase tracking-[0.3em] mb-1">Paths to Success</h3>
         <h4 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Education Systems</h4>
       </div>
       
@@ -2615,7 +2615,7 @@ return (
   desc: "Our school provides a wide range of subjects, encompassing both core and elective disciplines. The curriculum is designed to give students a strong foundation in essential academic areas while also allowing them to explore diverse interests and talents. Each subject is carefully structured to promote critical thinking, creativity, and practical skills, preparing students for higher education, career paths, and lifelong learning.",
   count: schoolData?.subjects?.length,
   data: schoolData?.subjects,
-  iconColor: "text-blue-600",
+  iconColor: "text-teal-700",
   bgColor: "bg-blue-50"
 },
 {
@@ -2795,7 +2795,7 @@ return (
     const isDark = idx === 1;
     return (
       <div key={idx} className={`flex flex-col md:flex-row rounded-2xl overflow-hidden border transition-all hover:shadow-lg ${
-        isDark ? 'bg-slate-900 border-slate-700/50' : 'bg-white border-slate-200'
+        isDark ? 'bg-teal-900 border-teal-800/40' : 'bg-white border-slate-200'
       }`}>
         {/* Left number strip */}
         <div className={`flex md:flex-col items-center justify-center gap-2 px-4 py-4 md:px-6 md:py-0 md:min-w-[70px] bg-gradient-to-b ${path.color}`}>
@@ -2825,7 +2825,7 @@ return (
           </div>
           
           <div className={`pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
-            <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>Potential Career Outcomes</p>
+            <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-teal-200' : 'text-teal-800'}`}>Potential Career Outcomes</p>
             <p className={`text-xs md:text-sm font-medium leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
               {path.careers}
             </p>
@@ -2839,7 +2839,7 @@ return (
         {/* CBC Core Subjects Row */}
         <div className="bg-white rounded-xl border border-slate-200 p-5 md:p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-teal-800 rounded-lg flex items-center justify-center">
               <FiLayers className="text-white text-sm" />
             </div>
             <div>
@@ -2874,7 +2874,7 @@ return (
     </section>
 
     {/* Career Guidance Banner - Full Width on Mobile */}
-    <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 md:rounded-[2.5rem] p-8 md:p-12 text-white w-full">
+    <div className="relative overflow-hidden bg-white md:rounded-[2.5rem] p-8 md:p-12 text-slate-900 w-full border border-slate-200 shadow-2xl">
       {/* Logo watermark */}
       <img src="/MatG.jpg" alt="" className="absolute right-6 bottom-6 w-32 md:w-48 opacity-[0.04] pointer-events-none select-none" />
       <div className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-teal-500/10 blur-[60px] md:blur-[100px] rounded-full -mr-32 -mt-32" />
@@ -2882,12 +2882,12 @@ return (
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
         <div className="max-w-2xl">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-teal-500/20 backdrop-blur-md border border-teal-400/20 rounded-2xl flex items-center justify-center">
-              <FiTarget className="text-teal-500 text-xl" />
+            <div className="w-12 h-12 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center">
+              <FiTarget className="text-teal-700 text-xl" />
             </div>
             <h3 className="text-xl md:text-2xl font-extrabold uppercase tracking-tight">Professional Development</h3>
           </div>
-          <p className="text-slate-300/80 text-sm md:text-base leading-relaxed font-medium">
+          <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
             From personalized career mapping and university placement guidance to hands-on industry visits — 
             we equip every student with the clarity and confidence to pursue their chosen profession.
           </p>
@@ -2897,7 +2897,7 @@ return (
           className="flex items-center justify-center gap-2 md:gap-3 w-full lg:w-auto px-5 md:px-10 py-3.5 md:py-5 rounded-xl md:rounded-2xl bg-white text-slate-900 border border-slate-200 shadow-sm font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-[10px] md:text-[11px] transition-transform active:scale-95"
         >
           <span className="whitespace-nowrap">Schedule Consultation</span>
-          <div className="flex-shrink-0 flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-slate-900 text-white">
+          <div className="flex-shrink-0 flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-teal-800 text-white">
             <FiArrowRight className="text-[10px] md:text-[12px]" />
           </div>
         </button>
@@ -2941,7 +2941,7 @@ return (
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-6">
         <div>
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-3 bg-slate-900 rounded-2xl shadow-xl shadow-slate-200">
+            <div className="p-3 bg-teal-800 rounded-2xl shadow-xl shadow-teal-100">
               <IoDocumentTextOutline className="text-white text-xl md:text-2xl" />
             </div>
             <h3 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tighter">
@@ -2979,7 +2979,7 @@ return (
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-50 flex items-center justify-center">
             <IoDocumentTextOutline className="text-teal-700 text-xl" />
           </div>
-          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-black border-4 border-white">
+          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-teal-800 text-white flex items-center justify-center text-[10px] font-black border-4 border-white">
             {index + 1}
           </div>
         </div>
@@ -3050,7 +3050,7 @@ return (
     <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 md:mb-16 gap-4">
       <div>
         <div className="flex items-center gap-3 mb-3">
-          <div className="p-2.5 bg-blue-600 rounded-xl shadow-lg shadow-blue-600/20">
+          <div className="p-2.5 bg-teal-700 rounded-xl shadow-lg shadow-teal-700/20">
             <FiArrowRight className="text-white text-xl" />
           </div>
           <h3 className="text-xl md:text-xl font-black uppercase tracking-tighter">
