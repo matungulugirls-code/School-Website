@@ -130,7 +130,7 @@ export default function AboutPage() {
     {
       title: "School Motto",
       icon: <Star className="h-5 w-5" />,
-      body: "Strive to Excel",
+      body: "Committed to Excellence",
       tone: "bg-[#f5efff] text-[#7c3aed]",
     },
   ];

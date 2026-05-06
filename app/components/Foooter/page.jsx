@@ -218,7 +218,7 @@ const BrandSection = () => (
     <p className="text-gray-200 text-sm leading-relaxed">
       A  National  girls' school in Matungulu, Machakos County, dedicated to 
       empowering young women through quality education, leadership development, and 
-      character formation since 1955. <span className="text-emerald-300 font-semibold">"Strive to Excel"</span>
+      character formation since 1955. <span className="text-emerald-300 font-semibold">"Committed to Excellence"</span>
     </p>
   </div>
 );
@@ -593,7 +593,7 @@ export default function ModernFooter() {
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-300/50">
-                      Strive to Excel
+                      Committed to Excellence
                     </p>
                   </div>
 

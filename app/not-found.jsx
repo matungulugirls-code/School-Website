@@ -23,7 +23,7 @@ const Modern404 = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   // Official single message
-  const officialMessage = "Strive to Excel... 404 This page cannot be found";
+  const officialMessage = "Committed to Excellence... 404 This page cannot be found";
 
   const quickLinks = [
     { name: 'Home Base', href: '/', icon: FiHome, description: 'Back to assembly' },
@@ -148,7 +148,7 @@ const Modern404 = () => {
                 <div className="h-px w-8 bg-gradient-to-r from-transparent to-rose-300"></div>
                 <div className="flex items-center gap-2">
                   <FaSeedling className="text-emerald-500 text-sm" />
-                  <span className="text-sm font-serif italic text-slate-600">Strive to Excel</span>
+                  <span className="text-sm font-serif italic text-slate-600">Committed to Excellence</span>
                   <FaCrown className="text-amber-500 text-sm" />
                 </div>
                 <div className="h-px w-8 bg-gradient-to-l from-transparent to-rose-300"></div>
@@ -312,7 +312,7 @@ const Modern404 = () => {
                             </p>
                           </div>
                           <p className="text-white/90 text-sm font-serif italic">
-                            "Strive to Excel"
+                            "Committed to Excellence"
                           </p>
                           <p className="text-[8px] text-rose-200/60 mt-1">
                             Matungulu, Machakos • Since Excellence
@@ -359,7 +359,7 @@ const Modern404 = () => {
             <p className="text-slate-400 text-[9px] sm:text-[10px]">
               Matungulu, Machakos • 
               <span className="mx-1.5">•</span>
-              <span className="font-serif italic">Strive to Excel</span>
+              <span className="font-serif italic">Committed to Excellence</span>
               <span className="mx-1.5">•</span>
               <a href="/" className="text-rose-600 hover:text-rose-800 transition-colors font-black uppercase tracking-wider">
                 Return Home

@@ -1197,7 +1197,7 @@ export default function ModernEventsNewsPage() {
               Matungulu Girls Senior School
             </h2>
             <p className="text-[8px] sm:text-[10px] italic font-medium text-white/45 tracking-widest uppercase">
-              "Strive to Excel"
+              "Committed to Excellence"
             </p>
           </div>
         </div>

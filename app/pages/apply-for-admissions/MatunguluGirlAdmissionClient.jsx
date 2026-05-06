@@ -1828,7 +1828,7 @@ const handleSubmit = async (e) => {
         © {new Date().getFullYear()} Matungulu Girls Senior School
       </p>
       <p className="text-[#9a5b1f] text-[9px] md:text-xs font-medium italic">
-        "Strive to Excel"
+        "Committed to Excellence"
       </p>
     </div>
     

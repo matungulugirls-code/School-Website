@@ -1264,7 +1264,7 @@ export default function ModernGallery() {
             </div>
             <span className="text-[9px] font-black text-emerald-600/60 uppercase tracking-wider">Est. 2024</span>
           </div>
-          <div className="text-[9px] font-bold text-emerald-500">Strive to Excel</div>
+          <div className="text-[9px] font-bold text-emerald-500">Committed to Excellence</div>
         </div>
       </div>
     </div>

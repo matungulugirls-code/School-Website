@@ -147,7 +147,7 @@ export default function StudentLoginModal({
                 </h1>
                 <p className="text-emerald-100/80 text-xs mt-0.5 flex items-center gap-1">
                   <FaLeaf className="text-emerald-300 text-xs" />
-                  <span>"Strive to Excel" • Secure Student Access</span>
+                  <span>"Committed to Excellence" • Secure Student Access</span>
                 </p>
               </div>
             </div>

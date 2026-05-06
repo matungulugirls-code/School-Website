@@ -259,7 +259,7 @@ export default function ModernNavbar() {
                   MatG 
                 </h1>
                 <p className="text-xs sm:text-sm text-emerald-100/90 font-medium tracking-wide whitespace-nowrap">
-                  Strive to Excel
+                  Committed to Excellence
                 </p>
               </div>
             </div>

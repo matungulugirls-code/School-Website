@@ -38,7 +38,7 @@ export async function generateMetadata({ params }) {
             url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/MatG.jpg`,
             width: 1200,
             height: 630,
-            alt: 'Matungulu Girls Senior School Staff - Strive to Excel'
+            alt: 'Matungulu Girls Senior School Staff - Committed to Excellence'
           }
         ],
         siteName: 'Matungulu Girls Senior School',

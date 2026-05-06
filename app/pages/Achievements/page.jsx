@@ -600,7 +600,7 @@ export default function StudentAchievements() {
                         Matungulu Girls Senior School
                       </h2>
                       <p className="text-[8px] sm:text-[10px] italic font-medium text-white/45 tracking-widest uppercase">
-                        "Strive to Excel"
+                        "Committed to Excellence"
                       </p>
                     </div>
                   </div>
@@ -846,7 +846,7 @@ export default function StudentAchievements() {
                   </div>
                   <h4 className="text-base font-black mb-2 tracking-tight">Our Slogan</h4>
                   <p className="text-xs text-white/70 mb-4 leading-relaxed italic">
-                    "{schoolStats?.slogan || 'Strive to Excel'}"
+                    "{schoolStats?.slogan || 'Committed to Excellence'}"
                   </p>
                   {schoolStats?.sloganDescription && (
                     <p className="text-[10px] text-white/50 mb-2">{schoolStats.sloganDescription}</p>

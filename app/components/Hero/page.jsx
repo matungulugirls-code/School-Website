@@ -113,7 +113,7 @@ export default function ModernHero() {
             studentCount: 1400,
             established: 1955,
             category: "National School",
-            motto: "Strive to Excel"
+            motto: "Committed to Excellence"
           });
         }
       } catch (error) {
@@ -126,7 +126,7 @@ export default function ModernHero() {
           studentCount: 1400,
           established: 1955,
           category: "National School",
-          motto: "Strive to Excel"
+          motto: "Committed to Excellence"
         });
       } finally {
         setStatsLoading(false);
@@ -430,7 +430,7 @@ export default function ModernHero() {
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
             <span className="text-white font-semibold text-md">Motto</span>
             <span className="text-white font-bold italic text-base">
-              "{getStatValue('motto', 'Strive to Excel')}"
+              "{getStatValue('motto', 'Committed to Excellence')}"
             </span>
           </div>
 

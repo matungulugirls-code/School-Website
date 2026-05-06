@@ -56,7 +56,7 @@ const LoadingSpinner = () => {
 
           {/* Motto - Vibrant */}
           <p className="text-base italic font-semibold tracking-wide text-emerald-700">
-            "Strive to Excel"
+            "Committed to Excellence"
           </p>
 
           {/* Progress Bar - Clean and Minimal */}

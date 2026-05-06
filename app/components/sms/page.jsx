@@ -1536,7 +1536,7 @@ const handleSendCampaign = async () => {
               Matungulu Girls Senior School
             </h2>
             <p className="text-[9px] italic font-medium text-white/40 tracking-widest uppercase">
-              "Strive to Excel"
+              "Committed to Excellence"
             </p>
           </div>
         </div>

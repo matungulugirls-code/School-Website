@@ -145,7 +145,7 @@ const [statsLoading, setStatsLoading] = useState(false);
   };
 
   const schoolName = schoolData?.name || "Matungulu Girls Senior School";
-  const motto = schoolData?.motto || "Strive to Excel";
+  const motto = schoolData?.motto || "Committed to Excellence";
   const vision =
     schoolData?.vision ||
     "To be a center of excellence in nurturing holistic, God-fearing, and academically empowered young women for global leadership.";

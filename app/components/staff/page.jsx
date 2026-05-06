@@ -2146,7 +2146,7 @@ const handleSubmit = async (formData, id) => {
           </h2>
           <p className="text-[10px] italic font-bold text-white/50 tracking-[0.2em] uppercase flex items-center gap-2">
             <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
-            "Strive to Excel"
+            "Committed to Excellence"
           </p>
         </div>
       </div>

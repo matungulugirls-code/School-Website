@@ -419,7 +419,7 @@ const ModernStaffLeadership = () => {
             <h3 className="text-lg font-black text-emerald-900">Matungulu Girls</h3>
             <p className="text-xs font-bold text-emerald-700 animate-pulse">Loading Staff Directory</p>
             <p className="text-[10px] font-medium text-emerald-600/70">Meet our dedicated team...</p>
-            <p className="text-[8px] font-bold text-emerald-400 uppercase tracking-wider">"Strive to Excel"</p>
+            <p className="text-[8px] font-bold text-emerald-400 uppercase tracking-wider">"Committed to Excellence"</p>
           </div>
         </div>
       </div>

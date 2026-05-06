@@ -154,7 +154,7 @@ const transporter = nodemailer.createTransport({
 // School information
 const SCHOOL_NAME = 'Matungulu Girls Senior School';
 const SCHOOL_LOCATION = 'Matungulu, Machakos County';
-const SCHOOL_MOTTO = 'Strive to Excel';
+const SCHOOL_MOTTO = 'Committed to Excellence';
 const SCHOOL_EMAIL = 'info@katwanyaahighschool.sc.ke';
 const SCHOOL_PHONE = '+254720123456';
 

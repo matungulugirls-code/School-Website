@@ -705,7 +705,7 @@ if (loading) {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
-                <span>Strive to Excel</span>
+                <span>Committed to Excellence</span>
                 <span className="h-0.5 w-0.5 sm:h-1 sm:w-1 rounded-full bg-slate-300" />
                 <span>&copy; {new Date().getFullYear()}</span>
               </div>

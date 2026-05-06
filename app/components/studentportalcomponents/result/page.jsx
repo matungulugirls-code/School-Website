@@ -80,7 +80,7 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
         <div className="flex items-center gap-2">
           <div className="w-6 h-px bg-emerald-400/50"></div>
           <p className="text-emerald-200 text-[10px] sm:text-xs italic font-medium">
-            "Strive to Excel"
+            "Committed to Excellence"
           </p>
           <div className="w-6 h-px bg-emerald-400/50"></div>
         </div>

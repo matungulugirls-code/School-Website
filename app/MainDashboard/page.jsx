@@ -359,7 +359,7 @@ const LoadingSpinner  = () => {
   const [progress, setProgress] = useState(0);
   
   const schoolName = "MATUNGULU GIRLS' SENIOR";
-  const motto = "Strive to Excel";
+  const motto = "Committed to Excellence";
   const established = "EST. 1955 | NATIONAL SCHOOL";
   const tagline = "Empowering Young Women • Shaping Future Leaders";
 
@@ -1258,7 +1258,7 @@ const CompactSchoolHeader = () => {
           <div className="mt-2 inline-flex items-center">
             <div className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-100">
                <p className="text-[10px] md:text-[11px] font-black text-slate-400 italic tracking-wide">
-                "Strive to Excel"
+                "Committed to Excellence"
               </p>
             </div>
           </div>

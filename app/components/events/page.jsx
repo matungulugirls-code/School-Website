@@ -453,7 +453,7 @@ const ModernEventsNewsSection = () => {
                     </div>
                   </div>
                   <div className="mt-4 pt-3 border-t border-white/20">
-                    <p className="text-[10px] text-emerald-200 text-center">"Strive to Excel"</p>
+                    <p className="text-[10px] text-emerald-200 text-center">"Committed to Excellence"</p>
                   </div>
                 </div>
               </>

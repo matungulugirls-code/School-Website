@@ -368,7 +368,7 @@ const buildDynamicCategories = (schoolData, documentData) => {
       icon: 'school',
       content: `${schoolData.name}
 
-**Motto:** ${schoolData.motto || 'Strive to Excel'}
+**Motto:** ${schoolData.motto || 'Committed to Excellence'}
 
 **Vision:**
 ${schoolData.vision || 'To be a center of excellence in holistic education'}
@@ -743,7 +743,7 @@ export default function ChatBot() {
 
   const getWelcomeMessage = () => {
     const schoolName = schoolData?.name || 'Matungulu Girls School';
-    const motto = schoolData?.motto ? `\n\n${schoolData.motto}✨` : '\n\nStrive to Excel✨';
+    const motto = schoolData?.motto ? `\n\n${schoolData.motto}✨` : '\n\nCommitted to Excellence✨';
     const studentCount = schoolData?.studentCount || '1000+';
     const staffCount = schoolData?.staffCount || '50+';
     
@@ -946,7 +946,7 @@ ${schoolData ? 'For the most current information, choose a category below! 👇'
                     {schoolData?.name || 'Matungulu Girls Senior School'}
                   </h3>
                   <p className="text-blue-200 text-[10px] sm:text-xs truncate opacity-80 font-medium">
-                    {schoolData?.motto || 'Strive to Excel'}
+                    {schoolData?.motto || 'Committed to Excellence'}
                   </p>
                 </div>
               </div>

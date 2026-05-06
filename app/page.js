@@ -95,7 +95,7 @@ const MatunguluGirlsLoadingScreen = () => {
   const [progress, setProgress] = useState(0);
   
   const schoolName = "MATUNGULU GIRLS' SENIOR";
-  const motto = "Strive to Excel";
+  const motto = "Committed to Excellence";
   const established = "EST. 1955 | NATIONAL SCHOOL";
   const tagline = "Empowering Young Women • Shaping Future Leaders";
 

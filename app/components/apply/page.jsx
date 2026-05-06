@@ -57,7 +57,7 @@ const PortalHeader = ({
               <div className="mt-3 flex items-center gap-3 overflow-x-auto pb-2 sm:pb-0">
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-gray-50 border border-gray-100 rounded-lg shrink-0">
                   <span className="text-sm">🦅</span>
-                  <span className="text-[11px] font-bold text-gray-600">Strive to Excel</span>
+                  <span className="text-[11px] font-bold text-gray-600">Committed to Excellence</span>
                 </div>
                 
                 <div className="flex items-center gap-2 shrink-0">
