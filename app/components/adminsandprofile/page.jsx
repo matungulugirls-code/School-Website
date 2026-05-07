@@ -1132,7 +1132,7 @@ if (loading) {
            Loading For Administrators
           </p>
           <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest mt-1 font-bold">
-            kinyui boys Senior School
+            Matungulu Girls School
           </p>
         </div>
       </Stack>
@@ -1222,7 +1222,7 @@ if (loading) {
         </div>{/* Main Icon */}
         
         {/* Enhanced Description */}
-        <p className="text-emerald-100/70 text-sm md:text-[13px] font-medium leading-relaxed max-w-3xl">
+        <p className="text-white-100 text-sm md:text-[13px] font-medium leading-relaxed max-w-3xl">
           Access the central authority hub to oversee system custodians. Regulate 
           administrative privileges, monitor security protocols, and orchestrate 
           high-level permissions to ensure total platform integrity and seamless 
