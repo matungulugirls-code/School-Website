@@ -622,7 +622,7 @@ const ModernStaffLeadership = () => {
                       {/* Profile Summary */}
                       <div className="rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
                         <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                          <FiUser className="text-emerald-600 w-3 h-3 sm:w-4 sm:h-4" /> Profile Summary
+                          <FiUser className="text-emerald-600 w-3 h-3 sm:w-4 sm:h-4" />  Bio
                         </h4>
                         <p className="text-xs sm:text-sm leading-6 sm:leading-7 text-slate-600">
                           {featuredStaff?.bio || `${featuredStaff?.name} is a dedicated member of our school's ${featuredStaff?.role || 'team'} with a passion for education and student development.`}
