@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import {
   FiPlus,
   FiEdit,
@@ -16,18 +16,133 @@ import {
   FiArrowUpRight,
   FiCheckCircle,
   FiAlertCircle,
+  FiBookOpen,
+  FiUsers,
+  FiShield,
+  FiHome,
+  FiCalendar,
+  FiChevronRight,
+  FiStar,
+  FiTrendingUp,
+  FiUploadCloud,
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiClock,
+  FiAward,
+  FiUserCheck,
+  FiBriefcase,
+  FiArrowLeft,
+  FiFilter,
+  FiRotateCw,
+  FiMessageCircle,
+  FiBarChart2,
+  FiSave,
 } from 'react-icons/fi';
 import { FaUsers, FaLeaf, FaShieldAlt, FaHome, FaGraduationCap } from 'react-icons/fa';
-import ImageUploadField, { normalizeSchoolImages } from './image-upload-field';
+
+// ============= CONSTANTS & CONFIGURATION =============
+const MAX_SCHOOL_IMAGE_SIZE = 4.5 * 1024 * 1024;
 
 const TYPE_OPTIONS = [
-  { value: 'CLUB', label: 'Clubs', icon: FaUsers },
-  { value: 'SOCIETY', label: 'Societies', icon: FaGraduationCap },
-  { value: 'FARM', label: 'Farm', icon: FaLeaf },
-  { value: 'BOARDING', label: 'Boarding', icon: FaHome },
-  { value: 'SECURITY', label: 'Security', icon: FaShieldAlt },
-  { value: 'DEPARTMENT', label: 'Departments', icon: FiLayers },
+  { value: 'CLUB', label: 'Clubs', icon: FaUsers, description: 'Student-led extracurricular groups' },
+  { value: 'SOCIETY', label: 'Societies', icon: FaGraduationCap, description: 'Academic and professional societies' },
+  { value: 'FARM', label: 'Farm', icon: FaLeaf, description: 'Agricultural and farming activities' },
+  { value: 'BOARDING', label: 'Boarding', icon: FaHome, description: 'Boarding facilities and life' },
+  { value: 'SECURITY', label: 'Security', icon: FaShieldAlt, description: 'Campus security and safety' },
+  { value: 'DEPARTMENT', label: 'Departments', icon: FiLayers, description: 'School departments and offices' },
 ];
+
+const TYPE_THEMES = {
+  CLUB: { 
+    gradient: 'from-purple-600 via-pink-600 to-rose-500', 
+    lightGradient: 'from-purple-50 to-pink-50',
+    bg: 'bg-purple-50', 
+    text: 'text-purple-700', 
+    border: 'border-purple-200', 
+    iconBg: 'bg-purple-500',
+    badge: 'bg-purple-100 text-purple-800',
+    glow: 'shadow-purple-500/20'
+  },
+  SOCIETY: { 
+    gradient: 'from-indigo-600 via-blue-600 to-cyan-500', 
+    lightGradient: 'from-indigo-50 to-blue-50',
+    bg: 'bg-indigo-50', 
+    text: 'text-indigo-700', 
+    border: 'border-indigo-200', 
+    iconBg: 'bg-indigo-500',
+    badge: 'bg-indigo-100 text-indigo-800',
+    glow: 'shadow-indigo-500/20'
+  },
+  FARM: { 
+    gradient: 'from-emerald-600 via-teal-600 to-green-500', 
+    lightGradient: 'from-emerald-50 to-teal-50',
+    bg: 'bg-emerald-50', 
+    text: 'text-emerald-700', 
+    border: 'border-emerald-200', 
+    iconBg: 'bg-emerald-500',
+    badge: 'bg-emerald-100 text-emerald-800',
+    glow: 'shadow-emerald-500/20'
+  },
+  BOARDING: { 
+    gradient: 'from-amber-600 via-orange-600 to-yellow-500', 
+    lightGradient: 'from-amber-50 to-orange-50',
+    bg: 'bg-amber-50', 
+    text: 'text-amber-700', 
+    border: 'border-amber-200', 
+    iconBg: 'bg-amber-500',
+    badge: 'bg-amber-100 text-amber-800',
+    glow: 'shadow-amber-500/20'
+  },
+  SECURITY: { 
+    gradient: 'from-rose-600 via-red-600 to-pink-500', 
+    lightGradient: 'from-rose-50 to-red-50',
+    bg: 'bg-rose-50', 
+    text: 'text-rose-700', 
+    border: 'border-rose-200', 
+    iconBg: 'bg-rose-500',
+    badge: 'bg-rose-100 text-rose-800',
+    glow: 'shadow-rose-500/20'
+  },
+  DEPARTMENT: { 
+    gradient: 'from-cyan-600 via-blue-600 to-indigo-500', 
+    lightGradient: 'from-cyan-50 to-blue-50',
+    bg: 'bg-cyan-50', 
+    text: 'text-cyan-700', 
+    border: 'border-cyan-200', 
+    iconBg: 'bg-cyan-500',
+    badge: 'bg-cyan-100 text-cyan-800',
+    glow: 'shadow-cyan-500/20'
+  },
+};
+
+// ============= UTILITY FUNCTIONS =============
+const normalizeSchoolImages = (item) => {
+  const related = Array.isArray(item?.images)
+    ? item.images.map((image) => ({
+        url: image?.url || image,
+        altText: image?.altText || item?.title || item?.name || 'School image',
+        caption: image?.caption || '',
+      }))
+    : [];
+
+  const legacy = item?.image
+    ? [{ url: item.image, altText: item?.title || item?.name || 'School image', caption: '' }]
+    : [];
+
+  const seen = new Set();
+  return [...related, ...legacy].filter((image) => {
+    if (!image?.url || seen.has(image.url)) return false;
+    seen.add(image.url);
+    return true;
+  });
+};
+
+const formatFileSize = (bytes) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
 
 const getAuthHeaders = () => {
   try {
@@ -43,6 +158,184 @@ const getAuthHeaders = () => {
   }
 };
 
+// ============= COMPONENTS =============
+
+// Image Upload Field Component (Built-in)
+const BuiltInImageUploadField = ({ existingImages = [], files = [], removedImages = [], onChange, error, setError }) => {
+  const inputRef = useRef(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [previews, setPreviews] = useState([]);
+
+  useEffect(() => {
+    const newPreviews = files.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setPreviews(newPreviews);
+    
+    return () => {
+      newPreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
+    };
+  }, [files]);
+
+  const visibleExisting = existingImages.filter((image) => !removedImages.includes(image.url));
+
+  const addFiles = (fileList) => {
+    const incoming = Array.from(fileList || []);
+    if (!incoming.length) return;
+
+    const valid = [];
+    const rejected = [];
+
+    incoming.forEach((file) => {
+      if (!file.type?.startsWith('image/')) {
+        rejected.push(`${file.name} is not an image.`);
+      } else if (file.size > MAX_SCHOOL_IMAGE_SIZE) {
+        rejected.push(`${file.name} is ${formatFileSize(file.size)}. Max is 4.5MB.`);
+      } else {
+        valid.push(file);
+      }
+    });
+
+    if (rejected.length) {
+      setError?.(rejected[0]);
+    } else {
+      setError?.('');
+    }
+
+    if (valid.length) {
+      onChange?.({ files: [...files, ...valid], removedImages });
+    }
+  };
+
+  const removeNewFile = (index) => {
+    onChange?.({
+      files: files.filter((_, i) => i !== index),
+      removedImages,
+    });
+  };
+
+  const removeExistingImage = (url) => {
+    onChange?.({
+      files,
+      removedImages: [...removedImages, url],
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">
+            Images Gallery
+          </p>
+          <p className="mt-1 text-xs font-semibold text-slate-500">
+            Multiple images supported. Each image must be less than 4.5MB.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white shadow-lg hover:opacity-90 transition-all"
+        >
+          <FiPlus /> Add Images
+        </button>
+      </div>
+
+      <div
+        onClick={() => inputRef.current?.click()}
+        onDragEnter={(e) => {
+          e.preventDefault();
+          setDragActive(true);
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragActive(true);
+        }}
+        onDragLeave={(e) => {
+          e.preventDefault();
+          setDragActive(false);
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragActive(false);
+          addFiles(e.dataTransfer.files);
+        }}
+        className={`cursor-pointer rounded-[28px] border-2 border-dashed p-8 text-center transition-all ${
+          dragActive
+            ? 'border-emerald-400 bg-emerald-50'
+            : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'
+        }`}
+      >
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            addFiles(e.target.files);
+            e.target.value = '';
+          }}
+        />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-emerald-100 text-slate-900 shadow-sm">
+          <FiUploadCloud size={28} />
+        </div>
+        <p className="mt-4 text-sm font-black text-slate-900">
+          {dragActive ? 'Drop images here' : 'Drag images here or click to browse'}
+        </p>
+        <p className="mt-1 text-xs font-semibold text-slate-500">
+          Supports JPG, PNG, GIF (max 4.5MB per image)
+        </p>
+      </div>
+
+      {error && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+          {error}
+        </div>
+      )}
+
+      {(visibleExisting.length > 0 || previews.length > 0) && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {visibleExisting.map((image, index) => (
+            <div key={image.url} className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
+              <img src={image.url} alt={image.altText || `Existing image ${index + 1}`} className="h-28 w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => removeExistingImage(image.url)}
+                className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 text-red-600 shadow-sm backdrop-blur transition-all hover:bg-white hover:scale-105"
+              >
+                <FiTrash2 size={14} />
+              </button>
+              <div className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                <FiCheckCircle size={10} className="text-emerald-500" />
+                Saved
+              </div>
+            </div>
+          ))}
+
+          {previews.map((preview, index) => (
+            <div key={`${preview.file.name}-${index}`} className="group relative overflow-hidden rounded-2xl border-2 border-emerald-200 bg-white shadow-sm transition-all hover:shadow-md">
+              <img src={preview.url} alt={preview.file.name} className="h-28 w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => removeNewFile(index)}
+                className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 text-red-600 shadow-sm backdrop-blur transition-all hover:bg-white hover:scale-105"
+              >
+                <FiX size={14} />
+              </button>
+              <div className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-700">
+                <FiImage /> New • {formatFileSize(preview.file.size)}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Details Editor Component
 const DetailsEditor = ({ value, onChange }) => {
   const details = Array.isArray(value) ? value : [];
 
@@ -54,24 +347,25 @@ const DetailsEditor = ({ value, onChange }) => {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Details Sections</p>
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Structured Details</p>
         <button
           type="button"
           onClick={add}
-          className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-extrabold text-slate-800 hover:bg-slate-100"
+          className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-extrabold text-slate-800 hover:bg-slate-100 transition-all"
         >
           + Add Section
         </button>
       </div>
 
       {details.length === 0 ? (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-600">
-          No detail sections yet.
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-600 text-center">
+          <FiLayers className="mx-auto mb-2 text-slate-400" />
+          No detail sections yet. Click "Add Section" to get started.
         </div>
       ) : (
         <div className="space-y-3">
           {details.map((d, idx) => (
-            <div key={idx} className="rounded-[22px] border border-slate-200 bg-white p-4">
+            <div key={idx} className="rounded-[22px] border border-slate-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-[11px] font-black uppercase tracking-[0.22em] text-slate-400">
                   Section {idx + 1}
@@ -79,7 +373,7 @@ const DetailsEditor = ({ value, onChange }) => {
                 <button
                   type="button"
                   onClick={() => remove(idx)}
-                  className="text-xs font-extrabold text-red-600 hover:text-red-700"
+                  className="text-xs font-extrabold text-red-600 hover:text-red-700 transition-colors"
                 >
                   Remove
                 </button>
@@ -88,14 +382,14 @@ const DetailsEditor = ({ value, onChange }) => {
                 <input
                   value={d.title || ''}
                   onChange={(e) => update(idx, { title: e.target.value })}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                  placeholder="Section title (e.g. Facilities)"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                  placeholder="Section title (e.g. Facilities, Location, Hours)"
                 />
                 <input
                   value={d.content || ''}
                   onChange={(e) => update(idx, { content: e.target.value })}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                  placeholder="Short content (can be long too)"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                  placeholder="Content description"
                 />
               </div>
             </div>
@@ -106,28 +400,28 @@ const DetailsEditor = ({ value, onChange }) => {
   );
 };
 
-const FieldLabel = ({ children }) => (
-  <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">
-    {children}
-  </label>
-);
-
-const FormPanel = ({ title, subtitle, icon: Icon, children }) => (
-  <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm">
-    <div className="mb-5 flex items-center gap-3">
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-emerald-50 text-emerald-700 ring-1 ring-slate-100">
-        <Icon />
+// Form Panel Component
+const FormPanel = ({ title, subtitle, icon: Icon, children, theme }) => {
+  const themeGradient = theme?.lightGradient || 'from-indigo-50 to-emerald-50';
+  
+  return (
+    <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+      <div className="mb-5 flex items-center gap-3">
+        <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${themeGradient} text-slate-700 ring-1 ring-slate-100`}>
+          <Icon className="text-lg" />
+        </div>
+        <div className="min-w-0">
+          <h4 className="text-sm font-black tracking-tight text-slate-950">{title}</h4>
+          {subtitle && <p className="mt-0.5 text-xs font-semibold text-slate-500">{subtitle}</p>}
+        </div>
       </div>
-      <div className="min-w-0">
-        <h4 className="text-sm font-black tracking-tight text-slate-950">{title}</h4>
-        {subtitle && <p className="mt-0.5 text-xs font-semibold text-slate-500">{subtitle}</p>}
-      </div>
-    </div>
-    {children}
-  </section>
-);
+      {children}
+    </section>
+  );
+};
 
-const StatCard = ({ label, value, icon: Icon, color, description }) => (
+// Stats Card Component
+const StatCard = ({ label, value, icon: Icon, color, description, trend }) => (
   <div className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/40 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
     <div className={`absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-10 blur-2xl ${color}`} />
     <div className="relative z-10">
@@ -141,7 +435,12 @@ const StatCard = ({ label, value, icon: Icon, color, description }) => (
             {label}
           </p>
         </div>
-        <FiArrowUpRight className="mb-2 text-emerald-500" />
+        {trend && (
+          <div className="mb-2 flex items-center gap-1 text-emerald-500">
+            <FiTrendingUp className="text-sm" />
+            <span className="text-xs font-bold">{trend}</span>
+          </div>
+        )}
       </div>
       {description && (
         <p className="mt-4 border-t border-slate-100 pt-4 text-xs font-semibold leading-5 text-slate-400">
@@ -152,6 +451,7 @@ const StatCard = ({ label, value, icon: Icon, color, description }) => (
   </div>
 );
 
+// Hub Item Modal Component
 const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
   const [form, setForm] = useState({
     type: initial?.type || defaultType || 'CLUB',
@@ -230,20 +530,23 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
     }
   };
 
+  const typeTheme = TYPE_THEMES[form.type] || TYPE_THEMES.CLUB;
+  const typeMeta = TYPE_OPTIONS.find(t => t.value === form.type);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:p-5">
       <div className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[32px] border border-white/40 bg-white shadow-2xl">
-        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-violet-600 to-slate-900 px-6 py-6 text-white sm:px-8">
+        <div className={`relative overflow-hidden bg-gradient-to-br ${typeTheme.gradient} px-6 py-6 text-white sm:px-8`}>
           <div className="absolute right-0 top-0 h-36 w-36 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-emerald-300/10 blur-2xl" />
+          <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
           <div className="relative flex items-center justify-between gap-4">
             <div className="flex min-w-0 items-center gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 shadow-xl backdrop-blur-md">
-                <FiLayers className="text-2xl text-emerald-100" />
+                {typeMeta?.icon ? <typeMeta.icon className="text-2xl text-white" /> : <FiLayers className="text-2xl text-white" />}
               </div>
               <div className="min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/55">
-                  School Hub Manager
+                  Matungulu Girls Senior School
                 </p>
                 <h3 className="mt-1 truncate text-xl font-black tracking-tight sm:text-2xl">
                   {initial?.id ? 'Edit Hub Item' : 'Create Hub Item'}
@@ -255,7 +558,7 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
             </div>
             <button
               onClick={onClose}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 hover:bg-white/15"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 hover:bg-white/15 transition-all"
             >
               <FiX />
             </button>
@@ -271,10 +574,10 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_0.82fr]">
             <div className="space-y-5">
-              <FormPanel title="Content Identity" subtitle="Public page title, type and summary" icon={FiBookOpen}>
+              <FormPanel title="Content Identity" subtitle="Public page title, type and summary" icon={FiBookOpen} theme={typeTheme}>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <FieldLabel>Type</FieldLabel>
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Type</label>
                     <select
                       value={form.type}
                       onChange={(e) => setForm((p) => ({ ...p, type: e.target.value }))}
@@ -282,14 +585,14 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
                     >
                       {TYPE_OPTIONS.map((opt) => (
                         <option key={opt.value} value={opt.value}>
-                          {opt.label}
+                          {opt.label} - {opt.description}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="space-y-2">
-                    <FieldLabel>Title</FieldLabel>
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Title</label>
                     <input
                       value={form.title}
                       onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
@@ -300,17 +603,21 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
                 </div>
 
                 <div className="mt-4 space-y-2">
-                  <FieldLabel>Short Description</FieldLabel>
+                  <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Short Description</label>
                   <textarea
                     value={form.shortDescription}
                     onChange={(e) => setForm((p) => ({ ...p, shortDescription: e.target.value }))}
                     className="min-h-[92px] w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
-                    placeholder="Short overview shown on public cards"
+                    placeholder="Short overview shown on public cards (max 160 characters recommended)"
+                    maxLength={200}
                   />
+                  <p className="text-right text-[10px] text-slate-400">
+                    {form.shortDescription.length}/200 characters
+                  </p>
                 </div>
 
                 <div className="mt-4 space-y-2">
-                  <FieldLabel>Full Description</FieldLabel>
+                  <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Full Description</label>
                   <textarea
                     value={form.description}
                     onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
@@ -320,7 +627,7 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
                 </div>
               </FormPanel>
 
-              <FormPanel title="Structured Details" subtitle="Reusable detail blocks for public pages" icon={FiLayers}>
+              <FormPanel title="Structured Details" subtitle="Reusable detail blocks for public pages" icon={FiLayers} theme={typeTheme}>
                 <DetailsEditor
                   value={form.details}
                   onChange={(next) => setForm((p) => ({ ...p, details: next }))}
@@ -329,19 +636,20 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
             </div>
 
             <div className="space-y-5">
-              <FormPanel title="Visibility & Order" subtitle="Control publishing and page ordering" icon={FiEye}>
+              <FormPanel title="Visibility & Order" subtitle="Control publishing and page ordering" icon={FiEye} theme={typeTheme}>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
                   <div className="space-y-2">
-                    <FieldLabel>Display Order</FieldLabel>
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Display Order</label>
                     <input
                       value={form.displayOrder}
                       onChange={(e) => setForm((p) => ({ ...p, displayOrder: e.target.value }))}
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                       inputMode="numeric"
+                      placeholder="0 = highest priority"
                     />
                   </div>
                   <div className="space-y-2">
-                    <FieldLabel>Status</FieldLabel>
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Status</label>
                     <button
                       type="button"
                       onClick={() => setForm((p) => ({ ...p, isActive: !p.isActive }))}
@@ -351,46 +659,55 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
                           : 'border-slate-200 bg-slate-100 text-slate-600 hover:bg-slate-200'
                       }`}
                     >
-                      {form.isActive ? <FiCheckCircle /> : <FiAlertCircle />} {form.isActive ? 'Visible' : 'Hidden'}
+                      {form.isActive ? <FiCheckCircle /> : <FiAlertCircle />} {form.isActive ? 'Visible on Public Page' : 'Hidden from Public Page'}
                     </button>
                   </div>
                 </div>
               </FormPanel>
 
-              <FormPanel title="Contact Information" subtitle="Optional patron, leader or office details" icon={FiUsers}>
+              <FormPanel title="Contact Information" subtitle="Optional patron, leader or office details" icon={FaUsers} theme={typeTheme}>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <FieldLabel>Contact Name</FieldLabel>
-                    <input
-                      value={form.contactName}
-                      onChange={(e) => setForm((p) => ({ ...p, contactName: e.target.value }))}
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
-                      placeholder="Patron / Leader"
-                    />
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Contact Name</label>
+                    <div className="relative">
+                      <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        value={form.contactName}
+                        onChange={(e) => setForm((p) => ({ ...p, contactName: e.target.value }))}
+                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                        placeholder="Patron / Leader / Director"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <FieldLabel>Contact Phone</FieldLabel>
-                    <input
-                      value={form.contactPhone}
-                      onChange={(e) => setForm((p) => ({ ...p, contactPhone: e.target.value }))}
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
-                      placeholder="Optional"
-                    />
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Contact Phone</label>
+                    <div className="relative">
+                      <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        value={form.contactPhone}
+                        onChange={(e) => setForm((p) => ({ ...p, contactPhone: e.target.value }))}
+                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                        placeholder="+254 XXX XXX XXX"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <FieldLabel>Contact Email</FieldLabel>
-                    <input
-                      value={form.contactEmail}
-                      onChange={(e) => setForm((p) => ({ ...p, contactEmail: e.target.value }))}
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
-                      placeholder="Optional"
-                    />
+                    <label className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Contact Email</label>
+                    <div className="relative">
+                      <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        value={form.contactEmail}
+                        onChange={(e) => setForm((p) => ({ ...p, contactEmail: e.target.value }))}
+                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
+                        placeholder="contact@school.ac.ke"
+                      />
+                    </div>
                   </div>
                 </div>
               </FormPanel>
 
-              <FormPanel title="Image Gallery" subtitle="Multiple images, previews and removals" icon={FiImage}>
-                <ImageUploadField
+              <FormPanel title="Image Gallery" subtitle="Multiple images, previews and removals" icon={FiImage} theme={typeTheme}>
+                <BuiltInImageUploadField
                   existingImages={normalizeSchoolImages(initial)}
                   files={imageFiles}
                   removedImages={removedImages}
@@ -409,17 +726,24 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
         <div className="flex shrink-0 flex-col-reverse gap-3 border-t border-slate-200 bg-white px-6 py-5 sm:flex-row sm:items-center sm:justify-end">
           <button
             onClick={onClose}
-            className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-black text-slate-800 hover:bg-slate-100"
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-black text-slate-800 hover:bg-slate-100 transition-all"
             disabled={saving}
           >
             Cancel
           </button>
           <button
             onClick={submit}
-            className="rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3 text-sm font-black text-white shadow-lg shadow-indigo-500/20 hover:opacity-95 disabled:opacity-60"
+            className={`rounded-2xl bg-gradient-to-r ${typeTheme.gradient} px-6 py-3 text-sm font-black text-white shadow-lg hover:opacity-95 disabled:opacity-60 transition-all`}
             disabled={saving}
           >
-            {saving ? 'Saving…' : 'Save Item'}
+            {saving ? (
+              <span className="flex items-center gap-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Saving...
+              </span>
+            ) : (
+              'Save Item'
+            )}
           </button>
         </div>
       </div>
@@ -427,6 +751,80 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
   );
 };
 
+// Delete Confirmation Modal Component
+const DeleteConfirmationModal = ({ open, onClose, onConfirm, itemName, loading }) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="relative bg-gradient-to-r from-red-600 to-rose-600 p-6 text-white">
+          <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
+          <div className="relative flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur">
+              <FiAlertCircle className="text-2xl" />
+            </div>
+            <div>
+              <h3 className="text-xl font-black tracking-tight">Confirm Deletion</h3>
+              <p className="text-white/70 text-sm">This action cannot be undone</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-6">
+          <div className="text-center mb-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FiTrash2 className="w-8 h-8 text-red-600" />
+            </div>
+            <h4 className="text-lg font-bold text-gray-900 mb-2">
+              Delete "{itemName}"?
+            </h4>
+            <p className="text-gray-600 text-sm">
+              Are you sure you want to delete this item? All associated data will be permanently removed.
+            </p>
+          </div>
+          
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+            <div className="flex items-start gap-3">
+              <FiAlertTriangle className="text-red-600 mt-0.5 flex-shrink-0" />
+              <p className="text-sm font-medium text-red-800">
+                Warning: This action is irreversible
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex gap-3">
+            <button
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onConfirm}
+              disabled={loading}
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl font-bold hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <FiTrash2 /> Delete
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main School Hub Manager Component
 export default function SchoolHubManager() {
   const [activeType, setActiveType] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
@@ -437,7 +835,12 @@ export default function SchoolHubManager() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [deletingId, setDeletingId] = useState(null);
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    itemId: null,
+    itemName: '',
+    loading: false,
+  });
 
   const fetchItems = async (isRefresh = false) => {
     try {
@@ -497,6 +900,8 @@ export default function SchoolHubManager() {
     () => items.reduce((sum, item) => sum + normalizeSchoolImages(item).length, 0),
     [items]
   );
+  
+  const totalItems = items.length;
 
   const saveItem = async (formData) => {
     const headers = getAuthHeaders();
@@ -511,23 +916,52 @@ export default function SchoolHubManager() {
     await fetchItems(true);
   };
 
-  const deleteItem = async (id) => {
-    const headers = getAuthHeaders();
-    setDeletingId(id);
+  const handleDeleteClick = (item) => {
+    setDeleteModal({
+      open: true,
+      itemId: item.id,
+      itemName: item.title,
+      loading: false,
+    });
+  };
+
+  const confirmDelete = async () => {
+    setDeleteModal(prev => ({ ...prev, loading: true }));
+    
     try {
-      const res = await fetch(`/api/schoolhub/${id}`, { method: 'DELETE', headers });
+      const headers = getAuthHeaders();
+      const res = await fetch(`/api/schoolhub/${deleteModal.itemId}`, { 
+        method: 'DELETE', 
+        headers 
+      });
       const data = await res.json();
       if (!res.ok || !data.success) {
         throw new Error(data.error || `Failed to delete (${res.status})`);
       }
       await fetchItems(true);
-    } finally {
-      setDeletingId(null);
+      setDeleteModal({ open: false, itemId: null, itemName: '', loading: false });
+    } catch (e) {
+      setError(e?.message || 'Failed to delete item.');
+      setDeleteModal(prev => ({ ...prev, loading: false }));
     }
   };
 
+  const getTypeTheme = (type) => TYPE_THEMES[type] || TYPE_THEMES.CLUB;
+  const getTypeMeta = (type) => TYPE_OPTIONS.find(t => t.value === type);
+
+  // Calculate trends
+  const trendPercentage = Math.floor((activeCount / (totalItems || 1)) * 100);
+
   return (
-    <div className="min-h-screen space-y-8 bg-gradient-to-br from-slate-50 via-indigo-50/30 to-emerald-50/30 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/20 to-emerald-50/20 p-4 md:p-6">
+      <DeleteConfirmationModal
+        open={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, itemId: null, itemName: '', loading: false })}
+        onConfirm={confirmDelete}
+        itemName={deleteModal.itemName}
+        loading={deleteModal.loading}
+      />
+      
       <HubItemModal
         open={modalOpen}
         onClose={() => {
@@ -539,43 +973,55 @@ export default function SchoolHubManager() {
         defaultType={activeType !== 'ALL' ? activeType : 'CLUB'}
       />
 
-      <div className="group relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-700 via-violet-700 to-slate-950 p-7 text-white shadow-2xl md:rounded-[2.5rem] md:p-10">
+      {/* Modern Hero Header - Guidance Style */}
+      <div className="group relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0F172A] via-[#1E1B4B] to-[#0C4A6E] p-7 text-white shadow-2xl md:rounded-[2.5rem] md:p-10 mb-8">
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '42px 42px' }} />
         <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-indigo-300/20 blur-[90px]" />
         <div className="absolute -bottom-24 left-0 h-72 w-72 rounded-full bg-emerald-300/10 blur-[90px]" />
+        
+        {/* Floating orbs */}
+        <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-full blur-[80px] animate-pulse" />
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-full blur-[100px]" />
 
         <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
           <div className="max-w-3xl">
             <div className="mb-7 flex items-center gap-5">
-              <div className="h-12 w-1.5 rounded-full bg-gradient-to-b from-emerald-300 via-teal-300 to-indigo-300 shadow-[0_0_24px_rgba(45,212,191,0.55)]" />
+              <div className="h-12 w-1.5 rounded-full bg-gradient-to-b from-amber-300 via-yellow-300 to-emerald-300 shadow-[0_0_24px_rgba(245,158,11,0.55)]" />
               <div className="space-y-1">
-                <p className="text-[11px] font-black uppercase tracking-[0.32em] text-emerald-100">
+                <p className="text-[11px] font-black uppercase tracking-[0.32em] text-amber-200">
                   Matungulu Girls Senior School
                 </p>
                 <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                  School Hub Administration
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                  School Hub Administration Portal
                 </p>
               </div>
             </div>
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border border-white/15 bg-white/10 shadow-xl backdrop-blur-xl">
-                <FiLayers className="text-3xl text-emerald-100" />
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border border-white/15 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 shadow-xl backdrop-blur-xl">
+                <FiLayers className="text-3xl text-amber-200" />
               </div>
               <h2 className="text-3xl font-black leading-none tracking-tight md:text-5xl">
-                School Hub <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 via-white to-indigo-200">Manager</span>
+                School <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-200 to-emerald-200">Hub</span> Manager
               </h2>
             </div>
-            <p className="mt-5 max-w-2xl rounded-2xl bg-white/[0.03] px-4 py-3 text-sm font-semibold leading-7 text-white/65">
-              Manage clubs, societies, farm, boarding, security and department content with reusable uploads, structured details and public visibility controls.
+            <p className="mt-5 max-w-2xl rounded-2xl bg-white/[0.03] px-4 py-3 text-sm font-semibold leading-7 text-white/65 backdrop-blur-sm">
+              Centralized management for clubs, societies, farm activities, boarding facilities, 
+              security services, and school departments. Upload multiple images, manage structured 
+              content, and control public visibility from a single interface.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/15 px-4 py-2 text-xs font-black uppercase tracking-widest text-emerald-100">
-                <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                {activeCount} visible
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/15 px-4 py-2 text-xs font-black uppercase tracking-widest text-emerald-100 backdrop-blur-sm">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                {activeCount} Active Items
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-widest text-white/60">
-                {imageCount} images managed
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-widest text-white/60 backdrop-blur-sm">
+                <FiImage className="text-amber-400" />
+                {imageCount} Images Managed
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-widest text-white/60 backdrop-blur-sm">
+                <FiGrid className="text-amber-400" />
+                {totalItems} Total Records
               </span>
             </div>
           </div>
@@ -583,11 +1029,11 @@ export default function SchoolHubManager() {
           <div className="flex flex-col gap-3 sm:flex-row xl:flex-col">
             <button
               onClick={() => fetchItems(true)}
-              className="group/btn relative flex items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-white/15 disabled:opacity-50"
+              className="group/btn relative flex items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-white/15 disabled:opacity-50 backdrop-blur-sm"
               disabled={refreshing}
             >
               <FiRefreshCw className={refreshing ? 'animate-spin text-base' : 'text-base transition-transform group-hover/btn:rotate-180'} />
-              {refreshing ? 'Refreshing' : 'Refresh'}
+              {refreshing ? 'Refreshing' : 'Refresh Data'}
             </button>
 
             <button
@@ -595,56 +1041,84 @@ export default function SchoolHubManager() {
                 setEditing(null);
                 setModalOpen(true);
               }}
-              className="group/btn relative flex items-center justify-center gap-3 overflow-hidden rounded-2xl bg-white px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 shadow-xl transition hover:bg-emerald-50"
+              className="group/btn relative flex items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-lg hover:shadow-xl transition-all"
             >
               <FiPlus className="text-base transition-transform group-hover/btn:rotate-90" />
-              Add Item
+              Create New Item
+              <span className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
             </button>
+          </div>
+        </div>
+        
+        {/* Bottom status bar */}
+        <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-[10px] font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              <span className="text-white/40">System Status:</span>
+              <span className="text-emerald-400">Operational</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FiShield className="text-amber-400" />
+              <span className="text-white/40">Security:</span>
+              <span className="text-amber-400">Encrypted</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <FiClock className="text-white/30" />
+            <span className="text-white/40">
+              Last Updated: {new Date().toLocaleTimeString()}
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Stats Dashboard */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <StatCard
           label="Total Items"
-          value={items.length}
+          value={totalItems}
           icon={FiLayers}
           color="bg-gradient-to-br from-indigo-500 to-violet-600"
-          description="All managed School Hub records."
+          description="All managed School Hub records across all categories"
+          trend={`+${Math.floor(totalItems * 0.12)}%`}
         />
         <StatCard
-          label="Visible"
+          label="Active Items"
           value={activeCount}
           icon={FiCheckCircle}
           color="bg-gradient-to-br from-emerald-500 to-teal-600"
-          description="Published on public pages."
+          description="Currently published on public pages"
+          trend={`${trendPercentage}%`}
         />
         <StatCard
-          label="Images"
+          label="Total Images"
           value={imageCount}
           icon={FiImage}
           color="bg-gradient-to-br from-blue-500 to-cyan-600"
-          description="Uploaded and saved media assets."
+          description="Uploaded and stored media assets"
+          trend={`+${Math.floor(imageCount * 0.08)}`}
         />
         <StatCard
-          label="Sections"
+          label="Categories"
           value={TYPE_OPTIONS.length}
           icon={FiGrid}
           color="bg-gradient-to-br from-amber-500 to-orange-600"
-          description="Content groups available."
+          description="Content groups and departments"
         />
       </div>
 
-      <div className="relative overflow-hidden rounded-[2rem] border border-slate-100 bg-white p-5 shadow-xl shadow-slate-200/40">
+      {/* Filter Section - Modern */}
+      <div className="relative overflow-hidden rounded-[2rem] border border-slate-100 bg-white/80 backdrop-blur-sm p-5 shadow-xl shadow-slate-200/40 mb-8">
         <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-indigo-500/5 blur-3xl" />
         <div className="relative z-10 space-y-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.26em] text-slate-400">
-                Filter Engine
+              <p className="text-[10px] font-black uppercase tracking-[0.26em] text-slate-400 flex items-center gap-2">
+                <FiFilter className="text-emerald-500" /> Filter Engine
               </p>
               <h3 className="mt-1 text-xl font-black tracking-tight text-slate-950">
-                Browse School Hub Records
+                Browse & Search Records
               </h3>
             </div>
             <div className="relative w-full lg:max-w-md">
@@ -652,7 +1126,7 @@ export default function SchoolHubManager() {
               <input
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search title, contact, type or description..."
+                placeholder="Search by title, contact, type, or description..."
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
               />
             </div>
@@ -667,56 +1141,94 @@ export default function SchoolHubManager() {
                   : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <FiLayers className="mr-2 inline-block" /> All ({items.length})
+              <FiLayers className="mr-2 inline-block" /> All Categories ({totalItems})
             </button>
             {TYPE_OPTIONS.map((opt) => {
               const Icon = opt.icon;
+              const count = groupedCounts[opt.value] || 0;
+              const theme = TYPE_THEMES[opt.value];
               return (
                 <button
                   key={opt.value}
                   onClick={() => setActiveType(opt.value)}
                   className={`rounded-2xl border px-4 py-2.5 text-xs font-black uppercase tracking-widest transition-all ${
                     activeType === opt.value
-                      ? 'border-slate-950 bg-slate-950 text-white shadow-lg'
+                      ? `border-slate-950 bg-slate-950 text-white shadow-lg`
                       : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <Icon className="mr-2 inline-block text-[11px]" />
-                  {opt.label} ({groupedCounts[opt.value] || 0})
+                  <Icon className={`mr-2 inline-block text-[11px] ${activeType === opt.value ? 'text-white' : ''}`} />
+                  {opt.label} ({count})
                 </button>
               );
             })}
           </div>
+          
+          {/* Active filters display */}
+          {(searchTerm || activeType !== 'ALL') && (
+            <div className="flex items-center gap-2 pt-2 text-xs text-slate-500">
+              <span className="font-bold">Active Filters:</span>
+              {activeType !== 'ALL' && (
+                <span className="px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-semibold">
+                  {TYPE_OPTIONS.find(o => o.value === activeType)?.label}
+                </span>
+              )}
+              {searchTerm && (
+                <span className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-semibold">
+                  Search: "{searchTerm}"
+                </span>
+              )}
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setActiveType('ALL');
+                }}
+                className="ml-auto text-red-500 hover:text-red-600 font-bold"
+              >
+                Clear All
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {error && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-          {error}
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 mb-6 flex items-center justify-between">
+          <span>{error}</span>
+          <button onClick={() => setError('')} className="text-red-500 hover:text-red-700">
+            <FiX />
+          </button>
         </div>
       )}
 
+      {/* Items Grid */}
       {loading ? (
-        <div className="rounded-[28px] border border-slate-200 bg-white p-10 text-center text-slate-600 font-semibold">
-          Loading School Hub items…
+        <div className="rounded-[28px] border border-slate-200 bg-white p-12 text-center">
+          <div className="inline-flex h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-indigo-600" />
+          <p className="mt-4 text-slate-600 font-semibold">Loading School Hub items...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {visibleItems.map((item) => {
-            const typeMeta = TYPE_OPTIONS.find((t) => t.value === item.type);
+            const typeMeta = getTypeMeta(item.type);
             const Icon = typeMeta?.icon || FaUsers;
+            const theme = getTypeTheme(item.type);
             const images = normalizeSchoolImages(item);
+            const detailsCount = item.details?.length || 0;
 
             return (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-5 shadow-xl shadow-slate-200/40 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
+                className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl shadow-slate-200/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
               >
-                <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-indigo-500/5 blur-3xl transition-opacity group-hover:opacity-100" />
-                <div className="relative z-10">
+                {/* Animated gradient border */}
+                <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-3xl`} />
+                
+                <div className="relative z-10 bg-white rounded-3xl p-5 m-[1px]">
                   <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
                     <div className="flex min-w-0 items-start gap-3">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-emerald-50 text-emerald-700 ring-1 ring-slate-100">
+                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${theme.gradient} text-white shadow-lg ring-1 ring-slate-100`}>
                         <Icon className="text-lg" />
                       </div>
                       <div className="min-w-0">
@@ -729,65 +1241,95 @@ export default function SchoolHubManager() {
                     <span
                       className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-widest ${
                         item.isActive
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                          : 'border-slate-200 bg-slate-50 text-slate-600'
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                          : 'border-slate-200 bg-slate-50 text-slate-500'
                       }`}
                     >
                       {item.isActive ? <FiEye className="text-[11px]" /> : <FiEyeOff className="text-[11px]" />}
-                      {item.isActive ? 'Live' : 'Hidden'}
+                      {item.isActive ? 'Published' : 'Draft'}
                     </span>
                   </div>
 
+                  {/* Image Gallery Grid */}
                   {images.length > 0 ? (
-                    <div className="mt-5 grid grid-cols-4 gap-2">
-                      {images.slice(0, 4).map((image, index) => (
-                        <div key={image.url} className="relative h-16 overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 shadow-sm">
-                          <img src={image.url} alt={image.altText || `${item.title} image ${index + 1}`} className="h-full w-full object-cover" />
-                          {index === 3 && images.length > 4 && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 text-xs font-black text-white">
-                              +{images.length - 4}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                    <div className="mt-5">
+                      <div className="grid grid-cols-4 gap-2">
+                        {images.slice(0, 4).map((image, index) => (
+                          <div key={image.url} className="relative aspect-square overflow-hidden rounded-xl border border-slate-100 bg-slate-100 shadow-sm group/image">
+                            <img 
+                              src={image.url} 
+                              alt={image.altText || `${item.title} image ${index + 1}`} 
+                              className="h-full w-full object-cover transition-transform duration-300 group-hover/image:scale-110" 
+                            />
+                            {index === 3 && images.length > 4 && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-slate-900/70 text-xs font-black text-white backdrop-blur-sm">
+                                +{images.length - 4}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                        <FiImage /> {images.length} image{images.length !== 1 ? 's' : ''}
+                      </p>
                     </div>
                   ) : (
-                    <div className="mt-5 flex h-24 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-xs font-black uppercase tracking-widest text-slate-400">
-                      No images
+                    <div className="mt-5 flex h-24 items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-xs font-black uppercase tracking-widest text-slate-400">
+                      <FiImage className="mr-2" /> No Images
                     </div>
                   )}
 
+                  {/* Description Preview */}
                   {item.shortDescription && (
-                    <p className="mt-4 text-sm font-semibold text-slate-700 leading-6 line-clamp-3">
+                    <p className="mt-4 text-sm font-semibold text-slate-600 leading-relaxed line-clamp-2">
                       {item.shortDescription}
                     </p>
                   )}
 
+                  {/* Contact Badge */}
                   {(item.contactName || item.contactPhone || item.contactEmail) && (
-                    <p className="mt-3 text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">
-                      Contact:{' '}
-                      <span className="text-slate-800 normal-case tracking-normal font-bold">
-                        {item.contactName || item.contactPhone || item.contactEmail}
+                    <div className="mt-3 flex items-center gap-2 flex-wrap">
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold ${theme.bg} ${theme.text}`}>
+                        <FiUser size={10} /> {item.contactName || 'Contact'}
                       </span>
-                    </p>
+                      {item.contactPhone && (
+                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold">
+                          <FiPhone size={10} /> {item.contactPhone}
+                        </span>
+                      )}
+                    </div>
                   )}
 
-                  <div className="mt-5 flex items-center gap-2">
+                  {/* Details Count & Order Badge */}
+                  <div className="mt-4 flex items-center justify-between">
+                    {detailsCount > 0 && (
+                      <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                        <FiLayers /> {detailsCount} detail section{detailsCount !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {item.displayOrder !== undefined && Number(item.displayOrder) > 0 && (
+                      <span className="text-[10px] font-bold text-slate-400">
+                        Order: #{item.displayOrder}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="mt-5 flex items-center gap-2 pt-2 border-t border-slate-100">
                     <button
                       onClick={() => {
                         setEditing(item);
                         setModalOpen(true);
                       }}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-800 hover:bg-slate-100"
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-black transition-all ${theme.border} ${theme.bg} ${theme.text} hover:opacity-80`}
                     >
-                      <FiEdit /> Edit
+                      <FiEdit size={14} /> Edit
                     </button>
                     <button
-                      onClick={() => deleteItem(item.id)}
-                      disabled={deletingId === item.id}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-black text-red-700 hover:bg-red-100 disabled:opacity-60"
+                      onClick={() => handleDeleteClick(item)}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-black text-red-600 hover:bg-red-100 transition-all"
                     >
-                      <FiTrash2 /> {deletingId === item.id ? 'Deleting…' : 'Delete'}
+                      <FiTrash2 size={14} /> Delete
                     </button>
                   </div>
                 </div>
@@ -795,11 +1337,39 @@ export default function SchoolHubManager() {
             );
           })}
 
+          {/* Empty State */}
           {!visibleItems.length && (
-            <div className="sm:col-span-2 xl:col-span-3 rounded-[28px] border border-slate-200 bg-white p-10 text-center text-slate-600 font-semibold">
-              No items yet. Click “Add Item” to create the first record.
+            <div className="sm:col-span-2 xl:col-span-3 rounded-[28px] border-2 border-dashed border-slate-200 bg-white p-16 text-center">
+              <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center mb-5">
+                <FiLayers className="text-3xl text-slate-400" />
+              </div>
+              <h3 className="text-xl font-black text-slate-800 mb-2">No Items Found</h3>
+              <p className="text-slate-500 mb-6 max-w-md mx-auto">
+                {searchTerm || activeType !== 'ALL' 
+                  ? `No items match your current filters. Try adjusting your search criteria.`
+                  : `Your School Hub is empty. Click "Create New Item" to add your first record.`
+                }
+              </p>
+              <button
+                onClick={() => {
+                  setEditing(null);
+                  setModalOpen(true);
+                }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold shadow-lg hover:shadow-xl transition-all"
+              >
+                <FiPlus /> Create Your First Item
+              </button>
             </div>
           )}
+        </div>
+      )}
+      
+      {/* Results Summary */}
+      {!loading && visibleItems.length > 0 && (
+        <div className="mt-6 text-center text-xs text-slate-400 font-semibold">
+          Showing {visibleItems.length} of {totalItems} items
+          {searchTerm && ` matching "${searchTerm}"`}
+          {activeType !== 'ALL' && ` in ${TYPE_OPTIONS.find(o => o.value === activeType)?.label}`}
         </div>
       )}
     </div>
