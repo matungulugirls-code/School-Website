@@ -222,6 +222,71 @@ model Staff {
   updatedAt        DateTime @updatedAt
 }
 
+// ==========================================
+// Staff Departments (public grouping only)
+// ==========================================
+
+enum DepartmentCategory {
+  CBC
+  EIGHT_FOUR_FOUR
+  TEACHING
+  SUPPORT
+}
+
+model StaffDepartment {
+  id           Int               @id @default(autoincrement())
+  name         String            @db.VarChar(255)
+  category     DepartmentCategory
+  description  String?           @db.Text
+  image        String?           @db.Text
+  staffCount   Int               @default(0)
+  headName     String?           @db.VarChar(255)
+  extra        Json?
+  isActive     Boolean           @default(true)
+  displayOrder Int               @default(0)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+  @@index([displayOrder])
+  @@map("staff_departments")
+}
+
+// ==========================================
+// School Hub Items (Clubs, Societies, etc.)
+// ==========================================
+
+enum SchoolHubType {
+  CLUB
+  SOCIETY
+  FARM
+  BOARDING
+  SECURITY
+}
+
+model SchoolHubItem {
+  id               Int          @id @default(autoincrement())
+  type             SchoolHubType
+  title            String       @db.VarChar(255)
+  shortDescription String?      @db.Text
+  description      String?      @db.Text
+  image            String?      @db.Text
+  contactName      String?      @db.VarChar(255)
+  contactPhone     String?      @db.VarChar(50)
+  contactEmail     String?      @db.VarChar(255)
+  details          Json         @default("[]")
+  isActive         Boolean      @default(true)
+  displayOrder     Int          @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([displayOrder])
+  @@map("school_hub_items")
+}
+
 model EmailCampaign {
   id            String    @id @default(cuid())
   title         String
@@ -933,6 +998,5 @@ model Team {
 
   @@map("teams")
 }
-
 
 

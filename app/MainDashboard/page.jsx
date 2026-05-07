@@ -20,7 +20,6 @@ import {
   FiInfo,
   FiTrendingUp,
   FiAward,
-  FiClipboard,
   FiMonitor,
   FiSmartphone,
   FiArrowLeft,
@@ -51,7 +50,6 @@ import GalleryManager from '../components/gallery/page';
 import AdminManager from '../components/adminsandprofile/page';
 import GuidanceCounselingTab from '../components/guidance/page';
 import SchoolInfoTab from '../components/schoolinfo/page';
-import ApplicationsManager from '../components/applications/page';
 import Resources from '../components/resources/page';
 import Careers from "../components/career/page";
 import Student from "../components/student/page";
@@ -59,6 +57,7 @@ import Fees from "../components/fees/page";
 import SchoolDocs from "../components/schooldocuments/page";
 import SMSManager from "../components/sms/page";
 import AchievementsManager from "../components/Achievements/page";
+import SchoolHubManager from '../components/schoolhub/page';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -74,8 +73,6 @@ export default function AdminDashboard() {
     activeAssignments: 0,
     galleryItems: 0,
     guidanceSessions: 0,
-    totalApplications: 0,
-    pendingApplications: 0,
     Resources: 0,
     Careers: 0,
     totalStudent: 0,
@@ -665,6 +662,13 @@ const loadingMessages = [
   const fetchRealCounts = async () => {
     try {
       const studentCount = await fetchStudentCount();
+
+      // Prefer authenticated staff fetch (so admin stats remain accurate after privacy changes)
+      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+      const deviceToken = typeof window !== 'undefined' ? localStorage.getItem('device_token') : null;
+      const staffHeaders = adminToken && deviceToken
+        ? { Authorization: `Bearer ${adminToken}`, 'x-device-token': deviceToken }
+        : null;
       
       const [
         staffRes,
@@ -674,7 +678,6 @@ const loadingMessages = [
         assignmentsRes,
         galleryRes,
         guidanceRes,
-        admissionsRes,
         resourcesRes,
         careersRes,
         studentRes,
@@ -683,20 +686,19 @@ const loadingMessages = [
         smsRes,
         achievementsRes
       ] = await Promise.allSettled([
-        fetch('/api/staff'),
+        fetch('/api/staff', staffHeaders ? { headers: staffHeaders } : {}),
         fetch('/api/subscriber'),
         fetch('/api/events'),
         fetch('/api/news'),
         fetch('/api/assignment'),
         fetch('/api/gallery'),
         fetch('/api/guidance'),
-        fetch('/api/sms'),
-        fetch('/api/applyadmission'),
         fetch('/api/resources'),
         fetch('/api/career'),
         fetch('/api/studentupload'),
         fetch('/api/feebalances'),
         fetch('/api/schooldocuments'),
+        fetch('/api/sms'),
         fetch('/api/achievements'),
       ]);
 
@@ -707,7 +709,6 @@ const loadingMessages = [
       const assignments = assignmentsRes.status === 'fulfilled' ? await assignmentsRes.value.json() : { assignments: [] };
       const gallery = galleryRes.status === 'fulfilled' ? await galleryRes.value.json() : { galleries: [] };
       const guidance = guidanceRes.status === 'fulfilled' ? await guidanceRes.value.json() : { events: [] };
-      const admissions = admissionsRes.status === 'fulfilled' ? await admissionsRes.value.json() : { applications: [] };
       const resources = resourcesRes.status === 'fulfilled' ? await resourcesRes.value.json() : { resources: [] };
       const careers = careersRes.status === 'fulfilled' ? await careersRes.value.json() : { careers: [] };
       const student = studentRes.status === 'fulfilled' ? await studentRes.value.json() : { students: [] };
@@ -720,8 +721,6 @@ const loadingMessages = [
       
       const upcomingEvents = events.events?.filter(e => new Date(e.eventDate) >= new Date()).length || 0;
       const activeAssignments = assignments.assignments?.filter(a => a.status === 'assigned').length || 0;
-      const admissionsData = admissions.applications || [];
-      const pendingApps = admissionsData.filter(app => app.status === 'PENDING').length || 0;
 
       setRealStats({
         totalStaff: staff.staff?.length || 0,
@@ -731,8 +730,6 @@ const loadingMessages = [
         activeAssignments,
         galleryItems: gallery.galleries?.length || 0,
         guidanceSessions: guidance.events?.length || 0,
-        totalApplications: admissionsData.length || 0,
-        pendingApplications: pendingApps,
         Resources: resources.resources?.length || 0,
         sms: sms.sms?.length || 0,
         Careers: careers.careers?.length || 0,
@@ -1082,8 +1079,6 @@ const handleLogout = () => {
         return <StaffManager />;
       case 'assignments':
         return <AssignmentsManager />;
-      case 'admissions':
-        return <ApplicationsManager />;
       case 'resources':
         return <Resources />; 
       case 'newsevents':
@@ -1103,6 +1098,8 @@ const handleLogout = () => {
         return <Student />;  
       case 'fees':
         return <Fees />;
+      case 'school-hub':
+        return <SchoolHubManager />;
       case 'admins-profile':
         return <AdminManager user={user} />;
 
@@ -1147,19 +1144,19 @@ const handleLogout = () => {
       badge: 'orange'
     },
     { 
+      id: 'school-hub', 
+      label: 'School Hub', 
+      icon: IoSchoolOutline,
+      badge: 'teal'
+    },
+    { 
       id: 'assignments', 
       label: 'Assignments', 
       icon: FiBook,
       badge: 'red'
     },
     { 
-      id: 'admissions',
-      label: 'Admission Applications', 
-      icon: FiClipboard,
-      badge: 'purple'
-    },
-    { 
-      id: 'resources', 
+      id: 'resources',
       label: 'Resources',
       icon: FiFileText,
       badge: 'cyan' 

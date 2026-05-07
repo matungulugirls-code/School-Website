@@ -6,7 +6,6 @@ import {
   FiHome, 
   FiInfo, 
   FiBook, 
-  FiUserPlus,
   FiCalendar,
   FiImage,
   FiMail,
@@ -20,7 +19,10 @@ import {
   FiGrid,
   FiBookOpen,
   FiAward,
-  FiHeart
+  FiHeart,
+  FiLayers,
+  FiShield,
+  FiActivity
 } from 'react-icons/fi';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -105,11 +107,11 @@ export default function ModernNavbar() {
       href: '/pages/contact', 
       icon: FiMail 
     },
-     { 
-      name: 'Curriculum', 
-      href: '/pages/admissions',
-      icon: FiUserPlus
-    },
+      { 
+       name: 'Curriculum', 
+       href: '/pages/admissions',
+       icon: FiBookOpen
+     },
     { 
       name: 'Academics', 
       href: '/pages/academics',
@@ -155,12 +157,6 @@ export default function ModernNavbar() {
       description: 'School publications & newsletters'
     },
     {
-      name: 'Apply Now',
-      href: '/pages/apply-for-admissions',
-      icon: FiUserPlus,
-      description: 'Start your application process'
-    },
-    {
       name: 'School Rules',
       href: '/pages/School Policies',
       icon: FiAward,
@@ -187,7 +183,43 @@ export default function ModernNavbar() {
       name: 'Staff Directory',
       href: '/pages/SchoolTeam',
       icon: FiUsers,
-      description: 'Find staff contacts & departments'
+      description: 'Leadership profiles & department groups'
+    },
+    {
+      name: 'Departments',
+      href: '/pages/Departments',
+      icon: FiLayers,
+      description: 'CBC, 8-4-4, teaching & support departments'
+    },
+    {
+      name: 'Clubs',
+      href: '/pages/Clubs and Societies#clubs',
+      icon: FiUsers,
+      description: 'Co-curricular clubs & patrons'
+    },
+    {
+      name: 'Societies',
+      href: '/pages/Clubs and Societies#societies',
+      icon: FiHeart,
+      description: 'Student societies & activities'
+    },
+    {
+      name: 'Farm',
+      href: '/pages/Farm',
+      icon: FiActivity,
+      description: 'School farm projects & learning'
+    },
+    {
+      name: 'Boarding',
+      href: '/pages/Boarding',
+      icon: FiHome,
+      description: 'Facilities, rules & expectations'
+    },
+    {
+      name: 'Security',
+      href: '/pages/Security',
+      icon: FiShield,
+      description: 'Safety measures & guidelines'
     },
     {
       name: 'Alumni page',

@@ -161,6 +161,9 @@ const getStaffHierarchy = (position) => {
   if (!position) return 'teaching';
   
   const positionLower = position.toLowerCase();
+  if (positionLower.includes('senior teacher')) {
+    return 'leadership';
+  }
   if ((positionLower.includes('principal') || positionLower.includes('deputy principal')) &&
       !positionLower.includes('senior') && !positionLower.includes('head')) {
     return 'leadership';
@@ -279,6 +282,134 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
               : <StaffListCard staff={member} onContactClick={onContactClick} />
             }
           </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+// Department grouping cards (privacy-safe, no individual teacher profiles)
+const getDepartmentImage = (image) => {
+  if (!image || typeof image !== 'string') return null;
+  const trimmed = image.trim();
+  if (!trimmed) return null;
+  if (trimmed.includes('cloudinary.com')) return trimmed;
+  if (trimmed.startsWith('/') || trimmed.startsWith('http')) return trimmed;
+  if (trimmed.startsWith('data:image')) return trimmed;
+  return trimmed;
+};
+
+const getDepartmentCategoryLabel = (category) => {
+  switch (category) {
+    case 'CBC':
+      return 'CBC Department';
+    case 'EIGHT_FOUR_FOUR':
+      return '8-4-4 Department';
+    case 'TEACHING':
+      return 'Teaching Department';
+    case 'SUPPORT':
+      return 'Support Department';
+    default:
+      return 'Department';
+  }
+};
+
+const DepartmentCard = ({ department }) => {
+  const imageUrl = getDepartmentImage(department?.image);
+  const staffCount = Number(department?.staffCount) || 0;
+  const headName = department?.headName || '';
+
+  return (
+    <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
+
+      <div className="relative mx-5 mt-5 overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
+        {imageUrl ? (
+          <div className="relative aspect-[16/9]">
+            <Image
+              src={imageUrl}
+              alt={department?.name || 'Department'}
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, 700px"
+              onError={(e) => {
+                e.target.src = '/images/default-staff.jpg';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07111b]/60 via-[#07111b]/10 to-transparent" />
+          </div>
+        ) : (
+          <div className="aspect-[16/9] flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+            <FiLayers className="text-slate-400" size={22} />
+          </div>
+        )}
+
+        <div className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-800 border border-white/60 backdrop-blur-sm">
+          {getDepartmentCategoryLabel(department?.category)}
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h3 className="truncate text-[15px] font-black text-slate-950">
+              {department?.name || 'Department'}
+            </h3>
+            {department?.description && (
+              <p className="mt-2 text-[13px] font-semibold leading-6 text-slate-700 line-clamp-3">
+                {department.description}
+              </p>
+            )}
+          </div>
+
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border border-slate-200 bg-slate-50 shadow-sm">
+            <FiUsers size={18} className="text-slate-700" />
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2.5">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
+            <FiUsers size={11} />
+            {staffCount} Staff
+          </span>
+          {headName && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
+              <FiUser size={11} />
+              HOD: {headName}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DepartmentGroupSection = ({ title, icon: Icon, departments, subtitle }) => {
+  if (!departments?.length) return null;
+
+  return (
+    <section className="mt-10">
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-8 h-8 rounded-lg bg-[#1a1a2e] flex items-center justify-center">
+          <Icon size={14} className="text-white" />
+        </div>
+        <div className="min-w-0">
+          <h2 className="text-sm font-black text-[#1a1a2e] uppercase tracking-[0.15em]">
+            {title}
+          </h2>
+          {subtitle && (
+            <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{subtitle}</p>
+          )}
+        </div>
+        <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+          {departments.length}
+        </span>
+        <div className="flex-1 h-px bg-slate-100 ml-2" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {departments.map((dept) => (
+          <DepartmentCard key={dept.id} department={dept} />
         ))}
       </div>
     </section>
@@ -478,8 +609,16 @@ export default function StaffDirectory() {
   const [error, setError] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDepts, setSelectedDepts] = useState([]);
   const [selectedHierarchy, setSelectedHierarchy] = useState('all');
+
+  // Department groupings (public, privacy-safe)
+  const [departmentsByCategory, setDepartmentsByCategory] = useState({
+    CBC: [],
+    EIGHT_FOUR_FOUR: [],
+    TEACHING: [],
+    SUPPORT: []
+  });
+  const [departmentsLoading, setDepartmentsLoading] = useState(true);
   
   const [viewMode, setViewMode] = useState('grid');
   const [currentPage, setCurrentPage] = useState(1);
@@ -588,16 +727,16 @@ export default function StaffDirectory() {
           id: staff.id,
           name: staff.name,
           role: staff.role,
-          position: staff.position,
-          department: staff.department,
-          departmentId: staff.department.toLowerCase().replace(/\s+/g, '-'),
-          email: staff.email,
-          phone: staff.phone,
+          position: staff.position || staff.role || '',
+          department: staff.department || 'Administration',
+          departmentId: (staff.department || 'Administration').toLowerCase().replace(/\s+/g, '-'),
+          email: staff.email || '',
+          phone: staff.phone || '',
           image: staff.image,
-          expertise: staff.expertise || [],
+          expertise: Array.isArray(staff.expertise) ? staff.expertise : [],
           bio: staff.bio,
-          responsibilities: staff.responsibilities || [],
-          achievements: staff.achievements || [],
+          responsibilities: Array.isArray(staff.responsibilities) ? staff.responsibilities : [],
+          achievements: Array.isArray(staff.achievements) ? staff.achievements : [],
           location: 'Matungulu Girls Senior School',
           joinDate: '2020'
         }));
@@ -617,7 +756,37 @@ export default function StaffDirectory() {
 
   useEffect(() => {
     fetchStaffData();
+    fetchDepartmentsData();
   }, []);
+
+  async function fetchDepartmentsData() {
+    try {
+      setDepartmentsLoading(true);
+      const response = await fetch('/api/staff/departments?grouped=1');
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch departments: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        const grouped = data.departmentsByCategory || {};
+        setDepartmentsByCategory({
+          CBC: grouped.CBC || [],
+          EIGHT_FOUR_FOUR: grouped.EIGHT_FOUR_FOUR || [],
+          TEACHING: grouped.TEACHING || [],
+          SUPPORT: grouped.SUPPORT || []
+        });
+      } else {
+        throw new Error(data.error || 'Invalid departments response');
+      }
+    } catch (err) {
+      console.error('Error fetching departments:', err);
+      setDepartmentsByCategory({ CBC: [], EIGHT_FOUR_FOUR: [], TEACHING: [], SUPPORT: [] });
+    } finally {
+      setDepartmentsLoading(false);
+    }
+  }
 
   const filteredStaff = useMemo(() => {
     return staffData.filter(staff => {
@@ -625,18 +794,16 @@ export default function StaffDirectory() {
       const matchesSearch = 
         staff.name.toLowerCase().includes(searchLower) ||
         staff.role.toLowerCase().includes(searchLower) ||
-        staff.position.toLowerCase().includes(searchLower) ||
+        (staff.position || '').toLowerCase().includes(searchLower) ||
         (staff.bio && staff.bio.toLowerCase().includes(searchLower)) ||
         staff.expertise.some(exp => exp.toLowerCase().includes(searchLower));
-
-      const matchesDept = selectedDepts.length === 0 || selectedDepts.includes(staff.departmentId);
 
       const staffHierarchy = getStaffHierarchy(staff.position);
       const matchesHierarchy = selectedHierarchy === 'all' || selectedHierarchy === staffHierarchy;
 
-      return matchesSearch && matchesDept && matchesHierarchy;
+      return matchesSearch && matchesHierarchy;
     });
-  }, [staffData, searchQuery, selectedDepts, selectedHierarchy]);
+  }, [staffData, searchQuery, selectedHierarchy]);
 
   const staffByHierarchy = useMemo(() => {
     const leadership = filteredStaff.filter(staff => getStaffHierarchy(staff.position) === 'leadership');
@@ -668,28 +835,77 @@ export default function StaffDirectory() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedDepts, selectedHierarchy]);
-
-  const toggleDept = (id) => {
-    setSelectedDepts(prev => 
-      prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
-    );
-  };
+  }, [searchQuery, selectedHierarchy]);
 
   const clearAllFilters = () => {
     setSearchQuery('');
-    setSelectedDepts([]);
     setSelectedHierarchy('all');
   };
 
-  const getDeptCount = (id) => staffData.filter(s => s.departmentId === id).length;
+  const departmentTotals = useMemo(() => {
+    const sum = (list) =>
+      (Array.isArray(list) ? list : []).reduce(
+        (acc, d) => acc + (Number(d?.staffCount) || 0),
+        0
+      );
+
+    const cbc = departmentsByCategory.CBC || [];
+    const eight = departmentsByCategory.EIGHT_FOUR_FOUR || [];
+    const teaching = departmentsByCategory.TEACHING || [];
+    const support = departmentsByCategory.SUPPORT || [];
+
+    const totalDepartments = cbc.length + eight.length + teaching.length + support.length;
+    const teachingStaffCount = sum(cbc) + sum(eight) + sum(teaching);
+    const supportStaffCount = sum(support);
+
+    return { totalDepartments, teachingStaffCount, supportStaffCount };
+  }, [departmentsByCategory]);
 
   const departmentStats = useMemo(() => [
     { icon: FiShield, value: staffByHierarchy.leadership.length, label: 'Leadership', color: 'blue' },
-    { icon: FiBookOpen, value: staffByHierarchy.teaching.length, label: 'Teachers', color: 'emerald' },
-    { icon: FiSettings, value: staffByHierarchy.support.length, label: 'Support', color: 'orange' },
-    { icon: FiLayers, value: DEPARTMENTS.length, label: 'Depts', color: 'violet' }
-  ], [staffByHierarchy]);
+    { icon: FiBookOpen, value: departmentTotals.teachingStaffCount, label: 'Teaching', color: 'emerald' },
+    { icon: FiSettings, value: departmentTotals.supportStaffCount, label: 'Support', color: 'orange' },
+    { icon: FiLayers, value: departmentTotals.totalDepartments, label: 'Depts', color: 'violet' }
+  ], [staffByHierarchy, departmentTotals]);
+
+  const filteredDepartmentsByCategory = useMemo(() => {
+    const query = (searchQuery || '').trim().toLowerCase();
+    if (!query) return departmentsByCategory;
+
+    const filterList = (list) =>
+      (Array.isArray(list) ? list : []).filter((d) => {
+        const name = (d?.name || '').toLowerCase();
+        const desc = (d?.description || '').toLowerCase();
+        const head = (d?.headName || '').toLowerCase();
+        return name.includes(query) || desc.includes(query) || head.includes(query);
+      });
+
+    return {
+      CBC: filterList(departmentsByCategory.CBC),
+      EIGHT_FOUR_FOUR: filterList(departmentsByCategory.EIGHT_FOUR_FOUR),
+      TEACHING: filterList(departmentsByCategory.TEACHING),
+      SUPPORT: filterList(departmentsByCategory.SUPPORT),
+    };
+  }, [departmentsByCategory, searchQuery]);
+
+  const filteredDepartmentCount = useMemo(() => {
+    const c = filteredDepartmentsByCategory.CBC?.length || 0;
+    const e = filteredDepartmentsByCategory.EIGHT_FOUR_FOUR?.length || 0;
+    const t = filteredDepartmentsByCategory.TEACHING?.length || 0;
+    const s = filteredDepartmentsByCategory.SUPPORT?.length || 0;
+    return c + e + t + s;
+  }, [filteredDepartmentsByCategory]);
+
+  const filteredTeachingDepartmentCount = useMemo(() => {
+    const c = filteredDepartmentsByCategory.CBC?.length || 0;
+    const e = filteredDepartmentsByCategory.EIGHT_FOUR_FOUR?.length || 0;
+    const t = filteredDepartmentsByCategory.TEACHING?.length || 0;
+    return c + e + t;
+  }, [filteredDepartmentsByCategory]);
+
+  const filteredSupportDepartmentCount = useMemo(() => {
+    return filteredDepartmentsByCategory.SUPPORT?.length || 0;
+  }, [filteredDepartmentsByCategory]);
 
   if (error) {
     return (
@@ -842,10 +1058,10 @@ export default function StaffDirectory() {
     {/* Hierarchy Tabs */}
     <div className="flex items-center gap-2 py-3.5 overflow-x-auto scrollbar-hide -mx-1 px-1">
       {[
-        { key: 'all', label: 'All Staff', Icon: FiUsers, count: staffData.length },
+        { key: 'all', label: 'All', Icon: FiUsers, count: staffByHierarchy.leadership.length + departmentTotals.teachingStaffCount + departmentTotals.supportStaffCount },
         { key: 'leadership', label: 'Leadership', Icon: FiShield, count: staffByHierarchy.leadership?.length || 0 },
-        { key: 'teaching', label: 'Teaching', Icon: FiBookOpen, count: staffByHierarchy.teaching?.length || 0 },
-        { key: 'support', label: 'Support', Icon: FiSettings, count: staffByHierarchy.support?.length || 0 },
+        { key: 'teaching', label: 'Teaching', Icon: FiBookOpen, count: departmentTotals.teachingStaffCount || 0 },
+        { key: 'support', label: 'Support', Icon: FiSettings, count: departmentTotals.supportStaffCount || 0 },
       ].map((item) => (
           <button
             key={item.key}
@@ -864,33 +1080,8 @@ export default function StaffDirectory() {
           </button>
       ))}
 
-      {/* Divider */}
-      <div className="w-px h-6 bg-slate-200 mx-2 flex-shrink-0" />
-
-      {/* Department Pills */}
-      {DEPARTMENTS.map((dept) => {
-        const DIcon = DEPT_ICONS[dept.id] || FiLayers;
-        return (
-          <button
-            key={dept.id}
-            onClick={() => toggleDept(dept.id)}
-            className={`flex-shrink-0 flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-extrabold transition-[box-shadow,background-color,border-color,color] ${
-              selectedDepts.includes(dept.id)
-                ? `${getBadgeColorStyles(dept.color)} shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_0_0_5px_rgba(148,163,184,0.18)]`
-                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-            }`}
-          >
-            <DIcon size={14} />
-            <span className="whitespace-nowrap">{dept.label}</span>
-            <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${
-              selectedDepts.includes(dept.id) ? 'bg-white/75 text-slate-900' : 'bg-slate-100 text-slate-600'
-            }`}>{getDeptCount(dept.id)}</span>
-          </button>
-        );
-      })}
-
       {/* Clear Filters */}
-      {(selectedDepts.length > 0 || searchQuery || selectedHierarchy !== 'all') && (
+      {(searchQuery || selectedHierarchy !== 'all') && (
         <>
           <div className="w-px h-5 bg-slate-200 mx-1 flex-shrink-0" />
           <button
@@ -913,13 +1104,25 @@ export default function StaffDirectory() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5">
               <div>
                 <p className="text-sm text-slate-500">
-                  {loading ? 'Loading...' : (
-                    <>
-                      Showing <span className="font-bold text-slate-900">{filteredStaff.length}</span> staff members
-                      {filteredStaff.length !== staffData.length && (
-                        <span className="text-blue-600 font-semibold"> (filtered from {staffData.length})</span>
-                      )}
-                    </>
+                  {(loading || departmentsLoading) ? 'Loading...' : (
+                    selectedHierarchy === 'leadership' ? (
+                      <>
+                        Showing <span className="font-bold text-slate-900">{filteredStaff.length}</span> leadership profiles
+                      </>
+                    ) : selectedHierarchy === 'teaching' ? (
+                      <>
+                        Showing <span className="font-bold text-slate-900">{filteredTeachingDepartmentCount}</span> teaching departments
+                      </>
+                    ) : selectedHierarchy === 'support' ? (
+                      <>
+                        Showing <span className="font-bold text-slate-900">{filteredSupportDepartmentCount}</span> support departments
+                      </>
+                    ) : (
+                      <>
+                        Showing <span className="font-bold text-slate-900">{staffByHierarchy.leadership.length}</span> leadership profiles and{' '}
+                        <span className="font-bold text-slate-900">{filteredDepartmentCount}</span> departments
+                      </>
+                    )
                   )}
                 </p>
               </div>
@@ -1123,36 +1326,88 @@ export default function StaffDirectory() {
             )}
 
             {/* Content */}
-            {loading ? (
+            {loading || departmentsLoading ? (
               <div className={viewMode === 'grid' ? 'grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3' : 'space-y-4'}>
                 {[...Array(6)].map((_, i) => (
                   <StaffSkeleton key={i} viewMode={viewMode} />
                 ))}
               </div>
-            ) : filteredStaff.length > 0 ? (
+            ) : (staffByHierarchy.leadership.length > 0 || filteredDepartmentCount > 0) ? (
               <>
                 {selectedHierarchy === 'all' ? (
                   <div className="space-y-6">
                     <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst={true} onContactClick={handleContactClick} />
-                    <HierarchySection title="Teaching Staff" iconKey="teaching" staff={staffByHierarchy.teaching} viewMode={viewMode} onContactClick={handleContactClick} />
-                    <HierarchySection title="Support Staff" iconKey="support" staff={staffByHierarchy.support} viewMode={viewMode} onContactClick={handleContactClick} />
+
+                    <DepartmentGroupSection
+                      title="CBC Departments"
+                      icon={FiLayers}
+                      departments={filteredDepartmentsByCategory.CBC}
+                      subtitle="Department overview (privacy-safe)"
+                    />
+
+                    <DepartmentGroupSection
+                      title="8-4-4 Departments"
+                      icon={FiBookOpen}
+                      departments={filteredDepartmentsByCategory.EIGHT_FOUR_FOUR}
+                      subtitle="Department overview (privacy-safe)"
+                    />
+
+                    <DepartmentGroupSection
+                      title="Teaching Departments"
+                      icon={FiBookOpen}
+                      departments={filteredDepartmentsByCategory.TEACHING}
+                      subtitle="Grouped teaching staff by department (no individual teacher profiles)"
+                    />
+
+                    <DepartmentGroupSection
+                      title="Support / Non-Teaching Departments"
+                      icon={FiSettings}
+                      departments={filteredDepartmentsByCategory.SUPPORT}
+                      subtitle="Grouped support staff by department"
+                    />
                   </div>
-                ) : viewMode === 'grid' ? (
+                ) : selectedHierarchy === 'leadership' ? (
+                  viewMode === 'grid' ? (
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                       {paginatedStaff.map((staff) => (
                         <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                       ))}
                     </div>
-                ) : (
+                  ) : (
                   <div className="space-y-4">
                     {paginatedStaff.map((staff) => (
                       <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                     ))}
                   </div>
+                  )
+                ) : selectedHierarchy === 'teaching' ? (
+                  <div className="space-y-6">
+                    <DepartmentGroupSection
+                      title="CBC Departments"
+                      icon={FiLayers}
+                      departments={filteredDepartmentsByCategory.CBC}
+                    />
+                    <DepartmentGroupSection
+                      title="8-4-4 Departments"
+                      icon={FiBookOpen}
+                      departments={filteredDepartmentsByCategory.EIGHT_FOUR_FOUR}
+                    />
+                    <DepartmentGroupSection
+                      title="Teaching Departments"
+                      icon={FiBookOpen}
+                      departments={filteredDepartmentsByCategory.TEACHING}
+                    />
+                  </div>
+                ) : (
+                  <DepartmentGroupSection
+                    title="Support / Non-Teaching Departments"
+                    icon={FiSettings}
+                    departments={filteredDepartmentsByCategory.SUPPORT}
+                  />
                 )}
 
                 {/* Pagination */}
-                {totalPages > 1 && selectedHierarchy !== 'all' && (
+                {totalPages > 1 && selectedHierarchy === 'leadership' && (
                   <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 pt-5">
                     <p className="text-xs text-slate-400">
                       Page <span className="font-bold text-slate-900">{currentPage}</span> of <span className="font-bold text-slate-900">{totalPages}</span>
@@ -1204,12 +1459,12 @@ export default function StaffDirectory() {
 
   {/* Heading: Increased from text-base to text-xl, ensured font-black */}
   <h3 className="text-xl font-black text-slate-900 mb-2 tracking-tight">
-    No Staff Members Found
+    No Results Found
   </h3>
 
   {/* Subtext: Increased size and line height */}
   <p className="text-[16px] font-medium text-slate-500 max-w-md mb-8 leading-relaxed">
-    We couldn't find anyone matching those criteria. <br className="hidden sm:block" />
+    We couldn't find any leadership profiles or departments matching those criteria. <br className="hidden sm:block" />
     Try adjusting your search keywords or filters.
   </p>
 

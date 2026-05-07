@@ -22,7 +22,6 @@ import {
   FiTarget,
   FiBriefcase,
   FiActivity,
-  FiUserPlus,
   FiBell,
   FiCheckCircle,
   FiDownload,
@@ -61,7 +60,6 @@ const QUICK_LINKS = [
 
 const RESOURCES = [
   { name: 'Student Portal', href: '/pages/StudentPortal', icon: FiBookOpen },
-  { name: 'Apply Now', href: '/pages/apply-for-admissions', icon: FiUserPlus },
   {
     name: 'Guidance & Counselling',
     href: '/pages/Guidance-and-Councelling',

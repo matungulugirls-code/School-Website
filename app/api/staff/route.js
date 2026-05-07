@@ -201,6 +201,39 @@ const deleteImageFromCloudinary = async (imageUrl) => {
   }
 };
 
+// ==================== STAFF VISIBILITY RULES ====================
+
+const LEADERSHIP_ROLES = new Set([
+  "Principal",
+  "Deputy Principal",
+  "Senior Teacher",
+]);
+
+const DEPUTY_POSITIONS = new Set([
+  "Deputy Principal (Academics)",
+  "Deputy Principal (Administration)",
+]);
+
+const isLeadershipStaff = (staff) => {
+  if (!staff) return false;
+  const role = (staff.role || "").trim();
+  const position = (staff.position || "").trim();
+  const positionLower = position.toLowerCase();
+
+  if (role === "Principal") return true;
+  if (role === "Senior Teacher") return true;
+  if (positionLower.includes("senior teacher")) return true;
+
+  if (role === "Deputy Principal") {
+    // Prefer the new, explicit positions but allow legacy deputy records too
+    if (!position) return true;
+    const normalized = position.toLowerCase();
+    return normalized.includes("academics") || normalized.includes("academic") || normalized.includes("admin");
+  }
+
+  return false;
+};
+
 // 🔹 Check principal/deputy principal limits
 // 🔹 Enhanced role limits with position-based validation for Deputy Principals
 async function checkRoleLimits(role, staffId = null, position = null) {
@@ -265,14 +298,28 @@ async function checkRoleLimits(role, staffId = null, position = null) {
   }
 }
 
-// 🔹 GET all staff (PUBLIC - no authentication required)
-export async function GET() {
+// 🔹 GET staff
+// - Public: leadership only (privacy)
+// - Admin (auth headers present + valid): all staff records
+export async function GET(req) {
   try {
+    let isAdmin = false;
+
+    const maybeAdminToken = req?.headers?.get('x-admin-token') || req?.headers?.get('authorization')?.replace('Bearer ', '');
+    const maybeDeviceToken = req?.headers?.get('x-device-token');
+
+    if (maybeAdminToken && maybeDeviceToken) {
+      const validation = DeviceTokenManager.validateTokensFromHeaders(req.headers);
+      isAdmin = validation.valid;
+    }
+
     const staff = await prisma.staff.findMany({
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ success: true, staff });
+    const visibleStaff = isAdmin ? staff : staff.filter(isLeadershipStaff);
+
+    return NextResponse.json({ success: true, staff: visibleStaff });
   } catch (error) {
     console.error("❌ GET Staff Error:", error);
     return NextResponse.json(
@@ -321,6 +368,19 @@ export async function POST(req) {
       );
     }
 
+    // 🔹 Restrict uploads to leadership profiles only
+    if (!LEADERSHIP_ROLES.has(role)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Individual staff profiles are restricted to leadership roles only: Principal, Deputy Principal (Academics), Deputy Principal (Administration), and Senior Teacher.",
+          authenticated: true,
+        },
+        { status: 400 }
+      );
+    }
+
     // 🔹 Validate Deputy Principal has position specified
     if (role === "Deputy Principal" && !position) {
       return NextResponse.json(
@@ -328,6 +388,19 @@ export async function POST(req) {
           success: false, 
           error: "Deputy Principal must have a position: 'Deputy Principal (Academics)' or 'Deputy Principal (Administration)'",
           authenticated: true
+        },
+        { status: 400 }
+      );
+    }
+
+    // 🔹 Enforce Deputy Principal type (Academics/Admin) for privacy + grouping
+    if (role === "Deputy Principal" && position && !DEPUTY_POSITIONS.has(position)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Deputy Principal position must be 'Deputy Principal (Academics)' or 'Deputy Principal (Administration)'.",
+          authenticated: true,
         },
         { status: 400 }
       );

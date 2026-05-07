@@ -289,7 +289,7 @@ const emailTemplates = {
               
               <!-- CTA Button -->
               <div style="text-align: center; margin: 8% 0;">
-                <a href="https://matungulu-girls.vercel.app/pages/apply-for-admissions" 
+                <a href="https://matungulu-girls.vercel.app/pages/admissions" 
                    style="display: inline-block; 
                           width: 100%; 
                           max-width: 280px; 
@@ -303,7 +303,7 @@ const emailTemplates = {
                           margin: 0 auto; 
                           text-align: center;
                           border: none;
-                          cursor: pointer;">Apply Now →</a>
+                          cursor: pointer;">View Admissions →</a>
               </div>
               
               <!-- Contact Info -->

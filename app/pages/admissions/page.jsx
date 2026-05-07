@@ -858,7 +858,7 @@ const ModernEducationSystemCard = ({ system, icon: Icon, color, description, fea
     </div>
   );
 };
-const AdmissionPathCard = ({ path, onApply, index }) => {
+const AdmissionPathCard = ({ path, index }) => {
   const isEven = index % 2 === 0;
   const PathIcon = path.icon;
 
@@ -924,16 +924,6 @@ const AdmissionPathCard = ({ path, onApply, index }) => {
               <span className={`text-xs font-bold ${isEven ? 'text-slate-800' : 'text-white'}`}>{path.deadline}</span>
             </div>
           </div>
-          <button
-            onClick={onApply}
-            className={`text-[10px] font-bold px-4 py-2 rounded-lg uppercase tracking-wide transition-colors ${
-              isEven 
-                ? 'bg-teal-800 text-white hover:bg-teal-900' 
-                : 'bg-white text-slate-900 hover:bg-slate-100'
-            }`}
-          >
-            Apply Now
-          </button>
         </div>
       </div>
     </div>
@@ -2362,18 +2352,6 @@ return (
         </div>
       </div>
 
-      {/* Action Button - Only strategic Apply Now */}
-      <button
-        disabled={!isOpen}
-        onClick={() => router.push('/pages/apply-for-admissions')}
-        className={`w-auto px-7 py-3 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 ${
-          isOpen 
-            ? 'bg-stone-900 text-white hover:bg-stone-800' 
-            : 'bg-stone-100 text-stone-400 cursor-not-allowed border border-stone-200'
-        }`}
-      >
-        {isOpen ? 'Apply Now' : 'Closed'}
-      </button>
     </div>
   </div>
 );
@@ -2534,7 +2512,6 @@ return (
           key={path.title}
           path={path}
           index={index}
-          onApply={() => router.push('/pages/apply-for-admissions')}
         />
       ))}
     </div>

@@ -114,9 +114,9 @@ export default function ContactPage() {
   const quickActions = [
     {
       icon: <User className="w-4 h-4" />,
-      title: 'Apply for Admission',
-      description: 'Start your application process',
-      link: '/pages/apply-for-admissions',
+      title: 'Admissions Info',
+      description: 'Requirements and key dates',
+      link: '/pages/admissions',
       color: 'emerald'
     },
     {
@@ -299,13 +299,6 @@ export default function ContactPage() {
 
           {/* MODERN ACTION DOCK */}
           <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center w-full px-2 mt-6">
-            
-            <Link href="/pages/apply-for-admissions" passHref className="flex-1 sm:flex-none">
-              <button className="w-full sm:w-auto px-4 sm:px-10 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[11px] sm:text-sm font-black rounded-xl sm:rounded-2xl shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 transition-transform active:scale-95 whitespace-nowrap">
-                Apply Now <ArrowRight size={16} className="shrink-0" />
-              </button>
-            </Link>
-
             <Link href="/pages/admissions" passHref className="flex-1 sm:flex-none">
               <button className="w-full sm:w-auto px-4 sm:px-10 py-3 bg-slate-900 text-white text-[11px] sm:text-sm font-black rounded-xl sm:rounded-2xl border border-white/10 shadow-xl flex items-center justify-center transition-transform active:scale-95 whitespace-nowrap">
                 View Programs

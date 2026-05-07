@@ -279,7 +279,7 @@
           <xsl:variable name="homepage" select="urlset/url[contains(loc, 'vercel.app/') and not(contains(loc, '/pages/')) and not(contains(loc, '/about')) and not(contains(loc, 'admissions')) and not(contains(loc, 'apply')) and not(contains(loc, 'guidance')) and not(contains(loc, 'career')) and not(contains(loc, 'events')) and not(contains(loc, 'gallery')) and not(contains(loc, 'staff')) and not(contains(loc, 'portal')) and not(contains(loc, 'policy')) and not(contains(loc, 'contact')) and not(contains(loc, 'login')) and not(contains(loc, 'dashboard'))]"/>
           
           <xsl:variable name="aboutUrls" select="urlset/url[contains(loc, 'AboutUs') or contains(loc, 'about') or contains(loc, 'mission') or contains(loc, 'history')]"/>
-          <xsl:variable name="admissionsUrls" select="urlset/url[contains(loc, 'admissions') or contains(loc, 'apply-for-admissions') or contains(loc, 'apply-now') or contains(loc, 'fees') or contains(loc, 'scholarship')]"/>
+          <xsl:variable name="admissionsUrls" select="urlset/url[contains(loc, 'admissions') or contains(loc, 'fees') or contains(loc, 'scholarship')]"/>
           <xsl:variable name="supportUrls" select="urlset/url[contains(loc, 'Guidance') or contains(loc, 'Coucelling') or contains(loc, 'careers')]"/>
           <xsl:variable name="newsUrls" select="urlset/url[contains(loc, 'eventsandnews') or contains(loc, 'news') or contains(loc, 'gallery')]"/>
           <xsl:variable name="communityUrls" select="urlset/url[contains(loc, 'SchoolTeam') or contains(loc, 'staff') or contains(loc, 'alumni')]"/>

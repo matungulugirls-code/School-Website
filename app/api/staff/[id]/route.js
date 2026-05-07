@@ -201,8 +201,40 @@ const deleteImageFromCloudinary = async (imageUrl) => {
   }
 };
 
+// ==================== STAFF VISIBILITY RULES ====================
+
+const LEADERSHIP_ROLES = new Set([
+  "Principal",
+  "Deputy Principal",
+  "Senior Teacher",
+]);
+
+const DEPUTY_POSITIONS = new Set([
+  "Deputy Principal (Academics)",
+  "Deputy Principal (Administration)",
+]);
+
+const isLeadershipStaff = (staff) => {
+  if (!staff) return false;
+  const role = (staff.role || "").trim();
+  const position = (staff.position || "").trim();
+  const positionLower = position.toLowerCase();
+
+  if (role === "Principal") return true;
+  if (role === "Senior Teacher") return true;
+  if (positionLower.includes("senior teacher")) return true;
+
+  if (role === "Deputy Principal") {
+    if (!position) return true;
+    const normalized = position.toLowerCase();
+    return normalized.includes("academics") || normalized.includes("academic") || normalized.includes("admin");
+  }
+
+  return false;
+};
+
 // 🔹 Check principal/deputy principal limits
-async function checkRoleLimits(role, staffId = null) {
+async function checkRoleLimits(role, staffId = null, position = null) {
   if (role === "Principal") {
     const existingPrincipal = await prisma.staff.findFirst({
       where: { 
@@ -214,7 +246,9 @@ async function checkRoleLimits(role, staffId = null) {
     if (existingPrincipal) {
       throw new Error("A principal already exists. There can only be one principal.");
     }
-  } else if (role === "Deputy Principal") {
+  } 
+  
+  else if (role === "Deputy Principal") {
     const existingDeputies = await prisma.staff.findMany({
       where: { 
         role: "Deputy Principal",
@@ -222,20 +256,73 @@ async function checkRoleLimits(role, staffId = null) {
       }
     });
     
-    if (existingDeputies.length >= 3) {
-      throw new Error("Maximum of three deputy principals allowed. Current count: " + existingDeputies.length);
+    // Hard limit: Exactly 2 Deputy Principals maximum
+    if (existingDeputies.length >= 2) {
+      throw new Error(
+        "Maximum of two deputy principals allowed.\n" +
+        "✓ One Deputy Principal (Academics)\n" +
+        "✓ One Deputy Principal (Administration)"
+      );
+    }
+
+    // If position is provided, check for duplicates based on position type
+    if (position && existingDeputies.length > 0) {
+      const positionLower = position.toLowerCase();
+
+      // Check if trying to add a second Academic Deputy
+      if (positionLower.includes('academics') || positionLower.includes('academic')) {
+        const academicExists = existingDeputies.some(deputy => 
+          deputy.position?.toLowerCase().includes('academics') || 
+          deputy.position?.toLowerCase().includes('academic')
+        );
+        
+        if (academicExists) {
+          throw new Error("Deputy Principal (Academics) already exists.");
+        }
+      }
+      
+      // Check if trying to add a second Administration Deputy
+      if (positionLower.includes('admin')) {
+        const adminExists = existingDeputies.some(deputy => 
+          deputy.position?.toLowerCase().includes('admin') ||
+          deputy.position?.toLowerCase().includes('administration')
+        );
+        
+        if (adminExists) {
+          throw new Error("Deputy Principal (Administration) already exists.");
+        }
+      }
     }
   }
 }
 
-// 🔹 GET single staff by ID (PUBLIC - no authentication required)
+// 🔹 GET single staff by ID
+// - Public: leadership only (privacy)
+// - Admin (auth headers present + valid): any staff record
 export async function GET(req, { params }) {
   try {
+    let isAdmin = false;
+
+    const maybeAdminToken = req?.headers?.get('x-admin-token') || req?.headers?.get('authorization')?.replace('Bearer ', '');
+    const maybeDeviceToken = req?.headers?.get('x-device-token');
+
+    if (maybeAdminToken && maybeDeviceToken) {
+      const validation = DeviceTokenManager.validateTokensFromHeaders(req.headers);
+      isAdmin = validation.valid;
+    }
+
     const staff = await prisma.staff.findUnique({
       where: { id: Number(params.id) },
     });
 
     if (!staff) {
+      return NextResponse.json(
+        { success: false, error: "Staff not found" },
+        { status: 404 }
+      );
+    }
+
+    if (!isAdmin && !isLeadershipStaff(staff)) {
       return NextResponse.json(
         { success: false, error: "Staff not found" },
         { status: 404 }
@@ -286,6 +373,19 @@ export async function PUT(req, { params }) {
     // Check if role or position is being changed
     const newRole = formData.get("role");
     const newPosition = formData.get("position");
+
+    // 🔹 Restrict updates to leadership profiles only
+    if (newRole && !LEADERSHIP_ROLES.has(newRole)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Individual staff profiles are restricted to leadership roles only: Principal, Deputy Principal (Academics), Deputy Principal (Administration), and Senior Teacher.",
+          authenticated: true,
+        },
+        { status: 400 }
+      );
+    }
     
     // Validate Deputy Principal has position when role is Deputy Principal
     if (newRole === "Deputy Principal" && !newPosition) {
@@ -294,6 +394,32 @@ export async function PUT(req, { params }) {
           success: false, 
           error: "Deputy Principal must have a position: 'Deputy Principal (Academics)' or 'Deputy Principal (Administration)'",
           authenticated: true
+        },
+        { status: 400 }
+      );
+    }
+
+    // Enforce Deputy Principal type (Academics/Admin)
+    if (newRole === "Deputy Principal" && newPosition && !DEPUTY_POSITIONS.has(newPosition)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Deputy Principal position must be 'Deputy Principal (Academics)' or 'Deputy Principal (Administration)'.",
+          authenticated: true,
+        },
+        { status: 400 }
+      );
+    }
+
+    // If role isn't provided but we're updating a Deputy Principal, still validate the position
+    if (!newRole && existingStaff.role === "Deputy Principal" && newPosition && !DEPUTY_POSITIONS.has(newPosition)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Deputy Principal position must be 'Deputy Principal (Academics)' or 'Deputy Principal (Administration)'.",
+          authenticated: true,
         },
         { status: 400 }
       );

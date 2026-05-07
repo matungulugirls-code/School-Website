@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import DepartmentsAdmin from './departments-admin';
 import { 
   FiPlus, 
   FiSearch, 
@@ -816,7 +817,7 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: staff?.name || '',
-    role: staff?.role || 'Teacher',
+    role: staff?.role || 'Principal',
     position: staff?.position || '',
     department: staff?.department || 'Sciences',
     email: staff?.email || '',
@@ -847,13 +848,9 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   ];
 
   const ROLES = [
-    { value: 'Teacher', label: 'Teacher', icon: FaChalkboardTeacher, color: 'text-blue-600' },
     { value: 'Principal', label: 'Principal', icon: FaCrown, color: 'text-purple-600' },
     { value: 'Deputy Principal', label: 'Deputy Principal', icon: FaShieldAlt, color: 'text-emerald-600' },
-    { value: 'BOM Member', label: 'BOM Member', icon: FaShieldAlt, color: 'text-red-600' },
-    { value: 'Support Staff', label: 'Support Staff', icon: FaUsers, color: 'text-yellow-600' },
-    { value: 'Librarian', label: 'Librarian', icon: FaBook, color: 'text-indigo-600' },
-    { value: 'Counselor', label: 'Counselor', icon: FaHandsHelping, color: 'text-pink-600' }
+    { value: 'Senior Teacher', label: 'Senior Teacher', icon: FaStar, color: 'text-amber-600' }
   ];
 
   const DEPUTY_PRINCIPAL_TYPES = [
@@ -1631,6 +1628,7 @@ export default function StaffManager() {
   const [stats, setStats] = useState(null);
   const [bulkDeleting, setBulkDeleting] = useState(false);
  const [refreshing, setRefreshing] = useState(false);
+  const [activeView, setActiveView] = useState('profiles'); // profiles | departments
 
   
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -1643,7 +1641,7 @@ export default function StaffManager() {
     message: ''
   });
 
-  const roles = ['Principal', 'Deputy Principal', 'Teacher', 'BOM Member', 'Support Staff', 'Librarian', 'Counselor'];
+  const roles = ['Principal', 'Deputy Principal', 'Senior Teacher'];
   const departments = ['Sciences', 'Mathematics', 'Languages', 'Humanities', 'Administration', 'Sports', 'Guidance'];
 
 
@@ -1653,11 +1651,12 @@ const getStaffHierarchy = (staff) => {
   const hierarchyOrder = {
     'Principal': 1,
     'Deputy Principal': 2,
-    'Teacher': 3,
-    'BOM Member': 4,
-    'Support Staff': 5,
-    'Librarian': 6,
-    'Counselor': 7
+    'Senior Teacher': 3,
+    'Teacher': 10,
+    'BOM Member': 11,
+    'Support Staff': 12,
+    'Librarian': 13,
+    'Counselor': 14
   };
 
   return [...staff].sort((a, b) => {
@@ -1755,8 +1754,14 @@ const fetchStaff = async (isRefresh = false) => {
       setLoading(true);
     }
     
-    // ✅ PUBLIC ENDPOINT - No authentication needed
-    const response = await fetch('/api/staff');
+    // Prefer authenticated fetch (admin view), but fall back to public if tokens are missing
+    let response;
+    try {
+      const headers = getAuthHeaders();
+      response = await fetch('/api/staff', { headers });
+    } catch {
+      response = await fetch('/api/staff');
+    }
     
     const data = await response.json();
     
@@ -1796,8 +1801,8 @@ const fetchStaff = async (isRefresh = false) => {
     if (searchTerm) {
       filtered = filtered.filter(staffMember =>
         staffMember.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        staffMember.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        staffMember.department.toLowerCase().includes(searchTerm.toLowerCase())
+        (staffMember.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (staffMember.department || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -2085,7 +2090,7 @@ const handleSubmit = async (formData, id) => {
     </div>
   );
 
-  if (loading && staff.length === 0) {
+  if (activeView === 'profiles' && loading && staff.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
         <div className="text-center">
@@ -2121,9 +2126,34 @@ const handleSubmit = async (formData, id) => {
         loading={bulkDeleting}
       />
 
+      {/* View switch (profiles vs department groups) */}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          onClick={() => setActiveView('profiles')}
+          className={`px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all ${
+            activeView === 'profiles'
+              ? 'bg-[#172033] text-white border-[#172033] shadow-md'
+              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          Leadership Profiles
+        </button>
+        <button
+          onClick={() => setActiveView('departments')}
+          className={`px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all ${
+            activeView === 'departments'
+              ? 'bg-[#172033] text-white border-[#172033] shadow-md'
+              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          Departments
+        </button>
+      </div>
 
-
-      
+      {activeView === 'departments' ? (
+        <DepartmentsAdmin embedded />
+      ) : (
+        <>
 
 <div className="group relative mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
                 bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800
@@ -2514,6 +2544,8 @@ const handleSubmit = async (formData, id) => {
           onClose={() => setShowDetailModal(false)} 
           onEdit={handleEdit}
         />
+      )}
+        </>
       )}
     </div>
   );

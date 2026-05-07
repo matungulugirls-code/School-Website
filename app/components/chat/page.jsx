@@ -139,8 +139,7 @@ Steps:
 • Fully equipped computer lab
 • Internet access for all students`,
     links: [
-      { label: 'Admissions', path: '/pages/admissions', icon: 'file' },
-      { label: 'Apply Now', path: '/pages/apply-for-admissions', icon: 'user' }
+      { label: 'Admissions', path: '/pages/admissions', icon: 'file' }
     ]
   },
   fees: {

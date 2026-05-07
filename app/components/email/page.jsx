@@ -1079,10 +1079,17 @@ const fetchData = async () => {
 
     console.log('Starting fetchData...');
 
+    // Prefer authenticated staff fetch (public endpoint is leadership-only)
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    const deviceToken = typeof window !== 'undefined' ? localStorage.getItem('device_token') : null;
+    const staffHeaders = adminToken && deviceToken
+      ? { Authorization: `Bearer ${adminToken}`, 'x-device-token': deviceToken }
+      : null;
+
     const [campaignsRes, studentRes, staffRes] = await Promise.all([
       fetch('/api/emails'),
       fetch('/api/s'),
-      fetch('/api/staff')
+      fetch('/api/staff', staffHeaders ? { headers: staffHeaders } : {})
     ]);
 
     console.log('API Responses:', { 
@@ -3288,5 +3295,4 @@ const CampaignAttachmentsDisplay = ({ campaign }) => {
     </div>
   );
 }
-
 

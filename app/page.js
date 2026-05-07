@@ -486,7 +486,7 @@ export default function ModernHero() {
         innovation: "STEM Programs" 
       },
       features: ["Computer Studies", "Science Innovation", "Career Guidance", "Coding Classes"],
-      cta: "Apply Now",
+      cta: "Admissions",
       highlightColor: "pink",
       testimonial: "\"The advanced computer labs gave me skills that directly contributed to securing my university scholarship in Computer Science.\" - 2022 Alumni",
       icon: IoRocketOutline

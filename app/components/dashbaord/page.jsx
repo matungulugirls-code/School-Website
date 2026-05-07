@@ -550,33 +550,7 @@ export default function DashboardOverview() {
     totalCareers: 0,
     galleryItems: 0,
     guidanceSessions: 0,
-    totalNews: 0,
-    
-    // Admission stats
-    totalApplications: 0,
-    pendingApplications: 0,
-    acceptedApplications: 0,
-    rejectedApplications: 0,
-    underReviewApplications: 0,
-    interviewedApplications: 0,
-    waitlistedApplications: 0,
-    conditionalApplications: 0,
-    withdrawnApplications: 0,
-    monthlyApplications: 0,
-    dailyApplications: 0,
-    applicationConversionRate: 0,
-    averageProcessingTime: 0,
-    
-    // Admission analytics
-    scienceApplications: 0,
-    artsApplications: 0,
-    businessApplications: 0,
-    technicalApplications: 0,
-    maleApplications: 0,
-    femaleApplications: 0,
-    topCountyApplications: '',
-    averageKCPEScore: 0,
-    averageAge: 0
+    totalNews: 0
   });
   
   // New SMS stats
@@ -592,7 +566,6 @@ export default function DashboardOverview() {
   const [recentActivity, setRecentActivity] = useState([]);
   const [performanceData, setPerformanceData] = useState([]);
   const [quickStats, setQuickStats] = useState([]);
-  const [admissionStats, setAdmissionStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 const [growthMetrics, setGrowthMetrics] = useState({
@@ -600,7 +573,6 @@ const [growthMetrics, setGrowthMetrics] = useState({
   newsGrowth: 0,
   galleryGrowth: 0
 });
-const [admissionGrowth, setAdmissionGrowth] = useState({});
   const [showQuickTour, setShowQuickTour] = useState(false);
   const [schoolVideo, setSchoolVideo] = useState(null);
   
@@ -741,6 +713,13 @@ const [admissionGrowth, setAdmissionGrowth] = useState({});
       if (!authenticatedUser) return;
       
       setUser(authenticatedUser);
+
+      // Prefer authenticated staff fetch (privacy-safe public endpoint returns leadership only)
+      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+      const deviceToken = typeof window !== 'undefined' ? localStorage.getItem('device_token') : null;
+      const staffHeaders = adminToken && deviceToken
+        ? { Authorization: `Bearer ${adminToken}`, 'x-device-token': deviceToken }
+        : null;
       
       // Fetch data from all endpoints
       const [
@@ -754,13 +733,12 @@ const [admissionGrowth, setAdmissionGrowth] = useState({});
         newsRes,
         schoolInfoRes,
         adminsRes,
-        admissionsRes,
         resourcesRes,
         emailCampaignsRes,
         smsRes
       ] = await Promise.allSettled([
         fetch('/api/studentupload?includeStats=true&limit=1000'),
-        fetch('/api/staff'),
+        fetch('/api/staff', staffHeaders ? { headers: staffHeaders } : {}),
         fetch('/api/subscriber'),
         fetch('/api/assignment'),
         fetch('/api/career'),
@@ -769,7 +747,6 @@ const [admissionGrowth, setAdmissionGrowth] = useState({});
         fetch('/api/news'),
         fetch('/api/school'),
         fetch('/api/register'),
-        fetch('/api/applyadmission'),
         fetch('/api/resources'),
         fetch('/api/emails'),
         fetch('/api/sms')  // Added SMS campaigns fetch
@@ -822,7 +799,6 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
 
      const schoolInfo = schoolInfoRes.status === 'fulfilled' ? await schoolInfoRes.value.json() : { school: {} };
       const admins = adminsRes.status === 'fulfilled' ? await adminsRes.value.json() : { users: [] };
-      const admissions = admissionsRes.status === 'fulfilled' ? await admissionsRes.value.json() : { applications: [] };
       const resources = resourcesRes.status === 'fulfilled' ? await resourcesRes.value.json() : { resources: [] };
       const emailCampaignsData = emailCampaignsRes.status === 'fulfilled' ? await emailCampaignsRes.value.json() : { campaigns: [] };
       
@@ -953,39 +929,6 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
       
       const totalAssignments = assignments.assignments?.length || 1;
       
-      // Calculate admission statistics
-      const applications = admissions.applications || [];
-      const today = new Date();
-      
-      const monthlyApplications = applications.filter(app => {
-        if (!app.createdAt) return false;
-        const appDate = new Date(app.createdAt);
-        return appDate.getMonth() === today.getMonth() && 
-               appDate.getFullYear() === today.getFullYear();
-      }).length;
-      
-      const dailyApplications = applications.filter(app => {
-        if (!app.createdAt) return false;
-        const appDate = new Date(app.createdAt);
-        return appDate.toDateString() === today.toDateString();
-      }).length;
-      
-      const pendingApps = applications.filter(app => 
-        (app.status || '').toUpperCase() === 'PENDING'
-      ).length;
-      
-      const acceptedApps = applications.filter(app => 
-        (app.status || '').toUpperCase() === 'ACCEPTED'
-      ).length;
-      
-      const rejectedApps = applications.filter(app => 
-        (app.status || '').toUpperCase() === 'REJECTED'
-      ).length;
-      
-      // Calculate conversion rate
-      const conversionRate = applications.length > 0 ? 
-        Math.round((acceptedApps / applications.length) * 100) : 0;
-      
       // Update stats
       const updatedStats = {
         totalStudents: studentList.length || 0,
@@ -1001,63 +944,11 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
 totalNews: newsArticles.length || 0,    
     completedAssignments,
         totalAssignments,
-        
-        totalApplications: applications.length,
-        pendingApplications: pendingApps,
-        acceptedApplications: acceptedApps,
-        rejectedApplications: rejectedApps,
-        underReviewApplications: applications.filter(app => 
-          (app.status || '').toUpperCase() === 'UNDER_REVIEW'
-        ).length,
-        interviewedApplications: applications.filter(app => 
-          (app.status || '').toUpperCase() === 'INTERVIEWED'
-        ).length,
-        waitlistedApplications: applications.filter(app => 
-          (app.status || '').toUpperCase() === 'WAITLISTED'
-        ).length,
-        conditionalApplications: applications.filter(app => 
-          (app.status || '').toUpperCase() === 'CONDITIONAL_ACCEPTANCE'
-        ).length,
-        withdrawnApplications: applications.filter(app => 
-          (app.status || '').toUpperCase() === 'WITHDRAWN'
-        ).length,
-        monthlyApplications,
-        dailyApplications,
-        applicationConversionRate: conversionRate,
-        averageProcessingTime: 0,
-        
-        scienceApplications: applications.filter(app => 
-          (app.preferredStream || '').toUpperCase() === 'SCIENCE'
-        ).length,
-        artsApplications: applications.filter(app => 
-          (app.preferredStream || '').toUpperCase() === 'ARTS'
-        ).length,
-        businessApplications: applications.filter(app => 
-          (app.preferredStream || '').toUpperCase() === 'BUSINESS'
-        ).length,
-        technicalApplications: applications.filter(app => 
-          (app.preferredStream || '').toUpperCase() === 'TECHNICAL'
-        ).length,
-        maleApplications: applications.filter(app => 
-          (app.gender || '').toUpperCase() === 'MALE'
-        ).length,
-        femaleApplications: applications.filter(app => 
-          (app.gender || '').toUpperCase() === 'FEMALE'
-        ).length,
-        topCountyApplications: 'N/A',
-        averageKCPEScore: 0,
-        averageAge: 0
       };
       
       setStats(updatedStats);
 
 
-
-// ========== CALCULATE GROWTH METRICS ==========
-// Calculate month-over-month growth for various metrics
-const currentMonthApplications = countRecordsByMonth(applications, 0);
-const previousMonthApplications = countRecordsByMonth(applications, 1);
-const applicationGrowth = calculateMonthOverMonthGrowth(currentMonthApplications, previousMonthApplications);
 
 // Calculate guidance growth with safe defaults
 const guidanceEvents = guidance.events || guidance.sessions || [];
@@ -1084,10 +975,6 @@ setGrowthMetrics({
   galleryGrowth: isNaN(galleryGrowth) ? 0 : (galleryGrowth || 0)
 });
 
-      setAdmissionGrowth({
-        monthlyGrowth: applicationGrowth
-      });
-
 
       
       // ========== RECENT ACTIVITY ==========
@@ -1112,13 +999,6 @@ setGrowthMetrics({
           change: assignmentGrowth,
           color: assignmentGrowth >= 0 ? 'blue' : 'red',
           description: 'Assignment completion rate'
-        },
-        { 
-          label: 'Admission Conversion', 
-          value: conversionRate,
-          change: 0,
-          color: conversionRate > 50 ? 'purple' : 'red',
-          description: 'Applications to acceptances'
         },
         { 
           label: 'Guidance Sessions', 
@@ -1156,14 +1036,6 @@ setGrowthMetrics({
           color: smsStats.total > 0 ? 'blue' : 'red',
           calculation: 'Total campaigns'
         },
-        { 
-          label: 'Admission Growth', 
-          value: `${monthlyApplications}`, 
-          change: 0, 
-          icon: monthlyApplications > 0 ? FiTrendingUp : FiTrendingDown, 
-          color: monthlyApplications > 0 ? 'purple' : 'red',
-          calculation: 'Monthly applications'
-        }
       ];
       
       setQuickStats(quickStatsData);
@@ -1953,58 +1825,6 @@ const StatCard = ({ icon: Icon, label, value, change, color, subtitle, trend }) 
                 <p className="text-gray-400 text-sm mt-1">Staff information will appear here</p>
               </div>
             )}
-          </div>
-          
-          {/* Admission Growth Card */}
-          <div className="group relative bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]  overflow-hidden">
-            
-            {/* Background Decorative Glow */}
-            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-gradient-to-br from-purple-500/10 to-transparent blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            
-            <div className="relative z-10">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
-                    Enrollment Pipe
-                  </span>
-                  <h3 className="text-lg font-black text-slate-800 tracking-tight mt-1">Admission Growth</h3>
-                </div>
-                <div className="p-3 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 shadow-sm transition-transform group-hover:scale-100">
-                  <FiUserPlus className="text-xl" />
-                </div>
-              </div>
-              
-              {/* Main Value Display */}
-              <div className="text-center py-4 bg-slate-50/50 rounded-2xl border border-slate-100 mb-6 group-hover:bg-white transition-colors">
-                <h4 className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">
-                  {stats.totalApplications.toLocaleString()}
-                </h4>
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mt-1">Total Applications</p>
-              </div>
-              
-              {/* Secondary Metrics Split */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Monthly Growth Tile */}
-                <div className="p-3 rounded-2xl border border-slate-50 bg-white shadow-sm flex flex-col items-center justify-center">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase mb-1">Monthly</span>
-                  <div className={`flex items-center gap-1 font-black text-sm ${
-                    admissionGrowth.monthlyGrowth >= 0 ? 'text-emerald-600' : 'text-rose-600'
-                  }`}>
-                    {admissionGrowth.monthlyGrowth >= 0 ? <FiTrendingUp size={12} /> : <FiTrendingDown size={12} />}
-                    <span>{admissionGrowth.monthlyGrowth >= 0 ? '+' : ''}{admissionGrowth.monthlyGrowth}%</span>
-                  </div>
-                </div>
-                
-                {/* Daily Applications Tile */}
-                <div className="p-3 rounded-2xl border border-slate-50 bg-white shadow-sm flex flex-col items-center justify-center">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase mb-1">Today</span>
-                  <span className="font-black text-blue-600 text-sm tabular-nums">
-                    {stats.dailyApplications}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
           
           {/* Academic Content Card */}

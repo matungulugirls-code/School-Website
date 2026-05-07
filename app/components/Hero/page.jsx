@@ -37,7 +37,7 @@ const heroSlides = [
     image: "/hero/MatG1.jpg",
     mobileImage: "/hero/MatG1_mobile.jpg",
     tags: ["Public School", "Girls' Boarding", "National School", "CBC Curriculum"],
-    cta: "Apply Now",
+    cta: "Admissions",
     link: "/pages/admissions",
   },
   {

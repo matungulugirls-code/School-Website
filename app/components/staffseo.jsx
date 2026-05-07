@@ -28,6 +28,7 @@ export default function StaffProfilePage() {
   const [staff, setStaff] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [notPublic, setNotPublic] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
   const schoolDescription =
@@ -91,9 +92,13 @@ export default function StaffProfilePage() {
       try {
         setLoading(true);
         setError(null);
+        setNotPublic(false);
 
         const response = await fetch(`/api/staff/${id}`);
         if (!response.ok) {
+          if (response.status === 404) {
+            setNotPublic(true);
+          }
           throw new Error(`Staff member not available (${response.status})`);
         }
 
@@ -410,7 +415,11 @@ if (loading) {
             <FaUserTie className="text-xl text-red-500" />
           </div>
           <h2 className="mb-2 text-lg font-black text-slate-900">Profile Unavailable</h2>
-          <p className="mb-6 text-sm text-slate-500">We couldn&apos;t load this staff member&apos;s profile.</p>
+          <p className="mb-6 text-sm text-slate-500">
+            {notPublic
+              ? "This profile isn't available publicly. Only leadership profiles are published on the Staff page."
+              : "We couldn't load this staff member's profile."}
+          </p>
           <button
             onClick={() => router.push('/pages/SchoolTeam')}
             className="w-full rounded-lg bg-[#1a1a2e] px-6 py-2.5 text-sm font-bold text-white"
