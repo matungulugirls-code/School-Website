@@ -70,6 +70,12 @@ const extractYouTubeId = (url) => {
   return (match && match[2].length === 11) ? match[2] : null;
 };
 
+const isAudioFileUrl = (url) => {
+  if (!url) return false;
+  const cleaned = String(url).toLowerCase().split('?')[0].split('#')[0];
+  return ['.mp3', '.wav', '.m4a', '.aac', '.ogg'].some(ext => cleaned.endsWith(ext));
+};
+
 export default function ModernHero() {
   const currentYear = new Date().getFullYear();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -84,6 +90,7 @@ export default function ModernHero() {
   const [isMobile, setIsMobile] = useState(false);
   const [progress, setProgress] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState({});
+  const [videoReloadKey, setVideoReloadKey] = useState(0);
 
   const router = useRouter();
 
@@ -194,35 +201,43 @@ export default function ModernHero() {
 
   // Fetch school video data when modal opens
   useEffect(() => {
-    if (showVideoModal) {
-      setLoading(true);
-      setError(null);
-      fetch('/school')
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.school) {
-            setSchoolData(data.school);
-          } else throw new Error('No video data found');
-        })
-        .catch(err => {
-          console.error(err);
-          setError(err.message);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [showVideoModal]);
+    if (!showVideoModal) return;
+
+    const loadSchoolVideo = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch('/api/school', { headers: { Accept: 'application/json' } });
+        const contentType = res.headers.get('content-type') || '';
+
+        if (!res.ok) {
+          const bodyText = await res.text().catch(() => '');
+          throw new Error(`Failed to load tour (${res.status}). ${bodyText.slice(0, 80)}`);
+        }
+
+        if (!contentType.includes('application/json')) {
+          const bodyText = await res.text().catch(() => '');
+          throw new Error(`Tour endpoint did not return JSON. ${bodyText.slice(0, 80)}`);
+        }
+
+        const data = await res.json();
+        if (data?.success && data?.school) setSchoolData(data.school);
+        else throw new Error('No video data found');
+      } catch (err) {
+        console.error(err);
+        setError(err?.message || 'Failed to load tour');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSchoolVideo();
+  }, [showVideoModal, videoReloadKey]);
 
   const retryVideoLoad = () => {
-    setLoading(true);
-    setError(null);
-    fetch('/school')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.school) setSchoolData(data.school);
-        else throw new Error('No video data');
-      })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
+    setSchoolData(null);
+    setVideoReloadKey(k => k + 1);
   };
 
   const slide = heroSlides[currentSlide];
@@ -561,13 +576,22 @@ export default function ModernHero() {
                   allowFullScreen
                 />
               ) : schoolData?.videoType === 'file' && schoolData?.videoTour ? (
-                <video
-                  src={schoolData.videoTour}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  controls
-                  poster={schoolData?.videoThumbnail}
-                />
+                isAudioFileUrl(schoolData.videoTour) ? (
+                  <div className="w-full h-full flex items-center justify-center p-6">
+                    <div className="w-full max-w-xl">
+                      <p className="text-white/80 text-sm font-semibold mb-3 text-center">Audio Tour</p>
+                      <audio src={schoolData.videoTour} className="w-full" autoPlay controls />
+                    </div>
+                  </div>
+                ) : (
+                  <video
+                    src={schoolData.videoTour}
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    controls
+                    poster={schoolData?.videoThumbnail}
+                  />
+                )
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center">
                   <Play className="w-16 h-16 text-white/30 mb-4" />
