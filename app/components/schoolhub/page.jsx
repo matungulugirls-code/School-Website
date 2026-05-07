@@ -7,12 +7,12 @@ import {
   FiTrash2,
   FiRefreshCw,
   FiX,
-  FiUpload,
   FiLayers,
   FiEye,
   FiEyeOff,
 } from 'react-icons/fi';
 import { FaUsers, FaLeaf, FaShieldAlt, FaHome, FaGraduationCap } from 'react-icons/fa';
+import ImageUploadField, { normalizeSchoolImages } from './image-upload-field';
 
 const TYPE_OPTIONS = [
   { value: 'CLUB', label: 'Clubs', icon: FaUsers },
@@ -20,6 +20,7 @@ const TYPE_OPTIONS = [
   { value: 'FARM', label: 'Farm', icon: FaLeaf },
   { value: 'BOARDING', label: 'Boarding', icon: FaHome },
   { value: 'SECURITY', label: 'Security', icon: FaShieldAlt },
+  { value: 'DEPARTMENT', label: 'Departments', icon: FiLayers },
 ];
 
 const getAuthHeaders = () => {
@@ -114,7 +115,9 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
     details: Array.isArray(initial?.details) ? initial.details : [],
   });
 
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
+  const [uploadError, setUploadError] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -132,7 +135,9 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
       image: initial?.image || '',
       details: Array.isArray(initial?.details) ? initial.details : [],
     });
-    setImageFile(null);
+    setImageFiles([]);
+    setRemovedImages([]);
+    setUploadError('');
     setSaving(false);
     setError('');
   }, [open, initial, defaultType]);
@@ -160,11 +165,9 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
       fd.append('isActive', form.isActive ? 'true' : 'false');
       fd.append('details', JSON.stringify(Array.isArray(form.details) ? form.details : []));
 
-      if (imageFile) {
-        fd.append('image', imageFile);
-      } else if (form.image) {
-        fd.append('image', form.image);
-      }
+      imageFiles.forEach((file) => fd.append('images', file));
+      removedImages.forEach((url) => fd.append('imagesToRemove', url));
+      if (!imageFiles.length && form.image) fd.append('image', form.image);
 
       await onSave(fd);
       onClose();
@@ -178,7 +181,9 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
       <div className="w-full max-w-3xl rounded-[28px] bg-white border border-slate-200 shadow-2xl overflow-hidden">
-        <div className="px-6 py-5 bg-gradient-to-r from-[#172033] to-[#2d4258] text-white flex items-center justify-between">
+        <div className="relative overflow-hidden bg-[#2D1B14] px-6 py-6 text-white">
+          <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-amber-400/10 blur-3xl" />
+          <div className="relative flex items-center justify-between">
           <div className="min-w-0">
             <p className="text-[11px] font-black uppercase tracking-[0.28em] text-white/60">
               School Hub Manager
@@ -193,9 +198,10 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
           >
             <FiX />
           </button>
+          </div>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="max-h-[70vh] overflow-y-auto p-6 space-y-5 bg-white">
           {error && (
             <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
               {error}
@@ -279,7 +285,7 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Display Order</label>
               <input
@@ -303,22 +309,19 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
                 {form.isActive ? <FiEye /> : <FiEyeOff />} {form.isActive ? 'Visible' : 'Hidden'}
               </button>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Image</label>
-              <label className="w-full cursor-pointer rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-extrabold text-slate-700 hover:bg-slate-100 flex items-center justify-center gap-2">
-                <FiUpload /> Upload
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) setImageFile(file);
-                  }}
-                />
-              </label>
-            </div>
           </div>
+
+          <ImageUploadField
+            existingImages={normalizeSchoolImages(initial)}
+            files={imageFiles}
+            removedImages={removedImages}
+            error={uploadError}
+            setError={setUploadError}
+            onChange={({ files, removedImages: nextRemoved }) => {
+              setImageFiles(files);
+              setRemovedImages(nextRemoved);
+            }}
+          />
 
           <DetailsEditor
             value={form.details}
@@ -437,15 +440,21 @@ export default function SchoolHubManager() {
         defaultType={activeType !== 'ALL' ? activeType : 'CLUB'}
       />
 
-      <div className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_30px_80px_-60px_rgba(15,23,42,0.55)]">
-        <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(135deg,#172033_0%,#2d4258_62%,#f2c357_160%)]" />
-        <div className="relative p-6 md:p-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800 p-6 text-white shadow-2xl md:p-8">
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '38px 38px' }} />
+        <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="min-w-0">
-            <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">School Hub</p>
-            <h2 className="mt-2 text-2xl md:text-3xl font-black text-[#172033] tracking-tight">
+            <div className="mb-5 flex items-center gap-4">
+              <div className="h-12 w-1.5 rounded-full bg-gradient-to-b from-emerald-300 to-teal-300 shadow-[0_0_20px_rgba(45,212,191,0.45)]" />
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-emerald-200">School Hub</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">Matungulu Girls Senior School</p>
+              </div>
+            </div>
+            <h2 className="text-2xl md:text-4xl font-black text-white tracking-tight">
               Clubs, Societies, Farm, Boarding & Security
             </h2>
-            <p className="mt-2 text-sm font-semibold text-slate-600 max-w-2xl">
+            <p className="mt-3 text-sm font-semibold text-white/65 max-w-2xl leading-6">
               Manage School Hub public pages with a single, consistent system.
             </p>
           </div>
@@ -453,7 +462,7 @@ export default function SchoolHubManager() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => fetchItems(true)}
-              className="rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm font-extrabold text-slate-800 hover:bg-slate-50 flex items-center gap-2"
+              className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-extrabold text-white hover:bg-white/15 flex items-center gap-2"
               disabled={refreshing}
             >
               <FiRefreshCw />
@@ -465,21 +474,21 @@ export default function SchoolHubManager() {
                 setEditing(null);
                 setModalOpen(true);
               }}
-              className="rounded-2xl bg-[#172033] px-4 py-3 text-sm font-extrabold text-white hover:bg-[#2d2d44] flex items-center gap-2"
+              className="rounded-2xl bg-white px-4 py-3 text-sm font-extrabold text-[#0f5b4c] hover:bg-emerald-50 flex items-center gap-2 shadow-xl"
             >
               <FiPlus /> Add Item
             </button>
           </div>
         </div>
 
-        <div className="relative px-6 pb-6 md:px-8">
+        <div className="relative z-10 pt-6">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveType('ALL')}
               className={`px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all ${
                 activeType === 'ALL'
-                  ? 'bg-[#172033] text-white border-[#172033]'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                  ? 'bg-white text-[#0f5b4c] border-white'
+                  : 'bg-white/10 text-white border-white/15 hover:bg-white/15'
               }`}
             >
               <FiLayers className="inline-block mr-2" /> All ({items.length})
@@ -490,8 +499,8 @@ export default function SchoolHubManager() {
                 onClick={() => setActiveType(opt.value)}
                 className={`px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest border transition-all ${
                   activeType === opt.value
-                    ? 'bg-[#172033] text-white border-[#172033]'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    ? 'bg-white text-[#0f5b4c] border-white'
+                    : 'bg-white/10 text-white border-white/15 hover:bg-white/15'
                 }`}
               >
                 {opt.label} ({groupedCounts[opt.value] || 0})
@@ -546,6 +555,21 @@ export default function SchoolHubManager() {
                     </div>
                   </div>
 
+                  {normalizeSchoolImages(item).length > 0 && (
+                    <div className="mt-5 grid grid-cols-4 gap-2">
+                      {normalizeSchoolImages(item).slice(0, 4).map((image, index) => (
+                        <div key={image.url} className="relative h-16 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+                          <img src={image.url} alt={image.altText || `${item.title} image ${index + 1}`} className="h-full w-full object-cover" />
+                          {index === 3 && normalizeSchoolImages(item).length > 4 && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 text-xs font-black text-white">
+                              +{normalizeSchoolImages(item).length - 4}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {item.shortDescription && (
                     <p className="mt-4 text-sm font-semibold text-slate-700 leading-6 line-clamp-3">
                       {item.shortDescription}
@@ -594,4 +618,3 @@ export default function SchoolHubManager() {
     </div>
   );
 }
-

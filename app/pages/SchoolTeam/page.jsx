@@ -270,16 +270,17 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
         <div className="flex-1 h-px bg-slate-100 ml-2" />
       </div>
       
-      <div className={
-        viewMode === 'grid' 
-          ? "grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" 
+      <div className={iconKey === 'leadership'
+        ? "flex flex-col gap-4"
+        : viewMode === 'grid'
+          ? "grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
           : "flex flex-col gap-4"
       }>
         {staff.map((member) => (
           <div key={member.id}>
-            {viewMode === 'grid' 
-              ? <StaffCard staff={member} onContactClick={onContactClick} /> 
-              : <StaffListCard staff={member} onContactClick={onContactClick} />
+            {iconKey === 'leadership' || viewMode !== 'grid'
+              ? <StaffListCard staff={member} onContactClick={onContactClick} />
+              : <StaffCard staff={member} onContactClick={onContactClick} />
             }
           </div>
         ))}
@@ -1367,19 +1368,11 @@ export default function StaffDirectory() {
                     />
                   </div>
                 ) : selectedHierarchy === 'leadership' ? (
-                  viewMode === 'grid' ? (
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                      {paginatedStaff.map((staff) => (
-                        <StaffCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
-                      ))}
-                    </div>
-                  ) : (
                   <div className="space-y-4">
                     {paginatedStaff.map((staff) => (
                       <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                     ))}
                   </div>
-                  )
                 ) : selectedHierarchy === 'teaching' ? (
                   <div className="space-y-6">
                     <DepartmentGroupSection

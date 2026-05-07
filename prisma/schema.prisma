@@ -239,6 +239,7 @@ model StaffDepartment {
   category     DepartmentCategory
   description  String?           @db.Text
   image        String?           @db.Text
+  images       StaffDepartmentImage[]
   staffCount   Int               @default(0)
   headName     String?           @db.VarChar(255)
   extra        Json?
@@ -253,6 +254,23 @@ model StaffDepartment {
   @@map("staff_departments")
 }
 
+model StaffDepartmentImage {
+  id                Int             @id @default(autoincrement())
+  staffDepartmentId Int
+  url               String          @db.Text
+  publicId          String?         @db.Text
+  caption           String?         @db.VarChar(255)
+  altText           String?         @db.VarChar(255)
+  displayOrder      Int             @default(0)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  staffDepartment   StaffDepartment @relation(fields: [staffDepartmentId], references: [id], onDelete: Cascade)
+
+  @@index([staffDepartmentId])
+  @@index([displayOrder])
+  @@map("staff_department_images")
+}
+
 // ==========================================
 // School Hub Items (Clubs, Societies, etc.)
 // ==========================================
@@ -263,6 +281,7 @@ enum SchoolHubType {
   FARM
   BOARDING
   SECURITY
+  DEPARTMENT
 }
 
 model SchoolHubItem {
@@ -272,6 +291,7 @@ model SchoolHubItem {
   shortDescription String?      @db.Text
   description      String?      @db.Text
   image            String?      @db.Text
+  images           SchoolHubImage[]
   contactName      String?      @db.VarChar(255)
   contactPhone     String?      @db.VarChar(50)
   contactEmail     String?      @db.VarChar(255)
@@ -285,6 +305,23 @@ model SchoolHubItem {
   @@index([isActive])
   @@index([displayOrder])
   @@map("school_hub_items")
+}
+
+model SchoolHubImage {
+  id              Int           @id @default(autoincrement())
+  schoolHubItemId Int
+  url             String        @db.Text
+  publicId        String?       @db.Text
+  caption         String?       @db.VarChar(255)
+  altText         String?       @db.VarChar(255)
+  displayOrder    Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  schoolHubItem   SchoolHubItem @relation(fields: [schoolHubItemId], references: [id], onDelete: Cascade)
+
+  @@index([schoolHubItemId])
+  @@index([displayOrder])
+  @@map("school_hub_images")
 }
 
 model EmailCampaign {
@@ -998,5 +1035,4 @@ model Team {
 
   @@map("teams")
 }
-
 

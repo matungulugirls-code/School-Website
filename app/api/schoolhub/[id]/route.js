@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
-import cloudinary from "../../../../libs/cloudinary";
+import {
+  deleteSchoolImages,
+  isFileUpload,
+  uploadSchoolImagesFromFormData,
+  validateSchoolImage,
+} from "../../../../libs/schoolContentUpload";
 
 // ==================== AUTHENTICATION UTILITIES ====================
 
@@ -130,59 +135,7 @@ const authenticateWriteRequest = (req) => {
   return { authenticated: true, user: validationResult.user };
 };
 
-// ==================== CLOUDINARY HELPERS ====================
-
-const uploadImageToCloudinary = async (file) => {
-  if (!file?.name || file.size === 0) return null;
-
-  try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const timestamp = Date.now();
-    const originalName = file.name;
-    const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf("."));
-    const sanitizedFileName = nameWithoutExt.replace(/[^a-zA-Z0-9.-]/g, "_");
-
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "image",
-          folder: "school_hub",
-          public_id: `${timestamp}-${sanitizedFileName}`,
-          transformation: [{ width: 1200, height: 675, crop: "fill" }, { quality: "auto:good" }],
-        },
-        (error, res) => {
-          if (error) reject(error);
-          else resolve(res);
-        }
-      );
-      uploadStream.end(buffer);
-    });
-
-    return result.secure_url;
-  } catch (error) {
-    console.error("❌ Cloudinary upload error:", error);
-    return null;
-  }
-};
-
-const deleteImageFromCloudinary = async (imageUrl) => {
-  if (!imageUrl || !imageUrl.includes("cloudinary.com")) return;
-
-  try {
-    const urlParts = imageUrl.split("/");
-    const uploadIndex = urlParts.indexOf("upload");
-    if (uploadIndex === -1) return;
-
-    const pathAfterUpload = urlParts.slice(uploadIndex + 1).join("/");
-    const publicId = pathAfterUpload.replace(/\.[^/.]+$/, "");
-
-    await cloudinary.uploader.destroy(publicId);
-  } catch (error) {
-    console.error("❌ Error deleting image from Cloudinary:", error);
-  }
-};
-
-const VALID_TYPES = new Set(["CLUB", "SOCIETY", "FARM", "BOARDING", "SECURITY"]);
+const VALID_TYPES = new Set(["CLUB", "SOCIETY", "FARM", "BOARDING", "SECURITY", "DEPARTMENT"]);
 
 export async function GET(req, { params }) {
   try {
@@ -205,7 +158,10 @@ export async function GET(req, { params }) {
       }
     }
 
-    const item = await prisma.schoolHubItem.findUnique({ where: { id } });
+    const item = await prisma.schoolHubItem.findUnique({
+      where: { id },
+      include: { images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] } },
+    });
     if (!item) {
       return NextResponse.json({ success: false, error: "Item not found" }, { status: 404 });
     }
@@ -234,7 +190,10 @@ export async function PUT(req, { params }) {
       );
     }
 
-    const existing = await prisma.schoolHubItem.findUnique({ where: { id } });
+    const existing = await prisma.schoolHubItem.findUnique({
+      where: { id },
+      include: { images: true },
+    });
     if (!existing) {
       return NextResponse.json(
         { success: false, error: "Item not found", authenticated: true },
@@ -308,42 +267,68 @@ export async function PUT(req, { params }) {
       }
     }
 
-    const imageFile = formData.get("image");
-    if (imageFile) {
-      if (typeof imageFile === "string" && imageFile.trim() !== "") {
-        data.image = imageFile.trim();
-      } else if (typeof imageFile !== "string" && imageFile.size > 0) {
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
-        if (!allowedTypes.includes(imageFile.type)) {
-          return NextResponse.json(
-            { success: false, error: "Invalid image format. Only JPEG, PNG, WebP, and GIF are allowed.", authenticated: true },
-            { status: 400 }
-          );
-        }
-        const maxSize = 8 * 1024 * 1024;
-        if (imageFile.size > maxSize) {
-          return NextResponse.json(
-            { success: false, error: "Image size too large. Maximum size is 8MB.", authenticated: true },
-            { status: 400 }
-          );
-        }
-
-        const uploadedUrl = await uploadImageToCloudinary(imageFile);
-        if (!uploadedUrl) {
-          return NextResponse.json(
-            { success: false, error: "Failed to upload image", authenticated: true },
-            { status: 500 }
-          );
-        }
-        data.image = uploadedUrl;
-
-        if (existing.image && existing.image !== uploadedUrl) {
-          await deleteImageFromCloudinary(existing.image);
-        }
+    for (const file of [...formData.getAll("images"), formData.get("image")].filter(isFileUpload)) {
+      const validation = validateSchoolImage(file);
+      if (!validation.valid) {
+        return NextResponse.json(
+          { success: false, error: validation.error, authenticated: true },
+          { status: 400 }
+        );
       }
     }
 
-    const item = await prisma.schoolHubItem.update({ where: { id }, data });
+    let imagesChanged = false;
+    const imagesToRemove = formData.getAll("imagesToRemove").map((value) => value.toString());
+    const matchingImagesToRemove = existing.images.filter((image) => imagesToRemove.includes(image.url));
+    if (matchingImagesToRemove.length > 0) {
+      imagesChanged = true;
+      await deleteSchoolImages(matchingImagesToRemove);
+      await prisma.schoolHubImage.deleteMany({
+        where: { id: { in: matchingImagesToRemove.map((image) => image.id) } },
+      });
+    }
+
+    if (existing.image && imagesToRemove.includes(existing.image)) {
+      imagesChanged = true;
+      data.image = null;
+      await deleteSchoolImages(existing.image);
+    }
+
+    const legacyImageFile = formData.get("image");
+    const uploadedImages = await uploadSchoolImagesFromFormData(formData, "images", "school_hub");
+    if (isFileUpload(legacyImageFile)) {
+      uploadedImages.push(...(await uploadSchoolImagesFromFormData(formData, "image", "school_hub")));
+    } else if (typeof legacyImageFile === "string" && legacyImageFile.trim() !== "" && uploadedImages.length === 0) {
+      data.image = legacyImageFile.trim();
+    }
+
+    if (uploadedImages.length > 0) {
+      imagesChanged = true;
+      await prisma.schoolHubImage.createMany({
+        data: uploadedImages.map((image, index) => ({
+          schoolHubItemId: id,
+          url: image.url,
+          publicId: image.publicId,
+          altText: image.altText || data.title || existing.title,
+          caption: image.caption || null,
+          displayOrder: existing.images.length + index,
+        })),
+      });
+      data.image = data.image || uploadedImages[0].url;
+    }
+
+    const remainingImages = existing.images.filter(
+      (image) => !matchingImagesToRemove.some((removed) => removed.id === image.id)
+    );
+    if (imagesChanged && !data.image) {
+      data.image = remainingImages[0]?.url || uploadedImages[0]?.url || null;
+    }
+
+    const item = await prisma.schoolHubItem.update({
+      where: { id },
+      data,
+      include: { images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] } },
+    });
     return NextResponse.json({ success: true, item });
   } catch (error) {
     console.error("❌ PUT SchoolHub Item Error:", error);
@@ -367,7 +352,10 @@ export async function DELETE(req, { params }) {
       );
     }
 
-    const existing = await prisma.schoolHubItem.findUnique({ where: { id } });
+    const existing = await prisma.schoolHubItem.findUnique({
+      where: { id },
+      include: { images: true },
+    });
     if (!existing) {
       return NextResponse.json(
         { success: false, error: "Item not found", authenticated: true },
@@ -377,9 +365,7 @@ export async function DELETE(req, { params }) {
 
     await prisma.schoolHubItem.delete({ where: { id } });
 
-    if (existing.image) {
-      await deleteImageFromCloudinary(existing.image);
-    }
+    await deleteSchoolImages([...(existing.images || []), existing.image].filter(Boolean));
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -390,4 +376,3 @@ export async function DELETE(req, { params }) {
     );
   }
 }
-

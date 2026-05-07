@@ -7,9 +7,9 @@ import {
   FiTrash2,
   FiRefreshCw,
   FiX,
-  FiUpload,
 } from 'react-icons/fi';
 import { FaBuilding, FaUsers, FaUserTie } from 'react-icons/fa';
+import ImageUploadField, { normalizeSchoolImages } from '../schoolhub/image-upload-field';
 
 const CATEGORY_OPTIONS = [
   { value: 'CBC', label: 'CBC Departments' },
@@ -44,7 +44,9 @@ const DepartmentModal = ({ open, onClose, onSave, initial }) => {
     image: initial?.image || '',
   });
 
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
+  const [uploadError, setUploadError] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -59,7 +61,9 @@ const DepartmentModal = ({ open, onClose, onSave, initial }) => {
       isActive: typeof initial?.isActive === 'boolean' ? initial.isActive : true,
       image: initial?.image || '',
     });
-    setImageFile(null);
+    setImageFiles([]);
+    setRemovedImages([]);
+    setUploadError('');
     setError('');
     setSaving(false);
   }, [initial, open]);
@@ -88,11 +92,9 @@ const DepartmentModal = ({ open, onClose, onSave, initial }) => {
       fd.append('displayOrder', String(form.displayOrder || '0'));
       fd.append('isActive', form.isActive ? 'true' : 'false');
 
-      if (imageFile) {
-        fd.append('image', imageFile);
-      } else if (form.image) {
-        fd.append('image', form.image);
-      }
+      imageFiles.forEach((file) => fd.append('images', file));
+      removedImages.forEach((url) => fd.append('imagesToRemove', url));
+      if (!imageFiles.length && form.image) fd.append('image', form.image);
 
       await onSave(fd);
       onClose();
@@ -106,7 +108,9 @@ const DepartmentModal = ({ open, onClose, onSave, initial }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
       <div className="w-full max-w-2xl rounded-[28px] bg-white border border-slate-200 shadow-2xl overflow-hidden">
-        <div className="px-6 py-5 bg-gradient-to-r from-[#172033] to-[#2d4258] text-white flex items-center justify-between">
+        <div className="relative overflow-hidden bg-[#2D1B14] px-6 py-6 text-white">
+          <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-amber-400/10 blur-3xl" />
+          <div className="relative flex items-center justify-between">
           <div className="min-w-0">
             <p className="text-[11px] font-black uppercase tracking-[0.28em] text-white/60">
               Staff Departments
@@ -121,9 +125,10 @@ const DepartmentModal = ({ open, onClose, onSave, initial }) => {
           >
             <FiX />
           </button>
+          </div>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="max-h-[70vh] overflow-y-auto p-6 space-y-5 bg-white">
           {error && (
             <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
               {error}
@@ -229,32 +234,19 @@ const DepartmentModal = ({ open, onClose, onSave, initial }) => {
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">
-                Department Image (Optional)
-              </label>
-              <div className="flex items-center gap-3">
-                <label className="flex-1 cursor-pointer rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-extrabold text-slate-700 hover:bg-slate-100 flex items-center justify-center gap-2">
-                  <FiUpload />
-                  Upload
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) setImageFile(file);
-                    }}
-                  />
-                </label>
-                {imageFile && (
-                  <span className="text-xs font-bold text-slate-500 truncate max-w-[12rem]">
-                    {imageFile.name}
-                  </span>
-                )}
-              </div>
-            </div>
           </div>
+
+          <ImageUploadField
+            existingImages={normalizeSchoolImages(initial)}
+            files={imageFiles}
+            removedImages={removedImages}
+            error={uploadError}
+            setError={setUploadError}
+            onChange={({ files, removedImages: nextRemoved }) => {
+              setImageFiles(files);
+              setRemovedImages(nextRemoved);
+            }}
+          />
         </div>
 
         <div className="px-6 py-5 border-t border-slate-200 bg-white flex items-center justify-end gap-3">
@@ -487,6 +479,21 @@ export default function DepartmentsAdmin({ embedded = false }) {
                           <p className="mt-4 text-sm font-semibold text-slate-700 leading-6 line-clamp-3">
                             {dept.description}
                           </p>
+                        )}
+
+                        {normalizeSchoolImages(dept).length > 0 && (
+                          <div className="mt-5 grid grid-cols-4 gap-2">
+                            {normalizeSchoolImages(dept).slice(0, 4).map((image, index) => (
+                              <div key={image.url} className="relative h-16 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+                                <img src={image.url} alt={image.altText || `${dept.name} image ${index + 1}`} className="h-full w-full object-cover" />
+                                {index === 3 && normalizeSchoolImages(dept).length > 4 && (
+                                  <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 text-xs font-black text-white">
+                                    +{normalizeSchoolImages(dept).length - 4}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
                         )}
 
                         {dept.headName && (

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../libs/prisma";
-import cloudinary from "../../../libs/cloudinary";
+import {
+  isFileUpload,
+  uploadSchoolImagesFromFormData,
+  validateSchoolImage,
+} from "../../../libs/schoolContentUpload";
 
 // ==================== AUTHENTICATION UTILITIES ====================
 
@@ -130,42 +134,7 @@ const authenticateWriteRequest = (req) => {
   return { authenticated: true, user: validationResult.user };
 };
 
-// ==================== CLOUDINARY HELPERS ====================
-
-const uploadImageToCloudinary = async (file) => {
-  if (!file?.name || file.size === 0) return null;
-
-  try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const timestamp = Date.now();
-    const originalName = file.name;
-    const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf("."));
-    const sanitizedFileName = nameWithoutExt.replace(/[^a-zA-Z0-9.-]/g, "_");
-
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "image",
-          folder: "school_hub",
-          public_id: `${timestamp}-${sanitizedFileName}`,
-          transformation: [{ width: 1200, height: 675, crop: "fill" }, { quality: "auto:good" }],
-        },
-        (error, res) => {
-          if (error) reject(error);
-          else resolve(res);
-        }
-      );
-      uploadStream.end(buffer);
-    });
-
-    return result.secure_url;
-  } catch (error) {
-    console.error("❌ Cloudinary upload error:", error);
-    return null;
-  }
-};
-
-const VALID_TYPES = new Set(["CLUB", "SOCIETY", "FARM", "BOARDING", "SECURITY"]);
+const VALID_TYPES = new Set(["CLUB", "SOCIETY", "FARM", "BOARDING", "SECURITY", "DEPARTMENT"]);
 
 export async function GET(req) {
   try {
@@ -203,6 +172,9 @@ export async function GET(req) {
     const items = await prisma.schoolHubItem.findMany({
       where,
       orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
+      include: {
+        images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+      },
     });
 
     if (!grouped) {
@@ -284,36 +256,27 @@ export async function POST(req) {
       details = [];
     }
 
-    const imageFile = formData.get("image");
-    let imageUrl = null;
-
-    if (imageFile && typeof imageFile !== "string" && imageFile.size > 0) {
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
-      if (!allowedTypes.includes(imageFile.type)) {
+    for (const file of [...formData.getAll("images"), formData.get("image")].filter(isFileUpload)) {
+      const validation = validateSchoolImage(file);
+      if (!validation.valid) {
         return NextResponse.json(
-          { success: false, error: "Invalid image format. Only JPEG, PNG, WebP, and GIF are allowed.", authenticated: true },
+          { success: false, error: validation.error, authenticated: true },
           { status: 400 }
         );
       }
-
-      const maxSize = 8 * 1024 * 1024;
-      if (imageFile.size > maxSize) {
-        return NextResponse.json(
-          { success: false, error: "Image size too large. Maximum size is 8MB.", authenticated: true },
-          { status: 400 }
-        );
-      }
-
-      imageUrl = await uploadImageToCloudinary(imageFile);
-      if (!imageUrl) {
-        return NextResponse.json(
-          { success: false, error: "Failed to upload image", authenticated: true },
-          { status: 500 }
-        );
-      }
-    } else if (typeof imageFile === "string" && imageFile.trim() !== "") {
-      imageUrl = imageFile.trim();
     }
+
+    const uploadedImages = await uploadSchoolImagesFromFormData(formData, "images", "school_hub");
+    const legacyImageFile = formData.get("image");
+    if (isFileUpload(legacyImageFile)) {
+      uploadedImages.push(...(await uploadSchoolImagesFromFormData(formData, "image", "school_hub")));
+    }
+
+    const legacyImageUrl =
+      typeof legacyImageFile === "string" && legacyImageFile.trim() !== ""
+        ? legacyImageFile.trim()
+        : null;
+    const primaryImage = uploadedImages[0]?.url || legacyImageUrl || null;
 
     const item = await prisma.schoolHubItem.create({
       data: {
@@ -321,13 +284,27 @@ export async function POST(req) {
         title,
         shortDescription: shortDescription || null,
         description: description || null,
-        image: imageUrl,
+        image: primaryImage,
         contactName: contactName || null,
         contactPhone: contactPhone || null,
         contactEmail: contactEmail || null,
         details,
         isActive,
         displayOrder: Math.floor(displayOrder),
+        images: uploadedImages.length
+          ? {
+              create: uploadedImages.map((image, index) => ({
+                url: image.url,
+                publicId: image.publicId,
+                altText: image.altText || title,
+                caption: image.caption || null,
+                displayOrder: index,
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
       },
     });
 
@@ -340,4 +317,3 @@ export async function POST(req) {
     );
   }
 }
-

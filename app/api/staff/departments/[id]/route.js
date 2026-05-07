@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../libs/prisma";
-import cloudinary from "../../../../../libs/cloudinary";
+import {
+  deleteSchoolImages,
+  isFileUpload,
+  uploadSchoolImagesFromFormData,
+  validateSchoolImage,
+} from "../../../../../libs/schoolContentUpload";
 
 // ==================== AUTHENTICATION UTILITIES ====================
 
@@ -156,58 +161,6 @@ const authenticateWriteRequest = (req) => {
   return { authenticated: true, user: validationResult.user };
 };
 
-// ==================== CLOUDINARY HELPERS ====================
-
-const uploadImageToCloudinary = async (file) => {
-  if (!file?.name || file.size === 0) return null;
-
-  try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const timestamp = Date.now();
-    const originalName = file.name;
-    const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf("."));
-    const sanitizedFileName = nameWithoutExt.replace(/[^a-zA-Z0-9.-]/g, "_");
-
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "image",
-          folder: "school_departments",
-          public_id: `${timestamp}-${sanitizedFileName}`,
-          transformation: [{ width: 1200, height: 675, crop: "fill" }, { quality: "auto:good" }],
-        },
-        (error, res) => {
-          if (error) reject(error);
-          else resolve(res);
-        }
-      );
-      uploadStream.end(buffer);
-    });
-
-    return result.secure_url;
-  } catch (error) {
-    console.error("❌ Cloudinary upload error:", error);
-    return null;
-  }
-};
-
-const deleteImageFromCloudinary = async (imageUrl) => {
-  if (!imageUrl || !imageUrl.includes("cloudinary.com")) return;
-
-  try {
-    const urlParts = imageUrl.split("/");
-    const uploadIndex = urlParts.indexOf("upload");
-    if (uploadIndex === -1) return;
-
-    const pathAfterUpload = urlParts.slice(uploadIndex + 1).join("/");
-    const publicId = pathAfterUpload.replace(/\.[^/.]+$/, "");
-
-    await cloudinary.uploader.destroy(publicId);
-  } catch (error) {
-    console.error("❌ Error deleting image from Cloudinary:", error);
-  }
-};
-
 const VALID_CATEGORIES = new Set(["CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
 
 export async function GET(_req, { params }) {
@@ -217,7 +170,10 @@ export async function GET(_req, { params }) {
       return NextResponse.json({ success: false, error: "Invalid id" }, { status: 400 });
     }
 
-    const department = await prisma.staffDepartment.findUnique({ where: { id } });
+    const department = await prisma.staffDepartment.findUnique({
+      where: { id },
+      include: { images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] } },
+    });
     if (!department) {
       return NextResponse.json({ success: false, error: "Department not found" }, { status: 404 });
     }
@@ -245,7 +201,10 @@ export async function PUT(req, { params }) {
       );
     }
 
-    const existing = await prisma.staffDepartment.findUnique({ where: { id } });
+    const existing = await prisma.staffDepartment.findUnique({
+      where: { id },
+      include: { images: true },
+    });
     if (!existing) {
       return NextResponse.json(
         { success: false, error: "Department not found", authenticated: true },
@@ -326,44 +285,67 @@ export async function PUT(req, { params }) {
       }
     }
 
-    const imageFile = formData.get("image");
-    if (imageFile) {
-      if (typeof imageFile === "string" && imageFile.trim() !== "") {
-        data.image = imageFile.trim();
-      } else if (typeof imageFile !== "string" && imageFile.size > 0) {
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
-        if (!allowedTypes.includes(imageFile.type)) {
-          return NextResponse.json(
-            { success: false, error: "Invalid image format. Only JPEG, PNG, WebP, and GIF are allowed.", authenticated: true },
-            { status: 400 }
-          );
-        }
-        const maxSize = 6 * 1024 * 1024;
-        if (imageFile.size > maxSize) {
-          return NextResponse.json(
-            { success: false, error: "Image size too large. Maximum size is 6MB.", authenticated: true },
-            { status: 400 }
-          );
-        }
-
-        const uploadedUrl = await uploadImageToCloudinary(imageFile);
-        if (!uploadedUrl) {
-          return NextResponse.json(
-            { success: false, error: "Failed to upload image", authenticated: true },
-            { status: 500 }
-          );
-        }
-        data.image = uploadedUrl;
-
-        if (existing.image && existing.image !== uploadedUrl) {
-          await deleteImageFromCloudinary(existing.image);
-        }
+    for (const file of [...formData.getAll("images"), formData.get("image")].filter(isFileUpload)) {
+      const validation = validateSchoolImage(file);
+      if (!validation.valid) {
+        return NextResponse.json(
+          { success: false, error: validation.error, authenticated: true },
+          { status: 400 }
+        );
       }
+    }
+
+    let imagesChanged = false;
+    const imagesToRemove = formData.getAll("imagesToRemove").map((value) => value.toString());
+    const matchingImagesToRemove = existing.images.filter((image) => imagesToRemove.includes(image.url));
+    if (matchingImagesToRemove.length > 0) {
+      imagesChanged = true;
+      await deleteSchoolImages(matchingImagesToRemove);
+      await prisma.staffDepartmentImage.deleteMany({
+        where: { id: { in: matchingImagesToRemove.map((image) => image.id) } },
+      });
+    }
+
+    if (existing.image && imagesToRemove.includes(existing.image)) {
+      imagesChanged = true;
+      data.image = null;
+      await deleteSchoolImages(existing.image);
+    }
+
+    const legacyImageFile = formData.get("image");
+    const uploadedImages = await uploadSchoolImagesFromFormData(formData, "images", "school_departments");
+    if (isFileUpload(legacyImageFile)) {
+      uploadedImages.push(...(await uploadSchoolImagesFromFormData(formData, "image", "school_departments")));
+    } else if (typeof legacyImageFile === "string" && legacyImageFile.trim() !== "" && uploadedImages.length === 0) {
+      data.image = legacyImageFile.trim();
+    }
+
+    if (uploadedImages.length > 0) {
+      imagesChanged = true;
+      await prisma.staffDepartmentImage.createMany({
+        data: uploadedImages.map((image, index) => ({
+          staffDepartmentId: id,
+          url: image.url,
+          publicId: image.publicId,
+          altText: image.altText || data.name || existing.name,
+          caption: image.caption || null,
+          displayOrder: existing.images.length + index,
+        })),
+      });
+      data.image = data.image || uploadedImages[0].url;
+    }
+
+    const remainingImages = existing.images.filter(
+      (image) => !matchingImagesToRemove.some((removed) => removed.id === image.id)
+    );
+    if (imagesChanged && !data.image) {
+      data.image = remainingImages[0]?.url || uploadedImages[0]?.url || null;
     }
 
     const department = await prisma.staffDepartment.update({
       where: { id },
       data,
+      include: { images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] } },
     });
 
     return NextResponse.json({ success: true, department });
@@ -389,7 +371,10 @@ export async function DELETE(req, { params }) {
       );
     }
 
-    const existing = await prisma.staffDepartment.findUnique({ where: { id } });
+    const existing = await prisma.staffDepartment.findUnique({
+      where: { id },
+      include: { images: true },
+    });
     if (!existing) {
       return NextResponse.json(
         { success: false, error: "Department not found", authenticated: true },
@@ -399,9 +384,7 @@ export async function DELETE(req, { params }) {
 
     await prisma.staffDepartment.delete({ where: { id } });
 
-    if (existing.image) {
-      await deleteImageFromCloudinary(existing.image);
-    }
+    await deleteSchoolImages([...(existing.images || []), existing.image].filter(Boolean));
 
     return NextResponse.json({ success: true });
   } catch (error) {
