@@ -321,6 +321,16 @@ const ModernStaffLeadership = () => {
   
   // Combine all staff for table view
   const allStaffForTable = [...(principal ? [principal] : []), ...(academicsDeputy ? [academicsDeputy] : []), ...(adminDeputy ? [adminDeputy] : []), ...teachers, ...supportStaff];
+  const teacherIdsForTable = new Set((teachers || []).map(t => t?.id).filter(Boolean));
+  const supportIdsForTable = new Set((supportStaff || []).map(s => s?.id).filter(Boolean));
+  const getHierarchyRankForTable = (member) => {
+    if (!member) return 99;
+    if (member.id === principal?.id) return 0;
+    if (member.id === academicsDeputy?.id || member.id === adminDeputy?.id) return 1;
+    if (teacherIdsForTable.has(member.id)) return 2;
+    if (supportIdsForTable.has(member.id)) return 3;
+    return 4;
+  };
   
   // Filter staff based on search and role filter
   const filteredStaff = allStaffForTable.filter(member => {
@@ -334,7 +344,8 @@ const ModernStaffLeadership = () => {
     let roleCategory = 'other';
     if (member.id === principal?.id) roleCategory = 'principal';
     else if (member.id === academicsDeputy?.id || member.id === adminDeputy?.id) roleCategory = 'deputy';
-    else if (teachers.includes(member)) roleCategory = 'teacher';
+    else if (teacherIdsForTable.has(member.id)) roleCategory = 'teacher';
+    else if (supportIdsForTable.has(member.id)) roleCategory = 'support';
     else roleCategory = 'support';
     
     const matchesRole = filterRole === 'all' || roleCategory === filterRole;
@@ -344,6 +355,9 @@ const ModernStaffLeadership = () => {
   
   // Sort staff
   const sortedStaff = [...filteredStaff].sort((a, b) => {
+    const rankDiff = getHierarchyRankForTable(a) - getHierarchyRankForTable(b);
+    if (rankDiff !== 0) return rankDiff;
+
     let aVal = '', bVal = '';
     
     switch(sortField) {
@@ -396,7 +410,7 @@ const ModernStaffLeadership = () => {
   const getRoleRowClass = (member) => {
     if (member.id === principal?.id) return 'border-l-4 border-l-emerald-600 bg-emerald-50/30';
     if (member.id === academicsDeputy?.id || member.id === adminDeputy?.id) return 'border-l-4 border-l-teal-500 bg-teal-50/30';
-    if (teachers.includes(member)) return 'hover:bg-emerald-50/20';
+    if (teacherIdsForTable.has(member.id)) return 'hover:bg-emerald-50/20';
     return 'hover:bg-slate-50';
   };
 
