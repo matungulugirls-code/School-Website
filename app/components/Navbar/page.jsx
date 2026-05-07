@@ -139,6 +139,18 @@ export default function ModernNavbar() {
       description: 'Access your academic records & results'
     },
     {
+      name: 'Staff Directory',
+      href: '/pages/SchoolTeam',
+      icon: FiUsers,
+      description: 'Leadership profiles & department groups'
+    },
+    {
+      name: 'Departments',
+      href: '/pages/Departments',
+      icon: FiLayers,
+      description: 'CBC, 8-4-4, teaching & support departments'
+    },
+    {
       name: 'Guidance & Counselling',
       href: '/pages/Guidance-and-Councelling',
       icon: FiUsers,
@@ -178,18 +190,6 @@ export default function ModernNavbar() {
       href: '/pages/careers',
       icon: FiBriefcase,
       description: 'Job opportunities at Matungulu Girls'
-    },
-    {
-      name: 'Staff Directory',
-      href: '/pages/SchoolTeam',
-      icon: FiUsers,
-      description: 'Leadership profiles & department groups'
-    },
-    {
-      name: 'Departments',
-      href: '/pages/Departments',
-      icon: FiLayers,
-      description: 'CBC, 8-4-4, teaching & support departments'
     },
     {
       name: 'Clubs',
@@ -232,13 +232,21 @@ export default function ModernNavbar() {
   // Function to check if a link is active
   const isActiveLink = (href, exact = false) => {
     if (!pathname) return false;
-    if (href === '/') {
+    if (!href || !href.startsWith('/')) return false;
+
+    const normalizedHref = href.split('#')[0].split('?')[0];
+
+    if (normalizedHref === '/') {
       return pathname === '/';
     }
     if (exact) {
-      return pathname === href;
+      return pathname === normalizedHref;
     }
-    return pathname && pathname.startsWith(href);
+    return pathname && pathname.startsWith(normalizedHref);
+  };
+
+  const isAnyDropdownItemActive = (items) => {
+    return items.some((item) => isActiveLink(item.href));
   };
 
   // Navigation handlers
@@ -300,7 +308,9 @@ export default function ModernNavbar() {
             <div className="hidden lg:flex items-center justify-center flex-1 mx-8 min-w-0">
               <div className="flex items-center justify-between w-full max-w-7xl gap-0.5">
                 {mainNavigation.map((item) => {
-                  const isActive = isActiveLink(item.href, item.exact);
+                  const isActive = item.hasDropdown
+                    ? isActiveLink(item.href, item.exact) || isAnyDropdownItemActive(academicDropdownItems)
+                    : isActiveLink(item.href, item.exact);
                   
                   if (item.hasDropdown) {
                     return (
@@ -439,11 +449,7 @@ export default function ModernNavbar() {
                 >
                   <button
                     className={`group flex items-center gap-0.5 xs:gap-1 font-bold transition-all text-[0.85rem] xs:text-[0.9rem] tracking-wide whitespace-nowrap px-1.5 xs:px-2 py-2 relative ${
-                      isResourcesDropdownOpen || 
-                      isActiveLink('/pages/careers') ||
-                      isActiveLink('/pages/adminLogin') ||
-                      isActiveLink('/pages/SchoolTeam') ||
-                      isActiveLink('/pages/alumni')
+                      isResourcesDropdownOpen || isAnyDropdownItemActive(resourcesDropdownItems)
                         ? 'text-emerald-100' 
                         : 'text-white/80 hover:text-emerald-100'
                     }`}
@@ -456,11 +462,7 @@ export default function ModernNavbar() {
                       isResourcesDropdownOpen ? 'rotate-180' : ''
                     }`} />
                     
-                    {(isResourcesDropdownOpen || 
-                      isActiveLink('/pages/adminLogin') ||
-                      isActiveLink('/pages/careers') ||
-                      isActiveLink('/pages/SchoolTeam') ||
-                      isActiveLink('/pages/alumni')) && (
+                    {(isResourcesDropdownOpen || isAnyDropdownItemActive(resourcesDropdownItems)) && (
                       <span className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-emerald-300 rounded-full"></span>
                     )}
                   </button>
@@ -585,7 +587,9 @@ export default function ModernNavbar() {
             <div className="px-3 xs:px-4 sm:px-6 py-6 xs:py-8 max-w-2xl mx-auto">
               <div className="space-y-1.5 xs:space-y-2 mb-6 xs:mb-8">
                 {mainNavigation.map((item) => {
-                  const isActive = isActiveLink(item.href, item.exact);
+                  const isActive = item.hasDropdown
+                    ? isActiveLink(item.href, item.exact) || isAnyDropdownItemActive(academicDropdownItems)
+                    : isActiveLink(item.href, item.exact);
                   
                   if (item.hasDropdown) {
                     return (
@@ -681,11 +685,7 @@ export default function ModernNavbar() {
                   <button
                     onClick={() => setIsMobileResourcesDropdownOpen(!isMobileResourcesDropdownOpen)}
                     className={`w-full flex items-center justify-between p-3 xs:p-4 rounded-lg xs:rounded-xl text-left ${
-                      isMobileResourcesDropdownOpen ||
-                      isActiveLink('/pages/SchoolTeam') ||
-                      isActiveLink('/pages/careers') ||
-                      isActiveLink('/pages/adminLogin') ||
-                      isActiveLink('/pages/alumni')
+                      isMobileResourcesDropdownOpen || isAnyDropdownItemActive(resourcesDropdownItems)
                         ? 'bg-white/10 text-emerald-200'
                         : 'text-white/90 hover:bg-white/5'
                     }`}
