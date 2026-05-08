@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -234,19 +233,19 @@ enum DepartmentCategory {
 }
 
 model StaffDepartment {
-  id           Int               @id @default(autoincrement())
-  name         String            @db.VarChar(255)
+  id           Int                    @id @default(autoincrement())
+  name         String                 @db.VarChar(255)
   category     DepartmentCategory
-  description  String?           @db.Text
-  image        String?           @db.Text
+  description  String?                @db.Text
+  image        String?                @db.Text
   images       StaffDepartmentImage[]
-  staffCount   Int               @default(0)
-  headName     String?           @db.VarChar(255)
+  staffCount   Int                    @default(0)
+  headName     String?                @db.VarChar(255)
   extra        Json?
-  isActive     Boolean           @default(true)
-  displayOrder Int               @default(0)
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
+  isActive     Boolean                @default(true)
+  displayOrder Int                    @default(0)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
 
   @@index([category])
   @@index([isActive])
@@ -278,6 +277,8 @@ model StaffDepartmentImage {
 enum SchoolHubType {
   CLUB
   SOCIETY
+  STUDENT_COUNCIL
+  COMPUTER_LAB
   FARM
   BOARDING
   SECURITY
@@ -285,21 +286,25 @@ enum SchoolHubType {
 }
 
 model SchoolHubItem {
-  id               Int          @id @default(autoincrement())
+  id               Int              @id @default(autoincrement())
   type             SchoolHubType
-  title            String       @db.VarChar(255)
-  shortDescription String?      @db.Text
-  description      String?      @db.Text
-  image            String?      @db.Text
+  title            String           @db.VarChar(255)
+  shortDescription String?          @db.Text
+  description      String?          @db.Text
+  image            String?          @db.Text
   images           SchoolHubImage[]
-  contactName      String?      @db.VarChar(255)
-  contactPhone     String?      @db.VarChar(50)
-  contactEmail     String?      @db.VarChar(255)
-  details          Json         @default("[]")
-  isActive         Boolean      @default(true)
-  displayOrder     Int          @default(0)
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  location         String?          @db.VarChar(255)
+  established      String?          @db.VarChar(100)
+  website          String?          @db.VarChar(255)
+  socialMedia      Json             @default("{}")
+  contactName      String?          @db.VarChar(255)
+  contactPhone     String?          @db.VarChar(50)
+  contactEmail     String?          @db.VarChar(255)
+  details          Json             @default("[]")
+  isActive         Boolean          @default(true)
+  displayOrder     Int              @default(0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
   @@index([type])
   @@index([isActive])
@@ -455,29 +460,29 @@ model SchoolInfo {
 
 // Individual Achievement Model
 model Achievement {
-  id                Int       @id @default(autoincrement())
-  title             String    @db.VarChar(255)
-  description       String?   @db.Text
-  category          String    @db.VarChar(100) // e.g., "Academic", "Sports", "Arts", "Leadership"
-  year              Int       // Year the achievement was earned
-  
+  id          Int     @id @default(autoincrement())
+  title       String  @db.VarChar(255)
+  description String? @db.Text
+  category    String  @db.VarChar(100) // e.g., "Academic", "Sports", "Arts", "Leadership"
+  year        Int // Year the achievement was earned
+
   // Images stored as JSON array
-  images            Json      @default("[]") // Array of { url, public_id, caption }
-  
+  images Json @default("[]") // Array of { url, public_id, caption }
+
   // Display options
-  featured          Boolean   @default(false)
-  displayOrder      Int       @default(0)
-  isActive          Boolean   @default(true)
-  
+  featured     Boolean @default(false)
+  displayOrder Int     @default(0)
+  isActive     Boolean @default(true)
+
   // Additional metadata
-  awardingBody      String?   @db.VarChar(255)
-  recipients        Json      @default("[]") // Array of recipient names
-  
+  awardingBody String? @db.VarChar(255)
+  recipients   Json    @default("[]") // Array of recipient names
+
   // Timestamps
-  achievedDate      DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  
+  achievedDate DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
   @@index([category])
   @@index([year])
   @@index([featured])
@@ -487,27 +492,23 @@ model Achievement {
 
 // School Stats Model (for constant mean and target values)
 model SchoolStats {
-  id                Int       @id @default(autoincrement())
-  
-  meanScore         Float?    // Overall mean score
-  lastYearMean      Float?    // Last year's mean score
-  targetMean        Float?    // Target mean for current year
-  
+  id Int @id @default(autoincrement())
+
+  meanScore    Float? // Overall mean score
+  lastYearMean Float? // Last year's mean score
+  targetMean   Float? // Target mean for current year
+
   // School slogan
-  slogan            String?   @db.Text
-  sloganDescription String?   @db.Text
-  sloganAuthor      String?   @db.VarChar(255)
-  
+  slogan            String? @db.Text
+  sloganDescription String? @db.Text
+  sloganAuthor      String? @db.VarChar(255)
+
   // Timestamps
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("SchoolStats")
 }
-
-
-
-
 
 model SchoolDocument {
   id Int @id @default(autoincrement())
@@ -1035,4 +1036,3 @@ model Team {
 
   @@map("teams")
 }
-

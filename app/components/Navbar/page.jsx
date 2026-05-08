@@ -24,8 +24,10 @@ import {
   FiLock,
   FiMail,
   FiMenu,
+  FiMonitor,
   FiPhone,
   FiShield,
+  FiUserCheck,
   FiUsers,
   FiX,
 } from 'react-icons/fi';
@@ -103,6 +105,18 @@ const schoolHubLinks = [
     href: '/pages/Societies',
     icon: FiHeart,
     description: 'Student societies and service communities',
+  },
+  {
+    name: 'Student Council',
+    href: '/pages/Student Council',
+    icon: FiUserCheck,
+    description: 'Student leadership, representation and service',
+  },
+  {
+    name: 'Computer Lab',
+    href: '/pages/Computer Lab',
+    icon: FiMonitor,
+    description: 'ICT spaces, resources and digital learning',
   },
   {
     name: 'Farm',

@@ -8,12 +8,19 @@ import {
   FiBookOpen,
   FiCalendar,
   FiChevronRight,
+  FiExternalLink,
+  FiGlobe,
   FiGrid,
   FiImage,
   FiLayers,
+  FiMail,
+  FiMapPin,
+  FiMonitor,
+  FiPhone,
   FiRefreshCw,
   FiSearch,
   FiShield,
+  FiUserCheck,
   FiUsers,
   FiX,
 } from 'react-icons/fi';
@@ -23,6 +30,8 @@ import { normalizeSchoolImages } from './image-upload-field';
 const ICONS = {
   CLUB: FiUsers,
   SOCIETY: FaGraduationCap,
+  STUDENT_COUNCIL: FiUserCheck,
+  COMPUTER_LAB: FiMonitor,
   FARM: FaLeaf,
   BOARDING: FaHome,
   SECURITY: FiShield,
@@ -30,23 +39,51 @@ const ICONS = {
 };
 
 const TYPE_THEMES = {
-  CLUB: { gradient: 'from-purple-500 to-pink-500', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-  SOCIETY: { gradient: 'from-indigo-500 to-blue-500', bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
-  FARM: { gradient: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
-  BOARDING: { gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
-  SECURITY: { gradient: 'from-rose-500 to-red-500', bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200' },
-  DEPARTMENT: { gradient: 'from-cyan-500 to-blue-500', bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200' },
+  CLUB: { gradient: 'from-purple-500 to-pink-500', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', ring: 'ring-purple-100' },
+  SOCIETY: { gradient: 'from-indigo-500 to-blue-500', bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', ring: 'ring-indigo-100' },
+  STUDENT_COUNCIL: { gradient: 'from-fuchsia-500 to-rose-500', bg: 'bg-fuchsia-50', text: 'text-fuchsia-700', border: 'border-fuchsia-200', ring: 'ring-fuchsia-100' },
+  COMPUTER_LAB: { gradient: 'from-sky-500 to-cyan-500', bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200', ring: 'ring-sky-100' },
+  FARM: { gradient: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', ring: 'ring-emerald-100' },
+  BOARDING: { gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', ring: 'ring-amber-100' },
+  SECURITY: { gradient: 'from-rose-500 to-red-500', bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', ring: 'ring-rose-100' },
+  DEPARTMENT: { gradient: 'from-cyan-500 to-blue-500', bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200', ring: 'ring-cyan-100' },
 };
 
 const getTypeLabel = (type) => {
   switch (type) {
-    case 'CLUB': return 'Club';
-    case 'SOCIETY': return 'Society';
-    case 'FARM': return 'Farm';
-    case 'BOARDING': return 'Boarding';
-    case 'SECURITY': return 'Security';
-    case 'DEPARTMENT': return 'Department';
-    default: return 'School Hub';
+    case 'CLUB':
+      return 'Club';
+    case 'SOCIETY':
+      return 'Society';
+    case 'STUDENT_COUNCIL':
+      return 'Student Council';
+    case 'COMPUTER_LAB':
+      return 'Computer Lab';
+    case 'FARM':
+      return 'Farm';
+    case 'BOARDING':
+      return 'Boarding';
+    case 'SECURITY':
+      return 'Security';
+    case 'DEPARTMENT':
+      return 'Department';
+    default:
+      return 'School Hub';
+  }
+};
+
+const getDepartmentCategoryLabel = (category) => {
+  switch (category) {
+    case 'CBC':
+      return 'CBC Department';
+    case 'EIGHT_FOUR_FOUR':
+      return '8-4-4 Department';
+    case 'TEACHING':
+      return 'Teaching Department';
+    case 'SUPPORT':
+      return 'Support Department';
+    default:
+      return 'Department';
   }
 };
 
@@ -63,31 +100,54 @@ const buildDepartmentItem = (dept) => ({
   ].filter((item) => item.content),
 });
 
-const getDepartmentCategoryLabel = (category) => {
-  switch (category) {
-    case 'CBC': return 'CBC Department';
-    case 'EIGHT_FOUR_FOUR': return '8-4-4 Department';
-    case 'TEACHING': return 'Teaching Department';
-    case 'SUPPORT': return 'Support Department';
-    default: return 'Department';
+const getSocialLinks = (item) => {
+  let social = item?.socialMedia || {};
+
+  if (typeof social === 'string') {
+    try {
+      social = JSON.parse(social);
+    } catch {
+      social = {};
+    }
   }
+
+  if (!social || typeof social !== 'object' || Array.isArray(social)) return [];
+
+  return Object.entries(social)
+    .filter(([, value]) => typeof value === 'string' && value.trim())
+    .map(([label, href]) => ({ label, href: href.trim() }));
 };
+
+const InfoPill = ({ icon: Icon, children }) => (
+  <span className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700">
+    <Icon className="text-slate-400" />
+    {children}
+  </span>
+);
 
 const GalleryModal = ({ item, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [item?.id, item?.type]);
+
   if (!item) return null;
 
   const images = normalizeSchoolImages(item);
   const selectedImage = images[selectedIndex]?.url;
   const Icon = ICONS[item.type] || FiLayers;
   const theme = TYPE_THEMES[item.type] || TYPE_THEMES.DEPARTMENT;
+  const socialLinks = getSocialLinks(item);
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 p-0 backdrop-blur-sm sm:p-4">
-      <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[92vh] sm:rounded-[32px]">
+      <div className="relative flex h-full w-full max-w-6xl flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[92vh] sm:rounded-[28px]">
         <button
+          type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur-md"
+          className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/25 text-white backdrop-blur-md"
+          aria-label="Close gallery"
         >
           <FiX />
         </button>
@@ -98,12 +158,12 @@ const GalleryModal = ({ item, onClose }) => {
               <img src={selectedImage} alt={item.title} className="h-full w-full object-cover" />
             ) : (
               <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${theme.gradient}`}>
-                <Icon className="text-5xl text-white/70" />
+                <Icon className="text-5xl text-white/75" />
               </div>
             )}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5">
               <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-slate-900">
-                {images.length} images
+                {images.length} {images.length === 1 ? 'image' : 'images'}
               </span>
             </div>
           </div>
@@ -125,6 +185,7 @@ const GalleryModal = ({ item, onClose }) => {
                   {images.map((image, index) => (
                     <button
                       key={image.url}
+                      type="button"
                       onClick={() => setSelectedIndex(index)}
                       className={`h-20 overflow-hidden rounded-2xl border bg-slate-100 ${
                         selectedIndex === index ? 'border-slate-950 ring-2 ring-slate-950/10' : 'border-slate-200'
@@ -136,19 +197,52 @@ const GalleryModal = ({ item, onClose }) => {
                 </div>
               )}
 
+              {(item.location || item.established || item.website) && (
+                <div className="mb-5 flex flex-wrap gap-2">
+                  {item.location && <InfoPill icon={FiMapPin}>{item.location}</InfoPill>}
+                  {item.established && <InfoPill icon={FiCalendar}>{item.established}</InfoPill>}
+                  {item.website && (
+                    <a href={item.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-white">
+                      <FiGlobe className="text-slate-400" /> Website <FiExternalLink className="text-[10px]" />
+                    </a>
+                  )}
+                </div>
+              )}
+
               {(item.contactName || item.contactPhone || item.contactEmail) && (
                 <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Contact</p>
-                  <p className="mt-2 text-sm font-bold text-slate-800">
-                    {[item.contactName, item.contactPhone, item.contactEmail].filter(Boolean).join(' | ')}
-                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {item.contactName && <InfoPill icon={FiUserCheck}>{item.contactName}</InfoPill>}
+                    {item.contactPhone && <InfoPill icon={FiPhone}>{item.contactPhone}</InfoPill>}
+                    {item.contactEmail && <InfoPill icon={FiMail}>{item.contactEmail}</InfoPill>}
+                  </div>
+                </div>
+              )}
+
+              {socialLinks.length > 0 && (
+                <div className="mb-5 rounded-2xl border border-slate-200 bg-white p-4">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Social Links</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {socialLinks.map((link) => (
+                      <a
+                        key={`${link.label}-${link.href}`}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`rounded-xl border px-3 py-2 text-xs font-black capitalize ${theme.bg} ${theme.text} ${theme.border}`}
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {Array.isArray(item.details) && item.details.length > 0 && (
                 <div className="space-y-3">
                   {item.details.map((detail, index) => (
-                    <div key={index} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <div key={`${detail?.title || 'detail'}-${index}`} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                       <p className="text-sm font-black text-slate-950">{detail?.title || `Detail ${index + 1}`}</p>
                       {detail?.content && <p className="mt-2 text-sm font-semibold leading-7 text-slate-600">{detail.content}</p>}
                     </div>
@@ -158,7 +252,7 @@ const GalleryModal = ({ item, onClose }) => {
             </div>
 
             <div className="border-t border-slate-100 bg-slate-50 p-4">
-              <button onClick={onClose} className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white">
+              <button type="button" onClick={onClose} className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white">
                 Close
               </button>
             </div>
@@ -174,25 +268,30 @@ const HubCard = ({ item, onView }) => {
   const image = images[0]?.url;
   const Icon = ICONS[item.type] || FiLayers;
   const theme = TYPE_THEMES[item.type] || TYPE_THEMES.DEPARTMENT;
+  const detailCount = Array.isArray(item.details) ? item.details.length : 0;
 
   return (
-    <button onClick={onView} className="group relative block overflow-hidden rounded-[32px] border border-slate-100 bg-white text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <button
+      type="button"
+      onClick={onView}
+      className={`group relative block overflow-hidden rounded-[28px] border bg-white text-left shadow-sm ring-1 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${theme.border} ${theme.ring}`}
+    >
       <div className="relative h-52 w-full overflow-hidden bg-slate-100">
         {image ? (
           <img src={image} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${theme.gradient}`}>
-            <Icon className="text-4xl text-white/70" />
+            <Icon className="text-4xl text-white/75" />
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        <div className="absolute left-4 top-4 flex flex-col gap-2">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+        <div className="absolute left-4 top-4">
           <span className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-widest ${theme.bg} ${theme.text} ${theme.border}`}>
             <Icon /> {getTypeLabel(item.type)}
           </span>
         </div>
         <div className="absolute bottom-4 left-4 rounded-full bg-slate-950/80 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white backdrop-blur">
-          {images.length} images
+          {images.length} {images.length === 1 ? 'image' : 'images'}
         </div>
       </div>
 
@@ -202,13 +301,20 @@ const HubCard = ({ item, onView }) => {
           <p className="mt-2 text-sm font-semibold leading-6 text-slate-500 line-clamp-3">{item.shortDescription}</p>
         )}
 
-        <div className="mt-5 grid grid-cols-2 gap-2">
-          <div className="flex items-center gap-2 rounded-2xl border border-slate-100 bg-slate-50 p-2 text-[11px] font-bold uppercase tracking-tight text-slate-700">
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-[11px] font-bold uppercase tracking-tight text-slate-700">
             <FiImage className={theme.text} /> {images.length} photos
-          </div>
-          <div className="flex items-center gap-2 rounded-2xl border border-slate-100 bg-slate-50 p-2 text-[11px] font-bold uppercase tracking-tight text-slate-700">
-            <FiCalendar className={theme.text} /> Updated
-          </div>
+          </span>
+          {item.location && (
+            <span className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-[11px] font-bold uppercase tracking-tight text-slate-700">
+              <FiMapPin className={theme.text} /> {item.location}
+            </span>
+          )}
+          {detailCount > 0 && (
+            <span className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-[11px] font-bold uppercase tracking-tight text-slate-700">
+              <FiLayers className={theme.text} /> {detailCount} details
+            </span>
+          )}
         </div>
 
         <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
@@ -252,13 +358,14 @@ export default function PublicSchoolHubPage({
       } else if (Array.isArray(sections) && sections.length > 0) {
         const responses = await Promise.all(sections.map((section) => fetch(`/api/schoolhub?type=${section.type}`)));
         const payloads = await Promise.all(responses.map((res) => res.json()));
+        const failed = responses.findIndex((res, index) => !res.ok || !payloads[index].success);
+        if (failed >= 0) throw new Error(payloads[failed].error || `Failed to load ${sections[failed].title}`);
+
         const merged = payloads.flatMap((data, index) =>
           Array.isArray(data.items)
             ? data.items.map((item) => ({ ...item, sectionTitle: sections[index].title }))
             : []
         );
-        const failed = responses.findIndex((res, index) => !res.ok || !payloads[index].success);
-        if (failed >= 0) throw new Error(payloads[failed].error || `Failed to load ${sections[failed].title}`);
         setItems(merged);
       } else {
         const res = await fetch(`/api/schoolhub?type=${singleType}`);
@@ -283,7 +390,17 @@ export default function PublicSchoolHubPage({
     const q = search.trim().toLowerCase();
     if (!q) return items;
     return items.filter((item) =>
-      [item.title, item.shortDescription, item.description, item.contactName, item.sectionTitle]
+      [
+        item.title,
+        item.shortDescription,
+        item.description,
+        item.contactName,
+        item.contactEmail,
+        item.contactPhone,
+        item.location,
+        item.established,
+        item.sectionTitle,
+      ]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(q))
     );
@@ -296,6 +413,7 @@ export default function PublicSchoolHubPage({
         items: visibleItems.filter((item) => item.type === section.type),
       }));
     }
+
     if (departments) {
       return [
         { title: 'CBC Departments', type: 'DEPARTMENT', icon: FiLayers, items: visibleItems.filter((item) => item.category === 'CBC') },
@@ -304,11 +422,13 @@ export default function PublicSchoolHubPage({
         { title: 'Support Departments', type: 'DEPARTMENT', icon: FiShield, items: visibleItems.filter((item) => item.category === 'SUPPORT') },
       ];
     }
+
     return [{ title, type: singleType, items: visibleItems }];
   }, [departments, sections, singleType, title, visibleItems]);
 
   const totalImages = items.reduce((sum, item) => sum + normalizeSchoolImages(item).length, 0);
-  const HeroIcon = ICONS[singleType] || FiGrid;
+  const heroType = singleType || sections?.[0]?.type || 'DEPARTMENT';
+  const HeroIcon = ICONS[heroType] || FiGrid;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
@@ -328,7 +448,7 @@ export default function PublicSchoolHubPage({
             </div>
           </Link>
 
-          <Link href="/pages/SchoolTeam" className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50">
+          <Link href="/" className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-black uppercase tracking-widest text-slate-700 hover:bg-slate-50">
             <FiArrowLeft /> Back
           </Link>
         </div>
@@ -365,6 +485,7 @@ export default function PublicSchoolHubPage({
 
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
               <button
+                type="button"
                 onClick={() => load(true)}
                 disabled={refreshing}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-black text-[#0f5b4c] shadow-lg transition active:scale-95 disabled:opacity-60"
@@ -400,11 +521,11 @@ export default function PublicSchoolHubPage({
         {error && <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{error}</div>}
 
         {loading ? (
-          <div className="rounded-[32px] border border-slate-200 bg-white p-12 text-center text-sm font-bold text-slate-500 shadow-sm">
+          <div className="rounded-[28px] border border-slate-200 bg-white p-12 text-center text-sm font-bold text-slate-500 shadow-sm">
             Loading {title.toLowerCase()}...
           </div>
         ) : visibleItems.length === 0 ? (
-          <div className="rounded-[32px] border-2 border-dashed border-slate-200 bg-white p-12 text-center">
+          <div className="rounded-[28px] border-2 border-dashed border-slate-200 bg-white p-12 text-center">
             <FiLayers className="mx-auto text-4xl text-slate-300" />
             <h2 className="mt-4 text-xl font-black text-slate-950">{emptyText}</h2>
           </div>
@@ -417,7 +538,7 @@ export default function PublicSchoolHubPage({
                 <section key={section.title}>
                   <div className="mb-5 flex items-end justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-900 text-white shadow-lg">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f5b4c] text-white shadow-lg">
                         <SectionIcon />
                       </div>
                       <div>

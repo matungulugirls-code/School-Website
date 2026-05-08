@@ -134,7 +134,26 @@ const authenticateWriteRequest = (req) => {
   return { authenticated: true, user: validationResult.user };
 };
 
-const VALID_TYPES = new Set(["CLUB", "SOCIETY", "FARM", "BOARDING", "SECURITY", "DEPARTMENT"]);
+const VALID_TYPES = new Set([
+  "CLUB",
+  "SOCIETY",
+  "STUDENT_COUNCIL",
+  "COMPUTER_LAB",
+  "FARM",
+  "BOARDING",
+  "SECURITY",
+  "DEPARTMENT",
+]);
+
+const parseSocialMedia = (value) => {
+  if (!value) return {};
+  try {
+    const parsed = JSON.parse(value.toString());
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+};
 
 export async function GET(req) {
   try {
@@ -227,6 +246,10 @@ export async function POST(req) {
     const contactName = (formData.get("contactName") || "").toString().trim();
     const contactPhone = (formData.get("contactPhone") || "").toString().trim();
     const contactEmail = (formData.get("contactEmail") || "").toString().trim();
+    const location = (formData.get("location") || "").toString().trim();
+    const established = (formData.get("established") || "").toString().trim();
+    const website = (formData.get("website") || "").toString().trim();
+    const socialMedia = parseSocialMedia(formData.get("socialMedia"));
 
     const isActiveRaw = formData.get("isActive");
     const displayOrderRaw = formData.get("displayOrder");
@@ -285,6 +308,10 @@ export async function POST(req) {
         shortDescription: shortDescription || null,
         description: description || null,
         image: primaryImage,
+        location: location || null,
+        established: established || null,
+        website: website || null,
+        socialMedia,
         contactName: contactName || null,
         contactPhone: contactPhone || null,
         contactEmail: contactEmail || null,

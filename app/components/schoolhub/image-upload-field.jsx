@@ -71,11 +71,8 @@ export default function ImageUploadField({
       }
     });
 
-    if (rejected.length) {
-      setError?.(rejected[0]);
-    } else {
-      setError?.('');
-    }
+    if (rejected.length) setError?.(rejected[0]);
+    else setError?.('');
 
     if (valid.length) {
       onChange?.({ files: [...files, ...valid], removedImages });
@@ -159,7 +156,7 @@ export default function ImageUploadField({
           {dragActive ? 'Drop images here' : 'Drag images here or click to browse'}
         </p>
         <p className="mt-1 text-xs font-semibold text-slate-500">
-          Clean previews before saving, Gallery-style.
+          Clean previews before saving, gallery-style.
         </p>
       </div>
 

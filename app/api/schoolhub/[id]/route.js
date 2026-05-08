@@ -135,7 +135,26 @@ const authenticateWriteRequest = (req) => {
   return { authenticated: true, user: validationResult.user };
 };
 
-const VALID_TYPES = new Set(["CLUB", "SOCIETY", "FARM", "BOARDING", "SECURITY", "DEPARTMENT"]);
+const VALID_TYPES = new Set([
+  "CLUB",
+  "SOCIETY",
+  "STUDENT_COUNCIL",
+  "COMPUTER_LAB",
+  "FARM",
+  "BOARDING",
+  "SECURITY",
+  "DEPARTMENT",
+]);
+
+const parseSocialMedia = (value) => {
+  if (!value) return {};
+  try {
+    const parsed = JSON.parse(value.toString());
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+};
 
 export async function GET(req, { params }) {
   try {
@@ -242,6 +261,18 @@ export async function PUT(req, { params }) {
 
     const contactEmail = formData.get("contactEmail");
     if (contactEmail !== null) data.contactEmail = contactEmail.toString().trim() || null;
+
+    const location = formData.get("location");
+    if (location !== null) data.location = location.toString().trim() || null;
+
+    const established = formData.get("established");
+    if (established !== null) data.established = established.toString().trim() || null;
+
+    const website = formData.get("website");
+    if (website !== null) data.website = website.toString().trim() || null;
+
+    const socialMedia = formData.get("socialMedia");
+    if (socialMedia !== null) data.socialMedia = parseSocialMedia(socialMedia);
 
     const isActiveRaw = formData.get("isActive");
     if (isActiveRaw !== null) data.isActive = isActiveRaw === "true" || isActiveRaw === "1";
