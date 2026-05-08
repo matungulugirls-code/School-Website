@@ -29,6 +29,7 @@ import {
   FiMail,
   FiPhone,
   FiClock,
+  FiAlertTriangle,
   FiAward,
   FiUserCheck,
   FiBriefcase,
