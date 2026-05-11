@@ -174,8 +174,53 @@ const isSchemaCompatibilityError = (error) => {
     message.includes("table");
 };
 
+const parseDepartmentExtra = (extra) => {
+  if (!extra) return {};
+  if (typeof extra === "object") return extra;
+  try {
+    return JSON.parse(extra);
+  } catch {
+    return {};
+  }
+};
+
+const mergeAssistantHeadNameIntoExtra = (extra, assistantHeadName) => {
+  const parsedExtra = parseDepartmentExtra(extra);
+  if (!assistantHeadName) {
+    return Object.keys(parsedExtra).length ? parsedExtra : null;
+  }
+
+  return {
+    ...parsedExtra,
+    assistantHeadName,
+    ahodName: assistantHeadName,
+  };
+};
+
+const LEGACY_DEPARTMENT_SELECT = {
+  id: true,
+  name: true,
+  category: true,
+  description: true,
+  image: true,
+  staffCount: true,
+  headName: true,
+  extra: true,
+  isActive: true,
+  displayOrder: true,
+  createdAt: true,
+  updatedAt: true,
+  images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+};
+
 const normalizeDepartmentRecord = (department = {}) => ({
   ...department,
+  assistantHeadName:
+    department.assistantHeadName ||
+    parseDepartmentExtra(department.extra).assistantHeadName ||
+    parseDepartmentExtra(department.extra).ahodName ||
+    parseDepartmentExtra(department.extra).aHOD ||
+    null,
   images: Array.isArray(department.images) ? department.images : [],
   teachers: Array.isArray(department.teachers) ? department.teachers : [],
   staffCount: Array.isArray(department.teachers) && department.teachers.length > 0
@@ -272,7 +317,6 @@ export async function GET(req) {
             image: true,
             staffCount: true,
             headName: true,
-            assistantHeadName: true,
             extra: true,
             isActive: true,
             displayOrder: true,
@@ -406,36 +450,51 @@ export async function POST(req) {
     }
     const primaryImage = uploadedImages[0]?.url || null;
 
-    const department = await prisma.staffDepartment.create({
-      data: {
-        name,
-        category,
-        description: description || null,
-        headName: headName || null,
-        assistantHeadName: assistantHeadName || null,
-        staffCount: Math.floor(staffCount),
-        displayOrder: Math.floor(displayOrder),
-        isActive,
-        image: primaryImage,
-        extra,
-        images: uploadedImages.length
-          ? {
-              create: uploadedImages.map((image, index) => ({
-                url: image.url,
-                publicId: image.publicId,
-                altText: image.altText || name,
-                caption: image.caption || null,
-                displayOrder: index,
-              })),
-            }
-          : undefined,
-      },
-      include: {
-        images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
-      },
-    });
+    const createData = {
+      name,
+      category,
+      description: description || null,
+      headName: headName || null,
+      assistantHeadName: assistantHeadName || null,
+      staffCount: Math.floor(staffCount),
+      displayOrder: Math.floor(displayOrder),
+      isActive,
+      image: primaryImage,
+      extra: mergeAssistantHeadNameIntoExtra(extra, assistantHeadName || null),
+      images: uploadedImages.length
+        ? {
+            create: uploadedImages.map((image, index) => ({
+              url: image.url,
+              publicId: image.publicId,
+              altText: image.altText || name,
+              caption: image.caption || null,
+              displayOrder: index,
+            })),
+          }
+        : undefined,
+    };
 
-    return NextResponse.json({ success: true, department }, { status: 201 });
+    let department;
+    try {
+      department = await prisma.staffDepartment.create({
+        data: createData,
+        include: {
+          images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+        },
+      });
+    } catch (error) {
+      if (!isSchemaCompatibilityError(error)) {
+        throw error;
+      }
+
+      const { assistantHeadName: _ignored, ...legacyData } = createData;
+      department = await prisma.staffDepartment.create({
+        data: legacyData,
+        select: LEGACY_DEPARTMENT_SELECT,
+      });
+    }
+
+    return NextResponse.json({ success: true, department: normalizeDepartmentRecord(department) }, { status: 201 });
   } catch (error) {
     console.error("❌ POST Department Error:", error);
     return NextResponse.json(

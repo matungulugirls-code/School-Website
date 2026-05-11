@@ -184,27 +184,30 @@ const TYPE_THEMES = {
   },
 };
 
-// ============= MATUNGULU GIRLS SCHOOL INFORMATION =============
+// ============= KATWANYAA SCHOOL INFORMATION =============
 const KATWANYAA_INFO = {
-  name: 'Matungulu Girls Senior School',
-  shortName: 'MatG',
-  motto: 'Committed to Excellence',
-  vision: 'To nurture confident, disciplined, and high-achieving young women through modern education.',
-  mission: 'To provide a supportive school environment where academics, leadership, and talent grow together.',
-  location: 'Machakos County, Kenya',
-  email: 'office@matungulugirls.ac.ke',
-  phone: '+254 700 000 000',
-  website: 'www.matungulugirls.ac.ke',
-  colors: ['Emerald Green', 'Gold', 'Deep Slate'],
-  mascot: 'MatG Scholars',
+  name: 'Katwanyaa Senior School',
+  shortName: 'Katz',
+  motto: 'Education is Light',
+  vision: 'To be a center of academic excellence and holistic development in Africa',
+  mission: 'To provide quality education that nurtures talent, builds character, and prepares students for global leadership',
+  location: 'Kitui County, Kenya',
+  email: 'info@katwanyaa.ac.ke',
+  phone: '+254 712 345 678',
+  website: 'www.katwanyaa.ac.ke',
+  colors: ['Emerald Green', 'Royal Blue', 'Gold'],
+  mascot: 'The Mighty Eagle',
   achievements: [
-    'Strong KCSE and internal assessment performance',
-    'Growing academic and co-curricular programs',
-    'Expanding digital learning support',
-    'Student-centered leadership culture',
+    'Top Performer in Kitui County (2023)',
+    'National Science Congress Champions (2022)',
+    'Best in Drama Festivals (2021, 2023)',
+    'UNESCO Associated School',
   ],
-  description: `Matungulu Girls Senior School is a modern learning community focused on academic strength, student welfare, and visible growth across school life. 
-    The school hub brings together departments, clubs, facilities, and programs in one organized experience so families and students can quickly understand what is active inside the school.`
+  description: `Katwanyaa Senior School is a premier educational institution located in the heart of Kitui County, Kenya. 
+    Established in 1985, we have consistently provided quality education that transforms lives and builds future leaders. 
+    Our state-of-the-art facilities include modern science laboratories, a fully equipped computer lab, a well-stocked library, 
+    sports fields, and comfortable boarding facilities. We pride ourselves on our strong academic performance, 
+    vibrant co-curricular activities, and commitment to holistic student development.`
 };
 
 // ============= UTILITY FUNCTIONS =============
@@ -518,58 +521,61 @@ const HubCard = ({ item, onView }) => {
   return (
     <button
       onClick={onView}
-      className="group w-full overflow-hidden rounded-[28px] border border-slate-200 bg-white text-left shadow-[0_18px_50px_-32px_rgba(15,23,42,0.32)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_24px_60px_-28px_rgba(15,23,42,0.38)]"
+      className={`w-full bg-white text-left hover:bg-gray-50 transition-colors ${theme.bg} bg-opacity-30`}
     >
-      <div className="relative h-40 w-full bg-slate-100">
+      {/* Image Section - Compact */}
+      <div className="relative h-36 w-full bg-gray-100">
         {image ? (
-          <>
-            <img src={image} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07111b]/58 via-transparent to-transparent" />
-          </>
+          <img src={image} alt={item.title} className="h-full w-full object-cover" />
         ) : (
           <div className={`flex h-full w-full items-center justify-center ${theme.bg}`}>
             <Icon className="text-3xl text-gray-600" />
           </div>
         )}
         
-        <div className="absolute left-3 top-3">
-          <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${theme.bg} ${theme.text}`}>
+        {/* Type Badge */}
+        <div className="absolute left-2 top-2">
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium uppercase tracking-wider ${theme.bg} ${theme.text}`}>
             <Icon className="text-xs" /> {getTypeLabel(item.type)}
           </span>
         </div>
         
-        <div className="absolute bottom-3 right-3 rounded-full bg-white/92 px-2.5 py-1 text-[10px] font-black text-slate-800 backdrop-blur-sm">
-          {images.length} photos
+        {/* Image Count */}
+        <div className="absolute bottom-2 right-2 bg-gray-800 bg-opacity-80 px-1.5 py-0.5 text-xs font-medium text-white">
+          {images.length} 📷
         </div>
       </div>
 
-      <div className="p-4">
-        <h3 className="text-base font-black leading-tight text-gray-900 line-clamp-1">
+      {/* Content Section */}
+      <div className="p-3">
+        <h3 className="text-sm font-bold leading-tight text-gray-900 line-clamp-1">
           {item.title}
         </h3>
         
         {item.shortDescription && (
-          <p className="mt-2 text-sm leading-6 text-gray-600 line-clamp-2">
+          <p className="mt-1 text-xs font-medium leading-4 text-gray-500 line-clamp-2">
             {item.shortDescription}
           </p>
         )}
 
-        <div className="mt-3 flex flex-wrap gap-2">
+        {/* Stats Row */}
+        <div className="mt-2 flex flex-wrap gap-1">
           {detailCount > 0 && (
-            <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600">
-              <FiLayers className="text-xs" /> {detailCount} details
+            <span className="flex items-center gap-0.5 bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
+              <FiLayers className="text-xs" /> {detailCount}
             </span>
           )}
           {item.location && (
-            <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600">
+            <span className="flex items-center gap-0.5 bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
               <FiMapPin className="text-xs" /> {item.location.length > 20 ? item.location.slice(0, 20) + '...' : item.location}
             </span>
           )}
         </div>
 
-        <div className="mt-4 flex items-center justify-end border-t border-slate-100 pt-3">
-          <span className="text-[11px] font-black uppercase tracking-[0.18em] text-gray-500">Explore</span>
-          <span className="ml-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#0f5b4c] text-white">
+        {/* View Action */}
+        <div className="mt-2 flex items-center justify-end pt-2">
+          <span className="text-xs font-medium uppercase tracking-wider text-gray-400">Explore</span>
+          <span className="ml-2 flex h-5 w-5 items-center justify-center bg-gray-900 text-white">
             <FiChevronRight className="text-xs" />
           </span>
         </div>
@@ -581,8 +587,8 @@ const HubCard = ({ item, onView }) => {
 // Main Component
 export default function PublicSchoolHubPage({
   title = "School Hub",
-  eyebrow = "Matungulu Girls School Hub",
-  description = "Explore school life at Matungulu Girls Senior School through departments, clubs, facilities, student activities, and public learning spaces.",
+  eyebrow = "Welcome to Katwanyaa",
+  description = "Explore the vibrant life and opportunities at Katwanyaa Senior School. Discover our clubs, departments, facilities, and student activities.",
   singleType,
   sections,
   departments = false,
@@ -663,7 +669,6 @@ export default function PublicSchoolHubPage({
   const totalImages = items.reduce((sum, item) => sum + normalizeSchoolImages(item).length, 0);
   const heroType = singleType || sections?.[0]?.type || 'DEPARTMENT';
   const HeroIcon = ICONS[heroType] || FiGrid;
-  const activeSectionCount = renderedSections.filter((section) => section.items.length > 0).length;
 
   // Features data
   const features = [
@@ -676,68 +681,82 @@ export default function PublicSchoolHubPage({
   ];
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_18%,#f3f7f5_100%)] text-gray-900">
+    <div className="min-h-screen bg-white text-gray-900">
       <GalleryModal item={active} onClose={() => setActive(null)} />
 
-      <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <div className="relative mb-12 overflow-hidden rounded-[34px] border border-emerald-100 bg-[linear-gradient(135deg,#0d3b34_0%,#105346_46%,#d1a84c_130%)] px-5 py-6 text-white shadow-[0_35px_90px_-45px_rgba(13,59,52,0.72)] sm:px-8 sm:py-8 lg:px-10 lg:py-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.12),transparent_24%)]" />
-          <div className="absolute right-0 top-0 h-36 w-36 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute bottom-0 left-0 h-40 w-40 rounded-full bg-[#f5d37e]/20 blur-3xl" />
-
-          <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_320px] lg:items-end">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.22em] text-white/85 backdrop-blur-sm">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-[#f6d27a]">
-                  <HeroIcon className="text-sm" />
-                </span>
-                {eyebrow}
+      <main className="mx-auto w-full md:w-[80%] px-6 py-8 sm:px-8 lg:px-12">
+        {/* Hero Section - Katwanyaa Branding */}
+        <div className="mb-10 bg-gray-50 p-6 md:p-8">
+          {/* Header Badges */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div className="inline-flex items-center gap-2 bg-gray-100 px-3 py-1.5">
+              <div className="flex h-5 w-5 items-center justify-center bg-blue-900">
+                <span className="text-xs font-black text-white">K</span>
               </div>
-
-              <h1 className="mt-5 max-w-4xl text-3xl font-black leading-[1.02] text-white sm:text-4xl lg:text-6xl">
-                Discover {title} across Matungulu Girls.
-              </h1>
-
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
-                {description || KATWANYAA_INFO.description}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                {[
-                  { label: 'Published Items', value: visibleItems.length },
-                  { label: 'Active Sections', value: activeSectionCount },
-                  { label: 'Images', value: totalImages },
-                ].map((stat) => (
-                  <div key={stat.label} className="rounded-2xl border border-white/12 bg-white/10 px-4 py-3 backdrop-blur-sm">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/55">{stat.label}</p>
-                    <p className="mt-1 text-2xl font-black text-white">{stat.value}</p>
-                  </div>
-                ))}
-              </div>
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-600">{eyebrow}</span>
             </div>
-
-            <div className="rounded-[28px] border border-white/12 bg-white/10 p-4 backdrop-blur-md">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/55">Browse Hub</p>
-              <div className="mt-4 flex flex-col gap-3">
-                <RefreshButton refreshing={refreshing} onClick={() => load(true)} />
-                <div className="relative w-full group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <FiSearch className="text-white/55 transition-colors group-focus-within:text-white" />
-                  </div>
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder={`Search ${title.toLowerCase()}...`}
-                    className="w-full rounded-2xl border border-white/15 bg-white/90 py-3 pl-11 pr-4 text-sm font-semibold text-slate-900 outline-none transition-all focus:border-white focus:ring-4 focus:ring-white/10"
-                  />
-                </div>
-              </div>
+            
+            <div className="inline-flex items-center gap-2 bg-gray-100 px-3 py-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              </span>
             </div>
           </div>
+
+          {/* Title Section */}
+          <div className="max-w-3xl">
+            <div className="relative inline-block mb-3">
+              <div className="flex h-12 w-12 items-center justify-center bg-blue-800">
+                <HeroIcon className="text-2xl text-white" />
+              </div>
+            </div>
+            
+           <h1 className="text-2xl font-black tracking-tight sm:text-3xl md:text-5xl text-gray-900">
+  Welcome to Our{' '}
+  <span className="text-cyan-800">
+    {title}
+  </span>{' '}
+  at Katwanyaa Senior School
+</h1>
+            
+            <div className="my-3 flex gap-2">
+              <div className="h-1 w-12 bg-blue-800" />
+              <div className="h-1 w-6 bg-emerald-300" />
+              <div className="h-1 w-3 bg-emerald-200" />
+            </div>
+            
+            <p className="text-sm font-medium leading-6 text-gray-600 max-w-2xl">
+              {description || KATWANYAA_INFO.description}
+            </p>
+          </div>
+
+    {/* Action Bar */}
+<div className="flex flex-col items-center justify-center gap-4 mt-8 sm:flex-row">
+  
+  {/* Refresh Button - Now centered on mobile */}
+  <div className="shrink-0">
+    <RefreshButton refreshing={refreshing} onClick={() => load(true)} />
+  </div>
+
+  {/* Search Bar - Modernized & Width-Constrained */}
+  <div className="relative w-full max-w-md group">
+    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+      <FiSearch className="text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+    </div>
+    <input
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      placeholder={`Search ${title.toLowerCase()}...`}
+      className="w-full bg-white border border-slate-200 py-3 pl-11 pr-4 rounded-2xl text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal outline-none shadow-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
+    />
+  </div>
+  
+</div>
         </div>
 
+        {/* Error Display */}
         {error && (
-          <div className="mb-6 flex items-center justify-between rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 shadow-sm">
+          <div className="mb-6 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 flex items-center justify-between">
             <span className="flex items-center gap-2"><FiAlertTriangle /> {error}</span>
             <button onClick={() => setError('')} className="text-red-600 hover:text-red-800">
               <FiX />
@@ -745,36 +764,39 @@ export default function PublicSchoolHubPage({
           </div>
         )}
 
+        {/* Loading State */}
         {loading ? (
           <ModernLoadingSpinner message={`Loading amazing ${title.toLowerCase()} content...`} />
         ) : visibleItems.length === 0 ? (
-          <div className="rounded-[30px] border border-slate-200 bg-white p-12 text-center shadow-[0_25px_70px_-45px_rgba(15,23,42,0.3)]">
-            <div className="mb-4 inline-flex rounded-2xl bg-slate-100 p-4">
+          <div className="bg-gray-50 p-12 text-center">
+            <div className="inline-flex p-4 bg-gray-100 mb-4">
               <FiLayers className="text-4xl text-gray-400" />
             </div>
-            <h2 className="text-xl font-black text-gray-700">{emptyText}</h2>
-            <p className="mt-2 text-sm text-gray-500">Check back soon for fresh updates from the school hub.</p>
+            <h2 className="text-xl font-bold text-gray-700">{emptyText}</h2>
+            <p className="text-sm text-gray-500 mt-2">Check back soon for updates!</p>
           </div>
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-10">
             {renderedSections.map((section) => {
               if (!section.items.length) return null;
               const SectionIcon = section.icon || ICONS[section.type] || FiLayers;
               return (
                 <section key={section.title}>
-                  <div className="mb-6 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f5b4c] text-white shadow-lg shadow-emerald-900/20">
+                  {/* Section Header */}
+                  <div className="mb-5 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center bg-blue-800 text-white">
                       <SectionIcon className="text-base" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-black tracking-tight text-gray-900">{section.title}</h2>
-                      <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#0f5b4c]">
+                      <h2 className="text-lg font-bold tracking-tight text-gray-900">{section.title}</h2>
+                      <p className="text-xs font-bold uppercase tracking-wider text-cyan-800">
                         {section.items.length} {section.items.length === 1 ? 'item' : 'items'} available
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                  {/* Items Grid - Responsive with more columns */}
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {section.items.map((item) => (
                       <HubCard key={`${item.type}-${item.id}`} item={item} onView={() => setActive(item)} />
                     ))}
