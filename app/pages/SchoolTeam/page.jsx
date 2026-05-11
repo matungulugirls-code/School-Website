@@ -289,7 +289,7 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
   );
 };
 
-// Department grouping cards (privacy-safe, no individual teacher profiles)
+// Department grouping cards with department-scoped teacher previews
 const getDepartmentImage = (image) => {
   if (!image || typeof image !== 'string') return null;
   const trimmed = image.trim();
@@ -298,6 +298,68 @@ const getDepartmentImage = (image) => {
   if (trimmed.startsWith('/') || trimmed.startsWith('http')) return trimmed;
   if (trimmed.startsWith('data:image')) return trimmed;
   return trimmed;
+};
+
+const getTeacherImage = (teacher) => {
+  if (!teacher?.image || typeof teacher.image !== 'string') return '/images/default-staff.jpg';
+  if (teacher.image.startsWith('/')) {
+    return `${process.env.NEXT_PUBLIC_SITE_URL || ''}${teacher.image}`;
+  }
+  return teacher.image;
+};
+
+const getDepartmentTeacherCount = (department) => {
+  const teachers = Array.isArray(department?.teachers) ? department.teachers : [];
+  if (teachers.length > 0) return teachers.length;
+  return Number(department?.staffCount) || 0;
+};
+
+const TeacherCarousel = ({ teachers = [] }) => {
+  if (!teachers.length) {
+    return (
+      <div className="mt-5 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm font-semibold text-slate-500">
+        No teachers are mapped to this department yet.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
+          Assigned Teachers
+        </p>
+        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black text-slate-600">
+          {teachers.length}
+        </span>
+      </div>
+
+      <div className="flex gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
+        {teachers.map((teacher) => (
+          <div
+            key={teacher.id}
+            className="snap-start min-w-[180px] max-w-[180px] rounded-[24px] border border-slate-200 bg-slate-50 p-3 shadow-sm"
+          >
+            <div className="relative aspect-[4/4.4] overflow-hidden rounded-[20px] bg-white">
+              <img
+                src={getTeacherImage(teacher)}
+                alt={teacher.name || 'Teacher'}
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+            <div className="mt-3">
+              <p className="line-clamp-2 text-sm font-black text-slate-900">
+                {teacher.name || 'Teacher'}
+              </p>
+              <p className="mt-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1f5f3a]">
+                {teacher.subjectOffered || 'Subject teacher'}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 const getDepartmentCategoryLabel = (category) => {
@@ -317,8 +379,10 @@ const getDepartmentCategoryLabel = (category) => {
 
 const DepartmentCard = ({ department }) => {
   const imageUrl = getDepartmentImage(department?.image);
-  const staffCount = Number(department?.staffCount) || 0;
+  const staffCount = getDepartmentTeacherCount(department);
   const headName = department?.headName || '';
+  const assistantHeadName = department?.assistantHeadName || '';
+  const teachers = Array.isArray(department?.teachers) ? department.teachers : [];
 
   return (
     <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
@@ -371,7 +435,7 @@ const DepartmentCard = ({ department }) => {
         <div className="mt-4 flex flex-wrap items-center gap-2.5">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
             <FiUsers size={11} />
-            {staffCount} Staff
+            {staffCount} {teachers.length ? 'Teachers' : 'Staff'}
           </span>
           {headName && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
@@ -379,7 +443,15 @@ const DepartmentCard = ({ department }) => {
               HOD: {headName}
             </span>
           )}
+          {assistantHeadName && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
+              <FiUser size={11} />
+              AHOD: {assistantHeadName}
+            </span>
+          )}
         </div>
+
+        <TeacherCarousel teachers={teachers} />
       </div>
     </div>
   );
@@ -846,7 +918,7 @@ export default function StaffDirectory() {
   const departmentTotals = useMemo(() => {
     const sum = (list) =>
       (Array.isArray(list) ? list : []).reduce(
-        (acc, d) => acc + (Number(d?.staffCount) || 0),
+        (acc, d) => acc + getDepartmentTeacherCount(d),
         0
       );
 
@@ -878,7 +950,12 @@ export default function StaffDirectory() {
         const name = (d?.name || '').toLowerCase();
         const desc = (d?.description || '').toLowerCase();
         const head = (d?.headName || '').toLowerCase();
-        return name.includes(query) || desc.includes(query) || head.includes(query);
+        const teacherMatch = (Array.isArray(d?.teachers) ? d.teachers : []).some((teacher) =>
+          [teacher?.name, teacher?.subjectOffered]
+            .filter(Boolean)
+            .some((value) => String(value).toLowerCase().includes(query))
+        );
+        return name.includes(query) || desc.includes(query) || head.includes(query) || teacherMatch;
       });
 
     return {
@@ -958,7 +1035,7 @@ export default function StaffDirectory() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by name, role, expertise..."
+                placeholder="Search departments, teacher names, or subjects..."
                 className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm font-bold shadow-sm outline-none transition-all focus:border-[#1a1a2e] focus:ring-4 focus:ring-[#1a1a2e]/5"
               />
               {searchQuery && (
@@ -1009,14 +1086,14 @@ export default function StaffDirectory() {
             Meet the dedicated team shaping the next generation.
           </h1>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white sm:text-base">
-                Explore the people behind leadership, teaching, and student support across the school. Each profile highlights the expertise and care that keeps the community moving.
+                Explore school leadership and browse each department to see the teachers mapped to that learning area.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <div className="rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold text-white/85 backdrop-blur-sm">
-                  Structured by leadership, teaching, and support
+                  Departments first, leadership preserved
                 </div>
                 <div className="rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold text-white/85 backdrop-blur-sm">
-                  Quick contact and profile access
+                  Teachers grouped under valid departments
                 </div>
               </div>
             </div>
@@ -1337,35 +1414,35 @@ export default function StaffDirectory() {
               <>
                 {selectedHierarchy === 'all' ? (
                   <div className="space-y-6">
-                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst={true} onContactClick={handleContactClick} />
-
                     <DepartmentGroupSection
                       title="CBC Departments"
                       icon={FiLayers}
                       departments={filteredDepartmentsByCategory.CBC}
-                      subtitle="Department overview (privacy-safe)"
+                      subtitle="Department teams with mapped teachers"
                     />
 
                     <DepartmentGroupSection
                       title="8-4-4 Departments"
                       icon={FiBookOpen}
                       departments={filteredDepartmentsByCategory.EIGHT_FOUR_FOUR}
-                      subtitle="Department overview (privacy-safe)"
+                      subtitle="Department teams with mapped teachers"
                     />
 
                     <DepartmentGroupSection
                       title="Teaching Departments"
                       icon={FiBookOpen}
                       departments={filteredDepartmentsByCategory.TEACHING}
-                      subtitle="Grouped teaching staff by department (no individual teacher profiles)"
+                      subtitle="Teachers grouped under their assigned departments"
                     />
 
                     <DepartmentGroupSection
                       title="Support / Non-Teaching Departments"
                       icon={FiSettings}
                       departments={filteredDepartmentsByCategory.SUPPORT}
-                      subtitle="Grouped support staff by department"
+                      subtitle="Department structure and assigned teaching support"
                     />
+
+                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst={false} onContactClick={handleContactClick} />
                   </div>
                 ) : selectedHierarchy === 'leadership' ? (
                   <div className="space-y-4">

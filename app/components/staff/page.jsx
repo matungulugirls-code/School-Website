@@ -812,14 +812,17 @@ function ModernStaffCard({ staff, onEdit, onDelete, onView, selected, onSelect, 
 
 // REPLACE YOUR ModernStaffModal WITH THIS - SAME STYLING AS ModernSchoolModal
 // REPLACE YOUR ModernStaffModal WITH THIS - EXACT SAME STYLE AS ModernSchoolModal
-function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCounts }) {
+function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCounts, staffDepartments = [] }) {
   const isUpdateMode = !!staff && staff.id;
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: staff?.name || '',
     role: staff?.role || 'Principal',
+    staffType: staff?.staffType || (staff?.role === 'Teacher' ? 'Teacher' : 'Leadership'),
     position: staff?.position || '',
     department: staff?.department || 'Sciences',
+    departmentId: staff?.departmentId ? String(staff.departmentId) : '',
+    subjectOffered: staff?.subjectOffered || '',
     email: staff?.email || '',
     phone: staff?.phone || '',
     image: staff?.image || '',
@@ -839,8 +842,11 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   const [imagePreview, setImagePreview] = useState(staff?.image || '');
   const [imageError, setImageError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  const isTeacher = formData.role === 'Teacher' || formData.staffType === 'Teacher';
 
-  const steps = [
+  const steps = isTeacher ? [
+    { id: 'teacher', label: 'Teacher', icon: FaChalkboardTeacher }
+  ] : [
     { id: 'basic', label: 'Basic Info', icon: FaUser },
     { id: 'contact', label: 'Contact', icon: FaEnvelope },
     { id: 'profile', label: 'Profile', icon: FaUserCircle },
@@ -850,7 +856,8 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   const ROLES = [
     { value: 'Principal', label: 'Principal', icon: FaCrown, color: 'text-purple-600' },
     { value: 'Deputy Principal', label: 'Deputy Principal', icon: FaShieldAlt, color: 'text-emerald-600' },
-    { value: 'Senior Teacher', label: 'Senior Teacher', icon: FaStar, color: 'text-amber-600' }
+    { value: 'Senior Teacher', label: 'Senior Teacher', icon: FaStar, color: 'text-amber-600' },
+    { value: 'Teacher', label: 'Teacher', icon: FaChalkboardTeacher, color: 'text-blue-600' }
   ];
 
   const DEPUTY_PRINCIPAL_TYPES = [
@@ -870,7 +877,9 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
     }
   ];
 
-  const DEPARTMENTS = [
+  const DEPARTMENTS = staffDepartments.length
+    ? staffDepartments.map((dept) => dept.name)
+    : [
     'Sciences', 'Mathematics', 'Languages', 'Humanities', 
     'Administration', 'Sports', 'Guidance', 'Arts', 'Technology'
   ];
@@ -887,6 +896,21 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
       setImagePreview(formattedImage);
     }
   }, [staff]);
+
+  useEffect(() => {
+    if (isTeacher) {
+      setCurrentStep(0);
+      if (!formData.departmentId && staffDepartments[0]?.id) {
+        setFormData((prev) => ({
+          ...prev,
+          staffType: 'Teacher',
+          position: 'Teacher',
+          departmentId: String(staffDepartments[0].id),
+          department: staffDepartments[0].name,
+        }));
+      }
+    }
+  }, [isTeacher, staffDepartments, formData.departmentId]);
 
   const validateDeputyPrincipal = () => {
     if (formData.role === 'Deputy Principal') {
@@ -907,7 +931,11 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
 
     try {
       setActionLoading(true);
-      validateDeputyPrincipal();
+      if (!isTeacher) validateDeputyPrincipal();
+      if (isTeacher && (!formData.departmentId || !formData.subjectOffered.trim())) {
+        setCurrentStep(0);
+        throw new Error('Teacher name, department, subject offered, and image are required.');
+      }
       
       if (!imageFile && !staff?.image && !imagePreview) {
         setImageError('Staff image is required.');
@@ -981,7 +1009,27 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   };
 
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const next = { ...prev, [field]: value };
+      if (field === 'role') {
+        if (value === 'Teacher') {
+          const firstDepartment = staffDepartments.find((dept) => String(dept.id) === prev.departmentId) || staffDepartments[0];
+          next.staffType = 'Teacher';
+          next.position = 'Teacher';
+          next.departmentId = firstDepartment ? String(firstDepartment.id) : prev.departmentId;
+          next.department = firstDepartment?.name || prev.department;
+        } else {
+          next.staffType = 'Leadership';
+          next.subjectOffered = '';
+          next.departmentId = '';
+        }
+      }
+      if (field === 'departmentId') {
+        const selected = staffDepartments.find((dept) => String(dept.id) === String(value));
+        if (selected) next.department = selected.name;
+      }
+      return next;
+    });
   };
 
   const handleArrayChange = (field, items) => {
@@ -993,6 +1041,7 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
   };
 
   const isStepValid = () => {
+    if (isTeacher) return isTeacherStepValid();
     switch (currentStep) {
       case 0: return formData.name.trim() && formData.role.trim();
       case 1: return formData.email.trim() && formData.phone.trim();
@@ -1001,6 +1050,13 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
       default: return true;
     }
   };
+
+  const isTeacherStepValid = () =>
+    formData.name.trim() &&
+    formData.departmentId &&
+    formData.subjectOffered.trim() &&
+    (imageFile || staff?.image || imagePreview) &&
+    !imageError;
 
   return (
     <Modal open={true} onClose={onClose}>
@@ -1024,10 +1080,14 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
               </div>
               <div>
                 <h2 className="text-lg md:text-xl font-bold">
-                  {isUpdateMode ? 'Update Staff Information' : 'Add New Staff Member'}
+                  {isTeacher
+                    ? isUpdateMode ? 'Update Teacher' : 'Add Teacher'
+                    : isUpdateMode ? 'Update Staff Information' : 'Add New Staff Member'}
                 </h2>
                 <p className="text-white/80 text-xs mt-0.5">
-                  {isUpdateMode ? 'Modify existing staff details' : 'Add a new staff member to the directory'}
+                  {isTeacher
+                    ? 'Connect the teacher to an existing department'
+                    : isUpdateMode ? 'Modify existing staff details' : 'Add a new staff member to the directory'}
                 </p>
               </div>
             </div>
@@ -1086,7 +1146,121 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
             className="space-y-6"
           >
             {/* Step 1: Basic Information */}
-            {currentStep === 0 && (
+            {currentStep === 0 && isTeacher && (
+              <div className="space-y-6">
+                <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-emerald-50 p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white">
+                      <FaChalkboardTeacher className="text-lg" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-black text-slate-900">
+                        Teacher Setup
+                      </h3>
+                      <p className="mt-1 text-sm font-semibold leading-6 text-slate-600">
+                        Teachers are attached to departments already created in the departments dashboard.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.82fr)]">
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-blue-200 bg-white p-5 shadow-sm">
+                      <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <FaUser className="text-blue-600" /> Teacher Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
+                        placeholder="Enter teacher name..."
+                        className="w-full rounded-xl border-2 border-blue-100 bg-slate-50 px-4 py-3 text-base font-bold outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10"
+                        required
+                      />
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm">
+                      <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <FaBuilding className="text-emerald-600" /> Department <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={formData.departmentId}
+                        onChange={(e) => handleChange('departmentId', e.target.value)}
+                        disabled={!staffDepartments.length}
+                        className="w-full rounded-xl border-2 border-emerald-100 bg-slate-50 px-4 py-3 text-base font-bold outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                        required
+                      >
+                        {!staffDepartments.length && (
+                          <option value="">Create an active department first</option>
+                        )}
+                        {staffDepartments.map((dept) => (
+                          <option key={dept.id} value={String(dept.id)}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </select>
+                      {!staffDepartments.length && (
+                        <p className="mt-2 text-sm font-semibold text-amber-700">
+                          No active departments are available yet. Add departments before creating teacher records.
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="rounded-2xl border border-purple-200 bg-white p-5 shadow-sm">
+                      <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <FaBook className="text-purple-600" /> Subject Offered <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.subjectOffered}
+                        onChange={(e) => handleChange('subjectOffered', e.target.value)}
+                        placeholder="e.g., Mathematics"
+                        className="w-full rounded-xl border-2 border-purple-100 bg-slate-50 px-4 py-3 text-base font-bold outline-none transition focus:border-purple-500 focus:bg-white focus:ring-2 focus:ring-purple-500/10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-cyan-200 bg-white p-5 shadow-sm">
+                    <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <FaUpload className="text-cyan-600" /> Teacher Image <span className="text-red-500">*</span>
+                    </label>
+                    <div className="space-y-4">
+                      <div className="flex min-h-[220px] items-center justify-center rounded-2xl border-2 border-dashed border-cyan-200 bg-cyan-50/50 p-4">
+                        {imagePreview ? (
+                          <div className="relative">
+                            <img src={imagePreview} alt="Teacher preview" className="h-44 w-44 rounded-2xl object-cover object-top border-4 border-white shadow-lg" />
+                            <button
+                              type="button"
+                              onClick={handleImageRemove}
+                              className="absolute -right-2 -top-2 rounded-full bg-red-500 p-2 text-white shadow-lg"
+                            >
+                              <FaTimes className="text-xs" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="text-center">
+                            <FaUpload className="mx-auto text-3xl text-cyan-500" />
+                            <p className="mt-3 text-sm font-bold text-slate-700">Upload a clear teacher photo</p>
+                            <p className="mt-1 text-xs font-semibold text-slate-500">JPG, PNG, or WEBP up to 5MB</p>
+                          </div>
+                        )}
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(e.target.files[0])}
+                        className="w-full text-sm text-gray-500 file:mr-3 file:rounded-xl file:border-0 file:bg-cyan-100 file:px-4 file:py-2 file:text-sm file:font-bold file:text-cyan-700 hover:file:bg-cyan-200"
+                      />
+                      {imageError && <p className="text-sm font-semibold text-red-600">{imageError}</p>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentStep === 0 && !isTeacher && (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-4">
@@ -1613,6 +1787,7 @@ function StyledTagInput({ label, value, onChange, placeholder, disabled, color =
 export default function StaffManager() {
   const [staff, setStaff] = useState([]);
   const [filteredStaff, setFilteredStaff] = useState([]);
+  const [staffDepartments, setStaffDepartments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [selectedRole, setSelectedRole] = useState('all');
@@ -1641,8 +1816,10 @@ export default function StaffManager() {
     message: ''
   });
 
-  const roles = ['Principal', 'Deputy Principal', 'Senior Teacher'];
-  const departments = ['Sciences', 'Mathematics', 'Languages', 'Humanities', 'Administration', 'Sports', 'Guidance'];
+  const roles = ['Principal', 'Deputy Principal', 'Senior Teacher', 'Teacher'];
+  const departments = staffDepartments.length
+    ? staffDepartments.map((dept) => dept.name)
+    : ['Sciences', 'Mathematics', 'Languages', 'Humanities', 'Administration', 'Sports', 'Guidance'];
 
 
 
@@ -1725,6 +1902,7 @@ useEffect(() => {
   
   checkAuth();
   fetchStaff();
+  fetchStaffDepartments();
 }, []);
 
 
@@ -1789,11 +1967,29 @@ const fetchStaff = async (isRefresh = false) => {
   }
 };
 
+const fetchStaffDepartments = async () => {
+  try {
+    let response;
+    try {
+      const headers = getAuthHeaders();
+      response = await fetch('/api/staff/departments?includeInactive=1', { headers });
+    } catch {
+      response = await fetch('/api/staff/departments');
+    }
 
-
-  useEffect(() => {
-    fetchStaff();
-  }, []);
+    const data = await response.json();
+    if (data.success) {
+      const departmentsList = Array.isArray(data.departments) ? data.departments : [];
+      setStaffDepartments(departmentsList.filter((dept) => dept?.name));
+    } else {
+      console.error('Failed to fetch departments:', data.error);
+      setStaffDepartments([]);
+    }
+  } catch (error) {
+    console.error('Error fetching staff departments:', error);
+    setStaffDepartments([]);
+  }
+};
 
   useEffect(() => {
     let filtered = staff;
@@ -1802,7 +1998,8 @@ const fetchStaff = async (isRefresh = false) => {
       filtered = filtered.filter(staffMember =>
         staffMember.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (staffMember.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (staffMember.department || '').toLowerCase().includes(searchTerm.toLowerCase())
+        (staffMember.department || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (staffMember.subjectOffered || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -1817,6 +2014,12 @@ const fetchStaff = async (isRefresh = false) => {
     setFilteredStaff(filtered);
     setCurrentPage(1);
   }, [searchTerm, selectedDepartment, selectedRole, staff]);
+
+  useEffect(() => {
+    if (activeView === 'profiles') {
+      fetchStaffDepartments();
+    }
+  }, [activeView]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -1836,11 +2039,13 @@ const fetchStaff = async (isRefresh = false) => {
 
   const handleCreate = () => {
     setEditingStaff(null);
+    fetchStaffDepartments();
     setShowModal(true);
   };
 
   const handleEdit = (staffMember) => {
     setEditingStaff(staffMember);
+    fetchStaffDepartments();
     setShowModal(true);
   };
 
@@ -2530,6 +2735,7 @@ const handleSubmit = async (formData, id) => {
     onSave={handleSubmit} 
     staff={editingStaff} 
     loading={saving}
+    staffDepartments={staffDepartments}
     existingDeputyCounts={{
       academics: stats?.deputyAcademics || 0,
       administration: stats?.deputyAdmin || 0,

@@ -419,7 +419,7 @@ function GuestPortalLanding({ onOpenLogin, router }) {
               A complete digital workspace for student academics and school life.
             </h1>
             <p className="max-w-2xl text-base leading-8 text-gray-600 sm:text-lg">
-              The portal has been rebuilt as a modern app-like environment for results, resources, guidance, and finance while keeping the same secure school data flow underneath.
+              The portal is now refined into a modern app-like environment for results, resources, guidance, and finance while keeping the same secure school data flow underneath.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -649,21 +649,42 @@ export default function ModernStudentPortalPage() {
     }
   }, [token, student]);
 
-  const handleStudentLogin = async (fullName, admissionNumber) => {
+  const handleStudentLogin = async (credentialsOrName, legacyAdmissionNumber) => {
     setLoginLoading(true);
     setLoginError(null);
     setRequiresContact(false);
 
     try {
+      const credentials = typeof credentialsOrName === 'object'
+        ? credentialsOrName
+        : { fullName: credentialsOrName, admissionNumber: legacyAdmissionNumber };
+
+      const payload = credentials.mode === 'password'
+        ? {
+            admissionNumber: credentials.admissionNumber,
+            password: credentials.password,
+          }
+        : {
+            fullName: credentials.fullName,
+            admissionNumber: credentials.admissionNumber,
+            newPassword: credentials.newPassword,
+          };
+
       const response = await fetch('/api/studentlogin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, admissionNumber }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
-      if (data.success) {
+      if (data.success && data.requiresPasswordSetup) {
+        setLoginError(data.message || 'Create a strong password to finish setup.');
+        toast.info('Create a portal password to continue');
+        return;
+      }
+
+      if (data.success && data.token) {
         localStorage.setItem('student_token', data.token);
         setStudent(data.student);
         setToken(data.token);
@@ -679,6 +700,10 @@ export default function ModernStudentPortalPage() {
           toast.error('Student record not found', {
             description: 'Please contact your class teacher or school administrator',
           });
+        } else if (data.requiresPasswordSetup) {
+          toast.error(data.error || 'Use first-time setup to create your password');
+        } else if (data.requiresPassword) {
+          toast.error(data.error || 'Enter your portal password');
         } else {
           toast.error(data.error || 'Login failed');
         }
@@ -866,10 +891,10 @@ export default function ModernStudentPortalPage() {
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-gray-900">
+                <button onClick={() => router.push('/pages/School Policies')} className="transition hover:text-gray-900">
                   Privacy
                 </button>
-                <button onClick={() => router.push('/pagesSchool Policies')} className="transition hover:text-gray-900">
+                <button onClick={() => router.push('/pages/School Policies')} className="transition hover:text-gray-900">
                   Terms
                 </button>
                 <button onClick={() => router.push('/pages/contact')} className="transition hover:text-gray-900">

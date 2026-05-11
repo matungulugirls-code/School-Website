@@ -56,7 +56,6 @@ import {
   FiLogOut,
   FiMenu,
   FiBell,
-  FiAlertTriangle,
   FiThumbsUp,
   FiMessageSquare,
   FiSend,

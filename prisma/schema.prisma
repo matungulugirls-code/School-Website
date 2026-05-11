@@ -202,8 +202,12 @@ model Staff {
   id               Int      @id @default(autoincrement())
   name             String
   role             String
+  staffType        String?  @default("Leadership") @db.VarChar(50)
   position         String?
   department       String?
+  departmentId     Int?
+  departmentRecord StaffDepartment? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  subjectOffered   String?  @db.VarChar(255)
   education        String?  @db.Text
   experience       String?  @db.Text
   email            String?
@@ -219,6 +223,8 @@ model Staff {
   image            String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+
+  @@index([departmentId])
 }
 
 // ==========================================
@@ -241,9 +247,11 @@ model StaffDepartment {
   images       StaffDepartmentImage[]
   staffCount   Int                    @default(0)
   headName     String?                @db.VarChar(255)
+  assistantHeadName String?           @db.VarChar(255)
   extra        Json?
   isActive     Boolean                @default(true)
   displayOrder Int                    @default(0)
+  teachers     Staff[]
   createdAt    DateTime               @default(now())
   updatedAt    DateTime               @updatedAt
 
@@ -848,6 +856,19 @@ model StudentSession {
   @@index([studentId])
   @@index([token(length: 191)]) // ✅ Prefix index for MySQL TEXT
   @@index([expiresAt])
+}
+
+model StudentPortalAccount {
+  id              String    @id @default(cuid())
+  admissionNumber String    @unique @db.VarChar(50)
+  passwordHash    String    @db.VarChar(255)
+  passwordSetAt   DateTime  @default(now())
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([admissionNumber])
+  @@map("student_portal_accounts")
 }
 
 model FeeBalance {

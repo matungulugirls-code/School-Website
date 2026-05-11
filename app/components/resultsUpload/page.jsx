@@ -97,7 +97,7 @@ function ResultsUploadStrategyModal({ open, onClose, onConfirm, loading, showNot
   const [selectedForms, setSelectedForms] = useState([]);
   const [targetForm, setTargetForm] = useState('');
   const [term, setTerm] = useState('Term 1');
-  const [academicYear, setAcademicYear] = useState('2024/2025');
+  const [academicYear, setAcademicYear] = useState(String(new Date().getFullYear()));
   const [uploadMode, setUploadMode] = useState('new');
 
   const handleFormToggle = (form) => {
@@ -206,7 +206,7 @@ function ResultsUploadStrategyModal({ open, onClose, onConfirm, loading, showNot
                 required
                 value={academicYear}
                 onChange={(e) => setAcademicYear(e.target.value)}
-                placeholder="e.g., 2024/2025"
+                placeholder="e.g., 2026"
                 className="w-full px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm sm:text-base"
               />
             </div>
@@ -1260,7 +1260,7 @@ function ResultEditModal({ result, student, onClose, onSave, loading }) {
                     required
                     value={formData.academicYear}
                     onChange={(e) => setFormData({...formData, academicYear: e.target.value})}
-                    placeholder="e.g., 2024/2025"
+                    placeholder="e.g., 2026"
                     className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white text-base"
                   />
                 </div>
@@ -2501,9 +2501,9 @@ function ResultsFilterPanel({
             className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base"
           >
             <option value="">All Years</option>
-            <option value="2024/2025">2024/2025</option>
-            <option value="2023/2024">2023/2024</option>
-            <option value="2022/2023">2022/2023</option>
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
           </select>
         </div>
       </div>
@@ -4031,7 +4031,7 @@ return (
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-              <span className="text-emerald-800 font-semibold text-sm">academicYear (Required: e.g., 2024/2025)</span>
+              <span className="text-emerald-800 font-semibold text-sm">academicYear (Required: e.g., 2026)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>

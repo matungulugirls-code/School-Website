@@ -1165,6 +1165,12 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
   
   const formDistribution = demographics.formDistribution || [];
   const totalStudents = stats.totalStudents || 0;
+  const recordedGenderCount = (demographics.gender || [])
+    .filter((entry) => entry.name !== 'Not Specified')
+    .reduce((sum, entry) => sum + entry.value, 0);
+  const unspecifiedGenderCount = (demographics.gender || [])
+    .filter((entry) => entry.name === 'Not Specified')
+    .reduce((sum, entry) => sum + entry.value, 0);
   
   return (
     <div className="bg-white rounded-2xl p-6 border-2 border-gray-300 shadow-2xl">
@@ -1235,15 +1241,15 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="text-center p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-emerald-700">
-            {(demographics.gender?.find(g => g.name === 'Male')?.value || 0).toLocaleString()}
+            {recordedGenderCount.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-emerald-900">Male Students</div>
+          <div className="text-sm font-semibold text-emerald-900">Gender Recorded</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-teal-700">
-            {(demographics.gender?.find(g => g.name === 'Female')?.value || 0).toLocaleString()}
+            {unspecifiedGenderCount.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-teal-900">Female Students</div>
+          <div className="text-sm font-semibold text-teal-900">Not Specified</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-amber-50 to-amber-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-amber-700">
@@ -1738,7 +1744,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
 }
 
 // Duplicate Validation Modal
-function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loading, uploadType, targetForm }) {
+function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loading, uploadType, targetForm, totalRows = 0 }) {
   const [action, setAction] = useState('skip');
 
   if (!open) return null;
@@ -1914,7 +1920,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                   <>
                     <li className="flex items-center gap-1.5 sm:gap-2">
                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full"></div>
-                      <span>Total students in file: {duplicates.length + (duplicates.length * 2)}</span>
+                      <span>Total students in file: {totalRows || duplicates.length}</span>
                     </li>
                     <li className="flex items-center gap-1.5 sm:gap-2">
                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full"></div>
@@ -1922,11 +1928,15 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                     </li>
                     <li className="flex items-center gap-1.5 sm:gap-2">
                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full"></div>
-                      <span>New students to add: {duplicates.length}</span>
+                      <span>New students to add: {Math.max((totalRows || 0) - duplicates.length, 0)}</span>
                     </li>
                   </>
                 ) : (
                   <>
+                    <li className="flex items-center gap-1.5 sm:gap-2">
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full"></div>
+                      <span>Rows in file: {totalRows || duplicates.length}</span>
+                    </li>
                     <li className="flex items-center gap-1.5 sm:gap-2">
                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full"></div>
                       <span>Updating form: {targetForm}</span>
@@ -2005,6 +2015,7 @@ export default function ModernStudentBulkUpload() {
   const [showValidationModal, setShowValidationModal] = useState(false);
   const [uploadStrategy, setUploadStrategy] = useState(null);
   const [duplicates, setDuplicates] = useState([]);
+  const [duplicateSummary, setDuplicateSummary] = useState({ totalRows: 0 });
   const [validationLoading, setValidationLoading] = useState(false);
     const [editingStudent, setEditingStudent] = useState(null); // <-- ADD THIS
 
@@ -2059,6 +2070,30 @@ export default function ModernStudentBulkUpload() {
     } else {
       return data;
     }
+  };
+
+  const describeStudentUploadError = (payloadOrMessage, suggestion = '') => {
+    const message = typeof payloadOrMessage === 'string'
+      ? payloadOrMessage
+      : payloadOrMessage?.error || payloadOrMessage?.message || 'Upload failed';
+
+    if (message.includes('Invalid file type')) {
+      return 'Upload a CSV or Excel file that matches the current student template.';
+    }
+    if (message.includes('No readable student rows') || message.includes('empty')) {
+      return 'The file looks empty or unreadable. Confirm the first row contains student data and the sheet is not blank.';
+    }
+    if (message.includes('Missing required columns')) {
+      return `${message}. Use the current template so admission number, first name, last name, and form are present.`;
+    }
+    if (message.includes('duplicate')) {
+      return 'Duplicate admission numbers were found. Review the duplicate list before continuing.';
+    }
+    if (message.includes('Invalid form selection') || message.includes('Please select')) {
+      return message;
+    }
+
+    return suggestion ? `${message} ${suggestion}`.trim() : message;
   };
 
 
@@ -2462,6 +2497,7 @@ const checkDuplicates = async () => {
     const data = await response.json();
     
     if (data.success) {
+      setDuplicateSummary({ totalRows: data.totalRows || 0 });
       if (data.duplicates && data.duplicates.length > 0) {
         setDuplicates(data.duplicates);
         setShowValidationModal(true);
@@ -2470,7 +2506,7 @@ const checkDuplicates = async () => {
         proceedWithUpload('skip');
       }
     } else {
-      sooner.error(data.error || 'Failed to check for duplicates');
+      sooner.error(describeStudentUploadError(data, data.suggestion));
     }
   } catch (error) {
     console.error('Validation error:', error);
@@ -2478,7 +2514,7 @@ const checkDuplicates = async () => {
     if (error.message.includes('Authentication') || error.message.includes('login')) {
       sooner.error('Authentication failed. Please login again to continue.');
     } else {
-      sooner.error('Failed to validate file');
+      sooner.error(describeStudentUploadError(error.message));
     }
   } finally {
     setValidationLoading(false);
@@ -2528,7 +2564,7 @@ const proceedWithUpload = async (duplicateAction = 'skip') => {
     const data = await response.json();
     
     if (!response.ok) {
-      throw new Error(data.message || 'Upload failed');
+      throw new Error(describeStudentUploadError(data, data.suggestion));
     }
     
     setResult(data);
@@ -2539,6 +2575,13 @@ const proceedWithUpload = async (duplicateAction = 'skip') => {
         successMessage = `✅ New upload successful! ${data.processingStats?.validRows || 0} students processed.`;
       } else {
         successMessage = `✅ Update successful! Form ${uploadStrategy.targetForm} updated: ${data.processingStats?.updatedRows || 0} updated, ${data.processingStats?.createdRows || 0} created.`;
+      }
+
+      if ((data.processingStats?.skippedRows || 0) > 0) {
+        successMessage += ` ${data.processingStats.skippedRows} row(s) were skipped.`;
+      }
+      if ((data.processingStats?.errorRows || 0) > 0) {
+        successMessage += ` ${data.processingStats.errorRows} row(s) need review.`;
       }
       
       sooner.success(successMessage);
@@ -2555,11 +2598,12 @@ const proceedWithUpload = async (duplicateAction = 'skip') => {
       await Promise.all([loadStudents(1), loadUploadHistory(1), loadStats()]);
       setFile(null);
       setUploadStrategy(null);
+      setDuplicateSummary({ totalRows: 0 });
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     } else {
-      sooner.error(data.message || 'Upload failed');
+      sooner.error(describeStudentUploadError(data, data.suggestion));
     }
   } catch (error) {
     console.error('Upload error:', error);
@@ -2569,7 +2613,7 @@ const proceedWithUpload = async (duplicateAction = 'skip') => {
       sooner.error('Authentication failed. Please login again to continue.');
       // Optionally redirect to login or show login modal
     } else {
-      sooner.error(error.message || 'Upload failed. Please try again.');
+      sooner.error(describeStudentUploadError(error.message));
     }
   } finally {
     setUploading(false);
@@ -2958,9 +3002,10 @@ const downloadExcelTemplate = () => {
                 trend={12.3}
               />
               <StudentStatisticsCard
-                title="Male/Female Ratio"
-                value={demographics.gender?.length > 0 ? 
-                  `${((demographics.gender.find(g => g.name === 'Male')?.value || 0) / stats.totalStudents * 100).toFixed(1)}%` : '0%'}
+                title="Gender Recorded"
+                value={(demographics.gender || [])
+                  .filter(g => g.name !== 'Not Specified')
+                  .reduce((sum, g) => sum + g.value, 0)}
                 icon={FiPercent}
                 color="from-emerald-600 to-green-700"
                 trend={2.1}
@@ -3779,15 +3824,19 @@ const downloadExcelTemplate = () => {
                 trend={12.3}
               />
               <StudentStatisticsCard
-                title="Male Students"
-                value={demographics.gender?.find(g => g.name === 'Male')?.value || 0}
+                title="Gender Recorded"
+                value={(demographics.gender || [])
+                  .filter(g => g.name !== 'Not Specified')
+                  .reduce((sum, g) => sum + g.value, 0)}
                 icon={FiUser}
                 color="from-teal-600 to-teal-800"
                 trend={5.2}
               />
               <StudentStatisticsCard
-                title="Female Students"
-                value={demographics.gender?.find(g => g.name === 'Female')?.value || 0}
+                title="Not Specified"
+                value={(demographics.gender || [])
+                  .filter(g => g.name === 'Not Specified')
+                  .reduce((sum, g) => sum + g.value, 0)}
                 icon={FiUser}
                 color="from-pink-500 to-pink-700"
                 trend={7.8}
@@ -3813,7 +3862,7 @@ const downloadExcelTemplate = () => {
               <StudentsChart
                 data={demographics.gender}
                 type="bar"
-                title="Gender Distribution"
+                title="Gender Records"
                 colors={['#0D9488', '#EC4899', '#047857']}
                 height={400}
               />
@@ -4082,6 +4131,7 @@ const downloadExcelTemplate = () => {
         loading={uploading}
         uploadType={uploadStrategy?.uploadType}
         targetForm={uploadStrategy?.targetForm}
+        totalRows={duplicateSummary.totalRows}
       />
     </div>
   );

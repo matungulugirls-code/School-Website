@@ -178,6 +178,15 @@ const parseDateSafely = (dateString) => {
   }
 };
 
+const normalizeAcademicYear = (yearValue) => {
+  if (!yearValue) return null;
+  const str = String(yearValue).trim();
+  if (/^\d{4}$/.test(str)) return str;
+  const legacyMatch = str.match(/(\d{4})\s*[\/-]\s*\d{4}/);
+  if (legacyMatch) return legacyMatch[1];
+  return str;
+};
+
 // ========== API ENDPOINTS ==========
 
 // GET fee balances by admission number (PUBLIC - no authentication required)
@@ -305,9 +314,21 @@ export async function POST(request, { params }) {
     const { id } = params;
     const admissionNumber = String(id).trim();
     const data = await request.json();
+    const normalizedAcademicYear = normalizeAcademicYear(data.academicYear);
+
+    if (normalizedAcademicYear && !/^\d{4}$/.test(normalizedAcademicYear)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Academic year must use the exact year format, for example 2026',
+          authenticated: true
+        },
+        { status: 400 }
+      );
+    }
 
     // Validate required fields
-    if (!data.term || !data.academicYear || data.amount === undefined) {
+    if (!data.term || !normalizedAcademicYear || data.amount === undefined) {
       return NextResponse.json(
         { 
           success: false, 
@@ -366,7 +387,7 @@ export async function POST(request, { params }) {
       where: {
         admissionNumber,
         term: data.term,
-        academicYear: data.academicYear
+        academicYear: normalizedAcademicYear
       }
     });
 
@@ -385,7 +406,7 @@ export async function POST(request, { params }) {
     const feeData = {
       admissionNumber,
       term: data.term,
-      academicYear: data.academicYear,
+      academicYear: normalizedAcademicYear,
       amount: parseFloat(data.amount),
       amountPaid: parseFloat(amountPaid),
       balance,
@@ -415,7 +436,7 @@ export async function POST(request, { params }) {
       }
     });
 
-    console.log(`✅ Fee balance created by ${auth.user.name}: Student ${admissionNumber} - ${data.term} ${data.academicYear}`);
+    console.log(`✅ Fee balance created by ${auth.user.name}: Student ${admissionNumber} - ${data.term} ${normalizedAcademicYear}`);
 
     return NextResponse.json({
       success: true,
@@ -466,6 +487,20 @@ export async function PUT(request, { params }) {
 
     const { id } = params; // Get fee ID from URL params
     const data = await request.json();
+    const normalizedAcademicYear = data.academicYear !== undefined
+      ? normalizeAcademicYear(data.academicYear)
+      : undefined;
+
+    if (normalizedAcademicYear !== undefined && normalizedAcademicYear && !/^\d{4}$/.test(normalizedAcademicYear)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Academic year must use the exact year format, for example 2026',
+          authenticated: true
+        },
+        { status: 400 }
+      );
+    }
     
     // Get feeBalanceId from request body (for backward compatibility)
     const feeBalanceId = data.feeBalanceId || id;
@@ -541,7 +576,7 @@ export async function PUT(request, { params }) {
     if (data.admissionNumber || data.term || data.academicYear) {
       const admissionNumber = data.admissionNumber || currentFee.admissionNumber;
       const term = data.term || currentFee.term;
-      const academicYear = data.academicYear || currentFee.academicYear;
+      const academicYear = normalizedAcademicYear || currentFee.academicYear;
 
       const existingFee = await prisma.feeBalance.findFirst({
         where: {
@@ -570,7 +605,7 @@ export async function PUT(request, { params }) {
     // Only include fields that are being updated
     if (data.admissionNumber !== undefined) updateData.admissionNumber = data.admissionNumber;
     if (data.term !== undefined) updateData.term = data.term;
-    if (data.academicYear !== undefined) updateData.academicYear = data.academicYear;
+    if (data.academicYear !== undefined) updateData.academicYear = normalizedAcademicYear;
     if (data.form !== undefined) updateData.form = data.form;
     if (data.isActive !== undefined) updateData.isActive = data.isActive;
     

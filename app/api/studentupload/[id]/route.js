@@ -240,6 +240,11 @@ export async function PUT(request, { params }) {
       }
     }
 
+    const oldStudent = await prisma.databaseStudent.findUnique({
+      where: { id },
+      select: { form: true, admissionNumber: true }
+    });
+
     const updatedStudent = await prisma.databaseStudent.update({
       where: { id },
       data: {
@@ -255,18 +260,16 @@ export async function PUT(request, { params }) {
         email: data.email || null,
         address: data.address || null,
         status: data.status || 'active',
-        updatedAt: new Date(),
-        lastUpdatedBy: auth.user.id,
-        lastUpdatedByName: auth.user.name,
-        lastUpdatedByRole: auth.user.role
+        updatedAt: new Date()
       }
     });
 
-    // Update stats if form changed
-    const oldStudent = await prisma.databaseStudent.findUnique({
-      where: { id },
-      select: { form: true }
-    });
+    if (oldStudent?.admissionNumber && data.admissionNumber && data.admissionNumber !== oldStudent.admissionNumber) {
+      await prisma.studentPortalAccount.updateMany({
+        where: { admissionNumber: oldStudent.admissionNumber },
+        data: { admissionNumber: data.admissionNumber }
+      });
+    }
 
     if (oldStudent && oldStudent.form !== data.form) {
       // Decrement old form count
@@ -343,6 +346,10 @@ export async function DELETE(request, { params }) {
 
     const deletedStudent = await prisma.databaseStudent.delete({
       where: { id }
+    });
+
+    await prisma.studentPortalAccount.deleteMany({
+      where: { admissionNumber: deletedStudent.admissionNumber }
     });
 
     // Update stats

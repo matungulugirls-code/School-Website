@@ -22,8 +22,12 @@ export default function StudentLoginModal({
 }) {
   const [formData, setFormData] = useState({
     fullName: '',
-    admissionNumber: ''
+    admissionNumber: '',
+    password: '',
+    newPassword: '',
+    confirmPassword: ''
   });
+  const [mode, setMode] = useState('password');
   const [localError, setLocalError] = useState(null);
   const [showContactInfo, setShowContactInfo] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
@@ -45,9 +49,9 @@ export default function StudentLoginModal({
   const validateInputs = () => {
     const errors = {};
     
-    if (!formData.fullName.trim()) {
+    if (mode === 'setup' && !formData.fullName.trim()) {
       errors.fullName = 'Please enter your name';
-    } else {
+    } else if (mode === 'setup') {
       const nameParts = formData.fullName.trim().split(/\s+/).filter(part => part.length > 0);
       if (nameParts.length < 1) {
         errors.fullName = 'Please enter at least your first name';
@@ -58,6 +62,31 @@ export default function StudentLoginModal({
       errors.admissionNumber = 'Please enter your admission number';
     } else if (!/^[A-Z0-9]{2,10}$/i.test(formData.admissionNumber.trim())) {
       errors.admissionNumber = 'Admission number should be 2-10 letters or numbers';
+    }
+
+    if (mode === 'password' && !formData.password) {
+      errors.password = 'Please enter your portal password';
+    }
+
+    if (mode === 'setup') {
+      if (!formData.newPassword) {
+        errors.newPassword = 'Create a strong password';
+      } else {
+        const passwordRules = [
+          formData.newPassword.length >= 8,
+          /[a-z]/.test(formData.newPassword),
+          /[A-Z]/.test(formData.newPassword),
+          /\d/.test(formData.newPassword),
+          /[^A-Za-z0-9]/.test(formData.newPassword)
+        ];
+        if (!passwordRules.every(Boolean)) {
+          errors.newPassword = 'Use 8+ characters with uppercase, lowercase, number, and symbol';
+        }
+      }
+
+      if (formData.newPassword !== formData.confirmPassword) {
+        errors.confirmPassword = 'Passwords do not match';
+      }
     }
 
     setValidationErrors(errors);
@@ -74,11 +103,17 @@ export default function StudentLoginModal({
       return;
     }
 
-    onLogin(formData.fullName.trim(), formData.admissionNumber.trim());
+    onLogin({
+      mode,
+      fullName: formData.fullName.trim(),
+      admissionNumber: formData.admissionNumber.trim(),
+      password: formData.password,
+      newPassword: formData.newPassword
+    });
   };
 
   const handleClear = () => {
-    setFormData({ fullName: '', admissionNumber: '' });
+    setFormData({ fullName: '', admissionNumber: '', password: '', newPassword: '', confirmPassword: '' });
     setLocalError(null);
     setShowContactInfo(false);
     setValidationErrors({});
@@ -169,11 +204,11 @@ export default function StudentLoginModal({
             <div className="flex items-start gap-2">
               <FiCheckCircle className="text-emerald-600 text-sm mt-0.5 flex-shrink-0" />
               <div className="flex-1">
-                <h2 className="text-xs font-bold text-emerald-800 mb-1">Flexible Name Entry</h2>
+                <h2 className="text-xs font-bold text-emerald-800 mb-1">Secure Portal Access</h2>
                 <p className="text-emerald-700 text-xs mb-2">
-                  Any format works: uppercase, lowercase, 2 or 3 names, any order
+                  Returning students use admission number and password. First-time students verify their name once, then create a strong password.
                 </p>
-                <div className="flex flex-wrap gap-1">
+                {mode === 'setup' && <div className="flex flex-wrap gap-1">
                   {nameFormats.slice(0, 4).map((format, idx) => (
                     <button 
                       key={idx}
@@ -184,7 +219,7 @@ export default function StudentLoginModal({
                       {format}
                     </button>
                   ))}
-                </div>
+                </div>}
               </div>
             </div>
           </section>
@@ -233,7 +268,7 @@ export default function StudentLoginModal({
                   <FiShield className="text-emerald-700 text-sm" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-900">Student Verification</h3>
+                  <h3 className="text-sm font-semibold text-gray-900">{mode === 'setup' ? 'First-Time Password Setup' : 'Student Login'}</h3>
                   <div className="flex items-center gap-1 text-gray-500 text-xs">
                     <FiClock className="text-emerald-600 text-xs" />
                     <span>Session: <span className="font-medium text-emerald-700">2 hours</span></span>
@@ -243,15 +278,43 @@ export default function StudentLoginModal({
 
               <div className="bg-emerald-50/50 rounded-lg p-3 border border-emerald-100 mb-4">
                 <p className="text-emerald-700 text-xs">
-                  <span className="font-semibold">Note:</span> Use your official admission number. 
-                  Names can be entered in any format.
+                  <span className="font-semibold">Note:</span> Passwords are encrypted and never shown in portal responses.
                 </p>
               </div>
             </div>
 
+            <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl border border-emerald-100 bg-white p-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('password');
+                  setValidationErrors({});
+                  setLocalError(null);
+                }}
+                className={`rounded-lg px-3 py-2 text-xs font-black transition-colors ${
+                  mode === 'password' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-800 hover:bg-emerald-50'
+                }`}
+              >
+                Password Login
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('setup');
+                  setValidationErrors({});
+                  setLocalError(null);
+                }}
+                className={`rounded-lg px-3 py-2 text-xs font-black transition-colors ${
+                  mode === 'setup' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-800 hover:bg-emerald-50'
+                }`}
+              >
+                First-Time Setup
+              </button>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Name Input */}
-              <div>
+              {mode === 'setup' && <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-xs font-medium text-gray-700 flex items-center gap-1.5">
                     <FiUser className="text-emerald-600 text-xs" />
@@ -304,7 +367,7 @@ export default function StudentLoginModal({
                     ))}
                   </div>
                 </div>
-              </div>
+              </div>}
 
               {/* Admission Number Input */}
               <div>
@@ -359,6 +422,93 @@ export default function StudentLoginModal({
                 </div>
               </div>
 
+              {mode === 'password' && (
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-medium text-gray-700 flex items-center gap-1.5">
+                      <FiShield className="text-emerald-600 text-xs" />
+                      <span>Password</span>
+                    </label>
+                    <span className="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                      Required after setup
+                    </span>
+                  </div>
+                  <input
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    placeholder="Enter your portal password"
+                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm placeholder:text-gray-400 bg-white transition-all ${
+                      validationErrors.password ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-emerald-500'
+                    }`}
+                    disabled={isLoading}
+                    autoComplete="current-password"
+                  />
+                  {validationErrors.password && (
+                    <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                      <FiAlertCircle className="text-xs" />
+                      {validationErrors.password}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {mode === 'setup' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-gray-700 flex items-center gap-1.5 mb-1.5">
+                      <FiShield className="text-emerald-600 text-xs" />
+                      <span>Create Password</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={formData.newPassword}
+                      onChange={(e) => handleInputChange('newPassword', e.target.value)}
+                      placeholder="Strong password"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm placeholder:text-gray-400 bg-white transition-all ${
+                        validationErrors.newPassword ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-emerald-500'
+                      }`}
+                      disabled={isLoading}
+                      autoComplete="new-password"
+                    />
+                    {validationErrors.newPassword && (
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <FiAlertCircle className="text-xs" />
+                        {validationErrors.newPassword}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-medium text-gray-700 flex items-center gap-1.5 mb-1.5">
+                      <FiCheckCircle className="text-emerald-600 text-xs" />
+                      <span>Confirm Password</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={formData.confirmPassword}
+                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                      placeholder="Repeat password"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm placeholder:text-gray-400 bg-white transition-all ${
+                        validationErrors.confirmPassword ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-emerald-500'
+                      }`}
+                      disabled={isLoading}
+                      autoComplete="new-password"
+                    />
+                    {validationErrors.confirmPassword && (
+                      <p className="text-red-600 text-xs mt-1 flex items-center gap-1">
+                        <FiAlertCircle className="text-xs" />
+                        {validationErrors.confirmPassword}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="sm:col-span-2 rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-[11px] font-semibold text-emerald-800">
+                    Use at least 8 characters with uppercase, lowercase, a number, and a symbol.
+                  </div>
+                </div>
+              )}
+
               {/* Action Buttons */}
               <div className="flex gap-3 pt-2">
                 <button
@@ -385,7 +535,12 @@ export default function StudentLoginModal({
 
                 <button
                   type="submit"
-                  disabled={isLoading || !formData.fullName.trim() || !formData.admissionNumber.trim()}
+                  disabled={
+                    isLoading ||
+                    !formData.admissionNumber.trim() ||
+                    (mode === 'setup' && (!formData.fullName.trim() || !formData.newPassword || !formData.confirmPassword)) ||
+                    (mode === 'password' && !formData.password)
+                  }
                   className="
                     flex-1 py-3 px-4
                     bg-emerald-600 hover:bg-emerald-700
@@ -403,12 +558,12 @@ export default function StudentLoginModal({
                   {isLoading ? (
                     <span className="flex items-center gap-2">
                       <CircularProgress size={16} thickness={4} sx={{ color: "white" }} />
-                      <span>Verifying...</span>
+                      <span>{mode === 'setup' ? 'Securing...' : 'Signing in...'}</span>
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
                       <FiLogIn className="text-sm" />
-                      <span>Access Portal</span>
+                      <span>{mode === 'setup' ? 'Create Password' : 'Access Portal'}</span>
                     </span>
                   )}
                 </button>

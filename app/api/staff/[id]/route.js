@@ -207,21 +207,49 @@ const LEADERSHIP_ROLES = new Set([
   "Principal",
   "Deputy Principal",
   "Senior Teacher",
+  "Head of Department",
+  "Assistant Head of Department",
+  "HOD",
+  "AHOD",
 ]);
+
+const LEADERSHIP_UPLOAD_ERROR =
+  "Individual staff profiles are restricted to leadership roles only: Principal, Deputy Principal (Academics), Deputy Principal (Administration), Senior Teacher, HOD, and AHOD.";
 
 const DEPUTY_POSITIONS = new Set([
   "Deputy Principal (Academics)",
   "Deputy Principal (Administration)",
 ]);
 
+const isHodValue = (value = "") => {
+  const normalized = value.toString().trim().toLowerCase();
+  return (
+    normalized === "hod" ||
+    normalized === "ahod" ||
+    normalized.includes("head of department") ||
+    normalized.includes("assistant head of department")
+  );
+};
+
+const isAllowedLeadershipRole = (role = "", position = "") => {
+  const cleanRole = role.toString().trim();
+  const cleanPosition = position?.toString().trim() || "";
+
+  if (LEADERSHIP_ROLES.has(cleanRole)) return true;
+  if (cleanPosition.toLowerCase().includes("senior teacher")) return true;
+  if (isHodValue(cleanRole) || isHodValue(cleanPosition)) return true;
+
+  return false;
+};
+
 const isLeadershipStaff = (staff) => {
   if (!staff) return false;
+  if (staff.staffType === "Teacher" || staff.role === "Teacher") return false;
   const role = (staff.role || "").trim();
   const position = (staff.position || "").trim();
   const positionLower = position.toLowerCase();
 
-  if (role === "Principal") return true;
-  if (role === "Senior Teacher") return true;
+  if (isAllowedLeadershipRole(role, position)) return true;
   if (positionLower.includes("senior teacher")) return true;
 
   if (role === "Deputy Principal") {
@@ -231,6 +259,11 @@ const isLeadershipStaff = (staff) => {
   }
 
   return false;
+};
+
+const sanitizePublicStaff = (staff) => {
+  const { email, phone, ...publicStaff } = staff;
+  return publicStaff;
 };
 
 // 🔹 Check principal/deputy principal limits
@@ -329,7 +362,7 @@ export async function GET(req, { params }) {
       );
     }
 
-    return NextResponse.json({ success: true, staff });
+    return NextResponse.json({ success: true, staff: isAdmin ? staff : sanitizePublicStaff(staff) });
   } catch (error) {
     console.error("❌ GET Staff Error:", error);
     return NextResponse.json(
@@ -373,14 +406,21 @@ export async function PUT(req, { params }) {
     // Check if role or position is being changed
     const newRole = formData.get("role");
     const newPosition = formData.get("position");
+    const newStaffType = formData.get("staffType");
+    const isTeacherRequest =
+      newStaffType === "Teacher" ||
+      newRole === "Teacher" ||
+      existingStaff.staffType === "Teacher" ||
+      existingStaff.role === "Teacher";
 
     // 🔹 Restrict updates to leadership profiles only
-    if (newRole && !LEADERSHIP_ROLES.has(newRole)) {
+    const effectiveRole = newRole || existingStaff.role;
+    const effectivePosition = newPosition || existingStaff.position;
+    if (!isTeacherRequest && (newRole || newPosition) && !isAllowedLeadershipRole(effectiveRole, effectivePosition)) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Individual staff profiles are restricted to leadership roles only: Principal, Deputy Principal (Academics), Deputy Principal (Administration), and Senior Teacher.",
+          error: LEADERSHIP_UPLOAD_ERROR,
           authenticated: true,
         },
         { status: 400 }
@@ -388,7 +428,7 @@ export async function PUT(req, { params }) {
     }
     
     // Validate Deputy Principal has position when role is Deputy Principal
-    if (newRole === "Deputy Principal" && !newPosition) {
+    if (!isTeacherRequest && newRole === "Deputy Principal" && !newPosition) {
       return NextResponse.json(
         { 
           success: false, 
@@ -400,7 +440,7 @@ export async function PUT(req, { params }) {
     }
 
     // Enforce Deputy Principal type (Academics/Admin)
-    if (newRole === "Deputy Principal" && newPosition && !DEPUTY_POSITIONS.has(newPosition)) {
+    if (!isTeacherRequest && newRole === "Deputy Principal" && newPosition && !DEPUTY_POSITIONS.has(newPosition)) {
       return NextResponse.json(
         {
           success: false,
@@ -413,7 +453,7 @@ export async function PUT(req, { params }) {
     }
 
     // If role isn't provided but we're updating a Deputy Principal, still validate the position
-    if (!newRole && existingStaff.role === "Deputy Principal" && newPosition && !DEPUTY_POSITIONS.has(newPosition)) {
+    if (!isTeacherRequest && !newRole && existingStaff.role === "Deputy Principal" && newPosition && !DEPUTY_POSITIONS.has(newPosition)) {
       return NextResponse.json(
         {
           success: false,
@@ -426,7 +466,7 @@ export async function PUT(req, { params }) {
     }
 
     // Check role limits if role is being changed OR if position is being updated for Deputy Principal
-    if (newRole && newRole !== existingStaff.role) {
+    if (!isTeacherRequest && newRole && newRole !== existingStaff.role) {
       try {
         await checkRoleLimits(newRole, id, newPosition);
       } catch (error) {
@@ -441,7 +481,7 @@ export async function PUT(req, { params }) {
       }
     } 
     // Special case: Updating Deputy Principal position (e.g., from Academics to Administration)
-    else if (existingStaff.role === "Deputy Principal" && 
+    else if (!isTeacherRequest && existingStaff.role === "Deputy Principal" && 
              newPosition && 
              newPosition !== existingStaff.position) {
       
@@ -480,9 +520,62 @@ export async function PUT(req, { params }) {
 
     // Include ALL fields from your Prisma schema
     if (formData.get("name")) data.name = formData.get("name");
-    if (formData.get("role")) data.role = formData.get("role");
-    if (formData.get("position")) data.position = formData.get("position");
-    if (formData.get("department")) data.department = formData.get("department");
+    if (isTeacherRequest) {
+      data.role = "Teacher";
+      data.staffType = "Teacher";
+      data.position = "Teacher";
+
+      const subjectOffered = (formData.get("subjectOffered") || "").toString().trim();
+      if (!subjectOffered) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Subject offered is required for teacher records.",
+            authenticated: true
+          },
+          { status: 400 }
+        );
+      }
+      data.subjectOffered = subjectOffered;
+
+      const departmentId = Number(formData.get("departmentId") || existingStaff.departmentId);
+      if (!Number.isFinite(departmentId)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Please select a valid department for this teacher.",
+            authenticated: true
+          },
+          { status: 400 }
+        );
+      }
+
+      const selectedDepartment = await prisma.staffDepartment.findFirst({
+        where: { id: departmentId, isActive: true },
+        select: { id: true, name: true }
+      });
+
+      if (!selectedDepartment) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Selected department was not found or is hidden.",
+            authenticated: true
+          },
+          { status: 400 }
+        );
+      }
+
+      data.departmentId = selectedDepartment.id;
+      data.department = selectedDepartment.name;
+    } else {
+      if (formData.get("role")) data.role = formData.get("role");
+      data.staffType = "Leadership";
+      if (formData.get("position")) data.position = formData.get("position");
+      if (formData.get("department")) data.department = formData.get("department");
+      data.departmentId = null;
+      data.subjectOffered = null;
+    }
     if (formData.get("email")) data.email = formData.get("email");
     if (formData.get("phone")) data.phone = formData.get("phone");
     if (formData.get("bio")) data.bio = formData.get("bio");

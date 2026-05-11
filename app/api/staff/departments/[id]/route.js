@@ -172,7 +172,23 @@ export async function GET(_req, { params }) {
 
     const department = await prisma.staffDepartment.findUnique({
       where: { id },
-      include: { images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] } },
+      include: {
+        images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+        teachers: {
+          where: { staffType: "Teacher", status: "active" },
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            subjectOffered: true,
+            departmentId: true,
+            department: true,
+            role: true,
+            staffType: true,
+          },
+          orderBy: { name: "asc" },
+        },
+      },
     });
     if (!department) {
       return NextResponse.json({ success: false, error: "Department not found" }, { status: 404 });
@@ -246,6 +262,14 @@ export async function PUT(req, { params }) {
 
     const headName = formData.get("headName");
     if (headName !== null) data.headName = headName.toString().trim() || null;
+
+    let assistantHeadName = null;
+    if (formData.has("assistantHeadName")) assistantHeadName = formData.get("assistantHeadName");
+    else if (formData.has("ahodName")) assistantHeadName = formData.get("ahodName");
+    else if (formData.has("aHOD")) assistantHeadName = formData.get("aHOD");
+    if (assistantHeadName !== null) {
+      data.assistantHeadName = assistantHeadName.toString().trim() || null;
+    }
 
     const staffCountRaw = formData.get("staffCount");
     if (staffCountRaw !== null) {

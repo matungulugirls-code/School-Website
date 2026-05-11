@@ -337,12 +337,12 @@ const normalizeAcademicYear = (year) => {
   
   const yearStr = String(year).trim();
   if (/^\d{4}$/.test(yearStr)) {
-    const startYear = parseInt(yearStr);
-    return `${startYear}/${startYear + 1}`;
+    return yearStr;
   }
   
-  if (/^\d{4}\/\d{4}$/.test(yearStr)) {
-    return yearStr;
+  const rangeMatch = yearStr.match(/^(\d{4})\s*[\/-]\s*(\d{4})$/);
+  if (rangeMatch) {
+    return rangeMatch[1];
   }
   
   return yearStr;

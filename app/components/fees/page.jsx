@@ -666,7 +666,7 @@ function ModernFeeEditModal({ fee, student, onClose, onSave, loading }) {
                     required
                     value={formData.academicYear}
                     onChange={(e) => setFormData({...formData, academicYear: e.target.value})}
-                    placeholder="e.g., 2024/2025"
+                    placeholder="e.g., 2026"
                     className="w-full px-5 py-3.5 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-white text-base"
                   />
                 </div>
@@ -1047,9 +1047,9 @@ function EnhancedFilterPanel({
             </label>
             <select value={localFilters.academicYear} onChange={(e) => handleFilterChange('academicYear', e.target.value)} className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base">
               <option value="">All Years</option>
-              <option value="2024/2025">2024/2025</option>
-              <option value="2023/2024">2023/2024</option>
-              <option value="2022/2023">2022/2023</option>
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
+              <option value="2024">2024</option>
             </select>
           </div>
 
@@ -1124,7 +1124,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
       else setTerm('Term 3');
       
       const currentYear = new Date().getFullYear();
-      setAcademicYear(`${currentYear}/${currentYear + 1}`);
+      setAcademicYear(`${currentYear}`);
     } else if (uploadType === 'new') {
       // Clear term/year for new uploads
       setTerm('');
@@ -1305,11 +1305,10 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     >
                       <option value="">Select Year</option>
                       {Array.from({ length: 5 }, (_, i) => {
-                        const startYear = new Date().getFullYear() - 2 + i;
-                        const displayFormat = `${startYear}/${startYear + 1}`;
+                        const year = String(new Date().getFullYear() - 2 + i);
                         return (
-                          <option key={displayFormat} value={displayFormat}>
-                            {displayFormat}
+                          <option key={year} value={year}>
+                            {year}
                           </option>
                         );
                       })}
@@ -1442,7 +1441,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
                 <p className="opacity-90 text-sm sm:text-base">
                   {uploadType === 'update'
                     ? `Will update ${duplicates.length} existing fees`
-                    : `Found ${duplicates.length} existing students in ${selectedForm}`
+                    : `Found ${duplicates.length} existing fee records in ${selectedForm}`
                   }
                 </p>
               </div>
@@ -1481,7 +1480,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
             {/* Duplicate List */}
             <div className="mb-4 sm:mb-6">
               <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-sm sm:text-base">
-                {uploadType === 'update' ? 'Fees to Update:' : 'Existing Students:'}
+                {uploadType === 'update' ? 'Fees to Update:' : 'Existing Fee Records:'}
               </h4>
               <div className="border border-gray-200 rounded-lg overflow-hidden">
                 <div className="overflow-x-auto max-h-60">
@@ -1731,6 +1730,33 @@ const getFormTextColor = (form) => {
     } else {
       sonnerToast.info(message);
     }
+  }, []);
+
+  const describeFeeUploadError = useCallback((payloadOrMessage, suggestion = '') => {
+    const message = typeof payloadOrMessage === 'string'
+      ? payloadOrMessage
+      : payloadOrMessage?.error || payloadOrMessage?.message || 'Upload failed';
+
+    if (message.includes('No readable fee rows') || message.includes('empty')) {
+      return 'The file looks empty or unreadable. Confirm the fee sheet has data rows and the headers match the current template.';
+    }
+    if (message.includes('valid Term column')) {
+      return 'Add a valid Term column to the fee file, for example Term 1, Term 2, or Term 3.';
+    }
+    if (message.includes('valid Academic Year column') || message.includes('single year')) {
+      return 'Use the exact academic year format like 2026 in the fee file or upload setup.';
+    }
+    if (message.includes('must contain one term and one academic year')) {
+      return `${message} Split mixed term/year data into separate uploads before retrying.`;
+    }
+    if (message.includes('Duplicate') || message.includes('duplicate') || message.includes('already exists')) {
+      return 'Existing fee records were found for the same form, term, and year. Review the duplicate list before continuing.';
+    }
+    if (message.includes('Invalid file type')) {
+      return 'Upload a CSV or Excel fee file that matches the current template.';
+    }
+
+    return suggestion ? `${message} ${suggestion}`.trim() : message;
   }, []);
 
   const formatCurrency = useCallback((amount) => {
@@ -2363,14 +2389,14 @@ const checkDuplicates = async () => {
         proceedWithUpload();
       }
     } else {
-      showNotification(data.error || 'Duplicate check failed', 'error');
+      showNotification(describeFeeUploadError(data, data.suggestion), 'error');
     }
   } catch (error) {
     console.error('Duplicate check error:', error);
     if (error.message.includes('Authentication')) {
       handleAuthError(error, showNotification);
     } else {
-      showNotification('Failed to check for duplicates', 'error');
+      showNotification(describeFeeUploadError(error.message), 'error');
     }
   } finally {
     setValidationLoading(false);
@@ -2432,6 +2458,10 @@ const proceedWithUpload = async (duplicateAction = 'skip') => {
           successMessage += ` (skipped ${skipped} duplicates)`;
         }
       }
+
+      if ((data.data?.errors || []).length > 0) {
+        successMessage += ` ${data.data.errors.length} row issue(s) need review.`;
+      }
       
       showNotification(successMessage, 'success');
       
@@ -2451,14 +2481,14 @@ const proceedWithUpload = async (duplicateAction = 'skip') => {
       setDuplicates([]);
       
     } else {
-      showNotification(data.error || 'Upload failed', 'error');
+      showNotification(describeFeeUploadError(data, data.suggestion), 'error');
     }
   } catch (error) {
     console.error('Upload error:', error);
     if (error.message.includes('Authentication')) {
       handleAuthError(error, showNotification);
     } else {
-      showNotification(`Upload failed: ${error.message}`, 'error');
+      showNotification(describeFeeUploadError(error.message), 'error');
     }
   } finally {
     setUploading(false);
@@ -4013,7 +4043,7 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
         onConfirm={handleStrategyConfirm}
         loading={loading}
       />
-<FeeDuplicateValidationModal
+      <FeeDuplicateValidationModal
   open={showValidationModal}
   onClose={() => setShowValidationModal(false)}
   duplicates={duplicates}
@@ -4025,18 +4055,6 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
   academicYear={uploadStrategy?.academicYear}
   showNotification={showNotification}
 />
-
-      <DuplicateValidationModal
-        open={showValidationModal}
-        onClose={() => setShowValidationModal(false)}
-        duplicates={duplicates}
-        onProceed={proceedWithUpload}
-        loading={uploading}
-        uploadType={uploadStrategy?.uploadType}
-        selectedForm={uploadStrategy?.selectedForm}
-        term={uploadStrategy?.term}
-        academicYear={uploadStrategy?.academicYear}
-      />
     </div>
   );
 }

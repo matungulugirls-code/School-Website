@@ -213,6 +213,23 @@ export async function GET(req) {
       orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
       include: {
         images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+        teachers: {
+          where: {
+            staffType: "Teacher",
+            status: "active",
+          },
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            subjectOffered: true,
+            departmentId: true,
+            department: true,
+            role: true,
+            staffType: true,
+          },
+          orderBy: { name: "asc" },
+        },
       },
     });
 
@@ -248,6 +265,12 @@ export async function POST(req) {
     const category = (formData.get("category") || "").toString().trim();
     const description = (formData.get("description") || "").toString().trim();
     const headName = (formData.get("headName") || "").toString().trim();
+    const assistantHeadName = (
+      formData.get("assistantHeadName") ||
+      formData.get("ahodName") ||
+      formData.get("aHOD") ||
+      ""
+    ).toString().trim();
 
     const staffCountRaw = formData.get("staffCount");
     const displayOrderRaw = formData.get("displayOrder");
@@ -323,6 +346,7 @@ export async function POST(req) {
         category,
         description: description || null,
         headName: headName || null,
+        assistantHeadName: assistantHeadName || null,
         staffCount: Math.floor(staffCount),
         displayOrder: Math.floor(displayOrder),
         isActive,

@@ -146,6 +146,15 @@ const authenticateRequest = (req) => {
 
 // ========== HELPER FUNCTIONS ==========
 
+const normalizeColumnKey = (value = '') =>
+  String(value)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '');
+
+const getFeeRowNumber = (record, fallbackIndex = 0) =>
+  Number(record?.sourceRowNumber || record?.__rowNumber || fallbackIndex + 2);
+
 // Enhanced date parsing
 const parseDate = (dateStr) => {
   if (!dateStr) return null;
@@ -288,7 +297,8 @@ const normalizeTerm = (termValue) => {
   return normalized;
 };
 
-// Normalize academic year with validation
+// Normalize academic year with validation. The system now stores the exact year
+// entered by the school, e.g. "2026" instead of "2026/2027".
 const normalizeAcademicYear = (yearValue) => {
   if (!yearValue) {
     console.warn('⚠️ No academic year provided');
@@ -298,12 +308,12 @@ const normalizeAcademicYear = (yearValue) => {
   const str = String(yearValue).trim();
   console.log(`🔍 Academic year input: "${str}"`);
   
-  // Check if already in format 2024/2025
+  // Convert legacy ranges like 2026/2027 or 2026-2027 to the opening year.
   if (/^\d{4}\/\d{4}$/.test(str)) {
     const [year1, year2] = str.split('/').map(Number);
-    if (year2 === year1 + 1) {
-      console.log(`✅ Academic year already in correct format: ${str}`);
-      return str;
+    if (year1 >= 1900 && year1 <= 2100 && year2 >= 1900 && year2 <= 2100) {
+      console.log(`✅ Legacy academic year converted: ${str} -> ${year1}`);
+      return String(year1);
     }
   }
   
@@ -311,9 +321,8 @@ const normalizeAcademicYear = (yearValue) => {
   if (/^\d{4}$/.test(str)) {
     const year = parseInt(str);
     if (year >= 1900 && year <= 2100) {
-      const result = `${year}/${year + 1}`;
-      console.log(`✅ Single year converted: ${str} -> ${result}`);
-      return result;
+      console.log(`✅ Academic year normalized: ${str}`);
+      return String(year);
     }
   }
   
@@ -323,21 +332,19 @@ const normalizeAcademicYear = (yearValue) => {
     const year1 = parseInt(yearMatch[1]);
     const year2 = parseInt(yearMatch[2]);
     if (year1 >= 1900 && year1 <= 2100 && year2 >= 1900 && year2 <= 2100) {
-      const result = `${year1}/${year2}`;
-      console.log(`✅ Extracted years: ${str} -> ${result}`);
-      return result;
+      console.log(`✅ Extracted academic year: ${str} -> ${year1}`);
+      return String(year1);
     }
   }
   
-  // Try to fix malformed years like "2026/2027" (should already match above)
+  // Try to fix malformed years like "2026 / 2027" (should already match above)
   const malformedMatch = str.match(/(\d{4})\s*\/\s*(\d{4})/);
   if (malformedMatch) {
     const year1 = parseInt(malformedMatch[1]);
     const year2 = parseInt(malformedMatch[2]);
     if (year1 >= 1900 && year1 <= 2100 && year2 >= 1900 && year2 <= 2100) {
-      const result = `${year1}/${year2}`;
-      console.log(`✅ Fixed malformed year: ${str} -> ${result}`);
-      return result;
+      console.log(`✅ Fixed malformed year: ${str} -> ${year1}`);
+      return String(year1);
     }
   }
   
@@ -402,21 +409,22 @@ const determinePaymentStatus = (amount, amountPaid) => {
 const validateFeeBalance = (feeBalance, index) => {
   const errors = [];
   const warnings = [];
+  const rowNumber = getFeeRowNumber(feeBalance, index);
   
-  console.log(`\n🔍 Validating row ${index + 2}:`, feeBalance);
+  console.log(`\n🔍 Validating row ${rowNumber}:`, feeBalance);
   
   // Admission number
   if (!feeBalance.admissionNumber) {
-    errors.push(`Row ${index + 2}: Admission number is required`);
-    console.error(`❌ Row ${index + 2}: Missing admission number`);
+    errors.push(`Row ${rowNumber}: Admission number is required`);
+    console.error(`❌ Row ${rowNumber}: Missing admission number`);
   } else {
     const admissionStr = String(feeBalance.admissionNumber).trim();
     if (!/^\d{4,10}$/.test(admissionStr)) {
-      errors.push(`Row ${index + 2}: Admission number must be 4-10 digits (got: ${admissionStr})`);
-      console.error(`❌ Row ${index + 2}: Invalid admission number format: ${admissionStr}`);
+      errors.push(`Row ${rowNumber}: Admission number must be 4-10 digits (got: ${admissionStr})`);
+      console.error(`❌ Row ${rowNumber}: Invalid admission number format: ${admissionStr}`);
     } else {
       feeBalance.admissionNumber = admissionStr;
-      console.log(`✅ Row ${index + 2}: Valid admission number: ${admissionStr}`);
+      console.log(`✅ Row ${rowNumber}: Valid admission number: ${admissionStr}`);
     }
   }
   
@@ -426,14 +434,14 @@ const validateFeeBalance = (feeBalance, index) => {
   const validForms = ['Form 1', 'Form 2', 'Form 3', 'Form 4'];
   
   if (!normalizedForm) {
-    errors.push(`Row ${index + 2}: Form is required (got: ${originalForm || 'empty'})`);
-    console.error(`❌ Row ${index + 2}: Form normalization failed: ${originalForm} -> null`);
+    errors.push(`Row ${rowNumber}: Form is required (got: ${originalForm || 'empty'})`);
+    console.error(`❌ Row ${rowNumber}: Form normalization failed: ${originalForm} -> null`);
   } else if (!validForms.includes(normalizedForm)) {
-    errors.push(`Row ${index + 2}: Form must be one of: ${validForms.join(', ')} (got: ${originalForm}, normalized: ${normalizedForm})`);
-    console.error(`❌ Row ${index + 2}: Invalid form: ${originalForm} -> ${normalizedForm}`);
+    errors.push(`Row ${rowNumber}: Form must be one of: ${validForms.join(', ')} (got: ${originalForm}, normalized: ${normalizedForm})`);
+    console.error(`❌ Row ${rowNumber}: Invalid form: ${originalForm} -> ${normalizedForm}`);
   } else {
     feeBalance.form = normalizedForm;
-    console.log(`✅ Row ${index + 2}: Form validated: ${originalForm} -> ${normalizedForm}`);
+    console.log(`✅ Row ${rowNumber}: Form validated: ${originalForm} -> ${normalizedForm}`);
   }
   
   // Term validation
@@ -442,11 +450,11 @@ const validateFeeBalance = (feeBalance, index) => {
   const validTerms = ['Term 1', 'Term 2', 'Term 3'];
   
   if (!normalizedTerm) {
-    errors.push(`Row ${index + 2}: Term is required (got: ${originalTerm || 'empty'})`);
-    console.error(`❌ Row ${index + 2}: Term normalization failed: ${originalTerm} -> null`);
+    errors.push(`Row ${rowNumber}: Term is required (got: ${originalTerm || 'empty'})`);
+    console.error(`❌ Row ${rowNumber}: Term normalization failed: ${originalTerm} -> null`);
   } else if (!validTerms.includes(normalizedTerm)) {
-    warnings.push(`Row ${index + 2}: Term might be invalid: ${normalizedTerm} (expected: ${validTerms.join(', ')})`);
-    console.warn(`⚠️ Row ${index + 2}: Unusual term: ${originalTerm} -> ${normalizedTerm}`);
+    errors.push(`Row ${rowNumber}: Term must be one of ${validTerms.join(', ')} (got: ${originalTerm || normalizedTerm})`);
+    console.error(`❌ Row ${rowNumber}: Invalid term: ${originalTerm} -> ${normalizedTerm}`);
   }
   
   feeBalance.term = normalizedTerm;
@@ -456,29 +464,32 @@ const validateFeeBalance = (feeBalance, index) => {
   const normalizedYear = normalizeAcademicYear(feeBalance.academicYear);
   
   if (!normalizedYear) {
-    errors.push(`Row ${index + 2}: Academic year is required (got: ${originalYear || 'empty'})`);
-    console.error(`❌ Row ${index + 2}: Academic year normalization failed: ${originalYear} -> null`);
+    errors.push(`Row ${rowNumber}: Academic year is required (got: ${originalYear || 'empty'})`);
+    console.error(`❌ Row ${rowNumber}: Academic year normalization failed: ${originalYear} -> null`);
+  } else if (!/^\d{4}$/.test(normalizedYear)) {
+    errors.push(`Row ${rowNumber}: Academic year must be a single year like 2026 (got: ${originalYear || normalizedYear})`);
+    console.error(`❌ Row ${rowNumber}: Invalid academic year format: ${originalYear} -> ${normalizedYear}`);
   } else {
     feeBalance.academicYear = normalizedYear;
-    console.log(`✅ Row ${index + 2}: Academic year: ${originalYear} -> ${normalizedYear}`);
+    console.log(`✅ Row ${rowNumber}: Academic year: ${originalYear} -> ${normalizedYear}`);
   }
   
   // Amount validation
   const amount = parseAmount(feeBalance.amount);
-  if (amount < 0) {
-    errors.push(`Row ${index + 2}: Amount cannot be negative (got: ${feeBalance.amount})`);
-    console.error(`❌ Row ${index + 2}: Negative amount: ${feeBalance.amount}`);
+  if (amount <= 0) {
+    errors.push(`Row ${rowNumber}: Amount must be greater than 0 (got: ${feeBalance.amount})`);
+    console.error(`❌ Row ${rowNumber}: Invalid amount: ${feeBalance.amount}`);
   }
   
   const amountPaid = parseAmount(feeBalance.amountPaid);
   if (amountPaid < 0) {
-    errors.push(`Row ${index + 2}: Amount paid cannot be negative (got: ${feeBalance.amountPaid})`);
-    console.error(`❌ Row ${index + 2}: Negative amount paid: ${feeBalance.amountPaid}`);
+    errors.push(`Row ${rowNumber}: Amount paid cannot be negative (got: ${feeBalance.amountPaid})`);
+    console.error(`❌ Row ${rowNumber}: Negative amount paid: ${feeBalance.amountPaid}`);
   }
   
   if (amountPaid > amount) {
-    warnings.push(`Row ${index + 2}: Amount paid (${amountPaid}) is greater than total amount (${amount})`);
-    console.warn(`⚠️ Row ${index + 2}: Amount paid > total: ${amountPaid} > ${amount}`);
+    warnings.push(`Row ${rowNumber}: Amount paid (${amountPaid}) is greater than total amount (${amount})`);
+    console.warn(`⚠️ Row ${rowNumber}: Amount paid > total: ${amountPaid} > ${amount}`);
   }
   
   // Auto-calculate balance and status
@@ -487,7 +498,7 @@ const validateFeeBalance = (feeBalance, index) => {
   feeBalance.balance = calculateBalance(amount, amountPaid);
   feeBalance.paymentStatus = determinePaymentStatus(amount, amountPaid);
   
-  console.log(`✅ Row ${index + 2} validated:`, {
+  console.log(`✅ Row ${rowNumber} validated:`, {
     admission: feeBalance.admissionNumber,
     form: feeBalance.form,
     term: feeBalance.term,
@@ -579,7 +590,7 @@ const checkDuplicateFeeBalances = async (feeBalances, targetForm = null, term = 
       if (existingFeeMap.has(key)) {
         const existing = existingFeeMap.get(key);
         return {
-          row: index + 2,
+          row: getFeeRowNumber(fee, index),
           admissionNumber: fee.admissionNumber,
           form: existing.form,
           term: existing.term,
@@ -665,29 +676,30 @@ const parseFeeCSV = async (file, uploadStrategy) => {
         skipEmptyLines: true,
         transformHeader: (header) => {
           // SAME header normalization as student uploads
+          const normalizedHeader = normalizeColumnKey(header);
           const headerMap = {
-            'admission no': 'admissionNumber',
-            'admission number': 'admissionNumber',
-            'adm no': 'admissionNumber',
+            'admissionno': 'admissionNumber',
+            'admissionnumber': 'admissionNumber',
+            'admno': 'admissionNumber',
             'adm': 'admissionNumber',
-            'total amount': 'amount',
+            'totalamount': 'amount',
             'amount': 'amount',
-            'fee amount': 'amount',
-            'paid amount': 'amountPaid',
-            'amount paid': 'amountPaid',
+            'feeamount': 'amount',
+            'paidamount': 'amountPaid',
+            'amountpaid': 'amountPaid',
             'paid': 'amountPaid',
             'balance': 'balance',
-            'due date': 'dueDate',
+            'duedate': 'dueDate',
             'due': 'dueDate',
             'term': 'term',
-            'academic year': 'academicYear',
+            'academicyear': 'academicYear',
             'academic': 'academicYear',
             'year': 'academicYear',
             'form': 'form',
             'class': 'form',
             'grade': 'form'
           };
-          return headerMap[header.toLowerCase()] || header;
+          return headerMap[normalizedHeader] || normalizedHeader || header;
         },
         complete: (results) => {
           console.log('\n📄 CSV Parsing Results:');
@@ -715,13 +727,23 @@ const parseFeeCSV = async (file, uploadStrategy) => {
                   ''
                 ).trim();
                 
-                if (!admissionNumber) {
-                  console.warn(`Row ${index + 2}: Skipped - no admission number`);
+                const hasAnyContent = [
+                  admissionNumber,
+                  row.form,
+                  row.term,
+                  row.academicYear,
+                  row.amount,
+                  row.amountPaid,
+                  row.dueDate
+                ].some((value) => String(value ?? '').trim() !== '');
+
+                if (!hasAnyContent) {
                   return null;
                 }
                 
                 // CRITICAL FIX: Always use strategy values, NOT file values
                 const parsedData = {
+                  sourceRowNumber: index + 2,
                   admissionNumber,
                   // ALWAYS use selectedForm from strategy
                   form: uploadStrategy ? uploadStrategy.selectedForm : normalizeForm(row.form || 'Form 1'),
@@ -729,12 +751,12 @@ const parseFeeCSV = async (file, uploadStrategy) => {
                   // For NEW uploads: Extract from file (first row)
                   // For UPDATE uploads: Use from strategy
                   term: uploadStrategy?.uploadType === 'update' 
-                    ? (uploadStrategy.term || normalizeTerm(row.term || 'Term 1'))
-                    : normalizeTerm(row.term || 'Term 1'),
+                    ? (uploadStrategy.term || normalizeTerm(row.term || ''))
+                    : normalizeTerm(row.term || ''),
                   
                   academicYear: uploadStrategy?.uploadType === 'update'
-                    ? (uploadStrategy.academicYear || normalizeAcademicYear(row.academicYear || `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`))
-                    : normalizeAcademicYear(row.academicYear || `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`),
+                    ? normalizeAcademicYear(uploadStrategy.academicYear || row.academicYear || '')
+                    : normalizeAcademicYear(row.academicYear || ''),
                   
                   amount: parseAmount(row.amount || 0),
                   amountPaid: parseAmount(row.amountPaid || 0),
@@ -824,25 +846,35 @@ const parseFeeExcel = async (file, uploadStrategy) => {
         try {
           const normalizedRow = normalizeHeaders(row);
           
-          const admissionNumber = normalizedRow.admissionNumber || '';
-          if (!admissionNumber) {
-            console.warn(`Row ${index + 2}: Skipped - no admission number`);
+          const admissionNumber = String(normalizedRow.admissionNumber || '').trim();
+          const hasAnyContent = [
+            admissionNumber,
+            normalizedRow.form,
+            normalizedRow.term,
+            normalizedRow.academicYear,
+            normalizedRow.amount,
+            normalizedRow.amountPaid,
+            normalizedRow.dueDate
+          ].some((value) => String(value ?? '').trim() !== '');
+
+          if (!hasAnyContent) {
             return null;
           }
           
           // CRITICAL: Same logic as CSV parsing
           const parsedData = {
+            sourceRowNumber: index + 2,
             admissionNumber,
             // ALWAYS use selectedForm from strategy
             form: uploadStrategy ? uploadStrategy.selectedForm : normalizeForm(normalizedRow.form || 'Form 1'),
             
             term: uploadStrategy?.uploadType === 'update'
-              ? (uploadStrategy.term || normalizeTerm(normalizedRow.term || 'Term 1'))
-              : normalizeTerm(normalizedRow.term || 'Term 1'),
+              ? (uploadStrategy.term || normalizeTerm(normalizedRow.term || ''))
+              : normalizeTerm(normalizedRow.term || ''),
             
             academicYear: uploadStrategy?.uploadType === 'update'
-              ? (uploadStrategy.academicYear || normalizeAcademicYear(normalizedRow.academicYear || `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`))
-              : normalizeAcademicYear(normalizedRow.academicYear || `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`),
+              ? normalizeAcademicYear(uploadStrategy.academicYear || normalizedRow.academicYear || '')
+              : normalizeAcademicYear(normalizedRow.academicYear || ''),
             
             amount: parseAmount(normalizedRow.amount || 0),
             amountPaid: parseAmount(normalizedRow.amountPaid || 0),
@@ -977,7 +1009,7 @@ const processUpdateFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
       
       // STEP 6: Validate and prepare new fees
       for (const [index, fee] of fees.entries()) {
-        const rowNum = index + 2;
+        const rowNum = getFeeRowNumber(fee, index);
         
         // Skip duplicates within same file
         if (seenAdmissionNumbers.has(fee.admissionNumber)) {
@@ -1104,8 +1136,8 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
   
   const normalizedForm = normalizeForm(uploadStrategy.selectedForm);
   const firstRow = fees[0];
-  const normalizedTerm = normalizeTerm(firstRow?.term || 'Term 1');
-  const normalizedYear = normalizeAcademicYear(firstRow?.academicYear || `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`);
+  const normalizedTerm = normalizeTerm(firstRow?.term || '');
+  const normalizedYear = normalizeAcademicYear(firstRow?.academicYear || '');
   
   console.log(`🎯 New upload for: ${normalizedForm} - ${normalizedTerm} ${normalizedYear}`);
   
@@ -1142,7 +1174,7 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
       
       // Process each fee
       for (const [index, fee] of fees.entries()) {
-        const rowNum = index + 2;
+        const rowNum = getFeeRowNumber(fee, index);
         
         // Skip duplicates within same file
         if (seenInFile.has(fee.admissionNumber)) {
@@ -1308,13 +1340,16 @@ export async function POST(request) {
         authenticated: true 
       }, { status: 400 });
     }
+
+    const normalizedRequestTerm = term ? normalizeTerm(term) : undefined;
+    const normalizedRequestYear = academicYear ? normalizeAcademicYear(academicYear) : undefined;
     
     // Create upload strategy object
     const uploadStrategy = {
       uploadType,
       selectedForm: normalizedForm,
-      term: uploadType === 'update' ? term : undefined,
-      academicYear: uploadType === 'update' ? academicYear : undefined
+      term: uploadType === 'update' ? normalizedRequestTerm : undefined,
+      academicYear: uploadType === 'update' ? normalizedRequestYear : undefined
     };
     
     console.log('📋 Upload Strategy:', uploadStrategy);
@@ -1333,7 +1368,7 @@ export async function POST(request) {
     if (!parsedData || parsedData.length === 0) {
       return NextResponse.json({ 
         success: false, 
-        error: 'No valid fee data found in file',
+        error: 'No readable fee rows were found in the file. Confirm the sheet is not empty and that the headers match the existing fee template.',
         authenticated: true 
       }, { status: 400 });
     }
@@ -1345,6 +1380,39 @@ export async function POST(request) {
       const firstRow = parsedData[0];
       const commonTerm = normalizeTerm(firstRow.term);
       const commonYear = normalizeAcademicYear(firstRow.academicYear);
+
+      if (!commonTerm || !['Term 1', 'Term 2', 'Term 3'].includes(commonTerm)) {
+        return NextResponse.json({
+          success: false,
+          error: 'New fee uploads must include a valid Term column in the file, such as "Term 1".',
+          authenticated: true
+        }, { status: 400 });
+      }
+
+      if (!commonYear || !/^\d{4}$/.test(commonYear)) {
+        return NextResponse.json({
+          success: false,
+          error: 'New fee uploads must include a valid Academic Year column using the exact year format, for example "2026".',
+          authenticated: true
+        }, { status: 400 });
+      }
+
+      const mismatchedRows = parsedData
+        .map((row, index) => ({
+          row: getFeeRowNumber(row, index),
+          term: normalizeTerm(row.term),
+          academicYear: normalizeAcademicYear(row.academicYear)
+        }))
+        .filter((row) => row.term !== commonTerm || row.academicYear !== commonYear);
+
+      if (mismatchedRows.length > 0) {
+        return NextResponse.json({
+          success: false,
+          error: `New fee uploads must contain one term and one academic year per file. Found ${mismatchedRows.length} mismatched row(s).`,
+          details: mismatchedRows.slice(0, 10).map((row) => `Row ${row.row}: ${row.term || 'Missing term'} / ${row.academicYear || 'Missing year'}`),
+          authenticated: true
+        }, { status: 400 });
+      }
       
       parsedData = parsedData.map(row => ({
         ...row,
@@ -1361,8 +1429,8 @@ export async function POST(request) {
       const duplicates = await checkDuplicateFeeBalances(
         parsedData, 
         normalizedForm,
-        uploadType === 'update' ? term : parsedData[0]?.term,
-        uploadType === 'update' ? academicYear : parsedData[0]?.academicYear
+        uploadType === 'update' ? normalizedRequestTerm : parsedData[0]?.term,
+        uploadType === 'update' ? normalizedRequestYear : parsedData[0]?.academicYear
       );
       
       return NextResponse.json({
@@ -1371,8 +1439,8 @@ export async function POST(request) {
         duplicates: duplicates,
         totalRows: parsedData.length,
         form: normalizedForm,
-        term: uploadType === 'update' ? term : parsedData[0]?.term,
-        academicYear: uploadType === 'update' ? academicYear : parsedData[0]?.academicYear,
+        term: uploadType === 'update' ? normalizedRequestTerm : parsedData[0]?.term,
+        academicYear: uploadType === 'update' ? normalizedRequestYear : parsedData[0]?.academicYear,
         uploadType: uploadType,
         authenticated: true,
         uploadedBy: auth.user.name,
@@ -1393,8 +1461,8 @@ export async function POST(request) {
         uploadedBy: auth.user.name, // Use authenticated user's name
         status: 'processing',
         targetForm: normalizedForm,
-        term: uploadType === 'update' ? term : parsedData[0]?.term,
-        academicYear: uploadType === 'update' ? academicYear : parsedData[0]?.academicYear,
+        term: uploadType === 'update' ? normalizedRequestTerm : parsedData[0]?.term,
+        academicYear: uploadType === 'update' ? normalizedRequestYear : parsedData[0]?.academicYear,
         totalRows: parsedData.length,
         validRows: 0,
         skippedRows: 0,
@@ -1458,7 +1526,7 @@ export async function POST(request) {
       success: true,
       message: uploadType === 'new'
         ? `Uploaded ${processingStats.created} new fees for ${normalizedForm}`
-        : `Updated ${processingStats.created} fees for ${normalizedForm} ${term} ${academicYear}`,
+        : `Updated ${processingStats.created} fees for ${normalizedForm} ${normalizedRequestTerm} ${normalizedRequestYear}`,
       data: {
         uploadId: batchId,
         processed: processingStats.validRows,
@@ -1468,8 +1536,8 @@ export async function POST(request) {
         skipped: processingStats.skippedRows,
         errors: processingStats.errors,
         form: normalizedForm,
-        term: uploadType === 'update' ? term : parsedData[0]?.term,
-        academicYear: uploadType === 'update' ? academicYear : parsedData[0]?.academicYear
+        term: uploadType === 'update' ? normalizedRequestTerm : parsedData[0]?.term,
+        academicYear: uploadType === 'update' ? normalizedRequestYear : parsedData[0]?.academicYear
       },
       authenticated: true,
       uploadedBy: auth.user.name,
@@ -1478,6 +1546,17 @@ export async function POST(request) {
     
   } catch (error) {
     console.error('❌ Upload error:', error);
+    const isClientError = [
+      'No file',
+      'For UPDATE uploads',
+      'must contain one term and one academic year',
+      'must include a valid Term column',
+      'must include a valid Academic Year column',
+      'No readable fee rows',
+      'CSV parsing failed',
+      'Excel parsing failed',
+      'Authentication failed'
+    ].some((phrase) => (error.message || '').includes(phrase));
     return NextResponse.json(
       { 
         success: false, 
@@ -1485,7 +1564,7 @@ export async function POST(request) {
         authenticated: true,
         suggestion: 'Check that your file has the required columns and data format matches the template.'
       },
-      { status: 500 }
+      { status: isClientError ? 400 : 500 }
     );
   }
 }
@@ -1497,8 +1576,10 @@ export async function GET(request) {
     const action = url.searchParams.get('action');
     const admissionNumber = url.searchParams.get('admissionNumber');
     const form = url.searchParams.get('form') || '';
-    const term = url.searchParams.get('term') || '';
-    const academicYear = url.searchParams.get('academicYear') || '';
+    const rawTerm = url.searchParams.get('term') || '';
+    const rawAcademicYear = url.searchParams.get('academicYear') || '';
+    const term = rawTerm ? (normalizeTerm(rawTerm) || rawTerm) : '';
+    const academicYear = rawAcademicYear ? (normalizeAcademicYear(rawAcademicYear) || rawAcademicYear) : '';
     const paymentStatus = url.searchParams.get('paymentStatus') || '';
     const search = url.searchParams.get('search') || '';
     const sortBy = url.searchParams.get('sortBy') || 'updatedAt';
@@ -1620,7 +1701,7 @@ if (action === 'uploads') {
     if (action === 'stats') {
       // Get current academic year
       const currentYear = new Date().getFullYear();
-      const currentAcademicYear = `${currentYear}/${currentYear + 1}`;
+      const currentAcademicYear = `${currentYear}`;
       
       // Build WHERE clause for active records only
       const statsWhere = {
@@ -1881,9 +1962,9 @@ if (action === 'uploads') {
       
       // Convert to sorted array (newest year first)
       const feesByYearArray = Object.values(feesByYear).sort((a, b) => {
-        // Extract years for comparison (e.g., "2024/2025" -> 2024)
-        const yearA = parseInt(a.academicYear.split('/')[0]) || 0;
-        const yearB = parseInt(b.academicYear.split('/')[0]) || 0;
+        // Extract years for comparison (legacy "2024/2025" values still sort by 2024)
+        const yearA = parseInt(normalizeAcademicYear(a.academicYear) || a.academicYear || 0) || 0;
+        const yearB = parseInt(normalizeAcademicYear(b.academicYear) || b.academicYear || 0) || 0;
         return yearB - yearA; // Descending
       });
       
@@ -2188,7 +2269,8 @@ export async function DELETE(request) {
     const feeId = url.searchParams.get('feeId');
     const form = url.searchParams.get('form');
     const term = url.searchParams.get('term');
-    const academicYear = url.searchParams.get('academicYear');
+    const academicYearParam = url.searchParams.get('academicYear');
+    const academicYear = academicYearParam ? (normalizeAcademicYear(academicYearParam) || academicYearParam) : null;
     
     if (batchId) {
       // Delete batch and associated fees
