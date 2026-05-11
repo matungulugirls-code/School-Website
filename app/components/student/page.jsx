@@ -35,7 +35,6 @@ import {
   FiFilter,
   FiSearch,
   FiRefreshCw,
-  FiGrid,
   FiList,
   FiChevronUp,
   FiChevronDown,
@@ -117,17 +116,6 @@ function getFormBadgeColor(form) {
     case 'Form 3': return 'bg-gradient-to-r from-amber-500 to-amber-700 text-white';
     case 'Form 4': return 'bg-gradient-to-r from-emerald-600 to-emerald-800 text-white';
     default: return 'bg-gradient-to-r from-gray-400 to-gray-600 text-white';
-  }
-}
-
-// Helper function for form text colors (NEW - ADD THIS)
-function getFormTextColor(form) {
-  switch (form) {
-    case 'Form 1': return 'text-teal-700';
-    case 'Form 2': return 'text-emerald-700';
-    case 'Form 3': return 'text-amber-700';
-    case 'Form 4': return 'text-emerald-700';
-    default: return 'text-gray-700';
   }
 }
 
@@ -2007,7 +1995,6 @@ export default function ModernStudentBulkUpload() {
   const [uploadHistory, setUploadHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
-  const [displayMode, setDisplayMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState({ type: '', id: '', name: '' });
@@ -2861,18 +2848,7 @@ const downloadExcelTemplate = () => {
     checkDuplicates();
   };
 
-  const getFormBgColor = (form) => {
-  const themes = {
-    'Form 1': 'bg-gradient-to-b from-teal-500 to-teal-700',
-    'Form 2': 'bg-gradient-to-b from-emerald-500 to-emerald-700',
-    'Form 3': 'bg-gradient-to-b from-emerald-600 to-green-700',
-    'Form 4': 'bg-gradient-to-b from-rose-500 to-pink-500',
-  };
-  return themes[form] || 'bg-gradient-to-b from-slate-500 to-gray-500';
-};
-
-
-  if (loading && students.length === 0 && view !== 'upload' && view !== 'demographics') {
+  if (loading && students.length === 0 && view !== 'upload' && view !== 'demographics' && view !== 'students') {
     return <Spinner  />;
   }
 
@@ -3347,19 +3323,12 @@ const downloadExcelTemplate = () => {
                     {showFilters ? 'Hide Filters' : 'Show Filters'}
                   </button>
 
-                  <div className="flex items-center gap-2 bg-gray-100 p-2 rounded-2xl">
-                    <button
-                      onClick={() => setDisplayMode('grid')}
-                      className={`p-3 rounded-xl transition-all duration-300 ${displayMode === 'grid' ? 'bg-white text-teal-800 shadow-lg' : 'text-gray-600 hover:text-teal-700'}`}
-                    >
-                      <FiGrid size={18} />
-                    </button>
-                    <button
-                      onClick={() => setDisplayMode('list')}
-                      className={`p-3 rounded-xl transition-all duration-300 ${displayMode === 'list' ? 'bg-white text-teal-800 shadow-lg' : 'text-gray-600 hover:text-teal-700'}`}
-                    >
-                      <FiList size={18} />
-                    </button>
+                  <div className="hidden lg:flex items-center gap-3 px-4 py-4 bg-gradient-to-r from-slate-100 to-white border border-slate-200 rounded-2xl text-slate-700">
+                    <FiList className="text-teal-700" />
+                    <div className="leading-tight">
+                      <p className="text-sm font-bold">Modern List View</p>
+                      <p className="text-xs text-slate-500">Clean student rows with faster scanning</p>
+                    </div>
                   </div>
 
                   <button
@@ -3383,380 +3352,256 @@ const downloadExcelTemplate = () => {
               </div>
             </div>
 
-            {loading ? (
-              <div className="text-center py-20">
-                <Spinner message="Loading student records..." size="medium" />
+            {loading && students.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+                <div className="px-6 py-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="space-y-3">
+                      <div className="h-6 w-48 rounded-full bg-slate-200 animate-pulse"></div>
+                      <div className="h-4 w-72 max-w-full rounded-full bg-slate-100 animate-pulse"></div>
+                    </div>
+                    <div className="inline-flex items-center gap-3 self-start rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-800">
+                      <CircularProgress size={18} className="text-teal-700" />
+                      <span>Loading student records...</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 sm:p-6 space-y-4">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="rounded-3xl border border-slate-100 bg-gradient-to-r from-white to-slate-50 px-4 py-5 shadow-sm"
+                    >
+                      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.1fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-center">
+                        <div className="flex items-center gap-4">
+                          <div className="h-12 w-12 rounded-2xl bg-slate-200 animate-pulse"></div>
+                          <div className="min-w-0 flex-1 space-y-2">
+                            <div className="h-4 w-48 rounded-full bg-slate-200 animate-pulse"></div>
+                            <div className="h-3 w-32 rounded-full bg-slate-100 animate-pulse"></div>
+                          </div>
+                        </div>
+                        <div className="h-9 w-28 rounded-2xl bg-slate-100 animate-pulse"></div>
+                        <div className="h-4 w-36 rounded-full bg-slate-100 animate-pulse"></div>
+                        <div className="h-4 w-24 rounded-full bg-slate-100 animate-pulse"></div>
+                        <div className="h-4 w-28 rounded-full bg-slate-100 animate-pulse"></div>
+                        <div className="flex gap-2 lg:justify-end">
+                          <div className="h-10 w-20 rounded-2xl bg-slate-200 animate-pulse"></div>
+                          <div className="h-10 w-20 rounded-2xl bg-slate-100 animate-pulse"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <>
-                {displayMode === 'grid' && students.length > 0 && (
-                  <>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-3">
-                      <h3 className="text-2xl font-bold text-gray-900">
-                        Student Records ({pagination.total})
-                      </h3>
-                      <div className="text-gray-600 font-bold text-base">
-                        Page {pagination.page} of {pagination.pages}
+                {students.length > 0 && (
+                  <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xl transition-all duration-300">
+                    <div className="px-6 py-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 via-white to-emerald-50/40">
+                      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                        <div className="flex items-start gap-4">
+                          <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-700 to-emerald-700 shadow-lg">
+                            <FiList className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="text-2xl font-bold text-slate-900">
+                              Student Records ({pagination.total})
+                            </h3>
+                            <p className="mt-1 text-sm text-slate-500">
+                              A cleaner list view for scanning students, class placement, and record status.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                          <div className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-bold text-white shadow-lg">
+                            Page {pagination.page} of {pagination.pages}
+                          </div>
+                          <button
+                            onClick={() => loadStudents(pagination.page)}
+                            disabled={loading}
+                            className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-teal-700 to-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl disabled:opacity-50"
+                          >
+                            {loading ? (
+                              <CircularProgress size={16} className="text-white" />
+                            ) : (
+                              <FiRefreshCw className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180" />
+                            )}
+                            {loading ? 'Refreshing...' : 'Refresh'}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                 <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-  {students.map(student => (
-    <div
-      key={student.id}
-      className="group relative bg-white rounded-3xl sm:rounded-[2rem] p-5 border-0 shadow-lg hover:shadow-2xl hover:shadow-emerald-100/30 transition-all duration-300 flex flex-col overflow-hidden"
-    >
-      {/* Vertical Form Indicator */}
-      <div className={`absolute left-0 top-6 bottom-6 w-1 rounded-r-full transition-all duration-300 ${getFormBgColor(student.form)}`} />
-      
-      {/* Header: Avatar & Actions */}
-      <div className="flex justify-between items-start mb-6 pl-3">
-        <div className="relative">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-slate-50 to-white flex items-center justify-center border border-slate-100 shadow-inner group-hover:border-emerald-200 group-hover:from-emerald-50/30 transition-all duration-300">
-            <FiUser className="w-7 h-7 sm:w-8 sm:h-8 text-slate-400 group-hover:text-emerald-500 transition-colors" />
-          </div>
-          <div className={`absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full border-[3px] border-white shadow-sm ${student.status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-        </div>
-        
-        <button 
-          onClick={() => setEditingStudent && setEditingStudent(student)}
-          className="p-2 rounded-xl text-slate-400 hover:bg-slate-50 hover:text-slate-700 transition-all opacity-0 group-hover:opacity-100"
-        >
-          <FiSettings className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
-      </div>
 
-      {/* Student Info */}
-      <div className="pl-3 mb-6">
-        <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-800 transition-colors truncate leading-tight">
-          {student.firstName} {student.lastName}
-        </h3>
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded-full">
-            #{student.admissionNumber}
-          </span>
-          <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-            {student.form}
-          </span>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-3 pl-3 mb-6">
-        <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100/50 shadow-sm">
-          <p className="text-[9px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Stream</p>
-          <p className="text-sm font-bold text-slate-800">{student.stream || '—'}</p>
-        </div>
-        <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100/50 shadow-sm">
-          <p className="text-[9px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Joined</p>
-          <p className="text-sm font-bold text-slate-800">{formatDate(student.createdAt)}</p>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-3 mt-auto pl-3">
-        <button
-          onClick={() => setSelectedStudent && setSelectedStudent(student)}
-          className="group/btn flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-slate-900 to-black hover:from-emerald-600 hover:to-emerald-700 text-white rounded-2xl transition-all duration-300 shadow-lg hover:shadow-emerald-200/30"
-        >
-          <span className="text-xs font-bold tracking-wide">View Profile</span>
-          <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center group-hover/btn:bg-white/20 transition-colors">
-            <FiEye className="w-3 h-3" />
-          </div>
-        </button>
-        
-        <button
-          onClick={() => setEditingStudent && setEditingStudent(student)}
-          className="group/edit flex items-center justify-center w-12 py-3 bg-gradient-to-r from-slate-100 to-slate-50 hover:from-emerald-100 hover:to-emerald-50 text-slate-600 hover:text-emerald-700 rounded-2xl transition-all duration-300 border border-slate-200 hover:border-emerald-200"
-        >
-          <FiEdit className="w-4 h-4 group-hover/edit:scale-110 transition-transform" />
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
-                  </>
-                )}
-{displayMode === 'list' && students.length > 0 && (
-  <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
-    {/* Header with glass effect */}
-    <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white backdrop-blur-sm">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 shadow-lg">
-            <FiUsers className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 tracking-tight">Student Records</h3>
-            <p className="text-sm text-gray-500 mt-1">Manage and view all student information</p>
-          </div>
-        </div>
-        
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="px-4 py-3 bg-gradient-to-r from-slate-900 to-black text-white rounded-2xl font-bold text-sm shadow-lg">
-            <span className="text-emerald-300">{pagination.total}</span> total students
-          </div>
-          <button
-            onClick={() => loadStudents(pagination.page)}
-            disabled={loading}
-            className="group px-5 py-3 bg-gradient-to-r from-teal-700 to-emerald-700 hover:from-teal-800 hover:to-emerald-800 text-white rounded-2xl font-semibold flex items-center gap-3 text-sm shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-300"
-          >
-            {loading ? (
-              <CircularProgress size={16} className="text-white" />
-            ) : (
-              <FiRefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
-            )}
-            {loading ? 'Refreshing...' : 'Refresh'}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    {/* Table Container */}
-    <div className="overflow-x-auto rounded-b-3xl">
-      <table className="w-full min-w-[800px]">
-        <thead className="bg-gradient-to-r from-slate-50 to-gray-50">
-          <tr>
-            {/* Student Column */}
-            <th className="sticky top-0 z-10 px-6 py-5 text-left">
-              <button
-                onClick={() => handleSort('firstName')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
-              >
-                <div className="flex items-center gap-1.5">
-                  Student
-                  {filters.sortBy === 'firstName' ? (
-                    filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-teal-600" />
-                    ) : (
-                      <FiChevronDown className="w-3 h-3 text-teal-600" />
-                    )
-                  ) : (
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <FiChevronDown className="w-3 h-3" />
-                    </div>
-                  )}
-                </div>
-              </button>
-            </th>
-
-            {/* Form Column */}
-            <th className="sticky top-0 z-10 px-6 py-5 text-left">
-              <button
-                onClick={() => handleSort('form')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
-              >
-                <div className="flex items-center gap-1.5">
-                  Form
-                  {filters.sortBy === 'form' ? (
-                    filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-teal-600" />
-                    ) : (
-                      <FiChevronDown className="w-3 h-3 text-teal-600" />
-                    )
-                  ) : (
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <FiChevronDown className="w-3 h-3" />
-                    </div>
-                  )}
-                </div>
-              </button>
-            </th>
-
-            {/* Stream Column */}
-            <th className="sticky top-0 z-10 px-6 py-5 text-left">
-              <button
-                onClick={() => handleSort('stream')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
-              >
-                <div className="flex items-center gap-1.5">
-                  Stream
-                  {filters.sortBy === 'stream' ? (
-                    filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-teal-600" />
-                    ) : (
-                      <FiChevronDown className="w-3 h-3 text-teal-600" />
-                    )
-                  ) : (
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <FiChevronDown className="w-3 h-3" />
-                    </div>
-                  )}
-                </div>
-              </button>
-            </th>
-
-            {/* Status Column */}
-            <th className="sticky top-0 z-10 px-6 py-5 text-left">
-              <button
-                onClick={() => handleSort('status')}
-                className="group flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider hover:text-teal-700 transition-colors"
-              >
-                <div className="flex items-center gap-1.5">
-                  Status
-                  {filters.sortBy === 'status' ? (
-                    filters.sortOrder === 'asc' ? (
-                      <FiChevronUp className="w-3 h-3 text-teal-600" />
-                    ) : (
-                      <FiChevronDown className="w-3 h-3 text-teal-600" />
-                    )
-                  ) : (
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <FiChevronDown className="w-3 h-3" />
-                    </div>
-                  )}
-                </div>
-              </button>
-            </th>
-
-            {/* Actions Column */}
-            <th className="sticky top-0 z-10 px-6 py-5 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">
-              Actions
-            </th>
-          </tr>
-        </thead>
-
-        <tbody className="divide-y divide-gray-100">
-          {students.map((student, index) => (
-            <tr
-              key={student.id}
-              className="group hover:bg-gradient-to-r hover:from-teal-50/30 hover:to-emerald-50/30 transition-all duration-300"
-            >
-              {/* Student Cell */}
-              <td className="px-6 py-5">
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center shadow-lg">
-                      <FiUser className="w-5 h-5 text-white" />
-                    </div>
-                    <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                  </div>
-                  
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-gray-900 group-hover:text-teal-700 transition-colors">
-                        {student.firstName} {student.middleName ? `${student.middleName} ` : ''}{student.lastName}
-                      </h4>
-                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded-full">
-                        #{student.admissionNumber}
-                      </span>
-                    </div>
-                    {student.email && (
-                      <div className="text-sm text-gray-500 truncate max-w-[240px] mt-1 flex items-center gap-1">
-                        <FiMail className="w-3 h-3" />
-                        {student.email}
+                    {loading && students.length > 0 && (
+                      <div className="border-b border-slate-100 bg-teal-50/70 px-6 py-3 text-sm font-medium text-teal-800">
+                        Updating the student list. Your records will refresh in place when the search finishes.
                       </div>
                     )}
+
+                    <div className="hidden lg:grid grid-cols-[minmax(0,2.5fr)_minmax(0,1.2fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-4 border-b border-slate-100 bg-slate-50 px-6 py-4 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                      <button
+                        onClick={() => handleSort('firstName')}
+                        className="flex items-center gap-2 text-left transition-colors hover:text-teal-700"
+                      >
+                        <span>Student</span>
+                        {filters.sortBy === 'firstName' ? (
+                          filters.sortOrder === 'asc' ? (
+                            <FiChevronUp className="h-3 w-3 text-teal-600" />
+                          ) : (
+                            <FiChevronDown className="h-3 w-3 text-teal-600" />
+                          )
+                        ) : (
+                          <FiChevronDown className="h-3 w-3 opacity-30" />
+                        )}
+                      </button>
+                      <button
+                        onClick={() => handleSort('form')}
+                        className="flex items-center gap-2 text-left transition-colors hover:text-teal-700"
+                      >
+                        <span>Class</span>
+                        {filters.sortBy === 'form' ? (
+                          filters.sortOrder === 'asc' ? (
+                            <FiChevronUp className="h-3 w-3 text-teal-600" />
+                          ) : (
+                            <FiChevronDown className="h-3 w-3 text-teal-600" />
+                          )
+                        ) : (
+                          <FiChevronDown className="h-3 w-3 opacity-30" />
+                        )}
+                      </button>
+                      <div>Contact</div>
+                      <button
+                        onClick={() => handleSort('status')}
+                        className="flex items-center gap-2 text-left transition-colors hover:text-teal-700"
+                      >
+                        <span>Status</span>
+                        {filters.sortBy === 'status' ? (
+                          filters.sortOrder === 'asc' ? (
+                            <FiChevronUp className="h-3 w-3 text-teal-600" />
+                          ) : (
+                            <FiChevronDown className="h-3 w-3 text-teal-600" />
+                          )
+                        ) : (
+                          <FiChevronDown className="h-3 w-3 opacity-30" />
+                        )}
+                      </button>
+                      <div>Updated</div>
+                      <div className="text-right">Actions</div>
+                    </div>
+
+                    <div className="divide-y divide-slate-100">
+                      {students.map((student) => {
+                        const fullName = [student.firstName, student.middleName, student.lastName]
+                          .filter(Boolean)
+                          .join(' ');
+                        const isActive = (student.status || '').toLowerCase() === 'active';
+                        const contactLine = student.email || student.parentPhone || student.address || 'No contact details recorded';
+
+                        return (
+                          <div
+                            key={student.id}
+                            className="px-4 py-5 transition-colors duration-300 hover:bg-emerald-50/40 sm:px-6"
+                          >
+                            <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.2fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-center">
+                              <div className="min-w-0">
+                                <div className="flex items-start gap-4">
+                                  <div className="relative shrink-0">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 shadow-lg">
+                                      <FiUser className="h-5 w-5 text-white" />
+                                    </div>
+                                    <div className={`absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white ${isActive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                  </div>
+
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <h4 className="truncate text-base font-bold text-slate-900">
+                                        {fullName}
+                                      </h4>
+                                      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+                                        #{student.admissionNumber}
+                                      </span>
+                                    </div>
+                                    <p className="mt-1 truncate text-sm text-slate-500">
+                                      {contactLine}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 lg:hidden">
+                                  Class
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                  <span className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-bold ${getFormBadgeColor(student.form)}`}>
+                                    {student.form || 'Not assigned'}
+                                  </span>
+                                  <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
+                                    {student.stream || 'No stream'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 lg:hidden">
+                                  Contact
+                                </p>
+                                <div className="space-y-1">
+                                  <p className="text-sm font-semibold text-slate-800">
+                                    {student.parentPhone || student.email || 'Not provided'}
+                                  </p>
+                                  {student.address && (
+                                    <p className="truncate text-xs text-slate-500">
+                                      {student.address}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 lg:hidden">
+                                  Status
+                                </p>
+                                <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold ${isActive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
+                                  <span className={`h-2.5 w-2.5 rounded-full ${isActive ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
+                                  <span>{student.status || 'Unknown'}</span>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400 lg:hidden">
+                                  Updated
+                                </p>
+                                <div className="text-sm font-semibold text-slate-800">
+                                  {formatDate(student.updatedAt || student.createdAt)}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-wrap gap-2 lg:justify-end">
+                                <button
+                                  onClick={() => setSelectedStudent(student)}
+                                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-teal-50 to-teal-100 px-4 py-2.5 text-sm font-semibold text-teal-800 shadow-sm transition-all duration-300 hover:from-teal-100 hover:to-teal-200 hover:text-teal-900"
+                                >
+                                  <FiEye className="h-3.5 w-3.5" />
+                                  View
+                                </button>
+                                <button
+                                  onClick={() => setEditingStudent(student)}
+                                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-50 to-emerald-100 px-4 py-2.5 text-sm font-semibold text-emerald-700 shadow-sm transition-all duration-300 hover:from-emerald-100 hover:to-emerald-200 hover:text-emerald-800"
+                                >
+                                  <FiEdit className="h-3.5 w-3.5" />
+                                  Edit
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              </td>
-
-              {/* Form Cell */}
-              <td className="px-6 py-5">
-                <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold ${getFormBadgeColor(student.form)}`}>
-                  {student.form}
-                </span>
-              </td>
-
-              {/* Stream Cell */}
-              <td className="px-6 py-5">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
-                  <span className="font-semibold text-gray-800">
-                    {student.stream || <span className="text-gray-400">—</span>}
-                  </span>
-                </div>
-              </td>
-
-              {/* Status Cell */}
-              <td className="px-6 py-5">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
-                  <span className={`text-sm font-semibold ${student.status === 'active' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                    {student.status}
-                  </span>
-                </div>
-              </td>
-
-              {/* Actions Cell */}
-              <td className="px-6 py-5">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setSelectedStudent(student)}
-                    className="group/btn flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-50 to-teal-100 hover:from-teal-100 hover:to-teal-200 text-teal-800 hover:text-teal-900 font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow"
-                  >
-                    <FiEye className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
-                    View
-                  </button>
-                  <button
-                    onClick={() => setEditingStudent(student)}
-                    className="group/btn flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 text-emerald-700 hover:text-emerald-800 font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow"
-                  >
-                    <FiEdit className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
-                    Edit
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-
-    {/* Mobile Responsive Fallback */}
-    <div className="lg:hidden p-6 space-y-4">
-      {students.map(student => (
-        <div key={student.id} className="bg-gradient-to-r from-slate-50 to-white rounded-2xl p-5 border border-gray-200 shadow-sm">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center shadow-lg">
-                  <FiUser className="w-5 h-5 text-white" />
-                </div>
-                <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900">
-                  {student.firstName} {student.lastName}
-                </h4>
-                <p className="text-xs text-gray-500">#{student.admissionNumber}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-slate-50">
-              <p className="text-xs text-gray-500 mb-1">Form</p>
-              <span className={`text-sm font-bold ${getFormTextColor(student.form)}`}>
-                {student.form}
-              </span>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-50">
-              <p className="text-xs text-gray-500 mb-1">Stream</p>
-              <span className="text-sm font-bold text-gray-800">
-                {student.stream || '—'}
-              </span>
-            </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedStudent(student)}
-              className="flex-1 py-2.5 bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-xl font-semibold text-sm"
-            >
-              View Profile
-            </button>
-            <button
-              onClick={() => setEditingStudent(student)}
-              className="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl font-semibold text-sm"
-            >
-              Edit
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+                )}
 
                 {students.length === 0 && !loading && (
                   <div className="text-center py-20 bg-white rounded-2xl border-2 border-gray-300 shadow-xl">
