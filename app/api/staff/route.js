@@ -356,6 +356,28 @@ const fetchStaffRecords = async () => {
   }
 };
 
+const syncDepartmentStaffCount = async (departmentId) => {
+  const normalizedDepartmentId = Number(departmentId);
+  if (!Number.isFinite(normalizedDepartmentId)) return;
+
+  try {
+    const activeTeacherCount = await prisma.staff.count({
+      where: {
+        departmentId: normalizedDepartmentId,
+        staffType: "Teacher",
+        status: "active",
+      },
+    });
+
+    await prisma.staffDepartment.update({
+      where: { id: normalizedDepartmentId },
+      data: { staffCount: activeTeacherCount },
+    });
+  } catch (error) {
+    console.warn(`Unable to sync staff count for department ${normalizedDepartmentId}:`, error.message);
+  }
+};
+
 // 🔹 Check principal/deputy principal limits
 // 🔹 Enhanced role limits with position-based validation for Deputy Principals
 async function checkRoleLimits(role, staffId = null, position = null) {
@@ -719,6 +741,10 @@ export async function POST(req) {
         achievements,
       },
     });
+
+    if (isTeacher && selectedDepartment?.id) {
+      await syncDepartmentStaffCount(selectedDepartment.id);
+    }
 
     console.log(`✅ Staff member created by ${auth.user.name}: ${newStaff.name} (${newStaff.role}${newStaff.position ? ' - ' + newStaff.position : ''})`);
 

@@ -345,6 +345,10 @@ const TeacherCarousel = ({ teachers = [] }) => {
                 src={getTeacherImage(teacher)}
                 alt={teacher.name || 'Teacher'}
                 className="h-full w-full object-cover object-top"
+                loading="lazy"
+                onError={(event) => {
+                  event.currentTarget.src = '/images/default-staff.jpg';
+                }}
               />
             </div>
             <div className="mt-3">

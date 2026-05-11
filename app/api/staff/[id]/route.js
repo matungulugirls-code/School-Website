@@ -354,6 +354,28 @@ const fetchSingleStaffRecord = async (id) => {
   }
 };
 
+const syncDepartmentStaffCount = async (departmentId) => {
+  const normalizedDepartmentId = Number(departmentId);
+  if (!Number.isFinite(normalizedDepartmentId)) return;
+
+  try {
+    const activeTeacherCount = await prisma.staff.count({
+      where: {
+        departmentId: normalizedDepartmentId,
+        staffType: "Teacher",
+        status: "active",
+      },
+    });
+
+    await prisma.staffDepartment.update({
+      where: { id: normalizedDepartmentId },
+      data: { staffCount: activeTeacherCount },
+    });
+  } catch (error) {
+    console.warn(`Unable to sync staff count for department ${normalizedDepartmentId}:`, error.message);
+  }
+};
+
 // 🔹 Check principal/deputy principal limits
 async function checkRoleLimits(role, staffId = null, position = null) {
   if (role === "Principal") {
@@ -757,6 +779,16 @@ export async function PUT(req, { params }) {
       data,
     });
 
+    const departmentIdsToSync = Array.from(
+      new Set(
+        [existingStaff.departmentId, updatedStaff.departmentId]
+          .map((value) => Number(value))
+          .filter((value) => Number.isFinite(value))
+      )
+    );
+
+    await Promise.all(departmentIdsToSync.map(syncDepartmentStaffCount));
+
     console.log(`✅ Staff member updated by ${auth.user.name}: ${updatedStaff.name} (${updatedStaff.role}${updatedStaff.position ? ' - ' + updatedStaff.position : ''})`);
 
     return NextResponse.json({ 
@@ -841,6 +873,8 @@ export async function DELETE(req, { params }) {
     await prisma.staff.delete({
       where: { id },
     });
+
+    await syncDepartmentStaffCount(staff.departmentId);
 
     console.log(`✅ Staff member deleted by ${auth.user.name}: ${staff.name}`);
 

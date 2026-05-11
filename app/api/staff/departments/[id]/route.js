@@ -177,6 +177,9 @@ const normalizeDepartmentRecord = (department = {}) => ({
   ...department,
   images: Array.isArray(department.images) ? department.images : [],
   teachers: Array.isArray(department.teachers) ? department.teachers : [],
+  staffCount: Array.isArray(department.teachers) && department.teachers.length > 0
+    ? department.teachers.length
+    : Number(department.staffCount) || 0,
 });
 
 export async function GET(_req, { params }) {
