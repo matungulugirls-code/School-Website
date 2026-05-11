@@ -163,6 +163,22 @@ const authenticateWriteRequest = (req) => {
 
 const VALID_CATEGORIES = new Set(["CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
 
+const isSchemaCompatibilityError = (error) => {
+  const message = String(error?.message || "").toLowerCase();
+  return ["P2021", "P2022"].includes(error?.code) ||
+    message.includes("column") ||
+    message.includes("does not exist") ||
+    message.includes("unknown field") ||
+    message.includes("unknown column") ||
+    message.includes("table");
+};
+
+const normalizeDepartmentRecord = (department = {}) => ({
+  ...department,
+  images: Array.isArray(department.images) ? department.images : [],
+  teachers: Array.isArray(department.teachers) ? department.teachers : [],
+});
+
 export async function GET(_req, { params }) {
   try {
     const id = Number(params.id);
@@ -170,31 +186,66 @@ export async function GET(_req, { params }) {
       return NextResponse.json({ success: false, error: "Invalid id" }, { status: 400 });
     }
 
-    const department = await prisma.staffDepartment.findUnique({
-      where: { id },
-      include: {
-        images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
-        teachers: {
-          where: { staffType: "Teacher", status: "active" },
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            subjectOffered: true,
-            departmentId: true,
-            department: true,
-            role: true,
-            staffType: true,
+    let department;
+    try {
+      department = await prisma.staffDepartment.findUnique({
+        where: { id },
+        include: {
+          images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+          teachers: {
+            where: { staffType: "Teacher", status: "active" },
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              subjectOffered: true,
+              departmentId: true,
+              department: true,
+              role: true,
+              staffType: true,
+            },
+            orderBy: { name: "asc" },
           },
-          orderBy: { name: "asc" },
         },
-      },
-    });
+      });
+    } catch (error) {
+      if (!isSchemaCompatibilityError(error)) {
+        throw error;
+      }
+
+      console.warn("Falling back to legacy single-department query shape:", error.message);
+      department = await prisma.staffDepartment.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          description: true,
+          image: true,
+          staffCount: true,
+          headName: true,
+          assistantHeadName: true,
+          extra: true,
+          isActive: true,
+          displayOrder: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      department = department
+        ? normalizeDepartmentRecord({
+            ...department,
+            images: [],
+            teachers: [],
+          })
+        : null;
+    }
     if (!department) {
       return NextResponse.json({ success: false, error: "Department not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, department });
+    return NextResponse.json({ success: true, department: normalizeDepartmentRecord(department) });
   } catch (error) {
     console.error("❌ GET Department Error:", error);
     return NextResponse.json(

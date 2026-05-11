@@ -1749,6 +1749,12 @@ const getFormTextColor = (form) => {
     if (message.includes('must contain one term and one academic year')) {
       return `${message} Split mixed term/year data into separate uploads before retrying.`;
     }
+    if (message.includes('took too long') || message.includes('timed out')) {
+      return 'The fee upload is taking longer than expected. Please retry, keep this page open, and use the current template for large files.';
+    }
+    if (message.includes('interrupted') || message.includes('network') || message.includes('connection')) {
+      return 'The fee upload was interrupted before it finished saving. Check your connection and retry while keeping this page open.';
+    }
     if (message.includes('Duplicate') || message.includes('duplicate') || message.includes('already exists')) {
       return 'Existing fee records were found for the same form, term, and year. Review the duplicate list before continuing.';
     }
@@ -3315,13 +3321,13 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
       <>
         <CircularProgress size={16} className="text-white"   style={{ color: 'white' }}
  />
-        <span className="text-white/90">Processing...</span>
+        <span className="text-white/90">Processing file...</span>
       </>
     ) : validationLoading ? (
       <>
         <CircularProgress size={16} className="text-white"   style={{ color: 'white' }}
  />
-        <span className="text-white/90">Checking...</span>
+        <span className="text-white/90">Checking file...</span>
       </>
     ) : (
       <>
@@ -3332,6 +3338,12 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
   </button>
 </div>
                     </div>
+                  </div>
+                )}
+
+                {file && (
+                  <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+                    Large uploads and slower connections can take longer. Keep this page open until you see the final success or review message.
                   </div>
                 )}
               </div>
@@ -3384,7 +3396,13 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
                       <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <span className="text-blue-700 font-bold text-base">4</span>
                       </div>
-                      <span className="text-blue-800 font-semibold text-base">System checks for duplicates before uploading</span>
+                      <span className="text-blue-800 font-semibold text-base">System checks for duplicates before uploading and highlights row-level issues clearly</span>
+                    </li>
+                    <li className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-blue-700 font-bold text-base">5</span>
+                      </div>
+                      <span className="text-blue-800 font-semibold text-base">Large files can take longer, so keep this page open until upload finishes</span>
                     </li>
                   </ul>
                 </div>

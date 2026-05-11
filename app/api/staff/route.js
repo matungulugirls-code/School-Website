@@ -267,6 +267,95 @@ const sanitizePublicStaff = (staff) => {
   return publicStaff;
 };
 
+const STAFF_MODERN_SELECT = {
+  id: true,
+  name: true,
+  role: true,
+  staffType: true,
+  position: true,
+  department: true,
+  departmentId: true,
+  subjectOffered: true,
+  education: true,
+  experience: true,
+  email: true,
+  phone: true,
+  bio: true,
+  quote: true,
+  gender: true,
+  status: true,
+  joinDate: true,
+  responsibilities: true,
+  expertise: true,
+  achievements: true,
+  image: true,
+  createdAt: true,
+  updatedAt: true,
+};
+
+const STAFF_LEGACY_SELECT = {
+  id: true,
+  name: true,
+  role: true,
+  position: true,
+  department: true,
+  education: true,
+  experience: true,
+  email: true,
+  phone: true,
+  bio: true,
+  quote: true,
+  responsibilities: true,
+  expertise: true,
+  achievements: true,
+  image: true,
+  createdAt: true,
+  updatedAt: true,
+};
+
+const isSchemaCompatibilityError = (error) => {
+  const message = String(error?.message || "").toLowerCase();
+  return ["P2021", "P2022"].includes(error?.code) ||
+    message.includes("column") ||
+    message.includes("does not exist") ||
+    message.includes("unknown field") ||
+    message.includes("unknown column") ||
+    message.includes("table");
+};
+
+const normalizeStaffRecord = (staff = {}) => ({
+  ...staff,
+  position: staff.position || staff.role || "",
+  staffType: staff.staffType || (staff.role === "Teacher" ? "Teacher" : "Leadership"),
+  departmentId: staff.departmentId ?? null,
+  subjectOffered: staff.subjectOffered || "",
+  gender: staff.gender || "male",
+  status: staff.status || "active",
+  joinDate: staff.joinDate || "",
+});
+
+const fetchStaffRecords = async () => {
+  try {
+    const modernStaff = await prisma.staff.findMany({
+      orderBy: { createdAt: "desc" },
+      select: STAFF_MODERN_SELECT,
+    });
+    return modernStaff.map(normalizeStaffRecord);
+  } catch (error) {
+    if (!isSchemaCompatibilityError(error)) {
+      throw error;
+    }
+
+    console.warn("Falling back to legacy staff query shape:", error.message);
+    const legacyStaff = await prisma.staff.findMany({
+      orderBy: { createdAt: "desc" },
+      select: STAFF_LEGACY_SELECT,
+    });
+
+    return legacyStaff.map(normalizeStaffRecord);
+  }
+};
+
 // 🔹 Check principal/deputy principal limits
 // 🔹 Enhanced role limits with position-based validation for Deputy Principals
 async function checkRoleLimits(role, staffId = null, position = null) {
@@ -346,14 +435,7 @@ export async function GET(req) {
       isAdmin = validation.valid;
     }
 
-    const staff = await prisma.staff.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        departmentRecord: {
-          select: { id: true, name: true, category: true }
-        }
-      }
-    });
+    const staff = await fetchStaffRecords();
 
     const visibleStaff = isAdmin
       ? staff

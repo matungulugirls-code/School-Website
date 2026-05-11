@@ -3,6 +3,8 @@ import { parse } from 'papaparse';
 import * as XLSX from 'xlsx';
 import { prisma } from '../../../libs/prisma';
 
+export const maxDuration = 300;
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 // Device Token Manager (SAME AS STUDENT API)
@@ -155,6 +157,46 @@ const normalizeColumnKey = (value = '') =>
 const getFeeRowNumber = (record, fallbackIndex = 0) =>
   Number(record?.sourceRowNumber || record?.__rowNumber || fallbackIndex + 2);
 
+const LARGE_UPLOAD_ROW_THRESHOLD = 800;
+const DB_BATCH_SIZE = 200;
+
+const chunkArray = (items = [], size = DB_BATCH_SIZE) => {
+  const chunks = [];
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+  return chunks;
+};
+
+const createManyInChunks = async (delegate, rows, options = {}) => {
+  let total = 0;
+
+  for (const chunk of chunkArray(rows)) {
+    const result = await delegate.createMany({
+      data: chunk,
+      ...options
+    });
+    total += result?.count || 0;
+  }
+
+  return total;
+};
+
+const normalizeFeeUploadFailure = (error) => {
+  const message = String(error?.message || '').trim();
+  const lowerMessage = message.toLowerCase();
+
+  if (error?.code === 'P2024' || lowerMessage.includes('timeout') || lowerMessage.includes('timed out')) {
+    return 'Fee upload took too long to finish. Please retry the file and keep this page open until the upload completes.';
+  }
+
+  if (lowerMessage.includes('network') || lowerMessage.includes('fetch failed') || lowerMessage.includes('aborted') || lowerMessage.includes('interrupted')) {
+    return 'Fee upload was interrupted before saving finished. Check your connection, keep the page open, and try again.';
+  }
+
+  return message || 'Fee upload failed. Please try again.';
+};
+
 // Enhanced date parsing
 const parseDate = (dateStr) => {
   if (!dateStr) return null;
@@ -181,19 +223,14 @@ const parseDate = (dateStr) => {
 
 // Enhanced form normalization with better logging
 const normalizeForm = (formValue) => {
-  if (!formValue) {
-    console.warn('⚠️ No form value provided to normalizeForm');
-    return null;
-  }
+  if (!formValue) return null;
   
   const str = String(formValue).trim();
-  const original = str; // Keep for debugging
   
   // Handle numeric forms
   if (/^\d+$/.test(str)) {
     const num = parseInt(str);
     if (num >= 1 && num <= 4) {
-      console.log(`✅ Numeric form ${num} normalized to Form ${num}`);
       return `Form ${num}`;
     }
   }
@@ -203,7 +240,6 @@ const normalizeForm = (formValue) => {
   if (formMatch) {
     const num = parseInt(formMatch[1]);
     if (num >= 1 && num <= 4) {
-      console.log(`✅ Form pattern matched: ${original} -> Form ${num}`);
       return `Form ${num}`;
     }
   }
@@ -254,25 +290,14 @@ const normalizeForm = (formValue) => {
     'standard 4': 'Form 4'
   };
   
-  const normalized = formMap[str.toLowerCase()];
-  if (normalized) {
-    console.log(`✅ Form mapped: ${original} -> ${normalized}`);
-  } else {
-    console.warn(`❌ Form not recognized: ${original}`);
-  }
-  
-  return normalized || null;
+  return formMap[str.toLowerCase()] || null;
 };
 
 // Normalize term values
 const normalizeTerm = (termValue) => {
-  if (!termValue) {
-    console.warn('⚠️ No term value provided');
-    return null;
-  }
+  if (!termValue) return null;
   
   const str = String(termValue).trim().toLowerCase();
-  console.log(`🔍 Term normalization input: "${termValue}" -> "${str}"`);
   
   const termMap = {
     'term1': 'Term 1',
@@ -292,27 +317,20 @@ const normalizeTerm = (termValue) => {
     'third': 'Term 3'
   };
   
-  const normalized = termMap[str] || str;
-  console.log(`✅ Term normalized: "${termValue}" -> "${normalized}"`);
-  return normalized;
+  return termMap[str] || str;
 };
 
 // Normalize academic year with validation. The system now stores the exact year
 // entered by the school, e.g. "2026" instead of "2026/2027".
 const normalizeAcademicYear = (yearValue) => {
-  if (!yearValue) {
-    console.warn('⚠️ No academic year provided');
-    return null;
-  }
+  if (!yearValue) return null;
   
   const str = String(yearValue).trim();
-  console.log(`🔍 Academic year input: "${str}"`);
   
   // Convert legacy ranges like 2026/2027 or 2026-2027 to the opening year.
   if (/^\d{4}\/\d{4}$/.test(str)) {
     const [year1, year2] = str.split('/').map(Number);
     if (year1 >= 1900 && year1 <= 2100 && year2 >= 1900 && year2 <= 2100) {
-      console.log(`✅ Legacy academic year converted: ${str} -> ${year1}`);
       return String(year1);
     }
   }
@@ -321,7 +339,6 @@ const normalizeAcademicYear = (yearValue) => {
   if (/^\d{4}$/.test(str)) {
     const year = parseInt(str);
     if (year >= 1900 && year <= 2100) {
-      console.log(`✅ Academic year normalized: ${str}`);
       return String(year);
     }
   }
@@ -332,7 +349,6 @@ const normalizeAcademicYear = (yearValue) => {
     const year1 = parseInt(yearMatch[1]);
     const year2 = parseInt(yearMatch[2]);
     if (year1 >= 1900 && year1 <= 2100 && year2 >= 1900 && year2 <= 2100) {
-      console.log(`✅ Extracted academic year: ${str} -> ${year1}`);
       return String(year1);
     }
   }
@@ -343,12 +359,10 @@ const normalizeAcademicYear = (yearValue) => {
     const year1 = parseInt(malformedMatch[1]);
     const year2 = parseInt(malformedMatch[2]);
     if (year1 >= 1900 && year1 <= 2100 && year2 >= 1900 && year2 <= 2100) {
-      console.log(`✅ Fixed malformed year: ${str} -> ${year1}`);
       return String(year1);
     }
   }
   
-  console.warn(`❌ Could not normalize academic year: ${str}`);
   return str;
 };
 
@@ -411,8 +425,6 @@ const validateFeeBalance = (feeBalance, index) => {
   const warnings = [];
   const rowNumber = getFeeRowNumber(feeBalance, index);
   
-  console.log(`\n🔍 Validating row ${rowNumber}:`, feeBalance);
-  
   // Admission number
   if (!feeBalance.admissionNumber) {
     errors.push(`Row ${rowNumber}: Admission number is required`);
@@ -424,7 +436,6 @@ const validateFeeBalance = (feeBalance, index) => {
       console.error(`❌ Row ${rowNumber}: Invalid admission number format: ${admissionStr}`);
     } else {
       feeBalance.admissionNumber = admissionStr;
-      console.log(`✅ Row ${rowNumber}: Valid admission number: ${admissionStr}`);
     }
   }
   
@@ -441,7 +452,6 @@ const validateFeeBalance = (feeBalance, index) => {
     console.error(`❌ Row ${rowNumber}: Invalid form: ${originalForm} -> ${normalizedForm}`);
   } else {
     feeBalance.form = normalizedForm;
-    console.log(`✅ Row ${rowNumber}: Form validated: ${originalForm} -> ${normalizedForm}`);
   }
   
   // Term validation
@@ -471,7 +481,6 @@ const validateFeeBalance = (feeBalance, index) => {
     console.error(`❌ Row ${rowNumber}: Invalid academic year format: ${originalYear} -> ${normalizedYear}`);
   } else {
     feeBalance.academicYear = normalizedYear;
-    console.log(`✅ Row ${rowNumber}: Academic year: ${originalYear} -> ${normalizedYear}`);
   }
   
   // Amount validation
@@ -497,17 +506,6 @@ const validateFeeBalance = (feeBalance, index) => {
   feeBalance.amountPaid = amountPaid;
   feeBalance.balance = calculateBalance(amount, amountPaid);
   feeBalance.paymentStatus = determinePaymentStatus(amount, amountPaid);
-  
-  console.log(`✅ Row ${rowNumber} validated:`, {
-    admission: feeBalance.admissionNumber,
-    form: feeBalance.form,
-    term: feeBalance.term,
-    year: feeBalance.academicYear,
-    amount: feeBalance.amount,
-    paid: feeBalance.amountPaid,
-    balance: feeBalance.balance,
-    status: feeBalance.paymentStatus
-  });
   
   return { 
     isValid: errors.length === 0, 
@@ -767,17 +765,6 @@ const parseFeeCSV = async (file, uploadStrategy) => {
                 parsedData.balance = calculateBalance(parsedData.amount, parsedData.amountPaid);
                 parsedData.paymentStatus = determinePaymentStatus(parsedData.amount, parsedData.amountPaid);
                 
-                console.log(`✅ Row ${index + 2} parsed:`, {
-                  admission: parsedData.admissionNumber,
-                  form: parsedData.form,
-                  term: parsedData.term,
-                  year: parsedData.academicYear,
-                  amount: parsedData.amount,
-                  paid: parsedData.amountPaid,
-                  balance: parsedData.balance,
-                  status: parsedData.paymentStatus
-                });
-                
                 return parsedData;
               } catch (error) {
                 console.error(`❌ Error parsing CSV row ${index}:`, error, row);
@@ -885,13 +872,6 @@ const parseFeeExcel = async (file, uploadStrategy) => {
           parsedData.balance = calculateBalance(parsedData.amount, parsedData.amountPaid);
           parsedData.paymentStatus = determinePaymentStatus(parsedData.amount, parsedData.amountPaid);
           
-          console.log(`✅ Row ${index + 2} parsed:`, {
-            admission: parsedData.admissionNumber,
-            form: parsedData.form,
-            term: parsedData.term,
-            year: parsedData.academicYear
-          });
-          
           return parsedData;
         } catch (error) {
           console.error(`❌ Error parsing Excel row ${index}:`, error, row);
@@ -956,8 +936,7 @@ const processUpdateFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
       
       // STEP 2: Create audit log before deletion
       if (existingFees.length > 0) {
-        await tx.feeBalanceAuditLog.createMany({
-          data: existingFees.map(fee => ({
+        await createManyInChunks(tx.feeBalanceAuditLog, existingFees.map(fee => ({
             action: 'REPLACE_DELETE',
             feeId: fee.id,
             admissionNumber: fee.admissionNumber,
@@ -968,8 +947,7 @@ const processUpdateFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
             oldAmountPaid: fee.amountPaid,
             uploadBatchId: uploadBatchId,
             timestamp: new Date()
-          }))
-        });
+          })));
       }
       
       // STEP 3: HARD DELETE all existing fees (true replace)
@@ -1057,17 +1035,13 @@ const processUpdateFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
       
       // STEP 7: INSERT all new fees
       if (feeCreations.length > 0) {
-        const createdFees = await tx.feeBalance.createMany({
-          data: feeCreations,
+        stats.created = await createManyInChunks(tx.feeBalance, feeCreations, {
           skipDuplicates: false
         });
-        
-        stats.created = createdFees.count;
-        console.log(`✅ INSERTED ${createdFees.count} new fees`);
+        console.log(`✅ INSERTED ${stats.created} new fees`);
         
         // Create audit log for new fees
-        await tx.feeBalanceAuditLog.createMany({
-          data: feeCreations.map(fee => ({
+        await createManyInChunks(tx.feeBalanceAuditLog, feeCreations.map(fee => ({
             action: 'REPLACE_CREATE',
             admissionNumber: fee.admissionNumber,
             form: fee.form,
@@ -1077,8 +1051,7 @@ const processUpdateFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
             newAmountPaid: fee.amountPaid,
             uploadBatchId: uploadBatchId,
             timestamp: new Date()
-          }))
-        });
+          })));
       }
       
       return { 
@@ -1086,8 +1059,8 @@ const processUpdateFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
         createdCount: stats.created 
       };
     }, {
-      maxWait: 15000,
-      timeout: 45000,
+      maxWait: 30000,
+      timeout: fees.length >= LARGE_UPLOAD_ROW_THRESHOLD ? 150000 : 90000,
       isolationLevel: 'Serializable'
     });
     
@@ -1171,6 +1144,7 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
       const existingAdmissionNumbers = new Set(existingFees.map(f => f.admissionNumber));
       const seenInFile = new Set();
       const feeCreations = [];
+      const studentCheck = await checkStudentsExist(admissionNumbers, normalizedForm, tx);
       
       // Process each fee
       for (const [index, fee] of fees.entries()) {
@@ -1198,9 +1172,6 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
           continue;
         }
         
-        // Check student exists
-        const admissionNumbers = [fee.admissionNumber];
-        const studentCheck = await checkStudentsExist(admissionNumbers, normalizedForm, tx);
         if (!studentCheck.existingStudentMap.has(fee.admissionNumber)) {
           stats.skippedRows++;
           stats.errors.push(`Row ${rowNum}: Student ${fee.admissionNumber} not found`);
@@ -1229,16 +1200,12 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
       
       // Insert new fees
       if (feeCreations.length > 0) {
-        const createdFees = await tx.feeBalance.createMany({
-          data: feeCreations,
+        stats.created = await createManyInChunks(tx.feeBalance, feeCreations, {
           skipDuplicates: true
         });
         
-        stats.created = createdFees.count;
-        
         // Audit log
-        await tx.feeBalanceAuditLog.createMany({
-          data: feeCreations.map(fee => ({
+        await createManyInChunks(tx.feeBalanceAuditLog, feeCreations.map(fee => ({
             action: 'NEW_CREATE',
             admissionNumber: fee.admissionNumber,
             form: fee.form,
@@ -1248,9 +1215,11 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
             newAmountPaid: fee.amountPaid,
             uploadBatchId: uploadBatchId,
             timestamp: new Date()
-          }))
-        });
+          })));
       }
+    }, {
+      maxWait: 30000,
+      timeout: fees.length >= LARGE_UPLOAD_ROW_THRESHOLD ? 150000 : 90000
     });
     
     stats.metadata = {
@@ -1270,7 +1239,7 @@ const processNewFeeUpload = async (fees, uploadBatchId, uploadStrategy) => {
     
   } catch (error) {
     console.error('New upload error:', error);
-    throw error;
+    throw new Error(normalizeFeeUploadFailure(error));
   }
 };
 
@@ -1479,10 +1448,24 @@ export async function POST(request) {
     
     // Process upload based on type
     let processingStats;
-    if (uploadType === 'new') {
-      processingStats = await processNewFeeUpload(parsedData, batchId, uploadStrategy);
-    } else {
-      processingStats = await processUpdateFeeUpload(parsedData, batchId, uploadStrategy);
+    try {
+      if (uploadType === 'new') {
+        processingStats = await processNewFeeUpload(parsedData, batchId, uploadStrategy);
+      } else {
+        processingStats = await processUpdateFeeUpload(parsedData, batchId, uploadStrategy);
+      }
+    } catch (processingError) {
+      const safeErrorMessage = normalizeFeeUploadFailure(processingError);
+      await prisma.feeBalanceUpload.update({
+        where: { id: batchId },
+        data: {
+          status: 'failed',
+          processedDate: new Date(),
+          errorRows: 1,
+          errorLog: safeErrorMessage
+        }
+      });
+      throw new Error(safeErrorMessage);
     }
     
     // Update batch record
@@ -1555,14 +1538,16 @@ export async function POST(request) {
       'No readable fee rows',
       'CSV parsing failed',
       'Excel parsing failed',
-      'Authentication failed'
+      'Authentication failed',
+      'took too long',
+      'interrupted'
     ].some((phrase) => (error.message || '').includes(phrase));
     return NextResponse.json(
       { 
         success: false, 
         error: error.message || 'Upload failed',
         authenticated: true,
-        suggestion: 'Check that your file has the required columns and data format matches the template.'
+        suggestion: 'Check that your file has the required columns and data format matches the template. For large files, keep this page open until the upload finishes.'
       },
       { status: isClientError ? 400 : 500 }
     );

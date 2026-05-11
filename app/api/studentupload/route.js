@@ -3,6 +3,8 @@ import { parse } from 'papaparse';
 import * as XLSX from 'xlsx';
 import { prisma } from '../../../libs/prisma';
 
+export const maxDuration = 300;
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 // Device Token Manager
@@ -154,6 +156,46 @@ const normalizeColumnKey = (value = '') =>
 
 const getSourceRowNumber = (record, fallbackIndex = 0) =>
   Number(record?.sourceRowNumber || record?.__rowNumber || fallbackIndex + 2);
+
+const LARGE_UPLOAD_ROW_THRESHOLD = 800;
+const DB_BATCH_SIZE = 200;
+
+const chunkArray = (items = [], size = DB_BATCH_SIZE) => {
+  const chunks = [];
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+  return chunks;
+};
+
+const createManyInChunks = async (delegate, rows, options = {}) => {
+  let total = 0;
+
+  for (const chunk of chunkArray(rows)) {
+    const result = await delegate.createMany({
+      data: chunk,
+      ...options
+    });
+    total += result?.count || 0;
+  }
+
+  return total;
+};
+
+const normalizeStudentUploadFailure = (error) => {
+  const message = String(error?.message || '').trim();
+  const lowerMessage = message.toLowerCase();
+
+  if (error?.code === 'P2024' || lowerMessage.includes('timeout') || lowerMessage.includes('timed out')) {
+    return 'Student upload took too long to finish. Please retry the file and keep this page open until the upload completes.';
+  }
+
+  if (lowerMessage.includes('network') || lowerMessage.includes('fetch failed') || lowerMessage.includes('aborted') || lowerMessage.includes('interrupted')) {
+    return 'Student upload was interrupted before saving finished. Check your connection, keep the page open, and try again.';
+  }
+
+  return message || 'Student upload failed. Please try again.';
+};
 
 // Helper to parse dates consistently
 const parseDate = (dateStr) => {
@@ -551,16 +593,14 @@ const processNewUpload = async (students, uploadBatchId, selectedForms, duplicat
   // Insert students
   if (studentsToCreate.length > 0) {
     try {
-      await tx.databaseStudent.createMany({
-        data: studentsToCreate,
+      await createManyInChunks(tx.databaseStudent, studentsToCreate, {
         skipDuplicates: false // We handle duplicates manually
       });
       
       stats.createdStudents = studentsToCreate;
     } catch (error) {
       console.error('Error creating students:', error);
-      stats.errorRows += studentsToCreate.length;
-      stats.errors.push(`Failed to create ${studentsToCreate.length} students: ${error.message}`);
+      throw new Error(`Failed to save ${studentsToCreate.length} student record(s): ${error.message}`);
     }
   }
   
@@ -604,6 +644,7 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
   const seenAdmissionNumbers = new Set();
   const admissionNumbersInNewUpload = new Set();
   let matchedTargetRows = 0;
+  const studentsToCreate = [];
   
   // Process each student in the upload
   for (const [index, student] of students.entries()) {
@@ -667,33 +708,21 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
         continue;
       }
     } else {
-      // Create new student
-      try {
-        const newStudent = await tx.databaseStudent.create({
-          data: {
-            admissionNumber,
-            firstName: student.firstName,
-            middleName: student.middleName || null,
-            lastName: student.lastName,
-            form: targetForm,
-            stream: student.stream || null,
-            dateOfBirth: student.dateOfBirth ? new Date(student.dateOfBirth) : null,
-            gender: student.gender || null,
-            parentPhone: student.parentPhone || null,
-            email: student.email || null,
-            address: student.address || null,
-            uploadBatchId,
-            status: 'active'
-          }
-        });
-        
-        stats.createdRows++;
-        stats.createdStudents.push(newStudent);
-      } catch (error) {
-        stats.errorRows++;
-        stats.errors.push(`Row ${rowNumber}: Failed to create student ${admissionNumber}: ${error.message}`);
-        continue;
-      }
+      studentsToCreate.push({
+        admissionNumber,
+        firstName: student.firstName,
+        middleName: student.middleName || null,
+        lastName: student.lastName,
+        form: targetForm,
+        stream: student.stream || null,
+        dateOfBirth: student.dateOfBirth ? new Date(student.dateOfBirth) : null,
+        gender: student.gender || null,
+        parentPhone: student.parentPhone || null,
+        email: student.email || null,
+        address: student.address || null,
+        uploadBatchId,
+        status: 'active'
+      });
     }
     
     stats.validRows++;
@@ -701,6 +730,18 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
 
   if (matchedTargetRows === 0) {
     throw new Error(`No students found for form ${targetForm}. Make sure the form column matches the selected form.`);
+  }
+
+  if (studentsToCreate.length > 0) {
+    try {
+      await createManyInChunks(tx.databaseStudent, studentsToCreate, {
+        skipDuplicates: false
+      });
+      stats.createdRows += studentsToCreate.length;
+      stats.createdStudents = studentsToCreate;
+    } catch (error) {
+      throw new Error(`Failed to save ${studentsToCreate.length} student record(s): ${error.message}`);
+    }
   }
   
   // Deactivate students in this form that are not in the new upload
@@ -1570,8 +1611,8 @@ await prisma.$transaction(async (tx) => {
     });
   }
 }, {
-  maxWait: 15000,    // Increased from default
-  timeout: 30000     // 30 seconds timeout
+  maxWait: 30000,
+  timeout: rawData.length >= LARGE_UPLOAD_ROW_THRESHOLD ? 120000 : 60000
 });
       
       // Recalculate to ensure consistency
@@ -1602,6 +1643,7 @@ await prisma.$transaction(async (tx) => {
       
     } catch (error) {
       console.error('Processing error:', error);
+      const safeErrorMessage = normalizeStudentUploadFailure(error);
       
       // Update batch as failed
       await prisma.studentBulkUpload.update({
@@ -1610,11 +1652,11 @@ await prisma.$transaction(async (tx) => {
           status: 'failed',
           processedDate: new Date(),
           errorRows: 1,
-          errorLog: [error.message]
+          errorLog: [safeErrorMessage]
         }
       });
       
-      throw error;
+      throw new Error(safeErrorMessage);
     }
     
   } catch (error) {
@@ -1628,14 +1670,16 @@ await prisma.$transaction(async (tx) => {
       'CSV parsing failed',
       'Excel parsing failed',
       'No readable student rows',
-      'Missing required columns'
+      'Missing required columns',
+      'took too long',
+      'interrupted'
     ].some((phrase) => (error.message || '').includes(phrase));
     return NextResponse.json(
       { 
         success: false, 
         error: error.message || 'Upload failed',
         authenticated: true,
-        suggestion: 'Check that your file has the required columns: admissionNumber, firstName, lastName, form'
+        suggestion: 'Check that your file has the required columns: admissionNumber, firstName, lastName, form. For large files, keep this page open until the upload finishes.'
       },
       { status: isClientError ? 400 : 500 }
     );

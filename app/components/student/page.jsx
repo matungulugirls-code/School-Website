@@ -2086,6 +2086,15 @@ export default function ModernStudentBulkUpload() {
     if (message.includes('Missing required columns')) {
       return `${message}. Use the current template so admission number, first name, last name, and form are present.`;
     }
+    if (message.includes('took too long') || message.includes('timed out')) {
+      return 'The student upload is taking longer than expected. Please retry, keep this page open, and use the current template for large files.';
+    }
+    if (message.includes('interrupted') || message.includes('network') || message.includes('connection')) {
+      return 'The student upload was interrupted before it finished saving. Check your connection and retry while keeping this page open.';
+    }
+    if (message.includes('must match the selected update form') || message.includes('not in the selected upload forms')) {
+      return message;
+    }
     if (message.includes('duplicate')) {
       return 'Duplicate admission numbers were found. Review the duplicate list before continuing.';
     }
@@ -3184,17 +3193,17 @@ const downloadExcelTemplate = () => {
     disabled={uploading || validationLoading || !uploadStrategy}
     className="px-5 py-3 bg-gradient-to-r from-emerald-700 to-emerald-900 text-white rounded-xl font-bold flex items-center gap-2.5 text-sm shadow-lg disabled:opacity-70 hover:shadow-xl transition-all duration-300"
   >
-    {uploading ? (
-      <>
+                    {uploading ? (
+                      <>
         <CircularProgress size={16} className="text-white"   style={{ color: 'white' }}
 />
-        <span className="text-white/90">Processing...</span>
+        <span className="text-white/90">Processing file...</span>
       </>
     ) : validationLoading ? (
       <>
         <CircularProgress size={16} className="text-white"    style={{ color: 'white' }}
 />
-        <span className="text-white/90">Checking...</span>
+        <span className="text-white/90">Checking file...</span>
       </>
     ) : (
       <>
@@ -3205,6 +3214,12 @@ const downloadExcelTemplate = () => {
   </button>
 </div>
                     </div>
+                  </div>
+                )}
+
+                {file && (
+                  <div className="mt-4 rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+                    Large uploads and slower connections can take longer. Keep this page open until you see the final success or review message.
                   </div>
                 )}
               </div>
@@ -3257,7 +3272,13 @@ const downloadExcelTemplate = () => {
                       <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <span className="text-teal-800 font-bold text-base">4</span>
                       </div>
-                      <span className="text-teal-800 font-semibold text-base">System checks for duplicates before uploading</span>
+                      <span className="text-teal-800 font-semibold text-base">System checks for duplicates before uploading and keeps row-level errors easy to review</span>
+                    </li>
+                    <li className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-teal-800 font-bold text-base">5</span>
+                      </div>
+                      <span className="text-teal-800 font-semibold text-base">Large files can take longer, so keep this page open until upload finishes</span>
                     </li>
                   </ul>
                 </div>

@@ -788,12 +788,11 @@ export default function StaffDirectory() {
     try {
       setLoading(true);
       const response = await fetch('/api/staff');
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch staff data: ${response.status}`);
-      }
-      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Failed to fetch staff data: ${response.status}`);
+      }
       
       if (data.success && data.staff) {
         const mappedStaff = data.staff.map(staff => ({
@@ -836,12 +835,10 @@ export default function StaffDirectory() {
     try {
       setDepartmentsLoading(true);
       const response = await fetch('/api/staff/departments?grouped=1');
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch departments: ${response.status}`);
-      }
-
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || `Failed to fetch departments: ${response.status}`);
+      }
       if (data.success) {
         const grouped = data.departmentsByCategory || {};
         setDepartmentsByCategory({

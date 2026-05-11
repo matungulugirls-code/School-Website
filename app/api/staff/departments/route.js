@@ -164,6 +164,22 @@ const authenticateWriteRequest = (req) => {
 
 const VALID_CATEGORIES = new Set(["CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
 
+const isSchemaCompatibilityError = (error) => {
+  const message = String(error?.message || "").toLowerCase();
+  return ["P2021", "P2022"].includes(error?.code) ||
+    message.includes("column") ||
+    message.includes("does not exist") ||
+    message.includes("unknown field") ||
+    message.includes("unknown column") ||
+    message.includes("table");
+};
+
+const normalizeDepartmentRecord = (department = {}) => ({
+  ...department,
+  images: Array.isArray(department.images) ? department.images : [],
+  teachers: Array.isArray(department.teachers) ? department.teachers : [],
+});
+
 export async function GET(req) {
   try {
     const url = new URL(req.url);
@@ -208,30 +224,77 @@ export async function GET(req) {
       where.isActive = true;
     }
 
-    const departments = await prisma.staffDepartment.findMany({
-      where,
-      orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
-      include: {
-        images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
-        teachers: {
-          where: {
-            staffType: "Teacher",
-            status: "active",
+    let departments;
+    try {
+      departments = await prisma.staffDepartment.findMany({
+        where,
+        orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
+        include: {
+          images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+          teachers: {
+            where: {
+              staffType: "Teacher",
+              status: "active",
+            },
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              subjectOffered: true,
+              departmentId: true,
+              department: true,
+              role: true,
+              staffType: true,
+            },
+            orderBy: { name: "asc" },
           },
+        },
+      });
+    } catch (error) {
+      if (!isSchemaCompatibilityError(error)) {
+        throw error;
+      }
+
+      console.warn("Falling back to legacy departments query shape:", error.message);
+
+      try {
+        departments = await prisma.staffDepartment.findMany({
+          where,
+          orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
           select: {
             id: true,
             name: true,
+            category: true,
+            description: true,
             image: true,
-            subjectOffered: true,
-            departmentId: true,
-            department: true,
-            role: true,
-            staffType: true,
+            staffCount: true,
+            headName: true,
+            assistantHeadName: true,
+            extra: true,
+            isActive: true,
+            displayOrder: true,
+            createdAt: true,
+            updatedAt: true,
           },
-          orderBy: { name: "asc" },
-        },
-      },
-    });
+        });
+        departments = departments.map((department) =>
+          normalizeDepartmentRecord({
+            ...department,
+            images: [],
+            teachers: [],
+          })
+        );
+      } catch (fallbackError) {
+        if (!isSchemaCompatibilityError(fallbackError)) {
+          throw fallbackError;
+        }
+
+        console.warn("Departments tables are not fully available yet. Returning empty department list.");
+        departments = [];
+      }
+    }
+
+    departments = departments.map(normalizeDepartmentRecord);
 
     if (!grouped) {
       return NextResponse.json({ success: true, departments });

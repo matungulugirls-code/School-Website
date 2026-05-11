@@ -1943,7 +1943,7 @@ const fetchStaff = async (isRefresh = false) => {
     
     const data = await response.json();
     
-    if (data.success) {
+    if (response.ok && data.success) {
       const sortedStaff = getStaffHierarchy(data.staff || []);
       setStaff(sortedStaff);
       setFilteredStaff(sortedStaff);
@@ -1951,11 +1951,11 @@ const fetchStaff = async (isRefresh = false) => {
       console.error('Failed to fetch staff:', data.error);
       setStaff([]);
       setFilteredStaff([]);
-      showNotification('error', 'Fetch Failed', 'Failed to fetch staff data');
+      showNotification('error', 'Fetch Failed', data.error || 'Failed to fetch staff data');
     }
   } catch (error) {
     console.error('Error fetching staff:', error);
-    showNotification('error', 'Error', 'Error fetching staff data');
+    showNotification('error', 'Error', error.message || 'Error fetching staff data');
     setStaff([]);
     setFilteredStaff([]);
   } finally {
@@ -1978,7 +1978,7 @@ const fetchStaffDepartments = async () => {
     }
 
     const data = await response.json();
-    if (data.success) {
+    if (response.ok && data.success) {
       const departmentsList = Array.isArray(data.departments) ? data.departments : [];
       setStaffDepartments(departmentsList.filter((dept) => dept?.name));
     } else {
