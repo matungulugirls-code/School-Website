@@ -331,6 +331,7 @@ const RefreshButton = ({ refreshing, onClick }) => (
 const GalleryModal = ({ item, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [shareStatus, setShareStatus] = useState('');
   
   useEffect(() => { setSelectedIndex(0); }, [item?.id, item?.type]);
   if (!item) return null;
@@ -353,16 +354,43 @@ const GalleryModal = ({ item, onClose }) => {
     setTimeout(() => setIsAnimating(false), 300);
   };
 
+  const handleShare = async () => {
+    const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const shareData = {
+      title: item.title || 'School Hub',
+      text: item.shortDescription || item.description || `View ${item.title || 'this School Hub item'}`,
+      url: shareUrl,
+    };
+
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share(shareData);
+        setShareStatus('Shared');
+      } else if (typeof navigator !== 'undefined' && navigator.clipboard && shareUrl) {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareStatus('Link copied');
+      } else {
+        setShareStatus('Share unavailable');
+      }
+    } catch (error) {
+      if (error?.name !== 'AbortError') {
+        setShareStatus('Unable to share');
+      }
+    } finally {
+      setTimeout(() => setShareStatus(''), 2200);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" onClick={onClose}>
-      <div className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-2 backdrop-blur-sm sm:p-4" onClick={onClose}>
+      <div className="relative flex max-h-[96vh] w-full max-w-6xl flex-col overflow-hidden rounded-[22px] bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-lg" onClick={(e) => e.stopPropagation()}>
         <button onClick={onClose} className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 text-slate-700 shadow-lg transition hover:bg-slate-100">
           <FiX className="text-lg" />
         </button>
 
         <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[1.35fr_0.8fr]">
           <div className="relative bg-slate-100">
-            <div className="relative h-[360px] sm:h-[520px]">
+            <div className="relative h-[240px] sm:h-[420px] lg:h-[520px]">
               {selectedImage ? (
                 <img 
                   src={selectedImage} 
@@ -393,22 +421,30 @@ const GalleryModal = ({ item, onClose }) => {
           </div>
 
           <div className="flex min-h-0 flex-col bg-white">
-            <div className="border-b border-slate-100 p-5">
+            <div className="border-b border-slate-100 p-4 sm:p-5">
               <div className="mb-3 flex items-center justify-between">
                 <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-black uppercase tracking-wider ${theme.bg} ${theme.text}`}>
                   <Icon className="text-xs" /> {getTypeLabel(item.type)}
                 </span>
-                <button className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Share item">
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                  aria-label="Share item"
+                >
                   <FiShare2 />
                 </button>
               </div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">{item.title}</h2>
+              <h2 className="text-xl font-black tracking-tight text-slate-950 sm:text-2xl">{item.title}</h2>
               {item.description && (
                 <p className="mt-3 text-sm font-medium leading-6 text-slate-600">{item.description}</p>
               )}
+              {shareStatus && (
+                <p className="mt-3 text-xs font-black uppercase tracking-[0.14em] text-emerald-700">{shareStatus}</p>
+              )}
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto p-5 space-y-4">
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4 sm:p-5">
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-lg bg-slate-50 p-3 text-center">
                   <p className="text-lg font-black text-slate-950">{images.length}</p>
@@ -498,12 +534,16 @@ const GalleryModal = ({ item, onClose }) => {
               )}
             </div>
 
-            <div className="flex gap-2 border-t border-slate-100 bg-slate-50 p-4">
+            <div className="flex flex-col gap-2 border-t border-slate-100 bg-slate-50 p-4 sm:flex-row">
               <button onClick={onClose} className="flex-1 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800">
                 Close
               </button>
-              <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-100">
-                <FiExternalLink /> Share
+              <button
+                type="button"
+                onClick={handleShare}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-100"
+              >
+                <FiExternalLink /> {shareStatus || 'Share'}
               </button>
             </div>
           </div>

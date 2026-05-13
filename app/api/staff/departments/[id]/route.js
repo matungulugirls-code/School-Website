@@ -175,8 +175,25 @@ const isSchemaCompatibilityError = (error) => {
     message.includes("table");
 };
 
+const parseDepartmentExtra = (extra) => {
+  if (!extra) return {};
+  if (typeof extra === "object") return extra;
+  try {
+    return JSON.parse(extra);
+  } catch {
+    return {};
+  }
+};
+
 const normalizeDepartmentRecord = (department = {}) => ({
   ...department,
+  extra: parseDepartmentExtra(department.extra),
+  assistantHeadName:
+    department.assistantHeadName ||
+    parseDepartmentExtra(department.extra).assistantHeadName ||
+    parseDepartmentExtra(department.extra).ahodName ||
+    parseDepartmentExtra(department.extra).aHOD ||
+    null,
   images: Array.isArray(department.images) ? department.images : [],
   teachers: Array.isArray(department.teachers) ? department.teachers : [],
   staffCount: Array.isArray(department.teachers) && department.teachers.length > 0

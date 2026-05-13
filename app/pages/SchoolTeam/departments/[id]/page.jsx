@@ -50,8 +50,15 @@ const getDepartmentImages = (department) => {
 
 const getTeacherImage = (teacher) => normalizeImageUrl(teacher?.image) || '/images/default-staff.jpg';
 
+const normalizeDetailText = (value) => {
+  if (!value && value !== 0) return '';
+  if (Array.isArray(value)) return value.filter(Boolean).join(', ');
+  return String(value);
+};
+
 const DetailPill = ({ icon: Icon, label, value }) => {
-  if (!value && value !== 0) return null;
+  const displayValue = normalizeDetailText(value);
+  if (!displayValue && displayValue !== '0') return null;
 
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3">
@@ -60,8 +67,25 @@ const DetailPill = ({ icon: Icon, label, value }) => {
       </span>
       <div className="min-w-0">
         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
-        <p className="truncate text-sm font-black text-slate-900">{value}</p>
+        <p className="text-sm font-black leading-6 text-slate-900">{displayValue}</p>
       </div>
+    </div>
+  );
+};
+
+const DetailBlock = ({ icon: Icon, label, value }) => {
+  const displayValue = normalizeDetailText(value);
+  if (!displayValue && displayValue !== '0') return null;
+
+  return (
+    <div className="rounded-[24px] bg-slate-50 p-5">
+      <div className="mb-3 flex items-center gap-3">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1f5f3a] text-white">
+          <Icon size={16} />
+        </span>
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
+      </div>
+      <p className="text-sm font-semibold leading-7 text-slate-700">{displayValue}</p>
     </div>
   );
 };
@@ -218,6 +242,7 @@ export default function DepartmentDetailsPage({ params }) {
 
   const images = useMemo(() => getDepartmentImages(department), [department]);
   const teachers = useMemo(() => Array.isArray(department?.teachers) ? department.teachers : [], [department]);
+  const extra = department?.extra && typeof department.extra === 'object' ? department.extra : {};
   const heroImage = images[0];
 
   if (loading) {
@@ -270,9 +295,12 @@ export default function DepartmentDetailsPage({ params }) {
         <div className="flex flex-col justify-center">
           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#1f5f3a]">{getCategoryLabel(department.category)}</p>
           <h1 className="mt-3 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">{department.name}</h1>
-          {department.description && (
-            <p className="mt-5 text-base font-medium leading-8 text-slate-600">{department.description}</p>
-          )}
+          <div className="mt-5 rounded-[26px] bg-slate-50 p-5">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Description</p>
+            <p className="mt-3 text-base font-medium leading-8 text-slate-600">
+              {department.description || 'Department description will appear here once it is added from the admin dashboard.'}
+            </p>
+          </div>
 
           <div className="mt-7 grid gap-3 sm:grid-cols-2">
             <DetailPill icon={FiUsers} label="Teachers" value={teachers.length || Number(department.staffCount) || 0} />
@@ -281,12 +309,12 @@ export default function DepartmentDetailsPage({ params }) {
             <DetailPill icon={FiCalendar} label="Updated" value={department.updatedAt ? new Date(department.updatedAt).toLocaleDateString() : ''} />
           </div>
 
-          {(department.extra?.focusAreas || department.extra?.subjects || department.extra?.location || department.extra?.notes) && (
+          {(extra.focusAreas || extra.subjects || extra.location || extra.notes) && (
             <div className="mt-7 grid gap-3">
-              <DetailPill icon={FiBookOpen} label="Focus Areas" value={department.extra?.focusAreas} />
-              <DetailPill icon={FiLayers} label="Subjects" value={department.extra?.subjects} />
-              <DetailPill icon={FiMapPin} label="Location" value={department.extra?.location} />
-              <DetailPill icon={FiBookOpen} label="Notes" value={department.extra?.notes} />
+              <DetailBlock icon={FiBookOpen} label="Focus Areas" value={extra.focusAreas} />
+              <DetailBlock icon={FiLayers} label="Subjects" value={extra.subjects} />
+              <DetailBlock icon={FiMapPin} label="Location" value={extra.location} />
+              <DetailBlock icon={FiBookOpen} label="Notes" value={extra.notes} />
             </div>
           )}
         </div>
