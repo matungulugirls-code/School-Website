@@ -1009,8 +1009,10 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
         formDataToSend.append('image', '');
       }
       
-      await onSave(formDataToSend, staff?.id);
-      onClose();
+      const saved = await onSave(formDataToSend, staff?.id);
+      if (saved !== false) {
+        onClose();
+      }
     } catch (error) {
       alert(error.message);
     } finally {
@@ -2970,6 +2972,7 @@ const handleSubmit = async (formData, id) => {
       setShowModal(false);
       showNotification('success', id ? 'Updated' : 'Created', 
         `Staff member ${id ? 'updated' : 'created'} successfully!`);
+      return true;
     } else {
       // Handle specific error for missing image
       if (result.error?.includes('image') || result.error?.includes('Image')) {
@@ -2979,6 +2982,7 @@ const handleSubmit = async (formData, id) => {
         showNotification('error', 'Save Failed', 
           result.error || `Failed to ${id ? 'update' : 'create'} staff member`);
       }
+      return false;
     }
   } catch (error) {
     console.error('Error saving staff member:', error);
@@ -2993,6 +2997,7 @@ const handleSubmit = async (formData, id) => {
     } else {
       showNotification('error', 'Error', 'Error saving staff member');
     }
+    return false;
   } finally {
     setSaving(false);
   }

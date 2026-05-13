@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import cloudinary from "../../../../libs/cloudinary";
 
+export const dynamic = "force-dynamic";
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 // Device Token Manager
@@ -333,6 +335,11 @@ const normalizeStaffRecord = (staff = {}) => ({
   joinDate: staff.joinDate || "",
 });
 
+const formValue = (formData, key) => {
+  const value = formData.get(key);
+  return value === null ? undefined : value.toString();
+};
+
 const fetchSingleStaffRecord = async (id) => {
   try {
     const staff = await prisma.staff.findUnique({
@@ -626,8 +633,19 @@ export async function PUT(req, { params }) {
       }
     }
 
-    // Include ALL fields from your Prisma schema
-    if (formData.get("name")) data.name = formData.get("name");
+    // Include submitted fields from the Prisma schema, including intentional clears.
+    const submittedName = formValue(formData, "name");
+    if (submittedName !== undefined) {
+      const trimmedName = submittedName.trim();
+      if (!trimmedName) {
+        return NextResponse.json(
+          { success: false, error: "Staff name cannot be empty", authenticated: true },
+          { status: 400 }
+        );
+      }
+      data.name = trimmedName;
+    }
+
     if (isTeacherRequest) {
       data.role = "Teacher";
       data.staffType = "Teacher";
@@ -677,45 +695,60 @@ export async function PUT(req, { params }) {
       data.departmentId = selectedDepartment.id;
       data.department = selectedDepartment.name;
     } else {
-      if (formData.get("role")) data.role = formData.get("role");
+      const submittedRole = formValue(formData, "role");
+      const submittedPosition = formValue(formData, "position");
+      const submittedDepartment = formValue(formData, "department");
+
+      if (submittedRole !== undefined) data.role = submittedRole.trim();
       data.staffType = "Leadership";
-      if (formData.get("position")) data.position = formData.get("position");
-      if (formData.get("department")) data.department = formData.get("department");
+      if (submittedPosition !== undefined) data.position = submittedPosition.trim() || null;
+      if (submittedDepartment !== undefined) data.department = submittedDepartment.trim() || null;
       data.departmentId = null;
       data.subjectOffered = null;
     }
-    if (formData.get("email")) data.email = formData.get("email");
-    if (formData.get("phone")) data.phone = formData.get("phone");
-    if (formData.get("bio")) data.bio = formData.get("bio");
-    if (formData.get("quote")) data.quote = formData.get("quote");
-    if (formData.get("education")) data.education = formData.get("education");
-    if (formData.get("experience")) data.experience = formData.get("experience");
-    if (formData.get("gender")) data.gender = formData.get("gender");
-    if (formData.get("status")) data.status = formData.get("status");
-    if (formData.get("joinDate")) data.joinDate = formData.get("joinDate");
+
+    [
+      "email",
+      "phone",
+      "bio",
+      "quote",
+      "education",
+      "experience",
+      "gender",
+      "status",
+      "joinDate",
+    ].forEach((field) => {
+      const value = formValue(formData, field);
+      if (value !== undefined) {
+        data[field] = value.trim() || null;
+      }
+    });
 
     // JSON fields (safe parsing)
-    if (formData.get("responsibilities")) {
+    if (formData.get("responsibilities") !== null) {
       try {
-        data.responsibilities = JSON.parse(formData.get("responsibilities"));
+        data.responsibilities = JSON.parse(formData.get("responsibilities") || "[]");
       } catch (e) {
         console.error("Error parsing responsibilities:", e);
+        data.responsibilities = [];
       }
     }
 
-    if (formData.get("expertise")) {
+    if (formData.get("expertise") !== null) {
       try {
-        data.expertise = JSON.parse(formData.get("expertise"));
+        data.expertise = JSON.parse(formData.get("expertise") || "[]");
       } catch (e) {
         console.error("Error parsing expertise:", e);
+        data.expertise = [];
       }
     }
 
-    if (formData.get("achievements")) {
+    if (formData.get("achievements") !== null) {
       try {
-        data.achievements = JSON.parse(formData.get("achievements"));
+        data.achievements = JSON.parse(formData.get("achievements") || "[]");
       } catch (e) {
         console.error("Error parsing achievements:", e);
+        data.achievements = [];
       }
     }
 

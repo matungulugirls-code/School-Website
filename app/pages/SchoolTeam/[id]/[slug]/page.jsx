@@ -166,7 +166,7 @@ export function generateJsonLd(staff) {
       "@type": "EducationalOrganization",
       "name": "Matungulu Girls Senior School",
       "url": baseUrl,
-      "description": "A leading girls' Senior School in Kenya committed to academic excellence and holistic development.",
+      "description": "A leading girls'  School in Matungulu Machakos committed to academic excellence and holistic development.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Matungulu",

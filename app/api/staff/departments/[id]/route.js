@@ -7,6 +7,8 @@ import {
   validateSchoolImage,
 } from "../../../../../libs/schoolContentUpload";
 
+export const dynamic = "force-dynamic";
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 class DeviceTokenManager {
@@ -206,6 +208,15 @@ export async function GET(_req, { params }) {
               department: true,
               role: true,
               staffType: true,
+              position: true,
+              education: true,
+              experience: true,
+              bio: true,
+              quote: true,
+              gender: true,
+              responsibilities: true,
+              expertise: true,
+              achievements: true,
             },
             orderBy: { name: "asc" },
           },

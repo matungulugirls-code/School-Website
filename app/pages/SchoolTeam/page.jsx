@@ -487,6 +487,16 @@ const DepartmentCard = ({ department }) => {
           <div className="mt-6">
             <DepartmentMediaCarousel departmentImages={departmentImages} teachers={teachers} />
           </div>
+
+          <div className="mt-6 flex justify-end">
+            <Link
+              href={`/pages/SchoolTeam/departments/${department?.id}`}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f5f3a] px-5 py-3 text-sm font-black text-white transition hover:bg-[#17492c] focus:outline-none focus:ring-4 focus:ring-[#1f5f3a]/20"
+            >
+              View Department
+              <FiChevronRight size={16} />
+            </Link>
+          </div>
         </div>
       </div>
     </article>
@@ -823,7 +833,7 @@ export default function StaffDirectory() {
   const fetchStaffData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/staff');
+      const response = await fetch('/api/staff', { cache: 'no-store' });
       const data = await response.json();
 
       if (!response.ok) {
@@ -870,7 +880,7 @@ export default function StaffDirectory() {
   async function fetchDepartmentsData() {
     try {
       setDepartmentsLoading(true);
-      const response = await fetch('/api/staff/departments?grouped=1');
+      const response = await fetch('/api/staff/departments?grouped=1', { cache: 'no-store' });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || `Failed to fetch departments: ${response.status}`);

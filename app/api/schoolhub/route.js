@@ -6,6 +6,8 @@ import {
   validateSchoolImage,
 } from "../../../libs/schoolContentUpload";
 
+export const dynamic = "force-dynamic";
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 class DeviceTokenManager {
