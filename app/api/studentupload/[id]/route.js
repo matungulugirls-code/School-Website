@@ -255,7 +255,7 @@ export async function PUT(request, { params }) {
         form: data.form,
         stream: data.stream || null,
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
-        gender: data.gender || null,
+        gender: 'Female',
         parentPhone: data.parentPhone || null,
         email: data.email || null,
         address: data.address || null,

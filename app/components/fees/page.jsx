@@ -201,7 +201,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag, sh
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    const validExtensions = ['.csv', '.xlsx', '.xls', '.xlsm'];
+    const validExtensions = ['.csv', '.xlsx', '.xls'];
     
     if (selectedFile) {
       const ext = selectedFile.name.toLowerCase();
@@ -209,41 +209,115 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag, sh
         onFileSelect(selectedFile);
         showNotification('File selected successfully', 'success');
       } else {
-        showNotification('Please upload a CSV or Excel file', 'error');
+        showNotification('Please upload an Excel or CSV file', 'error');
         if (fileInputRef.current) fileInputRef.current.value = '';
       }
     }
   };
 
+  const handleDragEvent = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      onDrag(true);
+    } else if (e.type === 'dragleave') {
+      if (e.currentTarget.contains(e.relatedTarget)) return;
+      onDrag(false);
+    }
+  };
+
   return (
     <div
-      className={`border-3 border-dashed rounded-2xl p-8 sm:p-10 text-center cursor-pointer ${
-        dragActive 
-          ? 'border-teal-600 bg-gradient-to-br from-teal-50 to-teal-100 ring-4 ring-teal-100' 
-          : 'border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100'
+      className={`group relative overflow-hidden rounded-3xl border bg-white p-1 shadow-xl transition-all duration-300 ${
+        dragActive
+          ? 'border-teal-500 ring-4 ring-teal-100'
+          : 'border-slate-200 hover:border-teal-300'
       }`}
-      onDragEnter={onDrag}
-      onDragLeave={onDrag}
-      onDragOver={onDrag}
+      onDragEnter={handleDragEvent}
+      onDragLeave={handleDragEvent}
+      onDragOver={handleDragEvent}
       onDrop={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         onDrag(false);
         const files = e.dataTransfer.files;
         if (files && files[0]) handleFileChange({ target: { files } });
       }}
-      onClick={() => fileInputRef.current?.click()}
     >
-      <FiUpload className={`mx-auto text-3xl mb-4 ${dragActive ? 'text-teal-700' : 'text-gray-400'}`} />
-      <p className="text-gray-800 mb-2 font-bold text-lg">
-        {dragActive ? '📁 Drop file here!' : file ? 'Click to replace file' : 'Drag & drop or click to upload'}
-      </p>
-      <p className="text-sm text-gray-600">CSV, Excel (.xlsx, .xls) • Max 10MB</p>
-      <input 
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        className={`relative w-full rounded-[1.35rem] border-2 border-dashed px-5 py-8 text-left transition-all duration-300 sm:px-8 ${
+          dragActive
+            ? 'border-teal-500 bg-teal-50'
+            : 'border-slate-200 bg-gradient-to-br from-slate-50 via-white to-emerald-50/50 hover:border-teal-400'
+        }`}
+      >
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-4">
+            <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-lg ${
+              dragActive ? 'bg-teal-700 text-white' : 'bg-slate-900 text-white'
+            }`}>
+              {file ? <IoDocumentText className="h-6 w-6" /> : <FiUpload className="h-6 w-6" />}
+            </div>
+
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-teal-700">
+                Excel fee register
+              </p>
+              <h3 className="mt-2 text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
+                {dragActive ? 'Drop the spreadsheet here' : file ? 'Spreadsheet selected' : 'Upload fee spreadsheet'}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-500">
+                Upload fee balances from Excel. CSV remains supported for legacy files.
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {['.xlsx', '.xls', '.csv'].map((type) => (
+                  <span key={type} className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-black uppercase text-slate-600 shadow-sm">
+                    {type}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            {file && (
+              <div className="min-w-0 rounded-2xl border border-teal-100 bg-white px-4 py-3 shadow-sm">
+                <p className="max-w-[260px] truncate text-sm font-black text-slate-900">{file.name}</p>
+                <p className="mt-1 text-xs font-bold text-slate-500">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB - {file.name.split('.').pop()?.toUpperCase()}
+                </p>
+              </div>
+            )}
+            <span className="inline-flex items-center justify-center rounded-2xl bg-teal-700 px-5 py-3 text-sm font-black text-white shadow-lg transition-colors group-hover:bg-teal-800">
+              {file ? 'Replace File' : 'Choose File'}
+            </span>
+          </div>
+        </div>
+      </button>
+
+      {file && onRemove && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onRemove();
+          }}
+          className="absolute right-4 top-4 rounded-xl bg-white p-2 text-slate-500 shadow-md transition hover:text-red-600"
+          aria-label="Remove selected file"
+        >
+          <FiX className="h-4 w-4" />
+        </button>
+      )}
+
+      <input
         ref={fileInputRef}
-        type="file" 
-        accept=".csv,.xlsx,.xls,.xlsm"
+        type="file"
+        accept=".csv,.xlsx,.xls"
         onChange={handleFileChange}
-        className="hidden" 
+        className="hidden"
       />
     </div>
   );
@@ -1759,7 +1833,7 @@ const getFormTextColor = (form) => {
       return 'Existing fee records were found for the same form, term, and year. Review the duplicate list before continuing.';
     }
     if (message.includes('Invalid file type')) {
-      return 'Upload a CSV or Excel fee file that matches the current template.';
+      return 'Upload an Excel or CSV fee file that matches the current template.';
     }
 
     return suggestion ? `${message} ${suggestion}`.trim() : message;
@@ -3354,18 +3428,18 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Download Templates</h3>
                   <div className="space-y-4">
                     <button
-                      onClick={downloadCSVTemplate}
-                      className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
-                    >
-                      <FiFile className="text-blue-600 text-2xl" />
-                      <span className="font-bold text-gray-900 text-base">CSV Template</span>
-                    </button>
-                    <button
                       onClick={downloadExcelTemplate}
                       className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
                     >
                       <IoDocumentText className="text-green-600 text-2xl" />
                       <span className="font-bold text-gray-900 text-base">Excel Template</span>
+                    </button>
+                    <button
+                      onClick={downloadCSVTemplate}
+                      className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
+                    >
+                      <FiFile className="text-blue-600 text-2xl" />
+                      <span className="font-bold text-gray-900 text-base">CSV Template</span>
                     </button>
                   </div>
                 </div>
@@ -3425,7 +3499,7 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-purple-800 font-bold">Supported Formats</span>
-                      <span className="font-bold text-purple-700">CSV, Excel</span>
+                      <span className="font-bold text-purple-700">Excel, CSV</span>
                     </div>
                   </div>
                 </div>

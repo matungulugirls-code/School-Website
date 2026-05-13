@@ -97,10 +97,6 @@ export const metadata = {
   ],
   
   authors: [{ name: "Matungulu Girls Senior School" }],
-  
-  alternates: {
-    canonical: "/",
-  },
 
   /* Open Graph (Social Media Sharing) */
   openGraph: {

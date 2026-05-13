@@ -20,7 +20,9 @@ try {
 }
 
 export async function generateMetadata({ params }) {
-  const { id } = params;
+  const { id, slug } = params;
+  const baseUrlFromEnv = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
+  const canonicalUrl = `${baseUrlFromEnv}/pages/SchoolTeam/${id}/${slug}`;
   
   // Find staff from local data - this works at build time
   const staff = STAFF_DATA.find(s => s.id === id);
@@ -54,7 +56,7 @@ export async function generateMetadata({ params }) {
         follow: true,
       },
       alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/SchoolTeam/${id}`,
+        canonical: canonicalUrl,
       }
     };
   }
@@ -65,7 +67,7 @@ export async function generateMetadata({ params }) {
     : `Meet ${staff.name}, a dedicated ${staff.position} at Matungulu Girls Senior School specializing in ${staff.department}.`;
   
   // Fix the image URL
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
+  const baseUrl = baseUrlFromEnv;
   const imageUrl = staff.image 
     ? staff.image.startsWith('http') 
       ? staff.image 
@@ -110,7 +112,7 @@ export async function generateMetadata({ params }) {
       'max-snippet': -1,
     },
     alternates: {
-      canonical: `${baseUrl}/SchoolTeam/${id}`,
+      canonical: canonicalUrl,
     },
     keywords: `${staff.name}, ${staff.position}, ${staff.department}, Matungulu Girls Senior School, teaching staff, Kenyan education, ${staff.expertise?.join(', ') || ''}`,
   };

@@ -100,7 +100,7 @@ Hours:
 Learn more by selecting other categories!`,
     links: [
       { label: 'About', path: '/pages/AboutUs', icon: 'info' },
-      { label: 'Overview', path: '/pages/overview', icon: 'grid' }
+      { label: 'Departments', path: '/pages/Departments', icon: 'grid' }
     ]
   },
   admissions: {
@@ -211,7 +211,7 @@ Steps:
 
 **Quality holistic education for all students!**`,
     links: [
-      { label: 'Academics', path: '/pages/academics', icon: 'book' },
+      { label: 'Departments', path: '/pages/Departments', icon: 'book' },
       { label: 'Guidance & Counselling', path: '/pages/Guidance-and-Councelling', icon: 'users' }
     ]
   },
@@ -263,7 +263,7 @@ Steps:
 • Sports tournaments`,
     links: [
       { label: 'News & Events', path: '/pages/eventsandnews', icon: 'calendar' },
-      { label: 'Sports', path: '/pages/sports', icon: 'activity' }
+      { label: 'Achievements', path: '/pages/Achievements', icon: 'activity' }
     ]
   },
   achievements: {
@@ -327,7 +327,7 @@ P.O. Box 32, 90131 Tala
     links: [
       { label: 'Contact', path: '/pages/contact', icon: 'phone' },
       { label: 'Staff Directory', path: '/pages/SchoolTeam', icon: 'users' },
-      { label: 'Careers', path: '/pages/career', icon: 'briefcase' },
+      { label: 'Careers', path: '/pages/careers', icon: 'briefcase' },
       { label: 'Admin Login', path: '/pages/adminLogin', icon: 'login' }
     ]
   }

@@ -159,6 +159,7 @@ const getSourceRowNumber = (record, fallbackIndex = 0) =>
 
 const LARGE_UPLOAD_ROW_THRESHOLD = 800;
 const DB_BATCH_SIZE = 200;
+const DEFAULT_STUDENT_GENDER = 'Female';
 
 const chunkArray = (items = [], size = DB_BATCH_SIZE) => {
   const chunks = [];
@@ -543,7 +544,7 @@ const processNewUpload = async (students, uploadBatchId, selectedForms, duplicat
               lastName: student.lastName,
               stream: student.stream || null,
               dateOfBirth: student.dateOfBirth ? new Date(student.dateOfBirth) : null,
-              gender: student.gender || null,
+              gender: DEFAULT_STUDENT_GENDER,
               parentPhone: student.parentPhone || null,
               email: student.email || null,
               address: student.address || null,
@@ -579,7 +580,7 @@ const processNewUpload = async (students, uploadBatchId, selectedForms, duplicat
       form: student.form,
       stream: student.stream || null,
       dateOfBirth: student.dateOfBirth ? new Date(student.dateOfBirth) : null,
-      gender: student.gender || null,
+      gender: DEFAULT_STUDENT_GENDER,
       parentPhone: student.parentPhone || null,
       email: student.email || null,
       address: student.address || null,
@@ -690,7 +691,7 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
             lastName: student.lastName,
             stream: student.stream || null,
             dateOfBirth: student.dateOfBirth ? new Date(student.dateOfBirth) : null,
-            gender: student.gender || null,
+            gender: DEFAULT_STUDENT_GENDER,
             parentPhone: student.parentPhone || null,
             email: student.email || null,
             address: student.address || null,
@@ -716,7 +717,7 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
         form: targetForm,
         stream: student.stream || null,
         dateOfBirth: student.dateOfBirth ? new Date(student.dateOfBirth) : null,
-        gender: student.gender || null,
+        gender: DEFAULT_STUDENT_GENDER,
         parentPhone: student.parentPhone || null,
         email: student.email || null,
         address: student.address || null,
@@ -853,7 +854,6 @@ const parseCSV = async (file) => {
                     const middleName = row.middleName ? String(row.middleName).trim() : null;
                     const stream = row.stream ? String(row.stream).trim() : null;
                     const dateOfBirth = parseDate(row.dateOfBirth || row.dob || '');
-                    const gender = row.gender ? String(row.gender).trim() : null;
                     const parentPhone = row.parentPhone ? String(row.parentPhone).trim() : null;
                     const email = row.email ? String(row.email).trim() : null;
                     const address = row.address ? String(row.address).trim() : null;
@@ -865,7 +865,6 @@ const parseCSV = async (file) => {
                       lastName,
                       form,
                       stream,
-                      gender,
                       parentPhone,
                       email,
                       address
@@ -900,7 +899,7 @@ const parseCSV = async (file) => {
                       form: normalizedForm,
                       stream,
                       dateOfBirth,
-                      gender,
+                      gender: DEFAULT_STUDENT_GENDER,
                       parentPhone,
                       email,
                       address
@@ -995,7 +994,6 @@ const parseExcel = async (file) => {
           const stream = String(normalizedRow.stream || '').trim() || null;
           const dateOfBirthRaw = normalizedRow.dateOfBirth || '';
           const dateOfBirth = dateOfBirthRaw ? parseDate(dateOfBirthRaw) : null;
-          const gender = String(normalizedRow.gender || '').trim() || null;
           const parentPhone = String(normalizedRow.parentPhone || '').trim() || null;
           const email = String(normalizedRow.email || '').trim() || null;
           const address = String(normalizedRow.address || '').trim() || null;
@@ -1029,7 +1027,6 @@ const parseExcel = async (file) => {
             lastName,
             form,
             stream,
-            gender,
             parentPhone,
             email,
             address
@@ -1048,7 +1045,7 @@ const parseExcel = async (file) => {
             form: normalizedForm,
             stream,
             dateOfBirth,
-            gender,
+            gender: DEFAULT_STUDENT_GENDER,
             parentPhone,
             email,
             address,
@@ -1152,10 +1149,6 @@ const validateStudent = (student, index) => {
   
   if (student.stream && student.stream.length > 50) {
     errors.push(`Row ${rowNumber}: Stream too long (max 50 chars)`);
-  }
-  
-  if (student.gender && student.gender.length > 20) {
-    errors.push(`Row ${rowNumber}: Gender too long (max 20 chars)`);
   }
   
   if (student.parentPhone) {
@@ -1437,7 +1430,7 @@ export async function POST(request) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'Invalid file type. Please upload CSV or Excel (xlsx/xls) files.',
+          error: 'Invalid file type. Please upload Excel or CSV (xlsx/xls/csv) files.',
           authenticated: true 
         },
         { status: 400 }
@@ -1745,6 +1738,8 @@ export async function PUT(request) {
           throw new Error('Invalid date format');
         }
       }
+
+      updateData.gender = DEFAULT_STUDENT_GENDER;
 
       // Update student with audit info
       const updatedStudent = await tx.databaseStudent.update({

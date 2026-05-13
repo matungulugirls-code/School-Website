@@ -653,7 +653,7 @@ export default function ModernHero() {
   // Navigation handlers
   const handleAcademicsClick = useCallback(() => {
     if (navigationBlocked) return;
-    router.push('/pages/academics');
+    router.push('/pages/Departments');
   }, [router, navigationBlocked]);
 
   const handleWatchTour = useCallback(() => {

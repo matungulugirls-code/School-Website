@@ -316,7 +316,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    const validExtensions = ['.csv', '.xlsx', '.xls', '.xlsm'];
+    const validExtensions = ['.csv', '.xlsx', '.xls'];
     
     if (selectedFile) {
       const ext = selectedFile.name.toLowerCase();
@@ -324,7 +324,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
         onFileSelect(selectedFile);
         sooner.success('File selected successfully');
       } else {
-        sooner.error('Please upload a CSV or Excel file');
+        sooner.error('Please upload an Excel or CSV file');
         if (fileInputRef.current) fileInputRef.current.value = '';
       }
     }
@@ -341,12 +341,14 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
     }
   };
 
+  const fileExtension = file?.name?.split('.').pop()?.toUpperCase();
+
   return (
     <div
-      className={`border-3 border-dashed rounded-2xl p-10 text-center transition-all duration-300 cursor-pointer ${
-        dragActive 
-          ? 'border-teal-500 bg-gradient-to-br from-teal-50 to-teal-100 ring-4 ring-teal-100' 
-          : 'border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100'
+      className={`group relative overflow-hidden rounded-3xl border bg-white p-1 shadow-xl transition-all duration-300 ${
+        dragActive
+          ? 'border-teal-500 ring-4 ring-teal-100'
+          : 'border-slate-200 hover:border-teal-300'
       }`}
       onDragEnter={handleDragEvent}
       onDragLeave={handleDragEvent}
@@ -360,23 +362,81 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
           handleFileChange({ target: { files } });
         }
       }}
-      onClick={() => fileInputRef.current?.click()}
     >
-      <FiUpload className={`mx-auto text-3xl mb-4 ${
-        dragActive ? 'text-teal-700' : 'text-gray-400'
-      }`} />
-      <p className="text-gray-800 mb-2 font-bold text-lg">
-        {dragActive ? '📁 Drop file here!' : file ? 'Click to replace file' : 'Drag & drop or click to upload'}
-      </p>
-      <p className="text-sm text-gray-600">
-        CSV, Excel (.xlsx, .xls) • Max 10MB
-      </p>
-      <input 
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        className={`relative w-full rounded-[1.35rem] border-2 border-dashed px-5 py-8 text-left transition-all duration-300 sm:px-8 ${
+          dragActive
+            ? 'border-teal-500 bg-teal-50'
+            : 'border-slate-200 bg-gradient-to-br from-slate-50 via-white to-emerald-50/50 hover:border-teal-400'
+        }`}
+      >
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-4">
+            <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-lg ${
+              dragActive ? 'bg-teal-700 text-white' : 'bg-slate-900 text-white'
+            }`}>
+              {file ? <IoDocumentText className="h-6 w-6" /> : <FiUpload className="h-6 w-6" />}
+            </div>
+
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-teal-700">
+                Excel student register
+              </p>
+              <h3 className="mt-2 text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
+                {dragActive ? 'Drop the spreadsheet here' : file ? 'Spreadsheet selected' : 'Upload student spreadsheet'}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-500">
+                Use the Excel template for student records. CSV still works for older exports.
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {['.xlsx', '.xls', '.csv'].map((type) => (
+                  <span key={type} className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-black uppercase text-slate-600 shadow-sm">
+                    {type}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            {file && (
+              <div className="min-w-0 rounded-2xl border border-teal-100 bg-white px-4 py-3 shadow-sm">
+                <p className="max-w-[260px] truncate text-sm font-black text-slate-900">{file.name}</p>
+                <p className="mt-1 text-xs font-bold text-slate-500">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB {fileExtension ? `- ${fileExtension}` : ''}
+                </p>
+              </div>
+            )}
+            <span className="inline-flex items-center justify-center rounded-2xl bg-teal-700 px-5 py-3 text-sm font-black text-white shadow-lg transition-colors group-hover:bg-teal-800">
+              {file ? 'Replace File' : 'Choose File'}
+            </span>
+          </div>
+        </div>
+      </button>
+
+      {file && onRemove && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onRemove();
+          }}
+          className="absolute right-4 top-4 rounded-xl bg-white p-2 text-slate-500 shadow-md transition hover:text-red-600"
+          aria-label="Remove selected file"
+        >
+          <FiX className="h-4 w-4" />
+        </button>
+      )}
+
+      <input
         ref={fileInputRef}
-        type="file" 
-        accept=".csv,.xlsx,.xls,.xlsm"
+        type="file"
+        accept=".csv,.xlsx,.xls"
         onChange={handleFileChange}
-        className="hidden" 
+        className="hidden"
       />
     </div>
   );
@@ -499,10 +559,6 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                 </h4>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Gender</span>
-                    <span className="font-semibold">{student.gender || 'N/A'}</span>
-                  </div>
-                  <div className="flex justify-between">
                     <span className="text-gray-600">Date of Birth</span>
                     <span className="font-semibold">{formatDate(student.dateOfBirth)}</span>
                   </div>
@@ -584,7 +640,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
     admissionNumber: student?.admissionNumber || '',
     form: student?.form || 'Form 1',
     stream: student?.stream || '',
-    gender: student?.gender || '',
+    gender: 'Female',
     dateOfBirth: student?.dateOfBirth ? student.dateOfBirth.split('T')[0] : '',
     email: student?.email || '',
     parentPhone: student?.parentPhone || '',
@@ -676,21 +732,6 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Gender
-                  </label>
-                  <select
-                    value={formData.gender}
-                    onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -1007,7 +1048,7 @@ function StudentsChart({
               />
               <Bar 
                 dataKey="value" 
-                name={title.includes('Gender') ? "Students" : "Count"} 
+                name="Count"
                 radius={[8, 8, 0, 0]}
                 fill={chartColors[0]}
               >
@@ -1153,12 +1194,9 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
   
   const formDistribution = demographics.formDistribution || [];
   const totalStudents = stats.totalStudents || 0;
-  const recordedGenderCount = (demographics.gender || [])
-    .filter((entry) => entry.name !== 'Not Specified')
-    .reduce((sum, entry) => sum + entry.value, 0);
-  const unspecifiedGenderCount = (demographics.gender || [])
-    .filter((entry) => entry.name === 'Not Specified')
-    .reduce((sum, entry) => sum + entry.value, 0);
+  const activeStudents = demographics.statusDistribution?.find(s => s.name === 'Active')?.value || 0;
+  const streamCount = Object.keys(stats.streamStats || {}).length;
+  const ageGroupCount = (demographics.ageGroups || []).length;
   
   return (
     <div className="bg-white rounded-2xl p-6 border-2 border-gray-300 shadow-2xl">
@@ -1229,27 +1267,27 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="text-center p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-emerald-700">
-            {recordedGenderCount.toLocaleString()}
+            {activeStudents.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-emerald-900">Gender Recorded</div>
+          <div className="text-sm font-semibold text-emerald-900">Active Students</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-teal-700">
-            {unspecifiedGenderCount.toLocaleString()}
+            {formDistribution.length.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-teal-900">Not Specified</div>
+          <div className="text-sm font-semibold text-teal-900">Forms</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-amber-50 to-amber-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-amber-700">
-            {(demographics.statusDistribution?.find(s => s.name === 'Active')?.value || 0).toLocaleString()}
+            {streamCount.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-amber-900">Active Students</div>
+          <div className="text-sm font-semibold text-amber-900">Streams</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-gray-700">
-            {Object.keys(stats.streamStats || {}).length}
+            {ageGroupCount.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-gray-900">Streams</div>
+          <div className="text-sm font-semibold text-gray-900">Age Groups</div>
         </div>
       </div>
       
@@ -1300,7 +1338,6 @@ function EnhancedFilterPanel({
       search: '',
       form: '',
       stream: '',
-      gender: '',
       status: '',
       minAge: '',
       maxAge: '',
@@ -1402,22 +1439,6 @@ function EnhancedFilterPanel({
 
       {showAdvanced && (
         <div className="mt-8 pt-8 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">
-              Gender
-            </label>
-            <select
-              value={localFilters.gender}
-              onChange={(e) => handleFilterChange('gender', e.target.value)}
-              className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
-            >
-              <option value="">All Genders</option>
-              {['Male', 'Female', 'Other'].map(gender => (
-                <option key={gender} value={gender}>{gender}</option>
-              ))}
-            </select>
-          </div>
-
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">
               Age Range
@@ -2011,7 +2032,6 @@ export default function ModernStudentBulkUpload() {
     search: '',
     form: '',
     stream: '',
-    gender: '',
     status: '',
     minAge: '',
     maxAge: '',
@@ -2023,14 +2043,12 @@ export default function ModernStudentBulkUpload() {
     totalStudents: 0,
     formStats: {},
     streamStats: {},
-    genderStats: {},
     ageStats: {},
     globalStats: { totalStudents: 0, form1: 0, form2: 0, form3: 0, form4: 0 },
     validation: { isValid: true }
   });
 
   const [demographics, setDemographics] = useState({
-    gender: [],
     ageGroups: [],
     formDistribution: [],
     streamDistribution: [],
@@ -2065,7 +2083,7 @@ export default function ModernStudentBulkUpload() {
       : payloadOrMessage?.error || payloadOrMessage?.message || 'Upload failed';
 
     if (message.includes('Invalid file type')) {
-      return 'Upload a CSV or Excel file that matches the current student template.';
+      return 'Upload an Excel or CSV file that matches the current student template.';
     }
     if (message.includes('No readable student rows') || message.includes('empty')) {
       return 'The file looks empty or unreadable. Confirm the first row contains student data and the sheet is not blank.';
@@ -2156,15 +2174,11 @@ const getAuthHeaders = (isProtected = false) => {
           const totalStudents = apiStats.totalStudents || allStudents.length;
           
           const streamDistribution = {};
-          const genderDistribution = {};
           const statusDistribution = {};
           
           allStudents.forEach(student => {
             const stream = student.stream || 'Unassigned';
             streamDistribution[stream] = (streamDistribution[stream] || 0) + 1;
-            
-            const gender = student.gender || 'Not Specified';
-            genderDistribution[gender] = (genderDistribution[gender] || 0) + 1;
             
             const status = student.status || 'active';
             statusDistribution[status] = (statusDistribution[status] || 0) + 1;
@@ -2197,12 +2211,6 @@ const getAuthHeaders = (isProtected = false) => {
             'Form 3': apiStats.form3 || 0,
             'Form 4': apiStats.form4 || 0
           };
-          
-          const genderChartData = Object.entries(genderDistribution).map(([name, value]) => ({
-            name,
-            value,
-            color: name === 'Male' ? '#0D9488' : name === 'Female' ? '#EC4899' : '#047857'
-          }));
           
           const formChartData = Object.entries(formDistribution).map(([name, value]) => ({
             name,
@@ -2247,7 +2255,6 @@ const getAuthHeaders = (isProtected = false) => {
             globalStats: apiStats,
             formStats: formDistribution,
             streamStats: streamDistribution,
-            genderStats: genderDistribution,
             statusStats: statusDistribution,
             ageStats: ageDistribution,
             validation: {
@@ -2256,7 +2263,6 @@ const getAuthHeaders = (isProtected = false) => {
           });
           
           setDemographics({
-            gender: genderChartData,
             formDistribution: formChartData,
             streamDistribution: streamChartData,
             ageGroups: ageChartData,
@@ -2335,7 +2341,6 @@ const handleAuthError = (error) => {
       if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
       if (filters.form) url += `&form=${encodeURIComponent(filters.form)}`;
       if (filters.stream) url += `&stream=${encodeURIComponent(filters.stream)}`;
-      if (filters.gender) url += `&gender=${encodeURIComponent(filters.gender)}`;
       if (filters.status) url += `&status=${encodeURIComponent(filters.status)}`;
       if (filters.sortBy) url += `&sortBy=${encodeURIComponent(filters.sortBy)}`;
       if (filters.sortOrder) url += `&sortOrder=${encodeURIComponent(filters.sortOrder)}`;
@@ -2416,7 +2421,6 @@ const loadUploadHistory = async (page = 1) => {
       search: '',
       form: '',
       stream: '',
-      gender: '',
       status: '',
       minAge: '',
       maxAge: '',
@@ -2731,7 +2735,7 @@ const downloadExcelTemplate = () => {
       return;
     }
 
-    const headers = ['Admission Number', 'First Name', 'Middle Name', 'Last Name', 'Form', 'Stream', 'Gender', 'Date of Birth', 'Age', 'Status', 'Email', 'Parent Phone', 'Address'];
+    const headers = ['Admission Number', 'First Name', 'Middle Name', 'Last Name', 'Form', 'Stream', 'Date of Birth', 'Age', 'Status', 'Email', 'Parent Phone', 'Address'];
     const data = students.map(student => {
       const dob = student.dateOfBirth ? new Date(student.dateOfBirth) : null;
       const age = dob ? new Date().getFullYear() - dob.getFullYear() : '';
@@ -2743,7 +2747,6 @@ const downloadExcelTemplate = () => {
         student.lastName,
         student.form,
         student.stream || '',
-        student.gender || '',
         dob ? dob.toLocaleDateString() : '',
         age,
         student.status,
@@ -2778,7 +2781,7 @@ const downloadExcelTemplate = () => {
     }
 
     const worksheetData = [
-      ['Admission Number', 'First Name', 'Middle Name', 'Last Name', 'Form', 'Stream', 'Gender', 'Date of Birth', 'Age', 'Status', 'Email', 'Parent Phone', 'Address'],
+      ['Admission Number', 'First Name', 'Middle Name', 'Last Name', 'Form', 'Stream', 'Date of Birth', 'Age', 'Status', 'Email', 'Parent Phone', 'Address'],
       ...students.map(student => {
         const dob = student.dateOfBirth ? new Date(student.dateOfBirth) : null;
         const age = dob ? new Date().getFullYear() - dob.getFullYear() : '';
@@ -2790,7 +2793,6 @@ const downloadExcelTemplate = () => {
           student.lastName,
           student.form,
           student.stream || '',
-          student.gender || '',
           dob ? dob.toLocaleDateString() : '',
           age,
           student.status,
@@ -2987,11 +2989,9 @@ const downloadExcelTemplate = () => {
                 trend={12.3}
               />
               <StudentStatisticsCard
-                title="Gender Recorded"
-                value={(demographics.gender || [])
-                  .filter(g => g.name !== 'Not Specified')
-                  .reduce((sum, g) => sum + g.value, 0)}
-                icon={FiPercent}
+                title="Streams Tracked"
+                value={Object.keys(stats.streamStats || {}).length}
+                icon={FiLayers}
                 color="from-emerald-600 to-green-700"
                 trend={2.1}
               />
@@ -3206,18 +3206,18 @@ const downloadExcelTemplate = () => {
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Download Templates</h3>
                   <div className="space-y-4">
                     <button
-                      onClick={downloadCSVTemplate}
-                      className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
-                    >
-                      <FiFile className="text-teal-700 text-2xl" />
-                      <span className="font-bold text-gray-900 text-base">CSV Template</span>
-                    </button>
-                    <button
                       onClick={downloadExcelTemplate}
                       className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
                     >
                       <IoDocumentText className="text-green-600 text-2xl" />
                       <span className="font-bold text-gray-900 text-base">Excel Template</span>
+                    </button>
+                    <button
+                      onClick={downloadCSVTemplate}
+                      className="w-full flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300"
+                    >
+                      <FiFile className="text-teal-700 text-2xl" />
+                      <span className="font-bold text-gray-900 text-base">CSV Template</span>
                     </button>
                   </div>
                 </div>
@@ -3277,7 +3277,7 @@ const downloadExcelTemplate = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-emerald-800 font-bold">Supported Formats</span>
-                      <span className="font-bold text-emerald-700">CSV, Excel</span>
+                      <span className="font-bold text-emerald-700">Excel, CSV</span>
                     </div>
                   </div>
                 </div>
@@ -3690,21 +3690,17 @@ const downloadExcelTemplate = () => {
                 trend={12.3}
               />
               <StudentStatisticsCard
-                title="Gender Recorded"
-                value={(demographics.gender || [])
-                  .filter(g => g.name !== 'Not Specified')
-                  .reduce((sum, g) => sum + g.value, 0)}
-                icon={FiUser}
+                title="Forms Tracked"
+                value={(demographics.formDistribution || []).filter(item => item.value > 0).length}
+                icon={IoSchool}
                 color="from-teal-600 to-teal-800"
                 trend={5.2}
               />
               <StudentStatisticsCard
-                title="Not Specified"
-                value={(demographics.gender || [])
-                  .filter(g => g.name === 'Not Specified')
-                  .reduce((sum, g) => sum + g.value, 0)}
-                icon={FiUser}
-                color="from-pink-500 to-pink-700"
+                title="Streams Tracked"
+                value={Object.keys(stats.streamStats || {}).length}
+                icon={FiLayers}
+                color="from-amber-500 to-amber-700"
                 trend={7.8}
               />
             </div>
@@ -3726,10 +3722,10 @@ const downloadExcelTemplate = () => {
                 height={400}
               />
               <StudentsChart
-                data={demographics.gender}
+                data={demographics.statusDistribution}
                 type="bar"
-                title="Gender Records"
-                colors={['#0D9488', '#EC4899', '#047857']}
+                title="Status Distribution"
+                colors={['#10B981', '#EF4444', '#047857', '#F59E0B']}
                 height={400}
               />
             </div>

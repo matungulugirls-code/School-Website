@@ -592,7 +592,6 @@ const [growthMetrics, setGrowthMetrics] = useState({
     active: 0,
     inactive: 0,
     byForm: { 'Form 1': 0, 'Form 2': 0, 'Form 3': 0, 'Form 4': 0 },
-    byGender: { male: 0, female: 0, other: 0 },
     byStream: {},
     byStatus: { active: 0, inactive: 0 }
   });
@@ -845,7 +844,6 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
       // Calculate student population and distribution
       if (studentList.length > 0) {
         const formDistribution = { 'Form 1': 0, 'Form 2': 0, 'Form 3': 0, 'Form 4': 0 };
-        const genderDistribution = { male: 0, female: 0, other: 0 };
         const streamDistribution = {};
         const statusDistribution = { active: 0, inactive: 0 };
         
@@ -856,11 +854,6 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
           } else if (form) {
             formDistribution[form] = (formDistribution[form] || 0) + 1;
           }
-          
-          const gender = student.gender?.toLowerCase() || student.Gender?.toLowerCase() || 'other';
-          if (gender === 'male' || gender === 'm') genderDistribution.male++;
-          else if (gender === 'female' || gender === 'f') genderDistribution.female++;
-          else genderDistribution.other++;
           
           const stream = student.stream || student.Stream || '';
           if (stream) {
@@ -877,7 +870,6 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
           active: statusDistribution.active,
           inactive: statusDistribution.inactive,
           byForm: formDistribution,
-          byGender: genderDistribution,
           byStream: streamDistribution,
           byStatus: statusDistribution
         });
@@ -1362,11 +1354,7 @@ const StatCard = ({ icon: Icon, label, value, change, color, subtitle, trend }) 
              form === 'Form 3' ? '#F59E0B' : '#8B5CF6'
     }));
     
-    const genderData = [
-      { name: 'Male', value: studentPopulation.byGender.male, color: '#3B82F6' },
-      { name: 'Female', value: studentPopulation.byGender.female, color: '#EC4899' },
-      { name: 'Other', value: studentPopulation.byGender.other, color: '#6B7280' }
-    ];
+    const streamCount = Object.keys(studentPopulation.byStream || {}).length;
     
     return (
       <div className="group relative bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
@@ -1429,20 +1417,19 @@ const StatCard = ({ icon: Icon, label, value, change, color, subtitle, trend }) 
           </div>
         </div>
         
-        {/* Gender Distribution */}
+        {/* Register Scope */}
         <div className="pt-4 border-t border-slate-100">
-          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-3">Gender Distribution</h4>
-          <div className="flex items-center justify-between">
-            {genderData.map((gender, index) => (
-              <div key={index} className="text-center">
-                <div className="flex flex-col items-center">
-                  <div 
-                    className="w-3 h-3 rounded-full mb-1"
-                    style={{ backgroundColor: gender.color }}
-                  />
-                  <span className="text-xs font-bold text-slate-700">{gender.value}</span>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase">{gender.name}</span>
-                </div>
+          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-3">Register Scope</h4>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: 'Forms', value: formData.filter(item => item.students > 0).length, color: 'bg-blue-500' },
+              { label: 'Streams', value: streamCount, color: 'bg-emerald-500' },
+              { label: 'Active', value: studentPopulation.active, color: 'bg-amber-500' }
+            ].map((item) => (
+              <div key={item.label} className="rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-center">
+                <div className={`mx-auto mb-1 h-2.5 w-2.5 rounded-full ${item.color}`} />
+                <span className="block text-xs font-black text-slate-900">{item.value}</span>
+                <span className="text-[10px] font-bold uppercase text-slate-400">{item.label}</span>
               </div>
             ))}
           </div>

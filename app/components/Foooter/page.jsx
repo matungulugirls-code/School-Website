@@ -55,7 +55,7 @@ const QUICK_LINKS = [
   { name: 'Gallery', href: '/pages/gallery', icon: FiImage },
   { name: 'News & Events', href: '/pages/eventsandnews', icon: FiCalendar },
   { name: 'Contact Us', href: '/pages/contact', icon: FiPhone },
-  { name: 'Alumni', href: '/pages/alumni', icon: FaGraduationCap },
+  { name: 'Alumni', href: 'https://www.facebook.com/groups/53636547389', icon: FaGraduationCap },
 ];
 
 const RESOURCES = [
@@ -67,8 +67,8 @@ const RESOURCES = [
   },
   { name: 'Staff Directory', href: '/pages/SchoolTeam', icon: FiUsers },
   { name: 'Admin Login', href: '/pages/adminLogin', icon: FiLock },
-  { name: 'School Policies', href: '/pagesSchool Policies', icon: FiShield },
-  { name: 'E-Learning Platform', href: '/pages/e-learning', icon: FiCompass },
+  { name: 'School Policies', href: '/pages/School Policies', icon: FiShield },
+  { name: 'Learning Resources', href: '/pages/StudentPortal', icon: FiCompass },
 ];
 
 // Social Media Links - Matungulu Girls

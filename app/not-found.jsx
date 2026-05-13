@@ -27,13 +27,13 @@ const Modern404 = () => {
 
   const quickLinks = [
     { name: 'Home Base', href: '/', icon: FiHome, description: 'Back to assembly' },
-    { name: 'Academics', href: '/pages/academics', icon: FiBook, description: 'Course directory' },
+    { name: 'Academics', href: '/pages/Departments', icon: FiBook, description: 'Course directory' },
     { name: 'Gallery', href: '/pages/gallery', icon: FiBookOpen, description: 'School moments' },
     { name: 'Admissions', href: '/pages/admissions', icon: FiUsers, description: 'Join our sisterhood' },
     { name: 'Events', href: '/pages/eventsandnews', icon: FiCalendar, description: 'Upcoming terms' },
     { name: 'Support', href: '/pages/contact', icon: FiMail, description: 'Talk to the office' },
     { name: 'Portal', href: '/pages/StudentPortal', icon: FaGraduationCap, description: 'Student Portal' },
-    { name: 'Guidance', href: '/pages/Guidance-and-Coucelling', icon: FiHeart, description: 'Counseling sessions' },
+    { name: 'Guidance', href: '/pages/Guidance-and-Councelling', icon: FiHeart, description: 'Counseling sessions' },
   ];
 
   useEffect(() => {
