@@ -762,7 +762,9 @@ function ModernSchoolModal({ onClose, onSave, school, loading: parentLoading }) 
     description: school?.description || '',
     motto: school?.motto || '',
     vision: school?.vision || '',
-
+    magazineTitle: school?.magazine?.title || school?.Magazine?.title || '',
+    magazineYear: (school?.magazine?.year || school?.Magazine?.year)?.toString() || '',
+    magazineDescription: school?.magazine?.description || school?.Magazine?.description || '',
     mission: school?.mission || '',
     studentCount: school?.studentCount?.toString() || '',
     staffCount: school?.staffCount?.toString() || '',
@@ -792,11 +794,17 @@ function ModernSchoolModal({ onClose, onSave, school, loading: parentLoading }) 
   const [videoFile, setVideoFile] = useState(null);
   const [videoThumbnail, setVideoThumbnail] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [magazineFile, setMagazineFile] = useState(null);
+  const [magazineThumbnailFile, setMagazineThumbnailFile] = useState(null);
+  const [magazinePreview, setMagazinePreview] = useState(null);
+  const [removeMagazine, setRemoveMagazine] = useState(false);
+  const existingMagazine = school?.magazine || school?.Magazine || null;
 
   const steps = [
     { id: 'basic', label: 'Basic Info', icon: FaBuilding },
     { id: 'academic', label: 'Academic', icon: FaGraduationCap },
-    { id: 'admission', label: 'Admission', icon: FaUserCheck }
+    { id: 'admission', label: 'Admission', icon: FaUserCheck },
+    { id: 'magazine', label: 'Magazine', icon: FaBook }
   ];
 
 
@@ -900,6 +908,16 @@ const handleFormSubmit = async (e) => {
     
     if (!adminToken || !deviceToken) {
       throw new Error('Authentication required. Please login again.');
+    }
+
+    if (removeMagazine) {
+      formDataObj.append('removeMagazine', 'true');
+    } else {
+      if (magazineFile) formDataObj.append('magazinePdf', magazineFile);
+      if (magazineThumbnailFile) formDataObj.append('magazineThumbnail', magazineThumbnailFile);
+      formDataObj.append('magazineTitle', formData.magazineTitle || '');
+      formDataObj.append('magazineYear', formData.magazineYear || '');
+      formDataObj.append('magazineDescription', formData.magazineDescription || '');
     }
 
     // ✅ DYNAMIC METHOD SELECTION: POST for CREATE, PUT for UPDATE
@@ -1405,6 +1423,141 @@ const handleFormSubmit = async (e) => {
                     placeholder="Describe admission requirements..."
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-gray-500 resize-none bg-white text-base font-bold placeholder-gray-500"
                   />
+                </div>
+              </div>
+            )}
+
+            {currentStep === 3 && (
+              <div className="space-y-6">
+                <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50 p-6">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h3 className="flex items-center gap-2 text-xl font-bold text-gray-900">
+                        <FaBook className="text-amber-900" />
+                        School Magazine
+                      </h3>
+                      <p className="mt-2 text-sm font-semibold text-slate-600">
+                        Update the public magazine title, description, PDF, and thumbnail.
+                      </p>
+                    </div>
+
+                    {isUpdateMode && existingMagazine && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setRemoveMagazine((current) => !current);
+                          setMagazineFile(null);
+                          setMagazineThumbnailFile(null);
+                          setMagazinePreview(null);
+                        }}
+                        className={`rounded-xl px-4 py-3 text-sm font-black transition ${
+                          removeMagazine
+                            ? 'bg-red-700 text-white hover:bg-red-800'
+                            : 'bg-white text-red-700 ring-1 ring-red-200 hover:bg-red-50'
+                        }`}
+                      >
+                        {removeMagazine ? 'Undo Remove' : 'Remove Magazine'}
+                      </button>
+                    )}
+                  </div>
+
+                  {removeMagazine ? (
+                    <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold leading-6 text-red-800">
+                      This magazine will be removed when you save. The public Magazine page will no longer show it.
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div>
+                          <label className="mb-2 block text-sm font-bold text-gray-700">Magazine Title</label>
+                          <input
+                            type="text"
+                            value={formData.magazineTitle || ''}
+                            onChange={(e) => handleChange('magazineTitle', e.target.value)}
+                            placeholder="e.g., The Pride 2026"
+                            className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 font-bold text-slate-900 focus:border-amber-500 focus:ring-amber-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-2 block text-sm font-bold text-gray-700">Year</label>
+                          <input
+                            type="number"
+                            value={formData.magazineYear || ''}
+                            onChange={(e) => handleChange('magazineYear', e.target.value)}
+                            placeholder="2026"
+                            className="w-full rounded-xl border-2 border-gray-200 px-4 py-3 font-bold text-slate-900 focus:border-amber-500 focus:ring-amber-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="mb-2 block text-sm font-bold text-gray-700">Description</label>
+                        <textarea
+                          rows="3"
+                          value={formData.magazineDescription || ''}
+                          onChange={(e) => handleChange('magazineDescription', e.target.value)}
+                          placeholder="Brief description of the magazine content..."
+                          className="w-full rounded-xl border-2 border-gray-100 px-4 py-3 font-bold text-slate-900 focus:border-amber-500 focus:ring-amber-500"
+                        />
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div>
+                          <label className="mb-2 block text-sm font-bold text-gray-700">
+                            Magazine PDF (max 4.2MB)
+                          </label>
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                if (file.size > 4.2 * 1024 * 1024) {
+                                  toast.error('PDF size exceeds 4.2MB');
+                                  return;
+                                }
+                                setMagazineFile(file);
+                              }
+                            }}
+                            className="w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-amber-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-amber-700 hover:file:bg-amber-100"
+                          />
+                          {existingMagazine?.pdfUrl && !magazineFile && (
+                            <a href={existingMagazine.pdfUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm font-bold text-amber-700 underline">
+                              Current PDF
+                            </a>
+                          )}
+                          {magazineFile && <p className="mt-2 text-sm font-bold text-emerald-700">{magazineFile.name}</p>}
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm font-bold text-gray-700">
+                            Thumbnail (PNG/JPEG/JPG, max 2MB)
+                          </label>
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/jpg"
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                if (file.size > 2 * 1024 * 1024) {
+                                  toast.error('Thumbnail size must be 2MB or below');
+                                  return;
+                                }
+                                setMagazineThumbnailFile(file);
+                                setMagazinePreview(URL.createObjectURL(file));
+                              }
+                            }}
+                            className="w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-amber-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-amber-700 hover:file:bg-amber-100"
+                          />
+                          {(magazinePreview || existingMagazine?.thumbnail) && (
+                            <div className="mt-3 overflow-hidden rounded-xl bg-white p-2">
+                              <img src={magazinePreview || existingMagazine.thumbnail} alt="Magazine thumbnail" className="h-28 w-auto rounded-lg object-cover" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}

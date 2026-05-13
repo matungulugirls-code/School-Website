@@ -200,6 +200,12 @@ const sortStaffByHierarchy = (staff) => {
   });
 };
 
+const isPrincipalStaff = (staff) => {
+  const role = (staff?.role || '').toLowerCase();
+  const position = (staff?.position || '').toLowerCase();
+  return (role.includes('principal') || position.includes('principal')) && !role.includes('deputy') && !position.includes('deputy');
+};
+
 // ==========================================
 // 3. SUB-COMPONENTS
 // ==========================================
@@ -278,7 +284,9 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
       }>
         {staff.map((member) => (
           <div key={member.id}>
-            {iconKey === 'leadership' || viewMode !== 'grid'
+            {iconKey === 'leadership' && isPrincipalStaff(member)
+              ? <PrincipalFeatureCard staff={member} onContactClick={onContactClick} />
+              : iconKey === 'leadership' || viewMode !== 'grid'
               ? <StaffListCard staff={member} onContactClick={onContactClick} />
               : <StaffCard staff={member} onContactClick={onContactClick} />
             }
@@ -635,6 +643,108 @@ const StaffCard = ({ staff, onContactClick }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const PrincipalFeatureCard = ({ staff, onContactClick }) => {
+  const contactDisabled = isContactModalDisabled(staff);
+  const details = [
+    { icon: FiShield, label: 'Role', value: staff.position || staff.role || 'Principal' },
+    { icon: FiLayers, label: 'Department', value: staff.department || 'Administration' },
+    { icon: FiCalendar, label: 'Joined', value: staff.joinDate },
+    { icon: FiAward, label: 'Experience', value: staff.experience },
+  ].filter((detail) => detail.value);
+
+  return (
+    <article className="mx-auto w-full max-w-[76rem] overflow-hidden rounded-[32px] border border-slate-300 bg-white shadow-[0_26px_80px_-46px_rgba(15,23,42,0.52)]">
+      <div className="grid gap-0 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.35fr)]">
+        <div className="relative flex min-h-[360px] items-center justify-center bg-slate-100 p-4 sm:min-h-[460px]">
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
+          <div className="relative flex aspect-[4/4.6] w-full max-w-[430px] items-center justify-center overflow-hidden rounded-[28px] border border-white/80 bg-white shadow-sm">
+            <Image
+              src={getImageSrc(staff)}
+              alt={staff.name}
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 90vw, 430px"
+              priority
+              onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
+            />
+          </div>
+          <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-[#1a1a2e]/95 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-sm backdrop-blur-sm">
+            <FiShield size={12} />
+            Principal
+          </div>
+        </div>
+
+        <div className="flex min-w-0 flex-col justify-center p-5 sm:p-7 lg:p-8">
+          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#1f5f3a]">School Leadership</p>
+          <h3 className="mt-3 break-words text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+            {staff.name}
+          </h3>
+          <p className="mt-2 text-sm font-extrabold uppercase tracking-[0.18em] text-slate-600">
+            {staff.position || staff.role || 'Principal'}
+          </p>
+
+          {(staff.quote || staff.bio) && (
+            <div className="mt-6 rounded-[24px] bg-slate-50 p-5">
+              {staff.quote && (
+                <p className="break-words text-lg font-black leading-8 text-slate-900">
+                  “{staff.quote}”
+                </p>
+              )}
+              {staff.bio && (
+                <p className="mt-3 whitespace-pre-line break-words text-sm font-semibold leading-7 text-slate-600 line-clamp-5">
+                  {staff.bio}
+                </p>
+              )}
+            </div>
+          )}
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {details.map(({ icon: DetailIcon, label, value }) => (
+              <div key={label} className="flex min-w-0 items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1f5f3a] text-white">
+                  <DetailIcon size={15} />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
+                  <p className="break-words text-sm font-black leading-6 text-slate-900">{value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {Array.isArray(staff.expertise) && staff.expertise.length > 0 && (
+            <div className="mt-6 flex flex-wrap gap-2.5">
+              {staff.expertise.slice(0, 5).map((item, index) => (
+                <span key={`${item}-${index}`} className="rounded-full bg-[#f5f7fb] px-3 py-1.5 text-[11px] font-bold text-slate-700 ring-1 ring-slate-200/80">
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-7 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row">
+            <button
+              onClick={() => onContactClick(staff)}
+              disabled={contactDisabled}
+              className={`inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3.5 text-sm font-extrabold text-slate-800 transition ${
+                contactDisabled ? 'cursor-not-allowed opacity-50' : 'hover:border-slate-400 hover:bg-slate-50'
+              }`}
+            >
+              <FiMail size={14} /> Contact
+            </button>
+            <Link
+              href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#1a1a2e] px-5 py-3.5 text-sm font-extrabold text-white transition hover:bg-[#2d2d44]"
+            >
+              <FiChevronRight size={14} /> View Profile
+            </Link>
+          </div>
+        </div>
+      </div>
+    </article>
   );
 };
 
@@ -1490,7 +1600,9 @@ export default function StaffDirectory() {
                 ) : selectedHierarchy === 'leadership' ? (
                   <div className="space-y-4">
                     {paginatedStaff.map((staff) => (
-                      <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
+                      isPrincipalStaff(staff)
+                        ? <PrincipalFeatureCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
+                        : <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
                     ))}
                   </div>
                 ) : selectedHierarchy === 'teaching' ? (

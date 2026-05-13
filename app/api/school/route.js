@@ -796,7 +796,8 @@ export async function PUT(req) {
     }
 
     // THIRD: Handle Magazine Update
-    let magazineId = existing.magazineId;
+    let magazineId = existing.Magazine?.id || null;
+    const removeMagazine = formData.get("removeMagazine") === "true";
     const magazineTitle = formData.get("magazineTitle");
     const magazineYear = formData.get("magazineYear") ? parseInt(formData.get("magazineYear")) : null;
     const magazineDescription = formData.get("magazineDescription") || null;
@@ -804,13 +805,29 @@ export async function PUT(req) {
     const magazineThumb = formData.get("magazineThumbnail");
     
     const existingMag = existing.Magazine; // FIXED: Use capital M
-    
+
+    if (removeMagazine && existingMag) {
+      try {
+        if (existingMag.pdfUrl) await deleteFromCloudinary(existingMag.pdfUrl);
+        if (existingMag.thumbnail) await deleteFromCloudinary(existingMag.thumbnail);
+        await prisma.magazine.delete({ where: { id: existingMag.id } });
+        magazineId = null;
+        console.log("✅ Magazine removed:", existingMag.title);
+      } catch (magazineError) {
+        console.error("❌ Magazine removal error:", magazineError);
+        return NextResponse.json(
+          { success: false, error: magazineError.message || "Failed to remove magazine" },
+          { status: 400 }
+        );
+      }
+    }
+
     // Check if magazine needs to be updated
-    const hasMagazineChanges = (magazinePdf && magazinePdf.size > 0) || 
+    const hasMagazineChanges = !removeMagazine && ((magazinePdf && magazinePdf.size > 0) || 
                               (magazineThumb && magazineThumb.size > 0) || 
                               (magazineTitle !== undefined && magazineTitle !== existingMag?.title) ||
                               (magazineYear !== null && magazineYear !== existingMag?.year) ||
-                              (magazineDescription !== undefined && magazineDescription !== existingMag?.description);
+                              (magazineDescription !== undefined && magazineDescription !== existingMag?.description));
     
     if (hasMagazineChanges) {
       try {
