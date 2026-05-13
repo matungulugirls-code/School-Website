@@ -646,8 +646,7 @@ const StaffCard = ({ staff, onContactClick }) => {
   );
 };
 
-const PrincipalFeatureCard = ({ staff, onContactClick }) => {
-  const contactDisabled = isContactModalDisabled(staff);
+const PrincipalFeatureCard = ({ staff }) => {
   const details = [
     { icon: FiShield, label: 'Role', value: staff.position || staff.role || 'Principal' },
     { icon: FiLayers, label: 'Department', value: staff.department || 'Administration' },
@@ -725,19 +724,10 @@ const PrincipalFeatureCard = ({ staff, onContactClick }) => {
             </div>
           )}
 
-          <div className="mt-7 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row">
-            <button
-              onClick={() => onContactClick(staff)}
-              disabled={contactDisabled}
-              className={`inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3.5 text-sm font-extrabold text-slate-800 transition ${
-                contactDisabled ? 'cursor-not-allowed opacity-50' : 'hover:border-slate-400 hover:bg-slate-50'
-              }`}
-            >
-              <FiMail size={14} /> Contact
-            </button>
+          <div className="mt-7 flex border-t border-slate-200 pt-5">
             <Link
               href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#1a1a2e] px-5 py-3.5 text-sm font-extrabold text-white transition hover:bg-[#2d2d44]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#1a1a2e] px-5 py-3.5 text-sm font-extrabold text-white transition hover:bg-[#2d2d44] sm:w-auto sm:min-w-[220px]"
             >
               <FiChevronRight size={14} /> View Profile
             </Link>
@@ -749,11 +739,10 @@ const PrincipalFeatureCard = ({ staff, onContactClick }) => {
 };
 
 // StaffListCard Component
-const StaffListCard = ({ staff, onContactClick }) => {
+const StaffListCard = ({ staff }) => {
   const deptConfig = DEPARTMENTS.find(d => d.id === staff.departmentId);
   const hierarchy = getStaffHierarchy(staff.position);
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
-  const contactDisabled = isContactModalDisabled(staff);
   
   return (
     <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-7 rounded-[28px] border border-slate-300 bg-white p-7 shadow-md sm:flex-row sm:items-start sm:p-8">
@@ -803,15 +792,6 @@ const StaffListCard = ({ staff, onContactClick }) => {
       </div>
 
       <div className="flex w-full shrink-0 gap-3 sm:w-auto sm:self-center">
-        <button
-          onClick={() => onContactClick(staff)}
-          disabled={contactDisabled}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-slate-100 px-5 py-3.5 text-sm font-extrabold text-slate-800 transition-colors sm:flex-none ${
-            contactDisabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-slate-200'
-          }`}
-        >
-          <FiMail size={14} /> Contact
-        </button>
         <Link
           href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}
           className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#1a1a2e] px-5 py-3.5 text-sm font-extrabold text-white transition-colors sm:flex-none"
@@ -821,11 +801,6 @@ const StaffListCard = ({ staff, onContactClick }) => {
       </div>
     </div>
   );
-};
-
-const isContactModalDisabled = (staff) => {
-  const position = (staff?.position || '').toLowerCase().trim();
-  return position === 'principal' || position === 'deputy principal';
 };
 
 // ==========================================
@@ -851,94 +826,6 @@ export default function StaffDirectory() {
   
   const [viewMode, setViewMode] = useState('list');
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Consultation Modal States
-  const [showConsultModal, setShowConsultModal] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState(null);
-  const [consultForm, setConsultForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-    subject: '',
-    inquiryType: 'general',
-    contactMethod: 'email',
-    studentGrade: '',
-    staffId: '',
-    staffName: '',
-    staffEmail: ''
-  });
-  const [submitting, setSubmitting] = useState(false);
-
-  // Handle Contact Click
-  const handleContactClick = (staff) => {
-    if (isContactModalDisabled(staff)) return;
-    setSelectedStaff(staff);
-    setConsultForm({
-      ...consultForm,
-      staffId: staff.id,
-      staffName: staff.name,
-      staffEmail: staff.email,
-      subject: `Inquiry for ${staff.name}`
-    });
-    setShowConsultModal(true);
-  };
-
-  // Handle Consultation Submit
-  const handleConsultSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      const payload = {
-        name: consultForm.name,
-        email: consultForm.email,
-        phone: consultForm.phone,
-        message: consultForm.message,
-        subject: consultForm.subject || `Consultation with ${selectedStaff.name}`,
-        studentDetails: consultForm.studentGrade,
-        inquiryType: consultForm.inquiryType,
-        contactMethod: consultForm.contactMethod,
-        teacherId: selectedStaff.id,
-        teacherName: selectedStaff.name,
-        teacherEmail: selectedStaff.email,
-        teacherPosition: selectedStaff.position
-      };
-
-      const response = await fetch('/api/contactTeacher', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        toast.success('Your inquiry has been received. The teacher will respond shortly.');
-        setShowConsultModal(false);
-        setConsultForm({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-          subject: '',
-          inquiryType: 'general',
-          contactMethod: 'email',
-          studentGrade: '',
-          staffId: '',
-          staffName: '',
-          staffEmail: ''
-        });
-      } else {
-        throw new Error(data.error || 'Failed to send consultation request');
-      }
-    } catch (error) {
-      console.error('Error sending consultation:', error);
-      toast.error(error.message || 'Failed to send message. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const fetchStaffData = async () => {
     try {
