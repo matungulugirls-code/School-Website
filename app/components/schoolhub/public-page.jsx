@@ -135,6 +135,7 @@ const ICONS = {
   SOCIETY: FaGraduationCap,
   STUDENT_COUNCIL: FiUserCheck,
   COMPUTER_LAB: FiMonitor,
+  FARM: FaSeedling,
   BOARDING: FaHome,
   SECURITY: FiShield,
   DEPARTMENT: FiLayers,
@@ -167,6 +168,11 @@ const TYPE_THEMES = {
     text: 'text-sky-700', 
     iconBg: 'bg-sky-600',
   },
+  FARM: {
+    bg: 'bg-emerald-50',
+    text: 'text-emerald-700',
+    iconBg: 'bg-emerald-600',
+  },
   BOARDING: { 
     bg: 'bg-amber-50', 
     text: 'text-amber-700', 
@@ -184,37 +190,34 @@ const TYPE_THEMES = {
   },
 };
 
-// ============= KATWANYAA SCHOOL INFORMATION =============
-const KATWANYAA_INFO = {
-  name: 'Katwanyaa Senior School',
-  shortName: 'Katz',
+// ============= MATUNGULU GIRLS SCHOOL INFORMATION =============
+const SCHOOL_INFO = {
+  name: 'Matungulu Girls Senior School',
+  shortName: 'Matungulu Girls',
   motto: 'Education is Light',
-  vision: 'To be a center of academic excellence and holistic development in Africa',
-  mission: 'To provide quality education that nurtures talent, builds character, and prepares students for global leadership',
-  location: 'Kitui County, Kenya',
-  email: 'info@katwanyaa.ac.ke',
-  phone: '+254 712 345 678',
-  website: 'www.katwanyaa.ac.ke',
-  colors: ['Emerald Green', 'Royal Blue', 'Gold'],
-  mascot: 'The Mighty Eagle',
+  vision: 'To be a center of excellence for girls education, character formation, and leadership.',
+  mission: 'To provide quality, girls-centered education that nurtures talent, discipline, confidence, and service.',
+  location: 'Matungulu Sub-County, Machakos County, Kenya',
+  email: 'matungulugirls@gmail.com',
+  phone: '0734610130',
+  website: 'matungulu-girls.vercel.app',
+  colors: ['Emerald Green', 'Navy Blue', 'White'],
   achievements: [
-    'Top Performer in Kitui County (2023)',
-    'National Science Congress Champions (2022)',
-    'Best in Drama Festivals (2021, 2023)',
-    'UNESCO Associated School',
+    'Focused girls boarding learning environment',
+    'CBC senior school pathways and co-curricular development',
+    'Active clubs, societies, student leadership, and welfare programs',
+    'Strong community link in Matungulu, Machakos County',
   ],
-  description: `Katwanyaa Senior School is a premier educational institution located in the heart of Kitui County, Kenya. 
-    Established in 1985, we have consistently provided quality education that transforms lives and builds future leaders. 
-    Our state-of-the-art facilities include modern science laboratories, a fully equipped computer lab, a well-stocked library, 
-    sports fields, and comfortable boarding facilities. We pride ourselves on our strong academic performance, 
-    vibrant co-curricular activities, and commitment to holistic student development.`
+  description: `Matungulu Girls Senior School is a public girls boarding senior school in Matungulu Sub-County, Machakos County. 
+    The school supports learners through academics, boarding life, student leadership, guidance and counselling, clubs, societies, 
+    practical learning, and a structured school environment built around discipline, confidence, and holistic growth.`
 };
 
 // ============= UTILITY FUNCTIONS =============
 const getTypeLabel = (type) => {
   const labels = {
     CLUB: 'Club', SOCIETY: 'Society', STUDENT_COUNCIL: 'Student Council',
-    COMPUTER_LAB: 'Computer Lab', BOARDING: 'Boarding', SECURITY: 'Security',
+    COMPUTER_LAB: 'Computer Lab', FARM: 'School Farm', BOARDING: 'Boarding', SECURITY: 'Security',
     DEPARTMENT: 'Department', SPORTS: 'Sports', ARTS: 'Arts', SCIENCE: 'Science',
     TECHNOLOGY: 'Technology', LEADERSHIP: 'Leadership'
   };
@@ -278,7 +281,7 @@ const Spinner = ({ size = "md", color = "gray" }) => {
 };
 
 // Modern Loading Spinner (simplified)
-const ModernLoadingSpinner = ({ message = "Loading amazing content..." }) => (
+const ModernLoadingSpinner = ({ message = "Loading content..." }) => (
   <div className="flex flex-col items-center justify-center py-20">
     <Spinner size="lg" color="gray" />
     <p className="mt-6 text-sm font-medium text-gray-600">{message}</p>
@@ -587,8 +590,8 @@ const HubCard = ({ item, onView }) => {
 // Main Component
 export default function PublicSchoolHubPage({
   title = "School Hub",
-  eyebrow = "Welcome to Katwanyaa",
-  description = "Explore the vibrant life and opportunities at Katwanyaa Senior School. Discover our clubs, departments, facilities, and student activities.",
+  eyebrow = "Matungulu Girls Senior School",
+  description = SCHOOL_INFO.description,
   singleType,
   sections,
   departments = false,
@@ -670,14 +673,14 @@ export default function PublicSchoolHubPage({
   const heroType = singleType || sections?.[0]?.type || 'DEPARTMENT';
   const HeroIcon = ICONS[heroType] || FiGrid;
 
-  // Features data
+  // Feature highlights
   const features = [
-    { icon: FaGraduationCap, title: "Academic Excellence", description: "Consistently top-performing in national examinations with a 98% pass rate.", bg: "bg-emerald-100", text: "text-emerald-700" },
-    { icon: FaRobot, title: "STEM Innovation", description: "State-of-the-art computer labs and robotics club for future innovators.", bg: "bg-blue-100", text: "text-blue-700" },
-    { icon: FiHeart, title: "Holistic Development", description: "Over 25 clubs and societies for talents and skill development.", bg: "bg-rose-100", text: "text-rose-700" },
-    { icon: FaShieldAlt, title: "Safe Environment", description: "24/7 security, CCTV surveillance, and trained counselors for student welfare.", bg: "bg-purple-100", text: "text-purple-700" },
-    { icon: FaTree, title: "Green Campus", description: "Eco-friendly initiatives, gardening projects, and environmental awareness.", bg: "bg-green-100", text: "text-green-700" },
-    { icon: FaHandsHelping, title: "Community Focus", description: "Strong ties with local community and outreach programs.", bg: "bg-orange-100", text: "text-orange-700" },
+    { icon: FaGraduationCap, title: "Academic Growth", description: "Organized academic departments and learning support for senior school pathways.", bg: "bg-emerald-100", text: "text-emerald-700" },
+    { icon: FiMonitor, title: "Digital Learning", description: "ICT spaces and digital resources that support classroom learning and research.", bg: "bg-blue-100", text: "text-blue-700" },
+    { icon: FiHeart, title: "Student Welfare", description: "Guidance, boarding support, clubs, societies, and leadership opportunities for girls.", bg: "bg-rose-100", text: "text-rose-700" },
+    { icon: FaShieldAlt, title: "Safe Environment", description: "Security and student-care systems that help maintain a focused school setting.", bg: "bg-purple-100", text: "text-purple-700" },
+    { icon: FaTree, title: "Practical Learning", description: "Farm, environmental, and co-curricular activities that connect learning to real life.", bg: "bg-green-100", text: "text-green-700" },
+    { icon: FaHandsHelping, title: "Community Focus", description: "A school culture connected to families, staff, students, and the Matungulu community.", bg: "bg-orange-100", text: "text-orange-700" },
   ];
 
   return (
@@ -685,13 +688,13 @@ export default function PublicSchoolHubPage({
       <GalleryModal item={active} onClose={() => setActive(null)} />
 
       <main className="mx-auto w-full md:w-[80%] px-6 py-8 sm:px-8 lg:px-12">
-        {/* Hero Section - Katwanyaa Branding */}
+        {/* Hero Section - Matungulu Girls Branding */}
         <div className="mb-10 bg-gray-50 p-6 md:p-8">
           {/* Header Badges */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div className="inline-flex items-center gap-2 bg-gray-100 px-3 py-1.5">
               <div className="flex h-5 w-5 items-center justify-center bg-blue-900">
-                <span className="text-xs font-black text-white">K</span>
+                <span className="text-xs font-black text-white">MG</span>
               </div>
               <span className="text-xs font-bold uppercase tracking-wider text-gray-600">{eyebrow}</span>
             </div>
@@ -711,13 +714,13 @@ export default function PublicSchoolHubPage({
               </div>
             </div>
             
-           <h1 className="text-2xl font-black tracking-tight sm:text-3xl md:text-5xl text-gray-900">
-  Welcome to Our{' '}
-  <span className="text-cyan-800">
-    {title}
-  </span>{' '}
-  at Katwanyaa Senior School
-</h1>
+            <h1 className="text-2xl font-black tracking-tight sm:text-3xl md:text-5xl text-gray-900">
+              Explore{' '}
+              <span className="text-cyan-800">
+                {title}
+              </span>{' '}
+              at {SCHOOL_INFO.name}
+            </h1>
             
             <div className="my-3 flex gap-2">
               <div className="h-1 w-12 bg-blue-800" />
@@ -726,7 +729,7 @@ export default function PublicSchoolHubPage({
             </div>
             
             <p className="text-sm font-medium leading-6 text-gray-600 max-w-2xl">
-              {description || KATWANYAA_INFO.description}
+              {description || SCHOOL_INFO.description}
             </p>
           </div>
 
@@ -766,7 +769,7 @@ export default function PublicSchoolHubPage({
 
         {/* Loading State */}
         {loading ? (
-          <ModernLoadingSpinner message={`Loading amazing ${title.toLowerCase()} content...`} />
+          <ModernLoadingSpinner message={`Loading ${title.toLowerCase()} content...`} />
         ) : visibleItems.length === 0 ? (
           <div className="bg-gray-50 p-12 text-center">
             <div className="inline-flex p-4 bg-gray-100 mb-4">
