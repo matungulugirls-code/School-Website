@@ -434,41 +434,41 @@ const DepartmentCard = ({ department }) => {
   const teachers = Array.isArray(department?.teachers) ? department.teachers : [];
 
   return (
-    <article className="overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.42)]">
+    <article className="overflow-hidden rounded-[22px] border border-slate-300 bg-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.42)] sm:rounded-[30px]">
       <div className="grid gap-0 lg:grid-cols-[minmax(280px,0.95fr)_minmax(0,1.45fr)]">
-        <div className="relative flex min-h-[310px] items-center justify-center bg-slate-100 p-4">
+        <div className="relative flex min-h-[220px] items-center justify-center bg-slate-100 p-3 sm:min-h-[310px] sm:p-4">
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={department?.name || 'Department'}
-              className="max-h-[360px] w-full rounded-[24px] object-contain"
+              className="max-h-[260px] w-full rounded-[18px] object-contain sm:max-h-[360px] sm:rounded-[24px]"
               loading="lazy"
             />
           ) : (
-            <div className="flex aspect-[16/10] w-full items-center justify-center rounded-[24px] border border-dashed border-slate-300 bg-white text-center text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+            <div className="flex aspect-[16/10] w-full items-center justify-center rounded-[18px] border border-dashed border-slate-300 bg-white px-4 text-center text-[10px] font-black uppercase tracking-[0.12em] text-slate-400 sm:rounded-[24px] sm:text-xs sm:tracking-[0.18em]">
               Department image required
             </div>
           )}
 
-          <div className="absolute left-6 top-6 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-800 shadow-sm">
+          <div className="absolute left-4 top-4 rounded-full bg-white/95 px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-slate-800 shadow-sm sm:left-6 sm:top-6 sm:px-3 sm:text-[10px] sm:tracking-[0.18em]">
             {getDepartmentCategoryLabel(department?.category)}
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col p-5 sm:p-6">
+        <div className="flex min-w-0 flex-col p-4 sm:p-6">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
             <div className="min-w-0">
-              <h3 className="text-2xl font-black tracking-tight text-slate-950">
+              <h3 className="break-words text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
                 {department?.name || 'Department'}
               </h3>
               {department?.description && (
-                <p className="mt-3 text-sm font-semibold leading-7 text-slate-700">
+                <p className="mt-3 line-clamp-4 break-words text-sm font-semibold leading-6 text-slate-700 sm:leading-7">
                   {department.description}
                 </p>
               )}
             </div>
 
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-slate-200 bg-slate-50 shadow-sm">
+            <div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-slate-200 bg-slate-50 shadow-sm sm:flex">
               <FiUsers size={18} className="text-slate-700" />
             </div>
           </div>
@@ -496,10 +496,10 @@ const DepartmentCard = ({ department }) => {
             <DepartmentMediaCarousel departmentImages={departmentImages} teachers={teachers} />
           </div>
 
-          <div className="mt-6 flex justify-end">
+          <div className="mt-6 flex">
             <Link
               href={`/pages/SchoolTeam/departments/${department?.id}`}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f5f3a] px-5 py-3 text-sm font-black text-white transition hover:bg-[#17492c] focus:outline-none focus:ring-4 focus:ring-[#1f5f3a]/20"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#1f5f3a] px-5 py-3 text-sm font-black text-white transition hover:bg-[#17492c] focus:outline-none focus:ring-4 focus:ring-[#1f5f3a]/20 sm:w-auto"
             >
               View Department
               <FiChevronRight size={16} />
@@ -646,6 +646,8 @@ const StaffCard = ({ staff, onContactClick }) => {
   );
 };
 
+const isContactModalDisabled = (staff) => getStaffHierarchy(staff?.position) === 'leadership';
+
 const PrincipalFeatureCard = ({ staff }) => {
   const details = [
     { icon: FiShield, label: 'Role', value: staff.position || staff.role || 'Principal' },
@@ -655,11 +657,11 @@ const PrincipalFeatureCard = ({ staff }) => {
   ].filter((detail) => detail.value);
 
   return (
-    <article className="mx-auto w-full max-w-[76rem] overflow-hidden rounded-[32px] border border-slate-300 bg-white shadow-[0_26px_80px_-46px_rgba(15,23,42,0.52)]">
+    <article className="mx-auto w-full max-w-[76rem] overflow-hidden rounded-[24px] border border-slate-300 bg-white shadow-[0_26px_80px_-46px_rgba(15,23,42,0.52)] sm:rounded-[32px]">
       <div className="grid gap-0 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.35fr)]">
-        <div className="relative flex min-h-[360px] items-center justify-center bg-slate-100 p-4 sm:min-h-[460px]">
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
-          <div className="relative flex aspect-[4/4.6] w-full max-w-[430px] items-center justify-center overflow-hidden rounded-[28px] border border-white/80 bg-white shadow-sm">
+        <div className="relative flex min-h-[300px] items-center justify-center bg-slate-100 p-3 sm:min-h-[420px] sm:p-4 lg:min-h-[460px]">
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d] sm:h-32" />
+          <div className="relative flex aspect-[4/4.6] w-full max-w-[320px] items-center justify-center overflow-hidden rounded-[22px] border border-white/80 bg-white shadow-sm sm:max-w-[430px] sm:rounded-[28px]">
             <Image
               src={getImageSrc(staff)}
               alt={staff.name}
@@ -670,37 +672,37 @@ const PrincipalFeatureCard = ({ staff }) => {
               onError={(e) => { e.target.src = '/images/default-staff.jpg'; }}
             />
           </div>
-          <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full bg-[#1a1a2e]/95 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-sm backdrop-blur-sm">
+          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-[#1a1a2e]/95 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-white shadow-sm backdrop-blur-sm sm:left-6 sm:top-6 sm:px-4 sm:py-2 sm:text-[10px]">
             <FiShield size={12} />
             Principal
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col justify-center p-5 sm:p-7 lg:p-8">
+        <div className="flex min-w-0 flex-col justify-center p-4 sm:p-7 lg:p-8">
           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#1f5f3a]">School Leadership</p>
-          <h3 className="mt-3 break-words text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+          <h3 className="mt-3 break-words text-2xl font-black tracking-tight text-slate-950 sm:text-4xl">
             {staff.name}
           </h3>
-          <p className="mt-2 text-sm font-extrabold uppercase tracking-[0.18em] text-slate-600">
+          <p className="mt-2 break-words text-xs font-extrabold uppercase tracking-[0.14em] text-slate-600 sm:text-sm sm:tracking-[0.18em]">
             {staff.position || staff.role || 'Principal'}
           </p>
 
           {(staff.quote || staff.bio) && (
-            <div className="mt-6 rounded-[24px] bg-slate-50 p-5">
+            <div className="mt-5 rounded-[20px] bg-slate-50 p-4 sm:mt-6 sm:rounded-[24px] sm:p-5">
               {staff.quote && (
-                <p className="break-words text-lg font-black leading-8 text-slate-900">
+                <p className="break-words text-base font-black leading-7 text-slate-900 sm:text-lg sm:leading-8">
                   “{staff.quote}”
                 </p>
               )}
               {staff.bio && (
-                <p className="mt-3 whitespace-pre-line break-words text-sm font-semibold leading-7 text-slate-600 line-clamp-5">
+                <p className="mt-3 whitespace-pre-line break-words text-sm font-semibold leading-6 text-slate-600 line-clamp-5 sm:leading-7">
                   {staff.bio}
                 </p>
               )}
             </div>
           )}
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
             {details.map(({ icon: DetailIcon, label, value }) => (
               <div key={label} className="flex min-w-0 items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1f5f3a] text-white">
@@ -745,12 +747,12 @@ const StaffListCard = ({ staff }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-7 rounded-[28px] border border-slate-300 bg-white p-7 shadow-md sm:flex-row sm:items-start sm:p-8">
+    <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-5 rounded-[22px] border border-slate-300 bg-white p-4 text-center shadow-md sm:flex-row sm:items-start sm:gap-7 sm:rounded-[28px] sm:p-8 sm:text-left">
       
       {/* Increased profile image size slightly to match card width */}
       <div className="relative shrink-0">
         <div className="absolute inset-0 rounded-[22px] bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] blur-md opacity-20" />
-<div className="relative h-24 w-24 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100">
+<div className="relative h-28 w-28 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100 sm:h-24 sm:w-24">
   <div className="relative h-full w-full">
     <Image
       src={getImageSrc(staff)}
@@ -769,9 +771,9 @@ const StaffListCard = ({ staff }) => {
         )}
       </div>
 
-      <div className="min-w-0 flex-1 text-center sm:text-left">
+      <div className="min-w-0 flex-1">
         <div className="mb-3 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-          <h3 className="text-lg font-black text-slate-950">
+          <h3 className="break-words text-lg font-black text-slate-950">
             <Link href={`/pages/SchoolTeam/${staff.id}/${generateSlug(staff.name, staff.id)}`}>
               {staff.name}
             </Link>
@@ -782,11 +784,11 @@ const StaffListCard = ({ staff }) => {
           </span>
         </div>
 
-        <p className="mb-3 text-sm font-extrabold uppercase tracking-[0.18em] text-slate-700">
+        <p className="mb-3 break-words text-xs font-extrabold uppercase tracking-[0.14em] text-slate-700 sm:text-sm sm:tracking-[0.18em]">
           {staff.position}
         </p>
 
-        <p className="text-[15px] font-semibold leading-7 text-slate-700 line-clamp-3">
+        <p className="break-words text-sm font-semibold leading-6 text-slate-700 line-clamp-4 sm:text-[15px] sm:leading-7 sm:line-clamp-3">
           {staff.quote || staff.bio}
         </p>
       </div>
@@ -826,6 +828,91 @@ export default function StaffDirectory() {
   
   const [viewMode, setViewMode] = useState('list');
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [showConsultModal, setShowConsultModal] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [consultForm, setConsultForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    subject: '',
+    inquiryType: 'general',
+    contactMethod: 'email',
+    studentGrade: '',
+    staffId: '',
+    staffName: '',
+    staffEmail: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleContactClick = (staff) => {
+    if (getStaffHierarchy(staff?.position) === 'leadership') return;
+    setSelectedStaff(staff);
+    setConsultForm((previous) => ({
+      ...previous,
+      staffId: staff.id,
+      staffName: staff.name,
+      staffEmail: staff.email,
+      subject: `Inquiry for ${staff.name}`
+    }));
+    setShowConsultModal(true);
+  };
+
+  const handleConsultSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const payload = {
+        name: consultForm.name,
+        email: consultForm.email,
+        phone: consultForm.phone,
+        message: consultForm.message,
+        subject: consultForm.subject || `Consultation with ${selectedStaff.name}`,
+        studentDetails: consultForm.studentGrade,
+        inquiryType: consultForm.inquiryType,
+        contactMethod: consultForm.contactMethod,
+        teacherId: selectedStaff.id,
+        teacherName: selectedStaff.name,
+        teacherEmail: selectedStaff.email,
+        teacherPosition: selectedStaff.position
+      };
+
+      const response = await fetch('/api/contactTeacher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast.success('Your inquiry has been received. The teacher will respond shortly.');
+        setShowConsultModal(false);
+        setConsultForm({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          subject: '',
+          inquiryType: 'general',
+          contactMethod: 'email',
+          studentGrade: '',
+          staffId: '',
+          staffName: '',
+          staffEmail: ''
+        });
+      } else {
+        throw new Error(data.error || 'Failed to send consultation request');
+      }
+    } catch (error) {
+      console.error('Error sending consultation:', error);
+      toast.error(error.message || 'Failed to send message. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const fetchStaffData = async () => {
     try {
@@ -1118,21 +1205,21 @@ export default function StaffDirectory() {
       <div className="relative overflow-hidden bg-[#0f1724]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(215,167,61,0.24),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.22),_transparent_30%),linear-gradient(135deg,_rgba(255,255,255,0.05),_transparent_48%)]" />
         <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.25) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.25) 1px, transparent 1px)', backgroundSize: '34px 34px' }} />
-        <div className="relative z-10 mx-auto w-[85%] px-4 py-10 sm:px-6 sm:py-12">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:items-end">
             <div>
               <p className="mb-3 text-[10px] font-black uppercase tracking-[0.34em] text-[#f8c95f]/80">Matungulu Girls Senior School</p>
-          <h1 className="max-w-4xl text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-5xl leading-tight">
+          <h1 className="max-w-4xl text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl lg:text-5xl">
             Meet the dedicated team shaping the next generation.
           </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-white/85 sm:text-base sm:leading-relaxed">
                 Explore school leadership and browse each department to see the teachers mapped to that learning area.
               </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <div className="rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold text-white/85 backdrop-blur-sm">
+              <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
+                <div className="rounded-2xl border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold text-white/85 backdrop-blur-sm sm:rounded-full">
                   Departments first, leadership preserved
                 </div>
-                <div className="rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold text-white/85 backdrop-blur-sm">
+                <div className="rounded-2xl border border-white/12 bg-white/8 px-4 py-2 text-xs font-semibold text-white/85 backdrop-blur-sm sm:rounded-full">
                   Teachers grouped under valid departments
                 </div>
               </div>
@@ -1170,7 +1257,7 @@ export default function StaffDirectory() {
       </div>
 
 {/* ── Top Filter Bar ── */}
-<div className="sticky top-[92px] z-20 border-b border-slate-100 bg-slate-50/88 backdrop-blur-sm lg:top-[73px]">
+<div className="sticky top-[154px] z-20 border-b border-slate-100 bg-slate-50/88 backdrop-blur-sm sm:top-[92px] lg:top-[73px]">
   <div className="max-w-7xl mx-auto px-4 sm:px-6">
     
     {/* Hierarchy Tabs */}
@@ -1269,7 +1356,7 @@ export default function StaffDirectory() {
             </div>
 
             {/* Consultation Modal */}
-            {showConsultModal && selectedStaff && (
+            {false && (
               <div 
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[200]"
                 onClick={() => setShowConsultModal(false)}
@@ -1454,7 +1541,7 @@ export default function StaffDirectory() {
               <>
                 {selectedHierarchy === 'all' ? (
                   <div className="space-y-6">
-                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst onContactClick={handleContactClick} />
+                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst />
 
                     <DepartmentGroupSection
                       title="CBC Departments"
@@ -1488,8 +1575,8 @@ export default function StaffDirectory() {
                   <div className="space-y-4">
                     {paginatedStaff.map((staff) => (
                       isPrincipalStaff(staff)
-                        ? <PrincipalFeatureCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
-                        : <StaffListCard key={staff.id} staff={staff} onContactClick={handleContactClick} />
+                        ? <PrincipalFeatureCard key={staff.id} staff={staff} />
+                        : <StaffListCard key={staff.id} staff={staff} />
                     ))}
                   </div>
                 ) : selectedHierarchy === 'teaching' ? (
