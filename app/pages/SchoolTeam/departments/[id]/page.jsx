@@ -61,13 +61,13 @@ const DetailPill = ({ icon: Icon, label, value }) => {
   if (!displayValue && displayValue !== '0') return null;
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+    <div className="flex min-w-0 items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1f5f3a] text-white">
         <Icon size={16} />
       </span>
       <div className="min-w-0">
         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
-        <p className="text-sm font-black leading-6 text-slate-900">{displayValue}</p>
+        <p className="break-words text-sm font-black leading-6 text-slate-900">{displayValue}</p>
       </div>
     </div>
   );
@@ -78,14 +78,14 @@ const DetailBlock = ({ icon: Icon, label, value }) => {
   if (!displayValue && displayValue !== '0') return null;
 
   return (
-    <div className="rounded-[24px] bg-slate-50 p-5">
+    <div className="min-w-0 rounded-[24px] bg-slate-50 p-4 sm:p-5">
       <div className="mb-3 flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1f5f3a] text-white">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1f5f3a] text-white">
           <Icon size={16} />
         </span>
         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
       </div>
-      <p className="text-sm font-semibold leading-7 text-slate-700">{displayValue}</p>
+      <p className="whitespace-pre-line break-words text-sm font-semibold leading-7 text-slate-700">{displayValue}</p>
     </div>
   );
 };
@@ -102,8 +102,8 @@ const TeacherModal = ({ teacher, onClose }) => {
   ].filter((item) => item.value);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm" onClick={onClose}>
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-[28px] bg-white shadow-2xl" onClick={(event) => event.stopPropagation()}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-2 backdrop-blur-sm sm:p-4" onClick={onClose}>
+      <div className="relative max-h-[96vh] w-full max-w-2xl overflow-hidden rounded-[24px] bg-white shadow-2xl sm:rounded-[28px]" onClick={(event) => event.stopPropagation()}>
         <button
           type="button"
           onClick={onClose}
@@ -113,7 +113,7 @@ const TeacherModal = ({ teacher, onClose }) => {
           <FiX />
         </button>
 
-        <div className="grid gap-0 sm:grid-cols-[220px_1fr]">
+        <div className="grid max-h-[96vh] gap-0 overflow-y-auto sm:grid-cols-[220px_minmax(0,1fr)]">
           <div className="bg-slate-100 p-4">
             <div className="aspect-[4/5] overflow-hidden rounded-[22px] bg-white">
               <img
@@ -127,20 +127,20 @@ const TeacherModal = ({ teacher, onClose }) => {
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="min-w-0 p-4 sm:p-6">
             <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#1f5f3a]">Teacher Profile</p>
-            <h2 className="mt-2 pr-10 text-2xl font-black tracking-tight text-slate-950">{teacher.name || 'Teacher'}</h2>
-            <p className="mt-2 text-sm font-bold text-slate-500">{teacher.subjectOffered || teacher.position || teacher.role || 'Department teacher'}</p>
+            <h2 className="mt-2 break-words pr-10 text-2xl font-black tracking-tight text-slate-950">{teacher.name || 'Teacher'}</h2>
+            <p className="mt-2 break-words text-sm font-bold text-slate-500">{teacher.subjectOffered || teacher.position || teacher.role || 'Department teacher'}</p>
 
             {teacher.bio && (
-              <p className="mt-5 text-sm font-medium leading-7 text-slate-600">{teacher.bio}</p>
+              <p className="mt-5 whitespace-pre-line break-words text-sm font-medium leading-7 text-slate-600">{teacher.bio}</p>
             )}
 
             <div className="mt-5 grid gap-3">
               {details.map((detail) => (
                 <div key={detail.label} className="rounded-2xl bg-slate-50 px-4 py-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{detail.label}</p>
-                  <p className="mt-1 text-sm font-bold text-slate-800">{detail.value}</p>
+                  <p className="mt-1 whitespace-pre-line break-words text-sm font-bold text-slate-800">{detail.value}</p>
                 </div>
               ))}
             </div>
@@ -275,29 +275,31 @@ export default function DepartmentDetailsPage({ params }) {
     <main className="min-h-screen bg-white text-slate-950">
       <TeacherModal teacher={selectedTeacher} onClose={() => setSelectedTeacher(null)} />
 
-      <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:py-10">
-        <div>
+      <section className="mx-auto grid w-full max-w-7xl items-start gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(380px,520px)_minmax(0,1fr)] lg:px-8 lg:py-10 xl:grid-cols-[minmax(440px,560px)_minmax(0,1fr)]">
+        <div className="min-w-0 lg:sticky lg:top-6">
           <Link href="/pages/SchoolTeam" className="mb-5 inline-flex items-center gap-2 rounded-2xl bg-slate-100 px-4 py-2.5 text-sm font-black text-slate-700 transition hover:bg-slate-200">
             <FiArrowLeft /> Back to Staff
           </Link>
 
-          <div className="overflow-hidden rounded-[32px] bg-slate-100 p-4">
+          <div className="overflow-hidden rounded-[28px] bg-slate-100 p-3 sm:rounded-[32px] sm:p-4">
             {heroImage ? (
-              <img src={heroImage} alt={department.name || 'Department'} className="max-h-[560px] w-full rounded-[24px] object-contain" />
+              <div className="flex aspect-[4/3] min-h-[240px] items-center justify-center sm:min-h-[340px] lg:min-h-[420px]">
+                <img src={heroImage} alt={department.name || 'Department'} className="max-h-[560px] w-full rounded-[22px] object-contain sm:rounded-[24px]" />
+              </div>
             ) : (
-              <div className="flex aspect-[16/11] items-center justify-center rounded-[24px] bg-white text-slate-300">
+              <div className="flex aspect-[4/3] min-h-[240px] items-center justify-center rounded-[24px] bg-white text-slate-300 sm:min-h-[340px] lg:min-h-[420px]">
                 <FiImage size={56} />
               </div>
             )}
           </div>
         </div>
 
-        <div className="flex flex-col justify-center">
+        <div className="min-w-0">
           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#1f5f3a]">{getCategoryLabel(department.category)}</p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">{department.name}</h1>
-          <div className="mt-5 rounded-[26px] bg-slate-50 p-5">
+          <h1 className="mt-3 break-words text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">{department.name}</h1>
+          <div className="mt-5 min-w-0 rounded-[26px] bg-slate-50 p-4 sm:p-5">
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Description</p>
-            <p className="mt-3 text-base font-medium leading-8 text-slate-600">
+            <p className="mt-3 whitespace-pre-line break-words text-sm font-medium leading-7 text-slate-600 sm:text-base sm:leading-8">
               {department.description || 'Department description will appear here once it is added from the admin dashboard.'}
             </p>
           </div>
