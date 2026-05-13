@@ -1447,6 +1447,8 @@ export default function StaffDirectory() {
               <>
                 {selectedHierarchy === 'all' ? (
                   <div className="space-y-6">
+                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst onContactClick={handleContactClick} />
+
                     <DepartmentGroupSection
                       title="CBC Departments"
                       icon={FiLayers}
@@ -1474,8 +1476,6 @@ export default function StaffDirectory() {
                       departments={filteredDepartmentsByCategory.SUPPORT}
                       subtitle="Department structure and assigned teaching support"
                     />
-
-                    <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst={false} onContactClick={handleContactClick} />
                   </div>
                 ) : selectedHierarchy === 'leadership' ? (
                   <div className="space-y-4">

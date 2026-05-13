@@ -283,7 +283,7 @@ const Spinner = ({ size = "md", color = "gray" }) => {
 // Modern Loading Spinner (simplified)
 const ModernLoadingSpinner = ({ message = "Loading content..." }) => (
   <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white px-6 py-20">
-    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-[#0f3d35] text-white">
+    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-slate-900 text-white">
       <Spinner size="lg" color="white" />
     </div>
     <p className="mt-6 text-sm font-semibold text-slate-700">{message}</p>
@@ -300,7 +300,7 @@ const RefreshButton = ({ refreshing, onClick }) => (
   <button
     onClick={onClick}
     disabled={refreshing}
-    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#0f3d35] px-5 text-sm font-bold text-white transition hover:bg-[#145447] active:scale-[0.98] disabled:opacity-60"
+    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-bold text-white transition hover:bg-slate-800 active:scale-[0.98] disabled:opacity-60"
   >
     {refreshing ? (
       <>
@@ -420,7 +420,7 @@ const GalleryModal = ({ item, onClose }) => {
                         key={image.url}
                         onClick={() => setSelectedIndex(index)}
                         className={`relative aspect-square overflow-hidden rounded-lg ${
-                          selectedIndex === index ? 'ring-2 ring-emerald-600' : ''
+                          selectedIndex === index ? 'ring-2 ring-slate-700' : ''
                         }`}
                       >
                         <img src={image.url} alt={image.altText || `${item.title} ${index + 1}`} className="h-full w-full object-cover" />
@@ -490,7 +490,7 @@ const GalleryModal = ({ item, onClose }) => {
             </div>
 
             <div className="flex gap-2 border-t border-slate-100 bg-slate-50 p-4">
-              <button onClick={onClose} className="flex-1 rounded-lg bg-[#0f3d35] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#145447]">
+              <button onClick={onClose} className="flex-1 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800">
                 Close
               </button>
               <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-100">
@@ -515,7 +515,7 @@ const HubCard = ({ item, onView }) => {
   return (
     <button
       onClick={onView}
-      className="group flex h-full w-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-lg"
+      className="group flex h-full w-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg"
     >
       <div className="relative h-40 w-full bg-slate-100">
         {image ? (
@@ -664,35 +664,14 @@ export default function PublicSchoolHubPage({
     { label: 'Active Sections', value: activeSectionCount || renderedSections.length, icon: FiGrid },
   ];
 
-  // Feature highlights
-  const features = [
-    { icon: FaGraduationCap, title: "Academic Growth", description: "Organized academic departments and learning support for senior school pathways.", bg: "bg-emerald-100", text: "text-emerald-700" },
-    { icon: FiMonitor, title: "Digital Learning", description: "ICT spaces and digital resources that support classroom learning and research.", bg: "bg-blue-100", text: "text-blue-700" },
-    { icon: FiHeart, title: "Student Welfare", description: "Guidance, boarding support, clubs, societies, and leadership opportunities for girls.", bg: "bg-rose-100", text: "text-rose-700" },
-    { icon: FaShieldAlt, title: "Safe Environment", description: "Security and student-care systems that help maintain a focused school setting.", bg: "bg-purple-100", text: "text-purple-700" },
-    { icon: FaTree, title: "Practical Learning", description: "Farm, environmental, and co-curricular activities that connect learning to real life.", bg: "bg-green-100", text: "text-green-700" },
-    { icon: FaHandsHelping, title: "Community Focus", description: "A school culture connected to families, staff, students, and the Matungulu community.", bg: "bg-orange-100", text: "text-orange-700" },
-  ];
-
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <GalleryModal item={active} onClose={() => setActive(null)} />
 <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-  <section className="relative overflow-hidden rounded-lg bg-[#0f3d35] text-white">
-    <Image
-      src="/Matungulu/29.jpeg"
-      alt="Matungulu Girls Senior School campus"
-      fill
-      priority
-      sizes="(min-width: 1024px) 1180px, 100vw"
-      className="object-cover opacity-35"
-    />
-
-    <div className="absolute inset-0 bg-gradient-to-r from-[#0b302a] via-[#0b302a]/90 to-[#0b302a]/40" />
-
-    <div className="relative flex min-h-[520px] flex-col items-center justify-center px-6 py-16 text-center sm:px-8 lg:px-12">
-      <div className="inline-flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase text-emerald-50 backdrop-blur-md">
-        <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white shadow-lg">
+  <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-sm">
+    <div className="flex flex-col items-center justify-center px-5 py-10 text-center sm:px-8 sm:py-12 lg:px-12">
+      <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-slate-600">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-white">
           <Image
             src="/MatG.jpg"
             alt="Matungulu Girls Logo"
@@ -705,52 +684,52 @@ export default function PublicSchoolHubPage({
         {eyebrow}
       </div>
 
-      <div className="mt-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#0f3d35] shadow-xl">
+      <div className="mt-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-sm">
         <HeroIcon className="text-3xl" />
       </div>
 
       <div className="mx-auto mt-8 max-w-4xl">
-        <h1 className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
+        <h1 className="text-3xl font-black leading-tight tracking-tight sm:text-5xl">
           {title}
-          <span className="block text-amber-300">
+          <span className="block text-slate-700">
             {SCHOOL_INFO.name}
           </span>
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-base font-medium leading-8 text-emerald-50/90 sm:text-lg">
+        <p className="mx-auto mt-5 max-w-2xl text-sm font-medium leading-7 text-slate-600 sm:text-base">
           {description || SCHOOL_INFO.description}
         </p>
       </div>
 
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <div className="mt-8 grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
         {heroStats.map(({ label, value, icon: StatIcon }) => (
           <div
             key={label}
-            className="min-w-[170px] rounded-2xl border border-white/15 bg-white/10 px-6 py-5 text-center backdrop-blur-md transition hover:bg-white/15"
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-center"
           >
-            <StatIcon className="mx-auto mb-3 text-2xl text-amber-300" />
+            <StatIcon className="mx-auto mb-3 text-xl text-slate-500" />
 
-            <p className="text-3xl font-black">
+            <p className="text-2xl font-black text-slate-950">
               {value}
             </p>
 
-            <p className="mt-2 text-[11px] font-bold uppercase text-emerald-50/70">
+            <p className="mt-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
               {label}
             </p>
           </div>
         ))}
       </div>
 
-      <div className="mt-12 w-full max-w-3xl rounded-3xl border border-white/15 bg-white/95 p-6 text-slate-900 shadow-2xl backdrop-blur-xl">
-        <p className="text-xs font-bold uppercase text-emerald-700">
+      <div className="mt-8 w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-5 text-slate-900">
+        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
           {SCHOOL_INFO.shortName}
         </p>
 
-        <h2 className="mt-3 text-3xl font-black text-slate-900">
+        <h2 className="mt-2 text-2xl font-black text-slate-900">
           {SCHOOL_INFO.motto}
         </h2>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
           {[
             { icon: FiMapPin, label: SCHOOL_INFO.location },
             { icon: FiPhone, label: SCHOOL_INFO.phone },
@@ -758,9 +737,9 @@ export default function PublicSchoolHubPage({
           ].map(({ icon: InfoIcon, label }) => (
             <div
               key={label}
-              className="flex flex-col items-center rounded-2xl bg-slate-50 p-5 text-center transition hover:bg-slate-100"
+              className="flex flex-col items-center rounded-xl bg-slate-50 p-4 text-center"
             >
-              <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f3d35] text-lg text-white shadow-lg">
+              <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white">
                 <InfoIcon />
               </span>
 
@@ -777,7 +756,7 @@ export default function PublicSchoolHubPage({
   <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="text-center lg:text-left">
-        <p className="text-xs font-bold uppercase text-emerald-700">
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
           Browse School Life
         </p>
 
@@ -794,34 +773,13 @@ export default function PublicSchoolHubPage({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={`Search ${title.toLowerCase()}...`}
-            className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+            className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:bg-white focus:ring-4 focus:ring-slate-500/10"
           />
         </div>
 
         <RefreshButton refreshing={refreshing} onClick={() => load(true)} />
       </div>
     </div>
-  </section>
-
-  <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {features.map(({ icon: FeatureIcon, title: featureTitle, description: featureDescription, bg, text }) => (
-      <div
-        key={featureTitle}
-        className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-      >
-        <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${bg} ${text}`}>
-          <FeatureIcon className="text-xl" />
-        </div>
-
-        <h3 className="text-base font-black text-slate-950">
-          {featureTitle}
-        </h3>
-
-        <p className="mx-auto mt-2 max-w-xs text-sm font-medium leading-6 text-slate-500">
-          {featureDescription}
-        </p>
-      </div>
-    ))}
   </section>
 
   {error && (
@@ -867,7 +825,7 @@ export default function PublicSchoolHubPage({
             <section key={section.title}>
               <div className="mb-5 flex flex-col items-center justify-between gap-3 border-b border-slate-200 pb-4 text-center sm:flex-row sm:text-left">
                 <div className="flex flex-col items-center gap-3 sm:flex-row">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f3d35] text-white shadow-md">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-md">
                     <SectionIcon className="text-base" />
                   </div>
 
@@ -876,7 +834,7 @@ export default function PublicSchoolHubPage({
                       {section.title}
                     </h2>
 
-                    <p className="text-xs font-bold uppercase text-emerald-700">
+                    <p className="text-xs font-bold uppercase text-slate-500">
                       {section.items.length}{" "}
                       {section.items.length === 1 ? "item" : "items"} available
                     </p>
