@@ -420,6 +420,15 @@ export async function PUT(req, { params }) {
       data.image = remainingImages[0]?.url || uploadedImages[0]?.url || null;
     }
 
+    const finalPrimaryImage = data.image !== undefined ? data.image : existing.image;
+    const finalGalleryImage = remainingImages[0]?.url || uploadedImages[0]?.url || null;
+    if (!finalPrimaryImage && !finalGalleryImage) {
+      return NextResponse.json(
+        { success: false, error: "Department image is required. Please upload at least one department image.", authenticated: true },
+        { status: 400 }
+      );
+    }
+
     const department = await prisma.staffDepartment.update({
       where: { id },
       data,

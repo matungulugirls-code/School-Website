@@ -194,7 +194,7 @@ const TYPE_THEMES = {
 const SCHOOL_INFO = {
   name: 'Matungulu Girls Senior School',
   shortName: 'Matungulu Girls',
-  motto: 'Education is Light',
+  motto: 'Committed To Excellence',
   vision: 'To be a center of excellence for girls education, character formation, and leadership.',
   mission: 'To provide quality, girls-centered education that nurtures talent, discipline, confidence, and service.',
   location: 'Matungulu Sub-County, Machakos County, Kenya',
@@ -282,12 +282,14 @@ const Spinner = ({ size = "md", color = "gray" }) => {
 
 // Modern Loading Spinner (simplified)
 const ModernLoadingSpinner = ({ message = "Loading content..." }) => (
-  <div className="flex flex-col items-center justify-center py-20">
-    <Spinner size="lg" color="gray" />
-    <p className="mt-6 text-sm font-medium text-gray-600">{message}</p>
-    <div className="flex gap-1 mt-3">
+  <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white px-6 py-20">
+    <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-[#0f3d35] text-white">
+      <Spinner size="lg" color="white" />
+    </div>
+    <p className="mt-6 text-sm font-semibold text-slate-700">{message}</p>
+    <div className="mt-3 flex gap-1">
       {[0, 1, 2].map(i => (
-        <div key={i} className="w-1.5 h-1.5 rounded-full bg-blue-800 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+        <div key={i} className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
       ))}
     </div>
   </div>
@@ -298,7 +300,7 @@ const RefreshButton = ({ refreshing, onClick }) => (
   <button
     onClick={onClick}
     disabled={refreshing}
-    className="inline-flex items-center justify-center gap-2 bg-blue-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 active:scale-95 disabled:opacity-60"
+    className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#0f3d35] px-5 text-sm font-bold text-white transition hover:bg-[#145447] active:scale-[0.98] disabled:opacity-60"
   >
     {refreshing ? (
       <>
@@ -316,7 +318,7 @@ const RefreshButton = ({ refreshing, onClick }) => (
   </button>
 );
 
-// Gallery Modal Component (simplified, no borders/shadows)
+// Gallery Modal Component
 const GalleryModal = ({ item, onClose }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -343,93 +345,87 @@ const GalleryModal = ({ item, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white bg-opacity-95 p-4" onClick={onClose}>
-      <div className="relative flex h-full w-full max-w-7xl flex-col overflow-hidden bg-white" onClick={(e) => e.stopPropagation()}>
-        {/* Close Button */}
-        <button onClick={onClose} className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center bg-gray-200 text-gray-600 hover:bg-gray-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 text-slate-700 shadow-lg transition hover:bg-slate-100">
           <FiX className="text-lg" />
         </button>
 
-        <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[1.4fr_0.9fr]">
-          {/* Image Gallery Section */}
-          <div className="relative bg-gray-50">
-            <div className="relative h-[400px] sm:h-[500px]">
-              <img 
-                src={selectedImage} 
-                alt={item.title} 
-                className={`h-full w-full object-contain transition-all duration-300 ${isAnimating ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}
-              />
-              {!selectedImage && (
-                <div className={`flex h-full w-full items-center justify-center bg-gray-100`}>
-                  <Icon className="text-6xl text-gray-400" />
+        <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[1.35fr_0.8fr]">
+          <div className="relative bg-slate-100">
+            <div className="relative h-[360px] sm:h-[520px]">
+              {selectedImage ? (
+                <img 
+                  src={selectedImage} 
+                  alt={item.title} 
+                  className={`h-full w-full object-contain transition-all duration-300 ${isAnimating ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}
+                />
+              ) : (
+                <div className={`flex h-full w-full items-center justify-center ${theme.bg}`}>
+                  <Icon className={`text-6xl ${theme.text}`} />
                 </div>
               )}
             </div>
             
-            {/* Navigation Arrows */}
             {images.length > 1 && (
               <>
-                <button onClick={handlePrev} className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center bg-gray-200 text-gray-700 hover:bg-gray-300">
+                <button onClick={handlePrev} className="absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-white/95 text-slate-800 shadow-lg transition hover:bg-white">
                   <FiChevronRight className="rotate-180 text-xl" />
                 </button>
-                <button onClick={handleNext} className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center bg-gray-200 text-gray-700 hover:bg-gray-300">
+                <button onClick={handleNext} className="absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-white/95 text-slate-800 shadow-lg transition hover:bg-white">
                   <FiChevronRight className="text-xl" />
                 </button>
               </>
             )}
             
-            {/* Image Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 bg-opacity-80 px-4 py-1.5 text-xs font-medium text-white">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-slate-950/80 px-4 py-1.5 text-xs font-bold text-white">
               {selectedIndex + 1} / {images.length}
             </div>
           </div>
 
-          {/* Info Section */}
           <div className="flex min-h-0 flex-col bg-white">
-            <div className="p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-medium uppercase tracking-wider ${theme.bg} ${theme.text}`}>
+            <div className="border-b border-slate-100 p-5">
+              <div className="mb-3 flex items-center justify-between">
+                <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-black uppercase tracking-wider ${theme.bg} ${theme.text}`}>
                   <Icon className="text-xs" /> {getTypeLabel(item.type)}
                 </span>
-                <button className="text-gray-400 hover:text-gray-600">
+                <button className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Share item">
                   <FiShare2 />
                 </button>
               </div>
-              <h2 className="text-xl font-bold tracking-tight text-gray-900">{item.title}</h2>
+              <h2 className="text-2xl font-black tracking-tight text-slate-950">{item.title}</h2>
               {item.description && (
-                <p className="mt-2 text-sm font-medium leading-6 text-gray-600">{item.description}</p>
+                <p className="mt-3 text-sm font-medium leading-6 text-slate-600">{item.description}</p>
               )}
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto p-5 space-y-4">
-              {/* Stats Row */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="text-center p-3 bg-gray-50">
-                  <p className="text-lg font-bold text-gray-900">{images.length}</p>
-                  <p className="text-xs font-medium text-gray-500">Photos</p>
+                <div className="rounded-lg bg-slate-50 p-3 text-center">
+                  <p className="text-lg font-black text-slate-950">{images.length}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Photos</p>
                 </div>
-                <div className="text-center p-3 bg-gray-50">
-                  <p className="text-lg font-bold text-gray-900">{item.details?.length || 0}</p>
-                  <p className="text-xs font-medium text-gray-500">Details</p>
+                <div className="rounded-lg bg-slate-50 p-3 text-center">
+                  <p className="text-lg font-black text-slate-950">{item.details?.length || 0}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Details</p>
                 </div>
               </div>
 
-              {/* Thumbnail Gallery */}
               {images.length > 1 && (
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-2">All Photos</p>
+                  <p className="mb-2 text-xs font-black uppercase tracking-wider text-slate-400">All Photos</p>
                   <div className="grid grid-cols-4 gap-2">
                     {images.slice(0, 8).map((image, index) => (
                       <button
                         key={image.url}
                         onClick={() => setSelectedIndex(index)}
-                        className={`relative aspect-square overflow-hidden ${
-                          selectedIndex === index ? 'ring-2 ring-emerald-500' : ''
+                        className={`relative aspect-square overflow-hidden rounded-lg ${
+                          selectedIndex === index ? 'ring-2 ring-emerald-600' : ''
                         }`}
                       >
                         <img src={image.url} alt={image.altText || `${item.title} ${index + 1}`} className="h-full w-full object-cover" />
                         {index === 7 && images.length > 8 && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 text-white text-xs font-medium">
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-xs font-bold text-white">
                             +{images.length - 8}
                           </div>
                         )}
@@ -439,43 +435,40 @@ const GalleryModal = ({ item, onClose }) => {
                 </div>
               )}
 
-              {/* Location & Info */}
               {(item.location || item.established || item.website) && (
                 <div className="flex flex-wrap gap-2">
                   {item.location && <InfoPill icon={FiMapPin}>{item.location}</InfoPill>}
                   {item.established && <InfoPill icon={FiCalendar}>{item.established}</InfoPill>}
                   {item.website && (
-                    <a href={item.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-gray-100 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-200">
+                    <a href={item.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-200">
                       <FiGlobe /> Website <FiExternalLink className="text-[10px]" />
                     </a>
                   )}
                 </div>
               )}
 
-              {/* Contact Info */}
               {item.contactName && (
-                <div className="bg-gray-50 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-2">Contact Person</p>
+                <div className="rounded-lg bg-slate-50 p-4">
+                  <p className="mb-2 text-xs font-black uppercase tracking-wider text-slate-400">Contact Person</p>
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 ${theme.iconBg} flex items-center justify-center text-white`}>
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${theme.iconBg} text-white`}>
                       <FiUserCheck />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{item.contactName}</p>
-                      {item.contactEmail && <p className="text-xs text-gray-500">{item.contactEmail}</p>}
-                      {item.contactPhone && <p className="text-xs text-gray-500">{item.contactPhone}</p>}
+                      <p className="font-bold text-slate-950">{item.contactName}</p>
+                      {item.contactEmail && <p className="text-xs text-slate-500">{item.contactEmail}</p>}
+                      {item.contactPhone && <p className="text-xs text-slate-500">{item.contactPhone}</p>}
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Social Links */}
               {socialLinks.length > 0 && (
-                <div className="bg-white p-4">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400 mb-2">Connect With Us</p>
+                <div className="rounded-lg border border-slate-100 bg-white p-4">
+                  <p className="mb-2 text-xs font-black uppercase tracking-wider text-slate-400">Connect With Us</p>
                   <div className="flex flex-wrap gap-2">
                     {socialLinks.map((link) => (
-                      <a key={`${link.label}-${link.href}`} href={link.href} target="_blank" rel="noopener noreferrer" className={`px-3 py-1.5 text-xs font-medium capitalize ${theme.bg} ${theme.text}`}>
+                      <a key={`${link.label}-${link.href}`} href={link.href} target="_blank" rel="noopener noreferrer" className={`rounded-full px-3 py-1.5 text-xs font-bold capitalize ${theme.bg} ${theme.text}`}>
                         {link.label}
                       </a>
                     ))}
@@ -483,26 +476,24 @@ const GalleryModal = ({ item, onClose }) => {
                 </div>
               )}
 
-              {/* Details Sections */}
               {Array.isArray(item.details) && item.details.length > 0 && (
                 <div className="space-y-3">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Additional Information</p>
+                  <p className="text-xs font-black uppercase tracking-wider text-slate-400">Additional Information</p>
                   {item.details.map((detail, index) => (
-                    <div key={`${detail?.title || 'detail'}-${index}`} className="bg-white p-4">
-                      <p className="text-sm font-medium text-gray-900">{detail?.title || `Detail ${index + 1}`}</p>
-                      {detail?.content && <p className="mt-2 text-sm font-medium leading-6 text-gray-600">{detail.content}</p>}
+                    <div key={`${detail?.title || 'detail'}-${index}`} className="rounded-lg border border-slate-100 bg-white p-4">
+                      <p className="text-sm font-bold text-slate-950">{detail?.title || `Detail ${index + 1}`}</p>
+                      {detail?.content && <p className="mt-2 text-sm font-medium leading-6 text-slate-600">{detail.content}</p>}
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Action Footer */}
-            <div className="bg-gray-50 p-4 flex gap-2">
-              <button onClick={onClose} className="flex-1 bg-gray-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-800">
+            <div className="flex gap-2 border-t border-slate-100 bg-slate-50 p-4">
+              <button onClick={onClose} className="flex-1 rounded-lg bg-[#0f3d35] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#145447]">
                 Close
               </button>
-              <button className="bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
+              <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-100">
                 <FiExternalLink /> Share
               </button>
             </div>
@@ -513,7 +504,7 @@ const GalleryModal = ({ item, onClose }) => {
   );
 };
 
-// Hub Card Component (no borders/shadows)
+// Hub Card Component
 const HubCard = ({ item, onView }) => {
   const images = normalizeSchoolImages(item);
   const image = images[0]?.url;
@@ -524,61 +515,55 @@ const HubCard = ({ item, onView }) => {
   return (
     <button
       onClick={onView}
-      className={`w-full bg-white text-left hover:bg-gray-50 transition-colors ${theme.bg} bg-opacity-30`}
+      className="group flex h-full w-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-lg"
     >
-      {/* Image Section - Compact */}
-      <div className="relative h-36 w-full bg-gray-100">
+      <div className="relative h-40 w-full bg-slate-100">
         {image ? (
-          <img src={image} alt={item.title} className="h-full w-full object-cover" />
+          <img src={image} alt={item.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         ) : (
           <div className={`flex h-full w-full items-center justify-center ${theme.bg}`}>
-            <Icon className="text-3xl text-gray-600" />
+            <Icon className={`text-4xl ${theme.text}`} />
           </div>
         )}
         
-        {/* Type Badge */}
-        <div className="absolute left-2 top-2">
-          <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium uppercase tracking-wider ${theme.bg} ${theme.text}`}>
+        <div className="absolute left-3 top-3">
+          <span className={`inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${theme.text} shadow-sm`}>
             <Icon className="text-xs" /> {getTypeLabel(item.type)}
           </span>
         </div>
         
-        {/* Image Count */}
-        <div className="absolute bottom-2 right-2 bg-gray-800 bg-opacity-80 px-1.5 py-0.5 text-xs font-medium text-white">
-          {images.length} 📷
+        <div className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-slate-950/80 px-2.5 py-1 text-xs font-bold text-white">
+          <FiImage className="text-[11px]" /> {images.length}
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="p-3">
-        <h3 className="text-sm font-bold leading-tight text-gray-900 line-clamp-1">
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="text-base font-black leading-tight text-slate-950 line-clamp-1">
           {item.title}
         </h3>
         
         {item.shortDescription && (
-          <p className="mt-1 text-xs font-medium leading-4 text-gray-500 line-clamp-2">
+          <p className="mt-2 text-sm font-medium leading-5 text-slate-500 line-clamp-2">
             {item.shortDescription}
           </p>
         )}
 
-        {/* Stats Row */}
-        <div className="mt-2 flex flex-wrap gap-1">
+        <div className="mt-4 flex flex-wrap gap-2">
           {detailCount > 0 && (
-            <span className="flex items-center gap-0.5 bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
+            <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
               <FiLayers className="text-xs" /> {detailCount}
             </span>
           )}
           {item.location && (
-            <span className="flex items-center gap-0.5 bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
+            <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
               <FiMapPin className="text-xs" /> {item.location.length > 20 ? item.location.slice(0, 20) + '...' : item.location}
             </span>
           )}
         </div>
 
-        {/* View Action */}
-        <div className="mt-2 flex items-center justify-end pt-2">
-          <span className="text-xs font-medium uppercase tracking-wider text-gray-400">Explore</span>
-          <span className="ml-2 flex h-5 w-5 items-center justify-center bg-gray-900 text-white">
+        <div className="mt-auto flex items-center justify-between pt-5">
+          <span className="text-xs font-black uppercase tracking-wider text-slate-400">Explore</span>
+          <span className={`ml-2 flex h-8 w-8 items-center justify-center rounded-lg ${theme.iconBg} text-white transition group-hover:translate-x-0.5`}>
             <FiChevronRight className="text-xs" />
           </span>
         </div>
@@ -660,18 +645,24 @@ export default function PublicSchoolHubPage({
     }
     if (departments) {
       return [
-        { title: '📚 CBC Departments', type: 'DEPARTMENT', icon: FiLayers, items: visibleItems.filter((item) => item.category === 'CBC') },
-        { title: '📖 8-4-4 Departments', type: 'DEPARTMENT', icon: FiBookOpen, items: visibleItems.filter((item) => item.category === 'EIGHT_FOUR_FOUR') },
-        { title: '👨‍🏫 Teaching Departments', type: 'DEPARTMENT', icon: FiBookOpen, items: visibleItems.filter((item) => item.category === 'TEACHING') },
-        { title: '🤝 Support Departments', type: 'DEPARTMENT', icon: FiShield, items: visibleItems.filter((item) => item.category === 'SUPPORT') },
+        { title: 'CBC Departments', type: 'DEPARTMENT', icon: FiLayers, items: visibleItems.filter((item) => item.category === 'CBC') },
+        { title: '8-4-4 Departments', type: 'DEPARTMENT', icon: FiBookOpen, items: visibleItems.filter((item) => item.category === 'EIGHT_FOUR_FOUR') },
+        { title: 'Teaching Departments', type: 'DEPARTMENT', icon: FiBookOpen, items: visibleItems.filter((item) => item.category === 'TEACHING') },
+        { title: 'Support Departments', type: 'DEPARTMENT', icon: FiShield, items: visibleItems.filter((item) => item.category === 'SUPPORT') },
       ];
     }
     return [{ title, type: singleType || 'CLUB', items: visibleItems }];
   }, [departments, sections, singleType, title, visibleItems]);
 
   const totalImages = items.reduce((sum, item) => sum + normalizeSchoolImages(item).length, 0);
+  const activeSectionCount = renderedSections.filter((section) => section.items.length > 0).length;
   const heroType = singleType || sections?.[0]?.type || 'DEPARTMENT';
   const HeroIcon = ICONS[heroType] || FiGrid;
+  const heroStats = [
+    { label: 'Published Items', value: items.length, icon: FiLayers },
+    { label: 'Gallery Photos', value: totalImages, icon: FiImage },
+    { label: 'Active Sections', value: activeSectionCount || renderedSections.length, icon: FiGrid },
+  ];
 
   // Feature highlights
   const features = [
@@ -686,131 +677,229 @@ export default function PublicSchoolHubPage({
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <GalleryModal item={active} onClose={() => setActive(null)} />
+<main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+  <section className="relative overflow-hidden rounded-lg bg-[#0f3d35] text-white">
+    <Image
+      src="/Matungulu/29.jpeg"
+      alt="Matungulu Girls Senior School campus"
+      fill
+      priority
+      sizes="(min-width: 1024px) 1180px, 100vw"
+      className="object-cover opacity-35"
+    />
 
-      <main className="mx-auto w-full md:w-[80%] px-6 py-8 sm:px-8 lg:px-12">
-        {/* Hero Section - Matungulu Girls Branding */}
-        <div className="mb-10 bg-gray-50 p-6 md:p-8">
-          {/* Header Badges */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <div className="inline-flex items-center gap-2 bg-gray-100 px-3 py-1.5">
-              <div className="flex h-5 w-5 items-center justify-center bg-blue-900">
-                <span className="text-xs font-black text-white">MG</span>
-              </div>
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-600">{eyebrow}</span>
-            </div>
-            
-            <div className="inline-flex items-center gap-2 bg-gray-100 px-3 py-1.5">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              </span>
-            </div>
-          </div>
+    <div className="absolute inset-0 bg-gradient-to-r from-[#0b302a] via-[#0b302a]/90 to-[#0b302a]/40" />
 
-          {/* Title Section */}
-          <div className="max-w-3xl">
-            <div className="relative inline-block mb-3">
-              <div className="flex h-12 w-12 items-center justify-center bg-blue-800">
-                <HeroIcon className="text-2xl text-white" />
-              </div>
-            </div>
-            
-            <h1 className="text-2xl font-black tracking-tight sm:text-3xl md:text-5xl text-gray-900">
-              Explore{' '}
-              <span className="text-cyan-800">
-                {title}
-              </span>{' '}
-              at {SCHOOL_INFO.name}
-            </h1>
-            
-            <div className="my-3 flex gap-2">
-              <div className="h-1 w-12 bg-blue-800" />
-              <div className="h-1 w-6 bg-emerald-300" />
-              <div className="h-1 w-3 bg-emerald-200" />
-            </div>
-            
-            <p className="text-sm font-medium leading-6 text-gray-600 max-w-2xl">
-              {description || SCHOOL_INFO.description}
+    <div className="relative flex min-h-[520px] flex-col items-center justify-center px-6 py-16 text-center sm:px-8 lg:px-12">
+      <div className="inline-flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase text-emerald-50 backdrop-blur-md">
+        <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-white shadow-lg">
+          <Image
+            src="/MatG.jpg"
+            alt="Matungulu Girls Logo"
+            width={40}
+            height={40}
+            className="h-full w-full object-cover"
+          />
+        </span>
+
+        {eyebrow}
+      </div>
+
+      <div className="mt-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#0f3d35] shadow-xl">
+        <HeroIcon className="text-3xl" />
+      </div>
+
+      <div className="mx-auto mt-8 max-w-4xl">
+        <h1 className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
+          {title}
+          <span className="block text-amber-300">
+            {SCHOOL_INFO.name}
+          </span>
+        </h1>
+
+        <p className="mx-auto mt-6 max-w-2xl text-base font-medium leading-8 text-emerald-50/90 sm:text-lg">
+          {description || SCHOOL_INFO.description}
+        </p>
+      </div>
+
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        {heroStats.map(({ label, value, icon: StatIcon }) => (
+          <div
+            key={label}
+            className="min-w-[170px] rounded-2xl border border-white/15 bg-white/10 px-6 py-5 text-center backdrop-blur-md transition hover:bg-white/15"
+          >
+            <StatIcon className="mx-auto mb-3 text-2xl text-amber-300" />
+
+            <p className="text-3xl font-black">
+              {value}
+            </p>
+
+            <p className="mt-2 text-[11px] font-bold uppercase text-emerald-50/70">
+              {label}
             </p>
           </div>
+        ))}
+      </div>
 
-    {/* Action Bar */}
-<div className="flex flex-col items-center justify-center gap-4 mt-8 sm:flex-row">
-  
-  {/* Refresh Button - Now centered on mobile */}
-  <div className="shrink-0">
-    <RefreshButton refreshing={refreshing} onClick={() => load(true)} />
-  </div>
+      <div className="mt-12 w-full max-w-3xl rounded-3xl border border-white/15 bg-white/95 p-6 text-slate-900 shadow-2xl backdrop-blur-xl">
+        <p className="text-xs font-bold uppercase text-emerald-700">
+          {SCHOOL_INFO.shortName}
+        </p>
 
-  {/* Search Bar - Modernized & Width-Constrained */}
-  <div className="relative w-full max-w-md group">
-    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-      <FiSearch className="text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+        <h2 className="mt-3 text-3xl font-black text-slate-900">
+          {SCHOOL_INFO.motto}
+        </h2>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          {[
+            { icon: FiMapPin, label: SCHOOL_INFO.location },
+            { icon: FiPhone, label: SCHOOL_INFO.phone },
+            { icon: FiMail, label: SCHOOL_INFO.email },
+          ].map(({ icon: InfoIcon, label }) => (
+            <div
+              key={label}
+              className="flex flex-col items-center rounded-2xl bg-slate-50 p-5 text-center transition hover:bg-slate-100"
+            >
+              <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f3d35] text-lg text-white shadow-lg">
+                <InfoIcon />
+              </span>
+
+              <span className="text-sm font-bold leading-6 text-slate-700">
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-    <input
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      placeholder={`Search ${title.toLowerCase()}...`}
-      className="w-full bg-white border border-slate-200 py-3 pl-11 pr-4 rounded-2xl text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal outline-none shadow-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5"
-    />
-  </div>
-  
-</div>
+  </section>
+
+  <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="text-center lg:text-left">
+        <p className="text-xs font-bold uppercase text-emerald-700">
+          Browse School Life
+        </p>
+
+        <h2 className="mt-1 text-xl font-black text-slate-950">
+          Find the right information faster
+        </h2>
+      </div>
+
+      <div className="flex w-full flex-col gap-3 sm:flex-row lg:max-w-2xl">
+        <div className="relative flex-1">
+          <FiSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={`Search ${title.toLowerCase()}...`}
+            className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+          />
         </div>
 
-        {/* Error Display */}
-        {error && (
-          <div className="mb-6 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 flex items-center justify-between">
-            <span className="flex items-center gap-2"><FiAlertTriangle /> {error}</span>
-            <button onClick={() => setError('')} className="text-red-600 hover:text-red-800">
-              <FiX />
-            </button>
-          </div>
-        )}
+        <RefreshButton refreshing={refreshing} onClick={() => load(true)} />
+      </div>
+    </div>
+  </section>
 
-        {/* Loading State */}
-        {loading ? (
-          <ModernLoadingSpinner message={`Loading ${title.toLowerCase()} content...`} />
-        ) : visibleItems.length === 0 ? (
-          <div className="bg-gray-50 p-12 text-center">
-            <div className="inline-flex p-4 bg-gray-100 mb-4">
-              <FiLayers className="text-4xl text-gray-400" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-700">{emptyText}</h2>
-            <p className="text-sm text-gray-500 mt-2">Check back soon for updates!</p>
-          </div>
-        ) : (
-          <div className="space-y-10">
-            {renderedSections.map((section) => {
-              if (!section.items.length) return null;
-              const SectionIcon = section.icon || ICONS[section.type] || FiLayers;
-              return (
-                <section key={section.title}>
-                  {/* Section Header */}
-                  <div className="mb-5 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center bg-blue-800 text-white">
-                      <SectionIcon className="text-base" />
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-bold tracking-tight text-gray-900">{section.title}</h2>
-                      <p className="text-xs font-bold uppercase tracking-wider text-cyan-800">
-                        {section.items.length} {section.items.length === 1 ? 'item' : 'items'} available
-                      </p>
-                    </div>
+  <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {features.map(({ icon: FeatureIcon, title: featureTitle, description: featureDescription, bg, text }) => (
+      <div
+        key={featureTitle}
+        className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+      >
+        <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${bg} ${text}`}>
+          <FeatureIcon className="text-xl" />
+        </div>
+
+        <h3 className="text-base font-black text-slate-950">
+          {featureTitle}
+        </h3>
+
+        <p className="mx-auto mt-2 max-w-xs text-sm font-medium leading-6 text-slate-500">
+          {featureDescription}
+        </p>
+      </div>
+    ))}
+  </section>
+
+  {error && (
+    <div className="mt-6 flex items-center justify-between rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+      <span className="flex items-center gap-2">
+        <FiAlertTriangle /> {error}
+      </span>
+
+      <button
+        onClick={() => setError("")}
+        className="rounded-lg p-2 text-red-600 transition hover:bg-red-100 hover:text-red-800"
+      >
+        <FiX />
+      </button>
+    </div>
+  )}
+
+  <section className="mt-8">
+    {loading ? (
+      <ModernLoadingSpinner message={`Loading ${title.toLowerCase()} content...`} />
+    ) : visibleItems.length === 0 ? (
+      <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
+          <FiLayers className="text-4xl text-slate-400" />
+        </div>
+
+        <h2 className="text-xl font-black text-slate-800">
+          {emptyText}
+        </h2>
+
+        <p className="mt-2 text-sm font-medium text-slate-500">
+          Check back soon for updates.
+        </p>
+      </div>
+    ) : (
+      <div className="space-y-10">
+        {renderedSections.map((section) => {
+          if (!section.items.length) return null;
+
+          const SectionIcon = section.icon || ICONS[section.type] || FiLayers;
+
+          return (
+            <section key={section.title}>
+              <div className="mb-5 flex flex-col items-center justify-between gap-3 border-b border-slate-200 pb-4 text-center sm:flex-row sm:text-left">
+                <div className="flex flex-col items-center gap-3 sm:flex-row">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f3d35] text-white shadow-md">
+                    <SectionIcon className="text-base" />
                   </div>
 
-                  {/* Items Grid - Responsive with more columns */}
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                    {section.items.map((item) => (
-                      <HubCard key={`${item.type}-${item.id}`} item={item} onView={() => setActive(item)} />
-                    ))}
+                  <div>
+                    <h2 className="text-xl font-black text-slate-950">
+                      {section.title}
+                    </h2>
+
+                    <p className="text-xs font-bold uppercase text-emerald-700">
+                      {section.items.length}{" "}
+                      {section.items.length === 1 ? "item" : "items"} available
+                    </p>
                   </div>
-                </section>
-              );
-            })}
-          </div>
-        )}
-        
-      </main>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {section.items.map((item) => (
+                  <HubCard
+                    key={`${item.type}-${item.id}`}
+                    item={item}
+                    onView={() => setActive(item)}
+                  />
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    )}
+  </section>
+</main>
       
       {/* Custom Animation Styles */}
       <style jsx global>{`

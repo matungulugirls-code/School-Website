@@ -1923,9 +1923,23 @@ const getDepartmentAuthHeaders = () => {
   };
 };
 
-const getDepartmentImage = (department) => (
-  department?.image || department?.images?.[0]?.url || '/teachers.png'
-);
+const isAllowedDepartmentImage = (imageUrl) => {
+  if (!imageUrl || typeof imageUrl !== 'string') return false;
+  const normalized = imageUrl.toLowerCase();
+  return !normalized.includes('/teachers.png') &&
+    !normalized.includes('a.i.c_katwanyaa') &&
+    !normalized.includes('katwanyaa') &&
+    !normalized.includes('/katz');
+};
+
+const getDepartmentImage = (department) => {
+  const images = [
+    department?.image,
+    ...(Array.isArray(department?.images) ? department.images.map((image) => image?.url) : []),
+  ].filter(isAllowedDepartmentImage);
+
+  return images[0] || null;
+};
 
 const parseDepartmentExtra = (extra) => {
   if (!extra) return {};
@@ -1958,10 +1972,11 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState(
     department?.images?.length
-      ? department.images.map((image) => image.url)
-      : [getDepartmentImage(department)].filter(Boolean)
+      ? department.images.map((image) => image.url).filter(isAllowedDepartmentImage)
+      : [department?.image].filter(isAllowedDepartmentImage)
   );
   const [imageError, setImageError] = useState('');
+  const hasDepartmentImage = imageFiles.length > 0 || imagePreviews.length > 0 || Boolean(getDepartmentImage(department));
 
   const updateField = (field, value) => {
     setFormData((previous) => ({ ...previous, [field]: value }));
@@ -1992,6 +2007,10 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!hasDepartmentImage) {
+      setImageError('Department image is required. Upload at least one Matungulu Girls department photo.');
+      return;
+    }
 
     const payload = new FormData();
     payload.append('name', formData.name.trim());
@@ -2013,6 +2032,8 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
       imageFiles.forEach((file) => payload.append('images', file));
     } else if (department?.image) {
       payload.append('image', department.image);
+    } else if (department?.images?.[0]?.url) {
+      payload.append('image', department.images[0].url);
     }
 
     onSave(payload, department?.id);
@@ -2144,7 +2165,7 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
             <div className="space-y-4">
               <div>
                 <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
-                  Department Image
+                  Department Image <span className="text-red-500">*</span>
                 </label>
                 <div className="rounded-2xl border-2 border-dashed border-slate-200 p-4">
                   {imagePreviews.length > 0 && (
@@ -2161,7 +2182,7 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
                     onChange={(event) => handleImageChange(event.target.files)}
                     className="w-full text-sm text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-bold file:text-blue-700"
                   />
-                  <p className="mt-2 text-xs font-semibold text-slate-500">You can upload multiple images. Each image must be under 3 MB.</p>
+                  <p className="mt-2 text-xs font-semibold text-slate-500">Required. Upload real Matungulu Girls department images. Each image must be under 3 MB.</p>
                   {imageError && <p className="mt-2 text-xs font-bold text-red-600">{imageError}</p>}
                 </div>
               </div>
@@ -2238,7 +2259,7 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
             </button>
             <button
               type="submit"
-              disabled={loading || !formData.name.trim()}
+              disabled={loading || !formData.name.trim() || !hasDepartmentImage}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white disabled:opacity-50"
             >
               {loading ? <Spinner size={16} /> : <FaSave />}
@@ -2442,9 +2463,16 @@ function StaffDepartmentManager({ showNotification }) {
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredDepartments.map((department) => {
             const categoryInfo = STAFF_DEPARTMENT_CATEGORIES.find((item) => item.value === department.category) || STAFF_DEPARTMENT_CATEGORIES[2];
+            const departmentImage = getDepartmentImage(department);
             return (
               <article key={department.id} className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
-                <img src={getDepartmentImage(department)} alt={department.name} className="h-44 w-full object-cover" />
+                {departmentImage ? (
+                  <img src={departmentImage} alt={department.name} className="h-44 w-full object-cover" />
+                ) : (
+                  <div className="flex h-44 w-full items-center justify-center bg-slate-100 text-center text-xs font-black uppercase tracking-widest text-slate-400">
+                    Department image required
+                  </div>
+                )}
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-3">
                     <span className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${categoryInfo.color} px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white`}>

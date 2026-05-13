@@ -289,81 +289,42 @@ const HierarchySection = ({ title, iconKey, staff, viewMode, isFirst = false, on
   );
 };
 
-// Department grouping cards with department-scoped teacher previews
-const getDepartmentImage = (image) => {
+// Department list rows with department images and an automatic media carousel
+const normalizeImageUrl = (image) => {
   if (!image || typeof image !== 'string') return null;
   const trimmed = image.trim();
   if (!trimmed) return null;
+  const lower = trimmed.toLowerCase();
+  if (
+    lower.includes('/teachers.png') ||
+    lower.includes('a.i.c_katwanyaa') ||
+    lower.includes('katwanyaa') ||
+    lower.includes('/katz')
+  ) {
+    return null;
+  }
   if (trimmed.includes('cloudinary.com')) return trimmed;
-  if (trimmed.startsWith('/') || trimmed.startsWith('http')) return trimmed;
-  if (trimmed.startsWith('data:image')) return trimmed;
+  if (trimmed.startsWith('/') || trimmed.startsWith('http') || trimmed.startsWith('data:image')) return trimmed;
   return trimmed;
 };
 
-const getTeacherImage = (teacher) => {
-  if (!teacher?.image || typeof teacher.image !== 'string') return '/images/default-staff.jpg';
-  if (teacher.image.startsWith('/')) {
-    return `${process.env.NEXT_PUBLIC_SITE_URL || ''}${teacher.image}`;
-  }
-  return teacher.image;
+const getDepartmentImages = (department) => {
+  const urls = [
+    department?.image,
+    ...(Array.isArray(department?.images) ? department.images.map((image) => image?.url) : []),
+  ]
+    .map(normalizeImageUrl)
+    .filter(Boolean);
+
+  return [...new Set(urls)];
 };
+
+const getTeacherImage = (teacher) => normalizeImageUrl(teacher?.image) || '/images/default-staff.jpg';
 
 const getDepartmentTeacherCount = (department) => {
   const teachers = Array.isArray(department?.teachers) ? department.teachers : [];
   if (teachers.length > 0) return teachers.length;
   return Number(department?.staffCount) || 0;
-};
-
-const TeacherCarousel = ({ teachers = [] }) => {
-  if (!teachers.length) {
-    return (
-      <div className="mt-5 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm font-semibold text-slate-500">
-        No teachers are mapped to this department yet.
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-5">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
-          Assigned Teachers
-        </p>
-        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black text-slate-600">
-          {teachers.length}
-        </span>
-      </div>
-
-      <div className="flex gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
-        {teachers.map((teacher) => (
-          <div
-            key={teacher.id}
-            className="snap-start min-w-[180px] max-w-[180px] rounded-[24px] border border-slate-200 bg-slate-50 p-3 shadow-sm"
-          >
-            <div className="relative aspect-[4/4.4] overflow-hidden rounded-[20px] bg-white">
-              <img
-                src={getTeacherImage(teacher)}
-                alt={teacher.name || 'Teacher'}
-                className="h-full w-full object-cover object-top"
-                loading="lazy"
-                onError={(event) => {
-                  event.currentTarget.src = '/images/default-staff.jpg';
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <p className="line-clamp-2 text-sm font-black text-slate-900">
-                {teacher.name || 'Teacher'}
-              </p>
-              <p className="mt-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1f5f3a]">
-                {teacher.subjectOffered || 'Subject teacher'}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 };
 
 const getDepartmentCategoryLabel = (category) => {
@@ -381,83 +342,154 @@ const getDepartmentCategoryLabel = (category) => {
   }
 };
 
+const DepartmentMediaCarousel = ({ departmentImages = [], teachers = [] }) => {
+  const items = [
+    ...departmentImages.map((url, index) => ({
+      id: `department-image-${url}-${index}`,
+      type: 'image',
+      image: url,
+      title: `Department Image ${index + 1}`,
+      subtitle: 'Department gallery',
+    })),
+    ...teachers.map((teacher) => ({
+      id: `teacher-${teacher.id}`,
+      type: 'teacher',
+      image: getTeacherImage(teacher),
+      title: teacher.name || 'Teacher',
+      subtitle: teacher.subjectOffered || teacher.position || 'Department teacher',
+    })),
+  ];
+
+  if (!items.length) {
+    return (
+      <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm font-semibold text-slate-500">
+        Add department images and mapped teachers to complete this department row.
+      </div>
+    );
+  }
+
+  const trackItems = items.length > 1 ? [...items, ...items] : items;
+  const duration = Math.max(18, items.length * 6);
+
+  return (
+    <div className="overflow-hidden rounded-[26px] border border-slate-200 bg-slate-50 p-3">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
+          Department Images & Teachers
+        </p>
+        <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-black text-slate-600">
+          {items.length}
+        </span>
+      </div>
+
+      <div className="department-carousel-mask">
+        <div
+          className={`department-carousel-track flex gap-3 ${items.length > 1 ? '' : 'department-carousel-static'}`}
+          style={{ animationDuration: `${duration}s` }}
+        >
+          {trackItems.map((item, index) => (
+            <div
+              key={`${item.id}-${index}`}
+              className="min-w-[168px] max-w-[168px] overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-sm"
+            >
+              <div className="flex aspect-[4/3.4] items-center justify-center bg-slate-100">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className={item.type === 'image' ? 'h-full w-full object-contain' : 'h-full w-full object-cover object-top'}
+                  loading="lazy"
+                  onError={(event) => {
+                    if (item.type === 'teacher') event.currentTarget.src = '/images/default-staff.jpg';
+                  }}
+                />
+              </div>
+              <div className="p-3">
+                <p className="line-clamp-1 text-sm font-black text-slate-900">{item.title}</p>
+                <p className="mt-1 line-clamp-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#1f5f3a]">
+                  {item.subtitle}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DepartmentCard = ({ department }) => {
-  const imageUrl = getDepartmentImage(department?.image);
+  const departmentImages = getDepartmentImages(department);
+  const imageUrl = departmentImages[0];
   const staffCount = getDepartmentTeacherCount(department);
   const headName = department?.headName || '';
   const assistantHeadName = department?.assistantHeadName || '';
   const teachers = Array.isArray(department?.teachers) ? department.teachers : [];
 
   return (
-    <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_22px_60px_-34px_rgba(15,23,42,0.38)]">
-      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#1a1a2e] via-[#214760] to-[#d7a73d]" />
-
-      <div className="relative mx-5 mt-5 overflow-hidden rounded-[26px] border border-white/70 bg-slate-100 shadow-sm">
-        {imageUrl ? (
-          <div className="relative aspect-[16/9]">
-            <Image
+    <article className="overflow-hidden rounded-[30px] border border-slate-300 bg-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.42)]">
+      <div className="grid gap-0 lg:grid-cols-[minmax(280px,0.95fr)_minmax(0,1.45fr)]">
+        <div className="relative flex min-h-[310px] items-center justify-center bg-slate-100 p-4">
+          {imageUrl ? (
+            <img
               src={imageUrl}
               alt={department?.name || 'Department'}
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, 700px"
-              onError={(e) => {
-                e.target.src = '/images/default-staff.jpg';
-              }}
+              className="max-h-[360px] w-full rounded-[24px] object-contain"
+              loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07111b]/60 via-[#07111b]/10 to-transparent" />
-          </div>
-        ) : (
-          <div className="aspect-[16/9] flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-            <FiLayers className="text-slate-400" size={22} />
-          </div>
-        )}
+          ) : (
+            <div className="flex aspect-[16/10] w-full items-center justify-center rounded-[24px] border border-dashed border-slate-300 bg-white text-center text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+              Department image required
+            </div>
+          )}
 
-        <div className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-800 border border-white/60 backdrop-blur-sm">
-          {getDepartmentCategoryLabel(department?.category)}
+          <div className="absolute left-6 top-6 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-800 shadow-sm">
+            {getDepartmentCategoryLabel(department?.category)}
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h3 className="truncate text-[15px] font-black text-slate-950">
-              {department?.name || 'Department'}
-            </h3>
-            {department?.description && (
-              <p className="mt-2 text-[13px] font-semibold leading-6 text-slate-700 line-clamp-3">
-                {department.description}
-              </p>
+        <div className="flex min-w-0 flex-col p-5 sm:p-6">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <div className="min-w-0">
+              <h3 className="text-2xl font-black tracking-tight text-slate-950">
+                {department?.name || 'Department'}
+              </h3>
+              {department?.description && (
+                <p className="mt-3 text-sm font-semibold leading-7 text-slate-700">
+                  {department.description}
+                </p>
+              )}
+            </div>
+
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-slate-200 bg-slate-50 shadow-sm">
+              <FiUsers size={18} className="text-slate-700" />
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
+              <FiUsers size={11} />
+              {staffCount} {teachers.length ? 'Teachers' : 'Staff'}
+            </span>
+            {headName && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
+                <FiUser size={11} />
+                HOD: {headName}
+              </span>
+            )}
+            {assistantHeadName && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
+                <FiUser size={11} />
+                AHOD: {assistantHeadName}
+              </span>
             )}
           </div>
 
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[20px] border border-slate-200 bg-slate-50 shadow-sm">
-            <FiUsers size={18} className="text-slate-700" />
+          <div className="mt-6">
+            <DepartmentMediaCarousel departmentImages={departmentImages} teachers={teachers} />
           </div>
         </div>
-
-        <div className="mt-4 flex flex-wrap items-center gap-2.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
-            <FiUsers size={11} />
-            {staffCount} {teachers.length ? 'Teachers' : 'Staff'}
-          </span>
-          {headName && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
-              <FiUser size={11} />
-              HOD: {headName}
-            </span>
-          )}
-          {assistantHeadName && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-extrabold text-slate-800">
-              <FiUser size={11} />
-              AHOD: {assistantHeadName}
-            </span>
-          )}
-        </div>
-
-        <TeacherCarousel teachers={teachers} />
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -466,25 +498,25 @@ const DepartmentGroupSection = ({ title, icon: Icon, departments, subtitle }) =>
 
   return (
     <section className="mt-10">
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-8 h-8 rounded-lg bg-[#1a1a2e] flex items-center justify-center">
+      <div className="mb-5 flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1a1a2e]">
           <Icon size={14} className="text-white" />
         </div>
         <div className="min-w-0">
-          <h2 className="text-sm font-black text-[#1a1a2e] uppercase tracking-[0.15em]">
+          <h2 className="text-sm font-black uppercase tracking-[0.15em] text-[#1a1a2e]">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{subtitle}</p>
+            <p className="mt-0.5 text-[11px] font-semibold text-slate-500">{subtitle}</p>
           )}
         </div>
-        <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-400">
           {departments.length}
         </span>
-        <div className="flex-1 h-px bg-slate-100 ml-2" />
+        <div className="ml-2 h-px flex-1 bg-slate-100" />
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="flex flex-col gap-5">
         {departments.map((dept) => (
           <DepartmentCard key={dept.id} department={dept} />
         ))}
@@ -697,7 +729,7 @@ export default function StaffDirectory() {
   });
   const [departmentsLoading, setDepartmentsLoading] = useState(true);
   
-  const [viewMode, setViewMode] = useState('grid');
+  const [viewMode, setViewMode] = useState('list');
   const [currentPage, setCurrentPage] = useState(1);
 
   // Consultation Modal States
@@ -1563,6 +1595,32 @@ export default function StaffDirectory() {
           </div>
         </div>
       </footer>
+
+      <style jsx global>{`
+        @keyframes department-media-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        .department-carousel-mask {
+          overflow: hidden;
+        }
+
+        .department-carousel-track {
+          width: max-content;
+          animation-name: department-media-scroll;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+        }
+
+        .department-carousel-track:hover {
+          animation-play-state: paused;
+        }
+
+        .department-carousel-static {
+          animation: none;
+        }
+      `}</style>
     </div>
   );
 }

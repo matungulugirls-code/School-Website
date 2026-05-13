@@ -450,6 +450,13 @@ export async function POST(req) {
     }
     const primaryImage = uploadedImages[0]?.url || null;
 
+    if (!primaryImage) {
+      return NextResponse.json(
+        { success: false, error: "Department image is required. Please upload at least one department image." },
+        { status: 400 }
+      );
+    }
+
     const createData = {
       name,
       category,
