@@ -57,9 +57,39 @@ const NEWS_FALLBACK_IMAGE = '/MatG.jpg';
 
 const getMediaUrl = (value, fallback) => {
   if (!value) return fallback;
-  if (typeof value === 'string') return value.trim() || fallback;
-  if (typeof value === 'object') return value.url || value.secure_url || fallback;
-  return fallback;
+  let src = value;
+
+  if (typeof value === 'object') {
+    src = value.url || value.secure_url || value.path || '';
+  }
+
+  if (typeof src !== 'string') return fallback;
+
+  const trimmed = src.trim();
+  if (!trimmed) return fallback;
+
+  if (trimmed.startsWith('{')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      return getMediaUrl(parsed, fallback);
+    } catch {
+      return fallback;
+    }
+  }
+
+  if (/\.(pdf|docx?|xlsx?|pptx?)($|\?)/i.test(trimmed)) return fallback;
+  if (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('data:') ||
+    trimmed.startsWith('blob:') ||
+    trimmed.startsWith('/')
+  ) {
+    return trimmed;
+  }
+  if (trimmed.startsWith('public/')) return `/${trimmed.replace(/^public\//, '')}`;
+
+  return `/${trimmed.replace(/^\/+/, '')}`;
 };
 
 // Modern Modal Component with Glass Morphism
@@ -170,7 +200,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
         <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(135deg,#172033_0%,#2d4258_62%,#f2c357_160%)]" />
 
         <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
-          <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 shadow-lg sm:h-48 md:h-52">
+          <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 bg-slate-200 shadow-lg sm:h-48 md:h-56">
           <img
             src={imageUrl}
             alt={event.title}
@@ -179,7 +209,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
             }}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/78 via-[#172033]/14 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/48 via-[#172033]/8 to-transparent" />
           
           <div className="absolute top-3 sm:top-4 left-3 sm:left-4 flex flex-col gap-1.5 sm:gap-2">
             <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-sm border ${theme.bg} ${theme.text} ${theme.border}`}>
