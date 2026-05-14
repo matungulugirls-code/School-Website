@@ -747,12 +747,12 @@ const StaffListCard = ({ staff }) => {
   const DeptIcon = DEPT_ICONS[deptConfig?.id] || FiLayers;
   
   return (
-    <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-5 rounded-[22px] border border-slate-300 bg-white p-4 text-center shadow-md sm:flex-row sm:items-start sm:gap-7 sm:rounded-[28px] sm:p-8 sm:text-left">
+    <div className="mx-auto flex w-full max-w-[72rem] flex-col items-center gap-5 rounded-[22px] border border-slate-300 bg-white p-4 text-center shadow-md sm:flex-row sm:items-start sm:gap-7 sm:rounded-[28px] sm:p-6 sm:text-left lg:p-8">
       
       {/* Increased profile image size slightly to match card width */}
       <div className="relative shrink-0">
         <div className="absolute inset-0 rounded-[22px] bg-gradient-to-br from-[#1a1a2e] via-[#34556d] to-[#d7a73d] blur-md opacity-20" />
-<div className="relative h-28 w-28 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100 sm:h-24 sm:w-24">
+<div className="relative h-24 w-24 overflow-hidden rounded-[24px] border border-white bg-slate-50 ring-2 ring-slate-100">
   <div className="relative h-full w-full">
     <Image
       src={getImageSrc(staff)}
@@ -788,7 +788,7 @@ const StaffListCard = ({ staff }) => {
           {staff.position}
         </p>
 
-        <p className="break-words text-sm font-semibold leading-6 text-slate-700 line-clamp-4 sm:text-[15px] sm:leading-7 sm:line-clamp-3">
+        <p className="break-words text-sm font-semibold leading-6 text-slate-700 line-clamp-3 sm:text-[15px] sm:leading-7">
           {staff.quote || staff.bio}
         </p>
       </div>
