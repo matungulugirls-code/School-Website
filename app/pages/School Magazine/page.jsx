@@ -161,7 +161,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery" }) => {
         isList ? "grid lg:grid-cols-[minmax(300px,0.85fr)_minmax(0,1.25fr)]" : "flex h-full flex-col"
       }`}
     >
-      <div className={`relative w-full bg-slate-100 ${isList ? "min-h-[260px] sm:min-h-[320px] lg:min-h-full" : "h-64 sm:h-72"}`}>
+      <div className={`relative w-full bg-slate-100 ${isList ? "min-h-[260px] sm:min-h-[320px] lg:min-h-[300px]" : "h-64 sm:h-72"}`}>
         {issue.thumbnail ? (
           <Image
             src={issue.thumbnail}
