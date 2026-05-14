@@ -148,145 +148,20 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
     }
   };
 
-  const badgeTone = index % 3 === 0 ? "bg-[#10392f]" : index % 3 === 1 ? "bg-[#7c3450]" : "bg-[#7a5a1d]";
-  const accent = index % 3 === 0 ? "from-[#10392f]" : index % 3 === 1 ? "from-[#7c3450]" : "from-[#7a5a1d]";
-
-  if (viewMode === "list") {
-    return (
-      <motion.article
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -4 }}
-        onClick={() => onOpen(issue)}
-        className="group grid cursor-pointer gap-5 rounded-[2rem] border border-[#11281f1a] bg-[#fffaf0] p-5 shadow-[0_24px_60px_rgba(17,40,31,0.08)] transition-all duration-300 md:grid-cols-[220px_minmax(0,1fr)]"
-      >
-        <div className="relative h-60 overflow-hidden rounded-[1.5rem] bg-[#e8dfcf] md:h-full">
-          {issue.thumbnail ? (
-            <Image
-              src={issue.thumbnail}
-              alt={issue.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center bg-[linear-gradient(135deg,#10392f,#c89b3c)] text-white">
-              <BookOpen className="h-14 w-14 opacity-80" />
-            </div>
-          )}
-          <div className="absolute inset-x-4 top-4 flex items-center justify-between">
-            <span className={`rounded-full ${badgeTone} px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.28em] text-white`}>
-              {issue.year || "Archive"}
-            </span>
-            <button
-              onClick={handleBookmark}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/85 text-[#10392f] backdrop-blur-md"
-            >
-              {isBookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
-            </button>
-          </div>
-        </div>
-
-        <div className="flex min-w-0 flex-col justify-between gap-5">
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[#5f665e]">
-              <span className="rounded-full border border-[#11281f1a] px-3 py-1">Digital magazine</span>
-              <span className="rounded-full border border-[#11281f1a] px-3 py-1">
-                {issue.pages || 80} pages
-              </span>
-            </div>
-            <div>
-              <h3 className="text-2xl font-black text-[#11281f] sm:text-3xl">{issue.title}</h3>
-              <ExpandableDescription
-                text={issue.description || "An editorial snapshot of Matungulu Girls Senior School life, leadership, creativity, achievement, and student voice."}
-                limit={230}
-                className="mt-3 max-w-2xl text-sm leading-7 text-[#5f665e] sm:text-base"
-              />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#5f665e]">Edition Year</p>
-                <p className="mt-1 text-lg font-black text-[#10392f]">{issue.year || "Current"}</p>
-              </div>
-              <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#5f665e]">Reader Views</p>
-                <p className="mt-1 text-lg font-black text-[#10392f]">{issue.views || "New"}</p>
-              </div>
-              <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#5f665e]">Downloads</p>
-                <p className="mt-1 text-lg font-black text-[#10392f]">{issue.downloads || "Open"}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button className="inline-flex items-center gap-2 rounded-full bg-[#10392f] px-5 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(16,57,47,0.22)]">
-              Open Edition
-              <ArrowRight className="h-4 w-4" />
-            </button>
-            <button
-              onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-full border border-[#11281f1f] bg-white px-5 py-3 text-sm font-bold text-[#11281f]"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
-            </button>
-            {issue.pdfUrl && (
-              <a
-                href={issue.pdfUrl}
-                download
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-2 rounded-full border border-[#11281f1f] bg-[#f2ead9] px-5 py-3 text-sm font-bold text-[#7a5a1d]"
-              >
-                <Download className="h-4 w-4" />
-                Save PDF
-              </a>
-            )}
-          </div>
-        </div>
-      </motion.article>
-    );
-  }
+  const isList = viewMode === "list";
+  const descriptionLimit = isList ? 245 : 165;
 
   return (
     <motion.article
-      initial={{ opacity: 0, x: 24 }}
-      animate={{ opacity: 1, x: 0 }}
-      whileHover={{ y: -6 }}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
       onClick={() => onOpen(issue)}
-      className="group relative flex min-h-[540px] w-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d211c] text-white shadow-[0_35px_80px_rgba(6,18,15,0.30)]"
+      className={`group w-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${
+        isList ? "grid lg:grid-cols-[minmax(300px,0.85fr)_minmax(0,1.25fr)]" : "flex h-full flex-col"
+      }`}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(200,155,60,0.35),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(155,79,102,0.3),transparent_38%)]" />
-      <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accent} via-[#c89b3c] to-[#f7edd2]`} />
-
-      <div className="relative p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-2">
-            <span className={`inline-flex rounded-full ${badgeTone} px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.3em] text-white`}>
-              {issue.year || "Archive"}
-            </span>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white/70">
-              <Sparkles className="h-3.5 w-3.5 text-[#d8b15a]" />
-              Signature Edition
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={handleBookmark}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/90 backdrop-blur-md"
-            >
-              {isBookmarked ? <BookmarkCheck className="h-4 w-4 text-[#d8b15a]" /> : <Bookmark className="h-4 w-4" />}
-            </button>
-            <button
-              onClick={handleShare}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/90 backdrop-blur-md"
-            >
-              <Share2 className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative mx-5 h-[300px] overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#18332b]">
+      <div className={`relative w-full bg-slate-100 ${isList ? "min-h-[260px] sm:min-h-[320px] lg:min-h-full" : "h-64 sm:h-72"}`}>
         {issue.thumbnail ? (
           <Image
             src={issue.thumbnail}
@@ -295,63 +170,83 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-[linear-gradient(135deg,#10392f,#7a5a1d)]">
-            <BookOpen className="h-16 w-16 text-white/75" />
+          <div className="flex h-full w-full items-center justify-center bg-slate-100">
+            <BookOpen className="h-16 w-16 text-slate-400" />
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#081712] via-[#081712]/10 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/10 bg-[#081712]/70 px-4 py-3 backdrop-blur-xl">
-          <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60">Curated for</p>
-            <p className="mt-1 text-sm font-bold text-white">Students, parents & alumnae</p>
-          </div>
-          <div className="text-right">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60">Length</p>
-            <p className="mt-1 text-sm font-bold text-[#f5d998]">{issue.pages || 80} pages</p>
-          </div>
+        <div className="absolute left-3 top-3">
+          <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-700 shadow-sm">
+            <BookOpen className="h-3 w-3" />
+            {issue.year || "Archive"}
+          </span>
+        </div>
+        <div className="absolute right-3 top-3 flex gap-2">
+          <button
+            type="button"
+            onClick={handleBookmark}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 text-slate-700 shadow-sm transition hover:bg-slate-100"
+            aria-label={isBookmarked ? "Remove bookmark" : "Bookmark magazine"}
+          >
+            {isBookmarked ? <BookmarkCheck className="h-4 w-4 text-emerald-700" /> : <Bookmark className="h-4 w-4" />}
+          </button>
+          <button
+            type="button"
+            onClick={handleShare}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 text-slate-700 shadow-sm transition hover:bg-slate-100"
+            aria-label="Share magazine"
+          >
+            <Share2 className="h-4 w-4" />
+          </button>
         </div>
       </div>
 
-      <div className="relative flex flex-1 flex-col justify-between gap-5 p-5">
-        <div>
-          <h3 className="text-2xl font-black leading-tight">{issue.title}</h3>
-          <ExpandableDescription
-            text={issue.description || defaultMagazineDescription}
-            limit={155}
-            className="mt-3 text-sm leading-7 text-white/72"
-          />
+      <div className="flex min-h-[300px] flex-1 flex-col p-5 sm:p-6">
+        <div className="flex flex-wrap gap-2">
+          <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+            <FileText className="h-3 w-3" />
+            {issue.pages || 80} pages
+          </span>
+          <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+            <Eye className="h-3 w-3" />
+            {issue.views || "New"} views
+          </span>
+          <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+            <Download className="h-3 w-3" />
+            {issue.downloads || "Ready"}
+          </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/55">Year</p>
-            <p className="mt-1 text-base font-black">{issue.year || "-"}</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/55">Views</p>
-            <p className="mt-1 text-base font-black">{issue.views || "Fresh"}</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/55">Downloads</p>
-            <p className="mt-1 text-base font-black">{issue.downloads || "Ready"}</p>
-          </div>
-        </div>
+        <h3 className="mt-5 text-2xl font-black leading-tight text-slate-950">
+          {issue.title}
+        </h3>
 
-        <div className="flex items-center justify-between">
-          <span className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-[#f5d998]">
-            Enter Reader
+        <ExpandableDescription
+          text={issue.description || defaultMagazineDescription}
+          limit={descriptionLimit}
+          className="mt-3 text-sm font-medium leading-7 text-slate-600"
+        />
+
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
+          <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400">
+            Open Reader
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </span>
-          {issue.pdfUrl && (
-            <a
-              href={issue.pdfUrl}
-              download
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white"
-            >
-              <Download className="h-4 w-4" />
-            </a>
-          )}
+          <div className="flex items-center gap-2">
+            {issue.pdfUrl && (
+              <a
+                href={issue.pdfUrl}
+                download
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 transition hover:bg-slate-200"
+                aria-label="Download magazine PDF"
+              >
+                <Download className="h-4 w-4" />
+              </a>
+            )}
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white transition group-hover:translate-x-0.5">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </div>
         </div>
       </div>
     </motion.article>
@@ -360,19 +255,19 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
 
 const InfoTile = ({ icon: Icon, eyebrow, title, text, tone = "emerald" }) => {
   const toneMap = {
-    emerald: "from-[#10392f] to-[#0c2d25] text-white border-white/10",
-    ivory: "from-[#fffaf0] to-[#f4ecda] text-[#11281f] border-[#11281f12]",
-    rose: "from-[#7c3450] to-[#4f2032] text-white border-white/10",
+    emerald: "bg-white text-slate-900 border-slate-200",
+    ivory: "bg-white text-slate-900 border-slate-200",
+    rose: "bg-white text-slate-900 border-slate-200",
   };
 
   return (
-    <div className={`rounded-[2rem] border bg-gradient-to-br p-6 shadow-[0_24px_60px_rgba(17,40,31,0.08)] ${toneMap[tone]}`}>
-      <div className="mb-6 inline-flex rounded-2xl border border-current/10 bg-white/10 p-3">
+    <div className={`rounded-2xl border p-6 shadow-sm ${toneMap[tone]}`}>
+      <div className="mb-6 inline-flex rounded-2xl bg-slate-900 p-3 text-white">
         <Icon className="h-6 w-6" />
       </div>
-      <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] opacity-70">{eyebrow}</p>
-      <h3 className="mt-3 text-2xl font-black">{title}</h3>
-      <p className="mt-3 text-sm leading-7 opacity-85">{text}</p>
+      <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-slate-500">{eyebrow}</p>
+      <h3 className="mt-3 text-2xl font-black text-slate-950">{title}</h3>
+      <p className="mt-3 text-sm font-medium leading-7 text-slate-600">{text}</p>
     </div>
   );
 };
@@ -383,7 +278,7 @@ export default function MagazineArchive() {
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState("all");
-  const [viewMode, setViewMode] = useState("gallery");
+  const [viewMode, setViewMode] = useState("list");
   const [sortBy, setSortBy] = useState("year");
   const [sortOrder, setSortOrder] = useState("desc");
   const [showFilters, setShowFilters] = useState(false);
