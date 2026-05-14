@@ -129,7 +129,7 @@ import {
 } from 'react-icons/fa';
 
 // ============= CONSTANTS & CONFIGURATION =============
-const MAX_SCHOOL_IMAGE_SIZE = 4.5 * 1024 * 1024;
+const MAX_SCHOOL_IMAGE_SIZE = 4.2 * 1024 * 1024;
 const MAX_BULK_UPLOAD = 20;
 
 const TYPE_OPTIONS = [
@@ -351,8 +351,9 @@ const ImageUploadField = ({ existingImages = [], files = [], removedImages = [],
     const incoming = Array.from(fileList || []);
     if (!incoming.length) return;
 
-    if (files.length + incoming.length > MAX_BULK_UPLOAD) {
-      setError?.(`Maximum ${MAX_BULK_UPLOAD} images allowed. You have ${files.length} already.`);
+    const currentCount = visibleExisting.length + files.length;
+    if (currentCount + incoming.length > MAX_BULK_UPLOAD) {
+      setError?.(`Maximum ${MAX_BULK_UPLOAD} images allowed. You have ${currentCount} already.`);
       return;
     }
 
@@ -363,7 +364,7 @@ const ImageUploadField = ({ existingImages = [], files = [], removedImages = [],
       if (!file.type?.startsWith('image/')) {
         rejected.push(`${file.name} is not an image.`);
       } else if (file.size > MAX_SCHOOL_IMAGE_SIZE) {
-        rejected.push(`${file.name} is ${formatFileSize(file.size)}. Max is 4.5MB.`);
+        rejected.push(`${file.name} is ${formatFileSize(file.size)}. Max is 4.2MB.`);
       } else {
         valid.push(file);
         setUploadProgress(prev => ({ ...prev, [file.name]: 0 }));
@@ -415,7 +416,7 @@ const ImageUploadField = ({ existingImages = [], files = [], removedImages = [],
             <FiImage /> Image Gallery
           </p>
           <p className="mt-1 text-xs font-semibold text-slate-500">
-            Upload up to {MAX_BULK_UPLOAD} images. Each max 4.5MB. Supported: JPG, PNG, GIF, WebP
+            Upload up to {MAX_BULK_UPLOAD} images. Each max 4.2MB. Supported: JPG, PNG, GIF, WebP
           </p>
         </div>
         <div className="flex gap-2">

@@ -782,6 +782,7 @@ model databaseStudent {
   feeBalances     FeeBalance[] @relation("StudentFeeBalances")
 
   results StudentResult[]
+  portalAccount StudentPortalAccount?
 
   updatedAt   DateTime           @updatedAt
   uploadBatch StudentBulkUpload? @relation(fields: [uploadBatchId], references: [id], onDelete: Cascade)
@@ -866,6 +867,7 @@ model StudentPortalAccount {
   lastLoginAt     DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  student         databaseStudent @relation(fields: [admissionNumber], references: [admissionNumber], onDelete: Cascade)
 
   @@index([admissionNumber])
   @@map("student_portal_accounts")

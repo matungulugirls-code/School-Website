@@ -68,6 +68,42 @@ const ScrollToTop = () => {
   );
 };
 
+const defaultMagazineDescription =
+  "A polished yearly showcase of school life, student voice, leadership milestones, school memories, and growth stories across Matungulu Girls Senior School.";
+
+const getTruncatedText = (text, limit = 170) => {
+  const clean = String(text || "").replace(/\s+/g, " ").trim();
+  if (clean.length <= limit) return { text: clean, truncated: false };
+  const slice = clean.slice(0, limit);
+  const safeEnd = slice.lastIndexOf(" ") > 80 ? slice.lastIndexOf(" ") : limit;
+  return { text: `${slice.slice(0, safeEnd).trim()}...`, truncated: true };
+};
+
+const ExpandableDescription = ({ text, limit = 170, className = "" }) => {
+  const [expanded, setExpanded] = useState(false);
+  const source = text || defaultMagazineDescription;
+  const truncated = getTruncatedText(source, limit);
+  const shouldToggle = truncated.truncated;
+
+  return (
+    <div className={className}>
+      <p>{expanded || !shouldToggle ? source : truncated.text}</p>
+      {shouldToggle && (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            setExpanded((value) => !value);
+          }}
+          className="mt-2 text-xs font-black uppercase tracking-[0.18em] text-[#c89b3c] transition hover:text-[#10392f]"
+        >
+          {expanded ? "Show Less" : "Read More"}
+        </button>
+      )}
+    </div>
+  );
+};
+
 const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -160,10 +196,11 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
             </div>
             <div>
               <h3 className="text-2xl font-black text-[#11281f] sm:text-3xl">{issue.title}</h3>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#5f665e] sm:text-base">
-                {issue.description ||
-                  "An editorial snapshot of Matungulu Girls Senior School life, leadership, creativity, achievement, and student voice."}
-              </p>
+              <ExpandableDescription
+                text={issue.description || "An editorial snapshot of Matungulu Girls Senior School life, leadership, creativity, achievement, and student voice."}
+                limit={230}
+                className="mt-3 max-w-2xl text-sm leading-7 text-[#5f665e] sm:text-base"
+              />
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-2xl border border-[#11281f12] bg-white px-4 py-3">
@@ -216,7 +253,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
       animate={{ opacity: 1, x: 0 }}
       whileHover={{ y: -6 }}
       onClick={() => onOpen(issue)}
-      className="group relative flex min-h-[540px] w-[86vw] max-w-[400px] flex-shrink-0 snap-center cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d211c] text-white shadow-[0_35px_80px_rgba(6,18,15,0.36)] sm:w-[380px]"
+      className="group relative flex min-h-[540px] w-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0d211c] text-white shadow-[0_35px_80px_rgba(6,18,15,0.30)]"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(200,155,60,0.35),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(155,79,102,0.3),transparent_38%)]" />
       <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accent} via-[#c89b3c] to-[#f7edd2]`} />
@@ -278,10 +315,11 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery", index = 0 }) => {
       <div className="relative flex flex-1 flex-col justify-between gap-5 p-5">
         <div>
           <h3 className="text-2xl font-black leading-tight">{issue.title}</h3>
-          <p className="mt-3 text-sm leading-7 text-white/72">
-            {issue.description ||
-              "A polished yearly showcase of School life, student voice, leadership milestones, school memories, and growth stories across Matungulu Girls Senior School."}
-          </p>
+          <ExpandableDescription
+            text={issue.description || defaultMagazineDescription}
+            limit={155}
+            className="mt-3 text-sm leading-7 text-white/72"
+          />
         </div>
 
         <div className="grid grid-cols-3 gap-2">
@@ -788,12 +826,12 @@ export default function MagazineArchive() {
                   Explore editions in a cinematic flow
                 </h2>
               </div>
-              <p className="hidden max-w-sm text-right text-sm leading-7 text-[#5f665e] lg:block">
-                Swipe or scroll horizontally to move between editions, then open any copy in the premium reader.
+                <p className="hidden max-w-sm text-right text-sm leading-7 text-[#5f665e] lg:block">
+                Browse polished edition cards, then open any copy in the reader or save the PDF for offline reading.
               </p>
             </div>
-            <div className="hide-scrollbar -mx-4 overflow-x-auto px-4 pb-4">
-              <div className="flex snap-x snap-mandatory gap-5">
+            <div className="pb-4">
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {filteredAndSortedMagazines.map((issue, index) => (
                   <MagazineCard
                     key={issue.id || `${issue.title}-${index}`}

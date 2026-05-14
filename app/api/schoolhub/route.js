@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../libs/prisma";
 import {
+  SCHOOL_HUB_MAX_IMAGES,
   isFileUpload,
   uploadSchoolImagesFromFormData,
   validateSchoolImage,
@@ -281,7 +282,19 @@ export async function POST(req) {
       details = [];
     }
 
-    for (const file of [...formData.getAll("images"), formData.get("image")].filter(isFileUpload)) {
+    const incomingFiles = [...formData.getAll("images"), formData.get("image")].filter(isFileUpload);
+    if (incomingFiles.length > SCHOOL_HUB_MAX_IMAGES) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `A School Hub item can have up to ${SCHOOL_HUB_MAX_IMAGES} images.`,
+          authenticated: true,
+        },
+        { status: 400 }
+      );
+    }
+
+    for (const file of incomingFiles) {
       const validation = validateSchoolImage(file);
       if (!validation.valid) {
         return NextResponse.json(

@@ -556,17 +556,26 @@ const GalleryModal = ({ item, onClose }) => {
 // Hub Card Component
 const HubCard = ({ item, onView }) => {
   const images = normalizeSchoolImages(item);
-  const image = images[0]?.url;
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const image = images[activeImageIndex]?.url || images[0]?.url;
   const Icon = ICONS[item.type] || FiLayers;
   const theme = TYPE_THEMES[item.type] || TYPE_THEMES.DEPARTMENT;
   const detailCount = Array.isArray(item.details) ? item.details.length : 0;
 
+  useEffect(() => {
+    if (images.length < 2) return undefined;
+    const timer = setInterval(() => {
+      setActiveImageIndex((index) => (index + 1) % images.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [images.length]);
+
   return (
     <button
       onClick={onView}
-      className="group flex h-full min-w-[280px] max-w-[280px] flex-col overflow-hidden rounded-[30px] bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg sm:min-w-[310px] sm:max-w-[310px]"
+      className="group grid w-full overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.25fr)]"
     >
-      <div className="relative h-52 w-full bg-slate-100">
+      <div className="relative min-h-[260px] w-full bg-slate-100 sm:min-h-[320px] lg:min-h-full">
         {image ? (
           <img src={image} alt={item.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         ) : (
@@ -581,23 +590,47 @@ const HubCard = ({ item, onView }) => {
           </span>
         </div>
         
-        <div className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-slate-950/80 px-2.5 py-1 text-xs font-bold text-white">
+        <div className="absolute right-3 top-14 inline-flex items-center gap-1 rounded-full bg-slate-950/80 px-2.5 py-1 text-xs font-bold text-white">
           <FiImage className="text-[11px]" /> {images.length}
         </div>
+
+        {images.length > 1 && (
+          <div className="absolute inset-x-3 bottom-3 flex gap-2 overflow-x-auto rounded-xl bg-slate-950/65 p-2 backdrop-blur-md">
+            {images.slice(0, 6).map((thumb, index) => (
+              <span
+                key={thumb.url}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setActiveImageIndex(index);
+                }}
+                className={`relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border transition ${
+                  activeImageIndex === index ? 'border-white ring-2 ring-white/45' : 'border-white/20 opacity-75'
+                }`}
+              >
+                <img src={thumb.url} alt={thumb.altText || `${item.title} ${index + 1}`} className="h-full w-full object-cover" />
+              </span>
+            ))}
+            {images.length > 6 && (
+              <span className="flex h-12 w-16 shrink-0 items-center justify-center rounded-lg bg-white/15 text-xs font-black text-white">
+                +{images.length - 6}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-base font-black leading-tight text-slate-950 line-clamp-1">
+      <div className="flex min-h-[300px] flex-1 flex-col p-5 sm:p-6">
+        <h3 className="text-2xl font-black leading-tight text-slate-950">
           {item.title}
         </h3>
         
-        {item.shortDescription && (
-          <p className="mt-2 text-sm font-medium leading-5 text-slate-500 line-clamp-2">
-            {item.shortDescription}
+        {(item.shortDescription || item.description) && (
+          <p className="mt-3 text-sm font-medium leading-7 text-slate-600 line-clamp-4">
+            {item.shortDescription || item.description}
           </p>
         )}
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-wrap gap-2">
           {detailCount > 0 && (
             <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
               <FiLayers className="text-xs" /> {detailCount}
@@ -610,7 +643,26 @@ const HubCard = ({ item, onView }) => {
           )}
         </div>
 
-        <div className="mt-auto flex items-center justify-between pt-5">
+        {images.length > 1 && (
+          <div className="mt-5 grid grid-cols-4 gap-2 sm:grid-cols-6">
+            {images.slice(0, 6).map((thumb, index) => (
+              <span
+                key={`${thumb.url}-small`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setActiveImageIndex(index);
+                }}
+                className={`relative aspect-[4/3] overflow-hidden rounded-lg border bg-slate-100 ${
+                  activeImageIndex === index ? 'border-slate-900' : 'border-slate-200'
+                }`}
+              >
+                <img src={thumb.url} alt={thumb.altText || `${item.title} preview ${index + 1}`} className="h-full w-full object-cover" />
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-auto flex items-center justify-between pt-6">
           <span className="text-xs font-black uppercase tracking-wider text-slate-400">View Details</span>
           <span className={`ml-2 flex h-9 w-9 items-center justify-center rounded-xl ${theme.iconBg} text-white transition group-hover:translate-x-0.5`}>
             <FiChevronRight className="text-sm" />
@@ -624,25 +676,15 @@ const HubCard = ({ item, onView }) => {
 const HubCarousel = ({ items, onView }) => {
   if (!items?.length) return null;
 
-  const trackItems = items.length > 1 ? [...items, ...items] : items;
-  const duration = Math.max(22, items.length * 7);
-
   return (
-    <div className="overflow-hidden rounded-[34px] bg-slate-50 p-4">
-      <div className="school-hub-carousel-mask">
-        <div
-          className={`school-hub-carousel-track flex gap-4 ${items.length > 1 ? '' : 'school-hub-carousel-static'}`}
-          style={{ animationDuration: `${duration}s` }}
-        >
-          {trackItems.map((item, index) => (
-            <HubCard
-              key={`${item.type}-${item.id}-${index}`}
-              item={item}
-              onView={() => onView(item)}
-            />
-          ))}
-        </div>
-      </div>
+    <div className="grid gap-5 rounded-2xl bg-slate-50 p-3 sm:p-4">
+      {items.map((item) => (
+        <HubCard
+          key={`${item.type}-${item.id}`}
+          item={item}
+          onView={() => onView(item)}
+        />
+      ))}
     </div>
   );
 };

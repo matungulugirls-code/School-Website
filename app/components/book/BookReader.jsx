@@ -50,6 +50,8 @@ const BookReader = ({ issue, onClose }) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const containerRef = useRef(null);
+  const scrollRef = useRef(null);
+  const pageRefs = useRef([]);
   const touchStartY = useRef(0);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const BookReader = ({ issue, onClose }) => {
     const updateWidth = () => {
       if (!containerRef.current) return;
       const width = containerRef.current.clientWidth;
-      const gutters = width < 768 ? 28 : 72;
+      const gutters = width < 768 ? 28 : 92;
       setPageWidth(Math.max(260, Math.min(width - gutters, 980)));
     };
 
@@ -121,22 +123,35 @@ const BookReader = ({ issue, onClose }) => {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    const container = containerRef.current?.closest(".reader-shell");
-    if (container) {
-      container.addEventListener("wheel", handleWheel, { passive: false });
-      container.addEventListener("touchstart", handleTouchStart);
-      container.addEventListener("touchend", handleTouchEnd);
-    }
-
     return () => {
       document.body.style.overflow = "";
-      if (container) {
-        container.removeEventListener("wheel", handleWheel);
-        container.removeEventListener("touchstart", handleTouchStart);
-        container.removeEventListener("touchend", handleTouchEnd);
-      }
     };
-  }, [currentPage, numPages, isFlipping]);
+  }, []);
+
+  useEffect(() => {
+    if (!numPages || !scrollRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        const page = Number(visible?.target?.dataset?.page);
+        if (page && page !== currentPage) setCurrentPage(page);
+      },
+      {
+        root: scrollRef.current,
+        threshold: [0.35, 0.55, 0.75],
+      }
+    );
+
+    pageRefs.current.forEach((node) => {
+      if (node) observer.observe(node);
+    });
+
+    return () => observer.disconnect();
+  }, [numPages, currentPage]);
 
   const onDocumentLoadSuccess = ({ numPages: total }) => {
     setNumPages(total);
@@ -148,22 +163,21 @@ const BookReader = ({ issue, onClose }) => {
     setLoadingProgress(Math.round((loaded / total) * 100));
   };
 
+  const scrollToPage = (pageNum) => {
+    const nextPage = Math.max(1, Math.min(pageNum, numPages || 1));
+    const node = pageRefs.current[nextPage - 1];
+    if (!node) return;
+    setDirection(nextPage > currentPage ? 1 : -1);
+    setCurrentPage(nextPage);
+    node.scrollIntoView({ behavior: "smooth", block: "start", inline: "center" });
+  };
+
   const goNext = () => {
-    if (numPages && currentPage < numPages && !isFlipping) {
-      setIsFlipping(true);
-      setDirection(1);
-      setCurrentPage((page) => page + 1);
-      setTimeout(() => setIsFlipping(false), 420);
-    }
+    if (numPages && currentPage < numPages) scrollToPage(currentPage + 1);
   };
 
   const goPrev = () => {
-    if (currentPage > 1 && !isFlipping) {
-      setIsFlipping(true);
-      setDirection(-1);
-      setCurrentPage((page) => page - 1);
-      setTimeout(() => setIsFlipping(false), 420);
-    }
+    if (currentPage > 1) scrollToPage(currentPage - 1);
   };
 
   const handleWheel = (e) => {
@@ -245,11 +259,8 @@ const BookReader = ({ issue, onClose }) => {
   };
 
   const jumpToPage = (pageNum) => {
-    if (pageNum >= 1 && pageNum <= (numPages || 1) && !isFlipping) {
-      setIsFlipping(true);
-      setDirection(pageNum > currentPage ? 1 : -1);
-      setCurrentPage(pageNum);
-      setTimeout(() => setIsFlipping(false), 420);
+    if (pageNum >= 1 && pageNum <= (numPages || 1)) {
+      scrollToPage(pageNum);
       setShowPageJump(false);
       setJumpPage("");
     }
@@ -262,7 +273,7 @@ const BookReader = ({ issue, onClose }) => {
   };
 
   const progress = numPages ? (currentPage / numPages) * 100 : 0;
-  const readerWidth = Math.max(260, Math.min(pageWidth * scale, pageWidth * 1.75));
+  const readerWidth = Math.max(260, Math.min(pageWidth * scale, 1600));
 
   const pageVariants = {
     enter: (dir) => ({
@@ -656,15 +667,17 @@ const BookReader = ({ issue, onClose }) => {
           </div>
 
           <div
-            ref={containerRef}
-            className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-2 py-3 sm:px-3 sm:py-4 lg:px-6 lg:py-6"
-            style={{ perspective: 1800 }}
+            ref={(node) => {
+              containerRef.current = node;
+              scrollRef.current = node;
+            }}
+            className="reader-scroll relative min-h-0 flex-1 overflow-auto px-2 py-3 sm:px-3 sm:py-4 lg:px-6 lg:py-6"
           >
             <button
               onClick={goPrev}
-              disabled={currentPage <= 1 || isFlipping}
+              disabled={currentPage <= 1}
               className={`absolute left-2 sm:left-3 top-1/2 z-20 hidden h-10 w-10 sm:h-14 sm:w-14 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-xl transition md:flex ${
-                currentPage <= 1 || isFlipping
+                currentPage <= 1
                   ? "cursor-not-allowed border-white/6 bg-white/[0.03] text-white/20"
                   : "border-white/10 bg-white/[0.08] text-white shadow-[0_18px_40px_rgba(0,0,0,0.28)] hover:bg-white/[0.12]"
               }`}
@@ -674,9 +687,9 @@ const BookReader = ({ issue, onClose }) => {
 
             <button
               onClick={goNext}
-              disabled={!numPages || currentPage >= numPages || isFlipping}
+              disabled={!numPages || currentPage >= numPages}
               className={`absolute right-2 sm:right-3 top-1/2 z-20 hidden h-10 w-10 sm:h-14 sm:w-14 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-xl transition md:flex ${
-                !numPages || currentPage >= numPages || isFlipping
+                !numPages || currentPage >= numPages
                   ? "cursor-not-allowed border-white/6 bg-white/[0.03] text-white/20"
                   : "border-white/10 bg-white/[0.08] text-white shadow-[0_18px_40px_rgba(0,0,0,0.28)] hover:bg-white/[0.12]"
               }`}
@@ -693,68 +706,71 @@ const BookReader = ({ issue, onClose }) => {
                   className="pointer-events-none absolute bottom-7 left-1/2 z-20 -translate-x-1/2"
                 >
                   <div className="rounded-full border border-white/10 bg-[#0d211c]/90 px-5 py-3 text-xs font-bold uppercase tracking-[0.22em] text-white/82 shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-xl">
-                    Swipe, scroll, or use arrow keys to move pages
+                    Scroll naturally, zoom, or use arrows to jump pages
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <div className="relative w-full">
-              <div className="absolute inset-0 mx-auto max-w-[1100px] rounded-[1.5rem] sm:rounded-[2.5rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_52%)] blur-3xl" />
-              <AnimatePresence mode="wait" custom={direction}>
-                <motion.div
-                  key={currentPage}
-                  custom={direction}
-                  variants={pageVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="relative mx-auto overflow-hidden rounded-[1rem] sm:rounded-[1.5rem] lg:rounded-[2rem] border border-white/10 bg-[#f4ead4] shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:shadow-[0_35px_110px_rgba(0,0,0,0.45)]"
-                  style={{ width: "fit-content", maxWidth: "100%", transformStyle: "preserve-3d" }}
-                >
-                  <div className="absolute inset-x-0 top-0 z-10 h-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),transparent)]" />
-                  <Document
-                    file={issue.pdfUrl}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                    onLoadProgress={onDocumentLoadProgress}
-                    loading={
-                      <div className="flex min-h-[60vh] flex-col items-center justify-center px-8 py-20 text-center text-[#11281f]">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#10392f] text-white">
-                          <Loader2 className="h-7 w-7 animate-spin" />
-                        </div>
-                        <p className="mt-6 text-sm font-extrabold uppercase tracking-[0.3em] text-[#10392f]">
-                          Building Reader
-                        </p>
-                        <h3 className="mt-3 text-3xl font-black">Loading magazine pages</h3>
-                        <p className="mt-2 text-sm text-[#5f665e]">{loadingProgress}% complete</p>
+            <div className="relative mx-auto flex w-max min-w-full flex-col items-center gap-6 pb-10">
+              <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-[420px] max-w-[1100px] rounded-[2.5rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_60%)] blur-3xl" />
+              <Document
+                file={issue.pdfUrl}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onLoadProgress={onDocumentLoadProgress}
+                loading={
+                  <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-[2rem] bg-[#f4ead4] px-8 py-20 text-center text-[#11281f]">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#10392f] text-white">
+                      <Loader2 className="h-7 w-7 animate-spin" />
+                    </div>
+                    <p className="mt-6 text-sm font-extrabold uppercase tracking-[0.3em] text-[#10392f]">
+                      Building Reader
+                    </p>
+                    <h3 className="mt-3 text-3xl font-black">Loading magazine pages</h3>
+                    <p className="mt-2 text-sm text-[#5f665e]">{loadingProgress}% complete</p>
+                  </div>
+                }
+                error={
+                  <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-[2rem] bg-[#f4ead4] px-8 py-20 text-center text-[#11281f]">
+                    <AlertCircle className="h-12 w-12 text-[#9b4f66]" />
+                    <h3 className="mt-5 text-2xl font-black">The PDF could not be loaded</h3>
+                    <p className="mt-3 max-w-md text-sm leading-7 text-[#5f665e]">
+                      Please try again or download the magazine directly instead.
+                    </p>
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#10392f] px-5 py-3 text-sm font-black text-white"
+                    >
+                      Retry Reader
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                }
+              >
+                {Array.from({ length: numPages || 0 }, (_, index) => {
+                  const pageNumber = index + 1;
+                  return (
+                    <div
+                      key={pageNumber}
+                      ref={(node) => {
+                        pageRefs.current[index] = node;
+                      }}
+                      data-page={pageNumber}
+                      className="relative mb-6 scroll-mt-5 overflow-hidden rounded-[1rem] border border-white/10 bg-[#f4ead4] shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:rounded-[1.5rem] sm:shadow-[0_35px_110px_rgba(0,0,0,0.45)] lg:rounded-[2rem]"
+                    >
+                      <div className="absolute left-3 top-3 z-10 rounded-full bg-[#071410]/80 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white/80 backdrop-blur">
+                        Page {pageNumber}
                       </div>
-                    }
-                    error={
-                      <div className="flex min-h-[60vh] flex-col items-center justify-center px-8 py-20 text-center text-[#11281f]">
-                        <AlertCircle className="h-12 w-12 text-[#9b4f66]" />
-                        <h3 className="mt-5 text-2xl font-black">The PDF could not be loaded</h3>
-                        <p className="mt-3 max-w-md text-sm leading-7 text-[#5f665e]">
-                          Please try again or download the magazine directly instead.
-                        </p>
-                        <button
-                          onClick={() => window.location.reload()}
-                          className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#10392f] px-5 py-3 text-sm font-black text-white"
-                        >
-                          Retry Reader
-                          <ArrowRight className="h-4 w-4" />
-                        </button>
-                      </div>
-                    }
-                  >
-                    <Page
-                      pageNumber={currentPage}
-                      width={readerWidth}
-                      renderTextLayer
-                      renderAnnotationLayer
-                    />
-                  </Document>
-                </motion.div>
-              </AnimatePresence>
+                      <Page
+                        pageNumber={pageNumber}
+                        width={readerWidth}
+                        renderTextLayer
+                        renderAnnotationLayer
+                      />
+                    </div>
+                  );
+                })}
+              </Document>
             </div>
           </div>
 

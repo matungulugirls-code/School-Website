@@ -132,41 +132,17 @@ export default function StudentLoginModal({
     }
   };
 
-  // Updated with Kamba girls' names
-  const studentExamples = [
-    { name: "Mwende Mumbua Kalondu", admission: "2903" },
-    { name: "Mwikali Kasimu Ndanu", admission: "2902" },
-    { name: "Kasyoka Mutuku Mwende", admission: "1234" },
-    { name: "Ndanu Mumbua Mutiso", admission: "5678" },
-    { name: "Kalondu Mutua Mwende", admission: "9012" },
-    { name: "Mbula Mwanzia Nduku", admission: "3456" },
-    { name: "Mwithali Musyoka Kasyoka", admission: "7890" }
-  ];
-
-  // Updated name formats with Kamba girls' names
-  const nameFormats = [
-    "Mwende Mumbua",
-    "Mwende Mumbua Kalondu", 
-    "MWENDE MUMBUA",
-    "mwende mumbua",
-    "M. Mumbua",
-    "Kalondu Mutua",
-    "Mwikali Kasimu",
-    "Ndanu Mumbua",
-    "Kasyoka Mutuku"
-  ];
-
   return (
     <div 
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-2 sm:p-4 animate-fadeIn overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-slate-950/70 p-2 backdrop-blur-md animate-fadeIn sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="login-modal-title"
     >
-      <main className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl border border-emerald-100 overflow-hidden transform transition-all duration-300 scale-100 my-auto max-h-[90vh] flex flex-col">
+      <main className="my-auto flex max-h-[92vh] w-full max-w-4xl scale-100 transform flex-col overflow-hidden rounded-2xl border border-white/50 bg-white shadow-2xl transition-all duration-300">
         
         {/* Header - Matungulu Girls Theme */}
-        <header className="bg-gradient-to-r from-emerald-900 to-teal-800 px-5 py-4 sm:px-6 sm:py-4 text-white flex-shrink-0">
+        <header className="flex-shrink-0 bg-gradient-to-r from-slate-950 via-emerald-950 to-teal-900 px-5 py-5 text-white sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -197,10 +173,10 @@ export default function StudentLoginModal({
         </header>
 
         {/* Body */}
-        <article className="p-5 sm:p-6 overflow-y-auto flex-grow bg-gradient-to-br from-white to-emerald-50/30">
+        <article className="flex-grow overflow-y-auto bg-slate-50 p-5 sm:p-6">
           
           {/* Flexible Name Instructions */}
-          <section className="mb-4 bg-emerald-50 rounded-lg p-3 border border-emerald-200">
+          <section className="mb-4 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
             <div className="flex items-start gap-2">
               <FiCheckCircle className="text-emerald-600 text-sm mt-0.5 flex-shrink-0" />
               <div className="flex-1">
@@ -208,18 +184,6 @@ export default function StudentLoginModal({
                 <p className="text-emerald-700 text-xs mb-2">
                   Returning students use admission number and password. First-time students verify their name once, then create a strong password.
                 </p>
-                {mode === 'setup' && <div className="flex flex-wrap gap-1">
-                  {nameFormats.slice(0, 4).map((format, idx) => (
-                    <button 
-                      key={idx}
-                      onClick={() => handleInputChange('fullName', format)}
-                      className="px-2 py-1 bg-white text-emerald-700 rounded text-xs hover:bg-emerald-100 transition-colors border border-emerald-300"
-                      type="button"
-                    >
-                      {format}
-                    </button>
-                  ))}
-                </div>}
               </div>
             </div>
           </section>
@@ -283,7 +247,7 @@ export default function StudentLoginModal({
               </div>
             </div>
 
-            <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl border border-emerald-100 bg-white p-1">
+            <div className="mb-4 grid grid-cols-2 gap-2 rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
               <button
                 type="button"
                 onClick={() => {
@@ -292,7 +256,7 @@ export default function StudentLoginModal({
                   setLocalError(null);
                 }}
                 className={`rounded-lg px-3 py-2 text-xs font-black transition-colors ${
-                  mode === 'password' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-800 hover:bg-emerald-50'
+                  mode === 'password' ? 'bg-emerald-700 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
                 Password Login
@@ -305,7 +269,7 @@ export default function StudentLoginModal({
                   setLocalError(null);
                 }}
                 className={`rounded-lg px-3 py-2 text-xs font-black transition-colors ${
-                  mode === 'setup' ? 'bg-emerald-700 text-white shadow-sm' : 'text-emerald-800 hover:bg-emerald-50'
+                  mode === 'setup' ? 'bg-emerald-700 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
                 First-Time Setup
@@ -349,24 +313,6 @@ export default function StudentLoginModal({
                     {validationErrors.fullName}
                   </p>
                 )}
-                <div className="mt-2">
-                  <p className="text-gray-500 text-xs mb-1">Quick fill (Kamba girls' names):</p>
-                  <div className="flex flex-wrap gap-1">
-                    {studentExamples.slice(0, 4).map((student, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          handleInputChange('fullName', student.name);
-                          handleInputChange('admissionNumber', student.admission);
-                        }}
-                        className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded text-xs border border-emerald-200 transition-colors"
-                      >
-                        {student.name.split(' ')[0]} - {student.admission}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>}
 
               {/* Admission Number Input */}
@@ -405,21 +351,6 @@ export default function StudentLoginModal({
                     {validationErrors.admissionNumber}
                   </p>
                 )}
-                <div className="mt-2">
-                  <p className="text-gray-500 text-xs mb-1">Examples:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {['2903', '2902', '1234', '5678', '9012', '3456', '7890'].map((example, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => handleInputChange('admissionNumber', example)}
-                        className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded text-xs border border-emerald-200 transition-colors"
-                      >
-                        {example}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               {mode === 'password' && (

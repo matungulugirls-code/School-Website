@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import {
+  SCHOOL_HUB_MAX_IMAGES,
   deleteSchoolImages,
   isFileUpload,
   uploadSchoolImagesFromFormData,
@@ -298,7 +299,8 @@ export async function PUT(req, { params }) {
       }
     }
 
-    for (const file of [...formData.getAll("images"), formData.get("image")].filter(isFileUpload)) {
+    const incomingFiles = [...formData.getAll("images"), formData.get("image")].filter(isFileUpload);
+    for (const file of incomingFiles) {
       const validation = validateSchoolImage(file);
       if (!validation.valid) {
         return NextResponse.json(
@@ -311,6 +313,20 @@ export async function PUT(req, { params }) {
     let imagesChanged = false;
     const imagesToRemove = formData.getAll("imagesToRemove").map((value) => value.toString());
     const matchingImagesToRemove = existing.images.filter((image) => imagesToRemove.includes(image.url));
+    const remainingImages = existing.images.filter(
+      (image) => !matchingImagesToRemove.some((removed) => removed.id === image.id)
+    );
+    if (remainingImages.length + incomingFiles.length > SCHOOL_HUB_MAX_IMAGES) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `A School Hub item can have up to ${SCHOOL_HUB_MAX_IMAGES} images. Remove older images before adding more.`,
+          authenticated: true,
+        },
+        { status: 400 }
+      );
+    }
+
     if (matchingImagesToRemove.length > 0) {
       imagesChanged = true;
       await deleteSchoolImages(matchingImagesToRemove);
@@ -348,9 +364,6 @@ export async function PUT(req, { params }) {
       data.image = data.image || uploadedImages[0].url;
     }
 
-    const remainingImages = existing.images.filter(
-      (image) => !matchingImagesToRemove.some((removed) => removed.id === image.id)
-    );
     if (imagesChanged && !data.image) {
       data.image = remainingImages[0]?.url || uploadedImages[0]?.url || null;
     }

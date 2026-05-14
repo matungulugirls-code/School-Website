@@ -336,20 +336,30 @@ export async function POST(request) {
     }
 
     const passwordHash = await bcrypt.hash(String(newPassword), 12);
-    const newAccount = await prisma.studentPortalAccount.upsert({
-      where: { admissionNumber: cleanAdmissionNumber },
-      update: {
-        passwordHash,
-        passwordSetAt: new Date(),
-        lastLoginAt: new Date()
-      },
-      create: {
-        admissionNumber: cleanAdmissionNumber,
-        passwordHash,
-        passwordSetAt: new Date(),
-        lastLoginAt: new Date()
+    let newAccount;
+
+    try {
+      newAccount = await prisma.studentPortalAccount.create({
+        data: {
+          admissionNumber: cleanAdmissionNumber,
+          passwordHash,
+          passwordSetAt: new Date(),
+          lastLoginAt: new Date()
+        }
+      });
+    } catch (createError) {
+      if (createError?.code === 'P2002') {
+        return NextResponse.json(
+          {
+            success: false,
+            requiresPassword: true,
+            error: 'A portal password has already been created for this admission number. Please use Password Login.'
+          },
+          { status: 409 }
+        );
       }
-    });
+      throw createError;
+    }
 
     return createStudentSessionResponse(request, student, newAccount, 'Password created and login successful');
 

@@ -55,10 +55,10 @@ export default function NavigationSidebar({
   }, [feeBalance, feeLoading, feeError]);
 
   return (
-    <aside className="flex h-full flex-col bg-white shadow-xl rounded-r-3xl">
+    <aside className="flex h-full flex-col rounded-r-3xl border-r border-slate-200 bg-white shadow-xl">
       {/* Header Section - Fixed at top */}
       <div className="flex-shrink-0 border-b border-slate-100 p-5 sm:p-6">
-      <div className="flex-shrink-0 border-t border-slate-100 p-5 sm:p-6 bg-white sticky top-0">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-gradient-to-br from-teal-700 to-emerald-700 shadow-lg">
               <FiGrid className="h-6 w-6 text-white" />
@@ -141,8 +141,8 @@ export default function NavigationSidebar({
           <div className="mt-4 space-y-3">
             <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-xl">
-                  🛡️
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                  <FiShield className="h-4 w-4" />
                 </div>
                 <div>
                   <p className="text-sm font-black text-slate-800">Secure Session</p>
@@ -153,8 +153,8 @@ export default function NavigationSidebar({
             
             <div className="rounded-xl bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-xl">
-                  💳
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700">
+                  <FiCreditCard className="h-4 w-4" />
                 </div>
                 <div>
                   <p className="text-sm font-black text-slate-800">Finance Snapshot</p>
@@ -165,8 +165,8 @@ export default function NavigationSidebar({
             
             <div className="rounded-xl bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-xl">
-                  📋
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700">
+                  <FiUser className="h-4 w-4" />
                 </div>
                 <div>
                   <p className="text-sm font-black text-slate-800">Quick Identity</p>

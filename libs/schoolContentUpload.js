@@ -1,6 +1,7 @@
 import cloudinary from "./cloudinary";
 
-export const SCHOOL_IMAGE_MAX_SIZE = 4.5 * 1024 * 1024;
+export const SCHOOL_IMAGE_MAX_SIZE = 4.2 * 1024 * 1024;
+export const SCHOOL_HUB_MAX_IMAGES = 20;
 
 const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
@@ -26,7 +27,7 @@ export const validateSchoolImage = (file) => {
   if (file.size > SCHOOL_IMAGE_MAX_SIZE) {
     return {
       valid: false,
-      error: `Image "${file.name}" is too large. Maximum size is 4.5MB.`,
+      error: `Image "${file.name}" is too large. Maximum size is 4.2MB.`,
     };
   }
 

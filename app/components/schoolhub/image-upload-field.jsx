@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FiImage, FiPlus, FiTrash2, FiUploadCloud, FiX } from 'react-icons/fi';
 
-export const MAX_SCHOOL_IMAGE_SIZE = 4.5 * 1024 * 1024;
+export const MAX_SCHOOL_IMAGE_SIZE = 4.2 * 1024 * 1024;
 
 export const normalizeSchoolImages = (item) => {
   const related = Array.isArray(item?.images)
@@ -65,7 +65,7 @@ export default function ImageUploadField({
       if (!file.type?.startsWith('image/')) {
         rejected.push(`${file.name} is not an image.`);
       } else if (file.size > MAX_SCHOOL_IMAGE_SIZE) {
-        rejected.push(`${file.name} is ${formatMb(file.size)}. Max is 4.5MB.`);
+        rejected.push(`${file.name} is ${formatMb(file.size)}. Max is 4.2MB.`);
       } else {
         valid.push(file);
       }
@@ -101,7 +101,7 @@ export default function ImageUploadField({
             Images
           </p>
           <p className="mt-1 text-xs font-semibold text-slate-500">
-            Multiple images supported. Each image must be less than 4.5MB.
+            Multiple images supported. Each image must be less than 4.2MB.
           </p>
         </div>
         <button
