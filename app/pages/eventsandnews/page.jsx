@@ -52,6 +52,16 @@ import {
 import { CircularProgress, Stack } from '@mui/material';
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaTelegram, FaEnvelope, FaLeaf } from 'react-icons/fa';
 
+const EVENT_FALLBACK_IMAGE = '/events/119e626a-40ee-45cd-bd46-c6b21241b72b-event2.jpg';
+const NEWS_FALLBACK_IMAGE = '/MatG.jpg';
+
+const getMediaUrl = (value, fallback) => {
+  if (!value) return fallback;
+  if (typeof value === 'string') return value.trim() || fallback;
+  if (typeof value === 'object') return value.url || value.secure_url || fallback;
+  return fallback;
+};
+
 // Modern Modal Component with Glass Morphism
 const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true }) => {
   if (!open) return null;
@@ -84,6 +94,7 @@ const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true 
 // Modern Event Card with Enhanced Design
 const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewMode = 'grid', isBookmarked: initialBookmarked }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked || false);
+  const imageUrl = getMediaUrl(event.image, EVENT_FALLBACK_IMAGE);
 
   const getCategoryStyle = (category) => {
     const styles = {
@@ -161,8 +172,11 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
         <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
           <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 shadow-lg sm:h-48 md:h-52">
           <img
-            src={event.image || '/default-event.jpg'}
+            src={imageUrl}
             alt={event.title}
+            onError={(e) => {
+              e.currentTarget.src = EVENT_FALLBACK_IMAGE;
+            }}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/78 via-[#172033]/14 to-transparent" />
@@ -271,8 +285,11 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
       <div className="flex items-start gap-3 p-3 sm:gap-5 sm:p-5">
         <div className="relative h-20 w-20 overflow-hidden rounded-[18px] sm:h-28 sm:w-28 sm:rounded-[22px] flex-shrink-0">
           <img
-            src={event.image || '/default-event.jpg'}
+            src={imageUrl}
             alt={event.title}
+            onError={(e) => {
+              e.currentTarget.src = EVENT_FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover"
           />
           {event.featured && (
@@ -334,6 +351,7 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
 // Modern News Card
 const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', isBookmarked: initialBookmarked }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked || false);
+  const imageUrl = getMediaUrl(news.image, NEWS_FALLBACK_IMAGE);
 
   const getCategoryStyle = (category) => {
     const styles = {
@@ -404,8 +422,11 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
         <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
         <div className="relative h-36 overflow-hidden rounded-[24px] border border-white shadow-lg sm:h-44 md:h-48 w-full shrink-0">
           <img
-            src={news.image || '/default-news.jpg'}
+            src={imageUrl}
             alt={news.title}
+            onError={(e) => {
+              e.currentTarget.src = NEWS_FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           
@@ -491,8 +512,11 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
         
         <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg sm:rounded-2xl overflow-hidden shrink-0 shadow-sm">
           <img
-            src={news.image || '/default-news.jpg'}
+            src={imageUrl}
             alt={news.title}
+            onError={(e) => {
+              e.currentTarget.src = NEWS_FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover"
           />
         </div>
@@ -549,7 +573,7 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
 const ModernShareModal = ({ item, type = 'event', onClose }) => {
   const [copied, setCopied] = useState(false);
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const previewImage = item?.image || (type === 'event' ? '/default-event.jpg' : '/default-news.jpg');
+  const previewImage = getMediaUrl(item?.image, type === 'event' ? EVENT_FALLBACK_IMAGE : NEWS_FALLBACK_IMAGE);
   const previewMeta = type === 'event'
     ? `${item?.time || 'Time TBA'} • ${item?.location || 'Matungulu Girls Senior School'}`
     : `${item?.author || 'School Admin'} • ${item?.category || 'News'}`;
@@ -742,8 +766,11 @@ const ModernDetailModal = ({ item, type = 'event', onClose, onAddToCalendar, onS
 
         <div className="relative h-[30vh] sm:h-[350px] w-full shrink-0">
           <img
-            src={item.image || (type === 'event' ? '/default-event.jpg' : '/default-news.jpg')}
+            src={getMediaUrl(item.image, type === 'event' ? EVENT_FALLBACK_IMAGE : NEWS_FALLBACK_IMAGE)}
             alt={item.title}
+            onError={(e) => {
+              e.currentTarget.src = type === 'event' ? EVENT_FALLBACK_IMAGE : NEWS_FALLBACK_IMAGE;
+            }}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#fcfaf6] via-[#172033]/15 to-black/20" />
@@ -953,6 +980,7 @@ export default function ModernEventsNewsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState('grid');
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [bookmarkedEvents, setBookmarkedEvents] = useState(new Set());
   const [bookmarkedNews, setBookmarkedNews] = useState(new Set());
   const itemsPerPage = 9;
@@ -1070,6 +1098,18 @@ export default function ModernEventsNewsPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const syncResponsiveView = () => {
+      const small = window.innerWidth < 768;
+      setIsSmallScreen(small);
+      setViewMode((current) => (small ? 'list' : current === 'list' ? 'grid' : current));
+    };
+
+    syncResponsiveView();
+    window.addEventListener('resize', syncResponsiveView);
+    return () => window.removeEventListener('resize', syncResponsiveView);
+  }, []);
+
   const filteredEvents = eventsData.filter(event => {
     const matchesSearch = searchTerm === '' || 
       event.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -1089,6 +1129,7 @@ export default function ModernEventsNewsPage() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  const effectiveViewMode = isSmallScreen ? 'list' : viewMode;
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -1283,7 +1324,7 @@ export default function ModernEventsNewsPage() {
   </button>
 
   {/* View Toggle - Compact & Matching Height */}
-  <div className="flex h-12 items-center rounded-xl border border-white/20 bg-white/10 p-1 backdrop-blur-xl">
+  <div className="hidden h-12 items-center rounded-xl border border-white/20 bg-white/10 p-1 backdrop-blur-xl md:flex">
     <button
       onClick={() => setViewMode('grid')}
       className={`h-8 w-8 sm:w-10 flex items-center justify-center rounded-lg transition-all ${
@@ -1618,14 +1659,14 @@ export default function ModernEventsNewsPage() {
                   </button>
                 </div>
               ) : (
-                <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6' : 'space-y-3 sm:space-y-4'}>
+                <div className={effectiveViewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6' : 'space-y-3 sm:space-y-4'}>
                   {paginatedEvents.map((event, index) => (
                     <ModernEventCard 
                       key={event.id || index} 
                       event={event} 
                       onView={setSelectedEvent}
                       onBookmark={handleBookmarkEvent}
-                      viewMode={viewMode}
+                      viewMode={effectiveViewMode}
                       isBookmarked={bookmarkedEvents.has(event.id)}
                     />
                   ))}
