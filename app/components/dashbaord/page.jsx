@@ -2181,7 +2181,7 @@ const StatCard = ({ icon: Icon, label, value, change, color, subtitle, trend }) 
             subtitle="Profiles from staff API"
           />
           <StatCard
-            icon={Layers}
+            icon={FiLayers}
             label="Departments"
             value={stats.totalDepartments}
             change={0}
