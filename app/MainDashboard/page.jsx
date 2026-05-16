@@ -76,8 +76,11 @@ export default function AdminDashboard() {
     Resources: 0,
     Careers: 0,
     totalStudent: 0,
-
     totalFees: 0,
+    schooldocuments: 0,
+    sms: 0,
+    achievements: 0,
+    departments: 0,
   });
 
   const router = useRouter();
@@ -684,7 +687,8 @@ const loadingMessages = [
         feesRes,
         schooldocumentsRes,
         smsRes,
-        achievementsRes
+        achievementsRes,
+        departmentsRes
       ] = await Promise.allSettled([
         fetch('/api/staff', staffHeaders ? { headers: staffHeaders } : {}),
         fetch('/api/subscriber'),
@@ -695,11 +699,12 @@ const loadingMessages = [
         fetch('/api/guidance'),
         fetch('/api/resources'),
         fetch('/api/career'),
-        fetch('/api/studentupload'),
+        fetch('/api/studentupload?status=all&includeStats=true&limit=5000'),
         fetch('/api/feebalances'),
         fetch('/api/schooldocuments'),
         fetch('/api/sms'),
         fetch('/api/achievements'),
+        fetch('/api/staff/departments?grouped=1'),
       ]);
 
       const staff = staffRes.status === 'fulfilled' ? await staffRes.value.json() : { staff: [] };
@@ -717,10 +722,19 @@ const loadingMessages = [
       const sms = smsRes.status === 'fulfilled' ? await smsRes.value.json() : { sms: [] };
 
       const achievements = achievementsRes.status === 'fulfilled' ? await achievementsRes.value.json() : { achievements: [] };
+      const departments = departmentsRes.status === 'fulfilled' ? await departmentsRes.value.json() : { departments: [] };
 
       
       const upcomingEvents = events.events?.filter(e => new Date(e.eventDate) >= new Date()).length || 0;
       const activeAssignments = assignments.assignments?.filter(a => a.status === 'assigned').length || 0;
+      const studentTotal = student.data?.stats?.totalStudents || student.data?.pagination?.total || student.students?.length || student.data?.students?.length || 0;
+      const achievementTotal = Array.isArray(achievements.allAchievements)
+        ? achievements.allAchievements.length
+        : Object.values(achievements.achievements || {}).flat().length || 0;
+      const departmentTotal = Array.isArray(departments.departments)
+        ? departments.departments.filter(dept => dept?.isActive !== false).length
+        : Object.values(departments.departmentsByCategory || {}).flat().filter(dept => dept?.isActive !== false).length || 0;
+      const careerTotal = careers.jobs?.length || careers.careers?.length || 0;
 
       setRealStats({
         totalStaff: staff.staff?.length || 0,
@@ -731,12 +745,13 @@ const loadingMessages = [
         galleryItems: gallery.galleries?.length || 0,
         guidanceSessions: guidance.events?.length || 0,
         Resources: resources.resources?.length || 0,
-        sms: sms.sms?.length || 0,
-        Careers: careers.careers?.length || 0,
-        totalStudent: student.students?.length || 0,
+        sms: sms.campaigns?.length || sms.sms?.length || 0,
+        Careers: careerTotal,
+        totalStudent: studentTotal,
         totalFees: fees.feebalances?.length || 0,
         schooldocuments: schoolDocs.documents?.length || 0,
-        achievements: achievements.achievements?.length || 0,
+        achievements: achievementTotal,
+        departments: departmentTotal,
       });
 
     } catch (error) {

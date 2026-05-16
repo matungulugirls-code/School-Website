@@ -189,7 +189,7 @@ useEffect(() => {
       if (achievementsResult.success) {
         setAchievementsData(achievementsResult);
       } else {
-        console.warn('Failed to fetch achievements, using fallback');
+        console.warn('Failed to fetch achievements from API');
         setAchievementsData(null);
       }
     } catch (error) {
@@ -225,72 +225,40 @@ useEffect(() => {
 
 
 
-// Helper function to get achievements (API data or fallback)
+// Helper function to get achievements from the API response
 const getAchievements = () => {
-  // Check if API returned achievements AND they exist (count > 0)
-  if (achievementsData?.achievements) {
-    // Flatten the grouped achievements into an array
-    const allAchievements = [];
-    const grouped = achievementsData.achievements;
-    
-    // Count total achievements across all categories
-    let totalCount = 0;
-    Object.keys(grouped).forEach(category => {
-      if (Array.isArray(grouped[category])) {
-        totalCount += grouped[category].length;
-      }
-    });
-    
-    // If there are NO achievements (count < 1), use fallback
-    if (totalCount < 1) {
-      console.log('No achievements found in API, using fallback data');
-      return achievements; // Return the static fallback achievements array
-    }
-    
-    // Otherwise, map API achievements to expected format
-    Object.keys(grouped).forEach(category => {
-      if (Array.isArray(grouped[category])) {
-        grouped[category].forEach(achievement => {
-          const firstImage = Array.isArray(achievement.images) ? achievement.images[0] : null;
-          const imageUrl = typeof firstImage === 'string' ? firstImage : firstImage?.url;
-          const highlights = Array.isArray(achievement.recipients)
-            ? achievement.recipients
-                .map((recipient) => {
-                  if (typeof recipient === 'string') return recipient;
-                  return recipient?.name || recipient?.fullName || recipient?.title || '';
-                })
-                .filter(Boolean)
-            : [];
+  const apiAchievements = Array.isArray(achievementsData?.allAchievements)
+    ? achievementsData.allAchievements
+    : Object.values(achievementsData?.achievements || {}).flat().filter(Boolean);
 
-          allAchievements.push({
-            ...achievement,
-            year: achievement.year?.toString() || '',
-            title: achievement.title || '',
-            shortDescription: achievement.description ? `${achievement.description.substring(0, 100)}...` : '',
-            description: achievement.description || '',
-            impact: achievement.awardingBody || 'Achievement',
-            stats: `${achievement.category} | ${achievement.year}`,
-            icon: getCategoryIcon(achievement.category),
-            image: imageUrl || "/hero/MatG1.jpg",
-            highlights
-          });
-        });
-      }
-    });
-    
-    // Sort by year (newest first)
-    const sortedAchievements = allAchievements.sort((a, b) => (b.year || 0) - (a.year || 0)).slice(0, 5);
-    
-    // If after mapping we still have no achievements, use fallback
-    if (sortedAchievements.length < 1) {
-      return achievements;
-    }
-    
-    return sortedAchievements;
-  }
-  
-  // Fallback to static achievements array (defined in the component)
-  return achievements;
+  return apiAchievements
+    .map((achievement) => {
+      const firstImage = Array.isArray(achievement.images) ? achievement.images[0] : null;
+      const imageUrl = typeof firstImage === 'string' ? firstImage : firstImage?.url;
+      const highlights = Array.isArray(achievement.recipients)
+        ? achievement.recipients
+            .map((recipient) => {
+              if (typeof recipient === 'string') return recipient;
+              return recipient?.name || recipient?.fullName || recipient?.title || '';
+            })
+            .filter(Boolean)
+        : [];
+
+      return {
+        ...achievement,
+        year: achievement.year?.toString() || '',
+        title: achievement.title || '',
+        shortDescription: achievement.description ? `${achievement.description.substring(0, 100)}...` : '',
+        description: achievement.description || '',
+        impact: achievement.awardingBody || 'Achievement',
+        stats: `${achievement.category || 'Achievement'} | ${achievement.year || ''}`,
+        icon: getCategoryIcon(achievement.category),
+        image: imageUrl || "/hero/MatG1.jpg",
+        highlights
+      };
+    })
+    .sort((a, b) => Number(b.year || 0) - Number(a.year || 0))
+    .slice(0, 5);
 };
 
 
@@ -467,99 +435,6 @@ const getSchoolStats = () => {
       isPremium: true,
     },
   ];
-
-const achievements = [
-  {
-    year: "2026",
-    title: "National School Status",
-    shortDescription: "Elevated to Category One (C1) National School status by Ministry of Education",
-    description: "In a historic milestone during our 60th-anniversary celebrations in April 2026, Matungulu Girls Senior School was officially conferred Category One (C1) National School status by the Ministry of Education. This prestigious recognition places us among the elite institutions in Kenya, allowing us to admit students from all 47 counties. The elevation came after a rigorous assessment of our infrastructure, academic performance, co-curricular achievements, and governance structures. As a National School, we now have enhanced resources, expanded capacity, and greater opportunities to shape young women from across the nation into future leaders. This transformation marks the beginning of a new chapter in our 60-year legacy of excellence.",
-    impact: "Admission from all 47 counties, enhanced resources, national recognition",
-    stats: "Category One (C1) Status | 60th Anniversary | April 2026",
-    icon: <FiAward className="w-5 h-5" />,
-    image: "/hero/MatG1.jpg",
-    highlights: [
-      "Conferred during 60th-anniversary celebrations",
-      "Allows admission from all 47 counties",
-      "Enhanced government funding and resources",
-      "Rigorous assessment by Ministry of Education",
-      "One of only a few National Schools in Machakos County"
-    ]
-  },
-  {
-    year: "2025",
-    title: "Record KCSE Performance",
-    shortDescription: "Mean score of 8.14 (B plain), 84% university transition rate, 1 A (plain) and 15 A- grades",
-    description: "The 2025 KCSE results marked a historic turning point for Matungulu Girls. With a mean score of 8.14 (B plain), we achieved the highest academic performance in our school's history. One candidate scored an A (plain), 15 candidates earned A- grades, and over 60% of candidates scored B+ and above. The 84% university transition rate means that 8 out of every 10 students qualified for direct entry to public universities. This outstanding performance was driven by our intensive revision programs, dedicated faculty mentorship, and the resilience of our candidates. The results placed us as the best-performing girls' school in Machakos County and among the top 50 nationally. Our top-performing student scored an A and has since joined the University of Nairobi to pursue Medicine.",
-    impact: "Best performance in school history, top county ranking",
-    stats: "Mean 8.14 | 84% Uni Transition | 1 A | 15 A- | 60% B+",
-    icon: <FiTrendingUp className="w-5 h-5" />,
-    image: "/Matungulu/9.jpeg",
-    highlights: [
-      "Highest mean score in school history (8.14)",
-      "84% of students qualified for direct university entry",
-      "1 student scored A (plain)",
-      "15 students scored A-",
-      "Over 60% scored B+ and above",
-      "Top student joined University of Nairobi for Medicine"
-    ]
-  },
-  {
-    year: "2025",
-    title: "Top County Ranking",
-    shortDescription: "Best-performing girls' school in category, second-best public school in Machakos County",
-    description: "Beyond our individual performance, Matungulu Girls was officially recognized as the best-performing girls' school in our category and the second-best public school overall in Machakos County. This ranking, released by the County Education Office, considered not only KCSE results but also consistency in performance, student retention rates, and co-curricular achievements. We surpassed 15 other girls' schools in the county and stood only behind a long-standing national school. This recognition affirmed our position as a center of academic excellence in the lower Eastern region and attracted applications from students across Machakos, Makueni, Kitui, and beyond. The County Director of Education personally visited our school to present the award and commend our teachers and students for their dedication.",
-    impact: "Top 2 in Machakos County, benchmark for other schools",
-    stats: "2nd Best Public School | Top Girls' School | Surpassed 15 Schools",
-    icon: <FiStar className="w-5 h-5" />,
-    image: "/Matungulu/29.jpeg",
-    highlights: [
-      "Best-performing girls' school in Machakos County",
-      "2nd best public school overall in the county",
-      "Surpassed 15 other girls' schools",
-      "Recognition from County Education Office",
-      "Increased applications from neighboring counties"
-    ]
-  },
-  {
-    year: "2024",
-    title: "Most Improved School",
-    shortDescription: "Recognized as most improved secondary school in Machakos County",
-    description: "The 2024 'Most Improved School' award from the Machakos County Government celebrated our remarkable transformation journey. Over three years, our mean score improved by 1.8 points — from 6.34 in 2022 to 8.14 in 2025. This improvement was the largest margin among all secondary schools in the county. The award recognized not just academic gains but improvements in infrastructure, student enrollment, teacher retention, and community engagement. Our strategic interventions, including remedial classes, parent-teacher partnerships, and student wellness programs, were cited as best practices for other schools to emulate. The award was presented during the county's Education Week celebrations, with our Principal delivering a keynote speech on our transformation strategies.",
-    impact: "Largest improvement margin in county (+1.8 points)",
-    stats: "1.8 Point Gain | 2022: 6.34 → 2025: 8.14 | County Recognition",
-    icon: <FiTrendingUp className="w-5 h-5" />,
-    image: "/Matungulu/37.jpeg",
-    highlights: [
-      "Largest improvement margin in Machakos County",
-      "1.8 point gain over three years",
-      "Improved from 6.34 to 8.14 mean score",
-      "Recognized for academic and infrastructure improvements",
-      "Principal delivered keynote at Education Week"
-    ]
-  },
-  {
-    year: "2024",
-    title: "National Science Fair",
-    shortDescription: "Won National Science and Engineering Fair, top position nationally",
-    description: "Our students made history at the 2024 National Science and Engineering Fair by securing the top position nationally in the 'Innovations for Sustainable Energy' category. The winning project, 'Biogas from Market Waste: A Renewable Energy Solution for Schools,' was developed by three Form 3 students under the mentorship of our Chemistry and Biology departments. The project demonstrated how organic waste from local markets could be converted into clean cooking fuel, reducing deforestation and improving sanitation. Beyond the national award, the project earned a sponsorship from the Kenya Climate Innovation Center (KCIC) for further development. This achievement placed Matungulu Girls on the map as a hub for scientific innovation and problem-solving among girls' schools nationally. The students have since been invited to present their project at the East Africa Science Symposium.",
-    impact: "National champions, sponsorship from KCIC",
-    stats: "1st Place | Sustainable Energy Category | National Champions",
-    icon: <FiAward className="w-5 h-5" />,
-    image: "/Matungulu/26.jpeg",
-    highlights: [
-      "Top position nationally in Sustainable Energy category",
-      "Project: Biogas from Market Waste",
-      "Developed by three Form 3 students",
-      "Sponsorship from Kenya Climate Innovation Center",
-      "Invited to East Africa Science Symposium",
-      "Mentored by Chemistry and Biology departments"
-    ]
-  },
-];
-
-
-
 
   // CBC Pathways Data
   const pathways = [
@@ -1094,6 +969,8 @@ const achievements = [
 },
   ];
 
+  const timelineAchievements = getAchievements();
+
   return (
     <div className="bg-white overflow-hidden">
       {/* ===== HERO SECTION ===== */}
@@ -1565,8 +1442,9 @@ const achievements = [
         {/* Timeline Path: Thin & Sophisticated */}
         <div className="absolute left-4 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-px bg-slate-200"></div>
 
+        {timelineAchievements.length > 0 ? (
         <div className="space-y-12">
-          {getAchievements().map((item, idx) => (
+          {timelineAchievements.map((item, idx) => (
             <div
               key={idx}
               className={`relative flex items-center justify-between w-full mb-8 ${
@@ -1623,6 +1501,15 @@ const achievements = [
             </div>
           ))}
         </div>
+        ) : (
+          <div className="rounded-[28px] border border-dashed border-slate-200 bg-white p-10 text-center">
+            <FiAward className="mx-auto mb-3 h-8 w-8 text-slate-300" />
+            <h3 className="text-lg font-black text-slate-900">No achievement records yet</h3>
+            <p className="mt-2 text-sm font-medium text-slate-500">
+              Add achievements in the dashboard to publish them here automatically.
+            </p>
+          </div>
+        )}
       </div>
     )}
   </div>

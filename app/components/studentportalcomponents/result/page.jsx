@@ -301,12 +301,13 @@ function SubjectDetailsModal({ result, onClose }) {
   const subjectCount = subjects.length;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden border-2 border-gray-300 shadow-2xl">
-        <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 p-3 sm:p-4 md:p-6 text-white">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white rounded-3xl w-full max-w-5xl max-h-[92vh] overflow-hidden border border-slate-200 shadow-2xl">
+        <div className="relative bg-slate-950 p-4 sm:p-5 md:p-6 text-white">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
-              <div className="p-2 md:p-3 bg-white/20 rounded-2xl flex-shrink-0 mt-1">
+              <div className="p-2 md:p-3 bg-white/10 rounded-2xl border border-white/10 flex-shrink-0 mt-1">
                 <FiBook className="text-lg sm:text-xl md:text-2xl" />
               </div>
               <div className="min-w-0 flex-1">
@@ -318,42 +319,42 @@ function SubjectDetailsModal({ result, onClose }) {
             </div>
             <button 
               onClick={onClose}
-              className="p-2 bg-white/20 rounded-2xl hover:bg-white/30 transition-colors flex-shrink-0 ml-2"
+              className="p-2 hover:bg-white/10 rounded-xl transition-colors flex-shrink-0 ml-2"
             >
               <IoClose className="text-lg sm:text-xl" />
             </button>
           </div>
         </div>
 
-        <div className="max-h-[calc(90vh-70px)] overflow-y-auto p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
-          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-3 sm:p-4 md:p-6 border-2 border-emerald-200">
+        <div className="max-h-[calc(92vh-70px)] overflow-y-auto bg-slate-50 p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 md:p-6 border border-slate-200 shadow-sm">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+              <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200">
                 <div className="text-xs font-semibold text-emerald-700 truncate">Avg Score</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{averageScore.toFixed(2)}%</div>
               </div>
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+              <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200">
                 <div className="text-xs font-semibold text-emerald-700 truncate">Total Score</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{totalScore}</div>
               </div>
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+              <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200">
                 <div className="text-xs font-semibold text-emerald-700 truncate">Grade</div>
                 <div className={`text-lg sm:text-xl md:text-2xl font-bold mt-1 truncate ${overallStatus.color}`}>
                   {result.overallGrade || 'N/A'}
                 </div>
               </div>
-              <div className="text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+              <div className="text-center p-2 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200">
                 <div className="text-xs font-semibold text-emerald-700 truncate">Subjects</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{subjectCount}</div>
               </div>
-              <div className="col-span-2 sm:col-span-3 md:col-span-1 text-center p-2 sm:p-3 bg-white rounded-lg border border-emerald-200">
+              <div className="col-span-2 sm:col-span-3 md:col-span-1 text-center p-2 sm:p-3 bg-slate-50 rounded-2xl border border-slate-200">
                 <div className="text-xs font-semibold text-emerald-700 truncate">Form</div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-1 truncate">{result.form}</div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
             <div className="bg-gradient-to-r from-gray-50 to-white px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-200">
               <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">Subject Performance</h3>
               <p className="text-gray-600 text-xs sm:text-sm truncate">Scores, grades, and comments per subject</p>

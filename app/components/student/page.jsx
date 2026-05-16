@@ -206,11 +206,12 @@ function ModernDeleteModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 overflow-hidden">
-        <div className="bg-gradient-to-r from-red-500 via-red-600 to-orange-500 p-6 text-white">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-200 overflow-hidden">
+        <div className="relative bg-slate-950 p-6 text-white">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 via-amber-400 to-rose-500" />
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white bg-opacity-20 rounded-2xl">
+            <div className="p-3 bg-white/10 rounded-2xl border border-white/10">
               <FiAlertCircle className="text-white text-2xl" />
             </div>
             <div>
@@ -220,7 +221,7 @@ function ModernDeleteModal({
           </div>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="bg-slate-50 p-6 space-y-4">
           <div className="text-center">
             <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-red-200">
               <FiTrash2 className="text-red-600 text-2xl" />
@@ -280,7 +281,7 @@ function ModernDeleteModal({
           </div>
         </div>
 
-        <div className="flex gap-3 p-4 border-t border-gray-200 bg-gray-50">
+        <div className="flex gap-3 p-4 border-t border-slate-200 bg-white">
           <button 
             onClick={onClose} 
             disabled={loading}
@@ -489,16 +490,18 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
             maxWidth: '800px',
             maxHeight: '90vh',
             bgcolor: 'background.paper',
-            borderRadius: 3,
+            borderRadius: '24px',
+            border: '1px solid #e2e8f0',
             boxShadow: 24,
             overflow: 'hidden'
           }}
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-6 text-white">
+          <div className="relative bg-slate-950 p-6 text-white">
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/20 rounded-xl">
+                <div className="p-2 bg-white/10 rounded-2xl border border-white/10">
                   <FiUser className="text-xl" />
                 </div>
                 <div>
@@ -510,7 +513,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-white/20 rounded-lg transition"
+                className="p-2 hover:bg-white/10 rounded-xl transition"
               >
                 <FiX className="text-xl" />
               </button>
@@ -518,7 +521,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
           </div>
 
           {/* Content */}
-          <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+          <div className="bg-slate-50 p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
             {/* Profile Section */}
             <div className="flex items-center gap-6 mb-8">
             <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center">
@@ -552,7 +555,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
             {/* Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Personal Info */}
-              <div className="bg-gray-50 p-6 rounded-2xl">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <FiUser className="text-teal-700" />
                   Personal Information
@@ -570,7 +573,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
               </div>
 
               {/* Academic Info */}
-              <div className="bg-gray-50 p-6 rounded-2xl">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <FiBook className="text-teal-700" />
                   Academic Information
@@ -592,7 +595,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
               </div>
 
               {/* Contact Info */}
-              <div className="bg-gray-50 p-6 rounded-2xl md:col-span-2">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm md:col-span-2">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <FiPhone className="text-teal-700" />
                   Contact Information
@@ -665,16 +668,18 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
           maxWidth: '800px',
           maxHeight: '90vh',
           bgcolor: 'background.paper',
-          borderRadius: 3,
+          borderRadius: '24px',
+          border: '1px solid #e2e8f0',
           boxShadow: 24,
           overflow: 'hidden'
         }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-6 text-white">
+        <div className="relative bg-slate-950 p-6 text-white">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/20 rounded-xl">
+              <div className="p-2 bg-white/10 rounded-2xl border border-white/10">
                 <FiEdit className="text-xl" />
               </div>
               <div>
@@ -684,7 +689,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition"
+              className="p-2 hover:bg-white/10 rounded-xl transition"
             >
               <FiX className="text-xl" />
             </button>
@@ -692,10 +697,10 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
         </div>
 
         {/* Form */}
-        <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+        <div className="bg-slate-50 p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Personal Info */}
-            <div className="bg-gray-50 p-6 rounded-2xl">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <h4 className="text-lg font-bold text-gray-900 mb-4">Personal Information</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -1539,7 +1544,8 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
             sm: '90vh',
           },
           bgcolor: 'background.paper',
-          borderRadius: 3,
+          borderRadius: '24px',
+          border: '1px solid #e2e8f0',
           boxShadow: 24,
           overflow: 'hidden',
           display: 'flex',
@@ -1547,10 +1553,11 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
         }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-700 to-emerald-700 p-4 sm:p-6 text-white">
+        <div className="relative bg-slate-950 p-4 sm:p-6 text-white">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 bg-white/20 rounded-xl">
+              <div className="p-2 bg-white/10 rounded-2xl border border-white/10">
                 <FiUpload className="text-lg sm:text-xl" />
               </div>
               <div>
@@ -1562,7 +1569,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition"
+              className="p-2 hover:bg-white/10 rounded-xl transition"
             >
               <FiX className="text-lg sm:text-xl" />
             </button>
@@ -1570,7 +1577,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
         </div>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-slate-50">
           <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Upload Type Selection */}
             <div>
@@ -1778,7 +1785,8 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
             sm: '90vh',
           },
           bgcolor: 'background.paper',
-          borderRadius: 3,
+          borderRadius: '24px',
+          border: '1px solid #e2e8f0',
           boxShadow: 24,
           overflow: 'hidden',
           display: 'flex',
@@ -1786,10 +1794,11 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
         }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-500 to-orange-600 p-4 sm:p-6 text-white">
+        <div className="relative bg-slate-950 p-4 sm:p-6 text-white">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-500 via-orange-400 to-red-500" />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 bg-white/20 rounded-xl">
+              <div className="p-2 bg-white/10 rounded-2xl border border-white/10">
                 <FiAlertCircle className="text-lg sm:text-xl" />
               </div>
               <div>
@@ -1801,7 +1810,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition"
+              className="p-2 hover:bg-white/10 rounded-xl transition"
             >
               <FiX className="text-lg sm:text-xl" />
             </button>
@@ -1809,7 +1818,7 @@ function DuplicateValidationModal({ open, onClose, duplicates, onProceed, loadin
         </div>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-slate-50">
           <div className="p-4 sm:p-6">
             <div className="mb-4 sm:mb-6">
               <div className="flex items-center gap-2 mb-3 sm:mb-4">

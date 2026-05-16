@@ -1,11 +1,51 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { prisma } from '../../../libs/prisma';
 
 // Constants
-const JWT_SECRET = process.env.JWT_SECRET || 'Matungulu-student-secret-key-2024';
-const STUDENT_TOKEN_EXPIRY = '2h'; // Changed from 15m to 2 hours
+const FALLBACK_STUDENT_JWT_SECRET = 'Matungulu-student-secret-key-2024';
+const STUDENT_TOKEN_EXPIRY = '2h';
+const STUDENT_SESSION_SECONDS = 2 * 60 * 60;
+const PASSWORD_SETUP_EXPIRY = '10m';
+
+const getJwtSecret = () => {
+  const secret = process.env.STUDENT_JWT_SECRET || process.env.JWT_SECRET;
+
+  if (!secret && process.env.NODE_ENV === 'production') {
+    throw new Error('Student authentication secret is not configured.');
+  }
+
+  return secret || FALLBACK_STUDENT_JWT_SECRET;
+};
+
+const normalizeAdmissionNumber = (value = '') =>
+  String(value || '').trim().toUpperCase();
+
+const hashToken = (token = '') =>
+  crypto.createHash('sha256').update(String(token)).digest('hex');
+
+const getClientIp = (request) => {
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  return forwardedFor?.split(',')?.[0]?.trim() || request.headers.get('x-real-ip') || 'unknown';
+};
+
+const extractCookieValue = (request, key) => {
+  const cookieHeader = request.headers.get('cookie');
+  if (!cookieHeader) return null;
+
+  return cookieHeader.split(';').reduce((value, cookie) => {
+    if (value) return value;
+    const [name, ...parts] = cookie.trim().split('=');
+    return name === key ? parts.join('=') : null;
+  }, null);
+};
+
+const extractStudentToken = (request) =>
+  extractCookieValue(request, 'student_token') ||
+  request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ||
+  null;
 
 const validateStrongPassword = (password = '') => {
   const value = String(password);
@@ -56,9 +96,28 @@ const generateStudentToken = (student) => {
       stream: student.stream,
       role: 'student',
     },
-    JWT_SECRET,
+    getJwtSecret(),
     { expiresIn: STUDENT_TOKEN_EXPIRY }
   );
+};
+
+const generatePasswordSetupToken = (student) => jwt.sign(
+  {
+    studentId: student.id,
+    admissionNumber: student.admissionNumber,
+    role: 'student',
+    purpose: 'student-password-setup'
+  },
+  getJwtSecret(),
+  { expiresIn: PASSWORD_SETUP_EXPIRY }
+);
+
+const verifyPasswordSetupToken = (token) => {
+  const decoded = jwt.verify(token, getJwtSecret());
+  if (decoded?.role !== 'student' || decoded?.purpose !== 'student-password-setup') {
+    throw new Error('Invalid setup token');
+  }
+  return decoded;
 };
 
 // Clean and normalize name for comparison
@@ -170,6 +229,7 @@ const validateStudentCredentials = async (fullName, admissionNumber) => {
 
 const createStudentSessionResponse = async (request, student, account, message = 'Login successful') => {
   const token = generateStudentToken(student);
+  const tokenDigest = hashToken(token);
 
   try {
     await prisma.studentSession.create({
@@ -177,9 +237,9 @@ const createStudentSessionResponse = async (request, student, account, message =
         studentId: student.id,
         admissionNumber: student.admissionNumber,
         name: buildFullName(student),
-        token,
-        expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
-        ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
+        token: tokenDigest,
+        expiresAt: new Date(Date.now() + STUDENT_SESSION_SECONDS * 1000),
+        ipAddress: getClientIp(request),
         userAgent: request.headers.get('user-agent') || 'unknown'
       }
     });
@@ -187,7 +247,7 @@ const createStudentSessionResponse = async (request, student, account, message =
     console.warn('Could not create student session:', sessionError);
   }
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     success: true,
     message,
     student: sanitizeStudent(student, account),
@@ -198,20 +258,172 @@ const createStudentSessionResponse = async (request, student, account, message =
       canViewAssignments: true,
       canDownloadMaterials: true
     }
-  }, {
-    status: 200,
-    headers: {
-      'Set-Cookie': `student_token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=7200; Secure=${process.env.NODE_ENV === 'production'}`
-    }
+  }, { status: 200 });
+
+  response.cookies.set('student_token', token, {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge: STUDENT_SESSION_SECONDS
   });
+  response.headers.set('Cache-Control', 'no-store');
+
+  return response;
+};
+
+const createPasswordSetupResponse = (student, account = null) => {
+  const setupToken = generatePasswordSetupToken(student);
+
+  const response = NextResponse.json({
+    success: true,
+    requiresPasswordSetup: true,
+    message: 'Name verified. Create a strong portal password to finish setup.',
+    student: sanitizeStudent(student, account),
+    setupToken,
+    setupExpiresIn: '10 minutes',
+    passwordRules: [
+      'At least 8 characters',
+      'Uppercase and lowercase letters',
+      'At least one number',
+      'At least one symbol'
+    ]
+  }, { status: 200 });
+
+  response.headers.set('Cache-Control', 'no-store');
+  return response;
 };
 
 // POST - Student Login
 export async function POST(request) {
   try {
-    const { fullName, admissionNumber, password, newPassword } = await request.json();
+    const body = await request.json();
+    const {
+      action,
+      fullName,
+      admissionNumber,
+      identifier,
+      password,
+      newPassword,
+      confirmPassword,
+      setupToken
+    } = body || {};
 
-    if (!admissionNumber) {
+    const requestedAction = action || (
+      setupToken ? 'setup-password' :
+      identifier ? 'login' :
+      password && !fullName ? 'login' :
+      newPassword ? 'legacy-first-access' :
+      'verify-first-access'
+    );
+
+    if (requestedAction === 'setup-password') {
+      if (!setupToken) {
+        return NextResponse.json(
+          { success: false, requiresPasswordSetup: true, error: 'Password setup has expired. Please verify your record again.' },
+          { status: 400 }
+        );
+      }
+
+      const passwordToSet = newPassword || password;
+      if (!passwordToSet) {
+        return NextResponse.json(
+          { success: false, requiresPasswordSetup: true, error: 'New password is required.' },
+          { status: 400 }
+        );
+      }
+
+      if (confirmPassword !== undefined && String(passwordToSet) !== String(confirmPassword)) {
+        return NextResponse.json(
+          { success: false, requiresPasswordSetup: true, error: 'Passwords do not match.' },
+          { status: 400 }
+        );
+      }
+
+      let decodedSetup;
+      try {
+        decodedSetup = verifyPasswordSetupToken(setupToken);
+      } catch (tokenError) {
+        return NextResponse.json(
+          { success: false, requiresPasswordSetup: true, error: 'Password setup has expired. Please verify your record again.' },
+          { status: 401 }
+        );
+      }
+
+      const student = await prisma.databaseStudent.findUnique({
+        where: { id: decodedSetup.studentId }
+      });
+
+      if (!student || student.admissionNumber !== decodedSetup.admissionNumber || student.status !== 'active') {
+        return NextResponse.json(
+          {
+            success: false,
+            requiresContact: true,
+            error: 'Student record is unavailable or inactive. Please contact your class teacher or the school office.'
+          },
+          { status: 403 }
+        );
+      }
+
+      const existingAccount = await prisma.studentPortalAccount.findUnique({
+        where: { admissionNumber: student.admissionNumber }
+      });
+
+      if (existingAccount?.passwordHash) {
+        return NextResponse.json(
+          {
+            success: false,
+            requiresPassword: true,
+            error: 'A portal password already exists. Please use Password Login.'
+          },
+          { status: 409 }
+        );
+      }
+
+      const passwordValidation = validateStrongPassword(passwordToSet);
+      if (!passwordValidation.valid) {
+        return NextResponse.json(
+          {
+            success: false,
+            requiresPasswordSetup: true,
+            error: passwordValidation.message
+          },
+          { status: 400 }
+        );
+      }
+
+      const passwordHash = await bcrypt.hash(String(passwordToSet), 12);
+
+      let account;
+      try {
+        account = await prisma.studentPortalAccount.create({
+          data: {
+            admissionNumber: student.admissionNumber,
+            passwordHash,
+            passwordSetAt: new Date(),
+            lastLoginAt: new Date()
+          }
+        });
+      } catch (createError) {
+        if (createError?.code === 'P2002') {
+          return NextResponse.json(
+            {
+              success: false,
+              requiresPassword: true,
+              error: 'A portal password already exists. Please use Password Login.'
+            },
+            { status: 409 }
+          );
+        }
+        throw createError;
+      }
+
+      return createStudentSessionResponse(request, student, account, 'Password created and login successful');
+    }
+
+    const cleanAdmissionNumber = normalizeAdmissionNumber(identifier || admissionNumber);
+
+    if (!cleanAdmissionNumber) {
       return NextResponse.json(
         { 
           success: false, 
@@ -221,7 +433,6 @@ export async function POST(request) {
       );
     }
 
-    const cleanAdmissionNumber = String(admissionNumber).trim().toUpperCase();
     const student = await prisma.databaseStudent.findUnique({
       where: { admissionNumber: cleanAdmissionNumber }
     });
@@ -244,7 +455,7 @@ export async function POST(request) {
           error: 'Student account is not active. Please contact your class teacher or the school administrator/secretary.',
           requiresContact: true 
         },
-        { status: 404 }
+        { status: 403 }
       );
     }
 
@@ -252,7 +463,18 @@ export async function POST(request) {
       where: { admissionNumber: cleanAdmissionNumber }
     });
 
-    if (account?.passwordHash) {
+    if (requestedAction === 'login') {
+      if (!account?.passwordHash) {
+        return NextResponse.json(
+          {
+            success: false,
+            requiresPasswordSetup: true,
+            error: 'No portal password has been created for this admission number. Use First-Time Access to verify your name and create one.'
+          },
+          { status: 401 }
+        );
+      }
+
       if (!password) {
         return NextResponse.json(
           {
@@ -284,14 +506,14 @@ export async function POST(request) {
       return createStudentSessionResponse(request, student, updatedAccount);
     }
 
-    if (password && !fullName) {
+    if (account?.passwordHash) {
       return NextResponse.json(
         {
           success: false,
-          requiresPasswordSetup: true,
-          error: 'No portal password has been created for this admission number. Use First-Time Setup to verify your name and create one.'
+          requiresPassword: true,
+          error: 'A portal password already exists for this admission number. Please use Password Login.'
         },
-        { status: 401 }
+        { status: 409 }
       );
     }
 
@@ -309,18 +531,18 @@ export async function POST(request) {
     }
 
     if (!newPassword) {
-      return NextResponse.json({
-        success: true,
-        requiresPasswordSetup: true,
-        message: 'Name verified. Create a strong portal password to finish setup.',
-        student: sanitizeStudent(student, null),
-        passwordRules: [
-          'At least 8 characters',
-          'Uppercase and lowercase letters',
-          'At least one number',
-          'At least one symbol'
-        ]
-      }, { status: 200 });
+      return createPasswordSetupResponse(student, null);
+    }
+
+    if (confirmPassword !== undefined && String(newPassword) !== String(confirmPassword)) {
+      return NextResponse.json(
+        {
+          success: false,
+          requiresPasswordSetup: true,
+          error: 'Passwords do not match.'
+        },
+        { status: 400 }
+      );
     }
 
     const passwordValidation = validateStrongPassword(newPassword);
@@ -378,23 +600,7 @@ export async function POST(request) {
 // GET - Verify student token
 export async function GET(request) {
   try {
-    // Try to get token from cookie first
-    const cookieHeader = request.headers.get('cookie');
-    let token = null;
-    
-    if (cookieHeader) {
-      const cookies = cookieHeader.split(';').reduce((acc, cookie) => {
-        const [key, value] = cookie.trim().split('=');
-        acc[key] = value;
-        return acc;
-      }, {});
-      token = cookies.student_token;
-    }
-    
-    // Fallback to Authorization header
-    if (!token) {
-      token = request.headers.get('authorization')?.replace('Bearer ', '');
-    }
+    const token = extractStudentToken(request);
 
     if (!token) {
       return NextResponse.json(
@@ -408,7 +614,7 @@ export async function GET(request) {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
 
     // Check if token is for student
     if (decoded.role !== 'student') {
@@ -441,11 +647,15 @@ export async function GET(request) {
       );
     }
 
-    // Try to check session if available
+    // Verify the token is still backed by an active server-side session.
     try {
-      const session = await prisma.studentSession?.findFirst?.({
+      const tokenDigest = hashToken(token);
+      const session = await prisma.studentSession.findFirst({
         where: {
-          token: token,
+          OR: [
+            { token: tokenDigest },
+            { token }
+          ],
           expiresAt: {
             gt: new Date()
           }
@@ -453,18 +663,34 @@ export async function GET(request) {
       });
 
       if (!session) {
-        // If session table doesn't exist or session expired, just warn but don't block
-        console.warn('Session not found or expired, but continuing with token validation');
+        return NextResponse.json(
+          {
+            success: false,
+            authenticated: false,
+            error: 'Session expired. Please log in again.',
+            requiresReauth: true
+          },
+          { status: 401 }
+        );
       }
     } catch (sessionError) {
-      console.warn('Session check failed, continuing with token validation:', sessionError);
+      console.error('Student session check failed:', sessionError);
+      return NextResponse.json(
+        {
+          success: false,
+          authenticated: false,
+          error: 'Unable to verify session. Please log in again.',
+          requiresReauth: true
+        },
+        { status: 401 }
+      );
     }
 
     const account = await prisma.studentPortalAccount.findUnique({
       where: { admissionNumber: student.admissionNumber }
     });
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       authenticated: true,
       student: {
@@ -473,6 +699,8 @@ export async function GET(request) {
       },
       expiresAt: decoded.exp ? new Date(decoded.exp * 1000).toISOString() : null
     });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
 
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
@@ -502,29 +730,17 @@ export async function GET(request) {
 // DELETE - Student Logout
 export async function DELETE(request) {
   try {
-    // Get token from cookie or Authorization header
-    const cookieHeader = request.headers.get('cookie');
-    let token = null;
-    
-    if (cookieHeader) {
-      const cookies = cookieHeader.split(';').reduce((acc, cookie) => {
-        const [key, value] = cookie.trim().split('=');
-        acc[key] = value;
-        return acc;
-      }, {});
-      token = cookies.student_token;
-    }
-    
-    if (!token) {
-      token = request.headers.get('authorization')?.replace('Bearer ', '');
-    }
+    const token = extractStudentToken(request);
 
     // If we have a token and studentSession exists, try to delete the session
     if (token && prisma.studentSession) {
       try {
         await prisma.studentSession.deleteMany({
           where: {
-            token: token
+            OR: [
+              { token: hashToken(token) },
+              { token }
+            ]
           }
         });
       } catch (error) {
@@ -532,17 +748,23 @@ export async function DELETE(request) {
       }
     }
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         message: 'Logged out successfully'
-      },
-      {
-        headers: {
-          'Set-Cookie': `student_token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure=${process.env.NODE_ENV === 'production'}`
-        }
       }
     );
+    response.cookies.set('student_token', '', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 0,
+      expires: new Date(0)
+    });
+    response.headers.set('Cache-Control', 'no-store');
+
+    return response;
   } catch (error) {
     console.error('Logout error:', error);
     return NextResponse.json(

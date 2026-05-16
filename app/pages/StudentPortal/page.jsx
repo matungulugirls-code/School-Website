@@ -470,6 +470,7 @@ export default function ModernStudentPortalPage() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const [requiresContact, setRequiresContact] = useState(false);
+  const [passwordSetup, setPasswordSetup] = useState({ token: null, student: null });
   const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -659,14 +660,13 @@ export default function ModernStudentPortalPage() {
         ? credentialsOrName
         : { fullName: credentialsOrName, admissionNumber: legacyAdmissionNumber };
 
-      const payload = credentials.mode === 'password'
-        ? {
-            admissionNumber: credentials.admissionNumber,
-            password: credentials.password,
-          }
+      const payload = credentials.action
+        ? credentials
         : {
+            action: credentials.password ? 'login' : 'verify-first-access',
             fullName: credentials.fullName,
             admissionNumber: credentials.admissionNumber,
+            password: credentials.password,
             newPassword: credentials.newPassword,
           };
 
@@ -678,8 +678,9 @@ export default function ModernStudentPortalPage() {
 
       const data = await response.json();
 
-      if (data.success && data.requiresPasswordSetup) {
-        setLoginError(data.message || 'Create a strong password to finish setup.');
+      if (data.success && data.requiresPasswordSetup && data.setupToken) {
+        setPasswordSetup({ token: data.setupToken, student: data.student });
+        setLoginError(null);
         toast.info('Create a portal password to continue');
         return;
       }
@@ -688,11 +689,11 @@ export default function ModernStudentPortalPage() {
         localStorage.setItem('student_token', data.token);
         setStudent(data.student);
         setToken(data.token);
+        setPasswordSetup({ token: null, student: null });
         setShowLoginModal(false);
         toast.success('Login successful!', {
           description: `Welcome ${data.student.fullName}`,
         });
-        fetchAllData();
       } else {
         setLoginError(data.error);
         setRequiresContact(data.requiresContact || false);
@@ -715,6 +716,58 @@ export default function ModernStudentPortalPage() {
     } finally {
       setLoginLoading(false);
     }
+  };
+
+  const handlePasswordSetup = async (setupPayload) => {
+    setLoginLoading(true);
+    setLoginError(null);
+    setRequiresContact(false);
+
+    try {
+      const response = await fetch('/api/studentlogin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'setup-password',
+          setupToken: setupPayload.setupToken || passwordSetup.token,
+          newPassword: setupPayload.newPassword,
+          confirmPassword: setupPayload.confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.token) {
+        localStorage.setItem('student_token', data.token);
+        setStudent(data.student);
+        setToken(data.token);
+        setPasswordSetup({ token: null, student: null });
+        setShowLoginModal(false);
+        toast.success('Password created!', {
+          description: `Welcome ${data.student.fullName}`,
+        });
+      } else {
+        setLoginError(data.error || 'Password setup failed. Please try again.');
+        setRequiresContact(data.requiresContact || false);
+        toast.error(data.error || 'Password setup failed');
+        if (data.requiresReauth || data.requiresPassword) {
+          setPasswordSetup({ token: null, student: null });
+        }
+      }
+    } catch (error) {
+      console.error('Password setup error:', error);
+      setLoginError('Network error. Please try again.');
+      toast.error('Network error. Please try again.');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
+    setLoginError(null);
+    setRequiresContact(false);
+    setPasswordSetup({ token: null, student: null });
   };
 
   const handleLogout = async () => {
@@ -783,11 +836,14 @@ export default function ModernStudentPortalPage() {
         <GuestPortalLanding onOpenLogin={() => setShowLoginModal(true)} router={router} />
         <StudentLoginModal
           isOpen={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
+          onClose={handleLoginModalClose}
           onLogin={handleStudentLogin}
+          onSetupPassword={handlePasswordSetup}
           isLoading={loginLoading}
           error={loginError}
           requiresContact={requiresContact}
+          passwordSetupToken={passwordSetup.token}
+          passwordSetupStudent={passwordSetup.student}
         />
       </>
     );
@@ -798,11 +854,14 @@ export default function ModernStudentPortalPage() {
       <Toaster position="top-right" expand richColors theme="light" />
       <StudentLoginModal
         isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
+        onClose={handleLoginModalClose}
         onLogin={handleStudentLogin}
+        onSetupPassword={handlePasswordSetup}
         isLoading={loginLoading}
         error={loginError}
         requiresContact={requiresContact}
+        passwordSetupToken={passwordSetup.token}
+        passwordSetupStudent={passwordSetup.student}
       />
 
       {isMenuOpen && (

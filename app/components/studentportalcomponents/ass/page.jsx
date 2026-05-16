@@ -481,19 +481,18 @@ function DetailModal({ item, type, onClose, onDownload }) {
   const isOverdue = !isResource && item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'completed';
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-xl sm:rounded-2xl md:rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[92vh] overflow-hidden shadow-2xl border border-slate-200">
         {/* Modal Header */}
-        <div className={`p-4 sm:p-6 md:p-8 text-white ${
-          isResource 
-            ? 'bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-800' 
-            : isOverdue
-            ? 'bg-gradient-to-r from-rose-600 via-rose-700 to-pink-800'
-            : 'bg-gradient-to-r from-green-600 via-green-700 to-violet-800'
-        }`}>
+        <div className="relative bg-slate-950 p-4 sm:p-6 md:p-7 text-white">
+          <div className={`absolute inset-x-0 top-0 h-1 ${
+            isResource ? 'bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400' :
+            isOverdue ? 'bg-gradient-to-r from-rose-500 via-amber-400 to-red-500' :
+            'bg-gradient-to-r from-emerald-500 via-blue-400 to-amber-400'
+          }`} />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl">
+              <div className="p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10">
                 {isResource ? (
                   getFileIcon(item.type, item.files?.[0]?.extension, 20)
                 ) : (
@@ -513,7 +512,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
             </div>
             <button
               onClick={onClose}
-              className="p-1 sm:p-2 rounded-lg sm:rounded-xl ml-2 sm:ml-4"
+              className="p-2 hover:bg-white/10 rounded-xl ml-2 sm:ml-4 transition-colors"
             >
               <IoClose className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
@@ -521,7 +520,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
         </div>
 
         {/* Modal Content */}
-        <div className="max-h-[calc(90vh-120px)] overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6">
+        <div className="max-h-[calc(92vh-120px)] overflow-y-auto bg-slate-50 p-3 sm:p-4 md:p-6 lg:p-8 space-y-4 sm:space-y-6">
           {/* Status & Info */}
           <div className="flex flex-wrap gap-2 sm:gap-3">
             {!isResource && item.status && <StatusBadge status={item.status} size="md" />}
@@ -549,7 +548,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
             {!isResource && (
               <>
                 {item.dueDate && (
-                  <div className="text-center p-2 sm:p-3 md:p-4 bg-gray-50 rounded-lg sm:rounded-xl md:rounded-2xl">
+                  <div className="text-center p-2 sm:p-3 md:p-4 bg-white rounded-2xl border border-slate-200">
                     <div className="text-xs sm:text-sm text-gray-600 font-bold">Due Date</div>
                     <div className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mt-1 sm:mt-2">
                       {new Date(item.dueDate).toLocaleDateString()}
@@ -557,7 +556,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
                   </div>
                 )}
                 {item.priority && (
-                  <div className="text-center p-2 sm:p-3 md:p-4 bg-gray-50 rounded-lg sm:rounded-xl md:rounded-2xl">
+                  <div className="text-center p-2 sm:p-3 md:p-4 bg-white rounded-2xl border border-slate-200">
                     <div className="text-xs sm:text-sm text-gray-600 font-bold">Priority</div>
                     <div className={`text-sm sm:text-base md:text-lg font-bold mt-1 sm:mt-2 ${
                       item.priority === 'high' ? 'text-rose-600' :
@@ -569,13 +568,13 @@ function DetailModal({ item, type, onClose, onDownload }) {
                 )}
               </>
             )}
-            <div className="text-center p-2 sm:p-3 md:p-4 bg-gray-50 rounded-lg sm:rounded-xl md:rounded-2xl">
+            <div className="text-center p-2 sm:p-3 md:p-4 bg-white rounded-2xl border border-slate-200">
               <div className="text-xs sm:text-sm text-gray-600 font-bold">Teacher</div>
               <div className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mt-1 sm:mt-2 truncate">
                 {item.teacher || 'Not specified'}
               </div>
             </div>
-            <div className="text-center p-2 sm:p-3 md:p-4 bg-gray-50 rounded-lg sm:rounded-xl md:rounded-2xl">
+            <div className="text-center p-2 sm:p-3 md:p-4 bg-white rounded-2xl border border-slate-200">
               <div className="text-xs sm:text-sm text-gray-600 font-bold">Files</div>
               <div className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mt-1 sm:mt-2">
                 {isResource 
@@ -590,7 +589,7 @@ function DetailModal({ item, type, onClose, onDownload }) {
           {(item.description || (!isResource && item.instructions)) && (
             <div className="space-y-3 sm:space-y-4 md:space-y-6">
               {item.description && (
-                <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 border border-gray-200">
+                <div className="bg-white rounded-2xl p-3 sm:p-4 md:p-6 border border-slate-200 shadow-sm">
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4 flex items-center gap-2 sm:gap-3">
                     <IoInformation className="text-teal-500 w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Description</span>

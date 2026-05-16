@@ -560,13 +560,13 @@ function ModernDetailModal({ session, onClose, onContact }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-slate-900/90 backdrop-blur-sm">
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-3xl bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md">
+      <div className="relative w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-3xl bg-white sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-slate-200">
         
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-50 p-2 bg-black/20 backdrop-blur-md text-white rounded-full border border-white/20 transition-all active:scale-90 mobile-touch-target"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 z-50 p-2 bg-slate-950/40 backdrop-blur-md text-white rounded-xl border border-white/20 transition-all active:scale-90 mobile-touch-target"
         >
           <IoClose size={20} />
         </button>
@@ -582,6 +582,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
           ) : (
             <div className={`w-full h-full bg-gradient-to-r ${categoryStyle.gradient}`} />
           )}
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400 z-20" />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20" />
           
           {/* Badge Overlays */}
@@ -600,13 +601,13 @@ function ModernDetailModal({ session, onClose, onContact }) {
         </div>
 
         {/* Content Area - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10 bg-white">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10 bg-slate-50">
           <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
             
             {/* Title & Category */}
             <section className="space-y-3 sm:space-y-4">
               <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-col sm:flex-row">
-                <div className={`p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-gradient-to-r ${categoryStyle.gradient}`}>
+                <div className={`p-3 sm:p-4 rounded-2xl bg-gradient-to-r ${categoryStyle.gradient}`}>
                   {React.createElement(categoryStyle.icon, { className: "text-white text-xl sm:text-2xl" })}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -659,7 +660,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
 
             {/* Session Stats Grid - Reduced items for mobile */}
             <section className="grid grid-cols-2 gap-3 sm:gap-4 pt-4">
-              <div className="p-3 sm:p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100">
+              <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
                   <div className={`w-2 h-2 rounded-full ${
                     session.priority === 'high' ? 'bg-red-500' :
@@ -671,7 +672,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
                 <p className="font-bold text-slate-900 text-xs sm:text-sm md:text-base capitalize">{session.priority || 'medium'}</p>
               </div>
               
-              <div className="p-3 sm:p-4 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-100">
+              <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
                 <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-xl ${
                   session.status === 'active' ? 'bg-emerald-100 text-emerald-600' :
                   session.status === 'completed' ? 'bg-green-100 text-green-600' :
@@ -687,7 +688,7 @@ function ModernDetailModal({ session, onClose, onContact }) {
         </div>
 
         {/* Action Footer - Sticky at bottom */}
-        <div className="shrink-0 p-4 sm:p-6 bg-slate-50/80 backdrop-blur-md border-t border-slate-100">
+        <div className="shrink-0 p-4 sm:p-6 bg-white/95 backdrop-blur-md border-t border-slate-200">
 <div className="max-w-2xl mx-auto flex flex-row gap-2 sm:gap-3 px-1">
   <button
     onClick={addToCalendar}
@@ -833,14 +834,15 @@ function EmergencyModal({ student, onClose, onSubmit }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
       <style jsx global>{mobileStyles}</style>
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden border-2 border-red-300 shadow-2xl mobile-full-width">
+      <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-hidden border border-slate-200 shadow-2xl mobile-full-width">
         {/* Header */}
-        <div className="p-4 md:p-6 text-white bg-gradient-to-r from-red-500 to-slate-600">
+        <div className="relative p-4 md:p-6 text-white bg-slate-950">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 via-amber-400 to-rose-500" />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="p-2 md:p-3 bg-white/20 rounded-2xl">
+              <div className="p-2 md:p-3 bg-white/10 rounded-2xl border border-white/10">
                 <FaExclamationCircle className="text-xl md:text-2xl" />
               </div>
               <div>
@@ -850,7 +852,7 @@ function EmergencyModal({ student, onClose, onSubmit }) {
             </div>
             <button 
               onClick={onClose}
-              className="p-2 bg-white/20 rounded-2xl hover:bg-white/30 transition-colors mobile-touch-target"
+              className="p-2 hover:bg-white/10 rounded-xl transition-colors mobile-touch-target"
               disabled={submitting}
             >
               <FaTimes className="text-lg md:text-xl" />
@@ -858,10 +860,10 @@ function EmergencyModal({ student, onClose, onSubmit }) {
           </div>
         </div>
 
-        <div className="max-h-[calc(90vh-80px)] overflow-y-auto mobile-scroll-hide p-4 md:p-6 space-y-4 md:space-y-6">
+        <div className="max-h-[calc(92vh-80px)] overflow-y-auto mobile-scroll-hide bg-slate-50 p-4 md:p-6 space-y-4 md:space-y-6">
           {/* Student Info */}
           {student && (
-            <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-4 border border-green-300">
+            <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
               <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
                 <FiUser className="text-green-500" />
                 Student Information

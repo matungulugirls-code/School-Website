@@ -491,52 +491,21 @@ const ModernStaffLeadership = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-4 sm:mb-6">
             <Sparkles className="w-3 h-3 sm:w-4 text-emerald-300" />
-            <span className="text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase">Our Dedicated Team</span>
+            <span className="text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase">School Leadership</span>
           </div>
           
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight leading-tight">
-            School Leadership <br className="hidden sm:inline" /> & Staff
+            Meet Our <br className="hidden sm:inline" /> Leadership
           </h1>
           
           <p className="text-xs sm:text-base md:text-lg text-emerald-100 max-w-xl sm:max-w-3xl mx-auto font-light leading-relaxed px-4">
-            Meet the passionate educators and administrators committed to excellence at Matungulu Girls Senior School
+            Clear, visible profiles for the administrators guiding Matungulu Girls Senior School with excellence, care, and accountability.
           </p>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 pb-12 sm:pb-20">
-        
-        {/* Tabs */}
-        <div className="flex justify-center mb-6 sm:mb-8 px-4">
-          <div className="inline-flex p-1 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-emerald-100 w-full max-w-[320px] sm:max-w-none">
-            <button
-              onClick={() => setActiveTab('featured')}
-              className={`flex-1 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
-                activeTab === 'featured'
-                  ? 'bg-gradient-to-r from-emerald-800 to-teal-700 text-white shadow-md'
-                  : 'text-slate-600 hover:text-emerald-700'
-              }`}
-            >
-              <Crown className="w-3.5 h-3.5 sm:w-4" />
-              <span className="hidden xs:inline">Leadership</span>
-              <span className="xs:hidden">Leadership</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`flex-1 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
-                activeTab === 'all'
-                  ? 'bg-gradient-to-r from-emerald-800 to-teal-700 text-white shadow-md'
-                  : 'text-slate-600 hover:text-emerald-700'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5 sm:w-4" />
-              <span className="hidden xs:inline">All Staff</span>
-              <span className="xs:hidden">Staff</span>
-            </button>
-          </div>
-        </div>
-
         {activeTab === 'featured' ? (
           /* Featured Card View - Responsive Layout */
           <div className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-16 lg:gap-6">
@@ -878,40 +847,37 @@ const ModernStaffLeadership = () => {
                 </button>
               )}
 
-              {/* Stats Card */}
-              <div className="bg-gradient-to-br from-emerald-900 to-teal-800 rounded-xl p-5 sm:p-6 text-white shadow-xl w-full">
+              {/* Leadership Snapshot */}
+              <div className="bg-gradient-to-br from-emerald-900 to-teal-800 rounded-2xl p-5 sm:p-6 text-white shadow-xl w-full">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 sm:p-3 bg-white/20 rounded-xl">
-                    <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-200" />
                   </div>
                   <div>
-                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider opacity-90">Staff Overview</p>
-                    <p className="text-xl sm:text-2xl font-black">{staff.length} Team Members</p>
+                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider opacity-90">Leadership Snapshot</p>
+                    <p className="text-xl sm:text-2xl font-black">{leadershipTeam.length} Profiles</p>
                   </div>
                 </div>
                 
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-xs sm:text-sm">
-                    <span className="opacity-90">Leadership</span>
-                    <span className="font-bold">
-                      {[principal, academicsDeputy, adminDeputy].filter(Boolean).length}
-                    </span>
+                    <span className="opacity-90">Principal</span>
+                    <span className="font-bold">{principal ? 1 : 0}</span>
                   </div>
                   <div className="flex justify-between text-xs sm:text-sm">
-                    <span className="opacity-90">Teaching Staff</span>
-                    <span className="font-bold">{teachers.length}</span>
+                    <span className="opacity-90">Deputy Principals</span>
+                    <span className="font-bold">{[academicsDeputy, adminDeputy].filter(Boolean).length}</span>
                   </div>
-                  <div className="flex justify-between text-xs sm:text-sm">
-                    <span className="opacity-90">Support Staff</span>
-                    <span className="font-bold">{supportStaff.length}</span>
-                  </div>
+                  <p className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-medium leading-5 text-white/75">
+                    Leadership profiles are managed from the Staff module and published here automatically.
+                  </p>
                 </div>
                 
                 <button 
                   onClick={() => router.push('/pages/SchoolTeam')}
                   className="w-full py-2.5 sm:py-3 bg-white/20 hover:bg-white/30 rounded-xl font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-2"
                 >
-                  View All Staff
+                  View Leadership Directory
                   <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
               </div>
@@ -1172,7 +1138,7 @@ const ModernStaffLeadership = () => {
         {/* Mobile Hint */}
         {isMobile && activeTab === 'featured' && (
           <div className="mt-6 text-center text-xs sm:text-sm text-slate-500">
-            Tap on any staff card to view their profile
+            Tap a leadership card to view the full profile
           </div>
         )}
       </div>

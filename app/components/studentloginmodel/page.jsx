@@ -13,7 +13,7 @@ export default function StudentLoginModal({
   isOpen,
   onClose,
   onLogin,
-  onSetupPassword,
+  onSetupPassword = () => {},
   isLoading = false,
   error = null,
   requiresContact = false,
@@ -26,7 +26,6 @@ export default function StudentLoginModal({
     password: '',
     fullName: '',
     admissionNumber: '',
-    username: '',
     newPassword: '',
     confirmPassword: ''
   });
@@ -42,7 +41,8 @@ export default function StudentLoginModal({
       setMode('setup');
       setFormData(prev => ({
         ...prev,
-        username: passwordSetupStudent?.admissionNumber?.toLowerCase() || prev.username
+        newPassword: '',
+        confirmPassword: ''
       }));
     }
   }, [passwordSetupToken, passwordSetupStudent]);
@@ -60,7 +60,8 @@ export default function StudentLoginModal({
       password.length >= 8,
       /[a-z]/.test(password),
       /[A-Z]/.test(password),
-      /\d/.test(password)
+      /\d/.test(password),
+      /[^A-Za-z0-9]/.test(password)
     ];
     return checks.filter(Boolean).length;
   };
@@ -69,11 +70,8 @@ export default function StudentLoginModal({
     const errors = {};
     const score = passwordStrength(formData.newPassword);
 
-    if (formData.username && (formData.username.trim().length < 3 || formData.username.trim().length > 50)) {
-      errors.username = 'Username must be 3-50 characters.';
-    }
-    if (score < 4) {
-      errors.newPassword = 'Use at least 8 characters with uppercase, lowercase, and a number.';
+    if (score < 5) {
+      errors.newPassword = 'Use at least 8 characters with uppercase, lowercase, a number, and a symbol.';
     }
     if (formData.newPassword !== formData.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match.';
@@ -86,7 +84,7 @@ export default function StudentLoginModal({
   const handlePasswordLogin = (event) => {
     event.preventDefault();
     const errors = {};
-    if (!formData.identifier.trim()) errors.identifier = 'Enter your admission number or username.';
+    if (!formData.identifier.trim()) errors.identifier = 'Enter your admission number.';
     if (!formData.password) errors.password = 'Enter your password.';
     setValidationErrors(errors);
     if (Object.keys(errors).length) return;
@@ -118,9 +116,9 @@ export default function StudentLoginModal({
     if (!validatePasswordSetup()) return;
 
     onSetupPassword({
+      action: 'setup-password',
       setupToken: passwordSetupToken,
-      username: formData.username.trim(),
-      password: formData.newPassword,
+      newPassword: formData.newPassword,
       confirmPassword: formData.confirmPassword
     });
   };
@@ -185,7 +183,7 @@ export default function StudentLoginModal({
                 {[
                   ['First time', 'Verify your admission number and registered name.'],
                   ['Create password', 'Set a strong password that stays saved after record refreshes.'],
-                  ['Future logins', 'Use admission number or username plus your password.']
+                  ['Future logins', 'Use your admission number plus your password.']
                 ].map(([title, text]) => (
                   <div key={title} className="flex gap-3">
                     <div className="mt-0.5 w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
@@ -256,16 +254,6 @@ export default function StudentLoginModal({
                 </div>
 
                 <InputField
-                  label="Username"
-                  icon={FiUser}
-                  value={formData.username}
-                  onChange={(value) => updateField('username', value.toLowerCase())}
-                  error={validationErrors.username}
-                  placeholder="Optional username"
-                  disabled={isLoading}
-                />
-
-                <InputField
                   label="New Password"
                   icon={FiLock}
                   type="password"
@@ -274,15 +262,16 @@ export default function StudentLoginModal({
                   error={validationErrors.newPassword}
                   placeholder="Create a strong password"
                   disabled={isLoading}
+                  autoComplete="new-password"
                 />
 
                 <div>
-                  <div className="grid grid-cols-4 gap-2 mb-2">
-                    {[0, 1, 2, 3].map(index => (
+                  <div className="grid grid-cols-5 gap-2 mb-2">
+                    {[0, 1, 2, 3, 4].map(index => (
                       <div key={index} className={`h-1.5 rounded-full ${index < strength ? 'bg-emerald-500' : 'bg-slate-200'}`} />
                     ))}
                   </div>
-                  <p className="text-xs text-slate-500">Use 8+ characters with uppercase, lowercase, and a number.</p>
+                  <p className="text-xs text-slate-500">Use 8+ characters with uppercase, lowercase, a number, and a symbol.</p>
                 </div>
 
                 <InputField
@@ -294,6 +283,7 @@ export default function StudentLoginModal({
                   error={validationErrors.confirmPassword}
                   placeholder="Repeat password"
                   disabled={isLoading}
+                  autoComplete="new-password"
                 />
 
                 <SubmitButton loading={isLoading} label="Create Password" loadingLabel="Creating..." icon={FiShield} />
@@ -332,16 +322,16 @@ export default function StudentLoginModal({
               <form onSubmit={handlePasswordLogin} className="space-y-5">
                 <div>
                   <h2 className="text-xl font-black text-slate-950">Sign In Securely</h2>
-                  <p className="text-sm text-slate-600 mt-1">Use your admission number or username and your portal password.</p>
+                  <p className="text-sm text-slate-600 mt-1">Use your admission number and your portal password.</p>
                 </div>
 
                 <InputField
-                  label="Admission Number or Username"
+                  label="Admission Number"
                   icon={FiUser}
                   value={formData.identifier}
-                  onChange={(value) => updateField('identifier', value)}
+                  onChange={(value) => updateField('identifier', value.toUpperCase())}
                   error={validationErrors.identifier}
-                  placeholder="Admission number or username"
+                  placeholder="Admission number"
                   disabled={isLoading}
                 />
 
