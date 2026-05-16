@@ -41,8 +41,10 @@ import {
   FiTrendingDown as FiTrendingDownSolid,
   FiActivity as FiActivitySolid,
   FiBriefcase,
-  FiSend,          // SMS icon
+  FiSend,
+  FiLayers,  // ADD THIS LINE
 } from 'react-icons/fi';
+
 import {
   IoPeopleCircle,
   IoNewspaper,
@@ -1775,7 +1777,7 @@ const StatCard = ({ icon: Icon, label, value, change, color, subtitle, trend }) 
 
   const SchoolPerformanceHighlights = () => {
     const highlights = [
-      { label: 'Departments', value: stats.totalDepartments, icon: Layers, tone: 'text-indigo-600 bg-indigo-50 border-indigo-100' },
+      { label: 'Departments', value: stats.totalDepartments, icon: FiLayers, tone: 'text-indigo-600 bg-indigo-50 border-indigo-100' },
       { label: 'Students', value: stats.totalStudents, icon: FiUsers, tone: 'text-blue-600 bg-blue-50 border-blue-100' },
       { label: 'Resources', value: resourcesDistribution.reduce((sum, item) => sum + item.value, 0), icon: FiBookOpen, tone: 'text-emerald-600 bg-emerald-50 border-emerald-100' },
       { label: 'Careers', value: stats.totalCareers, icon: FiBriefcase, tone: 'text-amber-600 bg-amber-50 border-amber-100' }
