@@ -11,6 +11,17 @@ const SCHOOL_MOTTO = 'Committed to Excellence';
 const CONTACT_PHONE = '0734610130';
 const CONTACT_EMAIL = 'matungulugirls@gmial.com';
 
+const normalizeLocalMobilePhone = (value = '') => {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return null;
+  if (/^07\d{8}$/.test(digits)) return digits;
+  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
+  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  return String(value || '').trim();
+};
+
+const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
+
 // Email Transporter
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -443,7 +454,7 @@ const validateEnvironment = () => {
   return true;
 };
 
-const validateInput = (name, email, password, role) => {
+const validateInput = (name, email, password, role, phone = null) => {
   const errors = [];
   if (!name || name.trim().length < 2) {
     errors.push('Name must be at least 2 characters long');
@@ -453,6 +464,9 @@ const validateInput = (name, email, password, role) => {
   }
   if (!password || password.length < 6) {
     errors.push('Password must be at least 6 characters');
+  }
+  if (phone && !isLocalMobilePhone(phone)) {
+    errors.push('Phone number must be in format: 07XXXXXXXX');
   }
   // If role is missing or invalid, default to ADMIN
   const validRoles = ['ADMIN', 'SUPER_ADMIN', 'USER'];
@@ -543,7 +557,8 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const validationErrors = validateInput(name, email, password, role);
+    const normalizedPhone = normalizeLocalMobilePhone(phone || '');
+    const validationErrors = validateInput(name, email, password, role, normalizedPhone);
     if (validationErrors.length > 0) {
       return NextResponse.json({ error: 'Validation failed', details: validationErrors }, { status: 400 });
     }
@@ -561,7 +576,7 @@ export async function POST(request) {
         name: name.trim(),
         email: email.toLowerCase().trim(),
         password: hashedPassword,
-        phone: phone ? phone.trim() : null,
+        phone: normalizedPhone,
         role: dbRole
       },
       select: { 

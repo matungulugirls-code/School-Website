@@ -5,11 +5,15 @@ import {
   FiAlertCircle,
   FiCheckCircle,
   FiClock,
-  FiCopy,
   FiKey,
+  FiMail,
   FiRefreshCw,
+  FiSearch,
+  FiSend,
   FiShield,
   FiUser,
+  FiUsers,
+  FiXCircle,
 } from 'react-icons/fi';
 import { toast } from 'sonner';
 
@@ -22,7 +26,7 @@ const getAdminToken = () => {
 };
 
 const formatDate = (date) => {
-  if (!date) return 'Not available';
+  if (!date) return 'Not yet';
   return new Date(date).toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -31,101 +35,140 @@ const formatDate = (date) => {
   });
 };
 
+const filterOptions = [
+  { value: 'all', label: 'All Students' },
+  { value: 'set', label: 'Password Set' },
+  { value: 'not-set', label: 'Not Set' },
+  { value: 'missing-email', label: 'Missing Email' },
+  { value: 'orphan', label: 'Not In Dashboard' },
+];
+
 export default function StudentPasswordRequests() {
-  const [requests, setRequests] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    activeStudents: 0,
+    passwordSet: 0,
+    passwordNotSet: 0,
+    missingParentEmail: 0,
+    orphanAccounts: 0,
+  });
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState('pending');
-  const [activePassword, setActivePassword] = useState(null);
-  const [busyId, setBusyId] = useState(null);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedAdmissions, setSelectedAdmissions] = useState(new Set());
+  const [sending, setSending] = useState(false);
 
-  const stats = useMemo(() => ({
-    pending: requests.filter(item => item.status === 'pending').length,
-    resolved: requests.filter(item => item.status === 'resolved').length,
-    total: requests.length,
-  }), [requests]);
+  const eligibleRows = useMemo(
+    () => rows.filter(row => !row.hasPassword && row.canSendSetupEmail && row.currentlyInDashboard),
+    [rows]
+  );
 
-  const fetchRequests = async () => {
+  const selectedEligibleAdmissions = useMemo(() => (
+    rows
+      .filter(row => selectedAdmissions.has(row.admissionNumber) && !row.hasPassword && row.canSendSetupEmail && row.currentlyInDashboard)
+      .map(row => row.admissionNumber)
+  ), [rows, selectedAdmissions]);
+
+  const fetchAccounts = async () => {
     setLoading(true);
     try {
       const token = getAdminToken();
-      const response = await fetch(`/api/student-password-reset?status=${statusFilter}`, {
+      const params = new URLSearchParams({
+        scope: 'accounts',
+        status: statusFilter,
+      });
+      if (searchTerm.trim()) params.set('search', searchTerm.trim());
+
+      const response = await fetch(`/api/student-password-reset?${params.toString()}`, {
         headers: {
           Authorization: `Bearer ${token || ''}`,
           'Cache-Control': 'no-cache'
         }
       });
       const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data.error || 'Failed to load requests');
-      setRequests(data.requests || []);
+      if (!response.ok || !data.success) throw new Error(data.error || 'Failed to load student accounts');
+
+      setRows(data.rows || []);
+      setStats(data.stats || {});
+      setSelectedAdmissions(new Set());
     } catch (error) {
-      toast.error(error.message || 'Failed to load password requests');
+      toast.error(error.message || 'Failed to load student account status');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRequests();
+    fetchAccounts();
   }, [statusFilter]);
 
-  const issueTemporaryPassword = async (requestId) => {
-    setBusyId(requestId);
-    setActivePassword(null);
+  const handleSearch = (event) => {
+    event.preventDefault();
+    fetchAccounts();
+  };
+
+  const toggleRow = (admissionNumber) => {
+    setSelectedAdmissions(prev => {
+      const next = new Set(prev);
+      if (next.has(admissionNumber)) next.delete(admissionNumber);
+      else next.add(admissionNumber);
+      return next;
+    });
+  };
+
+  const toggleAllEligible = () => {
+    setSelectedAdmissions(prev => {
+      const next = new Set(prev);
+      const allSelected = eligibleRows.every(row => next.has(row.admissionNumber));
+
+      eligibleRows.forEach(row => {
+        if (allSelected) next.delete(row.admissionNumber);
+        else next.add(row.admissionNumber);
+      });
+
+      return next;
+    });
+  };
+
+  const sendSetupLinks = async (admissionNumbers) => {
+    if (!admissionNumbers.length) {
+      toast.error('Select students without passwords and with a registered parent email.');
+      return;
+    }
+
+    setSending(true);
     try {
       const token = getAdminToken();
       const response = await fetch('/api/student-password-reset', {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token || ''}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          id: requestId,
-          action: 'issue-temporary-password'
+          action: 'admin-send-setup-links',
+          admissionNumbers
         })
       });
       const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data.error || 'Could not issue password');
-      setActivePassword({
-        requestId,
-        password: data.temporaryPassword
-      });
-      toast.success('Temporary password issued');
-      await fetchRequests();
+      if (!response.ok || !data.success) throw new Error(data.error || data.message || 'Could not send setup links');
+
+      toast.success(data.message || 'Password setup links sent to parent emails');
+      await fetchAccounts();
     } catch (error) {
-      toast.error(error.message || 'Could not issue temporary password');
+      toast.error(error.message || 'Could not send password setup links');
     } finally {
-      setBusyId(null);
+      setSending(false);
     }
   };
 
-  const updateStatus = async (requestId, status) => {
-    setBusyId(requestId);
-    try {
-      const token = getAdminToken();
-      const response = await fetch('/api/student-password-reset', {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token || ''}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id: requestId, status })
-      });
-      const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data.error || 'Could not update request');
-      toast.success('Request updated');
-      await fetchRequests();
-    } catch (error) {
-      toast.error(error.message || 'Could not update request');
-    } finally {
-      setBusyId(null);
-    }
-  };
-
-  const copyPassword = async (password) => {
-    await navigator.clipboard.writeText(password);
-    toast.success('Temporary password copied');
-  };
+  const statCards = [
+    { label: 'Dashboard Students', value: stats.totalStudents || 0, icon: FiUsers, tone: 'bg-blue-50 text-blue-700 border-blue-100' },
+    { label: 'Passwords Set', value: stats.passwordSet || 0, icon: FiCheckCircle, tone: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+    { label: 'Need Setup', value: stats.passwordNotSet || 0, icon: FiKey, tone: 'bg-amber-50 text-amber-700 border-amber-100' },
+    { label: 'Missing Parent Email', value: stats.missingParentEmail || 0, icon: FiMail, tone: 'bg-red-50 text-red-700 border-red-100' },
+  ];
 
   return (
     <div className="space-y-6 p-4 sm:p-6">
@@ -137,31 +180,37 @@ export default function StudentPasswordRequests() {
               <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">
                 Student Portal Security
               </p>
-              <h1 className="mt-2 text-3xl font-black tracking-tight">Password Requests</h1>
+              <h1 className="mt-2 text-3xl font-black tracking-tight">Student Portal Accounts</h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-                Review student password-help requests and issue a new temporary password when identity has been verified.
+                Track who has created a portal password, who still needs setup, and send secure parent-email links without exposing passwords.
               </p>
             </div>
-            <button
-              onClick={fetchRequests}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100"
-            >
-              <FiRefreshCw className={loading ? 'animate-spin' : ''} />
-              Refresh
-            </button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button
+                onClick={() => sendSetupLinks(eligibleRows.map(row => row.admissionNumber))}
+                disabled={sending || eligibleRows.length === 0}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-black text-white transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <FiSend />
+                Notify All Not Set
+              </button>
+              <button
+                onClick={fetchAccounts}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100"
+              >
+                <FiRefreshCw className={loading ? 'animate-spin' : ''} />
+                Refresh
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        {[
-          { label: 'Pending', value: stats.pending, icon: FiClock },
-          { label: 'Resolved', value: stats.resolved, icon: FiCheckCircle },
-          { label: 'Total Loaded', value: stats.total, icon: FiShield },
-        ].map(({ label, value, icon: Icon }) => (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {statCards.map(({ label, value, icon: Icon, tone }) => (
           <div key={label} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white">
+              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${tone}`}>
                 <Icon />
               </div>
               <span className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Live</span>
@@ -173,110 +222,167 @@ export default function StudentPasswordRequests() {
       </section>
 
       <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">Request Queue</p>
-            <h2 className="mt-1 text-xl font-black text-slate-950">Student password assistance</h2>
+            <p className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">Account Status Table</p>
+            <h2 className="mt-1 text-xl font-black text-slate-950">Passwords set vs not set</h2>
           </div>
-          <div className="grid grid-cols-3 gap-2 rounded-2xl bg-slate-100 p-1">
-            {['pending', 'resolved', 'all'].map(status => (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={`rounded-xl px-4 py-2 text-xs font-black uppercase tracking-wider transition ${
-                  statusFilter === status ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'
-                }`}
-              >
-                {status}
-              </button>
-            ))}
+
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+            <form onSubmit={handleSearch} className="relative min-w-0 lg:w-80">
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search name, admission, form..."
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm font-bold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+              />
+            </form>
+
+            <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1 sm:grid-cols-5">
+              {filterOptions.map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => setStatusFilter(option.value)}
+                  className={`rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-wider transition ${
+                    statusFilter === option.value ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {activePassword && (
-          <div className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm font-black text-amber-900">Temporary password shown once</p>
-                <p className="mt-1 font-mono text-lg font-black text-slate-950">{activePassword.password}</p>
-              </div>
-              <button
-                onClick={() => copyPassword(activePassword.password)}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-2 text-sm font-black text-white"
-              >
-                <FiCopy />
-                Copy
-              </button>
+        {selectedEligibleAdmissions.length > 0 && (
+          <div className="mb-5 flex flex-col gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-black text-emerald-900">{selectedEligibleAdmissions.length} eligible student selected</p>
+              <p className="mt-1 text-xs font-bold text-emerald-700">Setup links will be sent to registered parent emails.</p>
             </div>
+            <button
+              onClick={() => sendSetupLinks(selectedEligibleAdmissions)}
+              disabled={sending}
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-black text-white disabled:opacity-60"
+            >
+              <FiSend />
+              {sending ? 'Sending...' : 'Send Selected'}
+            </button>
           </div>
         )}
 
         {loading ? (
-          <div className="flex min-h-48 items-center justify-center text-sm font-bold text-slate-500">
-            Loading password requests...
+          <div className="flex min-h-56 items-center justify-center text-sm font-bold text-slate-500">
+            Loading student account status...
           </div>
-        ) : requests.length === 0 ? (
+        ) : rows.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-10 text-center">
-            <FiKey className="mx-auto text-4xl text-slate-300" />
-            <p className="mt-3 text-sm font-black uppercase tracking-widest text-slate-500">No requests found</p>
+            <FiShield className="mx-auto text-4xl text-slate-300" />
+            <p className="mt-3 text-sm font-black uppercase tracking-widest text-slate-500">No students found</p>
           </div>
         ) : (
-          <div className="grid gap-3">
-            {requests.map((request) => {
-              const name = request.fullName || request.account?.fullName ||
-                [request.student?.firstName, request.student?.middleName, request.student?.lastName].filter(Boolean).join(' ') ||
-                'Student';
-
-              return (
-                <article key={request.id} className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="flex gap-3">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-slate-800 shadow-sm">
-                        <FiUser />
-                      </div>
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="font-black text-slate-950">{name}</h3>
-                          <span className={`rounded-full border px-2 py-0.5 text-[10px] font-black uppercase ${
-                            request.status === 'resolved'
-                              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                              : 'border-amber-200 bg-amber-50 text-amber-700'
-                          }`}>
-                            {request.status}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-sm font-bold text-slate-600">ADM {request.admissionNumber}</p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          {request.email || 'No email'} · {request.parentPhone || 'No phone'} · {formatDate(request.requestedAt)}
-                        </p>
-                        {request.message && (
-                          <p className="mt-3 rounded-2xl bg-white p-3 text-sm text-slate-600">{request.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="grid gap-2 sm:grid-cols-2 lg:w-[360px]">
-                      <button
-                        onClick={() => issueTemporaryPassword(request.id)}
-                        disabled={busyId === request.id}
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-black text-white transition hover:bg-slate-800 disabled:opacity-60"
-                      >
-                        <FiKey />
-                        Issue Temporary
-                      </button>
-                      <button
-                        onClick={() => updateStatus(request.id, request.status === 'resolved' ? 'pending' : 'resolved')}
-                        disabled={busyId === request.id}
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-100 disabled:opacity-60"
-                      >
-                        <FiAlertCircle />
-                        {request.status === 'resolved' ? 'Reopen' : 'Mark Resolved'}
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+          <div className="overflow-hidden rounded-3xl border border-slate-200">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1040px]">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="px-4 py-4 text-left">
+                      <input
+                        type="checkbox"
+                        checked={eligibleRows.length > 0 && eligibleRows.every(row => selectedAdmissions.has(row.admissionNumber))}
+                        onChange={toggleAllEligible}
+                        className="h-4 w-4 rounded border-slate-300 text-slate-950 focus:ring-slate-300"
+                      />
+                    </th>
+                    <th className="px-4 py-4 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Student</th>
+                    <th className="px-4 py-4 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Class</th>
+                    <th className="px-4 py-4 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Parent Email</th>
+                    <th className="px-4 py-4 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Password</th>
+                    <th className="px-4 py-4 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Last Login</th>
+                    <th className="px-4 py-4 text-right text-[11px] font-black uppercase tracking-widest text-slate-500">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 bg-white">
+                  {rows.map((row) => {
+                    const canSelect = !row.hasPassword && row.canSendSetupEmail && row.currentlyInDashboard;
+                    return (
+                      <tr key={`${row.admissionNumber}-${row.accountId || row.id}`} className="hover:bg-slate-50/80">
+                        <td className="px-4 py-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedAdmissions.has(row.admissionNumber)}
+                            onChange={() => toggleRow(row.admissionNumber)}
+                            disabled={!canSelect}
+                            className="h-4 w-4 rounded border-slate-300 text-slate-950 focus:ring-slate-300 disabled:opacity-30"
+                          />
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-white">
+                              <FiUser />
+                            </div>
+                            <div>
+                              <p className="font-black text-slate-950">{row.fullName || 'Student'}</p>
+                              <p className="text-xs font-bold text-slate-500">ADM {row.admissionNumber}</p>
+                              {!row.currentlyInDashboard && (
+                                <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-black uppercase text-red-700">
+                                  <FiXCircle />
+                                  Not in dashboard
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <p className="text-sm font-black text-slate-900">{row.form || 'N/A'}</p>
+                          <p className="text-xs font-bold text-slate-500">{row.stream || 'No stream'}</p>
+                        </td>
+                        <td className="px-4 py-4">
+                          {row.parentEmail ? (
+                            <p className="max-w-[220px] truncate text-sm font-bold text-slate-700">{row.parentEmail}</p>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-xs font-black text-red-700">
+                              <FiAlertCircle />
+                              Missing
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-4">
+                          {row.hasPassword ? (
+                            <div>
+                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                                <FiCheckCircle />
+                                Set
+                              </span>
+                              <p className="mt-1 text-[11px] font-bold text-slate-500">{formatDate(row.passwordSetAt)}</p>
+                            </div>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-black text-amber-700">
+                              <FiClock />
+                              Not set
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-4 text-sm font-bold text-slate-600">
+                          {formatDate(row.lastLoginAt)}
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <button
+                            onClick={() => sendSetupLinks([row.admissionNumber])}
+                            disabled={sending || !canSelect}
+                            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-2.5 text-xs font-black text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
+                          >
+                            <FiMail />
+                            Send Setup Link
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </section>

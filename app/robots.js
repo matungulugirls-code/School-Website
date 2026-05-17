@@ -15,6 +15,7 @@ export default function robots() {
           '/pages/adminLogin',
           '/pages/forgotpassword',
           '/pages/resetpassword',
+          '/pages/studentpasswordreset',
           '/*?*',
         ],
       },

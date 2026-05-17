@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../libs/prisma';
 
+const normalizeLocalMobilePhone = (value = '') => {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return null;
+  if (/^07\d{8}$/.test(digits)) return digits;
+  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
+  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  return String(value || '').trim();
+};
+
+const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 // Device Token Manager
@@ -219,6 +230,18 @@ export async function PUT(request, { params }) {
       );
     }
 
+    const parentPhone = normalizeLocalMobilePhone(data.parentPhone || '');
+    if (parentPhone && !isLocalMobilePhone(parentPhone)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Parent phone number must be in 07XXXXXXXX format',
+          authenticated: true
+        },
+        { status: 400 }
+      );
+    }
+
     // Check if admission number is being changed and if it already exists
     if (data.admissionNumber) {
       const existingStudent = await prisma.databaseStudent.findFirst({
@@ -256,7 +279,7 @@ export async function PUT(request, { params }) {
         stream: data.stream || null,
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
         gender: 'Female',
-        parentPhone: data.parentPhone || null,
+        parentPhone,
         email: data.email || null,
         address: data.address || null,
         status: data.status || 'active',

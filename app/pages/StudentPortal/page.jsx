@@ -782,8 +782,8 @@ export default function ModernStudentPortalPage() {
         throw new Error(data.error || 'Could not send password request');
       }
 
-      toast.success('Password request sent', {
-        description: data.message || 'Admin will review your request.',
+      toast.success('Password link sent', {
+        description: data.message || 'Check the registered parent email for the secure link.',
       });
     } catch (error) {
       setLoginError(error.message || 'Could not send password request.');

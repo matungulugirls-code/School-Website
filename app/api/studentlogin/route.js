@@ -477,6 +477,18 @@ export async function POST(request) {
     });
 
     if (requestedAction === 'login') {
+      if (!student || student.status !== 'active') {
+        return NextResponse.json(
+          {
+            success: false,
+            authenticated: false,
+            requiresContact: true,
+            error: 'Student record is not active in the dashboard. Please contact the school office.'
+          },
+          { status: 403 }
+        );
+      }
+
       if (!account?.passwordHash) {
         return NextResponse.json(
           {
@@ -514,7 +526,7 @@ export async function POST(request) {
       const updatedAccount = await prisma.studentPortalAccount.update({
         where: { admissionNumber: cleanAdmissionNumber },
         data: {
-          ...(student ? buildAccountSnapshot(student) : {}),
+          ...buildAccountSnapshot(student),
           lastLoginAt: new Date()
         }
       });
@@ -685,23 +697,13 @@ export async function GET(request) {
           where: { admissionNumber: decoded.admissionNumber }
         });
 
-    if (!student && !account) {
+    if (!student || student.status !== 'active') {
       return NextResponse.json(
         {
           success: false,
           authenticated: false,
-          error: 'Student portal account not found'
-        },
-        { status: 401 }
-      );
-    }
-
-    if (student?.status !== 'active' && !account) {
-      return NextResponse.json(
-        {
-          success: false,
-          authenticated: false,
-          error: 'Student not found or inactive'
+          error: 'Student record is not active in the dashboard.',
+          requiresContact: true
         },
         { status: 401 }
       );

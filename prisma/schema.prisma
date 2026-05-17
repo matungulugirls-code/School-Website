@@ -883,19 +883,29 @@ model StudentPortalAccount {
 model StudentPasswordResetRequest {
   id              String    @id @default(cuid())
   admissionNumber String    @db.VarChar(50)
+  requestType     String    @default("forgot") @db.VarChar(50)
   fullName        String?   @db.VarChar(255)
   email           String?   @db.VarChar(100)
+  parentEmail     String?   @db.VarChar(100)
   parentPhone     String?   @db.VarChar(20)
   message         String?   @db.Text
+  tokenHash       String?   @db.VarChar(191)
+  expiresAt       DateTime?
+  usedAt          DateTime?
   status          String    @default("pending")
   adminNote       String?   @db.Text
+  requestedByIp   String?   @db.VarChar(100)
+  requestedByUserAgent String? @db.VarChar(255)
   requestedAt     DateTime  @default(now())
   resolvedAt      DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
   @@index([admissionNumber])
+  @@index([requestType])
   @@index([status])
+  @@index([tokenHash])
+  @@index([expiresAt])
   @@index([requestedAt])
   @@map("student_password_reset_requests")
 }

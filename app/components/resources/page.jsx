@@ -1817,6 +1817,24 @@ export default function ResourcesManager() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const hasActiveFilters = selectedType !== 'all' ||
+    selectedSubject !== 'All Subjects' ||
+    selectedCategory !== 'All Categories' ||
+    selectedClass !== 'All Classes' ||
+    selectedAccessLevel !== 'all' ||
+    selectedStatus !== 'all' ||
+    Boolean(searchTerm);
+
+  const clearResourceFilters = () => {
+    setSelectedType('all');
+    setSelectedSubject('All Subjects');
+    setSelectedCategory('All Categories');
+    setSelectedClass('All Classes');
+    setSelectedAccessLevel('all');
+    setSelectedStatus('all');
+    setSearchTerm('');
+  };
+
   // View resource
   const handleView = (resource) => {
     setSelectedResource(resource);
@@ -2499,6 +2517,23 @@ const handleSubmit = async (formData, id) => {
 
       {/* Filters Section */}
       <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-lg border border-gray-200">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
+              <FiFilter className="text-teal-600" />
+              Filters
+            </p>
+            <h2 className="mt-1 text-lg font-black text-slate-950">Refine resource records</h2>
+          </div>
+          <button
+            onClick={clearResourceFilters}
+            disabled={!hasActiveFilters}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-700 transition hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <FiFilter />
+            Clear All Filters
+          </button>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
           <div className="lg:col-span-2 relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -2587,25 +2622,6 @@ const handleSubmit = async (formData, id) => {
               </option>
             ))}
           </select>
-
-          {/* Clear Filters Button */}
-          {(selectedType !== 'all' || selectedSubject !== 'All Subjects' || selectedCategory !== 'All Categories' || 
-            selectedClass !== 'All Classes' || selectedAccessLevel !== 'all' || selectedStatus !== 'all' || searchTerm) && (
-            <button
-              onClick={() => {
-                setSelectedType('all');
-                setSelectedSubject('All Subjects');
-                setSelectedCategory('All Categories');
-                setSelectedClass('All Classes');
-                setSelectedAccessLevel('all');
-                setSelectedStatus('all');
-                setSearchTerm('');
-              }}
-              className="px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold text-md  hover:bg-gray-50 cursor-pointer"
-            >
-              Clear All Filters
-            </button>
-          )}
         </div>
       </div>
 

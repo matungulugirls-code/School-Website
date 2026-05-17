@@ -5,6 +5,17 @@ import { prisma } from '../../../libs/prisma';
 
 export const maxDuration = 300;
 
+const normalizeLocalMobilePhone = (value = '') => {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return null;
+  if (/^07\d{8}$/.test(digits)) return digits;
+  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
+  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  return String(value || '').trim();
+};
+
+const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 // Device Token Manager
@@ -297,7 +308,11 @@ const buildWhereClause = (params) => {
   if (status && status !== 'all') where.status = status;
   
   if (search && search.trim()) {
-    const searchTerm = search.toLowerCase();
+    const searchTerm = search.trim();
+    const searchTokens = searchTerm
+      .split(/\s+/)
+      .map(token => token.trim())
+      .filter(Boolean);
     
     where.OR = [
       { admissionNumber: { contains: searchTerm } },
@@ -305,7 +320,24 @@ const buildWhereClause = (params) => {
       { middleName: { contains: searchTerm } },
       { lastName: { contains: searchTerm } },
       { email: { contains: searchTerm } },
-      { parentPhone: { contains: searchTerm } }
+      { parentPhone: { contains: searchTerm } },
+      { address: { contains: searchTerm } },
+      { form: { contains: searchTerm } },
+      { stream: { contains: searchTerm } },
+      ...(searchTokens.length > 1
+        ? [{
+            AND: searchTokens.map(token => ({
+              OR: [
+                { firstName: { contains: token } },
+                { middleName: { contains: token } },
+                { lastName: { contains: token } },
+                { admissionNumber: { contains: token } },
+                { email: { contains: token } },
+                { parentPhone: { contains: token } }
+              ]
+            }))
+          }]
+        : [])
     ];
   }
   
@@ -854,7 +886,7 @@ const parseCSV = async (file) => {
                     const middleName = row.middleName ? String(row.middleName).trim() : null;
                     const stream = row.stream ? String(row.stream).trim() : null;
                     const dateOfBirth = parseDate(row.dateOfBirth || row.dob || '');
-                    const parentPhone = row.parentPhone ? String(row.parentPhone).trim() : null;
+                    const parentPhone = row.parentPhone ? normalizeLocalMobilePhone(row.parentPhone) : null;
                     const email = row.email ? String(row.email).trim() : null;
                     const address = row.address ? String(row.address).trim() : null;
                     
@@ -994,7 +1026,7 @@ const parseExcel = async (file) => {
           const stream = String(normalizedRow.stream || '').trim() || null;
           const dateOfBirthRaw = normalizedRow.dateOfBirth || '';
           const dateOfBirth = dateOfBirthRaw ? parseDate(dateOfBirthRaw) : null;
-          const parentPhone = String(normalizedRow.parentPhone || '').trim() || null;
+          const parentPhone = normalizeLocalMobilePhone(normalizedRow.parentPhone || '');
           const email = String(normalizedRow.email || '').trim() || null;
           const address = String(normalizedRow.address || '').trim() || null;
           const status = String(row.status || row.Status || 'active').trim();
@@ -1152,11 +1184,8 @@ const validateStudent = (student, index) => {
   }
   
   if (student.parentPhone) {
-    const phoneRegex = /^[+]?[0-9\s\-()]{10,20}$/;
-    if (!phoneRegex.test(student.parentPhone)) {
-      errors.push(`Row ${rowNumber}: Parent phone number is invalid`);
-    } else if (student.parentPhone.length > 20) {
-      errors.push(`Row ${rowNumber}: Parent phone too long (max 20 chars)`);
+    if (!isLocalMobilePhone(student.parentPhone)) {
+      errors.push(`Row ${rowNumber}: Parent phone number must be in 07XXXXXXXX format`);
     }
   }
   

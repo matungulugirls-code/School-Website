@@ -1188,7 +1188,7 @@ const handleLogout = () => {
     },
     {
       id: 'student-password-requests',
-      label: 'Password Requests',
+      label: 'Student Accounts',
       icon: FiKey,
       badge: 'red'
     },

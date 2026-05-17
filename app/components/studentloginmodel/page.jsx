@@ -29,8 +29,7 @@ export default function StudentLoginModal({
     admissionNumber: '',
     newPassword: '',
     confirmPassword: '',
-    resetEmail: '',
-    resetParentPhone: '',
+    currentPassword: '',
     resetMessage: ''
   });
   const [localError, setLocalError] = useState(null);
@@ -38,7 +37,8 @@ export default function StudentLoginModal({
   const [visiblePasswords, setVisiblePasswords] = useState({
     login: false,
     setup: false,
-    confirm: false
+    confirm: false,
+    current: false
   });
 
   useEffect(() => {
@@ -136,17 +136,17 @@ export default function StudentLoginModal({
     event.preventDefault();
     const errors = {};
     if (!formData.admissionNumber.trim()) errors.admissionNumber = 'Enter your admission number.';
-    if (!formData.fullName.trim() && !formData.resetEmail.trim() && !formData.resetParentPhone.trim()) {
-      errors.fullName = 'Enter your name, email, or parent phone so admin can verify you.';
+    if (mode === 'changePassword' && !formData.currentPassword) {
+      errors.currentPassword = 'Enter your current password to request a password change.';
     }
     setValidationErrors(errors);
     if (Object.keys(errors).length) return;
 
     onPasswordResetRequest({
+      action: mode === 'changePassword' ? 'request-change-password' : 'request-forgot-password',
+      requestType: mode === 'changePassword' ? 'change' : 'forgot',
       admissionNumber: formData.admissionNumber.trim().toUpperCase(),
-      fullName: formData.fullName.trim(),
-      email: formData.resetEmail.trim(),
-      parentPhone: formData.resetParentPhone.trim(),
+      currentPassword: formData.currentPassword,
       message: formData.resetMessage.trim()
     });
   };
@@ -211,7 +211,7 @@ export default function StudentLoginModal({
                 {[
                   ['First time', 'Verify your admission number and registered name.'],
                   ['Create password', 'Set a strong password that stays saved after record refreshes.'],
-                  ['Future logins', 'Use your admission number plus your password.']
+                  ['Password help', 'Forgot and change requests send a secure link to the registered parent email.']
                 ].map(([title, text]) => (
                   <div key={title} className="flex gap-3">
                     <div className="mt-0.5 w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
@@ -360,11 +360,17 @@ export default function StudentLoginModal({
 
                 <SubmitButton loading={isLoading} label="Verify and Continue" loadingLabel="Verifying..." icon={FiCheckCircle} />
               </form>
-            ) : mode === 'forgotPassword' ? (
+            ) : mode === 'forgotPassword' || mode === 'changePassword' ? (
               <form onSubmit={handlePasswordResetRequest} className="space-y-5">
                 <div>
-                  <h2 className="text-xl font-black text-slate-950">Request Password Help</h2>
-                  <p className="text-sm text-slate-600 mt-1">Send your details to the school admin for password assistance.</p>
+                  <h2 className="text-xl font-black text-slate-950">
+                    {mode === 'changePassword' ? 'Request Password Change' : 'Forgot Password'}
+                  </h2>
+                  <p className="text-sm text-slate-600 mt-1">
+                    {mode === 'changePassword'
+                      ? 'Confirm your current password. A secure reset link will be sent to the registered parent email.'
+                      : 'A secure reset link will be sent to the registered parent email.'}
+                  </p>
                 </div>
 
                 <InputField
@@ -377,50 +383,43 @@ export default function StudentLoginModal({
                   disabled={isLoading}
                 />
 
-                <InputField
-                  label="Registered Name"
-                  icon={FiBook}
-                  value={formData.fullName}
-                  onChange={(value) => updateField('fullName', value)}
-                  error={validationErrors.fullName}
-                  placeholder="Name as it appears in school records"
-                  disabled={isLoading}
-                />
+                {mode === 'changePassword' && (
+                  <InputField
+                    label="Current Password"
+                    icon={FiLock}
+                    type={visiblePasswords.current ? 'text' : 'password'}
+                    value={formData.currentPassword}
+                    onChange={(value) => updateField('currentPassword', value)}
+                    error={validationErrors.currentPassword}
+                    placeholder="Enter your current portal password"
+                    disabled={isLoading}
+                    autoComplete="current-password"
+                    rightAction={
+                      <PasswordVisibilityButton
+                        visible={visiblePasswords.current}
+                        onClick={() => setVisiblePasswords(prev => ({ ...prev, current: !prev.current }))}
+                        label="current password"
+                      />
+                    }
+                  />
+                )}
 
                 <InputField
-                  label="Email"
-                  icon={FiSend}
-                  type="email"
-                  value={formData.resetEmail}
-                  onChange={(value) => updateField('resetEmail', value)}
-                  error={validationErrors.resetEmail}
-                  placeholder="Student or parent email"
-                  disabled={isLoading}
-                  autoComplete="email"
-                />
-
-                <InputField
-                  label="Parent Phone"
-                  icon={FiHelpCircle}
-                  value={formData.resetParentPhone}
-                  onChange={(value) => updateField('resetParentPhone', value)}
-                  error={validationErrors.resetParentPhone}
-                  placeholder="Parent phone for verification"
-                  disabled={isLoading}
-                  autoComplete="tel"
-                />
-
-                <InputField
-                  label="Message"
+                  label="Optional Note"
                   icon={FiAlertCircle}
                   value={formData.resetMessage}
                   onChange={(value) => updateField('resetMessage', value)}
                   error={validationErrors.resetMessage}
-                  placeholder="Optional note for admin"
+                  placeholder="Optional note for the school office"
                   disabled={isLoading}
                 />
 
-                <SubmitButton loading={isLoading} label="Send Request" loadingLabel="Sending..." icon={FiSend} />
+                <SubmitButton
+                  loading={isLoading}
+                  label={mode === 'changePassword' ? 'Send Parent Change Link' : 'Send Parent Reset Link'}
+                  loadingLabel="Sending..."
+                  icon={FiSend}
+                />
 
                 <button
                   type="button"
@@ -481,7 +480,14 @@ export default function StudentLoginModal({
                     onClick={() => setMode('forgotPassword')}
                     className="w-full text-sm font-bold text-blue-700 hover:text-blue-900"
                   >
-                    Forgot password? Send a request to admin.
+                    Forgot password? Send reset link to parent email.
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('changePassword')}
+                    className="w-full text-sm font-bold text-emerald-700 hover:text-emerald-900"
+                  >
+                    Change password? Verify current password first.
                   </button>
                 </div>
               </form>

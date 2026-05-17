@@ -1619,16 +1619,48 @@ export async function GET(request) {
       
       // Search across admission number and student names
       if (search && search.trim()) {
-        const searchTerm = search.toLowerCase();
+        const searchTerm = search.trim();
+        const searchTokens = searchTerm
+          .split(/\s+/)
+          .map(token => token.trim())
+          .filter(Boolean);
+
         where.OR = [
           { admissionNumber: { contains: searchTerm } },
+          { form: { contains: searchTerm } },
+          { term: { contains: searchTerm } },
+          { academicYear: { contains: searchTerm } },
+          { paymentStatus: { contains: searchTerm } },
           { student: { 
             OR: [
               { firstName: { contains: searchTerm } },
               { lastName: { contains: searchTerm } },
-              { middleName: { contains: searchTerm } }
+              { middleName: { contains: searchTerm } },
+              { email: { contains: searchTerm } },
+              { parentPhone: { contains: searchTerm } }
             ]
-          }}
+          }},
+          ...(searchTokens.length > 1
+            ? [{
+                AND: searchTokens.map(token => ({
+                  OR: [
+                    { admissionNumber: { contains: token } },
+                    { form: { contains: token } },
+                    { term: { contains: token } },
+                    { academicYear: { contains: token } },
+                    { student: {
+                      OR: [
+                        { firstName: { contains: token } },
+                        { middleName: { contains: token } },
+                        { lastName: { contains: token } },
+                        { email: { contains: token } },
+                        { parentPhone: { contains: token } }
+                      ]
+                    }}
+                  ]
+                }))
+              }]
+            : [])
         ];
       }
       

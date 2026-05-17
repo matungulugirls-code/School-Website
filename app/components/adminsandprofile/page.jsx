@@ -130,6 +130,17 @@ import {
 import {IoSparkles} from 'react-icons/io5';
 import { CircularProgress, Box, Typography, Stack } from '@mui/material';
 
+const normalizeLocalMobilePhone = (value = '') => {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (/^07\d{8}$/.test(digits)) return digits;
+  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
+  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  return String(value || '').trim();
+};
+
+const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
+
 export default function AdminManager() {
   const [session, setSession] = useState(null);
   const [status, setStatus] = useState('loading');
@@ -159,7 +170,7 @@ const [viewingAdmin, setViewingAdmin] = useState(null);
     name: '',
     email: '',
     password: '',
-    phone: '+254',
+    phone: '07',
     role: 'ADMIN', // Default to ADMIN
     permissions: {
       manageUsers: false,
@@ -678,7 +689,7 @@ const handleCreateAdmin = () => {
     name: '',
     email: '',
     password: '',
-    phone: '+254',
+    phone: '07',
     role: 'ADMIN',
     permissions: {
       manageUsers: false,
@@ -708,7 +719,7 @@ const handleEditAdmin = (admin) => {
     name: admin.name || '',
     email: admin.email || '',
     password: '',
-    phone: admin.phone || '+254',
+    phone: normalizeLocalMobilePhone(admin.phone) || '07',
     role: admin.role || 'ADMIN',
     permissions: admin.permissions || {
       manageUsers: false,
@@ -770,10 +781,10 @@ const handleSaveAdmin = async (e) => {
       return;
     }
     
-    // Phone number validation (Kenyan format)
-    const phoneRegex = /^\+254[17]\d{8}$/;
-    if (!phoneRegex.test(adminData.phone)) {
-      toast.error('Phone number must be in format: +2547XXXXXXXX or +2541XXXXXXXX');
+    // Phone number validation (local Kenyan mobile format)
+    const normalizedPhone = normalizeLocalMobilePhone(adminData.phone);
+    if (!isLocalMobilePhone(normalizedPhone)) {
+      toast.error('Phone number must be in format: 07XXXXXXXX');
       setSavingAdmin(false);
       return;
     }
@@ -866,7 +877,7 @@ const handleSaveAdmin = async (e) => {
     const adminPayload = {
       name: adminData.name.trim(),
       email: adminData.email.trim().toLowerCase(),
-      phone: adminData.phone.trim(),
+      phone: normalizedPhone,
       role: adminData.role,
       status: adminData.status,
       // Only send password if it's provided (for new admin or password change)
@@ -981,7 +992,7 @@ const handleSaveAdmin = async (e) => {
         name: '',
         email: '',
         password: '',
-        phone: '+254',
+        phone: '07',
         role: 'ADMIN',
         permissions: {
           manageUsers: false,
@@ -1345,7 +1356,7 @@ if (loading) {
               },
               { 
                 label: 'Contact', 
-                val: session.user.phone || '+254 XXX XXX', 
+                val: session.user.phone || '07XXXXXXXX',
                 icon: <Phone size={10} />,
                 color: 'from-green-500/20 to-green-600/10'
               }
@@ -1793,9 +1804,9 @@ if (loading) {
                       type="tel"
                       required
                       value={adminData.phone}
-                      onChange={(e) => setAdminData({ ...adminData, phone: e.target.value })}
+                      onChange={(e) => setAdminData({ ...adminData, phone: normalizeLocalMobilePhone(e.target.value) })}
                       className="w-full px-4 py-3 border-2 border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-white text-base font-bold"
-                      placeholder="+254700000000"
+                      placeholder="07XXXXXXXX"
                     />
                   </div>
 

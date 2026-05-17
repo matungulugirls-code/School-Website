@@ -94,6 +94,15 @@ import { IoSchool } from 'react-icons/io5';
 import { IoDocumentText } from 'react-icons/io5';
 import { IoPeopleCircle, IoNewspaper, IoClose, IoStatsChart } from 'react-icons/io5';
 
+const normalizeLocalMobilePhone = (value = '') => {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (/^07\d{8}$/.test(digits)) return digits;
+  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
+  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  return String(value || '').trim();
+};
+
 // Helper function for form colors
 // Add these functions right after the existing getFormColor function:
 
@@ -845,8 +854,9 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                   <input
                     type="tel"
                     value={formData.parentPhone}
-                    onChange={(e) => setFormData({...formData, parentPhone: e.target.value})}
+                    onChange={(e) => setFormData({...formData, parentPhone: normalizeLocalMobilePhone(e.target.value)})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
+                    placeholder="07XXXXXXXX"
                   />
                 </div>
                 <div className="md:col-span-2">

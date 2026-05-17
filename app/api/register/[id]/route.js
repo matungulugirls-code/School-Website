@@ -2,6 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import { hashPassword, sanitizeUser } from "../../../../libs/auth";
 
+const normalizeLocalMobilePhone = (value = '') => {
+  const digits = String(value || '').replace(/\D/g, '');
+  if (!digits) return null;
+  if (/^07\d{8}$/.test(digits)) return digits;
+  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
+  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  return String(value || '').trim();
+};
+
+const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
+
 // ==================== AUTHENTICATION UTILITIES (Matching your working pattern) ====================
 
 class DeviceTokenManager {
@@ -132,9 +143,9 @@ const validateInput = (name, email, password, role, phone = null, isEditing = fa
     errors.push("Valid email is required");
   }
 
-  // Phone validation for Kenyan format
-  if (phone && !/^\+254[17]\d{8}$/.test(phone)) {
-    errors.push("Phone number must be in format: +2547XXXXXXXX or +2541XXXXXXXX");
+  // Phone validation for local Kenyan mobile format
+  if (phone && !isLocalMobilePhone(normalizeLocalMobilePhone(phone))) {
+    errors.push("Phone number must be in format: 07XXXXXXXX");
   }
 
   // Password validation
@@ -333,7 +344,8 @@ export async function PUT(req, { params }) {
     });
 
     // Validate input (excluding status since it's not in schema)
-    const validationErrors = validateInput(name, email, password, role, phone, true);
+    const normalizedPhone = normalizeLocalMobilePhone(phone || '');
+    const validationErrors = validateInput(name, email, password, role, normalizedPhone, true);
     if (validationErrors.length > 0) {
       return NextResponse.json(
         { 
@@ -349,7 +361,7 @@ export async function PUT(req, { params }) {
     let dataToUpdate = {
       name: name || targetUser.name,
       email: email || targetUser.email,
-      phone: phone || undefined,
+      phone: normalizedPhone || undefined,
     };
 
     // Only update role if user has permission and role is valid
