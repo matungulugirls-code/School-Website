@@ -39,8 +39,17 @@ const filterOptions = [
   { value: 'all', label: 'All Students' },
   { value: 'set', label: 'Password Set' },
   { value: 'not-set', label: 'Not Set' },
+  { value: 'notify-ready', label: 'Ready To Email' },
   { value: 'missing-email', label: 'Missing Email' },
   { value: 'orphan', label: 'Not In Dashboard' },
+];
+
+const formOptions = ['all', 'Form 1', 'Form 2', 'Form 3', 'Form 4'];
+
+const emailOptions = [
+  { value: 'all', label: 'All Emails' },
+  { value: 'with-email', label: 'Has Parent Email' },
+  { value: 'missing-email', label: 'Missing Parent Email' },
 ];
 
 export default function StudentPasswordRequests() {
@@ -55,6 +64,9 @@ export default function StudentPasswordRequests() {
   });
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [formFilter, setFormFilter] = useState('all');
+  const [streamFilter, setStreamFilter] = useState('all');
+  const [emailFilter, setEmailFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAdmissions, setSelectedAdmissions] = useState(new Set());
   const [sending, setSending] = useState(false);
@@ -77,6 +89,9 @@ export default function StudentPasswordRequests() {
       const params = new URLSearchParams({
         scope: 'accounts',
         status: statusFilter,
+        form: formFilter,
+        stream: streamFilter,
+        emailStatus: emailFilter,
       });
       if (searchTerm.trim()) params.set('search', searchTerm.trim());
 
@@ -101,7 +116,12 @@ export default function StudentPasswordRequests() {
 
   useEffect(() => {
     fetchAccounts();
-  }, [statusFilter]);
+  }, [statusFilter, formFilter, streamFilter, emailFilter]);
+
+  const streamOptions = useMemo(() => {
+    const streams = [...new Set(rows.map(row => row.stream).filter(Boolean))].sort();
+    return ['all', ...streams];
+  }, [rows]);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -178,11 +198,11 @@ export default function StudentPasswordRequests() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">
-                Student Portal Security
+                Student Account Records
               </p>
               <h1 className="mt-2 text-3xl font-black tracking-tight">Student Portal Accounts</h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-                Track who has created a portal password, who still needs setup, and send secure parent-email links without exposing passwords.
+                View students who have set portal passwords, students who have not, and send secure setup emails to registered parents.
               </p>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
@@ -228,31 +248,66 @@ export default function StudentPasswordRequests() {
             <h2 className="mt-1 text-xl font-black text-slate-950">Passwords set vs not set</h2>
           </div>
 
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+          <div className="flex flex-col gap-3">
             <form onSubmit={handleSearch} className="relative min-w-0 lg:w-80">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search name, admission, form..."
+                placeholder="Search full name, admission, email..."
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm font-bold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
               />
             </form>
-
-            <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1 sm:grid-cols-5">
-              {filterOptions.map(option => (
-                <button
-                  key={option.value}
-                  onClick={() => setStatusFilter(option.value)}
-                  className={`rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-wider transition ${
-                    statusFilter === option.value ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
           </div>
+        </div>
+
+        <div className="mb-5 grid gap-3 lg:grid-cols-[1.35fr_0.65fr_0.7fr_0.8fr]">
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1 sm:grid-cols-3 xl:grid-cols-6">
+            {filterOptions.map(option => (
+              <button
+                key={option.value}
+                onClick={() => setStatusFilter(option.value)}
+                className={`rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-wider transition ${
+                  statusFilter === option.value ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-950'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <select
+            value={formFilter}
+            onChange={(event) => {
+              setFormFilter(event.target.value);
+              setStreamFilter('all');
+            }}
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          >
+            {formOptions.map(option => (
+              <option key={option} value={option}>{option === 'all' ? 'All Classes' : option}</option>
+            ))}
+          </select>
+
+          <select
+            value={streamFilter}
+            onChange={(event) => setStreamFilter(event.target.value)}
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          >
+            {streamOptions.map(option => (
+              <option key={option} value={option}>{option === 'all' ? 'All Streams' : option}</option>
+            ))}
+          </select>
+
+          <select
+            value={emailFilter}
+            onChange={(event) => setEmailFilter(event.target.value)}
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          >
+            {emailOptions.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
         </div>
 
         {selectedEligibleAdmissions.length > 0 && (

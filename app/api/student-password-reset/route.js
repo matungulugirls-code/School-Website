@@ -118,11 +118,6 @@ const validateStrongPassword = (password = '') => {
   };
 };
 
-const generateTemporaryPassword = () => {
-  const random = crypto.randomBytes(6).toString('base64url');
-  return `Mg-${random}9!`;
-};
-
 const createResetRecord = async ({
   request,
   student,
@@ -254,21 +249,45 @@ const findValidResetByToken = async (token) => {
   });
 };
 
-const buildAccountRows = async ({ search = '', status = 'all' }) => {
-  const where = search
-    ? {
-        OR: [
-          { admissionNumber: { contains: search } },
-          { firstName: { contains: search } },
-          { middleName: { contains: search } },
-          { lastName: { contains: search } },
-          { form: { contains: search } },
-          { stream: { contains: search } },
-          { email: { contains: search } },
-          { parentPhone: { contains: search } }
-        ]
-      }
-    : {};
+const buildAccountRows = async ({ search = '', status = 'all', form = 'all', stream = 'all', emailStatus = 'all' }) => {
+  const where = {};
+
+  if (form && form !== 'all') where.form = form;
+  if (stream && stream !== 'all') where.stream = stream;
+
+  if (search) {
+    const searchTokens = search
+      .split(/\s+/)
+      .map(token => token.trim())
+      .filter(Boolean);
+
+    where.OR = [
+      { admissionNumber: { contains: search } },
+      { firstName: { contains: search } },
+      { middleName: { contains: search } },
+      { lastName: { contains: search } },
+      { form: { contains: search } },
+      { stream: { contains: search } },
+      { email: { contains: search } },
+      { parentPhone: { contains: search } },
+      ...(searchTokens.length > 1
+        ? [{
+            AND: searchTokens.map(token => ({
+              OR: [
+                { firstName: { contains: token } },
+                { middleName: { contains: token } },
+                { lastName: { contains: token } },
+                { admissionNumber: { contains: token } },
+                { email: { contains: token } },
+                { parentPhone: { contains: token } },
+                { form: { contains: token } },
+                { stream: { contains: token } }
+              ]
+            }))
+          }]
+        : [])
+    ];
+  }
 
   const [students, accounts] = await Promise.all([
     prisma.databaseStudent.findMany({
@@ -387,9 +406,13 @@ const buildAccountRows = async ({ search = '', status = 'all' }) => {
   let filteredRows = rows;
   if (status === 'set') filteredRows = rows.filter(row => row.hasPassword);
   if (status === 'not-set') filteredRows = rows.filter(row => !row.hasPassword);
+  if (status === 'notify-ready') filteredRows = rows.filter(row => !row.hasPassword && row.canSendSetupEmail);
   if (status === 'missing-email') filteredRows = rows.filter(row => !row.parentEmail);
   if (status === 'orphan') filteredRows = orphanAccounts;
   if (status === 'all-with-orphans') filteredRows = [...rows, ...orphanAccounts];
+
+  if (emailStatus === 'with-email') filteredRows = filteredRows.filter(row => Boolean(row.parentEmail));
+  if (emailStatus === 'missing-email') filteredRows = filteredRows.filter(row => !row.parentEmail);
 
   return {
     rows: filteredRows,
@@ -660,7 +683,10 @@ export async function GET(request) {
   if (scope === 'accounts') {
     const status = searchParams.get('status') || 'all';
     const search = searchParams.get('search') || '';
-    const accountData = await buildAccountRows({ status, search });
+    const form = searchParams.get('form') || 'all';
+    const stream = searchParams.get('stream') || 'all';
+    const emailStatus = searchParams.get('emailStatus') || 'all';
+    const accountData = await buildAccountRows({ status, search, form, stream, emailStatus });
 
     return NextResponse.json({
       success: true,
@@ -805,52 +831,6 @@ export async function PATCH(request) {
     const requestRecord = await prisma.studentPasswordResetRequest.findUnique({ where: { id } });
     if (!requestRecord) {
       return NextResponse.json({ success: false, error: 'Request not found.' }, { status: 404 });
-    }
-
-    if (action === 'issue-temporary-password') {
-      const tempPassword = generateTemporaryPassword();
-      const passwordHash = await bcrypt.hash(tempPassword, 12);
-      const student = await prisma.databaseStudent.findUnique({
-        where: { admissionNumber: requestRecord.admissionNumber }
-      });
-
-      if (!student || student.status !== 'active') {
-        return NextResponse.json(
-          { success: false, error: 'Student record is not active in the dashboard.' },
-          { status: 403 }
-        );
-      }
-
-      await prisma.studentPortalAccount.upsert({
-        where: { admissionNumber: requestRecord.admissionNumber },
-        update: {
-          passwordHash,
-          ...buildAccountSnapshot(student, requestRecord),
-          passwordSetAt: new Date()
-        },
-        create: {
-          admissionNumber: requestRecord.admissionNumber,
-          passwordHash,
-          ...buildAccountSnapshot(student, requestRecord),
-          passwordSetAt: new Date()
-        }
-      });
-
-      const updatedRequest = await prisma.studentPasswordResetRequest.update({
-        where: { id },
-        data: {
-          status: 'resolved',
-          adminNote: adminNote || `Temporary password issued by ${admin.name}.`,
-          resolvedAt: new Date()
-        }
-      });
-
-      return NextResponse.json({
-        success: true,
-        request: updatedRequest,
-        temporaryPassword: tempPassword,
-        message: 'Temporary password issued. It is shown once; share it only with the verified student/parent.'
-      });
     }
 
     const nextStatus = status || requestRecord.status;
