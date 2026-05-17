@@ -18,7 +18,7 @@ import {
 import {
   IoSchool, IoDocumentText, IoStatsChart,
   IoAnalytics, IoSparkles, IoClose,
-  IoFilter as IoFilterIcon, IoLeaf, IoFlower, IoShield, IoGlobe
+  IoFilter as IoFilterIcon, IoShield, IoGlobe
 } from 'react-icons/io5';
 import {
   CircularProgress,
@@ -29,28 +29,14 @@ import {
 // ==================== MATUNGULU GIRLS HERO HEADER ====================
 function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
   const currentYear = new Date().getFullYear();
-  const foundingYear = 1955;
+  const foundingYear = 1966;
   const yearsOfExcellence = currentYear - foundingYear;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <div className="h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
       {/* Main Header Container */}
-   <div className="relative bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-900 rounded-2xl sm:rounded-3xl shadow-2xl">
-  
-  {/* Decorative Background Elements */}
-  <div className="absolute inset-0 overflow-hidden">
-    <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
-    <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl"></div>
-    
-    {/* Leaf/Flower decorative patterns */}
-    <div className="absolute top-6 right-6 opacity-10">
-      <IoLeaf className="text-5xl text-emerald-300" />
-    </div>
-    <div className="absolute bottom-6 left-6 opacity-10">
-      <IoFlower className="text-5xl text-teal-300" />
-    </div>
-  </div>
+   <div className="bg-slate-950">
 
   {/* Content Container - REDUCED PADDING */}
   <div className="relative z-10 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6">
@@ -59,7 +45,7 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 sm:mb-5">
       <div className="space-y-1.5 sm:space-y-2">
         {/* School Badge - SMALLER */}
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/10 px-2.5 py-1">
           <IoShield className="text-emerald-300 text-xs sm:text-sm" />
           <span className="text-[9px] sm:text-[11px] font-bold text-emerald-100 uppercase tracking-wider">
             National C1 Girls' Boarding School
@@ -88,7 +74,7 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
 
       {/* Student Info Card - COMPACT */}
       {student && (
-        <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/20 shadow-lg">
+        <div className="rounded-2xl border border-white/10 bg-white/10 p-2 shadow-lg sm:p-3">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
               <span className="text-white font-black text-xs sm:text-sm">
@@ -117,25 +103,25 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
 
     {/* Middle Row - Stats Grid - COMPACT */}
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
-      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-2 sm:p-3">
         <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Founded</p>
         <p className="text-white text-base sm:text-lg md:text-xl font-black">{foundingYear}</p>
         <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">{yearsOfExcellence}+ Years</p>
       </div>
       
-      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-2 sm:p-3">
         <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Students</p>
         <p className="text-white text-base sm:text-lg md:text-xl font-black">1,500+</p>
         <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Current Enrollment</p>
       </div>
       
-      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-2 sm:p-3">
         <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Subjects</p>
         <p className="text-white text-base sm:text-lg md:text-xl font-black">12+</p>
         <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Core & Electives</p>
       </div>
       
-      <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/10">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-2 sm:p-3">
         <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Location</p>
         <p className="text-white text-xs sm:text-sm md:text-base font-black">Machakos</p>
         <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Matungulu</p>
@@ -147,9 +133,9 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
       <button
         onClick={onRefresh}
         disabled={isRefreshing}
-        className="flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white font-semibold text-xs sm:text-sm transition-all duration-200 disabled:opacity-50"
+        className="flex items-center justify-center gap-1.5 rounded-2xl bg-white px-3 py-2 text-xs font-black text-slate-950 transition-all duration-200 hover:bg-slate-100 disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
       >
-        <FiRefreshCw className={`text-emerald-300 text-xs sm:text-sm ${isRefreshing ? 'animate-spin' : ''}`} />
+        <FiRefreshCw className={`text-blue-600 text-xs sm:text-sm ${isRefreshing ? 'animate-spin' : ''}`} />
         <span>{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
       </button>
       
@@ -157,7 +143,7 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
         href="https://maps.app.goo.gl/WqjeNfi78asowHx7A"
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white font-semibold text-xs sm:text-sm transition-all duration-200"
+        className="flex items-center justify-center gap-1.5 rounded-2xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-black text-white transition-all duration-200 hover:bg-white/15 sm:px-4 sm:py-2 sm:text-sm"
       >
         <IoGlobe className="text-emerald-300 text-xs sm:text-sm" />
         <span>Map</span>
@@ -181,29 +167,28 @@ function ResultsLoadingSpinner({ message = "Loading academic results...", size =
   const { outer, inner } = sizes[size];
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-emerald-50/30 to-teal-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className="text-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         <div className="relative inline-block">
           <div className="relative">
             <CircularProgress 
               size={outer} 
               thickness={5}
-              className="text-emerald-600"
+              className="text-blue-600"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full" style={{ width: inner, height: inner }}></div>
+              <div className="rounded-full bg-slate-950" style={{ width: inner, height: inner }}></div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-full blur-xl opacity-30"></div>
         </div>
         
         <div className="mt-8 space-y-3">
-          <span className="block text-lg font-semibold text-gray-800">
+          <span className="block text-lg font-black text-slate-950">
             {message}
           </span>
           <div className="flex justify-center space-x-1.5">
             {[0, 1, 2].map(i => (
-              <div key={i} className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+              <div key={i} className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
             ))}
           </div>
         </div>
@@ -824,7 +809,7 @@ export default function ModernResultsView({
   }
 
   return (
-    <div className="space-y-3 sm:space-y-4 md:space-y-6 p-2 sm:p-3 md:p-6">
+    <div className="space-y-6">
       
       {/* MATUNGULU GIRLS HERO HEADER */}
       <MatunguluHeroHeader 
@@ -834,9 +819,9 @@ export default function ModernResultsView({
       />
 
       {/* ZERAKI SECTION */}
-      <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 rounded-2xl border-2 border-emerald-200 p-4 sm:p-6 md:p-8 shadow-lg">
+      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 md:p-8">
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-          <div className="flex-shrink-0 bg-gradient-to-br from-emerald-600 to-teal-700 p-4 rounded-2xl shadow-xl">
+          <div className="flex-shrink-0 rounded-2xl bg-slate-950 p-4 shadow-xl shadow-slate-900/10">
             <IoSchool className="text-white text-4xl md:text-5xl" />
           </div>
           
@@ -851,7 +836,7 @@ export default function ModernResultsView({
             
             <div className="bg-white/70 backdrop-blur-sm rounded-xl p-3 mb-4 inline-block">
               <p className="text-xs sm:text-sm font-medium text-gray-800">
-                <span className="font-bold text-emerald-700">How to log in:</span> Use your school credentials 
+              <span className="font-bold text-blue-700">How to log in:</span> Use your school credentials
                 (admission number and default password). First-time users, click "Forgot Password" to set up your account.
               </p>
             </div>
@@ -859,7 +844,7 @@ export default function ModernResultsView({
             <a
               href="https://zeraki.app"
               onClick={handleZerakiClick}
-              className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-white text-gray-700 font-medium text-sm sm:text-base rounded-full border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 hover:scale-101 active:scale-98 transition-all duration-300 cursor-pointer"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm transition-all duration-300 hover:border-blue-200 hover:bg-slate-100 sm:px-6 sm:py-3 sm:text-base"
             >
               <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
                 <img 
@@ -876,7 +861,7 @@ export default function ModernResultsView({
       </div>
 
       {/* SCHOOL DOCUMENTS SECTION */}
-      <div className="mt-6 pt-6 border-t-2 border-gray-300">
+      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 md:p-8">
         <div className="mb-2 sm:mb-3 md:mb-4">
           <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
             <IoDocumentText className="text-emerald-600 text-lg sm:text-xl" />

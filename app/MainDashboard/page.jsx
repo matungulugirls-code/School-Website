@@ -25,6 +25,7 @@ import {
   FiArrowLeft,
   FiArchive,
   FiMessageSquare,
+  FiKey,
 } from 'react-icons/fi';
 import { 
   IoStatsChart,
@@ -58,6 +59,7 @@ import SchoolDocs from "../components/schooldocuments/page";
 import SMSManager from "../components/sms/page";
 import AchievementsManager from "../components/Achievements/page";
 import SchoolHubManager from '../components/schoolhub/page';
+import StudentPasswordRequests from '../components/studentpasswordrequests/page';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -360,7 +362,7 @@ const LoadingSpinner  = () => {
   
   const schoolName = "MATUNGULU GIRLS' SENIOR";
   const motto = "Committed to Excellence";
-  const established = "EST. 1955 | NATIONAL SCHOOL";
+  const established = "EST. 1966 | NATIONAL SCHOOL";
   const tagline = "Empowering Young Women • Shaping Future Leaders";
 
 const loadingMessages = [
@@ -1111,6 +1113,8 @@ const handleLogout = () => {
         return <EmailManager />;
       case 'student':
         return <Student />;  
+      case 'student-password-requests':
+        return <StudentPasswordRequests />;
       case 'fees':
         return <Fees />;
       case 'school-hub':
@@ -1181,6 +1185,12 @@ const handleLogout = () => {
       label: 'Student Records',
       icon: FiInfo,
       badge: 'cyan'
+    },
+    {
+      id: 'student-password-requests',
+      label: 'Password Requests',
+      icon: FiKey,
+      badge: 'red'
     },
     {
       id: 'fees',

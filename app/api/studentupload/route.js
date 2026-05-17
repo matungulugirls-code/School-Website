@@ -1931,10 +1931,6 @@ export async function DELETE(request) {
         }
 
         if (hardDelete) {
-          await tx.studentPortalAccount.deleteMany({
-            where: { admissionNumber: student.admissionNumber }
-          });
-
           // Hard delete student
           await tx.databaseStudent.delete({
             where: { id: studentId }

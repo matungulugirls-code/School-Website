@@ -171,14 +171,14 @@ const downloadMultipleFiles = async (files) => {
 
 function LoadingSpinner() {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-white to-teal-50/30 flex items-center justify-center z-50">
-      <div className="text-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         <div className="relative">
           <div className="relative">
             <CircularProgress 
               size={80} 
               thickness={4}
-              className="text-teal-600"
+              className="text-blue-600"
               sx={{
                 '& .MuiCircularProgress-circle': {
                   strokeLinecap: 'round',
@@ -186,12 +186,11 @@ function LoadingSpinner() {
               }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-teal-500 to-emerald-600 rounded-full w-12 h-12 flex items-center justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950">
                 <IoDocumentsOutline className="text-white text-xl" />
               </div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-full blur-xl opacity-30"></div>
         </div>
         
         <div className="mt-8 space-y-3">
@@ -199,7 +198,7 @@ function LoadingSpinner() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xl font-bold text-gray-800"
+            className="text-xl font-black text-slate-950"
           >
             Loading Resources
           </motion.div>
@@ -207,7 +206,7 @@ function LoadingSpinner() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-gray-600"
+            className="text-sm font-medium text-slate-600"
           >
             Fetching your latest assignments...
           </motion.div>
@@ -215,7 +214,7 @@ function LoadingSpinner() {
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
             transition={{ delay: 0.6, duration: 1.5 }}
-            className="h-1 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full"
+            className="h-1 rounded-full bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400"
           ></motion.div>
         </div>
       </div>
@@ -228,12 +227,12 @@ function StatsCard({ title, value, icon: Icon, color, trend, unit = '', descript
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white rounded-2xl border border-gray-100 shadow-lg overflow-hidden ${
+      className={`overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm ${
         compact ? 'p-4' : 'p-5 sm:p-6'
       }`}
     >
       <div className="flex items-center justify-between mb-3">
-        <div className={`p-2 rounded-xl bg-gradient-to-br ${color} shadow-md`}>
+        <div className="rounded-2xl bg-slate-950 p-2 shadow-md shadow-slate-900/10">
           <Icon className={`text-white ${compact ? 'text-lg' : 'text-xl'}`} />
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${
@@ -248,13 +247,13 @@ function StatsCard({ title, value, icon: Icon, color, trend, unit = '', descript
         </div>
       </div>
       <div className="space-y-1">
-        <div className={`font-bold text-gray-900 ${compact ? 'text-2xl' : 'text-3xl'}`}>
+        <div className={`font-black text-slate-950 ${compact ? 'text-2xl' : 'text-3xl'}`}>
           {value}
           {unit && <span className="text-lg text-gray-600 ml-1">{unit}</span>}
         </div>
-        <div className="text-sm font-bold text-gray-700 truncate">{title}</div>
+        <div className="truncate text-sm font-bold text-slate-700">{title}</div>
         {description && (
-          <div className="text-xs text-gray-500 truncate">{description}</div>
+          <div className="truncate text-xs text-slate-500">{description}</div>
         )}
       </div>
     </motion.div>
@@ -1068,29 +1067,27 @@ export default function ModernResourcesAssignmentsView({
   const filteredCount = currentItems.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50/30 p-2 sm:p-4 md:p-6">
+    <div className="space-y-6">
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-900 rounded-3xl p-4 sm:p-6 md:p-8 text-white overflow-hidden mb-4 sm:mb-6 md:mb-8"
+        className="overflow-hidden rounded-3xl border border-slate-200 bg-white text-white shadow-sm"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/20 rounded-full -ml-24 -mb-24 blur-3xl"></div>
-        
-        <div className="relative z-10">
+        <div className="h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
+        <div className="bg-slate-950 p-4 sm:p-6 md:p-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
             <div className="space-y-2 sm:space-y-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-2xl">
-                  <IoDocumentsOutline className="text-xl sm:text-2xl text-yellow-300" />
+                <div className="rounded-2xl bg-white/10 p-2 sm:p-3">
+                  <IoDocumentsOutline className="text-xl text-emerald-300 sm:text-2xl" />
                 </div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Learning Hub</h1>
+                <h1 className="text-xl font-black tracking-tight sm:text-2xl md:text-3xl">Learning Hub</h1>
               </div>
-              <p className="text-teal-100 text-sm sm:text-base max-w-2xl">
-                Access assignments, resources, and study materials all in one place
+              <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
+                Assignments, resources, and study materials for your current class.
                 {student && (
-                  <span className="ml-2 text-yellow-300 font-bold">
+                  <span className="ml-2 font-bold text-emerald-300">
                     ({student.form} {student.stream})
                   </span>
                 )}
@@ -1100,7 +1097,7 @@ export default function ModernResourcesAssignmentsView({
             <div className="flex gap-2 sm:gap-3">
               <button
                 onClick={activeTab === 'assignments' ? fetchAssignments : fetchResources}
-                className="px-4 py-2 sm:px-5 sm:py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2"
+                className="flex items-center gap-2 rounded-2xl bg-white px-4 py-2 text-xs font-black text-slate-950 transition hover:bg-slate-100 sm:px-5 sm:py-3 sm:text-sm"
               >
                 <span>Refresh</span>
               </button>
@@ -1110,7 +1107,7 @@ export default function ModernResourcesAssignmentsView({
       </motion.div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <StatsCard
           title="Total Assignments"
           value={stats.totalAssignments}
@@ -1150,17 +1147,17 @@ export default function ModernResourcesAssignmentsView({
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 shadow-xl p-3 sm:p-4 md:p-6 mb-4 sm:mb-6">
+      <div className="rounded-3xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 md:p-6">
         {/* Tabs & Controls */}
         <div className="space-y-4 sm:space-y-6">
           {/* Tabs */}
-          <div className="flex bg-gradient-to-r from-gray-50 to-white/50 rounded-2xl p-1 border border-gray-200 overflow-hidden">
+          <div className="flex overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 p-1">
             <button
               onClick={() => setActiveTab('assignments')}
               className={`flex-1 py-3 sm:py-4 px-2 rounded-xl flex items-center justify-center gap-2 sm:gap-3 ${
                 activeTab === 'assignments'
-                  ? 'bg-gradient-to-r from-teal-500 to-emerald-600 shadow-lg shadow-teal-500/20 text-white'
-                  : 'text-gray-600'
+                  ? 'bg-white text-slate-950 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-950'
               }`}
             >
               <div className="text-left">
@@ -1175,8 +1172,8 @@ export default function ModernResourcesAssignmentsView({
               onClick={() => setActiveTab('resources')}
               className={`flex-1 py-3 sm:py-4 px-2 rounded-xl flex items-center justify-center gap-2 sm:gap-3 ${
                 activeTab === 'resources'
-                  ? 'bg-gradient-to-r from-green-500 to-violet-600 shadow-lg shadow-green-500/20 text-white'
-                  : 'text-gray-600'
+                  ? 'bg-white text-slate-950 shadow-sm'
+                  : 'text-slate-600 hover:text-slate-950'
               }`}
             >
               <div className="text-left">

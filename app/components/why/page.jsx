@@ -2139,7 +2139,7 @@ const getSchoolStats = () => {
       {/* Modal Footer */}
       <div className="p-3 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
         <p className="text-[10px] sm:text-xs text-gray-500 text-center italic">
-          Matungulu Girls Senior School — Celebrating Excellence Since 1955
+          Matungulu Girls Senior School — Celebrating Excellence Since 1966
         </p>
       </div>
     </div>

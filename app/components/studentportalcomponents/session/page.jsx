@@ -86,29 +86,28 @@ const DEFAULT_SESSIONS = [
 // ==================== LOADING SPINNER ====================
 function LoadingSpinner({ message = "Loading content..." }) {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-green-50/30 to-teal-50/20 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className="text-center">
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         <div className="relative inline-block">
           <div className="relative">
             <CircularProgress 
               size={64} 
               thickness={5}
-              className="text-green-600"
+              className="text-blue-600"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-gradient-to-r from-green-500 to-indigo-600 rounded-full w-8 h-8"></div>
+              <div className="h-8 w-8 rounded-full bg-slate-950"></div>
             </div>
           </div>
-          <div className="absolute -inset-6 bg-gradient-to-r from-green-100 to-indigo-100 rounded-full blur-xl opacity-30"></div>
         </div>
         
         <div className="mt-8 space-y-3">
-          <span className="block text-lg font-semibold text-gray-800">
+          <span className="block text-lg font-black text-slate-950">
             {message}
           </span>
           <div className="flex justify-center space-x-1.5">
             {[0, 1, 2].map(i => (
-              <div key={i} className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <div key={i} className="h-2 w-2 animate-pulse rounded-full bg-blue-500"></div>
             ))}
           </div>
         </div>
@@ -1093,8 +1092,6 @@ function EmergencyModal({ student, onClose, onSubmit }) {
 // ==================== MODERN HEADER ====================
 function ModernGuidanceHeader({ 
   student, 
-  onMenuToggle,
-  isMenuOpen,
   activeTab,
   setActiveTab,
   onBookEmergency
@@ -1107,39 +1104,6 @@ function ModernGuidanceHeader({
       .map(part => part.charAt(0).toUpperCase())
       .slice(0, 2)
       .join('');
-  };
-
-  const getGradientColor = (name) => {
-    const char = name?.trim().charAt(0).toUpperCase() || 'S';
-    const gradients = {
-      A: "bg-gradient-to-r from-red-500 to-slate-600",
-      B: "bg-gradient-to-r from-green-500 to-teal-600",
-      C: "bg-gradient-to-r from-green-500 to-emerald-600",
-      D: "bg-gradient-to-r from-teal-500 to-slate-600",
-      E: "bg-gradient-to-r from-emerald-500 to-teal-600",
-      F: "bg-gradient-to-r from-slate-500 to-rose-600",
-      G: "bg-gradient-to-r from-orange-500 to-amber-600",
-      H: "bg-gradient-to-r from-indigo-500 to-violet-600",
-      I: "bg-gradient-to-r from-teal-500 to-green-600",
-      J: "bg-gradient-to-r from-rose-500 to-red-600",
-      K: "bg-gradient-to-r from-amber-500 to-yellow-600",
-      L: "bg-gradient-to-r from-violet-500 to-teal-600",
-      M: "bg-gradient-to-r from-lime-500 to-green-600",
-      N: "bg-gradient-to-r from-sky-500 to-green-600",
-      O: "bg-gradient-to-r from-fuchsia-500 to-teal-600",
-      P: "bg-gradient-to-r from-teal-500 to-emerald-600",
-      Q: "bg-gradient-to-r from-slate-600 to-gray-700",
-      R: "bg-gradient-to-r from-red-400 to-slate-500",
-      S: "bg-gradient-to-r from-green-400 to-teal-500",
-      T: "bg-gradient-to-r from-emerald-400 to-green-500",
-      U: "bg-gradient-to-r from-indigo-400 to-teal-500",
-      V: "bg-gradient-to-r from-teal-400 to-slate-500",
-      W: "bg-gradient-to-r from-orange-400 to-amber-500",
-      X: "bg-gradient-to-r from-gray-500 to-slate-600",
-      Y: "bg-gradient-to-r from-yellow-400 to-amber-500",
-      Z: "bg-gradient-to-r from-zinc-700 to-gray-900",
-    };
-    return gradients[char] || "bg-gradient-to-r from-green-500 to-teal-600";
   };
 
   const getTabIcon = (tab) => {
@@ -1165,7 +1129,8 @@ function ModernGuidanceHeader({
   return (
     <>
       <style jsx global>{mobileStyles}</style>
-      <header className="bg-gradient-to-r from-white via-gray-50 to-green-50 border-b border-gray-200/50 shadow-xl sticky top-0 z-30 backdrop-blur-sm bg-white/80">
+      <header className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
         <div className="container mx-auto px-3 sm:px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             
@@ -1176,45 +1141,45 @@ function ModernGuidanceHeader({
               
               {/* Current Tab Title (Mobile) */}
               <div className="lg:hidden flex items-center gap-2 md:gap-3">
-                <div className={`p-2 ${getTabColor(activeTab)} bg-opacity-10 rounded-xl shadow-sm`}>
-                  <div className={`p-1 rounded-lg ${getTabColor(activeTab)}`}>
+                <div className="rounded-xl bg-slate-100 p-2 shadow-sm">
+                  <div className="rounded-lg bg-slate-950 p-1">
                     {getTabIcon(activeTab)}
                   </div>
                 </div>
                 <div className="max-w-[120px] md:max-w-none">
-                  <h1 className="text-sm md:text-lg font-bold text-gray-900 truncate">
+                  <h1 className="truncate text-sm font-black text-slate-950 md:text-lg">
                     {activeTab === 'events' && 'School Events'}
                     {activeTab === 'guidance' && 'Guidance'}
                     {activeTab === 'news' && 'School News'}
                     {activeTab === 'teams' && 'Teams'}
                   </h1>
-                  <p className="text-xs text-gray-500 hidden md:block">Stay Updated</p>
+                  <p className="hidden text-xs text-slate-500 md:block">Stay Updated</p>
                 </div>
               </div>
 
               {/* Desktop Logo/Title */}
               <div className="hidden lg:flex items-center gap-3">
-                <div className="p-3 bg-gradient-to-r from-green-500 to-teal-600 rounded-xl">
+                <div className="rounded-2xl bg-slate-950 p-3">
                   <FaCalendarCheck className="text-white text-xl" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">Guidance & Events Portal</h1>
-                  <p className="text-sm text-gray-600">Stay connected with school activities</p>
+                  <h1 className="text-xl font-black text-slate-950">Guidance & Events Portal</h1>
+                  <p className="text-sm text-slate-600">School activities, counseling, news, and teams</p>
                 </div>
               </div>
             </div>
 
             {/* Tab Navigation (Desktop) */}
             <div className="hidden lg:flex flex-1 justify-center">
-              <div className="flex items-center gap-2 bg-gray-100 rounded-2xl p-1.5">
+              <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-100 p-1.5">
                 {['events', 'guidance', 'news', 'teams'].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center gap-2 ${
                       activeTab === tab 
-                        ? 'bg-white text-gray-900 shadow-lg' 
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                        ? 'bg-white text-slate-950 shadow-sm'
+                        : 'text-slate-600 hover:bg-slate-200 hover:text-slate-950'
                     }`}
                   >
                     {getTabIcon(tab)}
@@ -1232,7 +1197,7 @@ function ModernGuidanceHeader({
               {/* Emergency Button (Mobile) */}
               <button
                 onClick={onBookEmergency}
-                className="lg:hidden p-2.5 md:p-3 rounded-xl bg-gradient-to-r from-red-100 to-slate-200 shadow-sm hover:shadow-md transition-all mobile-touch-target"
+                className="lg:hidden p-2.5 md:p-3 rounded-xl bg-red-50 text-red-600 shadow-sm hover:bg-red-100 hover:shadow-md transition-all mobile-touch-target"
                 title="Emergency"
               >
                 <FaExclamationCircle className="text-red-600 text-base md:text-lg" />
@@ -1240,22 +1205,19 @@ function ModernGuidanceHeader({
 
               {/* Student Avatar */}
               {student && (
-                <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-3 border-l border-gray-200/50">
+                <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-3 border-l border-slate-200">
                   <div className="relative group">
-                    <div
-                      className={`absolute inset-0 ${getGradientColor(student.fullName)} rounded-full blur opacity-70 group-hover:opacity-100 transition-opacity`}
-                    ></div>
                     <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-white text-xs md:text-sm bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-white shadow-lg">
                       {getInitials(student.fullName)}
                     </div>
                   </div>
 
                   <div className="hidden xl:flex flex-col">
-                    <p className="text-sm font-bold text-gray-900">
+                    <p className="text-sm font-black text-slate-950">
                       {student.fullName}
                     </p>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-500">
+                      <span className="text-xs font-medium text-slate-500">
                          {student.form} • {student.stream}
                       </span>
                       <span className="w-2.5 h-2.5 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full animate-pulse"></span>
@@ -1268,7 +1230,7 @@ function ModernGuidanceHeader({
         </div>
 
         {/* Tab Navigation (Mobile) */}
-        <div className="lg:hidden border-t border-gray-200/50">
+        <div className="border-t border-slate-200 lg:hidden">
           <div className="container mx-auto px-2 md:px-4 py-2 md:py-3">
             <div className="flex items-center justify-between">
               {['events', 'guidance', 'news', 'teams'].map((tab) => (
@@ -1277,8 +1239,8 @@ function ModernGuidanceHeader({
                   onClick={() => setActiveTab(tab)}
                   className={`flex flex-col items-center gap-0.5 md:gap-1 px-2 md:px-4 py-1.5 md:py-2 rounded-lg transition-all mobile-touch-target mobile-full-width ${
                     activeTab === tab 
-                      ? 'bg-green-50 text-green-600' 
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-white text-slate-950 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-950'
                   }`}
                 >
                   <div className="text-base md:text-lg">
@@ -1366,22 +1328,22 @@ function StatisticsCards({ events, guidance, news, teams, activeTab }) {
   };
 
   return (
-  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+  <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-2 md:mb-8 md:grid-cols-3 md:gap-4">
   {getActiveStats().map((stat, index) => (
-    <div key={index} className="relative bg-white rounded-[24px] md:rounded-[32px] p-4 md:p-6 border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex flex-col">
+    <div key={index} className="relative flex flex-col rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-6">
       
       {/* Header with Icon and Badge */}
       <div className="flex items-start justify-between mb-4 md:mb-6">
-        <div className={`p-2.5 md:p-3.5 rounded-xl md:rounded-2xl bg-gradient-to-br ${stat.color} shadow-sm`}>
+        <div className="rounded-2xl bg-slate-950 p-2.5 shadow-sm md:p-3.5">
           <div className="text-white text-lg md:text-2xl">
             {stat.icon}
           </div>
         </div>
         
         <span className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider ${
-          index === 0 ? 'bg-green-50 text-green-600 border border-green-200' :
+          index === 0 ? 'bg-blue-50 text-blue-600 border border-blue-200' :
           index === 1 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
-          'bg-teal-50 text-teal-600 border border-teal-200'
+          'bg-amber-50 text-amber-600 border border-amber-200'
         }`}>
           {index === 0 ? 'All' : index === 1 ? 'Active' : 'Visual'}
         </span>
@@ -1404,12 +1366,6 @@ function StatisticsCards({ events, guidance, news, teams, activeTab }) {
         )}
       </div>
       
-      {/* Decorative Element */}
-      <div className={`absolute -bottom-2 -right-2 w-12 h-12 md:w-16 md:h-16 opacity-[0.03] rounded-full bg-gradient-to-br ${
-        index === 0 ? 'from-green-500 to-teal-500' :
-        index === 1 ? 'from-emerald-500 to-green-500' :
-        'from-teal-500 to-slate-500'
-      } hidden md:block`} />
     </div>
   ))}
 </div>
@@ -1889,7 +1845,6 @@ export default function GuidanceEventsView() {
   const [news, setNews] = useState([]);
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [error, setError] = useState(null);
   
   // New state for modals
@@ -2083,9 +2038,6 @@ const fetchAllData = useCallback(async () => {
     fetchAllData();
   }, [fetchAllData]);
 
-  // Toggle menu
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
   // Handle view details
   const handleViewDetails = (item) => {
     setSelectedItem(item);
@@ -2121,40 +2073,38 @@ const fetchAllData = useCallback(async () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50/30 to-teal-50/30">
+    <div className="space-y-6">
       <style jsx global>{mobileStyles}</style>
       
       {/* Header */}
       <ModernGuidanceHeader
         student={student}
-        onMenuToggle={toggleMenu}
-        isMenuOpen={isMenuOpen}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onBookEmergency={handleBookEmergency}
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 md:py-6 max-w-7xl">
+      <main className="space-y-6">
         {/* Welcome Banner */}
-        <div className="mb-6 md:mb-8">
-          <div className="relative overflow-hidden rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl bg-gradient-to-r from-green-600 via-teal-600 to-slate-600 mobile-scroll-hide">
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/30"></div>
-            <div className="relative p-4 md:p-6 lg:p-8 text-white">
+        <div>
+          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm mobile-scroll-hide">
+            <div className="h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
+            <div className="bg-slate-950 p-4 text-white md:p-6 lg:p-8">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-                <div className="p-3 md:p-4 bg-white/20 rounded-xl md:rounded-2xl backdrop-blur-sm w-fit">
+                <div className="w-fit rounded-2xl bg-white/10 p-3 md:p-4">
                   {activeTab === 'events' && <FiCalendar className="text-xl md:text-2xl" />}
                   {activeTab === 'guidance' && <FiMessageSquare className="text-xl md:text-2xl" />}
                   {activeTab === 'news' && <FiBookOpen className="text-xl md:text-2xl" />}
                   {activeTab === 'teams' && <FiUsers className="text-xl md:text-2xl" />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold mb-1 md:mb-2">
+                  <h1 className="mb-1 text-lg font-black md:mb-2 md:text-xl lg:text-2xl xl:text-3xl">
                     {activeTab === 'events' && 'School Events & Activities'}
                     {activeTab === 'guidance' && 'Guidance & Counseling'}
                     {activeTab === 'news' && 'School News & Updates'}
                     {activeTab === 'teams' && 'Guidance & Counseling Team'}
                   </h1>
-                  <p className="text-green-100 text-sm md:text-base lg:text-lg mobile-text-ellipsis">
+                  <p className="text-sm text-slate-300 mobile-text-ellipsis md:text-base lg:text-lg">
                     {activeTab === 'events' && 'Stay informed about upcoming events, competitions, and school activities'}
                     {activeTab === 'guidance' && 'Access counseling sessions, career guidance, and support services'}
                     {activeTab === 'news' && 'Latest announcements, achievements, and important updates from school'}
@@ -2164,16 +2114,16 @@ const fetchAllData = useCallback(async () => {
               </div>
               
               <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-4 md:mt-6">
-                <span className="inline-flex items-center gap-1 md:gap-2 bg-white/20 px-3 md:px-4 py-1.5 md:py-2 rounded-full backdrop-blur-sm text-xs md:text-sm font-bold">
-                  <HiSparkles className="text-yellow-300 text-sm md:text-base" />
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold md:gap-2 md:px-4 md:py-2 md:text-sm">
+                  <HiSparkles className="text-emerald-300 text-sm md:text-base" />
                   {activeTab === 'events' && `Active Events: ${events.length}`}
                   {activeTab === 'guidance' && `Available Sessions: ${guidance.length}`}
                   {activeTab === 'news' && `Recent Updates: ${news.length}`}
                   {activeTab === 'teams' && `Team Members: ${teams.length}`}
                 </span>
                 {student && (
-                  <span className="inline-flex items-center gap-1 md:gap-2 bg-white/20 px-3 md:px-4 py-1.5 md:py-2 rounded-full backdrop-blur-sm text-xs md:text-sm font-bold">
-                    <FaUserFriends className="text-green-200 text-sm md:text-base" />
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold md:gap-2 md:px-4 md:py-2 md:text-sm">
+                    <FaUserFriends className="text-emerald-300 text-sm md:text-base" />
                     Form {student.form} {student.stream}
                   </span>
                 )}
@@ -2195,7 +2145,7 @@ const fetchAllData = useCallback(async () => {
         <div className="mb-6 md:mb-8 flex justify-end">
           <button
             onClick={handleBookEmergency}
-            className="hidden md:flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-red-500 to-slate-600 text-white rounded-xl font-bold text-sm hover:shadow-lg transition-all mobile-touch-target"
+            className="hidden md:flex items-center gap-2 rounded-2xl bg-red-600 px-4 py-2 text-sm font-black text-white transition-all hover:bg-red-700 hover:shadow-lg md:px-6 md:py-3 mobile-touch-target"
           >
             <FaExclamationCircle />
             Emergency Support
@@ -2204,12 +2154,12 @@ const fetchAllData = useCallback(async () => {
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 md:mb-6 p-3 md:p-4 bg-gradient-to-r from-red-50 to-red-100 border border-red-200 md:border-2 rounded-xl md:rounded-2xl">
+          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-3 md:mb-6 md:p-4">
             <div className="flex items-center gap-2 md:gap-3">
               <FaExclamationCircle className="text-red-500 text-lg md:text-xl" />
               <div className="flex-1 min-w-0">
                 <p className="text-red-700 font-bold text-sm md:text-base">{error}</p>
-                <p className="text-red-600 text-xs md:text-sm">Using sample data for demonstration.</p>
+                <p className="text-red-600 text-xs md:text-sm">Showing available fallback content.</p>
               </div>
             </div>
           </div>
@@ -2219,14 +2169,14 @@ const fetchAllData = useCallback(async () => {
         {activeTab === 'teams' ? (
           <TeamsSection teamMembers={teams} />
         ) : (
-          <div className="mb-8 md:mb-12">
+          <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
             <div className="flex items-center justify-between mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 truncate">
+              <h2 className="truncate text-lg font-black text-slate-950 md:text-xl lg:text-2xl">
                 {activeTab === 'events' && 'Upcoming Events'}
                 {activeTab === 'guidance' && 'Available Sessions'}
                 {activeTab === 'news' && 'Latest News'}
               </h2>
-              <span className="px-2 md:px-3 py-1 md:py-1.5 bg-gradient-to-r from-green-100 to-green-200 text-green-800 text-xs md:text-sm font-bold rounded-full">
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-black text-slate-700 md:px-3 md:py-1.5 md:text-sm">
                 {activeTab === 'events' && `${events.length} Events`}
                 {activeTab === 'guidance' && `${guidance.length} Sessions`}
                 {activeTab === 'news' && `${news.length} News`}
@@ -2238,14 +2188,14 @@ const fetchAllData = useCallback(async () => {
               (activeTab === 'guidance' && guidance.length === 0) ||
               (activeTab === 'news' && news.length === 0)
             ) ? (
-              <div className="bg-white rounded-xl md:rounded-2xl border border-gray-300 md:border-2 p-6 md:p-8 lg:p-12 text-center">
-                <div className="text-gray-300 text-4xl md:text-5xl mx-auto mb-3 md:mb-4">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center md:p-8 lg:p-12">
+                <div className="mx-auto mb-3 text-4xl text-slate-300 md:mb-4 md:text-5xl">
                   {activeTab === 'events' && <FiCalendar />}
                   {activeTab === 'guidance' && <FiMessageSquare />}
                   {activeTab === 'news' && <FiBookOpen />}
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-1 md:mb-2">No items found</h3>
-                <p className="text-gray-600 text-sm md:text-base mb-3 md:mb-4">
+                <h3 className="mb-1 text-lg font-black text-slate-800 md:mb-2 md:text-xl">No items found</h3>
+                <p className="mb-3 text-sm text-slate-600 md:mb-4 md:text-base">
                   No items available at the moment
                 </p>
               </div>
@@ -2266,12 +2216,12 @@ const fetchAllData = useCallback(async () => {
         )}
 
         {/* Quick Links/Resources */}
-        <div className="mt-8 md:mt-12">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8 text-white shadow-lg md:shadow-2xl mobile-scroll-hide">
+        <div>
+          <div className="rounded-3xl border border-slate-200 bg-slate-950 p-4 text-white shadow-sm md:p-6 lg:p-8 mobile-scroll-hide">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6 md:mb-8">
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Need Assistance?</h3>
-                <p className="text-gray-300 text-sm md:text-base">
+                <h3 className="mb-2 text-lg font-black md:mb-3 md:text-xl">Need Assistance?</h3>
+                <p className="text-sm text-slate-300 md:text-base">
                   Our guidance counselors and support staff are here to help with any concerns.
                 </p>
               </div>
@@ -2279,22 +2229,22 @@ const fetchAllData = useCallback(async () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-              <div className="bg-white/10 p-3 md:p-5 rounded-lg md:rounded-xl backdrop-blur-sm">
-                <h4 className="font-bold mb-2 md:mb-3 flex items-center gap-1 md:gap-2 text-sm md:text-base">
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-3 md:p-5">
+                <h4 className="mb-2 flex items-center gap-1 text-sm font-black md:mb-3 md:gap-2 md:text-base">
                   <FiMessageSquare className="text-sm md:text-base" /> Guidance Office
                 </h4>
                 <p className="text-gray-300 text-xs md:text-sm">Room 12, Admin Block</p>
                 <p className="text-gray-300 text-xs md:text-sm">Mon-Fri: 8:00 AM - 4:00 PM</p>
               </div>
-              <div className="bg-white/10 p-3 md:p-5 rounded-lg md:rounded-xl backdrop-blur-sm">
-                <h4 className="font-bold mb-2 md:mb-3 flex items-center gap-1 md:gap-2 text-sm md:text-base">
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-3 md:p-5">
+                <h4 className="mb-2 flex items-center gap-1 text-sm font-black md:mb-3 md:gap-2 md:text-base">
                   <FiBell className="text-sm md:text-base" /> Contact
                 </h4>
                 <p className="text-gray-300 text-xs md:text-sm">guidance@school.edu</p>
                 <p className="text-gray-300 text-xs md:text-sm">(123) 456-7890</p>
               </div>
-              <div className="bg-white/10 p-3 md:p-5 rounded-lg md:rounded-xl backdrop-blur-sm">
-                <h4 className="font-bold mb-2 md:mb-3 flex items-center gap-1 md:gap-2 text-sm md:text-base">
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-3 md:p-5">
+                <h4 className="mb-2 flex items-center gap-1 text-sm font-black md:mb-3 md:gap-2 md:text-base">
                   <FiAlertCircle className="text-sm md:text-base" /> Emergency
                 </h4>
                 <p className="text-gray-300 text-xs md:text-sm">24/7 Student Support</p>
@@ -2306,8 +2256,8 @@ const fetchAllData = useCallback(async () => {
       </main>
 
       {/* Footer Note */}
-      <footer className="mt-6 md:mt-12 py-4 md:py-6 border-t border-gray-200">
-        <div className="container mx-auto px-3 sm:px-4 text-center text-gray-600 text-xs md:text-sm">
+      <footer className="rounded-3xl border border-slate-200 bg-white px-3 py-4 text-center text-xs text-slate-600 md:py-6 md:text-sm">
+        <div>
           <p>© {new Date().getFullYear()} School Guidance & Events Portal. All rights reserved.</p>
           <p className="mt-1">Stay connected with school activities and support services.</p>
         </div>

@@ -141,7 +141,7 @@ const CONTACT_INFO = [
 
 // Achievements specific to Matungulu Girls
 const ACHIEVEMENTS = [
-  { value: 78, label: 'Years of Excellence', icon: FiAward },
+  { value: 60, label: 'Years of Excellence', icon: FiAward },
   { value: 90, label: 'KCSE Pass Rate', icon: FiTrendingUp },
   { value: 1200, label: 'Students Enrolled', icon: FiUsers },
   { value: 45, label: 'Qualified Teachers', icon: FaChalkboardTeacher },
@@ -198,7 +198,7 @@ const BrandSection = () => (
           Matungulu Girls
         </h3>
         <p className="text-emerald-200/80 text-sm">Senior School</p>
-        <p className="text-white/60 text-xs mt-1">Est. 1955</p>
+        <p className="text-white/60 text-xs mt-1">Est. 1966</p>
       </div>
     </div>
     
@@ -216,7 +216,7 @@ const BrandSection = () => (
     <p className="text-gray-200 text-sm leading-relaxed">
       A  National  girls' school in Matungulu, Machakos County, dedicated to 
       empowering young women through quality education, leadership development, and 
-      character formation since 1955. <span className="text-emerald-300 font-semibold">"Committed to Excellence"</span>
+      character formation since 1966. <span className="text-emerald-300 font-semibold">"Committed to Excellence"</span>
     </p>
   </div>
 );

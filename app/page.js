@@ -96,7 +96,7 @@ const MatunguluGirlsLoadingScreen = () => {
   
   const schoolName = "MATUNGULU GIRLS' SENIOR";
   const motto = "Committed to Excellence";
-  const established = "EST. 1955 | NATIONAL SCHOOL";
+  const established = "EST. 1966 | NATIONAL SCHOOL";
   const tagline = "Empowering Young Women • Shaping Future Leaders";
 
   const loadingMessages = [
@@ -402,7 +402,7 @@ export default function ModernHero() {
       'https://twitter.com/matungulugirls',
       'https://instagram.com/matungulugirls',
     ],
-    foundingDate: '1955',
+    foundingDate: '1966',
     numberOfStudents: '1200',
     hasOfferCatalog: {
       '@type': 'OfferCatalog',

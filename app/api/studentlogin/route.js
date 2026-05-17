@@ -65,33 +65,66 @@ const validateStrongPassword = (password = '') => {
   };
 };
 
-const buildFullName = (student) =>
-  [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+const buildFullName = (student) => {
+  const fullName = [student?.firstName, student?.middleName, student?.lastName]
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-const sanitizeStudent = (student, account = null) => ({
-  id: student.id,
-  admissionNumber: student.admissionNumber,
-  firstName: student.firstName,
-  lastName: student.lastName,
-  middleName: student.middleName,
-  fullName: buildFullName(student),
-  form: student.form,
-  stream: student.stream,
-  email: student.email,
-  gender: student.gender,
-  dateOfBirth: student.dateOfBirth,
-  parentPhone: student.parentPhone,
-  address: student.address,
-  hasPortalPassword: Boolean(account?.passwordHash)
+  return fullName || student?.fullName || '';
+};
+
+const buildAccountSnapshot = (student) => ({
+  firstName: student.firstName || null,
+  middleName: student.middleName || null,
+  lastName: student.lastName || null,
+  fullName: buildFullName(student) || null,
+  form: student.form || null,
+  stream: student.stream || null,
+  email: student.email || null,
+  parentPhone: student.parentPhone || null,
+  status: 'active'
 });
+
+const buildPortalProfile = (student = null, account = null) => {
+  const source = student || account;
+
+  if (!source) return null;
+
+  return {
+    id: student?.id || account?.id,
+    studentRecordId: student?.id || null,
+    portalAccountId: account?.id || null,
+    admissionNumber: source.admissionNumber,
+    firstName: source.firstName || null,
+    lastName: source.lastName || null,
+    middleName: source.middleName || null,
+    fullName: buildFullName(source) || source.fullName || source.admissionNumber,
+    form: source.form || null,
+    stream: source.stream || null,
+    email: source.email || null,
+    gender: student?.gender || null,
+    dateOfBirth: student?.dateOfBirth || null,
+    parentPhone: source.parentPhone || null,
+    address: student?.address || null,
+    status: student?.status || account?.status || 'active',
+    fromPortalAccount: !student,
+    hasPortalPassword: Boolean(account?.passwordHash)
+  };
+};
+
+const sanitizeStudent = (student, account = null) => buildPortalProfile(student, account);
 
 // Generate student JWT token
 const generateStudentToken = (student) => {
   return jwt.sign(
     {
       studentId: student.id,
+      studentRecordId: student.studentRecordId || null,
+      portalAccountId: student.portalAccountId || null,
       admissionNumber: student.admissionNumber,
-      name: buildFullName(student),
+      name: student.fullName || buildFullName(student),
       form: student.form,
       stream: student.stream,
       role: 'student',
@@ -228,15 +261,16 @@ const validateStudentCredentials = async (fullName, admissionNumber) => {
 };
 
 const createStudentSessionResponse = async (request, student, account, message = 'Login successful') => {
-  const token = generateStudentToken(student);
+  const profile = buildPortalProfile(student?.studentRecordId || student?.fromPortalAccount ? null : student, account) || student;
+  const token = generateStudentToken(profile);
   const tokenDigest = hashToken(token);
 
   try {
     await prisma.studentSession.create({
       data: {
-        studentId: student.id,
-        admissionNumber: student.admissionNumber,
-        name: buildFullName(student),
+        studentId: profile.id,
+        admissionNumber: profile.admissionNumber,
+        name: profile.fullName || profile.admissionNumber,
         token: tokenDigest,
         expiresAt: new Date(Date.now() + STUDENT_SESSION_SECONDS * 1000),
         ipAddress: getClientIp(request),
@@ -250,7 +284,7 @@ const createStudentSessionResponse = async (request, student, account, message =
   const response = NextResponse.json({
     success: true,
     message,
-    student: sanitizeStudent(student, account),
+    student: profile,
     token,
     expiresIn: '2 hours',
     permissions: {
@@ -400,6 +434,7 @@ export async function POST(request) {
           data: {
             admissionNumber: student.admissionNumber,
             passwordHash,
+            ...buildAccountSnapshot(student),
             passwordSetAt: new Date(),
             lastLoginAt: new Date()
           }
@@ -433,33 +468,11 @@ export async function POST(request) {
       );
     }
 
-    const student = await prisma.databaseStudent.findUnique({
+    const account = await prisma.studentPortalAccount.findUnique({
       where: { admissionNumber: cleanAdmissionNumber }
     });
 
-    if (!student) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Student not found with this admission number. Please contact your class teacher or the school administrator/secretary to add or confirm your records.',
-          requiresContact: true
-        },
-        { status: 404 }
-      );
-    }
-
-    if (student.status !== 'active') {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Student account is not active. Please contact your class teacher or the school administrator/secretary.',
-          requiresContact: true 
-        },
-        { status: 403 }
-      );
-    }
-
-    const account = await prisma.studentPortalAccount.findUnique({
+    const student = await prisma.databaseStudent.findUnique({
       where: { admissionNumber: cleanAdmissionNumber }
     });
 
@@ -500,10 +513,35 @@ export async function POST(request) {
 
       const updatedAccount = await prisma.studentPortalAccount.update({
         where: { admissionNumber: cleanAdmissionNumber },
-        data: { lastLoginAt: new Date() }
+        data: {
+          ...(student ? buildAccountSnapshot(student) : {}),
+          lastLoginAt: new Date()
+        }
       });
 
       return createStudentSessionResponse(request, student, updatedAccount);
+    }
+
+    if (!student) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Student not found with this admission number. Please contact your class teacher or the school administrator/secretary to add or confirm your records.',
+          requiresContact: true
+        },
+        { status: 404 }
+      );
+    }
+
+    if (student.status !== 'active') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Student account is not active. Please contact your class teacher or the school administrator/secretary.',
+          requiresContact: true
+        },
+        { status: 403 }
+      );
     }
 
     if (account?.passwordHash) {
@@ -565,6 +603,7 @@ export async function POST(request) {
         data: {
           admissionNumber: cleanAdmissionNumber,
           passwordHash,
+          ...buildAccountSnapshot(student),
           passwordSetAt: new Date(),
           lastLoginAt: new Date()
         }
@@ -628,20 +667,41 @@ export async function GET(request) {
       );
     }
 
-    // FIXED: Use findUnique with only unique field (id), then check status separately
-    const student = await prisma.databaseStudent.findUnique({
-      where: { 
-        id: decoded.studentId  // Only unique field here
-      }
+    const account = await prisma.studentPortalAccount.findUnique({
+      where: { admissionNumber: decoded.admissionNumber }
     });
 
-    // Check if student exists AND is active
-    if (!student || student.status !== 'active') {
+    const student = decoded.studentRecordId || decoded.studentId
+      ? await prisma.databaseStudent.findFirst({
+          where: {
+            OR: [
+              ...(decoded.studentRecordId ? [{ id: decoded.studentRecordId }] : []),
+              ...(decoded.studentId ? [{ id: decoded.studentId }] : []),
+              { admissionNumber: decoded.admissionNumber }
+            ]
+          }
+        })
+      : await prisma.databaseStudent.findUnique({
+          where: { admissionNumber: decoded.admissionNumber }
+        });
+
+    if (!student && !account) {
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           authenticated: false,
-          error: 'Student not found or inactive' 
+          error: 'Student portal account not found'
+        },
+        { status: 401 }
+      );
+    }
+
+    if (student?.status !== 'active' && !account) {
+      return NextResponse.json(
+        {
+          success: false,
+          authenticated: false,
+          error: 'Student not found or inactive'
         },
         { status: 401 }
       );
@@ -686,16 +746,14 @@ export async function GET(request) {
       );
     }
 
-    const account = await prisma.studentPortalAccount.findUnique({
-      where: { admissionNumber: student.admissionNumber }
-    });
+    const profile = buildPortalProfile(student?.status === 'active' ? student : null, account);
 
     const response = NextResponse.json({
       success: true,
       authenticated: true,
       student: {
-        ...sanitizeStudent(student, account),
-        name: buildFullName(student),
+        ...profile,
+        name: profile.fullName || profile.admissionNumber,
       },
       expiresAt: decoded.exp ? new Date(decoded.exp * 1000).toISOString() : null
     });

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import {
   FiUser, FiLock, FiAlertCircle, FiX,
   FiHelpCircle, FiBook, FiShield, FiClock,
-  FiLogIn, FiCheckCircle, FiAward
+  FiLogIn, FiCheckCircle, FiAward, FiEye, FiEyeOff, FiSend
 } from 'react-icons/fi';
 import Image from 'next/image';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -14,6 +14,7 @@ export default function StudentLoginModal({
   onClose,
   onLogin,
   onSetupPassword = () => {},
+  onPasswordResetRequest = () => {},
   isLoading = false,
   error = null,
   requiresContact = false,
@@ -27,10 +28,18 @@ export default function StudentLoginModal({
     fullName: '',
     admissionNumber: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    resetEmail: '',
+    resetParentPhone: '',
+    resetMessage: ''
   });
   const [localError, setLocalError] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
+  const [visiblePasswords, setVisiblePasswords] = useState({
+    login: false,
+    setup: false,
+    confirm: false
+  });
 
   useEffect(() => {
     setLocalError(error || null);
@@ -120,6 +129,25 @@ export default function StudentLoginModal({
       setupToken: passwordSetupToken,
       newPassword: formData.newPassword,
       confirmPassword: formData.confirmPassword
+    });
+  };
+
+  const handlePasswordResetRequest = (event) => {
+    event.preventDefault();
+    const errors = {};
+    if (!formData.admissionNumber.trim()) errors.admissionNumber = 'Enter your admission number.';
+    if (!formData.fullName.trim() && !formData.resetEmail.trim() && !formData.resetParentPhone.trim()) {
+      errors.fullName = 'Enter your name, email, or parent phone so admin can verify you.';
+    }
+    setValidationErrors(errors);
+    if (Object.keys(errors).length) return;
+
+    onPasswordResetRequest({
+      admissionNumber: formData.admissionNumber.trim().toUpperCase(),
+      fullName: formData.fullName.trim(),
+      email: formData.resetEmail.trim(),
+      parentPhone: formData.resetParentPhone.trim(),
+      message: formData.resetMessage.trim()
     });
   };
 
@@ -256,13 +284,20 @@ export default function StudentLoginModal({
                 <InputField
                   label="New Password"
                   icon={FiLock}
-                  type="password"
+                  type={visiblePasswords.setup ? 'text' : 'password'}
                   value={formData.newPassword}
                   onChange={(value) => updateField('newPassword', value)}
                   error={validationErrors.newPassword}
                   placeholder="Create a strong password"
                   disabled={isLoading}
                   autoComplete="new-password"
+                  rightAction={
+                    <PasswordVisibilityButton
+                      visible={visiblePasswords.setup}
+                      onClick={() => setVisiblePasswords(prev => ({ ...prev, setup: !prev.setup }))}
+                      label="new password"
+                    />
+                  }
                 />
 
                 <div>
@@ -277,13 +312,20 @@ export default function StudentLoginModal({
                 <InputField
                   label="Confirm Password"
                   icon={FiLock}
-                  type="password"
+                  type={visiblePasswords.confirm ? 'text' : 'password'}
                   value={formData.confirmPassword}
                   onChange={(value) => updateField('confirmPassword', value)}
                   error={validationErrors.confirmPassword}
                   placeholder="Repeat password"
                   disabled={isLoading}
                   autoComplete="new-password"
+                  rightAction={
+                    <PasswordVisibilityButton
+                      visible={visiblePasswords.confirm}
+                      onClick={() => setVisiblePasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
+                      label="confirm password"
+                    />
+                  }
                 />
 
                 <SubmitButton loading={isLoading} label="Create Password" loadingLabel="Creating..." icon={FiShield} />
@@ -318,6 +360,76 @@ export default function StudentLoginModal({
 
                 <SubmitButton loading={isLoading} label="Verify and Continue" loadingLabel="Verifying..." icon={FiCheckCircle} />
               </form>
+            ) : mode === 'forgotPassword' ? (
+              <form onSubmit={handlePasswordResetRequest} className="space-y-5">
+                <div>
+                  <h2 className="text-xl font-black text-slate-950">Request Password Help</h2>
+                  <p className="text-sm text-slate-600 mt-1">Send your details to the school admin for password assistance.</p>
+                </div>
+
+                <InputField
+                  label="Admission Number"
+                  icon={FiUser}
+                  value={formData.admissionNumber}
+                  onChange={(value) => updateField('admissionNumber', value.toUpperCase())}
+                  error={validationErrors.admissionNumber}
+                  placeholder="Admission number"
+                  disabled={isLoading}
+                />
+
+                <InputField
+                  label="Registered Name"
+                  icon={FiBook}
+                  value={formData.fullName}
+                  onChange={(value) => updateField('fullName', value)}
+                  error={validationErrors.fullName}
+                  placeholder="Name as it appears in school records"
+                  disabled={isLoading}
+                />
+
+                <InputField
+                  label="Email"
+                  icon={FiSend}
+                  type="email"
+                  value={formData.resetEmail}
+                  onChange={(value) => updateField('resetEmail', value)}
+                  error={validationErrors.resetEmail}
+                  placeholder="Student or parent email"
+                  disabled={isLoading}
+                  autoComplete="email"
+                />
+
+                <InputField
+                  label="Parent Phone"
+                  icon={FiHelpCircle}
+                  value={formData.resetParentPhone}
+                  onChange={(value) => updateField('resetParentPhone', value)}
+                  error={validationErrors.resetParentPhone}
+                  placeholder="Parent phone for verification"
+                  disabled={isLoading}
+                  autoComplete="tel"
+                />
+
+                <InputField
+                  label="Message"
+                  icon={FiAlertCircle}
+                  value={formData.resetMessage}
+                  onChange={(value) => updateField('resetMessage', value)}
+                  error={validationErrors.resetMessage}
+                  placeholder="Optional note for admin"
+                  disabled={isLoading}
+                />
+
+                <SubmitButton loading={isLoading} label="Send Request" loadingLabel="Sending..." icon={FiSend} />
+
+                <button
+                  type="button"
+                  onClick={() => setMode('password')}
+                  className="w-full text-sm font-bold text-slate-700 hover:text-slate-950"
+                >
+                  Back to password login.
+                </button>
+              </form>
             ) : (
               <form onSubmit={handlePasswordLogin} className="space-y-5">
                 <div>
@@ -338,24 +450,40 @@ export default function StudentLoginModal({
                 <InputField
                   label="Password"
                   icon={FiLock}
-                  type="password"
+                  type={visiblePasswords.login ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(value) => updateField('password', value)}
                   error={validationErrors.password}
                   placeholder="Your portal password"
                   disabled={isLoading}
                   autoComplete="current-password"
+                  rightAction={
+                    <PasswordVisibilityButton
+                      visible={visiblePasswords.login}
+                      onClick={() => setVisiblePasswords(prev => ({ ...prev, login: !prev.login }))}
+                      label="password"
+                    />
+                  }
                 />
 
                 <SubmitButton loading={isLoading} label="Login to Portal" loadingLabel="Signing in..." icon={FiLogIn} />
 
-                <button
-                  type="button"
-                  onClick={() => setMode('firstAccess')}
-                  className="w-full text-sm font-bold text-slate-700 hover:text-slate-950"
-                >
-                  First time here? Verify your record and create a password.
-                </button>
+                <div className="grid gap-2 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setMode('firstAccess')}
+                    className="w-full text-sm font-bold text-slate-700 hover:text-slate-950"
+                  >
+                    First time here? Verify your record and create a password.
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('forgotPassword')}
+                    className="w-full text-sm font-bold text-blue-700 hover:text-blue-900"
+                  >
+                    Forgot password? Send a request to admin.
+                  </button>
+                </div>
               </form>
             )}
 
@@ -387,7 +515,8 @@ function InputField({
   type = 'text',
   placeholder,
   disabled,
-  autoComplete = 'off'
+  autoComplete = 'off',
+  rightAction = null
 }) {
   return (
     <div>
@@ -395,15 +524,22 @@ function InputField({
         <Icon className="text-slate-600" />
         {label}
       </label>
-      <input
-        type={type}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        disabled={disabled}
-        autoComplete={autoComplete}
-        className={`w-full px-4 py-3.5 rounded-2xl border-2 bg-white text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all ${error ? 'border-red-400' : 'border-slate-200 hover:border-slate-300'}`}
-      />
+      <div className="relative">
+        <input
+          type={type}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          disabled={disabled}
+          autoComplete={autoComplete}
+          className={`w-full rounded-2xl border-2 bg-white px-4 py-3.5 text-slate-900 placeholder-slate-400 transition-all focus:border-blue-600 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500 ${rightAction ? 'pr-12' : ''} ${error ? 'border-red-400' : 'border-slate-200 hover:border-slate-300'}`}
+        />
+        {rightAction && (
+          <div className="absolute inset-y-0 right-2 flex items-center">
+            {rightAction}
+          </div>
+        )}
+      </div>
       {error && (
         <p className="mt-1.5 text-xs font-bold text-red-600 flex items-center gap-1">
           <FiAlertCircle />
@@ -411,6 +547,21 @@ function InputField({
         </p>
       )}
     </div>
+  );
+}
+
+function PasswordVisibilityButton({ visible, onClick, label }) {
+  const Icon = visible ? FiEyeOff : FiEye;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-200"
+      aria-label={`${visible ? 'Hide' : 'Show'} ${label}`}
+    >
+      <Icon className="h-5 w-5" aria-hidden="true" />
+    </button>
   );
 }
 

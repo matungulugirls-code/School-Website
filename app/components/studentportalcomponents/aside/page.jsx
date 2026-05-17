@@ -55,17 +55,17 @@ export default function NavigationSidebar({
   }, [feeBalance, feeLoading, feeError]);
 
   return (
-    <aside className="flex h-full flex-col rounded-r-3xl border-r border-slate-200 bg-white shadow-xl">
+    <aside className="flex h-full flex-col rounded-r-3xl border-r border-slate-200 bg-white shadow-xl shadow-slate-900/5">
       {/* Header Section - Fixed at top */}
       <div className="flex-shrink-0 border-b border-slate-100 p-5 sm:p-6">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-gradient-to-br from-teal-700 to-emerald-700 shadow-lg">
+            <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-slate-950 shadow-lg shadow-slate-900/15">
               <FiGrid className="h-6 w-6 text-white" />
             </div>
             <div>
               <p className="text-lg font-black tracking-tight text-slate-800">Student Hub</p>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-teal-700">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
                 Matungulu Girls
               </p>
             </div>
@@ -80,9 +80,9 @@ export default function NavigationSidebar({
         </div>
 
         {/* Student Profile Card */}
-        <div className="mt-6 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 p-4">
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-teal-700 to-emerald-700 text-lg font-black text-white shadow-md">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-slate-950 text-lg font-black text-white shadow-md">
               {getInitials(student?.fullName)}
             </div>
             <div className="min-w-0">
@@ -90,7 +90,7 @@ export default function NavigationSidebar({
               <p className="mt-1 text-xs font-medium text-slate-500">
                 {student?.form || 'Form'} · {student?.stream || 'Stream'}
               </p>
-              <p className="mt-1 text-[11px] font-bold text-teal-700">
+              <p className="mt-1 text-[11px] font-bold text-blue-600">
                 ADM {student?.admissionNumber || '----'}
               </p>
             </div>
@@ -100,8 +100,8 @@ export default function NavigationSidebar({
 
       {/* Scrollable Navigation Section */}
       <div className="flex-1 overflow-y-auto p-5 sm:p-6">
-        <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-teal-700">Navigation Hub</p>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Navigation Hub</p>
           <div className="mt-4 space-y-2">
             {navItems.map((item) => {
               const active = currentView === item.id;
@@ -111,14 +111,14 @@ export default function NavigationSidebar({
                   onClick={() => setCurrentView(item.id)}
                   className={`group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all ${
                     active
-                      ? 'bg-gradient-to-r from-teal-700 to-emerald-700 text-white shadow-md shadow-teal-200'
+                      ? 'bg-slate-950 text-white shadow-md shadow-slate-900/10'
                       : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-800'
                   }`}
                 >
                   <div className={`flex h-10 w-10 items-center justify-center rounded-lg transition-all ${
                     active 
                       ? 'bg-white/20 text-white' 
-                      : 'bg-slate-100 text-slate-500 group-hover:bg-teal-100 group-hover:text-teal-700'
+                      : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-700'
                   }`}>
                     {item.icon}
                   </div>
@@ -128,7 +128,7 @@ export default function NavigationSidebar({
                       {item.helper}
                     </p>
                   </div>
-                  <FiArrowUpRight className={`h-4 w-4 transition ${active ? 'text-white' : 'text-slate-300 group-hover:text-teal-700'}`} />
+                  <FiArrowUpRight className={`h-4 w-4 transition ${active ? 'text-white' : 'text-slate-300 group-hover:text-blue-700'}`} />
                 </button>
               );
             })}
@@ -136,10 +136,10 @@ export default function NavigationSidebar({
         </div>
 
         {/* Information Cards */}
-        <div className="mt-5 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-teal-700">Need To Know</p>
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Need To Know</p>
           <div className="mt-4 space-y-3">
-            <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 p-4">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
                   <FiShield className="h-4 w-4" />
@@ -151,9 +151,9 @@ export default function NavigationSidebar({
               </div>
             </div>
             
-            <div className="rounded-xl bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
                   <FiCreditCard className="h-4 w-4" />
                 </div>
                 <div>
@@ -163,9 +163,9 @@ export default function NavigationSidebar({
               </div>
             </div>
             
-            <div className="rounded-xl bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-100 p-4">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100 text-teal-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
                   <FiUser className="h-4 w-4" />
                 </div>
                 <div>
@@ -184,18 +184,18 @@ export default function NavigationSidebar({
           href="https://analytics.zeraki.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 flex items-center justify-between rounded-xl border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-4 text-slate-700 transition-all hover:border-teal-200 hover:shadow-md"
+          className="mt-5 flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 text-slate-700 transition-all hover:border-blue-200 hover:shadow-md"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100">
-              <FiTrendingUp className="h-4 w-4 text-teal-700" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+              <FiTrendingUp className="h-4 w-4 text-blue-700" />
             </div>
             <div>
               <p className="text-sm font-black">Zeraki Analytics</p>
               <p className="text-xs text-slate-400">Open external learning analytics</p>
             </div>
           </div>
-          <FiArrowUpRight className="h-4 w-4 text-teal-700" />
+          <FiArrowUpRight className="h-4 w-4 text-blue-700" />
         </a>
       </div>
 
@@ -204,14 +204,14 @@ export default function NavigationSidebar({
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={onRefresh}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-600 transition-all hover:bg-slate-50 hover:border-teal-200"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-600 transition-all hover:border-blue-200 hover:bg-slate-50"
           >
-            <FiRefreshCw className="h-4 w-4 text-teal-700" />
+            <FiRefreshCw className="h-4 w-4 text-blue-600" />
             Refresh
           </button>
           <button
             onClick={onLogout}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-700 to-emerald-700 px-4 py-3 text-sm font-black text-white shadow-md shadow-teal-200 transition-all hover:shadow-lg"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-black text-white shadow-md shadow-slate-900/15 transition-all hover:bg-slate-800"
           >
             <FiLogOut className="h-4 w-4" />
             Logout

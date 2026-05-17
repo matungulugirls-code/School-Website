@@ -348,10 +348,6 @@ export async function DELETE(request, { params }) {
       where: { id }
     });
 
-    await prisma.studentPortalAccount.deleteMany({
-      where: { admissionNumber: deletedStudent.admissionNumber }
-    });
-
     // Update stats
     await prisma.studentStats.update({
       where: { id: 'global_stats' },

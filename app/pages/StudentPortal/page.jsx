@@ -72,23 +72,23 @@ function StudentPortalHeader({
   const view = portalViews[currentView] || portalViews.home;
 
   return (
-    <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1600px] items-center gap-4 px-4 py-4 sm:px-6 xl:px-8">
         <button
           onClick={onMenuToggle}
-          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gray-300 bg-gray-50 text-gray-900 transition hover:bg-gray-100 lg:hidden"
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 transition hover:bg-slate-100 lg:hidden"
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMenuOpen ? <FaTimes className="h-4 w-4" /> : <FaBars className="h-4 w-4" />}
         </button>
 
-        <div className="hidden min-w-0 items-center gap-3 rounded-[1.5rem] border border-gray-200 bg-gray-50 px-4 py-3 lg:flex">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#cba14d)] text-white shadow-[0_14px_28px_rgba(15,91,76,0.35)]">
+        <div className="hidden min-w-0 items-center gap-3 rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 lg:flex">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-900/10">
             {view.icon}
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-gray-500">Current Zone</p>
-            <p className="truncate text-base font-black text-gray-900">{view.label}</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">Current Zone</p>
+            <p className="truncate text-base font-black text-slate-950">{view.label}</p>
           </div>
         </div>
 
@@ -99,25 +99,25 @@ function StudentPortalHeader({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search your workspace"
-            className="w-full rounded-[1.4rem] border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm font-medium text-gray-900 outline-none placeholder:text-gray-400 focus:border-[#0f5b4c] focus:ring-2 focus:ring-[#0f5b4c]/20"
+            className="w-full rounded-[1.4rem] border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
           />
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
           <button
             onClick={onRefresh}
-            className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-50 px-4 py-3 text-sm font-bold text-gray-900 transition hover:bg-gray-100"
+            className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-900 transition hover:bg-slate-100"
           >
-            <FiRefreshCw className="h-4 w-4 text-[#0f5b4c]" />
+            <FiRefreshCw className="h-4 w-4 text-blue-600" />
             Refresh
           </button>
-          <div className="flex items-center gap-3 rounded-[1.4rem] border border-gray-300 bg-gray-50 px-4 py-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#0c3028)] text-sm font-black text-white">
+          <div className="flex items-center gap-3 rounded-[1.4rem] border border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-sm font-black text-white">
               {getInitials(student?.fullName)}
             </div>
             <div>
-              <p className="text-sm font-black text-gray-900">{student?.fullName || 'Student'}</p>
-              <p className="text-xs font-medium text-gray-600">
+              <p className="text-sm font-black text-slate-950">{student?.fullName || 'Student'}</p>
+              <p className="text-xs font-medium text-slate-600">
                 {student?.form || 'Form'} · {student?.stream || 'Stream'}
               </p>
             </div>
@@ -203,58 +203,58 @@ function PortalWorkspaceHome({
   return (
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[1.4fr_0.9fr]">
-        <div className="relative overflow-hidden rounded-[2rem] border border-gray-200 bg-gradient-to-br from-white via-gray-50 to-gray-100 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] sm:p-8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(15,91,76,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(214,178,94,0.06),transparent_36%)]" />
-          <div className="relative">
-         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2">
-  <FiCommand className="h-3 w-3 sm:h-4 sm:w-4 text-emerald-600" />
-  <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-700">
-    Student Portal
-  </span>
-</div>
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+          <div className="h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-amber-400" />
+          <div className="bg-slate-950 p-6 text-white sm:p-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 sm:px-4 sm:py-2">
+              <FiCommand className="h-3 w-3 text-emerald-300 sm:h-4 sm:w-4" />
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-200 sm:text-[11px]">
+                Student Portal
+              </span>
+            </div>
 
-<h1 className="mt-4 sm:mt-5 max-w-3xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-[1.2] sm:leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-emerald-700">
-  Your center for learning, finance, and student life in MatG.
-</h1>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-gray-600 sm:text-base">
-              Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}. This portal is now organized like a focused digital workspace so you can move faster through academics, updates, and school essentials.
+            <h1 className="mt-4 max-w-3xl text-2xl font-black leading-tight tracking-tight text-white sm:mt-5 sm:text-3xl md:text-4xl lg:text-5xl">
+              Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}.
+            </h1>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+              Your academics, learning files, guidance updates, and finance records are ready in one secure Matungulu Girls workspace.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <button
                 onClick={() => onNavigate('results')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#0f5b4c] px-5 py-3 text-sm font-black text-white hover:bg-[#0d4a3a] transition"
+                className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100"
               >
                 Open Results
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => onNavigate('resources')}
-                className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-3 text-sm font-black text-gray-900 hover:bg-gray-50 transition"
+                className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15"
               >
                 Enter Learning Vault
-                <FiArrowUpRight className="h-4 w-4 text-[#0f5b4c]" />
+                <FiArrowUpRight className="h-4 w-4 text-emerald-300" />
               </button>
             </div>
           </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-          <div className="rounded-[2rem] border border-gray-200 bg-white p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Need To Know</p>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Need To Know</p>
             <div className="mt-5 space-y-3">
               {needToKnow.map((item, index) => (
-                <div key={index} className="rounded-[1.3rem] border border-gray-200 bg-gray-50 px-4 py-4 text-sm font-semibold text-gray-700">
+                <div key={index} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm font-bold text-slate-700">
                   {item}
                 </div>
               ))}
             </div>
           </div>
-          <div className="rounded-[2rem] border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Live Session</p>
-            <h3 className="mt-4 text-2xl font-black text-gray-900">Secure student access is active</h3>
-            <p className="mt-3 text-sm leading-7 text-gray-600">
-              Use the navigation hub to jump between modules. Refresh anytime to pull the latest portal data without leaving this workspace.
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Live Session</p>
+            <h3 className="mt-4 text-2xl font-black text-slate-950">Secure access is active</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Your session stays protected for about 2 hours. Refresh pulls the latest results, resources, and fee records.
             </p>
           </div>
         </div>
@@ -262,25 +262,25 @@ function PortalWorkspaceHome({
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {workspaceStats.map((stat) => (
-          <div key={stat.label} className="rounded-[1.7rem] border border-gray-200 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+          <div key={stat.label} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d6b25e)] text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white">
                 {stat.icon}
               </div>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-gray-500">Live</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">Live</span>
             </div>
-            <p className="mt-6 text-3xl font-black text-gray-900">{stat.value}</p>
-            <p className="mt-2 text-sm font-semibold text-gray-600">{stat.label}</p>
+            <p className="mt-6 text-3xl font-black text-slate-950">{stat.value}</p>
+            <p className="mt-2 text-sm font-bold text-slate-600">{stat.label}</p>
           </div>
         ))}
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[2rem] border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Quick Actions</p>
-              <h2 className="mt-3 text-3xl font-black text-gray-900">Open a module instantly</h2>
+              <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Quick Actions</p>
+              <h2 className="mt-3 text-3xl font-black text-slate-950">Open a module</h2>
             </div>
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -288,7 +288,7 @@ function PortalWorkspaceHome({
               <button
                 key={module.id}
                 onClick={() => onNavigate(module.id)}
-                className="group overflow-hidden rounded-[1.8rem] border border-gray-200 bg-white text-left transition hover:-translate-y-1 hover:bg-gray-50"
+                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white text-left transition hover:-translate-y-1 hover:bg-slate-50 hover:shadow-sm"
               >
                 <div className={`bg-gradient-to-br ${module.tone} p-5 text-white`}>
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
@@ -297,9 +297,9 @@ function PortalWorkspaceHome({
                   <h3 className="mt-4 text-xl font-black">{module.title}</h3>
                   <p className="mt-2 text-sm leading-7 text-white/85">{module.blurb}</p>
                 </div>
-                <div className="flex items-center justify-between px-5 py-4 text-sm font-black text-gray-900">
+                <div className="flex items-center justify-between px-5 py-4 text-sm font-black text-slate-950">
                   Launch module
-                  <FiArrowUpRight className="h-4 w-4 text-[#d6b25e] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  <FiArrowUpRight className="h-4 w-4 text-blue-600 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </div>
               </button>
             ))}
@@ -307,44 +307,44 @@ function PortalWorkspaceHome({
         </div>
 
         <div className="grid gap-4">
-          <div className="rounded-[2rem] border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Portal Rhythm</p>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Portal Rhythm</p>
             <div className="mt-5 grid gap-3">
-              <div className="rounded-[1.3rem] border border-gray-200 bg-white p-4">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center gap-3">
-                  <FiClock className="h-5 w-5 text-[#0f5b4c]" />
+                  <FiClock className="h-5 w-5 text-blue-600" />
                   <div>
-                    <p className="text-sm font-black text-gray-900">Session Window</p>
-                    <p className="text-xs text-gray-500">Secure sign-in stays active for about 2 hours.</p>
+                    <p className="text-sm font-black text-slate-950">Session Window</p>
+                    <p className="text-xs text-slate-500">Secure sign-in stays active for about 2 hours.</p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-[1.3rem] border border-gray-200 bg-white p-4">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center gap-3">
-                  <FiBell className="h-5 w-5 text-[#0f5b4c]" />
+                  <FiBell className="h-5 w-5 text-blue-600" />
                   <div>
-                    <p className="text-sm font-black text-gray-900">Refresh Often</p>
-                    <p className="text-xs text-gray-500">Pull the latest assignments, results, and finance updates from one button.</p>
+                    <p className="text-sm font-black text-slate-950">Refresh Often</p>
+                    <p className="text-xs text-slate-500">Pull the latest assignments, results, and finance updates from one button.</p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-[1.3rem] border border-gray-200 bg-white p-4">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center gap-3">
-                  <FaShieldAlt className="h-5 w-5 text-[#0f5b4c]" />
+                  <FaShieldAlt className="h-5 w-5 text-blue-600" />
                   <div>
-                    <p className="text-sm font-black text-gray-900">Student Safe Space</p>
-                    <p className="text-xs text-gray-500">Academic records and fee tools remain tied to the existing protected flow.</p>
+                    <p className="text-sm font-black text-slate-950">Protected Records</p>
+                    <p className="text-xs text-slate-500">Academic and fee tools stay tied to your student account.</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">Workspace Lens</p>
-            <h3 className="mt-4 text-2xl font-black text-gray-900">Designed for momentum</h3>
-            <p className="mt-3 text-sm leading-7 text-gray-600">
-              This home screen is intentionally faster to scan, more tactile on mobile, and more app-like across desktop so the portal feels like a living workspace rather than a static website.
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Today</p>
+            <h3 className="mt-4 text-2xl font-black text-slate-950">Start where it matters</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Check your newest assignments, open recent results, or confirm the latest finance statement before moving on.
             </p>
           </div>
         </div>
@@ -382,11 +382,10 @@ function GuestPortalLanding({ onOpenLogin, router }) {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-slate-50 text-slate-950">
       <Toaster position="top-right" expand richColors theme="light" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,178,94,0.06),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(15,91,76,0.08),transparent_32%)]" />
       <main className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 xl:px-8">
-        <nav className="flex items-center justify-between rounded-[2rem] border border-gray-200 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6">
+        <nav className="flex items-center justify-between rounded-3xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-6">
           <div className="flex items-center gap-3">
             <Image
               src="/MatG.jpg"
@@ -397,13 +396,13 @@ function GuestPortalLanding({ onOpenLogin, router }) {
               priority
             />
             <div>
-              <p className="text-lg font-black tracking-tight text-gray-900">Matungulu Girls</p>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-gray-500">Student Portal</p>
+              <p className="text-lg font-black tracking-tight text-slate-950">Matungulu Girls</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Student Portal</p>
             </div>
           </div>
           <button
             onClick={() => router.push('/pages/contact')}
-            className="rounded-full border border-gray-200 bg-white px-4 py-3 text-sm font-black text-gray-700 hover:bg-gray-50"
+            className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-700 hover:bg-slate-100"
           >
             Help Desk
           </button>
@@ -411,38 +410,38 @@ function GuestPortalLanding({ onOpenLogin, router }) {
 
         <section className="grid flex-1 items-center gap-8 py-10 lg:grid-cols-[1.1fr_0.9fr] lg:py-16">
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.28em] text-gray-600">
-              <FaStar className="h-3.5 w-3.5 text-[#d6b25e]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.28em] text-slate-600">
+              <FaStar className="h-3.5 w-3.5 text-amber-500" />
               Secure Student Portal
             </div>
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.92] text-gray-900 sm:text-6xl xl:text-7xl">
-              A complete digital workspace for student academics and school life.
+            <h1 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl xl:text-6xl">
+              Matungulu Girls student access.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-gray-600 sm:text-lg">
-              The portal is now refined into a modern app-like environment for results, resources, guidance, and finance while keeping the same secure school data flow underneath.
+            <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+              Sign in to view academic results, class resources, guidance updates, and fee statements from your protected student account.
             </p>
 
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={onOpenLogin}
-                className="inline-flex items-center gap-2 rounded-full bg-[#0f5b4c] px-6 py-4 text-sm font-black text-white hover:bg-[#0d4a3a]"
+                className="inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-6 py-4 text-sm font-black text-white hover:bg-slate-800"
               >
                 Access Portal
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => router.push('/pages/School Policies')}
-                className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-4 text-sm font-black text-gray-700 hover:bg-gray-50"
+                className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm font-black text-slate-700 hover:bg-slate-50"
               >
                 View Policies
-                <FiArrowUpRight className="h-4 w-4 text-[#0f5b4c]" />
+                <FiArrowUpRight className="h-4 w-4 text-blue-600" />
               </button>
             </div>
           </div>
 
       <div className="grid md:grid-cols-2 gap-3 grid-cols-2 lg:gap-6">
   {features.map((feature) => (
-    <div key={feature.title} className="overflow-hidden rounded-[1.5rem] sm:rounded-[1.8rem] border border-gray-200 bg-white shadow-sm">
+    <div key={feature.title} className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
       <div className={`bg-gradient-to-br ${feature.tone} p-3 sm:p-5 text-white`}>
         <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl bg-white/15">
           {feature.icon}
@@ -508,6 +507,7 @@ export default function ModernStudentPortalPage() {
         if (data.success && data.authenticated) {
           setStudent(data.student);
           setToken(savedToken);
+          localStorage.setItem('student_data', JSON.stringify(data.student));
           setShowLoginModal(false);
 
           const logoutTimer = setTimeout(() => {
@@ -687,6 +687,7 @@ export default function ModernStudentPortalPage() {
 
       if (data.success && data.token) {
         localStorage.setItem('student_token', data.token);
+        localStorage.setItem('student_data', JSON.stringify(data.student));
         setStudent(data.student);
         setToken(data.token);
         setPasswordSetup({ token: null, student: null });
@@ -739,6 +740,7 @@ export default function ModernStudentPortalPage() {
 
       if (data.success && data.token) {
         localStorage.setItem('student_token', data.token);
+        localStorage.setItem('student_data', JSON.stringify(data.student));
         setStudent(data.student);
         setToken(data.token);
         setPasswordSetup({ token: null, student: null });
@@ -763,6 +765,34 @@ export default function ModernStudentPortalPage() {
     }
   };
 
+  const handlePasswordResetRequest = async (resetPayload) => {
+    setLoginLoading(true);
+    setLoginError(null);
+    setRequiresContact(false);
+
+    try {
+      const response = await fetch('/api/student-password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(resetPayload),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Could not send password request');
+      }
+
+      toast.success('Password request sent', {
+        description: data.message || 'Admin will review your request.',
+      });
+    } catch (error) {
+      setLoginError(error.message || 'Could not send password request.');
+      toast.error(error.message || 'Could not send password request.');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
   const handleLoginModalClose = () => {
     setShowLoginModal(false);
     setLoginError(null);
@@ -777,6 +807,7 @@ export default function ModernStudentPortalPage() {
       console.error('Logout error:', error);
     } finally {
       localStorage.removeItem('student_token');
+      localStorage.removeItem('student_data');
       setStudent(null);
       setToken(null);
       setShowLoginModal(true);
@@ -839,6 +870,7 @@ export default function ModernStudentPortalPage() {
           onClose={handleLoginModalClose}
           onLogin={handleStudentLogin}
           onSetupPassword={handlePasswordSetup}
+          onPasswordResetRequest={handlePasswordResetRequest}
           isLoading={loginLoading}
           error={loginError}
           requiresContact={requiresContact}
@@ -850,13 +882,14 @@ export default function ModernStudentPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-slate-50 text-slate-950">
       <Toaster position="top-right" expand richColors theme="light" />
       <StudentLoginModal
         isOpen={showLoginModal}
         onClose={handleLoginModalClose}
         onLogin={handleStudentLogin}
         onSetupPassword={handlePasswordSetup}
+        onPasswordResetRequest={handlePasswordResetRequest}
         isLoading={loginLoading}
         error={loginError}
         requiresContact={requiresContact}
@@ -941,22 +974,22 @@ export default function ModernStudentPortalPage() {
             {currentView === 'fees' && <FeesView student={student} token={token} />}
           </main>
 
-          <footer className="border-t border-gray-200 bg-white/95 px-4 py-5 backdrop-blur-xl sm:px-6 xl:px-8">
+          <footer className="border-t border-slate-200 bg-white/95 px-4 py-5 backdrop-blur-xl sm:px-6 xl:px-8">
             <div className="mx-auto flex max-w-[1600px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-sm font-black text-gray-900">© {new Date().getFullYear()} Matungulu Girls Senior School</p>
-                <p className="mt-1 text-xs font-medium text-gray-500">
-                  Student Portal Workspace · Secure school data integrations preserved
+                <p className="text-sm font-black text-slate-950">© {new Date().getFullYear()} Matungulu Girls Senior School</p>
+                <p className="mt-1 text-xs font-medium text-slate-500">
+                  Student Portal Workspace · Secure school access
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                <button onClick={() => router.push('/pages/School Policies')} className="transition hover:text-gray-900">
+              <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                <button onClick={() => router.push('/pages/School Policies')} className="transition hover:text-slate-950">
                   Privacy
                 </button>
-                <button onClick={() => router.push('/pages/School Policies')} className="transition hover:text-gray-900">
+                <button onClick={() => router.push('/pages/School Policies')} className="transition hover:text-slate-950">
                   Terms
                 </button>
-                <button onClick={() => router.push('/pages/contact')} className="transition hover:text-gray-900">
+                <button onClick={() => router.push('/pages/contact')} className="transition hover:text-slate-950">
                   Help Desk
                 </button>
               </div>

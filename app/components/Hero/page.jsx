@@ -33,7 +33,7 @@ const heroSlides = [
     title: "Matungulu",
     titleAccent: "Girls",
     subtitle: "Excellence in the Heart of Machakos",
-    description: "A premier public girls' boarding Senior school in Matungulu sub-county, Machakos County. Established in 1955, we empower young women through a holistic education rooted in academic excellence, character formation, and leadership.",
+    description: "A premier public girls' boarding Senior school in Matungulu sub-county, Machakos County. Established in 1966, we empower young women through a holistic education rooted in academic excellence, character formation, and leadership.",
     image: "/hero/MatG1.jpg",
     mobileImage: "/hero/MatG1_mobile.jpg",
     tags: ["Public School", "Girls' Boarding", "National School", "CBC Curriculum"],
@@ -118,7 +118,7 @@ export default function ModernHero() {
             lastYearMean: 7.85,
             targetMean: 8.50,
             studentCount: 1200,
-            established: 1955,
+            established: 1966,
             category: "National School",
             motto: "Committed to Excellence"
           });
@@ -131,7 +131,7 @@ export default function ModernHero() {
           lastYearMean: 7.85,
           targetMean: 8.50,
           studentCount: 1400,
-          established: 1955,
+          established: 1966,
           category: "National School",
           motto: "Committed to Excellence"
         });
@@ -424,7 +424,7 @@ export default function ModernHero() {
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
             <span className="text-white font-semibold text-md">Established</span>
             <span className="text-white font-bold text-md">
-              {getStatValue('established', 1955)}
+              {getStatValue('established', 1966)}
             </span>
           </div>
 
