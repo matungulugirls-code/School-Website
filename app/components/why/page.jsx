@@ -2073,21 +2073,21 @@ const getSchoolStats = () => {
       onClick={(e) => e.stopPropagation()}
     >
       {/* Modal Header with Gradient */}
-      <div className="bg-gradient-to-r from-emerald-700 to-teal-700 p-4 sm:p-6 text-white shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+      <div className="bg-gradient-to-r from-emerald-700 to-teal-700 p-3 sm:p-6 text-white shrink-0">
+        <div className="flex items-start justify-between gap-2 sm:gap-3">
+          <div className="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="w-9 h-9 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
               {/* Ensure icon scales if it's an SVG */}
               <div className="scale-75 sm:scale-100">
                 {selectedAchievement.icon}
               </div>
             </div>
-            <div className="min-w-0">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <span className="w-fit text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-col gap-1">
+                <span className="w-fit text-[9px] sm:text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase">
                   {selectedAchievement.year}
                 </span>
-                <h3 className="text-lg sm:text-xl font-bold truncate pr-2">
+                <h3 className="text-base sm:text-xl font-bold leading-snug break-words">
                   {selectedAchievement.title}
                 </h3>
               </div>
@@ -2095,9 +2095,10 @@ const getSchoolStats = () => {
           </div>
           <button
             onClick={closeAchievementModal}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors shrink-0"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors shrink-0 flex-center"
+            aria-label="Close modal"
           >
-            <FiX className="w-5 h-5" />
+            <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>
@@ -2106,18 +2107,18 @@ const getSchoolStats = () => {
       <div className="overflow-y-auto flex-1">
         {/* Hero Image - Responsive Height */}
         {selectedAchievement.image && (
-          <div className="relative h-[62vh] max-h-[620px] min-h-[320px] w-full bg-slate-100 sm:h-[65vh]">
+          <div className="relative h-[50vh] sm:h-[55vh] max-h-[500px] min-h-[250px] w-full bg-slate-100">
             <Image
               src={selectedAchievement.image}
               alt={selectedAchievement.title}
               fill
-              className="object-contain p-3"
+              className="object-contain p-2 sm:p-3"
             />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-black/45 to-transparent" />
           </div>
         )}
 
-        <div className="p-4 sm:p-6">
+        <div className="p-3 sm:p-6">
           {/* Stats Badges - Improved Wrap/Overlap */}
           <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full border border-emerald-100">
@@ -2164,8 +2165,8 @@ const getSchoolStats = () => {
       </div>
 
       {/* Modal Footer */}
-      <div className="p-3 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
-        <p className="text-[10px] sm:text-xs text-gray-500 text-center italic">
+      <div className="p-2 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
+        <p className="text-[9px] sm:text-xs text-gray-500 text-center italic line-clamp-2">
           Matungulu Girls Senior School — Celebrating Excellence Since 1966
         </p>
       </div>
@@ -2184,37 +2185,38 @@ const getSchoolStats = () => {
       onClick={(e) => e.stopPropagation()}
     >
       {/* Modal Header */}
-      <div className={`bg-gradient-to-r ${selectedPathway.color} p-4 sm:p-6 text-white shrink-0`}>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+      <div className={`bg-gradient-to-r ${selectedPathway.color} p-3 sm:p-6 text-white shrink-0`}>
+        <div className="flex items-start justify-between gap-2 sm:gap-3">
+          <div className="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="w-9 h-9 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
               {React.createElement(selectedPathway.icon, {
                 className: "w-5 h-5 sm:w-6 sm:h-6",
               })}
             </div>
-            <div className="min-w-0">
-              <h3 className="text-lg sm:text-xl font-bold truncate">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-base sm:text-xl font-bold leading-snug break-words mb-0.5">
                 {selectedPathway.name}
               </h3>
-              <p className="text-white/80 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-none">
+              <p className="text-white/80 text-[10px] sm:text-sm leading-snug break-words">
                 {selectedPathway.description}
               </p>
             </div>
           </div>
           <button
             onClick={closeModal}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors shrink-0"
+            className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors shrink-0"
+            aria-label="Close modal"
           >
-            <FiX className="w-5 h-5" />
+            <FiX className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>
 
       {/* Modal Body with Scroll */}
-      <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+      <div className="p-3 sm:p-6 overflow-y-auto flex-1">
         {/* Subjects Section */}
         <div className="mb-6">
-          <h4 className="font-bold text-gray-900 text-md sm:text-lg mb-3 flex items-center gap-2">
+          <h4 className="font-bold text-gray-900 text-base sm:text-lg mb-3 flex items-center gap-2">
             <FiBook className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
             Core Subjects
           </h4>
@@ -2222,7 +2224,7 @@ const getSchoolStats = () => {
             {selectedPathway.subjects.map((subject, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-[11px] sm:text-sm font-semibold border border-emerald-100/50"
+                className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-[10px] sm:text-sm font-semibold border border-emerald-100/50"
               >
                 {subject}
               </span>
@@ -2232,19 +2234,19 @@ const getSchoolStats = () => {
 
         {/* Careers Section */}
         <div>
-          <h4 className="font-bold text-gray-900 text-md sm:text-lg mb-3 flex items-center gap-2">
+          <h4 className="font-bold text-gray-900 text-base sm:text-lg mb-3 flex items-center gap-2">
             <FiTrendingUp className="text-emerald-600 w-4 h-4 sm:w-5 sm:h-5" />
             Common <span className="text-emerald-800">Career Paths</span>
           </h4>
-          {/* Force 2 columns on small tablets, 1 column on tiny phones */}
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-1.5 sm:gap-2">
+          {/* Responsive grid: 1 column on mobile, 2 on larger screens */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {selectedPathway.careers.map((career, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 p-2 rounded-lg bg-gray-50/50 sm:hover:bg-gray-50 transition-colors border border-transparent sm:hover:border-gray-100"
+                className="flex items-center gap-2 p-2 sm:p-2.5 rounded-lg bg-gray-50/50 sm:hover:bg-gray-50 transition-colors border border-transparent sm:hover:border-gray-100"
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span className="text-gray-700 text-[12px] sm:text-sm font-medium">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-0.5" />
+                <span className="text-gray-700 text-[11px] sm:text-sm font-medium leading-snug">
                   {career}
                 </span>
               </div>
@@ -2254,10 +2256,9 @@ const getSchoolStats = () => {
       </div>
 
       {/* Fixed Modal Footer */}
-      <div className="p-3 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
-        <p className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">
-          These career pathways are aligned with Matungulu Girls' CBC
-          curriculum and university preparation programs.
+      <div className="p-2 sm:p-4 border-t border-gray-100 bg-gray-50 shrink-0">
+        <p className="text-[9px] sm:text-xs text-gray-500 text-center leading-snug line-clamp-2">
+          These career pathways are aligned with Matungulu Girls' CBC curriculum and university preparation programs.
         </p>
       </div>
     </div>
