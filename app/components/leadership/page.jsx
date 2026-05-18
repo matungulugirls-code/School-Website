@@ -474,7 +474,7 @@ const ModernStaffLeadership = () => {
   };
 
   // Image component for consistent rendering
-  const StaffImage = ({ staffMember, className, priority = false }) => {
+  const StaffImage = ({ staffMember, className, imageClassName = 'object-cover object-top', priority = false }) => {
     const [error, setError] = useState(false);
     const imageUrl = getImageUrl(staffMember?.image);
     
@@ -497,7 +497,7 @@ const ModernStaffLeadership = () => {
         <img
           src={imageUrl}
           alt={staffMember?.name || 'Staff member'}
-          className="w-full h-full object-cover object-top"
+          className={`w-full h-full ${imageClassName}`}
           onError={() => setError(true)}
           loading={priority ? 'eager' : 'lazy'}
         />
@@ -625,28 +625,18 @@ const ModernStaffLeadership = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20">
         {activeTab === 'featured' ? (
           /* Featured Card View - Responsive Layout */
-          <div className="space-y-6 xl:space-y-0 xl:grid xl:grid-cols-[minmax(0,1fr)_22rem] 2xl:grid-cols-[minmax(0,1fr)_24rem] xl:gap-6 xl:items-start">
+          <div className="space-y-6 2xl:space-y-0 2xl:grid 2xl:grid-cols-[minmax(0,1fr)_24rem] 2xl:gap-6 2xl:items-start">
             
             {/* Featured Hero Card */}
             <div id="featured-staff-card" className="w-full min-w-0">
               <div className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.35)]">
                 
                 {/* Responsive Grid Layout inside card */}
-                <div className="flex flex-col 2xl:grid 2xl:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)]">
+                <div className="flex flex-col lg:grid lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
                   
                   {/* Image Section */}
-                  <div className="relative min-h-[380px] sm:min-h-[440px] lg:min-h-[500px] 2xl:min-h-full bg-gradient-to-br from-emerald-900 to-teal-800">
-                    <StaffImage 
-                      staffMember={featuredStaff}
-                      className="absolute inset-0 w-full h-full"
-                      priority={true}
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#041114] via-[#041114]/40 to-transparent" />
-                    <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/35 to-transparent" />
-
-                    {/* Badges */}
-                    <div className="absolute left-4 sm:left-5 top-4 sm:top-5 right-4 sm:right-5 z-20 flex flex-wrap items-center gap-2">
+                  <div className="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-800 p-4 sm:p-6 lg:p-7">
+                    <div className="mb-4 flex flex-wrap items-center gap-2">
                       <span className={`inline-flex max-w-full items-center gap-2 rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] backdrop-blur-sm ${featuredMeta.badge}`}>
                         {featuredRoleBadge.icon}
                         <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.position || featuredStaff?.role || 'Staff Member'}</span>
@@ -661,36 +651,42 @@ const ModernStaffLeadership = () => {
                       )}
                     </div>
 
-                    {/* Bottom Info */}
-                    <div className="absolute inset-x-0 bottom-0 z-20 p-4 sm:p-5 lg:p-7">
-                      <div className="rounded-3xl border border-white/15 bg-white/10 p-4 sm:p-5 text-white backdrop-blur-md">
-                        <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200">Leadership Profile</p>
-                        <h2 className="mt-2 sm:mt-3 text-xl sm:text-2xl lg:text-3xl font-black leading-tight break-words">{featuredStaff?.name}</h2>
-                        <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-white/80">
-                          {(featuredStaff?.department || featuredStaff?.subject) && (
-                            <span className="inline-flex min-w-0 items-center gap-1.5">
-                              <Building2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
-                              <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.department || featuredStaff?.subject}</span>
-                            </span>
-                          )}
-                          {featuredStaff?.qualification && (
-                            <span className="inline-flex min-w-0 items-center gap-1.5">
-                              <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
-                              <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.qualification}</span>
-                            </span>
-                          )}
-                        </div>
+                    <div className="mx-auto max-w-[22rem] lg:max-w-none">
+                      <StaffImage
+                        staffMember={featuredStaff}
+                        className="aspect-[4/5] w-full rounded-[2rem] border border-white/15 bg-white/10 shadow-2xl"
+                        imageClassName="object-contain object-center"
+                        priority={true}
+                      />
+                    </div>
 
-                        {viewMode === 'other' && principal && (
-                          <button
-                            onClick={returnToPrincipal}
-                            className="mt-4 sm:mt-5 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white transition-all hover:bg-white/20"
-                          >
-                            <FiArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
-                            Back to Principal
-                          </button>
+                    <div className="mt-5 rounded-3xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-md sm:p-5">
+                      <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200">Leadership Profile</p>
+                      <h2 className="mt-2 sm:mt-3 text-xl sm:text-2xl lg:text-3xl font-black leading-tight break-words">{featuredStaff?.name}</h2>
+                      <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-white/80">
+                        {(featuredStaff?.department || featuredStaff?.subject) && (
+                          <span className="inline-flex min-w-0 items-center gap-1.5">
+                            <Building2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
+                            <span className="min-w-0 truncate">{featuredStaff?.department || featuredStaff?.subject}</span>
+                          </span>
+                        )}
+                        {featuredStaff?.qualification && (
+                          <span className="inline-flex min-w-0 items-center gap-1.5">
+                            <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
+                            <span className="min-w-0 truncate">{featuredStaff?.qualification}</span>
+                          </span>
                         )}
                       </div>
+
+                      {viewMode === 'other' && principal && (
+                        <button
+                          onClick={returnToPrincipal}
+                          className="mt-4 sm:mt-5 inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white transition-all hover:bg-white/20"
+                        >
+                          <FiArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+                          Back to Principal
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -795,7 +791,7 @@ const ModernStaffLeadership = () => {
             </div>
 
             {/* Sidebar Cards */}
-            <div className="grid gap-4 sm:grid-cols-2 xl:sticky xl:top-24 xl:block xl:space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2 2xl:sticky 2xl:top-24 2xl:block 2xl:space-y-4">
               
               {/* PRINCIPAL CARD */}
               {principal && (
