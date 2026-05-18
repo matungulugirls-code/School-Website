@@ -596,7 +596,7 @@ const ModernStaffLeadership = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-6">
+      <div className="mx-auto mt-6 mb-8 w-full px-4 sm:mt-8 sm:px-6 md:w-[85%] lg:px-0">
         <div className="flex gap-2 bg-white rounded-xl p-1 shadow-lg max-w-fit mx-auto">
           <button
             onClick={() => setActiveTab('featured')}
@@ -622,7 +622,7 @@ const ModernStaffLeadership = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20">
+      <div className="mx-auto w-full px-4 pb-12 sm:px-6 sm:pb-20 md:w-[85%] lg:px-0">
         {activeTab === 'featured' ? (
           /* Featured Card View - Responsive Layout */
           <div className="space-y-6 2xl:space-y-0 2xl:grid 2xl:grid-cols-[minmax(0,1fr)_24rem] 2xl:gap-6 2xl:items-start">
@@ -731,59 +731,57 @@ const ModernStaffLeadership = () => {
                         </div>
                       )}
 
-                      {/* Expertise & Responsibilities - Responsive grid */}
-                      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2 2xl:grid-cols-1">
-                        
-                        {/* Areas of Expertise */}
-                        <div className="rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
-                          <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                            <Target className="w-3 h-3 sm:w-4 sm:h-4" /> Areas of Expertise
-                          </h4>
-                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            {featuredExpertise.length > 0 ? featuredExpertise.map((skill, idx) => (
-                              <span key={idx} className={`rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold ${featuredMeta.chip}`}>
-                                {skill}
-                              </span>
-                            )) : (
-                              <span className="text-xs sm:text-sm text-slate-500">Leadership, mentoring, school development, and student success.</span>
-                            )}
-                          </div>
-                        </div>
+                    </div>
+                  </div>
+                </div>
 
-                        {/* Key Responsibilities */}
-                        <div className="rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
-                          <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                            <FiBriefcase /> Key Responsibilities
-                          </h4>
-                          <ul className="space-y-2 sm:space-y-3">
-                            {featuredResponsibilities.length > 0 ? featuredResponsibilities.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
-                                <span className="mt-1.5 sm:mt-2 h-1.5 w-1.5 sm:h-2 sm:w-2 shrink-0 rounded-full bg-emerald-600" />
-                                <span className="leading-5 sm:leading-6">{item}</span>
-                              </li>
-                            )) : (
-                              <li className="text-xs sm:text-sm italic text-slate-500">Leading school improvement, academic excellence, and student wellbeing.</li>
-                            )}
-                          </ul>
-                        </div>
-
-                        {/* Notable Achievements */}
-                        <div className="lg:col-span-2 2xl:col-span-1 rounded-[20px] sm:rounded-[24px] border border-slate-200 bg-white p-4 sm:p-5">
-                          <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-                            <Trophy className="w-3 h-3 sm:w-4 sm:h-4" /> Notable Achievements
-                          </h4>
-                          <ul className="space-y-2 sm:space-y-3">
-                            {featuredAchievements.length > 0 ? featuredAchievements.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-slate-700">
-                                <Medal className="mt-0.5 h-3 w-3 sm:h-4 sm:w-4 shrink-0 text-emerald-600" />
-                                <span className="leading-5 sm:leading-6">{item}</span>
-                              </li>
-                            )) : (
-                              <li className="text-xs sm:text-sm italic text-slate-500">Contributing to educational excellence and school leadership.</li>
-                            )}
-                          </ul>
-                        </div>
+                <div className="border-t border-emerald-100 bg-white p-4 sm:p-5 lg:p-6">
+                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                    <div className="rounded-[20px] border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
+                      <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                        <Target className="w-3 h-3 sm:w-4 sm:h-4" /> Areas of Expertise
+                      </h4>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        {featuredExpertise.length > 0 ? featuredExpertise.map((skill, idx) => (
+                          <span key={idx} className={`rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold ${featuredMeta.chip}`}>
+                            {skill}
+                          </span>
+                        )) : (
+                          <span className="text-xs sm:text-sm text-slate-500">Leadership, mentoring, school development, and student success.</span>
+                        )}
                       </div>
+                    </div>
+
+                    <div className="rounded-[20px] border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
+                      <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                        <FiBriefcase /> Key Responsibilities
+                      </h4>
+                      <ul className="space-y-2">
+                        {featuredResponsibilities.length > 0 ? featuredResponsibilities.map((item, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700">
+                            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600" />
+                            <span className="leading-5">{item}</span>
+                          </li>
+                        )) : (
+                          <li className="text-xs sm:text-sm italic text-slate-500">Leading school improvement, academic excellence, and student wellbeing.</li>
+                        )}
+                      </ul>
+                    </div>
+
+                    <div className="rounded-[20px] border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
+                      <h4 className="mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
+                        <Trophy className="w-3 h-3 sm:w-4 sm:h-4" /> Notable Achievements
+                      </h4>
+                      <ul className="space-y-2">
+                        {featuredAchievements.length > 0 ? featuredAchievements.map((item, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700">
+                            <Medal className="mt-0.5 h-3 w-3 sm:h-4 sm:w-4 shrink-0 text-emerald-600" />
+                            <span className="leading-5">{item}</span>
+                          </li>
+                        )) : (
+                          <li className="text-xs sm:text-sm italic text-slate-500">Contributing to educational excellence and school leadership.</li>
+                        )}
+                      </ul>
                     </div>
                   </div>
                 </div>
