@@ -111,7 +111,7 @@ function MatunguluHeroHeader({ student, onRefresh, isRefreshing }) {
       
       <div className="rounded-2xl border border-white/10 bg-white/5 p-2 sm:p-3">
         <p className="text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Students</p>
-        <p className="text-white text-base sm:text-lg md:text-xl font-black">1,500+</p>
+        <p className="text-white text-base sm:text-lg md:text-xl font-black">1,300+</p>
         <p className="text-white/60 text-[8px] sm:text-[9px] mt-0.5">Current Enrollment</p>
       </div>
       
