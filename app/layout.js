@@ -43,7 +43,10 @@ export const metadata = {
   keywords: [
     "Matungulu Girls Senior School",
     "Matungulu Girls Secondary School",
-    "Matungulu g",
+    "Matungulu girls high school",
+    "Matungulu Girls",
+    "Matungulu Girls School",
+    
     "Matungulu Girls school",
     "Matungulu Girls Senior School",
     "MatG school",
