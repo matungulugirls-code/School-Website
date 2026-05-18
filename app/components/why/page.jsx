@@ -235,6 +235,7 @@ const getAchievements = () => {
     .map((achievement) => {
       const firstImage = Array.isArray(achievement.images) ? achievement.images[0] : null;
       const imageUrl = typeof firstImage === 'string' ? firstImage : firstImage?.url;
+      const achievedAt = achievement.achievedDate || achievement.createdAt || '';
       const highlights = Array.isArray(achievement.recipients)
         ? achievement.recipients
             .map((recipient) => {
@@ -254,10 +255,15 @@ const getAchievements = () => {
         stats: `${achievement.category || 'Achievement'} | ${achievement.year || ''}`,
         icon: getCategoryIcon(achievement.category),
         image: imageUrl || "/hero/MatG1.jpg",
+        achievedAt,
         highlights
       };
     })
-    .sort((a, b) => Number(b.year || 0) - Number(a.year || 0))
+    .sort((a, b) => {
+      const dateDiff = new Date(b.achievedAt || 0).getTime() - new Date(a.achievedAt || 0).getTime();
+      if (dateDiff) return dateDiff;
+      return Number(b.year || 0) - Number(a.year || 0);
+    })
     .slice(0, 5);
 };
 
@@ -270,6 +276,7 @@ const getCategoryIcon = (category) => {
     'Sports': <FiAward className="w-5 h-5" />,
     'Arts': <FiAward className="w-5 h-5" />,
     'Leadership': <FiStar className="w-5 h-5" />,
+    'Environment': <FiDroplet className="w-5 h-5" />,
     'Other': <FiAward className="w-5 h-5" />
   };
   return icons[category] || <FiAward className="w-5 h-5" />;
@@ -1438,68 +1445,88 @@ const getSchoolStats = () => {
         <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Syncing Data...</p>
       </div>
     ) : (
-      <div className="relative">
-        {/* Timeline Path: Thin & Sophisticated */}
-        <div className="absolute left-4 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-px bg-slate-200"></div>
-
+      <div>
         {timelineAchievements.length > 0 ? (
-        <div className="space-y-12">
-          {timelineAchievements.map((item, idx) => (
-            <div
-              key={idx}
-              className={`relative flex items-center justify-between w-full mb-8 ${
-                idx % 2 === 0 ? "sm:flex-row-reverse" : "sm:flex-row"
-              }`}
+        <div className="grid gap-5 lg:grid-cols-12 lg:gap-6">
+          {timelineAchievements[0] && (
+            <button
+              type="button"
+              onClick={() => openAchievementModal(timelineAchievements[0])}
+              className="group relative min-h-[420px] overflow-hidden rounded-[2rem] bg-slate-950 text-left shadow-2xl shadow-emerald-950/10 lg:col-span-7"
             >
-              {/* Spacer for Desktop */}
-              <div className="hidden sm:block w-[45%]" />
-
-              {/* Timeline Indicator */}
-              <div className="absolute left-4 sm:left-1/2 transform -translate-x-1/2 z-20">
-                <div className="w-8 h-8 rounded-full bg-white border-2 border-emerald-500 flex items-center justify-center shadow-sm">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                </div>
+              <Image
+                src={timelineAchievements[0].image}
+                alt={timelineAchievements[0].title}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/55 to-transparent" />
+              <div className="absolute left-5 right-5 top-5 flex items-center justify-between gap-3">
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-white backdrop-blur-md">
+                  Latest Milestone
+                </span>
+                <span className="rounded-full bg-emerald-500 px-3 py-1 text-xs font-black text-white">
+                  {timelineAchievements[0].year}
+                </span>
               </div>
-
-              {/* Card Content */}
-              <div className="w-full sm:w-[45%] pl-12 sm:pl-0 group">
-                <div className="relative p-6 sm:p-8 rounded-[28px] bg-white border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] transition-all duration-500 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1">
-                  
-                  {/* Floating Year Tag */}
-                  <div className={`absolute top-0 -translate-y-1/2 flex items-center gap-2 ${
-                    idx % 2 === 0 ? "sm:right-8" : "sm:left-8"
-                  }`}>
-                    <span className="px-4 py-1 rounded-full bg-[#172033] text-white text-[11px] font-black tracking-widest uppercase shadow-lg">
-                      {item.year}
-                    </span>
-                  </div>
-
-                  <div className={`flex flex-col ${idx % 2 === 0 ? "sm:items-start" : "sm:items-end"} text-left ${idx % 2 === 0 ? "sm:text-left" : "sm:text-right"}`}>
-                    {/* Icon Plate */}
-                    <div className="mb-4 p-3 rounded-2xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-600 group-hover:text-white">
-                      {item.icon || <FiAward size={20} />}
-                    </div>
-
-                    <h4 className="text-xl font-black text-slate-900 mb-2 leading-tight">
-                      {item.title}
-                    </h4>
-
-                    <p className="text-slate-500 text-sm leading-relaxed font-medium mb-5 line-clamp-3">
-                      {item.shortDescription || (item.description && item.description.substring(0, 120) + '...')}
-                    </p>
-
-                    <button
-                      onClick={() => openAchievementModal(item)}
-                      className="group/btn inline-flex items-center gap-2 text-emerald-600 text-xs font-black uppercase tracking-widest hover:text-emerald-700 transition-colors"
-                    >
-                      View Intelligence
-                      <FiArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
-                    </button>
-                  </div>
+              <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-emerald-700 shadow-lg">
+                  {timelineAchievements[0].icon || <FiAward className="h-5 w-5" />}
                 </div>
+                <p className="mb-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
+                  {timelineAchievements[0].stats}
+                </p>
+                <h3 className="max-w-2xl text-2xl font-black leading-tight text-white sm:text-4xl">
+                  {timelineAchievements[0].title}
+                </h3>
+                <p className="mt-4 max-w-2xl text-sm font-medium leading-6 text-white/75 sm:text-base">
+                  {timelineAchievements[0].shortDescription || timelineAchievements[0].description}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-slate-950">
+                  View Achievement
+                  <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+                </span>
               </div>
-            </div>
-          ))}
+            </button>
+          )}
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5">
+            {timelineAchievements.slice(1, 5).map((item, idx) => (
+              <button
+                type="button"
+                key={`${item.id || item.title}-${idx}`}
+                onClick={() => openAchievementModal(item)}
+                className="group overflow-hidden rounded-[1.5rem] border border-slate-100 bg-white text-left shadow-[0_10px_35px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black text-slate-900 backdrop-blur">
+                    {item.year}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                    {item.icon || <FiAward className="h-4 w-4" />}
+                  </div>
+                  <p className="mb-2 text-[9px] font-black uppercase tracking-[0.18em] text-emerald-600">
+                    {item.category || 'Achievement'}
+                  </p>
+                  <h4 className="text-base font-black leading-snug text-slate-900 line-clamp-2">
+                    {item.title}
+                  </h4>
+                  <p className="mt-2 text-xs font-medium leading-5 text-slate-500 line-clamp-2">
+                    {item.shortDescription || item.description}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
         ) : (
           <div className="rounded-[28px] border border-dashed border-slate-200 bg-white p-10 text-center">

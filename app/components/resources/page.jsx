@@ -2979,16 +2979,6 @@ const handleSubmit = async (formData, id) => {
                 Upload Resource
               </button>
               
-              <button 
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedType('all');
-                  setSelectedSubject('All Subjects');
-                }}
-                className="px-6 py-3.5 rounded-2xl font-semibold border-2 border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-600 hover:bg-white transition-all duration-300"
-              >
-                Clear Filters
-              </button>
             </div>
           </div>
         </div>
