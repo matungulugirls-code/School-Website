@@ -353,6 +353,7 @@ export async function GET(req) {
       Sports: [],
       Arts: [],
       Leadership: [],
+      Environment: [],
       Other: []
     };
     

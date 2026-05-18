@@ -1458,7 +1458,7 @@ const getSchoolStats = () => {
                 src={timelineAchievements[0].image}
                 alt={timelineAchievements[0].title}
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                className="object-contain p-3 transition-transform duration-700 group-hover:scale-[1.02]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/55 to-transparent" />
               <div className="absolute left-5 right-5 top-5 flex items-center justify-between gap-3">
@@ -1503,7 +1503,7 @@ const getSchoolStats = () => {
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-contain p-2 transition-transform duration-700 group-hover:scale-[1.03]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 to-transparent" />
                   <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black text-slate-900 backdrop-blur">
@@ -2106,14 +2106,14 @@ const getSchoolStats = () => {
       <div className="overflow-y-auto flex-1">
         {/* Hero Image - Responsive Height */}
         {selectedAchievement.image && (
-          <div className="relative h-40 sm:h-56 w-full">
+          <div className="relative h-[62vh] max-h-[620px] min-h-[320px] w-full bg-slate-100 sm:h-[65vh]">
             <Image
               src={selectedAchievement.image}
               alt={selectedAchievement.title}
               fill
-              className="object-cover"
+              className="object-contain p-3"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-black/45 to-transparent" />
           </div>
         )}
 
