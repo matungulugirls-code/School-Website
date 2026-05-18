@@ -432,10 +432,6 @@ const ModernStaffLeadership = () => {
         aVal = a.department || a.subject || '';
         bVal = b.department || b.subject || '';
         break;
-      case 'contact':
-        aVal = a.phone || a.email || '';
-        bVal = b.phone || b.email || '';
-        break;
       default:
         aVal = a.name || '';
         bVal = b.name || '';
@@ -632,7 +628,7 @@ const ModernStaffLeadership = () => {
               <div className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.35)]">
                 
                 {/* Responsive Grid Layout inside card */}
-                <div className="flex flex-col lg:grid lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
+                <div className="flex flex-col lg:grid lg:grid-cols-[minmax(322px,414px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(368px,437px)_minmax(0,1fr)]">
                   
                   {/* Image Section */}
                   <div className="relative bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-800 p-4 sm:p-6 lg:p-7">
@@ -651,7 +647,7 @@ const ModernStaffLeadership = () => {
                       )}
                     </div>
 
-                    <div className="mx-auto max-w-[22rem] lg:max-w-none">
+                    <div className="mx-auto max-w-[25.3rem] lg:max-w-none">
                       <StaffImage
                         staffMember={featuredStaff}
                         className="aspect-[4/5] w-full rounded-[2rem] border border-white/15 bg-white/10 shadow-2xl"
@@ -1016,7 +1012,7 @@ const ModernStaffLeadership = () => {
             
             {/* Staff Table - Horizontal scroll on mobile */}
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[768px] lg:min-w-full">
+              <table className="w-full min-w-[640px] lg:min-w-full">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
                     <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('name')}>
@@ -1035,12 +1031,6 @@ const ModernStaffLeadership = () => {
                       <div className="flex items-center gap-1">
                         Department
                         {sortField === 'department' && (sortDirection === 'asc' ? '↑' : '↓')}
-                      </div>
-                    </th>
-                    <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-emerald-700" onClick={() => handleSort('contact')}>
-                      <div className="flex items-center gap-1">
-                        Contact
-                        {sortField === 'contact' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </div>
                     </th>
                     <th className="px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider">Role</th>
@@ -1094,22 +1084,6 @@ const ModernStaffLeadership = () => {
                           </p>
                         </td>
 
-                        {/* Contact Column */}
-                        <td className="px-3 sm:px-4 py-2 sm:py-3">
-                          <div className="space-y-0.5 text-[11px] sm:text-sm text-slate-600">
-                            {member.email ? (
-                              <p className="truncate max-w-[150px] sm:max-w-[220px]}">{member.email}</p>
-                            ) : null}
-                            {member.phone ? (
-                              <p className="truncate max-w-[150px] sm:max-w-[220px]">{formatPhone(member.phone)}</p>
-                            ) : null}
-                            {!member.email && !member.phone ? (
-                              <p className="text-slate-400">—</p>
-                            ) : null}
-                          </div>
-                        </td>
-                   
-                        
                         {/* Role Badge Column */}
                         <td className="px-3 sm:px-4 py-2 sm:py-3">
                           <span className={`inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold whitespace-nowrap ${roleBadge.bg} ${roleBadge.text}`}>
