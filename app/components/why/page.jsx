@@ -1349,12 +1349,12 @@ const getSchoolStats = () => {
           </div>
         </div>
         
-        {/* The Grid: Forced 2-column layout on mobile */}
+        {/* The Grid: one featured card on top, two supporting cards below on mobile */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           
           {/* Last Year Mean Card */}
           {schoolStatsData.lastYearMean && (
-            <div className="group relative rounded-2xl bg-slate-50/50 border border-slate-100 p-5 transition-all hover:bg-white hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200">
+            <div className="group relative order-2 lg:order-1 rounded-2xl bg-slate-50/50 border border-slate-100 p-4 sm:p-5 transition-all hover:bg-white hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200">
               <p className="text-[11px] font-black uppercase tracking-wider text-blue-600 mb-2">Previous Year</p>
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl sm:text-4xl font-black text-slate-800">{schoolStatsData.lastYearMean.toFixed(2)}</span>
@@ -1365,7 +1365,7 @@ const getSchoolStats = () => {
           
           {/* Current Mean Card - High Focus */}
           {schoolStatsData.meanScore && (
-            <div className="group relative col-span-2 lg:col-span-1 rounded-2xl bg-emerald-50 border-2 border-emerald-100 p-5 transition-all hover:shadow-xl hover:shadow-emerald-500/10">
+            <div className="group relative order-1 col-span-2 lg:order-2 lg:col-span-1 rounded-2xl bg-emerald-50 border-2 border-emerald-100 p-5 transition-all hover:shadow-xl hover:shadow-emerald-500/10">
               <p className="text-[11px] font-black uppercase tracking-wider text-emerald-700 mb-2">Current Standard</p>
               <div className="flex items-center justify-between">
                 <span className="text-4xl sm:text-5xl font-black text-emerald-600 tracking-tighter">
@@ -1387,7 +1387,7 @@ const getSchoolStats = () => {
           
           {/* Target Mean Card */}
           {schoolStatsData.targetMean && (
-            <div className="group relative col-span-2 lg:col-span-1 rounded-2xl bg-slate-50/50 border border-slate-100 p-5 transition-all hover:bg-white hover:shadow-xl hover:shadow-amber-500/10 hover:border-amber-200">
+            <div className="group relative order-3 col-span-1 lg:order-3 rounded-2xl bg-slate-50/50 border border-slate-100 p-4 sm:p-5 transition-all hover:bg-white hover:shadow-xl hover:shadow-amber-500/10 hover:border-amber-200">
                <div className="flex justify-between items-start mb-3">
                   <div>
                     <p className="text-[11px] font-black uppercase tracking-wider text-amber-600 mb-1">Strategic Goal</p>
