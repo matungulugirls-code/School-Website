@@ -78,6 +78,19 @@ const decodeToken = () => {
   }
 };
 
+const extractYouTubeId = (url) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = String(url).match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
+const isAudioFileUrl = (url) => {
+  if (!url) return false;
+  const cleaned = String(url).toLowerCase().split('?')[0].split('#')[0];
+  return ['.mp3', '.wav', '.m4a', '.aac', '.ogg'].some(ext => cleaned.endsWith(ext));
+};
+
 // ========== HELPER FUNCTIONS ==========
 const calculateMonthOverMonthGrowth = (currentCount, previousCount) => {
   if (!previousCount || previousCount === 0) {
@@ -901,7 +914,8 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
       if (schoolInfo.school?.videoTour) {
         setSchoolVideo({
           url: schoolInfo.school.videoTour,
-          type: schoolInfo.school.videoType
+          type: schoolInfo.school.videoType,
+          thumbnail: schoolInfo.school.videoThumbnail
         });
       }
 
@@ -1181,87 +1195,57 @@ setGrowthMetrics({
   // Quick Tour Modal Component
   const QuickTourModal = () => (
     showQuickTour && (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-        {/* Cinematic Backdrop */}
-        <div
-          className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-in fade-in duration-500"
-          onClick={() => setShowQuickTour(false)}
-        />
-
-        {/* Modal Container */}
-        <div className="relative bg-white rounded-[2.5rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] w-full max-w-5xl
-          max-h-[90vh] overflow-y-auto overflow-x-hidden
-          [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
-          animate-in zoom-in-95 duration-300 flex flex-col"
-        >
-
-          {/* Header Section */}
-          <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-white/90 backdrop-blur-md sticky top-0 z-30">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-8 w-1 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,99,235,0.5)]" />
-              <div>
-                <h2 className="text-xs font-black uppercase tracking-[0.3em] text-blue-400">
-                  Matungulu Girls Senior School
-                </h2>
-                <p className="text-[10px] italic font-medium text-white/60 tracking-widest uppercase">
-                  "Committed to Excellence"
-                </p>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-lg animate-in fade-in duration-300">
+        <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
+          <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/20 bg-black shadow-2xl">
+            <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between">
+              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-black/50 py-1.5 pl-3 pr-5 backdrop-blur-md">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-teal-500">
+                  <FiPlay className="h-4 w-4 text-white" />
+                </div>
+                <span className="text-sm font-semibold text-white">School Tour</span>
               </div>
+
+              <button
+                onClick={() => setShowQuickTour(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-md transition-all hover:bg-white/20"
+                aria-label="Close video tour"
+              >
+                <FiX className="h-5 w-5" />
+              </button>
             </div>
 
-            <button
-              onClick={() => setShowQuickTour(false)}
-              className="group p-3 hover:bg-rose-50 rounded-2xl transition-all duration-300 cursor-pointer border border-transparent hover:border-rose-100"
-            >
-              <FiX className="text-2xl text-slate-400 group-hover:text-rose-500" />
-            </button>
-          </div>
-
-          {/* Video Content Area */}
-          <div className="p-2 sm:p-6 bg-slate-50 flex-grow">
-            <div className="relative aspect-video bg-slate-900 rounded-[1.5rem] overflow-hidden shadow-inner ring-4 md:ring-8 ring-white">
-              {schoolVideo ? (
-                <div className="w-full h-full">
-                  {schoolVideo.type === 'youtube' ? (
-                    <iframe
-                      src={`${schoolVideo.url.replace('watch?v=', 'embed/')}?autoplay=1&rel=0`}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <video src={schoolVideo.url} autoPlay controls className="w-full h-full object-cover" poster="/school-poster.jpg" />
-                  )}
+            {schoolVideo?.type === 'youtube' && schoolVideo?.url && extractYouTubeId(schoolVideo.url) ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${extractYouTubeId(schoolVideo.url)}?autoplay=1&rel=0&modestbranding=1`}
+                className="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="School Tour"
+              />
+            ) : schoolVideo?.url ? (
+              isAudioFileUrl(schoolVideo.url) ? (
+                <div className="flex h-full w-full items-center justify-center p-6">
+                  <div className="w-full max-w-xl">
+                    <p className="mb-3 text-center text-sm font-semibold text-white/80">Audio Tour</p>
+                    <audio src={schoolVideo.url} className="w-full" autoPlay controls />
+                  </div>
                 </div>
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                  <FiPlay className="text-4xl text-slate-500 mb-4" />
-                  <h3 className="text-white font-bold text-lg mb-1">Tour Content Unavailable</h3>
-                  <p className="text-slate-500 text-xs md:text-sm max-w-xs">Please upload a School video in settings.</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Footer Actions */}
-          <div className="px-8 py-6 bg-white border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 sticky bottom-0 z-30">
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" />
-                ))}
+                <video
+                  src={schoolVideo.url}
+                  className="h-full w-full object-cover"
+                  autoPlay
+                  controls
+                  poster={schoolVideo.thumbnail}
+                />
+              )
+            ) : (
+              <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center">
+                <FiPlay className="mb-4 h-16 w-16 text-white/30" />
+                <p className="text-white/60">No tour video available yet</p>
               </div>
-              <p className="text-[11px] font-bold text-slate-500 tracking-tight">
-                Join 1K+ students on the virtual tour
-              </p>
-            </div>
-
-            <button
-              onClick={() => setShowQuickTour(false)}
-              className="w-full sm:w-auto bg-slate-900 hover:bg-black text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl transition-all"
-            >
-              Exit Tour
-            </button>
+            )}
           </div>
         </div>
       </div>

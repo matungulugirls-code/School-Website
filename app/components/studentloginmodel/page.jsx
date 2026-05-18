@@ -9,6 +9,24 @@ import {
 import Image from 'next/image';
 import CircularProgress from '@mui/material/CircularProgress';
 
+const EMPTY_FORM_DATA = {
+  identifier: '',
+  password: '',
+  fullName: '',
+  admissionNumber: '',
+  newPassword: '',
+  confirmPassword: '',
+  currentPassword: '',
+  resetMessage: ''
+};
+
+const EMPTY_PASSWORD_VISIBILITY = {
+  login: false,
+  setup: false,
+  confirm: false,
+  current: false
+};
+
 export default function StudentLoginModal({
   isOpen,
   onClose,
@@ -22,37 +40,31 @@ export default function StudentLoginModal({
   passwordSetupStudent = null
 }) {
   const [mode, setMode] = useState('password');
-  const [formData, setFormData] = useState({
-    identifier: '',
-    password: '',
-    fullName: '',
-    admissionNumber: '',
-    newPassword: '',
-    confirmPassword: '',
-    currentPassword: '',
-    resetMessage: ''
-  });
+  const [formData, setFormData] = useState(EMPTY_FORM_DATA);
   const [localError, setLocalError] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
-  const [visiblePasswords, setVisiblePasswords] = useState({
-    login: false,
-    setup: false,
-    confirm: false,
-    current: false
-  });
+  const [visiblePasswords, setVisiblePasswords] = useState(EMPTY_PASSWORD_VISIBILITY);
 
   useEffect(() => {
     setLocalError(error || null);
   }, [error]);
 
   useEffect(() => {
+    if (!isOpen || passwordSetupToken) return;
+
+    setMode('password');
+    setFormData(EMPTY_FORM_DATA);
+    setLocalError(null);
+    setValidationErrors({});
+    setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
+  }, [isOpen, passwordSetupToken]);
+
+  useEffect(() => {
     if (passwordSetupToken) {
       setMode('setup');
-      setFormData(prev => ({
-        ...prev,
-        newPassword: '',
-        confirmPassword: ''
-      }));
+      setFormData(EMPTY_FORM_DATA);
+      setValidationErrors({});
+      setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
     }
   }, [passwordSetupToken, passwordSetupStudent]);
 
@@ -62,6 +74,14 @@ export default function StudentLoginModal({
     setFormData(prev => ({ ...prev, [field]: value }));
     setLocalError(null);
     setValidationErrors(prev => ({ ...prev, [field]: '' }));
+  };
+
+  const switchMode = (nextMode) => {
+    setMode(nextMode);
+    setFormData(EMPTY_FORM_DATA);
+    setLocalError(null);
+    setValidationErrors({});
+    setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
   };
 
   const passwordStrength = (password) => {
@@ -152,8 +172,11 @@ export default function StudentLoginModal({
   };
 
   const handleClose = () => {
+    setMode('password');
+    setFormData(EMPTY_FORM_DATA);
     setLocalError(null);
     setValidationErrors({});
+    setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
     onClose();
   };
 
@@ -240,14 +263,14 @@ export default function StudentLoginModal({
               <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1 mb-5">
                 <button
                   type="button"
-                  onClick={() => setMode('password')}
+                  onClick={() => switchMode('password')}
                   className={`py-3 rounded-xl text-sm font-black transition-all ${mode === 'password' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950'}`}
                 >
                   Password Login
                 </button>
                 <button
                   type="button"
-                  onClick={() => setMode('firstAccess')}
+                  onClick={() => switchMode('firstAccess')}
                   className={`py-3 rounded-xl text-sm font-black transition-all ${mode === 'firstAccess' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950'}`}
                 >
                   First-Time Access
@@ -273,7 +296,7 @@ export default function StudentLoginModal({
             )}
 
             {mode === 'setup' && passwordSetupToken ? (
-              <form onSubmit={handleSetupPassword} className="space-y-5">
+              <form onSubmit={handleSetupPassword} className="space-y-5" autoComplete="off">
                 <div>
                   <h2 className="text-xl font-black text-slate-950">Create Your Password</h2>
                   <p className="text-sm text-slate-600 mt-1">
@@ -331,7 +354,7 @@ export default function StudentLoginModal({
                 <SubmitButton loading={isLoading} label="Create Password" loadingLabel="Creating..." icon={FiShield} />
               </form>
             ) : mode === 'firstAccess' ? (
-              <form onSubmit={handleFirstAccess} className="space-y-5">
+              <form onSubmit={handleFirstAccess} className="space-y-5" autoComplete="off">
                 <div>
                   <h2 className="text-xl font-black text-slate-950">Verify Student Record</h2>
                   <p className="text-sm text-slate-600 mt-1">Use your uploaded student record details for first-time access.</p>
@@ -345,7 +368,7 @@ export default function StudentLoginModal({
                   error={validationErrors.fullName}
                   placeholder="Name as it appears in school records"
                   disabled={isLoading}
-                  autoComplete="name"
+                  autoComplete="off"
                 />
 
                 <InputField
@@ -361,7 +384,7 @@ export default function StudentLoginModal({
                 <SubmitButton loading={isLoading} label="Verify and Continue" loadingLabel="Verifying..." icon={FiCheckCircle} />
               </form>
             ) : mode === 'forgotPassword' || mode === 'changePassword' ? (
-              <form onSubmit={handlePasswordResetRequest} className="space-y-5">
+              <form onSubmit={handlePasswordResetRequest} className="space-y-5" autoComplete="off">
                 <div>
                   <h2 className="text-xl font-black text-slate-950">
                     {mode === 'changePassword' ? 'Request Password Change' : 'Forgot Password'}
@@ -393,7 +416,7 @@ export default function StudentLoginModal({
                     error={validationErrors.currentPassword}
                     placeholder="Enter your current portal password"
                     disabled={isLoading}
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     rightAction={
                       <PasswordVisibilityButton
                         visible={visiblePasswords.current}
@@ -423,14 +446,14 @@ export default function StudentLoginModal({
 
                 <button
                   type="button"
-                  onClick={() => setMode('password')}
+                  onClick={() => switchMode('password')}
                   className="w-full text-sm font-bold text-slate-700 hover:text-slate-950"
                 >
                   Back to password login.
                 </button>
               </form>
             ) : (
-              <form onSubmit={handlePasswordLogin} className="space-y-5">
+              <form onSubmit={handlePasswordLogin} className="space-y-5" autoComplete="off">
                 <div>
                   <h2 className="text-xl font-black text-slate-950">Sign In Securely</h2>
                   <p className="text-sm text-slate-600 mt-1">Use your admission number and your portal password.</p>
@@ -455,7 +478,7 @@ export default function StudentLoginModal({
                   error={validationErrors.password}
                   placeholder="Your portal password"
                   disabled={isLoading}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   rightAction={
                     <PasswordVisibilityButton
                       visible={visiblePasswords.login}
@@ -470,21 +493,21 @@ export default function StudentLoginModal({
                 <div className="grid gap-2 text-center">
                   <button
                     type="button"
-                    onClick={() => setMode('firstAccess')}
+                    onClick={() => switchMode('firstAccess')}
                     className="w-full text-sm font-bold text-slate-700 hover:text-slate-950"
                   >
                     First time here? Verify your record and create a password.
                   </button>
                   <button
                     type="button"
-                    onClick={() => setMode('forgotPassword')}
+                    onClick={() => switchMode('forgotPassword')}
                     className="w-full text-sm font-bold text-blue-700 hover:text-blue-900"
                   >
                     Forgot password? Send reset link to parent email.
                   </button>
                   <button
                     type="button"
-                    onClick={() => setMode('changePassword')}
+                    onClick={() => switchMode('changePassword')}
                     className="w-full text-sm font-bold text-emerald-700 hover:text-emerald-900"
                   >
                     Change password? Verify current password first.
