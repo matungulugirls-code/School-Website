@@ -625,7 +625,7 @@ const handleZerakiClick = (e) => {
   e.preventDefault();
   window.location.href = "zeraki://";
   const fallback = setTimeout(() => {
-    window.location.href = "https://zeraki.app/login"; 
+    window.location.href = "https://zeraki.app"; 
   }, 1500);
   window.onblur = () => clearTimeout(fallback);
 };
