@@ -39,7 +39,7 @@ export const metadata = {
   },
 
   description:
-    "The official website of Matungulu Girls Senior School in Matungulu, Machakos County. Dedicated to academic excellence, Christian values, and holistic student development in Kenya.",
+    "The official website of Matungulu Girls School.",
   keywords: [
     "Matungulu Girls Senior School",
     "Matungulu Girls Secondary School",
