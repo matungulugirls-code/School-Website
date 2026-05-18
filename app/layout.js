@@ -39,72 +39,81 @@ export const metadata = {
   },
 
   description:
-    "The official website of Matungulu Girls School.",
+    "Official Matungulu Girls Website - Premier Public Secondary School in Machakos County, Kenya. Excellence in academics, sports, and character development.",
   keywords: [
+    /* Primary Keywords */
     "Matungulu Girls Senior School",
     "Matungulu Girls Secondary School",
-    "Matungulu girls high school",
-    "Matungulu Girls",
-    "Matungulu Girls School",
-    
-    "Matungulu Girls school",
-    "Matungulu Girls Senior School",
-    "MatG school",
-    "MatG",
-    "Mat G",
-    "national School matungulu",
-    "Matungulu Girls Senior High",
-    "MatG senior Senior School",
-    "Matungulu Girls Senior School Matungulu",
-    "Machakos County Schools",
-    "Best secondary schools in Machakos",
-    "Public schools in Kenya",
-    "Matungulu Girls school results",
-    "Matungulu Girls school admissions",
-    "Matungulu Girls school events",
-    "Matungulu Girls school news",
-    "Matungulu Girls school contact",
-    "Matungulu Girls school location",
-    "Matungulu Girls school map",
-    "Matungulu Girls school history",
-    "Matungulu Girls school achievements",
-    "Matungulu Girls school curriculum",
-    "Matungulu Girls school fees",
-    "Matungulu Girls school uniform",
-    "Matungulu Girls school alumni",
     "Matungulu Girls High School",
-    "Matungulu Girls Machakos",
-    "Matungulu Girls National School",
-    "Matungulu Girls extra county",
-    "Top girls schools Machakos",
-    "Matungulu Girls KCSE results",
-    "Matungulu Girls KCSE performance",
-    "Matungulu Girls mean score",
-    "Matungulu Girls ranking in Machakos",
-    "Matungulu Girls university placement",
-    "Matungulu Girls admission letter",
-    "Matungulu Girls joining instruction",
-    "Matungulu Girls fees structure",
-    "Matungulu Girls form one selection",
-    "Matungulu Girls phone number",
-    "Matungulu Girls email address",
-    "Matungulu Girls direction",
-    "Matungulu town Machakos",
-    "Matungulu Girls principal",
-    "Matungulu Girls old girls association",
-    "Girls boarding schools Machakos",
+    "Matungulu Girls School",
+    "MatG School",
+    "Matungulu National School",
+    
+    /* Search Engine Names & Variants */
+    "Matungulu Girls Official Website",
+    "Matungulu Girls School Kenya",
+    "Matungulu Girls School Machakos",
+    "Matungulu Girls School Machakos County",
+    "Matungulu Girls Extra County School",
+    
+    /* Academic Performance */
+    "Matungulu Girls KCSE Results",
+    "Matungulu Girls KCSE Performance",
+    "Matungulu Girls Mean Score",
+    "Matungulu Girls University Placement",
+    "Matungulu Girls Rankings",
+    "Top Girls Schools Machakos",
+    "Best Secondary Schools Machakos County",
+    
+    /* Admissions & Information */
+    "Matungulu Girls Admission",
+    "Matungulu Girls Admissions Letter",
+    "Matungulu Girls Joining Instructions",
+    "Matungulu Girls Form One Selection",
+    "Matungulu Girls Fees Structure",
+    "Matungulu Girls School Fees",
+    "Matungulu Girls Uniform",
+    
+    /* Contact & Location */
+    "Matungulu Girls Phone Number",
+    "Matungulu Girls Email Address",
+    "Matungulu Girls Direction",
+    "Matungulu Girls Location",
+    "Matungulu Girls Map",
+    "Matungulu Town Machakos",
+    
+    /* School Information */
+    "Matungulu Girls Principal",
+    "Matungulu Girls History",
+    "Matungulu Girls Achievements",
+    "Matungulu Girls Curriculum",
+    "Matungulu Girls Events",
+    "Matungulu Girls News",
+    "Matungulu Girls Alumni",
+    "Matungulu Girls Old Girls Association",
+    
+    /* Related Keywords */
+    "Girls Boarding Schools Machakos",
+    "Public Schools Kenya",
     "KUCCPS Matungulu Girls",
-    "Matungulu Girls school logo",
+    "Machakos County Schools",
+    "Secondary School Portal Kenya",
+    "KCSE Results Kenya",
+    
+    /* Brand Variations */
+    "MatG Senior School",
+    "Mat G School",
     "mat g official website",
-    "Matungulu girls Official Website",
+    "Matungulu girls official website",
+    "Matungulu Girls Senior High School",
   ],
   
-  authors: [{ name: "Matungulu Girls Senior School" }],
+  authors: [{ name: "Matungulu Girls School" }],
 
-  /* Open Graph (Social Media Sharing) */
+  /* Open Graph (Social Media Sharing - WhatsApp, Facebook, etc.) */
   openGraph: {
-    title: "Matungulu Girls School",
-    description: "Official school website.",
+    title: "Matungulu Girls School - Official Website",
+    description: "Official Matungulu Girls Website.",
     url: "https://matungulu-girls.vercel.app",
     siteName: "Matungulu Girls Senior School",
     locale: "en_KE",
@@ -114,7 +123,15 @@ export const metadata = {
         url: "/MatG.jpg",
         width: 1200,
         height: 630,
-        alt: "Matungulu Girls Senior School",
+        alt: "Matungulu Girls School - Official Website",
+        type: "image/jpeg",
+      },
+      {
+        url: "https://matungulu-girls.vercel.app/MatG.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Matungulu Girls School ",
+        type: "image/jpeg",
       },
     ],
   },
@@ -122,9 +139,16 @@ export const metadata = {
   /* Twitter Card */
   twitter: {
     card: "summary_large_image",
-    title: "Matungulu Girls Senior School",
-    description: "Empowering students through education and faith in Machakos County.",
-    images: ["/MatG.jpg"],
+    site: "@MatunguluGirls",
+    title: "Matungulu Girls Senior School - Official Website",
+    description: "Official Matungulu Girls Website.",
+    images: [
+      {
+        url: "https://matungulu-girls.vercel.app/MatG.jpg",
+        alt: "Matungulu Girls School",
+      },
+    ],
+    creator: "@MatunguluGirls",
   },
 
   /* Search Engine Bot Instructions */
@@ -136,6 +160,15 @@ export const metadata = {
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
+    },
+  },
+
+  /* Alternate Links for Search Engines */
+  alternates: {
+    canonical: "https://matungulu-girls.vercel.app",
+    languages: {
+      'en-KE': "https://matungulu-girls.vercel.app",
+      'en': "https://matungulu-girls.vercel.app",
     },
   },
 
@@ -162,7 +195,7 @@ export default function RootLayout({ children }) {
     "url": "https://matungulu-girls.vercel.app",
     "logo": "https://matungulu-girls.vercel.app/MatG.jpg",
     "image": "https://matungulu-girls.vercel.app/MatG.jpg",
-    "description": "A premier public secondary school in Matungulu, Machakos County, Kenya.",
+    "description": "A premier public girls school in Matungulu, Machakos County, Kenya.",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Matungulu",
