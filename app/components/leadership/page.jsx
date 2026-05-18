@@ -43,8 +43,9 @@ import {
   ChevronDown
 } from "lucide-react";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
-// Helper function for image URLs
+// Improved helper function for image URLs with better error handling
 const getImageUrl = (imagePath) => {
   if (!imagePath || typeof imagePath !== 'string') {
     return null;
@@ -55,19 +56,72 @@ const getImageUrl = (imagePath) => {
     return null;
   }
   
+  // Handle Cloudinary URLs
   if (trimmedPath.includes('cloudinary.com')) {
     return trimmedPath;
   }
   
-  if (trimmedPath.startsWith('/') || trimmedPath.startsWith('http')) {
+  // Handle absolute URLs
+  if (trimmedPath.startsWith('http://') || trimmedPath.startsWith('https://')) {
     return trimmedPath;
   }
   
+  // Handle relative paths (starting with /)
+  if (trimmedPath.startsWith('/')) {
+    return trimmedPath;
+  }
+  
+  // Handle data URLs (base64 images)
   if (trimmedPath.startsWith('data:image')) {
     return trimmedPath;
   }
   
-  return trimmedPath;
+  // Handle relative paths without leading slash
+  return `/${trimmedPath}`;
+};
+
+// Component for optimized image with fallback
+const OptimizedImage = ({ src, alt, className, priority = false, onError }) => {
+  const [imgError, setImgError] = useState(false);
+  const imageUrl = getImageUrl(src);
+  
+  if (!imageUrl || imgError) {
+    // Generate avatar fallback
+    const initials = alt?.split(' ').map(n => n[0]).join('') || 'ST';
+    return (
+      <div className={`${className} bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center`}>
+        <span className="text-white text-xl font-bold">{initials}</span>
+      </div>
+    );
+  }
+  
+  // Check if it's a data URL (base64)
+  if (imageUrl.startsWith('data:image')) {
+    return (
+      <img
+        src={imageUrl}
+        alt={alt}
+        className={className}
+        onError={(e) => {
+          setImgError(true);
+          if (onError) onError(e);
+        }}
+      />
+    );
+  }
+  
+  // Use Next.js Image for optimization
+  return (
+    <Image
+      src={imageUrl}
+      alt={alt}
+      fill
+      className={`${className} object-cover object-top`}
+      priority={priority}
+      onError={() => setImgError(true)}
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    />
+  );
 };
 
 const ModernStaffLeadership = () => {
@@ -115,11 +169,12 @@ const ModernStaffLeadership = () => {
           const allStaff = data.staff;
           setStaff(allStaff);
 
-          // Find Principal
+          // Find Principal with better matching
           const foundPrincipal = allStaff.find(s => 
             s.id === 1 ||
             s.role === 'Principal' ||
             s.role?.toLowerCase() === 'principal' ||
+            s.position?.toLowerCase().includes('principal') ||
             (s.position && (
               s.position.toLowerCase().includes('chief principal') || 
               s.position.toLowerCase().includes('principal')
@@ -139,14 +194,16 @@ const ModernStaffLeadership = () => {
 
           // Academics Deputy
           const foundAcademicsDeputy = allDeputies.find(s => 
-            s.position?.toLowerCase().includes('academics')
+            s.position?.toLowerCase().includes('academics') ||
+            s.role?.toLowerCase().includes('academics')
           );
           setAcademicsDeputy(foundAcademicsDeputy || null);
 
           // Administration Deputy
           const foundAdminDeputy = allDeputies.find(s => 
             s.position?.toLowerCase().includes('admin') || 
-            s.position?.toLowerCase().includes('administration')
+            s.position?.toLowerCase().includes('administration') ||
+            s.role?.toLowerCase().includes('admin')
           );
           setAdminDeputy(foundAdminDeputy || null);
 
@@ -182,6 +239,7 @@ const ModernStaffLeadership = () => {
   }, []);
 
   const router = useRouter();
+  
   // Handle staff click
   const handleStaffClick = (staffMember) => {
     if (principal?.id === staffMember.id) {
@@ -232,7 +290,8 @@ const ModernStaffLeadership = () => {
       bg: 'bg-emerald-100', 
       text: 'text-emerald-800', 
       border: 'border-emerald-200',
-      icon: <FiUser className="w-3 h-3 text-emerald-600" />
+      icon: <FiUser className="w-3 h-3 text-emerald-600" />,
+      label: 'STAFF'
     };
     
     const roleLower = role?.toLowerCase() || '';
@@ -253,7 +312,7 @@ const ModernStaffLeadership = () => {
         text: 'text-white', 
         border: 'border-teal-600',
         icon: <Medal className="w-3 h-3 text-yellow-200" />,
-        label: 'DEPUTY'
+        label: positionLower.includes('academic') ? 'ACADEMICS' : 'ADMIN'
       };
     }
     if (roleLower.includes('teacher') || positionLower.includes('teacher')) {
@@ -296,7 +355,7 @@ const ModernStaffLeadership = () => {
         accent: 'from-teal-950 via-teal-800 to-emerald-700',
         badge: 'border-white/20 bg-teal-950/45 text-white',
         chip: 'border-teal-200 bg-teal-50 text-teal-800',
-        label: positionLower.includes('academic') ? 'Deputy Principal - Academics' : 'Deputy Principal'
+        label: positionLower.includes('academic') ? 'Deputy Principal - Academics' : 'Deputy Principal - Administration'
       };
     }
 
@@ -414,6 +473,38 @@ const ModernStaffLeadership = () => {
     return 'hover:bg-slate-50';
   };
 
+  // Image component for consistent rendering
+  const StaffImage = ({ staffMember, className, priority = false }) => {
+    const [error, setError] = useState(false);
+    const imageUrl = getImageUrl(staffMember?.image);
+    
+    if (!imageUrl || error) {
+      const initials = staffMember?.name?.split(' ').map(n => n[0]).join('') || 'ST';
+      const isPrincipal = staffMember?.id === principal?.id;
+      return (
+        <div className={`${className} bg-gradient-to-br from-emerald-700 to-teal-800 flex items-center justify-center`}>
+          {isPrincipal ? (
+            <Crown className="w-1/2 h-1/2 text-yellow-300" />
+          ) : (
+            <span className="text-white text-2xl font-bold">{initials.substring(0, 2)}</span>
+          )}
+        </div>
+      );
+    }
+    
+    return (
+      <div className={`${className} relative overflow-hidden`}>
+        <img
+          src={imageUrl}
+          alt={staffMember?.name || 'Staff member'}
+          className="w-full h-full object-cover object-top"
+          onError={() => setError(true)}
+          loading={priority ? 'eager' : 'lazy'}
+        />
+      </div>
+    );
+  };
+
   // Loading spinner
   if (loading) {
     return (
@@ -504,8 +595,34 @@ const ModernStaffLeadership = () => {
         </div>
       </div>
 
+      {/* Tab Navigation */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-6">
+        <div className="flex gap-2 bg-white rounded-xl p-1 shadow-lg max-w-fit mx-auto">
+          <button
+            onClick={() => setActiveTab('featured')}
+            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${
+              activeTab === 'featured'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                : 'text-slate-600 hover:text-emerald-600'
+            }`}
+          >
+            Leadership View
+          </button>
+          <button
+            onClick={() => setActiveTab('table')}
+            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${
+              activeTab === 'table'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                : 'text-slate-600 hover:text-emerald-600'
+            }`}
+          >
+            Directory View
+          </button>
+        </div>
+      </div>
+
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 pb-12 sm:pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20">
         {activeTab === 'featured' ? (
           /* Featured Card View - Responsive Layout */
           <div className="space-y-6 xl:space-y-0 xl:grid xl:grid-cols-[minmax(0,1fr)_22rem] 2xl:grid-cols-[minmax(0,1fr)_24rem] xl:gap-6 xl:items-start">
@@ -518,22 +635,12 @@ const ModernStaffLeadership = () => {
                 <div className="flex flex-col 2xl:grid 2xl:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)]">
                   
                   {/* Image Section */}
-                  <div className="relative min-h-[380px] sm:min-h-[440px] lg:min-h-[500px] 2xl:min-h-full">
-                    {getImageUrl(featuredStaff?.image) ? (
-                      <img
-                        src={getImageUrl(featuredStaff.image)}
-                        alt={featuredStaff?.name}
-                        className="absolute inset-0 h-full w-full object-cover object-top"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(featuredStaff?.name || 'Staff')}&background=2d6a4f&color=fff&bold=true&size=256`;
-                        }}
-                      />
-                    ) : (
-                      <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${featuredMeta.accent}`}>
-                        <GraduationCap className="w-24 h-24 text-white/30" />
-                      </div>
-                    )}
+                  <div className="relative min-h-[380px] sm:min-h-[440px] lg:min-h-[500px] 2xl:min-h-full bg-gradient-to-br from-emerald-900 to-teal-800">
+                    <StaffImage 
+                      staffMember={featuredStaff}
+                      className="absolute inset-0 w-full h-full"
+                      priority={true}
+                    />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-[#041114] via-[#041114]/40 to-transparent" />
                     <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/35 to-transparent" />
@@ -542,7 +649,7 @@ const ModernStaffLeadership = () => {
                     <div className="absolute left-4 sm:left-5 top-4 sm:top-5 right-4 sm:right-5 z-20 flex flex-wrap items-center gap-2">
                       <span className={`inline-flex max-w-full items-center gap-2 rounded-full border px-2 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] backdrop-blur-sm ${featuredMeta.badge}`}>
                         {featuredRoleBadge.icon}
-                        <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.position || featuredStaff?.position || 'Staff Member'}</span>
+                        <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.position || featuredStaff?.role || 'Staff Member'}</span>
                         <span className="min-w-0 truncate sm:hidden">{featuredStaff?.position || 'Staff'}</span>
                       </span>
                       {viewMode === 'other' && (
@@ -564,6 +671,12 @@ const ModernStaffLeadership = () => {
                             <span className="inline-flex min-w-0 items-center gap-1.5">
                               <Building2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
                               <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.department || featuredStaff?.subject}</span>
+                            </span>
+                          )}
+                          {featuredStaff?.qualification && (
+                            <span className="inline-flex min-w-0 items-center gap-1.5">
+                              <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-300" />
+                              <span className="hidden min-w-0 truncate sm:inline">{featuredStaff?.qualification}</span>
                             </span>
                           )}
                         </div>
@@ -696,22 +809,11 @@ const ModernStaffLeadership = () => {
                   }`}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                      {principal.image ? (
-                        <img
-                          src={getImageUrl(principal.image)}
-                          alt={principal.name}
-                          className="w-full h-full object-cover object-top"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(principal.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-r from-emerald-900 to-teal-800 flex items-center justify-center">
-                          <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300" />
-                        </div>
-                      )}
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-700 to-teal-800">
+                      <StaffImage 
+                        staffMember={principal}
+                        className="w-full h-full"
+                      />
                     </div>
                     
                     <div className="flex-grow min-w-0">
@@ -751,22 +853,11 @@ const ModernStaffLeadership = () => {
                   }`}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                      {academicsDeputy.image ? (
-                        <img
-                          src={getImageUrl(academicsDeputy.image)}
-                          alt={academicsDeputy.name}
-                          className="w-full h-full object-cover object-top"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(academicsDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
-                          <Medal className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-200" />
-                        </div>
-                      )}
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden bg-gradient-to-br from-teal-700 to-emerald-700">
+                      <StaffImage 
+                        staffMember={academicsDeputy}
+                        className="w-full h-full"
+                      />
                     </div>
                     
                     <div className="flex-grow min-w-0">
@@ -806,22 +897,11 @@ const ModernStaffLeadership = () => {
                   }`}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden">
-                      {adminDeputy.image ? (
-                        <img
-                          src={getImageUrl(adminDeputy.image)}
-                          alt={adminDeputy.name}
-                          className="w-full h-full object-cover object-top"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(adminDeputy.name)}&background=0d9488&color=fff&bold=true&size=64`;
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-r from-teal-700 to-emerald-700 flex items-center justify-center">
-                          <Medal className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-200" />
-                        </div>
-                      )}
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-xl overflow-hidden bg-gradient-to-br from-teal-700 to-emerald-700">
+                      <StaffImage 
+                        staffMember={adminDeputy}
+                        className="w-full h-full"
+                      />
                     </div>
                     
                     <div className="flex-grow min-w-0">
@@ -991,22 +1071,11 @@ const ModernStaffLeadership = () => {
                         {/* Name Column with Avatar */}
                         <td className="px-3 sm:px-4 py-2 sm:py-3">
                           <div className="flex items-center gap-2 sm:gap-3">
-                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-100 to-teal-100 flex-shrink-0">
-                              {member.image ? (
-                                <img
-                                  src={getImageUrl(member.image)}
-                                  alt={member.name}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=2d6a4f&color=fff&bold=true&size=64`;
-                                  }}
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  {isPrincipal ? <Crown className="w-3 h-3 sm:w-5 sm:h-5 text-emerald-600" /> : <FiUser className="w-3 h-3 sm:w-5 sm:h-5 text-emerald-500" />}
-                                </div>
-                              )}
+                            <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-100 to-teal-100 flex-shrink-0">
+                              <StaffImage 
+                                staffMember={member}
+                                className="w-full h-full"
+                              />
                             </div>
                             <div className="min-w-0">
                               <p className="font-bold text-slate-900 text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">{member.name}</p>
@@ -1035,7 +1104,7 @@ const ModernStaffLeadership = () => {
                         <td className="px-3 sm:px-4 py-2 sm:py-3">
                           <div className="space-y-0.5 text-[11px] sm:text-sm text-slate-600">
                             {member.email ? (
-                              <p className="truncate max-w-[150px] sm:max-w-[220px]">{member.email}</p>
+                              <p className="truncate max-w-[150px] sm:max-w-[220px]}">{member.email}</p>
                             ) : null}
                             {member.phone ? (
                               <p className="truncate max-w-[150px] sm:max-w-[220px]">{formatPhone(member.phone)}</p>

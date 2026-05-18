@@ -171,6 +171,7 @@ const getSourceRowNumber = (record, fallbackIndex = 0) =>
 const LARGE_UPLOAD_ROW_THRESHOLD = 800;
 const DB_BATCH_SIZE = 200;
 const DEFAULT_STUDENT_GENDER = 'Female';
+const STUDENT_ARCHIVE_RETENTION_DAYS = 60;
 
 const chunkArray = (items = [], size = DB_BATCH_SIZE) => {
   const chunks = [];
@@ -192,6 +193,196 @@ const createManyInChunks = async (delegate, rows, options = {}) => {
   }
 
   return total;
+};
+
+const buildStudentFullName = (student = {}) =>
+  [student.firstName, student.middleName, student.lastName]
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const getArchiveExpiryDate = () =>
+  new Date(Date.now() + STUDENT_ARCHIVE_RETENTION_DAYS * 24 * 60 * 60 * 1000);
+
+const cleanupExpiredStudentCredentialArchives = async (tx = prisma) => {
+  try {
+    await tx.archivedStudentPortalCredential.deleteMany({
+      where: {
+        expiresAt: { lte: new Date() }
+      }
+    });
+  } catch (error) {
+    console.warn('Student credential archive cleanup skipped:', error?.message || error);
+  }
+};
+
+const archiveStudentPortalCredentials = async (
+  tx,
+  students = [],
+  { sourceBatchId = null, archiveReason = 'batch-delete', deletedBy = null } = {}
+) => {
+  const studentRows = students.filter(student => student?.admissionNumber);
+  const admissionNumbers = [...new Set(studentRows.map(student => student.admissionNumber))];
+
+  if (admissionNumbers.length === 0) {
+    return { archivedCount: 0 };
+  }
+
+  await cleanupExpiredStudentCredentialArchives(tx);
+
+  const accounts = await tx.studentPortalAccount.findMany({
+    where: {
+      admissionNumber: { in: admissionNumbers }
+    }
+  });
+
+  const studentMap = new Map(studentRows.map(student => [student.admissionNumber, student]));
+  const accountsWithPasswords = accounts.filter(account => account?.passwordHash);
+
+  for (const account of accountsWithPasswords) {
+    const student = studentMap.get(account.admissionNumber) || {};
+    const now = new Date();
+
+    await tx.archivedStudentPortalCredential.upsert({
+      where: { admissionNumber: account.admissionNumber },
+      update: {
+        passwordHash: account.passwordHash,
+        originalStudentId: student.id || null,
+        originalPortalAccountId: account.id,
+        sourceBatchId,
+        archiveReason,
+        deletedBy,
+        firstName: account.firstName || student.firstName || null,
+        middleName: account.middleName || student.middleName || null,
+        lastName: account.lastName || student.lastName || null,
+        fullName: account.fullName || buildStudentFullName(student) || null,
+        form: account.form || student.form || null,
+        stream: account.stream || student.stream || null,
+        email: account.email || student.email || null,
+        parentPhone: account.parentPhone || student.parentPhone || null,
+        status: 'archived',
+        passwordSetAt: account.passwordSetAt || null,
+        lastLoginAt: account.lastLoginAt || null,
+        archivedAt: now,
+        restoredAt: null,
+        expiresAt: getArchiveExpiryDate()
+      },
+      create: {
+        admissionNumber: account.admissionNumber,
+        passwordHash: account.passwordHash,
+        originalStudentId: student.id || null,
+        originalPortalAccountId: account.id,
+        sourceBatchId,
+        archiveReason,
+        deletedBy,
+        firstName: account.firstName || student.firstName || null,
+        middleName: account.middleName || student.middleName || null,
+        lastName: account.lastName || student.lastName || null,
+        fullName: account.fullName || buildStudentFullName(student) || null,
+        form: account.form || student.form || null,
+        stream: account.stream || student.stream || null,
+        email: account.email || student.email || null,
+        parentPhone: account.parentPhone || student.parentPhone || null,
+        status: 'archived',
+        passwordSetAt: account.passwordSetAt || null,
+        lastLoginAt: account.lastLoginAt || null,
+        archivedAt: now,
+        expiresAt: getArchiveExpiryDate()
+      }
+    });
+  }
+
+  return { archivedCount: accountsWithPasswords.length };
+};
+
+const restoreStudentPortalCredentials = async (tx, studentRows = []) => {
+  const admissionNumbers = [...new Set(
+    studentRows
+      .map(student => student?.admissionNumber)
+      .filter(Boolean)
+  )];
+
+  if (admissionNumbers.length === 0) {
+    return { restoredCount: 0 };
+  }
+
+  await cleanupExpiredStudentCredentialArchives(tx);
+
+  const [archives, activeStudents, existingAccounts] = await Promise.all([
+    tx.archivedStudentPortalCredential.findMany({
+      where: {
+        admissionNumber: { in: admissionNumbers },
+        expiresAt: { gt: new Date() }
+      }
+    }),
+    tx.databaseStudent.findMany({
+      where: {
+        admissionNumber: { in: admissionNumbers },
+        status: 'active'
+      }
+    }),
+    tx.studentPortalAccount.findMany({
+      where: {
+        admissionNumber: { in: admissionNumbers }
+      },
+      select: {
+        admissionNumber: true,
+        passwordHash: true
+      }
+    })
+  ]);
+
+  const activeStudentMap = new Map(activeStudents.map(student => [student.admissionNumber, student]));
+  const existingAccountMap = new Map(existingAccounts.map(account => [account.admissionNumber, account]));
+  let restoredCount = 0;
+
+  for (const archive of archives) {
+    const student = activeStudentMap.get(archive.admissionNumber);
+    if (!student || !archive.passwordHash) continue;
+
+    const snapshot = {
+      firstName: student.firstName || archive.firstName || null,
+      middleName: student.middleName || archive.middleName || null,
+      lastName: student.lastName || archive.lastName || null,
+      fullName: buildStudentFullName(student) || archive.fullName || null,
+      form: student.form || archive.form || null,
+      stream: student.stream || archive.stream || null,
+      email: student.email || archive.email || null,
+      parentPhone: student.parentPhone || archive.parentPhone || null,
+      status: 'active'
+    };
+
+    const existingAccount = existingAccountMap.get(archive.admissionNumber);
+
+    await tx.studentPortalAccount.upsert({
+      where: { admissionNumber: archive.admissionNumber },
+      update: {
+        ...(existingAccount?.passwordHash ? {} : { passwordHash: archive.passwordHash }),
+        ...snapshot,
+        passwordSetAt: archive.passwordSetAt || undefined
+      },
+      create: {
+        admissionNumber: archive.admissionNumber,
+        passwordHash: archive.passwordHash,
+        ...snapshot,
+        passwordSetAt: archive.passwordSetAt || new Date(),
+        lastLoginAt: archive.lastLoginAt || null
+      }
+    });
+
+    await tx.archivedStudentPortalCredential.update({
+      where: { admissionNumber: archive.admissionNumber },
+      data: {
+        restoredAt: new Date(),
+        status: 'restored'
+      }
+    });
+
+    restoredCount++;
+  }
+
+  return { restoredCount };
 };
 
 const normalizeStudentUploadFailure = (error) => {
@@ -508,7 +699,8 @@ const processNewUpload = async (students, uploadBatchId, selectedForms, duplicat
     skippedRows: 0,
     errorRows: 0,
     errors: [],
-    createdStudents: []
+    createdStudents: [],
+    restoredAccounts: 0
   };
   
   // Get existing admission numbers across all forms
@@ -631,6 +823,8 @@ const processNewUpload = async (students, uploadBatchId, selectedForms, duplicat
       });
       
       stats.createdStudents = studentsToCreate;
+      const restoreResult = await restoreStudentPortalCredentials(tx, studentsToCreate);
+      stats.restoredAccounts += restoreResult.restoredCount;
     } catch (error) {
       console.error('Error creating students:', error);
       throw new Error(`Failed to save ${studentsToCreate.length} student record(s): ${error.message}`);
@@ -651,7 +845,8 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
     errorRows: 0,
     errors: [],
     updatedStudents: [],
-    createdStudents: []
+    createdStudents: [],
+    restoredAccounts: 0
   };
   
   // Get existing students in this form
@@ -772,6 +967,8 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
       });
       stats.createdRows += studentsToCreate.length;
       stats.createdStudents = studentsToCreate;
+      const restoreResult = await restoreStudentPortalCredentials(tx, studentsToCreate);
+      stats.restoredAccounts += restoreResult.restoredCount;
     } catch (error) {
       throw new Error(`Failed to save ${studentsToCreate.length} student record(s): ${error.message}`);
     }
@@ -1544,7 +1741,11 @@ await prisma.$transaction(async (tx) => {
         validRows: processingStats.validRows,
         skippedRows: processingStats.skippedRows,
         errorRows: processingStats.errorRows,
-        errorLog: processingStats.errors.length > 0 ? processingStats.errors.slice(0, 50) : undefined
+        errorLog: processingStats.errors.length > 0 ? processingStats.errors.slice(0, 50) : undefined,
+        metadata: {
+          ...uploadBatch.metadata,
+          restoredAccounts: processingStats.restoredAccounts || 0
+        }
       }
     });
     
@@ -1596,7 +1797,8 @@ await prisma.$transaction(async (tx) => {
           ...uploadBatch.metadata,
           updatedRows: processingStats.updatedRows,
           createdRows: processingStats.createdRows,
-          deactivatedRows: processingStats.deactivatedRows
+          deactivatedRows: processingStats.deactivatedRows,
+          restoredAccounts: processingStats.restoredAccounts || 0
         }
       }
     });
@@ -1644,9 +1846,9 @@ await prisma.$transaction(async (tx) => {
       
       return NextResponse.json({
         success: true,
-        message: uploadType === 'new' 
-          ? `Successfully processed ${processingStats.validRows} new students` 
-          : `Successfully updated form ${targetForm}: ${processingStats.updatedRows} updated, ${processingStats.createdRows} created, ${processingStats.deactivatedRows} deactivated`,
+        message: uploadType === 'new'
+          ? `Successfully processed ${processingStats.validRows} new students${processingStats.restoredAccounts ? ` and restored ${processingStats.restoredAccounts} portal account${processingStats.restoredAccounts === 1 ? '' : 's'}` : ''}`
+          : `Successfully updated form ${targetForm}: ${processingStats.updatedRows} updated, ${processingStats.createdRows} created, ${processingStats.deactivatedRows} deactivated${processingStats.restoredAccounts ? `, ${processingStats.restoredAccounts} portal account${processingStats.restoredAccounts === 1 ? '' : 's'} restored` : ''}`,
         batch: {
           id: batchId,
           fileName: uploadBatch.fileName,
@@ -1880,7 +2082,25 @@ export async function DELETE(request) {
 
         const batchStudents = await tx.databaseStudent.findMany({
           where: { uploadBatchId: batchId },
-          select: { form: true, status: true }
+          select: {
+            id: true,
+            admissionNumber: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            form: true,
+            stream: true,
+            email: true,
+            parentPhone: true,
+            uploadBatchId: true,
+            status: true
+          }
+        });
+
+        const archiveResult = await archiveStudentPortalCredentials(tx, batchStudents, {
+          sourceBatchId: batchId,
+          archiveReason: hardDelete ? 'batch-hard-delete' : 'batch-delete',
+          deletedBy: auth.user?.id || auth.user?.email || auth.user?.name || null
         });
 
         const formCounts = batchStudents.reduce((acc, student) => {
@@ -1929,6 +2149,7 @@ export async function DELETE(request) {
         return { 
           batch, 
           deletedCount: batchStudents.length,
+          archivedCredentialCount: archiveResult.archivedCount,
           deletionType: hardDelete ? 'hard' : 'soft'
         };
       });
@@ -1943,7 +2164,8 @@ export async function DELETE(request) {
         message: `${result.deletionType === 'hard' ? 'Hard deleted' : 'Soft deleted'} batch ${result.batch.fileName} and ${result.deletedCount} students`,
         data: {
           stats: finalStats.stats,
-          validation: finalStats.validation
+          validation: finalStats.validation,
+          archivedCredentialCount: result.archivedCredentialCount
         },
         authenticated: true,
       });
@@ -1952,12 +2174,31 @@ export async function DELETE(request) {
     if (studentId) {
       const result = await prisma.$transaction(async (tx) => {
         const student = await tx.databaseStudent.findUnique({
-          where: { id: studentId }
+          where: { id: studentId },
+          select: {
+            id: true,
+            admissionNumber: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            form: true,
+            stream: true,
+            email: true,
+            parentPhone: true,
+            uploadBatchId: true,
+            status: true
+          }
         });
 
         if (!student) {
           throw new Error('Student not found');
         }
+
+        const archiveResult = await archiveStudentPortalCredentials(tx, [student], {
+          sourceBatchId: student.uploadBatchId || null,
+          archiveReason: hardDelete ? 'student-hard-delete' : 'student-delete',
+          deletedBy: auth.user?.id || auth.user?.email || auth.user?.name || null
+        });
 
         if (hardDelete) {
           // Hard delete student
@@ -1988,7 +2229,7 @@ export async function DELETE(request) {
           });
         }
 
-        return { student, deletionType: hardDelete ? 'hard' : 'soft' };
+        return { student, archivedCredentialCount: archiveResult.archivedCount, deletionType: hardDelete ? 'hard' : 'soft' };
       });
 
       // Recalculate to ensure consistency
@@ -2001,7 +2242,8 @@ export async function DELETE(request) {
         message: `${result.deletionType === 'hard' ? 'Hard deleted' : 'Soft deleted'} student ${result.student.firstName} ${result.student.lastName}`,
         data: {
           stats: finalStats.stats,
-          validation: finalStats.validation
+          validation: finalStats.validation,
+          archivedCredentialCount: result.archivedCredentialCount
         },
         authenticated: true,
       });

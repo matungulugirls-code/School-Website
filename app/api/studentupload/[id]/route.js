@@ -11,6 +11,93 @@ const normalizeLocalMobilePhone = (value = '') => {
 };
 
 const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
+const STUDENT_ARCHIVE_RETENTION_DAYS = 60;
+
+const buildStudentFullName = (student = {}) =>
+  [student.firstName, student.middleName, student.lastName]
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const getArchiveExpiryDate = () =>
+  new Date(Date.now() + STUDENT_ARCHIVE_RETENTION_DAYS * 24 * 60 * 60 * 1000);
+
+const cleanupExpiredStudentCredentialArchives = async (tx = prisma) => {
+  try {
+    await tx.archivedStudentPortalCredential.deleteMany({
+      where: {
+        expiresAt: { lte: new Date() }
+      }
+    });
+  } catch (error) {
+    console.warn('Student credential archive cleanup skipped:', error?.message || error);
+  }
+};
+
+const archiveStudentPortalCredential = async (tx, student, deletedBy = null) => {
+  if (!student?.admissionNumber) return { archivedCount: 0 };
+
+  await cleanupExpiredStudentCredentialArchives(tx);
+
+  const account = await tx.studentPortalAccount.findUnique({
+    where: { admissionNumber: student.admissionNumber }
+  });
+
+  if (!account?.passwordHash) return { archivedCount: 0 };
+
+  const now = new Date();
+
+  await tx.archivedStudentPortalCredential.upsert({
+    where: { admissionNumber: account.admissionNumber },
+    update: {
+      passwordHash: account.passwordHash,
+      originalStudentId: student.id || null,
+      originalPortalAccountId: account.id,
+      sourceBatchId: student.uploadBatchId || null,
+      archiveReason: 'student-delete',
+      deletedBy,
+      firstName: account.firstName || student.firstName || null,
+      middleName: account.middleName || student.middleName || null,
+      lastName: account.lastName || student.lastName || null,
+      fullName: account.fullName || buildStudentFullName(student) || null,
+      form: account.form || student.form || null,
+      stream: account.stream || student.stream || null,
+      email: account.email || student.email || null,
+      parentPhone: account.parentPhone || student.parentPhone || null,
+      status: 'archived',
+      passwordSetAt: account.passwordSetAt || null,
+      lastLoginAt: account.lastLoginAt || null,
+      archivedAt: now,
+      restoredAt: null,
+      expiresAt: getArchiveExpiryDate()
+    },
+    create: {
+      admissionNumber: account.admissionNumber,
+      passwordHash: account.passwordHash,
+      originalStudentId: student.id || null,
+      originalPortalAccountId: account.id,
+      sourceBatchId: student.uploadBatchId || null,
+      archiveReason: 'student-delete',
+      deletedBy,
+      firstName: account.firstName || student.firstName || null,
+      middleName: account.middleName || student.middleName || null,
+      lastName: account.lastName || student.lastName || null,
+      fullName: account.fullName || buildStudentFullName(student) || null,
+      form: account.form || student.form || null,
+      stream: account.stream || student.stream || null,
+      email: account.email || student.email || null,
+      parentPhone: account.parentPhone || student.parentPhone || null,
+      status: 'archived',
+      passwordSetAt: account.passwordSetAt || null,
+      lastLoginAt: account.lastLoginAt || null,
+      archivedAt: now,
+      expiresAt: getArchiveExpiryDate()
+    }
+  });
+
+  return { archivedCount: 1 };
+};
 
 // ==================== AUTHENTICATION UTILITIES ====================
 
@@ -367,9 +454,32 @@ export async function DELETE(request, { params }) {
 
     const { id } = params;
 
-    const deletedStudent = await prisma.databaseStudent.delete({
-      where: { id }
+    const result = await prisma.$transaction(async (tx) => {
+      const student = await tx.databaseStudent.findUnique({
+        where: { id }
+      });
+
+      if (!student) {
+        throw Object.assign(new Error('Student not found'), { code: 'P2025' });
+      }
+
+      const archiveResult = await archiveStudentPortalCredential(
+        tx,
+        student,
+        auth.user?.id || auth.user?.email || auth.user?.name || null
+      );
+
+      const deletedStudent = await tx.databaseStudent.delete({
+        where: { id }
+      });
+
+      return {
+        deletedStudent,
+        archivedCredentialCount: archiveResult.archivedCount
+      };
     });
+
+    const { deletedStudent, archivedCredentialCount } = result;
 
     // Update stats
     await prisma.studentStats.update({
@@ -390,6 +500,7 @@ export async function DELETE(request, { params }) {
       message: 'Student deleted successfully',
       authenticated: true,
       deletedBy: auth.user.name,
+      archivedCredentialCount,
       deletedStudent: {
         name: `${deletedStudent.firstName} ${deletedStudent.lastName}`,
         admissionNumber: deletedStudent.admissionNumber,

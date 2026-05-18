@@ -87,6 +87,58 @@ const buildAccountSnapshot = (student) => ({
   status: 'active'
 });
 
+const cleanupExpiredStudentCredentialArchives = async () => {
+  try {
+    await prisma.archivedStudentPortalCredential.deleteMany({
+      where: {
+        expiresAt: { lte: new Date() }
+      }
+    });
+  } catch (error) {
+    console.warn('Student credential archive cleanup skipped:', error?.message || error);
+  }
+};
+
+const restoreArchivedAccountForStudent = async (student) => {
+  if (!student?.admissionNumber || student.status !== 'active') return null;
+
+  await cleanupExpiredStudentCredentialArchives();
+
+  const archive = await prisma.archivedStudentPortalCredential.findFirst({
+    where: {
+      admissionNumber: student.admissionNumber,
+      expiresAt: { gt: new Date() }
+    }
+  });
+
+  if (!archive?.passwordHash) return null;
+
+  const account = await prisma.studentPortalAccount.upsert({
+    where: { admissionNumber: student.admissionNumber },
+    update: {
+      ...buildAccountSnapshot(student),
+      passwordSetAt: archive.passwordSetAt || undefined
+    },
+    create: {
+      admissionNumber: student.admissionNumber,
+      passwordHash: archive.passwordHash,
+      ...buildAccountSnapshot(student),
+      passwordSetAt: archive.passwordSetAt || new Date(),
+      lastLoginAt: archive.lastLoginAt || null
+    }
+  });
+
+  await prisma.archivedStudentPortalCredential.update({
+    where: { admissionNumber: student.admissionNumber },
+    data: {
+      restoredAt: new Date(),
+      status: 'restored'
+    }
+  });
+
+  return account;
+};
+
 const buildPortalProfile = (student = null, account = null) => {
   const source = student || account;
 
@@ -468,13 +520,17 @@ export async function POST(request) {
       );
     }
 
-    const account = await prisma.studentPortalAccount.findUnique({
+    let account = await prisma.studentPortalAccount.findUnique({
       where: { admissionNumber: cleanAdmissionNumber }
     });
 
     const student = await prisma.databaseStudent.findUnique({
       where: { admissionNumber: cleanAdmissionNumber }
     });
+
+    if (!account?.passwordHash && student?.status === 'active') {
+      account = await restoreArchivedAccountForStudent(student) || account;
+    }
 
     if (requestedAction === 'login') {
       if (!student || student.status !== 'active') {

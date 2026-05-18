@@ -880,6 +880,40 @@ model StudentPortalAccount {
   @@map("student_portal_accounts")
 }
 
+model ArchivedStudentPortalCredential {
+  id                      String    @id @default(cuid())
+  admissionNumber         String    @unique @db.VarChar(50)
+  passwordHash            String    @db.VarChar(255)
+  originalStudentId       String?   @db.VarChar(191)
+  originalPortalAccountId String?   @db.VarChar(191)
+  sourceBatchId           String?   @db.VarChar(191)
+  archiveReason           String?   @db.VarChar(100)
+  deletedBy               String?   @db.VarChar(191)
+  firstName               String?   @db.VarChar(100)
+  middleName              String?   @db.VarChar(100)
+  lastName                String?   @db.VarChar(100)
+  fullName                String?   @db.VarChar(255)
+  form                    String?   @db.VarChar(20)
+  stream                  String?   @db.VarChar(50)
+  email                   String?   @db.VarChar(100)
+  parentPhone             String?   @db.VarChar(20)
+  status                  String    @default("archived") @db.VarChar(50)
+  passwordSetAt           DateTime?
+  lastLoginAt             DateTime?
+  archivedAt              DateTime  @default(now())
+  restoredAt              DateTime?
+  expiresAt               DateTime
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@index([admissionNumber])
+  @@index([sourceBatchId])
+  @@index([archivedAt])
+  @@index([expiresAt])
+  @@index([restoredAt])
+  @@map("archived_student_portal_credentials")
+}
+
 model StudentPasswordResetRequest {
   id              String    @id @default(cuid())
   admissionNumber String    @db.VarChar(50)
