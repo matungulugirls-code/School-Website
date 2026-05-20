@@ -26,6 +26,7 @@ import {
   FiMenu,
   FiPhone,
   FiShield,
+  FiTrendingUp,
   FiUsers,
   FiX,
 } from 'react-icons/fi';
@@ -35,6 +36,7 @@ const primaryLinks = [
   { name: 'About', href: '/pages/AboutUs', icon: FiInfo },
   { name: 'Admissions', href: '/pages/admissions', icon: FiBookOpen },
   { name: 'Gallery', href: '/pages/gallery', icon: FiImage },
+  { name: 'KCSE Performance', href: '/pages/KCSE-Performance', icon: FiTrendingUp },
   { name: 'Events & News', href: '/pages/eventsandnews', icon: FiCalendar },
 ];
 

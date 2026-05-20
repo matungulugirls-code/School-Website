@@ -19,6 +19,7 @@ import {
   FiHeart,
   FiAward,
   FiCheckCircle,
+  FiExternalLink,
   FiPrinter,
   FiShare2,
   FiRefreshCw
@@ -51,7 +52,7 @@ import { useRouter } from 'next/navigation';
 
 const FeesHero = ({ stats, activeTabLabel, onRefresh }) => {
   return (
-    <section className="relative overflow-hidden rounded-lg border border-[#d6e9df] bg-[#0d2f25] p-6 text-white sm:p-8 lg:p-10">
+    <section className="relative overflow-hidden rounded-[2rem] border border-[#d6e9df] bg-[#0d2f25] p-6 text-white shadow-[0_35px_90px_-70px_rgba(15,23,42,0.8)] sm:p-8 lg:p-10">
       <div className="absolute -right-20 -top-16 h-72 w-72 rounded-full bg-emerald-400/15 blur-3xl" />
       <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-teal-400/10 blur-3xl" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_35%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_45%)]" />
@@ -383,11 +384,13 @@ export default function ModernFeesPage() {
   const [documentData, setDocumentData] = useState(null);
   const [selectedFeeItem, setSelectedFeeItem] = useState(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [pdfPreview, setPdfPreview] = useState(null);
   const [activeTab, setActiveTab] = useState('boarding');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Tabs configuration
   const tabs = [
+    { id: 'day', name: 'Day Scholars', icon: IoPeopleOutline },
     { id: 'boarding', name: 'Boarders', icon: IoBedOutline },
     { id: 'admission', name: 'Admission', icon: MdOutlineAdUnits }
   ];
@@ -426,6 +429,8 @@ export default function ModernFeesPage() {
     if (!documentData) return [];
     
     switch(activeTab) {
+      case 'day':
+        return documentData.feesDayDistributionJson || [];
       case 'boarding':
         return documentData.feesBoardingDistributionJson || [];
       case 'admission':
@@ -446,6 +451,14 @@ export default function ModernFeesPage() {
     if (!documentData) return null;
     
     switch(activeTab) {
+      case 'day':
+        return {
+          url: documentData.feesDayDistributionPdf,
+          name: documentData.feesDayPdfName,
+          size: documentData.feesDayPdfSize,
+          date: documentData.feesDayPdfUploadDate,
+          description: documentData.feesDayDescription
+        };
       case 'boarding':
         return {
           url: documentData.feesBoardingDistributionPdf,
@@ -496,7 +509,11 @@ export default function ModernFeesPage() {
       toast.error('PDF not available');
       return;
     }
-    window.open(url, '_blank');
+    setPdfPreview({
+      url,
+      title: `${currentTabLabel} Fee Structure`,
+      fileName: pdfInfo?.name || 'fee-structure.pdf'
+    });
   };
 
   // Handle refresh
@@ -588,7 +605,7 @@ export default function ModernFeesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f7f3]">
+    <div className="min-h-screen bg-[#f6f8f4]">
       <Toaster position="top-right" richColors />
 
       <div className="w-full md:w-[90%] mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
@@ -598,7 +615,7 @@ export default function ModernFeesPage() {
       <div className="max-w-7xl mx-auto  py-6 sm:py-8">
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-            <div className="rounded-md border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-700">Browse Sections</p>
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 {tabs.map((tab) => {
@@ -686,7 +703,7 @@ export default function ModernFeesPage() {
               </div>
             )}
 
-            <div className="rounded-md bg-[#102d24] p-6 text-white">
+            <div className="rounded-[1.8rem] bg-[#102d24] p-6 text-white shadow-[0_24px_70px_-55px_rgba(15,23,42,0.7)]">
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200">What To Know</p>
               <div className="mt-4 space-y-4 text-sm leading-7 text-white/78">
                 <p>Review the correct section before making payment so charges match the learner&apos;s status.</p>
@@ -832,6 +849,49 @@ export default function ModernFeesPage() {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+
+      {pdfPreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+          <div className="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white shadow-2xl">
+            <div className="flex flex-col gap-4 border-b border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Fee PDF Preview</p>
+                <h3 className="mt-1 truncate text-lg font-black text-slate-950">{pdfPreview.title}</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={pdfPreview.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-slate-700 transition-colors hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                >
+                  <FiExternalLink size={14} />
+                  Open
+                </a>
+                <button
+                  onClick={() => handleDownloadPDF(pdfPreview.url, pdfPreview.fileName)}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-emerald-800"
+                >
+                  <FiDownload size={14} />
+                  Download
+                </button>
+                <button
+                  onClick={() => setPdfPreview(null)}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-100"
+                  aria-label="Close PDF preview"
+                >
+                  <IoClose size={18} />
+                </button>
+              </div>
+            </div>
+            <iframe
+              src={`${pdfPreview.url}#toolbar=1&navpanes=0&view=FitH`}
+              title={`${pdfPreview.title} preview`}
+              className="h-[75vh] w-full bg-white"
+            />
           </div>
         </div>
       )}

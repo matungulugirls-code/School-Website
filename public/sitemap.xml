@@ -182,6 +182,16 @@
     </image:image>
   </url>
   <url>
+    <loc>https://matungulu-girls.vercel.app/pages/KCSE-Performance</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.84</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/Matungulu/9.jpeg</image:loc>
+      <image:title>KCSE Performance</image:title>
+    </image:image>
+  </url>
+  <url>
     <loc>https://matungulu-girls.vercel.app/pages/eventsandnews</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>daily</changefreq>
