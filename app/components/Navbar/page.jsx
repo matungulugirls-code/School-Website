@@ -40,7 +40,7 @@ const primaryLinks = [
 ];
 
 const utilityLinks = [
-  { name: 'KCSE Performance', href: '/pages/KCSE-Performance', icon: FiTrendingUp },
+  { name: 'KCSE Performance', href: '/kcse-performance', icon: FiTrendingUp },
   { name: 'Student Portal', href: '/pages/StudentPortal', icon: FiFileText },
   { name: 'School Fees', href: '/pages/School Fees', icon: FiDollarSign },
   { name: 'Contact', href: '/pages/contact', icon: FiPhone },

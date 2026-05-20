@@ -1,4 +1,4 @@
-import KcsePerformancePage from '../../components/kcse-performance/page';
+import KcsePerformancePage from '../components/kcse-performance/page';
 
 export const metadata = {
   title: 'KCSE Performance | Matungulu Girls Senior School',
