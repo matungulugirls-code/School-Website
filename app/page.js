@@ -386,7 +386,7 @@ export default function ModernHero() {
     '@context': 'https://schema.org',
     '@type': 'School',
     name: 'Matungulu Girls Senior School',
-    image: 'https://matungulu-girls.vercel.app/MatG.jpg',
+    image: 'https://matungulugirls.school/MatG.jpg',
     description: 'A secondary school committed to academic excellence, integrity, and holistic student development.',
     address: {
       '@type': 'PostalAddress',
@@ -395,7 +395,7 @@ export default function ModernHero() {
       'addressRegion': 'Machakos County',
       'addressCountry': 'KE'
     },
-    url: 'https://matungulu-girls.vercel.app',
+    url: 'https://matungulugirls.school',
     telephone: '0734610130',
     sameAs: [
       'https://facebook.com/matungulugirls',

@@ -155,7 +155,7 @@ const SCHOOL_LOCATION = process.env.SCHOOL_LOCATION || 'Matungulu, Machakos Coun
 const SCHOOL_MOTTO = process.env.SCHOOL_MOTTO || 'Committed to Excellence';
 const CONTACT_PHONE = process.env.CONTACT_PHONE || '0734610130';
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'matungulugirls@gmial.com';
-const SCHOOL_WEBSITE = process.env.SCHOOL_WEBSITE || 'https://matungulu-girls.vercel.app';
+const SCHOOL_WEBSITE = process.env.SCHOOL_WEBSITE || 'https://matungulugirls.school';
 
 // Social Media Configuration
 const SOCIAL_MEDIA = {
@@ -164,7 +164,7 @@ const SOCIAL_MEDIA = {
     color: '#1877F2',
   },
   youtube: {
-    url: process.env.SCHOOL_YOUTUBE || 'https://matungulu-girls.vercel.app',
+    url: process.env.SCHOOL_YOUTUBE || 'https://matungulugirls.school',
     color: '#FF0000',
   },
   linkedin: {
@@ -172,7 +172,7 @@ const SOCIAL_MEDIA = {
     color: '#0A66C2',
   },
   twitter: {
-    url: process.env.SCHOOL_TWITTER || 'https://matungulu-girls.vercel.app',
+    url: process.env.SCHOOL_TWITTER || 'https://matungulugirls.school',
     color: '#1DA1F2',
   }
 };

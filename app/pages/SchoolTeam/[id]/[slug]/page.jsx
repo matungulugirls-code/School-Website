@@ -21,7 +21,7 @@ try {
 
 export async function generateMetadata({ params }) {
   const { id, slug } = params;
-  const baseUrlFromEnv = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
+  const baseUrlFromEnv = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulugirls.school';
   const canonicalUrl = `${baseUrlFromEnv}/pages/SchoolTeam/${id}/${slug}`;
   
   // Find staff from local data - this works at build time
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }) {
         description: "Professional educators dedicated to student success at Matungulu Girls Senior School",
         images: [
           {
-            url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/MatG.jpg`,
+            url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulugirls.school'}/MatG.jpg`,
             width: 1200,
             height: 630,
             alt: 'Matungulu Girls Senior School Staff - Committed to Excellence'
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }) {
         card: 'summary_large_image',
         title: "Staff Profile | Matungulu Girls Senior School",
         description: "Professional educators dedicated to student success",
-        images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app'}/MatG.jpg`],
+        images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulugirls.school'}/MatG.jpg`],
       },
       robots: {
         index: true,
@@ -133,7 +133,7 @@ export async function generateStaticParams() {
   
   // ALTERNATIVE: If you want to fetch from API but avoid build errors:
   // try {
-  //   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
+  //   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulugirls.school';
   //   const res = await fetch(`${baseUrl}/api/staff`, { next: { revalidate: 3600 } });
   //   
   //   if (res.ok) {
@@ -155,7 +155,7 @@ export const dynamic = 'force-dynamic'; // Force dynamic rendering
 export function generateJsonLd(staff) {
   if (!staff) return null;
   
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulu-girls.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://matungulugirls.school';
   
   return {
     "@context": "https://schema.org",

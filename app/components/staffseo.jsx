@@ -156,10 +156,10 @@ export default function StaffProfilePage() {
         staff.expertise?.slice(0, 3).join(', ') || 'education'
       }. View full profile, qualifications, and contact information.`;
 
-    const profileUrl = `https://matungulu-girls.vercel.app/pages/SchoolTeam/${id}`;
+    const profileUrl = `https://matungulugirls.school/pages/SchoolTeam/${id}`;
     const imageUrl = staff.image?.startsWith('http')
       ? staff.image
-      : `https://matungulu-girls.vercel.app${staff.image}`;
+      : `https://matungulugirls.school${staff.image}`;
 
     return (
       <Head>
@@ -203,7 +203,7 @@ export default function StaffProfilePage() {
                 name: schoolName,
                 alternateName: ['Matungulu GirlsSenior School', 'SA Matungulu Girls', 'Katz School'],
                 description: schoolDescription,
-                url: 'https://matungulu-girls.vercel.app',
+                url: 'https://matungulugirls.school',
                 address: {
                   '@type': 'PostalAddress',
                   addressLocality: 'Matungulu',
@@ -232,7 +232,7 @@ export default function StaffProfilePage() {
                 },
                 startDate: staff.joinDate,
               },
-              sameAs: [profileUrl, 'https://matungulu-girls.vercel.app/pages/SchoolTeam'],
+              sameAs: [profileUrl, 'https://matungulugirls.school/pages/SchoolTeam'],
             }),
           }}
         />

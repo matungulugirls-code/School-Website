@@ -52,7 +52,7 @@ export async function POST(req) {
       },
     });
 
-    const baseUrl = 'https://matungulu-girls.vercel.app';
+    const baseUrl = 'https://matungulugirls.school';
     
     const resetLink = `${baseUrl}/pages/resetpassword?token=${token}`;
     

@@ -46,7 +46,7 @@ export const metadata = {
   openGraph: {
     title: 'Matungulu Girls Senior School - Photo Gallery | C1 Institution',
     description: 'Browse through our collection of school photos, events, and memorable moments at this prestigious C1 girls senior school.',
-    url: 'https://matungulu-girls.vercel.app/pages/gallery',
+    url: 'https://matungulugirls.school/pages/gallery',
     siteName: 'Matungulu Girls Senior School',
     images: [
       {
@@ -68,7 +68,7 @@ export const metadata = {
   },
   
   alternates: {
-    canonical: 'https://matungulu-girls.vercel.app/pages/gallery',
+    canonical: 'https://matungulugirls.school/pages/gallery',
   },
   
   robots: {

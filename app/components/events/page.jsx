@@ -96,7 +96,7 @@ const ModernEventsNewsSection = () => {
   const list = tab === 'events' ? events : news;
   const activeIdx = tab === 'events' ? activeEvent : activeNews;
   const setActiveIdx = tab === 'events' ? setActiveEvent : setActiveNews;
-  const SHARE_URL = typeof window !== 'undefined' ? `${window.location.origin}/pages/eventsandnews` : 'https://matungulu-girls.vercel.app/eventsandnews';
+  const SHARE_URL = typeof window !== 'undefined' ? `${window.location.origin}/pages/eventsandnews` : 'https://matungulugirls.school/pages/eventsandnews';
 
   const shareLinks = (title) => ({
     whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out "${title}" from Matungulu Girls: ${SHARE_URL}`)}`,

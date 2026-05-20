@@ -5,13 +5,13 @@ export const metadata = {
   description:
     'View Matungulu Girls Senior School KCSE performance, mean score, target mean, previous mean and the latest official KCSE results PDF.',
   alternates: {
-    canonical: 'https://matungulu-girls.vercel.app/pages/KCSE-Performance',
+    canonical: 'https://matungulugirls.school/pages/KCSE-Performance',
   },
   openGraph: {
     title: 'KCSE Performance - Matungulu Girls Senior School',
     description:
       'Official KCSE performance page with school mean score, target mean and results document.',
-    url: 'https://matungulu-girls.vercel.app/pages/KCSE-Performance',
+    url: 'https://matungulugirls.school/pages/KCSE-Performance',
     siteName: 'Matungulu Girls Senior School',
     images: [
       {

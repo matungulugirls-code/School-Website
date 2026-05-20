@@ -1,5 +1,5 @@
 ### 1. Create Mathematics Teacher Job
-POST https://matungulu-girls.vercel.app/api/career
+POST https://matungulugirls.school/api/career
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### 2. Create Laboratory Technician Job
-POST https://matungulu-girls.vercel.app/api/career
+POST https://matungulugirls.school/api/career
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ### 3. Create ICT Support Staff Job
-POST https://matungulu-girls.vercel.app/api/career
+POST https://matungulugirls.school/api/career
 Content-Type: application/json
 
 {
@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 
 ### 4. Create Guidance and Counseling Intern
-POST https://matungulu-girls.vercel.app/api/career
+POST https://matungulugirls.school/api/career
 Content-Type: application/json
 
 {
@@ -79,7 +79,7 @@ Content-Type: application/json
 }
 
 ### 5. Create School Nurse (Part-time)
-POST https://matungulu-girls.vercel.app/api/career
+POST https://matungulugirls.school/api/career
 Content-Type: application/json
 
 {

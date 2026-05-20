@@ -52,4 +52,4 @@ User-agent: SemrushBot
 Disallow: /
 
 # Sitemap for Google to discover all public pages
-Sitemap: https://matungulu-girls.vercel.app/sitemap.xml
+Sitemap: https://matungulugirls.school/sitemap.xml

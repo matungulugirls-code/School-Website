@@ -200,7 +200,7 @@ const SCHOOL_INFO = {
   location: 'Matungulu Sub-County, Machakos County, Kenya',
   email: 'matungulugirls@gmail.com',
   phone: '0734610130',
-  website: 'matungulu-girls.vercel.app',
+  website: 'matungulugirls.school',
   colors: ['Emerald Green', 'Navy Blue', 'White'],
   achievements: [
     'Focused girls boarding learning environment',

@@ -1,4 +1,4 @@
-const SITE_URL = 'https://matungulu-girls.vercel.app';
+const SITE_URL = 'https://matungulugirls.school';
 
 export default function robots() {
   return {

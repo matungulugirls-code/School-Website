@@ -935,7 +935,7 @@ export default function ModernGallery() {
     "@type": "CollectionPage",
     "name": "Matungulu Girls Senior School Gallery",
     "description": "Official photo and video gallery of Matungulu Girls Senior School in Matungulu, Machakos County, Kenya",
-    "url": "https://matungulu-girls.vercel.app/pages/gallery",
+    "url": "https://matungulugirls.school/pages/gallery",
     "isPartOf": { "@type": "School", "name": "Matungulu Girls Senior School" },
     "about": { "@type": "EducationalOrganization", "name": "Matungulu Girls Senior School", "address": { "@type": "PostalAddress", "addressLocality": "Matungulu", "addressRegion": "Machakos County", "addressCountry": "KE" } }
   };

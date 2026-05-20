@@ -31,7 +31,7 @@ export const viewport = {
 /* METADATA                                  */
 /* -------------------------------------------------------------------------- */
 export const metadata = {
-  metadataBase: new URL("https://matungulu-girls.vercel.app"),
+  metadataBase: new URL("https://matungulugirls.school"),
 
   title: {
     default: "Matungulu Girls School",
@@ -114,7 +114,7 @@ export const metadata = {
   openGraph: {
     title: "Matungulu Girls School - Official Website",
     description: "Official Matungulu Girls Website.",
-    url: "https://matungulu-girls.vercel.app",
+    url: "https://matungulugirls.school",
     siteName: "Matungulu Girls Senior School",
     locale: "en_KE",
     type: "website",
@@ -127,7 +127,7 @@ export const metadata = {
         type: "image/jpeg",
       },
       {
-        url: "https://matungulu-girls.vercel.app/MatG.jpg",
+        url: "https://matungulugirls.school/MatG.jpg",
         width: 1200,
         height: 630,
         alt: "Matungulu Girls School ",
@@ -144,7 +144,7 @@ export const metadata = {
     description: "Official Matungulu Girls Website.",
     images: [
       {
-        url: "https://matungulu-girls.vercel.app/MatG.jpg",
+        url: "https://matungulugirls.school/MatG.jpg",
         alt: "Matungulu Girls School",
       },
     ],
@@ -165,10 +165,10 @@ export const metadata = {
 
   /* Alternate Links for Search Engines */
   alternates: {
-    canonical: "https://matungulu-girls.vercel.app",
+    canonical: "https://matungulugirls.school",
     languages: {
-      'en-KE': "https://matungulu-girls.vercel.app",
-      'en': "https://matungulu-girls.vercel.app",
+      'en-KE': "https://matungulugirls.school",
+      'en': "https://matungulugirls.school",
     },
   },
 
@@ -192,9 +192,9 @@ export default function RootLayout({ children }) {
     "@type": "School",
     "name": "Matungulu Girls School",
     "alternateName": "Matungulu Girls Senior School",
-    "url": "https://matungulu-girls.vercel.app",
-    "logo": "https://matungulu-girls.vercel.app/MatG.jpg",
-    "image": "https://matungulu-girls.vercel.app/MatG.jpg",
+    "url": "https://matungulugirls.school",
+    "logo": "https://matungulugirls.school/MatG.jpg",
+    "image": "https://matungulugirls.school/MatG.jpg",
     "description": "A premier public girls school in Matungulu, Machakos County, Kenya.",
     "address": {
       "@type": "PostalAddress",
