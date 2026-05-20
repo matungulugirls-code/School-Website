@@ -1,123 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://matungulu-girls.vercel.app/</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Matungulu Girls School</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/AboutUs</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>About Matungulu Girls School</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/admissions</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Admissions - Matungulu Girls School</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/School%20Fees</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>School Fees</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/SchoolTeam</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.82</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>School Team</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Departments</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Departments</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Guidance-and-Councelling</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Guidance and Counselling</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Achievements</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Achievements</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/School%20Magazine</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>School Magazine</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/School%20Policies</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.65</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>School Policies</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Clubs</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Clubs</image:title>
+    </image:image>
   </url>
   <url>
-    <loc>https://matungulu-girls.vercel.app/pages/Societies</loc>
-    <lastmod>2026-05-13</lastmod>
+    <loc>https://matungulu-girls.vercel.app/pages/Clubs%20and%20Societies</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Clubs and Societies</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Boarding</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Boarding</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://matungulu-girls.vercel.app/pages/Computer%20Lab</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.68</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Computer Lab</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Farm</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.62</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Farm</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/Security</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.62</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Security</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/careers</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Careers</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/gallery</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Gallery</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/eventsandnews</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Events and News</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/contact</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.86</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Contact Us</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://matungulu-girls.vercel.app/pages/StudentPortal</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.45</priority>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Student Portal</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://matungulu-girls.vercel.app/pages/adminLogin</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulu-girls.vercel.app/MatG.jpg</image:loc>
+      <image:title>Admin Login</image:title>
+    </image:image>
   </url>
 </urlset>

@@ -1,16 +1,55 @@
 # Robots.txt - Matungulu Girls Senior School
 # Keep this file aligned with app/robots.js.
 
+# Allow search engines to index public pages
 User-agent: *
 Allow: /
+Allow: /pages/
+Allow: /images/
+Allow: /public/
+Allow: /MatG.jpg
+Allow: /hero/
+Allow: /gallery/
+
+# Block private/admin areas from indexing
 Disallow: /api/
 Disallow: /session/
 Disallow: /MainDashboard
 Disallow: /MainDashboard/
 Disallow: /components/
+Disallow: /libs/
+Disallow: /generated/
 Disallow: /pages/adminLogin
 Disallow: /pages/forgotpassword
 Disallow: /pages/resetpassword
-Disallow: /*?*
+Disallow: /pages/StudentPortal
 
+# Block specific query parameters that may create duplicate content
+Disallow: /*?utm_
+Disallow: /*?fbclid
+Disallow: /*?gclid
+
+# Googlebot specific - allow faster crawling of public content
+User-agent: Googlebot
+Allow: /
+Allow: /pages/
+Allow: /images/
+Allow: /public/
+Allow: /MatG.jpg
+Allow: /hero/
+Allow: /gallery/
+Crawl-delay: 0
+
+# Bingbot - standard crawl delay
+User-agent: Bingbot
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemap for Google to discover all public pages
 Sitemap: https://matungulu-girls.vercel.app/sitemap.xml
