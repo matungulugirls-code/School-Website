@@ -36,11 +36,11 @@ const primaryLinks = [
   { name: 'About', href: '/pages/AboutUs', icon: FiInfo },
   { name: 'Admissions', href: '/pages/admissions', icon: FiBookOpen },
   { name: 'Gallery', href: '/pages/gallery', icon: FiImage },
-  { name: 'KCSE Performance', href: '/pages/KCSE-Performance', icon: FiTrendingUp },
   { name: 'Events & News', href: '/pages/eventsandnews', icon: FiCalendar },
 ];
 
 const utilityLinks = [
+  { name: 'KCSE Performance', href: '/pages/KCSE-Performance', icon: FiTrendingUp },
   { name: 'Student Portal', href: '/pages/StudentPortal', icon: FiFileText },
   { name: 'School Fees', href: '/pages/School Fees', icon: FiDollarSign },
   { name: 'Contact', href: '/pages/contact', icon: FiPhone },
@@ -242,8 +242,8 @@ export default function ModernNavbar() {
           isScrolled ? 'shadow-xl shadow-slate-950/10' : 'shadow-lg shadow-slate-950/5'
         }`}
       >
-        <div className="hidden border-b border-white/10 bg-[#0b3b35] text-white lg:block">
-          <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-6">
+        <div className="hidden border-b border-white/10 bg-[#0b3b35] py-2 text-white lg:block">
+          <div className="mx-auto flex min-h-12 max-w-7xl items-center justify-between gap-5 px-6">
             <div className="flex items-center gap-5 text-[11px] font-black uppercase tracking-[0.2em] text-emerald-100/80">
               <span>Matungulu Girls Senior School</span>
               <span className="h-1 w-1 rounded-full bg-emerald-300" />
@@ -422,7 +422,7 @@ export default function ModernNavbar() {
         )}
       </nav>
 
-      <div className="h-[72px] lg:h-[112px]" />
+      <div className="h-[72px] lg:h-[128px]" />
     </>
   );
 }
