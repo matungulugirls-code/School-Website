@@ -65,7 +65,7 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh }) => {
 
        <div className="mt-5 max-w-3xl">
   <p className="text-[11px] font-black uppercase tracking-[0.26em] text-emerald-300/80">
-    Matungulu Girls Senior School
+    Matungulu Girls School
   </p>
   <h1 className="mt-3 text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
     School Fees,
@@ -252,6 +252,126 @@ const InsightCard = ({ icon: Icon, label, value, sublabel, tone = 'bg-white' }) 
       <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
       <p className="mt-1 text-xl font-black text-slate-900">{value}</p>
       <p className="mt-1 text-xs leading-6 text-slate-500">{sublabel}</p>
+    </div>
+  );
+};
+
+const PaymentInstructionsCard = ({ onContact }) => {
+  const acceptedMethods = [
+    'Postal Money Order',
+    "Banker's Cheque payable to Matungulu Girls' Secondary School",
+    'Bank Deposit to the school accounts listed below',
+    'M-karo platform',
+  ];
+
+  const bankAccounts = [
+    { bank: 'KCB Tala', account: '1107262992' },
+    { bank: 'Equity Bank Tala', account: '0900261636074' },
+  ];
+
+  const mpesaSteps = [
+    'Go to M-Pesa menu.',
+    'Select Pay Bill.',
+    'Enter Business Number: 522533',
+    'Enter the Account Number as 7984032#ADMN0.',
+    'Replace ADMN0 with the actual Admission Number, without spaces.',
+    'Example: 7984032#11111',
+    'Enter Amount.',
+    'Enter your M-Pesa PIN, press OK, and Confirm.',
+  ];
+
+  return (
+    <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Payment Instructions</p>
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+            Official school fee payment guide
+          </h2>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            Use only the accepted payment methods below and confirm the admission number before sending funds.
+          </p>
+        </div>
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+          <IoWalletOutline size={22} />
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+        <div className="rounded-[1.4rem] border border-emerald-100 bg-[#f6fbf7] p-5">
+          <div className="flex items-center gap-2">
+            <FiCheckCircle className="text-emerald-700" />
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-700">Accepted Payment Methods</p>
+          </div>
+          <div className="mt-4 space-y-3">
+            {acceptedMethods.map((method) => (
+              <div key={method} className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600" />
+                <p className="text-sm font-semibold leading-6 text-slate-700">{method}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-[1.4rem] border border-rose-100 bg-rose-50 p-5">
+          <div className="flex items-center gap-2">
+            <FiX className="text-rose-700" />
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-rose-700">Not Accepted</p>
+          </div>
+          <div className="mt-4 space-y-3">
+            {['Personal Cheques', 'Cash'].map((method) => (
+              <div key={method} className="flex items-start gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-600" />
+                <p className="text-sm font-semibold leading-6 text-slate-700">{method}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        {bankAccounts.map((account) => (
+          <div key={account.account} className="rounded-[1.4rem] border border-slate-200 bg-[#fbfcfa] p-5">
+            <div className="flex items-start gap-3">
+              <FaUniversity className="mt-1 text-emerald-600" />
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">{account.bank}</p>
+                <p className="mt-1 text-lg font-black text-slate-950">Account No. {account.account}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5 rounded-[1.4rem] border border-slate-200 bg-[#102d24] p-5 text-white">
+        <div className="flex items-center gap-2">
+          <IoCardOutline className="text-emerald-200" />
+          <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-200">How To Pay Through M-KARO via M-Pesa - Lipa na KCB</p>
+        </div>
+        <ol className="mt-4 space-y-3">
+          {mpesaSteps.map((step, index) => (
+            <li key={step} className="flex gap-3 text-sm leading-6 text-white/82">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-[11px] font-black text-emerald-100">
+                {index + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p className="text-sm font-bold leading-7 text-white">
+            Make sure the admission number is correct. For clarification, call the school.
+          </p>
+        </div>
+      </div>
+
+      <button
+        onClick={onContact}
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
+      >
+        <FaPhone size={15} />
+        Contact School
+      </button>
     </div>
   );
 };
@@ -581,52 +701,10 @@ export default function ModernFeesPage() {
 
 
           <section className="space-y-5">
+            <PaymentInstructionsCard onContact={() => router.push("/pages/contact")} />
+
             <div className="rounded-[1.8rem] border border-slate-200 bg-white p-5 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.35)] sm:p-6">
-              
-            <div className="rounded-[1.8rem] border border-slate-200 bg-white p-6">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">Payment Channels</p>
-              <div className="mt-4 space-y-4">
-                <div className="flex items-start gap-3">
-                  <FaUniversity className="mt-1 text-emerald-600" />
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Bank Account</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">1234567890 - Equity Bank</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <IoCardOutline className="mt-1 text-emerald-600" />
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Paybill</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">522522 - Account: Student ID</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <FaPhone className="mt-1 text-emerald-600" />
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Finance Office</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">0734610130</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <FaEnvelope className="mt-1 text-emerald-600" />
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">Email</p>
-                    <p className="mt-1 text-sm font-bold text-slate-900">matungulugirls@gmial.com</p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => router.push("/pages/contact")}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
-              >
-                <FiArrowRight size={16} />
-                Contact Bursar
-              </button>
-            </div>
-
-
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
 
 
