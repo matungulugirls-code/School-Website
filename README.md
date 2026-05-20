@@ -51,3 +51,4 @@ A modern, responsive web application for managing school assignments with beauti
    ```bash
    git clone https://github.com/Emmanuel10701/MatG.git
    cd MatG# Matungulu Girls Senior School Website
+# School-Website
