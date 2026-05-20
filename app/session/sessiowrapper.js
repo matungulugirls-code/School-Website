@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const SessionContext = createContext(undefined);
 
 export function SessionProvider({ children }) {
+  
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
