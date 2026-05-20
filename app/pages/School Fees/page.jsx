@@ -724,9 +724,6 @@ export default function ModernFeesPage() {
               </div>
             </div>
 
-
-
-
   <div className="mt-5">
                 <div className="relative">
                   <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
