@@ -466,6 +466,7 @@ export default function ModernStudentPortalPage() {
   const [student, setStudent] = useState(null);
   const [token, setToken] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(true);
+  const [loginModalMode, setLoginModalMode] = useState('password');
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const [requiresContact, setRequiresContact] = useState(false);
@@ -785,9 +786,14 @@ export default function ModernStudentPortalPage() {
       toast.success('Password link sent', {
         description: data.message || 'Check the registered parent email for the secure link.',
       });
+      return data;
     } catch (error) {
       setLoginError(error.message || 'Could not send password request.');
       toast.error(error.message || 'Could not send password request.');
+      return {
+        success: false,
+        error: error.message || 'Could not send password request.'
+      };
     } finally {
       setLoginLoading(false);
     }
@@ -795,9 +801,17 @@ export default function ModernStudentPortalPage() {
 
   const handleLoginModalClose = () => {
     setShowLoginModal(false);
+    setLoginModalMode('password');
     setLoginError(null);
     setRequiresContact(false);
     setPasswordSetup({ token: null, student: null });
+  };
+
+  const openLoginModal = (mode = 'password') => {
+    setLoginModalMode(mode);
+    setLoginError(null);
+    setRequiresContact(false);
+    setShowLoginModal(true);
   };
 
   const handleLogout = async () => {
@@ -864,7 +878,7 @@ export default function ModernStudentPortalPage() {
   if (!student || !token) {
     return (
       <>
-        <GuestPortalLanding onOpenLogin={() => setShowLoginModal(true)} router={router} />
+        <GuestPortalLanding onOpenLogin={() => openLoginModal('password')} router={router} />
         <StudentLoginModal
           isOpen={showLoginModal}
           onClose={handleLoginModalClose}
@@ -876,6 +890,7 @@ export default function ModernStudentPortalPage() {
           requiresContact={requiresContact}
           passwordSetupToken={passwordSetup.token}
           passwordSetupStudent={passwordSetup.student}
+          initialMode={loginModalMode}
         />
       </>
     );
@@ -895,6 +910,8 @@ export default function ModernStudentPortalPage() {
         requiresContact={requiresContact}
         passwordSetupToken={passwordSetup.token}
         passwordSetupStudent={passwordSetup.student}
+        initialMode={loginModalMode}
+        defaultAdmissionNumber={student?.admissionNumber || ''}
       />
 
       {isMenuOpen && (
@@ -916,6 +933,7 @@ export default function ModernStudentPortalPage() {
             feeLoading={feeLoading}
             feeError={feeError}
             onLogout={handleLogout}
+            onPasswordHelp={() => openLoginModal('changePassword')}
             currentView={currentView}
             setCurrentView={handleViewChange}
             onRefresh={handleRefresh}

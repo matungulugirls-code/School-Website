@@ -27,6 +27,12 @@ const EMPTY_PASSWORD_VISIBILITY = {
   current: false
 };
 
+const buildInitialFormData = (admissionNumber = '') => ({
+  ...EMPTY_FORM_DATA,
+  identifier: admissionNumber,
+  admissionNumber
+});
+
 export default function StudentLoginModal({
   isOpen,
   onClose,
@@ -37,11 +43,14 @@ export default function StudentLoginModal({
   error = null,
   requiresContact = false,
   passwordSetupToken = null,
-  passwordSetupStudent = null
+  passwordSetupStudent = null,
+  initialMode = 'password',
+  defaultAdmissionNumber = ''
 }) {
   const [mode, setMode] = useState('password');
   const [formData, setFormData] = useState(EMPTY_FORM_DATA);
   const [localError, setLocalError] = useState(null);
+  const [localSuccess, setLocalSuccess] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
   const [visiblePasswords, setVisiblePasswords] = useState(EMPTY_PASSWORD_VISIBILITY);
 
@@ -52,17 +61,19 @@ export default function StudentLoginModal({
   useEffect(() => {
     if (!isOpen || passwordSetupToken) return;
 
-    setMode('password');
-    setFormData(EMPTY_FORM_DATA);
+    setMode(initialMode);
+    setFormData(buildInitialFormData(defaultAdmissionNumber));
     setLocalError(null);
+    setLocalSuccess(null);
     setValidationErrors({});
     setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
-  }, [isOpen, passwordSetupToken]);
+  }, [isOpen, passwordSetupToken, initialMode, defaultAdmissionNumber]);
 
   useEffect(() => {
     if (passwordSetupToken) {
       setMode('setup');
       setFormData(EMPTY_FORM_DATA);
+      setLocalSuccess(null);
       setValidationErrors({});
       setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
     }
@@ -73,6 +84,7 @@ export default function StudentLoginModal({
   const updateField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setLocalError(null);
+    setLocalSuccess(null);
     setValidationErrors(prev => ({ ...prev, [field]: '' }));
   };
 
@@ -80,6 +92,7 @@ export default function StudentLoginModal({
     setMode(nextMode);
     setFormData(EMPTY_FORM_DATA);
     setLocalError(null);
+    setLocalSuccess(null);
     setValidationErrors({});
     setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
   };
@@ -152,7 +165,7 @@ export default function StudentLoginModal({
     });
   };
 
-  const handlePasswordResetRequest = (event) => {
+  const handlePasswordResetRequest = async (event) => {
     event.preventDefault();
     const errors = {};
     if (!formData.admissionNumber.trim()) errors.admissionNumber = 'Enter your admission number.';
@@ -162,19 +175,25 @@ export default function StudentLoginModal({
     setValidationErrors(errors);
     if (Object.keys(errors).length) return;
 
-    onPasswordResetRequest({
+    const result = await onPasswordResetRequest({
       action: mode === 'changePassword' ? 'request-change-password' : 'request-forgot-password',
       requestType: mode === 'changePassword' ? 'change' : 'forgot',
       admissionNumber: formData.admissionNumber.trim().toUpperCase(),
       currentPassword: formData.currentPassword,
       message: formData.resetMessage.trim()
     });
+
+    if (result?.success) {
+      setLocalError(null);
+      setLocalSuccess(result.message || 'A secure password link has been sent to the registered parent email.');
+    }
   };
 
   const handleClose = () => {
     setMode('password');
     setFormData(EMPTY_FORM_DATA);
     setLocalError(null);
+    setLocalSuccess(null);
     setValidationErrors({});
     setVisiblePasswords(EMPTY_PASSWORD_VISIBILITY);
     onClose();
@@ -291,6 +310,18 @@ export default function StudentLoginModal({
                       <FiHelpCircle /> Contact your class teacher or the school office.
                     </p>
                   )}
+                </div>
+              </div>
+            )}
+
+            {localSuccess && (
+              <div className="mb-5 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                <div className="p-2 bg-emerald-100 rounded-xl text-emerald-700">
+                  <FiCheckCircle />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-emerald-900">Request sent</p>
+                  <p className="text-sm text-emerald-700 mt-1">{localSuccess}</p>
                 </div>
               </div>
             )}

@@ -170,6 +170,8 @@ const getSourceRowNumber = (record, fallbackIndex = 0) =>
 
 const LARGE_UPLOAD_ROW_THRESHOLD = 800;
 const DB_BATCH_SIZE = 200;
+const LARGE_UPLOAD_TIMEOUT_MS = 240000;
+const STANDARD_UPLOAD_TIMEOUT_MS = 90000;
 const DEFAULT_STUDENT_GENDER = 'Female';
 const STUDENT_ARCHIVE_RETENTION_DAYS = 60;
 
@@ -389,12 +391,32 @@ const normalizeStudentUploadFailure = (error) => {
   const message = String(error?.message || '').trim();
   const lowerMessage = message.toLowerCase();
 
+  if (error?.code === 'P2002' || lowerMessage.includes('unique constraint')) {
+    return 'Duplicate student records were found. Please review the duplicate list and make sure each admission number appears only once.';
+  }
+
+  if (error?.code === 'P2003' || lowerMessage.includes('foreign key constraint')) {
+    return 'Some uploaded rows reference records that no longer exist. Refresh the page and retry the upload.';
+  }
+
   if (error?.code === 'P2024' || lowerMessage.includes('timeout') || lowerMessage.includes('timed out')) {
-    return 'Student upload took too long to finish. Please retry the file and keep this page open until the upload completes.';
+    return 'Student upload took longer than expected. Please retry the file, keep this page open, and avoid refreshing while it saves.';
   }
 
   if (lowerMessage.includes('network') || lowerMessage.includes('fetch failed') || lowerMessage.includes('aborted') || lowerMessage.includes('interrupted')) {
     return 'Student upload was interrupted before saving finished. Check your connection, keep the page open, and try again.';
+  }
+
+  if (lowerMessage.includes('csv parsing failed')) {
+    return 'The CSV file could not be read. Confirm it uses the current student template and has a header row.';
+  }
+
+  if (lowerMessage.includes('excel parsing failed')) {
+    return 'The Excel file could not be read. Confirm the first sheet uses the current student template and is not protected or empty.';
+  }
+
+  if (lowerMessage.includes('no readable student rows') || lowerMessage.includes('empty')) {
+    return 'No readable student rows were found. Confirm the sheet is not empty and the headers match the student template.';
   }
 
   return message || 'Student upload failed. Please try again.';
@@ -651,7 +673,30 @@ const validateFormSelection = (forms) => {
 
 // Check for duplicate admission numbers
 const checkDuplicateAdmissionNumbers = async (students, targetForm = null) => {
-  const admissionNumbers = students.map(s => s.admissionNumber);
+  const admissionNumbers = students
+    .map(s => String(s.admissionNumber || '').trim())
+    .filter(Boolean);
+  const seenInFile = new Map();
+  const fileDuplicates = [];
+
+  students.forEach((student, index) => {
+    const admissionNumber = String(student.admissionNumber || '').trim();
+    if (!admissionNumber) return;
+
+    if (seenInFile.has(admissionNumber)) {
+      fileDuplicates.push({
+        row: getSourceRowNumber(student, index),
+        admissionNumber,
+        name: buildStudentFullName(student) || `${student.firstName || ''} ${student.lastName || ''}`.trim(),
+        form: student.form,
+        duplicateType: 'file',
+        message: `Admission number also appears on row ${seenInFile.get(admissionNumber)} in this file`
+      });
+      return;
+    }
+
+    seenInFile.set(admissionNumber, getSourceRowNumber(student, index));
+  });
   
   const whereClause = {
     admissionNumber: { in: admissionNumbers }
@@ -681,14 +726,15 @@ const checkDuplicateAdmissionNumbers = async (students, targetForm = null) => {
           name: `${student.firstName} ${student.lastName}`,
           form: student.form,
           existingName: `${existing.firstName} ${existing.lastName}`,
-          existingForm: existing.form
+          existingForm: existing.form,
+          duplicateType: 'database'
         };
       }
       return null;
     })
     .filter(dup => dup !== null);
   
-  return duplicates;
+  return [...fileDuplicates, ...duplicates];
 };
 
 // Process New Upload
@@ -1709,6 +1755,24 @@ export async function POST(request) {
           // Check for duplicates in the target form
           duplicates = await checkDuplicateAdmissionNumbers(rawData, targetForm);
         }
+
+        await prisma.studentBulkUpload.update({
+          where: { id: batchId },
+          data: {
+            status: 'completed',
+            processedDate: new Date(),
+            totalRows: rawData.length,
+            validRows: Math.max(0, rawData.length - duplicates.length),
+            skippedRows: duplicates.length,
+            errorRows: 0,
+            metadata: {
+              ...uploadBatch.metadata,
+              duplicateCheckOnly: true,
+              duplicatesFound: duplicates.length,
+              checkedAt: new Date().toISOString()
+            }
+          }
+        });
         
         return NextResponse.json({
           success: true,
@@ -1744,7 +1808,9 @@ await prisma.$transaction(async (tx) => {
         errorLog: processingStats.errors.length > 0 ? processingStats.errors.slice(0, 50) : undefined,
         metadata: {
           ...uploadBatch.metadata,
-          restoredAccounts: processingStats.restoredAccounts || 0
+          restoredAccounts: processingStats.restoredAccounts || 0,
+          largeUpload: rawData.length >= LARGE_UPLOAD_ROW_THRESHOLD,
+          chunkSize: DB_BATCH_SIZE
         }
       }
     });
@@ -1798,7 +1864,9 @@ await prisma.$transaction(async (tx) => {
           updatedRows: processingStats.updatedRows,
           createdRows: processingStats.createdRows,
           deactivatedRows: processingStats.deactivatedRows,
-          restoredAccounts: processingStats.restoredAccounts || 0
+          restoredAccounts: processingStats.restoredAccounts || 0,
+          largeUpload: rawData.length >= LARGE_UPLOAD_ROW_THRESHOLD,
+          chunkSize: DB_BATCH_SIZE
         }
       }
     });
@@ -1836,7 +1904,7 @@ await prisma.$transaction(async (tx) => {
   }
 }, {
   maxWait: 30000,
-  timeout: rawData.length >= LARGE_UPLOAD_ROW_THRESHOLD ? 120000 : 60000
+  timeout: rawData.length >= LARGE_UPLOAD_ROW_THRESHOLD ? LARGE_UPLOAD_TIMEOUT_MS : STANDARD_UPLOAD_TIMEOUT_MS
 });
       
       // Recalculate to ensure consistency
@@ -2069,6 +2137,7 @@ export async function DELETE(request) {
     const batchId = url.searchParams.get('batchId');
     const studentId = url.searchParams.get('studentId');
     const hardDelete = url.searchParams.get('hardDelete') === 'true';
+    const purgePortalAuth = url.searchParams.get('purgePortalAuth') === 'true';
 
     if (batchId) {
       const result = await prisma.$transaction(async (tx) => {
@@ -2097,11 +2166,13 @@ export async function DELETE(request) {
           }
         });
 
-        const archiveResult = await archiveStudentPortalCredentials(tx, batchStudents, {
-          sourceBatchId: batchId,
-          archiveReason: hardDelete ? 'batch-hard-delete' : 'batch-delete',
-          deletedBy: auth.user?.id || auth.user?.email || auth.user?.name || null
-        });
+        const archiveResult = purgePortalAuth
+          ? { archivedCount: 0 }
+          : await archiveStudentPortalCredentials(tx, batchStudents, {
+              sourceBatchId: batchId,
+              archiveReason: hardDelete ? 'batch-hard-delete' : 'batch-delete',
+              deletedBy: auth.user?.id || auth.user?.email || auth.user?.name || null
+            });
 
         const formCounts = batchStudents.reduce((acc, student) => {
           if (student.status === 'active') {
@@ -2115,6 +2186,23 @@ export async function DELETE(request) {
           await tx.databaseStudent.deleteMany({
             where: { uploadBatchId: batchId }
           });
+
+          if (purgePortalAuth) {
+            await tx.studentPortalAccount.deleteMany({
+              where: {
+                admissionNumber: {
+                  in: batchStudents.map(student => student.admissionNumber).filter(Boolean)
+                }
+              }
+            });
+            await tx.archivedStudentPortalCredential.deleteMany({
+              where: {
+                admissionNumber: {
+                  in: batchStudents.map(student => student.admissionNumber).filter(Boolean)
+                }
+              }
+            });
+          }
         } else {
           // Soft delete students (mark as inactive)
           await tx.databaseStudent.updateMany({
@@ -2150,6 +2238,7 @@ export async function DELETE(request) {
           batch, 
           deletedCount: batchStudents.length,
           archivedCredentialCount: archiveResult.archivedCount,
+          purgedPortalAuth: hardDelete && purgePortalAuth,
           deletionType: hardDelete ? 'hard' : 'soft'
         };
       });
@@ -2165,7 +2254,8 @@ export async function DELETE(request) {
         data: {
           stats: finalStats.stats,
           validation: finalStats.validation,
-          archivedCredentialCount: result.archivedCredentialCount
+          archivedCredentialCount: result.archivedCredentialCount,
+          purgedPortalAuth: result.purgedPortalAuth
         },
         authenticated: true,
       });
@@ -2194,17 +2284,28 @@ export async function DELETE(request) {
           throw new Error('Student not found');
         }
 
-        const archiveResult = await archiveStudentPortalCredentials(tx, [student], {
-          sourceBatchId: student.uploadBatchId || null,
-          archiveReason: hardDelete ? 'student-hard-delete' : 'student-delete',
-          deletedBy: auth.user?.id || auth.user?.email || auth.user?.name || null
-        });
+        const archiveResult = purgePortalAuth
+          ? { archivedCount: 0 }
+          : await archiveStudentPortalCredentials(tx, [student], {
+              sourceBatchId: student.uploadBatchId || null,
+              archiveReason: hardDelete ? 'student-hard-delete' : 'student-delete',
+              deletedBy: auth.user?.id || auth.user?.email || auth.user?.name || null
+            });
 
         if (hardDelete) {
           // Hard delete student
           await tx.databaseStudent.delete({
             where: { id: studentId }
           });
+
+          if (purgePortalAuth) {
+            await tx.studentPortalAccount.deleteMany({
+              where: { admissionNumber: student.admissionNumber }
+            });
+            await tx.archivedStudentPortalCredential.deleteMany({
+              where: { admissionNumber: student.admissionNumber }
+            });
+          }
 
           // Update stats
           await tx.studentStats.update({
@@ -2229,7 +2330,12 @@ export async function DELETE(request) {
           });
         }
 
-        return { student, archivedCredentialCount: archiveResult.archivedCount, deletionType: hardDelete ? 'hard' : 'soft' };
+        return {
+          student,
+          archivedCredentialCount: archiveResult.archivedCount,
+          purgedPortalAuth: hardDelete && purgePortalAuth,
+          deletionType: hardDelete ? 'hard' : 'soft'
+        };
       });
 
       // Recalculate to ensure consistency
@@ -2243,7 +2349,8 @@ export async function DELETE(request) {
         data: {
           stats: finalStats.stats,
           validation: finalStats.validation,
-          archivedCredentialCount: result.archivedCredentialCount
+          archivedCredentialCount: result.archivedCredentialCount,
+          purgedPortalAuth: result.purgedPortalAuth
         },
         authenticated: true,
       });
@@ -2290,13 +2397,14 @@ export async function PATCH(request) {
           
         }
       });
+      const restoreResult = await restoreStudentPortalCredentials(prisma, [student]);
 
       console.log(`✅ Student reactivated by ${auth.user.name}: ${student.firstName} ${student.lastName}`);
 
       return NextResponse.json({
         success: true,
-        message: `Student ${student.firstName} ${student.lastName} reactivated`,
-        data: { student },
+        message: `Student ${student.firstName} ${student.lastName} reactivated${restoreResult.restoredCount ? ' and portal password restored' : ''}`,
+        data: { student, restoredAccounts: restoreResult.restoredCount },
         authenticated: true,
         reactivatedBy: auth.user.name
       });
@@ -2305,6 +2413,13 @@ export async function PATCH(request) {
     if (batchId) {
       // Reactivate all students in a batch
       const result = await prisma.$transaction(async (tx) => {
+        const studentsToRestore = await tx.databaseStudent.findMany({
+          where: {
+            uploadBatchId: batchId,
+            status: 'inactive'
+          }
+        });
+
         const updated = await tx.databaseStudent.updateMany({
           where: { 
             uploadBatchId: batchId,
@@ -2316,6 +2431,8 @@ export async function PATCH(request) {
             
           }
         });
+
+        const restoreResult = await restoreStudentPortalCredentials(tx, studentsToRestore);
 
         // Update statistics
         const batchStudents = await tx.databaseStudent.findMany({
@@ -2339,14 +2456,14 @@ export async function PATCH(request) {
           }
         });
 
-        return { count: updated.count };
+        return { count: updated.count, restoredAccounts: restoreResult.restoredCount };
       });
 
       console.log(`✅ Batch reactivated by ${auth.user.name}: ${result.count} students`);
 
       return NextResponse.json({
         success: true,
-        message: `Reactivated ${result.count} students from batch`,
+        message: `Reactivated ${result.count} students from batch${result.restoredAccounts ? ` and restored ${result.restoredAccounts} portal account${result.restoredAccounts === 1 ? '' : 's'}` : ''}`,
         data: result,
         authenticated: true,
         reactivatedBy: auth.user.name
@@ -2356,6 +2473,13 @@ export async function PATCH(request) {
     if (form) {
       // Reactivate all inactive students in a form
       const result = await prisma.$transaction(async (tx) => {
+        const studentsToRestore = await tx.databaseStudent.findMany({
+          where: {
+            form: form,
+            status: 'inactive'
+          }
+        });
+
         const updated = await tx.databaseStudent.updateMany({
           where: { 
             form: form,
@@ -2367,6 +2491,8 @@ export async function PATCH(request) {
             
           }
         });
+
+        const restoreResult = await restoreStudentPortalCredentials(tx, studentsToRestore);
 
         // Update statistics
         await tx.studentStats.update({
@@ -2380,14 +2506,14 @@ export async function PATCH(request) {
           }
         });
 
-        return { count: updated.count };
+        return { count: updated.count, restoredAccounts: restoreResult.restoredCount };
       });
 
       console.log(`✅ Form reactivated by ${auth.user.name}: ${result.count} students in ${form}`);
 
       return NextResponse.json({
         success: true,
-        message: `Reactivated ${result.count} students in ${form}`,
+        message: `Reactivated ${result.count} students in ${form}${result.restoredAccounts ? ` and restored ${result.restoredAccounts} portal account${result.restoredAccounts === 1 ? '' : 's'}` : ''}`,
         data: result,
         authenticated: true,
         reactivatedBy: auth.user.name

@@ -8,6 +8,7 @@ import {
   FiCreditCard,
   FiGrid,
   FiHome,
+  FiKey,
   FiLayers,
   FiLogOut,
   FiRefreshCw,
@@ -40,6 +41,7 @@ export default function NavigationSidebar({
   feeLoading,
   feeError,
   onLogout,
+  onPasswordHelp,
   currentView,
   setCurrentView,
   onRefresh,
@@ -201,17 +203,24 @@ export default function NavigationSidebar({
 
       {/* Footer Buttons - Sticky/Fixed at bottom */}
       <div className="flex-shrink-0 border-t border-slate-100 p-5 sm:p-6 bg-white sticky bottom-0">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
+          <button
+            onClick={onPasswordHelp}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm font-black text-emerald-700 transition-all hover:bg-emerald-100"
+          >
+            <FiKey className="h-4 w-4" />
+            Password
+          </button>
           <button
             onClick={onRefresh}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-600 transition-all hover:border-blue-200 hover:bg-slate-50"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-black text-slate-600 transition-all hover:border-blue-200 hover:bg-slate-50"
           >
             <FiRefreshCw className="h-4 w-4 text-blue-600" />
             Refresh
           </button>
           <button
             onClick={onLogout}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-black text-white shadow-md shadow-slate-900/15 transition-all hover:bg-slate-800"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-3 py-3 text-sm font-black text-white shadow-md shadow-slate-900/15 transition-all hover:bg-slate-800"
           >
             <FiLogOut className="h-4 w-4" />
             Logout

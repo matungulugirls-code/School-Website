@@ -3214,7 +3214,39 @@ const downloadExcelTemplate = () => {
 
                 {file && (
                   <div className="mt-4 rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
-                    Large uploads and slower connections can take longer. Keep this page open until you see the final success or review message.
+                    Large uploads with 800+ rows now use longer server processing windows and chunked database saves. Keep this page open until you see the final success or review message.
+                  </div>
+                )}
+
+                {result?.success && (
+                  <div className="rounded-3xl border border-emerald-200 bg-white p-5 shadow-xl">
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                          <FiCheckCircle className="text-xl" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-700">Last Upload Completed</p>
+                          <h3 className="mt-1 text-xl font-black text-slate-950">{result.message || 'Student upload finished successfully'}</h3>
+                          <p className="mt-2 text-sm font-medium text-slate-600">
+                            Batch {result.batch?.id || result.data?.uploadId || 'saved'} · {result.uploadedBy ? `Uploaded by ${result.uploadedBy}` : 'Records refreshed'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:min-w-[420px]">
+                        {[
+                          ['Processed', result.processingStats?.validRows || result.data?.processed || 0],
+                          ['Skipped', result.processingStats?.skippedRows || result.data?.skipped || 0],
+                          ['Issues', result.processingStats?.errorRows || result.errors?.length || 0],
+                          ['Restored', result.processingStats?.restoredAccounts || 0]
+                        ].map(([label, value]) => (
+                          <div key={label} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">{label}</p>
+                            <p className="mt-1 text-xl font-black text-slate-950">{value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
