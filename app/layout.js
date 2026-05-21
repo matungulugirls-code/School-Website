@@ -178,7 +178,7 @@ export const metadata = {
   },
 
   verification: {
-    google: "googlef8123d1ff1ecb88f",
+    google: "googleaca91d683d907aa4",
   },
 };
 
