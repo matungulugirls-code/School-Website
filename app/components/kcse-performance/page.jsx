@@ -658,20 +658,6 @@ export default function KcsePerformancePage() {
                 <div className="flex w-full items-center gap-2 border-t border-slate-100 pt-2 md:w-auto md:border-l md:border-t-0 md:pl-3 md:pt-0">
                   <div className="relative min-w-0 flex-1 md:flex-none">
                     <select
-                      value={activeSource}
-                      onChange={(event) => setActiveSource(event.target.value)}
-                      className="w-full appearance-none rounded-2xl border-none bg-slate-50 px-4 py-3 text-xs font-medium text-slate-600 transition-all focus:ring-2 focus:ring-emerald-500/20 md:w-44"
-                    >
-                      {sourceOptions.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="relative min-w-0 flex-1 md:flex-none">
-                    <select
                       value={selectedYear}
                       onChange={(event) => setSelectedYear(event.target.value)}
                       className="w-full appearance-none rounded-2xl border-none bg-slate-50 px-4 py-3 text-xs font-medium text-slate-600 transition-all focus:ring-2 focus:ring-emerald-500/20 md:w-32"
