@@ -657,7 +657,7 @@ function FeeBreakdownModal({
               </p>
             </div>
             
-            <div className="flex gap-3 w-full sm:w-auto">
+            <div className="flex gap-3 w-full py-5 sm:w-auto">
               <button
                 type="button"
                 onClick={onClose}
@@ -1239,7 +1239,7 @@ function AdmissionFeeBreakdownModal({
         </div>
              
 
-<div className="flex gap-3 w-full sm:w-auto ">
+<div className="flex gap-3 w-full py-4 sm:w-auto ">
   <button
     type="button"
     onClick={onClose}
@@ -1407,7 +1407,7 @@ function EditDocumentMetadataModal({
         </div>
 
         <div className="border-t border-gray-200 p-6 bg-white">
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end py-4 gap-3">
             <button
               type="button"
               onClick={onClose}
