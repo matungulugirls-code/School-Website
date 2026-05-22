@@ -327,35 +327,35 @@ export default function ModernHero() {
         </div>
 
 {/* Action buttons Container */}
-<div className="mt-10 max-w-xl">
+<div className="mt-8 sm:mt-10 max-w-xl">
   
   {/* 1. Dynamic Stats Grid - Moved ABOVE the buttons so it doesn't push them apart */}
   {currentSlide === 1 && !statsLoading && schoolStats && (
-    <div className="grid grid-cols-2 gap-3 text-white mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-        <p className="text-[10px] uppercase tracking-wider text-white/50">Mean Score</p>
-        <p className="text-base font-black text-white">
-          {schoolStats.meanScore?.toFixed(2)} <span className="text-[10px] font-normal text-emerald-400">(B)</span>
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 text-white mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <div className="bg-white/5 backdrop-blur-md rounded-lg sm:rounded-xl p-2 sm:p-3 border border-white/10">
+        <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-white/50">Mean Score</p>
+        <p className="text-sm sm:text-base font-black text-white mt-1">
+          {schoolStats.meanScore?.toFixed(2)} <span className="text-[8px] sm:text-[10px] font-normal text-emerald-400">(B)</span>
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-        <p className="text-[10px] uppercase tracking-wider text-white/50">Transition</p>
-        <p className="text-base font-black text-white">
+      <div className="bg-white/5 backdrop-blur-md rounded-lg sm:rounded-xl p-2 sm:p-3 border border-white/10">
+        <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-white/50">Transition</p>
+        <p className="text-sm sm:text-base font-black text-white mt-1">
           {schoolStats.transitionRate || "84%"}
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-        <p className="text-[10px] uppercase tracking-wider text-white/50">Last Year</p>
-        <p className="text-base font-black text-white">
+      <div className="bg-white/5 backdrop-blur-md rounded-lg sm:rounded-xl p-2 sm:p-3 border border-white/10">
+        <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-white/50">Last Year</p>
+        <p className="text-sm sm:text-base font-black text-white mt-1">
           {schoolStats.lastYearMean?.toFixed(2)}
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-        <p className="text-[10px] uppercase tracking-wider text-white/50">Target</p>
-        <p className="text-base font-black text-white">
+      <div className="bg-white/5 backdrop-blur-md rounded-lg sm:rounded-xl p-2 sm:p-3 border border-white/10">
+        <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-white/50">Target</p>
+        <p className="text-sm sm:text-base font-black text-white mt-1">
           {schoolStats.targetMean?.toFixed(2)}
         </p>
       </div>
@@ -363,27 +363,27 @@ export default function ModernHero() {
   )}
 
   {/* 2. The Actual Buttons - Now they stay side-by-side */}
-  <div className="flex flex-row items-center gap-4">
+  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
     <button
       onClick={handleSlideButtonClick}
       disabled={navigationBlocked}
-      className="group relative px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 
-        text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20
+      className="group relative px-4 sm:px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 
+        text-white rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20
         hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
-        flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+        flex items-center justify-center sm:justify-start gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap w-full sm:w-auto"
     >
       {slide.cta}
-      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      <ArrowRight className="w-3 sm:w-4 h-3 sm:h-4 group-hover:translate-x-1 transition-transform" />
     </button>
 
     <button
       onClick={openVideoModal}
-      className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-white/30 
-        text-white font-semibold text-sm backdrop-blur-sm bg-white/5
-        hover:bg-white/10 hover:border-white/50 transition-all whitespace-nowrap"
+      className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border border-white/30 
+        text-white font-semibold text-xs sm:text-sm backdrop-blur-sm bg-white/5
+        hover:bg-white/10 hover:border-white/50 transition-all w-full sm:w-auto"
     >
-      <Play className="w-4 h-4 group-hover:scale-110 transition-transform" />
-      {isMobile ? 'Tour' : 'Watch Tour'}
+      <Play className="w-3 sm:w-4 h-3 sm:h-4 group-hover:scale-110 transition-transform" />
+      <span>{isMobile ? 'Tour' : 'Watch Tour'}</span>
     </button>
   </div>
 </div>
@@ -392,23 +392,23 @@ export default function ModernHero() {
 {!isMobile && (
   <div
   className="absolute 
-  right-4 sm:right-6 md:right-10 lg:right-16 xl:right-[10%]
+  right-4 sm:right-6 md:right-8 lg:right-12 xl:right-[8%]
   top-1/2 -translate-y-1/2
-  w-[85vw] sm:w-[24rem] md:w-[26rem] lg:w-[28rem] xl:w-[30rem]
-  max-w-[92vw]
+  w-[22rem] md:w-[24rem] lg:w-[26rem] xl:w-[28rem]
+  max-w-[90vw]
   bg-transparent
   p-4 sm:p-5 md:p-6
   space-y-3 sm:space-y-4
   rounded-2xl"
 >
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center">
-        <GiGraduateCap className="w-6 h-6 text-white" />
+      <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center flex-shrink-0">
+        <GiGraduateCap className="w-5 sm:w-6 h-5 sm:h-6 text-white" />
       </div>
 
       <div>
-        <h3 className="text-white font-black text-2xl">Matungulu Girls</h3>
-        <p className="text-white font-semibold text-md">Senior School</p>
+        <h3 className="text-white font-black text-lg sm:text-2xl">Matungulu Girls</h3>
+        <p className="text-white font-semibold text-xs sm:text-sm">Senior School</p>
       </div>
     </div>
 
@@ -422,37 +422,37 @@ export default function ModernHero() {
       <>
         <div className="space-y-4 text-base">
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-md">Established</span>
-            <span className="text-white font-bold text-md">
+            <span className="text-white font-semibold text-xs sm:text-sm">Established</span>
+            <span className="text-white font-bold text-xs sm:text-sm">
               {getStatValue('established', 1966)}
             </span>
           </div>
 
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-md">Category</span>
-            <span className="text-white font-bold text-lg">
+            <span className="text-white font-semibold text-xs sm:text-sm">Category</span>
+            <span className="text-white font-bold text-xs sm:text-base">
               {getStatValue('category', 'National School')}
             </span>
           </div>
 
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-md">Enrollment</span>
-            <span className="text-white font-bold text-md">
+            <span className="text-white font-semibold text-xs sm:text-sm">Enrollment</span>
+            <span className="text-white font-bold text-xs sm:text-sm">
               {getStatValue('studentCount', 1200)}+ Girls
             </span>
           </div>
 
           <div className="flex justify-between items-center border-b border-white/10 pb-3">
-            <span className="text-white font-semibold text-md">Motto</span>
-            <span className="text-white font-bold italic text-base">
+            <span className="text-white font-semibold text-xs sm:text-sm">Motto</span>
+            <span className="text-white font-bold italic text-xs sm:text-sm">
               "{getStatValue('motto', 'Committed to Excellence')}"
             </span>
           </div>
 
           <div className="flex justify-between items-center">
-          <span className="text-white font-semibold text-md">
+          <span className="text-white font-semibold text-xs sm:text-sm">
             KCSE {currentYear - 1} Mean
-          </span>            <span className="text-white font-black text-md">
+          </span>            <span className="text-white font-black text-xs sm:text-sm">
               {getStatValue('meanScore', 8.14).toFixed(2)} (B plain)
             </span>
           </div>
@@ -461,14 +461,14 @@ export default function ModernHero() {
         {/* Performance indicators */}
         {(schoolStats?.lastYearMean || schoolStats?.targetMean) && (
           <div className="mt-5 pt-4 border-t border-white/10">
-            <div className="flex justify-between items-center text-sm mb-2">
+            <div className="flex justify-between items-center text-xs sm:text-sm mb-2">
               <span className="text-white font-medium">Last Year</span>
               <span className="text-white font-bold">
                 {schoolStats?.lastYearMean?.toFixed(2) || '7.85'}
               </span>
             </div>
 
-            <div className="flex justify-between items-center text-sm">
+            <div className="flex justify-between items-center text-xs sm:text-sm">
               <span className="text-white font-medium">Target</span>
               <span className="text-white font-black">
                 {schoolStats?.targetMean?.toFixed(2) || '8.50'}
@@ -481,10 +481,10 @@ export default function ModernHero() {
 
     <button
       onClick={openVideoModal}
-      className="w-full mt-6 flex items-center justify-center gap-2 py-3 rounded-xl 
-      bg-white/10 hover:bg-white/20 transition-colors text-white text-sm font-black uppercase tracking-wider"
+      className="w-full mt-6 flex items-center justify-center gap-2 py-2 sm:py-3 rounded-lg sm:rounded-xl 
+      bg-white/10 hover:bg-white/20 transition-colors text-white text-xs sm:text-sm font-black uppercase tracking-wider"
     >
-      <Play className="w-4 h-4" /> Take a Tour
+      <Play className="w-3 sm:w-4 h-3 sm:h-4" /> Take a Tour
     </button>
   </div>
 )}
@@ -530,22 +530,22 @@ export default function ModernHero() {
 
       {/* Video Modal */}
       {showVideoModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
-          <div className="relative w-full max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
-            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-lg animate-in fade-in duration-300">
+          <div className="relative w-full max-w-2xl sm:max-w-4xl lg:max-w-5xl mx-auto animate-in zoom-in-95 duration-300">
+            <div className="relative aspect-video rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black">
               {/* Modal Header */}
-              <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
-                <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md rounded-full pl-3 pr-5 py-1.5 border border-white/10">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center">
-                    <Play className="w-4 h-4 text-white fill-white" />
+              <div className="absolute top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-20 flex justify-between items-center gap-2">
+                <div className="flex items-center gap-2 sm:gap-3 bg-black/50 backdrop-blur-md rounded-full pl-2 sm:pl-3 pr-3 sm:pr-5 py-1 sm:py-1.5 border border-white/10 min-w-0">
+                  <div className="w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                    <Play className="w-3 sm:w-4 h-3 sm:h-4 text-white fill-white" />
                   </div>
-                  <span className="text-white text-sm font-semibold">School Tour</span>
+                  <span className="text-white text-xs sm:text-sm font-semibold truncate">School Tour</span>
                 </div>
                 <button
                   onClick={closeVideoModal}
-                  className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all flex items-center justify-center flex-shrink-0"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 sm:w-5 h-4 sm:h-5" />
                 </button>
               </div>
 
@@ -600,13 +600,13 @@ export default function ModernHero() {
               )}
 
               {/* Modal Footer */}
-              <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4">
+              <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-2 sm:p-4">
                 <button
                   onClick={handleContactClick}
-                  className="w-full sm:w-auto ml-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-all"
+                  className="w-full sm:w-auto ml-auto flex items-center justify-center gap-2 px-3 sm:px-6 py-2 sm:py-2.5 bg-white text-slate-900 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm hover:bg-gray-100 transition-all whitespace-nowrap"
                 >
-                  Learn More About Matungulu
-                  <ChevronRight className="w-4 h-4" />
+                  Learn More
+                  <ChevronRight className="w-3 sm:w-4 h-3 sm:h-4" />
                 </button>
               </div>
             </div>
