@@ -36,9 +36,7 @@ const defaultStats = {
 };
 
 const sourceOptions = [
-  { id: 'all', name: 'All KCSE', icon: FiArchive, gradient: 'from-slate-500 to-slate-700' },
   { id: 'school-documents', name: 'Official Upload', icon: FiAward, gradient: 'from-emerald-500 to-teal-500' },
-  { id: 'local-archive', name: 'Public Archive', icon: FiFolder, gradient: 'from-purple-500 to-pink-500' },
 ];
 
 const sourceStyles = {
@@ -48,16 +46,10 @@ const sourceStyles = {
     icon: 'bg-emerald-100 text-emerald-700',
     gradient: 'from-emerald-500 to-teal-500',
   },
-  'local-archive': {
-    label: 'Public Archive',
-    badge: 'bg-purple-50 text-purple-700 border-purple-200',
-    icon: 'bg-purple-100 text-purple-700',
-    gradient: 'from-purple-500 to-pink-500',
-  },
   fallback: {
-    label: 'KCSE File',
-    badge: 'bg-slate-50 text-slate-700 border-slate-200',
-    icon: 'bg-slate-100 text-slate-700',
+    label: 'KCSE Results',
+    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    icon: 'bg-emerald-100 text-emerald-700',
     gradient: 'from-slate-500 to-slate-700',
   },
 };
@@ -369,7 +361,7 @@ const DocumentPreviewModal = ({ document, onClose, onShare }) => {
 
 export default function KcsePerformancePage() {
   const [payload, setPayload] = useState({ stats: defaultStats, documents: [] });
-  const [activeSource, setActiveSource] = useState('all');
+  const [activeSource, setActiveSource] = useState('school-documents');
   const [selectedYear, setSelectedYear] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid');
@@ -433,22 +425,20 @@ export default function KcsePerformancePage() {
 
     return documents
       .filter((document) => {
-        const matchesSource = activeSource === 'all' || document.source === activeSource;
         const matchesYear = selectedYear === 'all' || String(document.year) === selectedYear;
         const matchesSearch =
           !search ||
-          [document.title, document.name, document.description, document.year, document.source]
+          [document.title, document.name, document.description, document.year]
             .filter(Boolean)
             .some((value) => String(value).toLowerCase().includes(search));
 
-        return matchesSource && matchesYear && matchesSearch;
+        return matchesYear && matchesSearch;
       })
       .sort((a, b) => new Date(b.uploadDate || 0) - new Date(a.uploadDate || 0));
-  }, [activeSource, documents, searchTerm, selectedYear]);
+  }, [documents, searchTerm, selectedYear]);
 
   const latestDocument = documents[0] || null;
-  const officialCount = documents.filter((document) => document.source === 'school-documents').length;
-  const archiveCount = documents.filter((document) => document.source === 'local-archive').length;
+  const documentCount = documents.length;
 
   const metricCards = [
     {
@@ -466,11 +456,11 @@ export default function KcsePerformancePage() {
       gradient: 'from-purple-500 to-pink-500',
     },
     {
-      icon: FiArchive,
+      icon: FiAward,
       label: 'KCSE Files',
-      value: String(documents.length),
-      note: `${officialCount} official upload, ${archiveCount} archive file${archiveCount === 1 ? '' : 's'}.`,
-      gradient: 'from-blue-500 to-cyan-500',
+      value: String(documentCount),
+      note: documentCount === 0 ? 'No KCSE documents uploaded yet.' : documentCount === 1 ? '1 official KCSE document.' : `${documentCount} official KCSE documents.`,
+      gradient: 'from-emerald-500 to-teal-500',
     },
     {
       icon: FiCalendar,
@@ -495,7 +485,7 @@ export default function KcsePerformancePage() {
 
   const resetFilters = () => {
     setSearchTerm('');
-    setActiveSource('all');
+    setActiveSource('school-documents');
     setSelectedYear('all');
   };
 
@@ -707,25 +697,35 @@ export default function KcsePerformancePage() {
             </div>
 
             <div className="-mx-2 flex gap-2 overflow-x-auto px-2 pb-2">
-              {sourceOptions.map((option) => {
-                const Icon = option.icon;
-                const isActive = activeSource === option.id;
-
-                return (
+              {years.length > 0 && (
+                <>
                   <button
-                    key={option.id}
-                    onClick={() => setActiveSource(option.id)}
+                    onClick={() => setSelectedYear('all')}
                     className={`flex items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition-all sm:px-5 sm:py-2.5 sm:text-sm ${
-                      isActive
+                      selectedYear === 'all'
                         ? 'border-emerald-700 bg-emerald-700 text-white shadow-md shadow-emerald-100'
                         : 'border-slate-200 bg-white text-slate-600'
                     }`}
                   >
-                    <Icon className={isActive ? 'text-white' : 'text-slate-400'} />
-                    <span>{option.name}</span>
+                    <FiCalendar className={selectedYear === 'all' ? 'text-white' : 'text-slate-400'} />
+                    <span>All Years</span>
                   </button>
-                );
-              })}
+                  {years.map((year) => (
+                    <button
+                      key={year}
+                      onClick={() => setSelectedYear(year)}
+                      className={`flex items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition-all sm:px-5 sm:py-2.5 sm:text-sm ${
+                        selectedYear === year
+                          ? 'border-emerald-700 bg-emerald-700 text-white shadow-md shadow-emerald-100'
+                          : 'border-slate-200 bg-white text-slate-600'
+                      }`}
+                    >
+                      <FiCalendar className={selectedYear === year ? 'text-white' : 'text-slate-400'} />
+                      <span>{year}</span>
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
 
             {filteredDocuments.length === 0 ? (
@@ -734,7 +734,7 @@ export default function KcsePerformancePage() {
                   <FiFileText className="text-2xl text-slate-300" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">No KCSE documents found</h3>
-                <p className="mt-1 text-sm text-slate-500">Try changing the search, source or year filter.</p>
+                <p className="mt-1 text-sm text-slate-500">Please check back later or contact the school administration.</p>
                 <button
                   onClick={resetFilters}
                   className="mt-4 rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-bold text-slate-700 transition-all hover:bg-slate-50"
