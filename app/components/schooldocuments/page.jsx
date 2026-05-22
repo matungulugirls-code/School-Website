@@ -2688,19 +2688,19 @@ const [formData, setFormData] = useState(() => {
       id: 'curriculum', 
       label: 'Curriculum', 
       icon: FaBook, 
-      description: 'Academic curriculum documents' 
+      description: 'Academic curriculum documents (optional)' 
     },
     { 
       id: 'fees', 
-      label: 'Fee Structures', 
-      icon: FaMoneyBillWave, 
-      description: 'Day and boarding fee documents' 
+      label: 'Boarding Fees', 
+      icon: FaBuilding, 
+      description: 'Boarding school fee structure documents' 
     },
     { 
       id: 'admission', 
-      label: 'Admission', 
+      label: 'Admission Fees', 
       icon: FaUserCheck, 
-      description: 'Admission fee documents' 
+      description: 'Admission fee documents (separate from boarding)' 
     },
     { 
       id: 'exams', 
@@ -2773,10 +2773,15 @@ const handleSubmitAfterReview = async () => {
     // Append files and their metadata
     Object.keys(formData).forEach(key => {
       const fileData = formData[key];
+      
+      // Skip if marked for deletion or empty
       if (!fileData || fileData.markedForDeletion) return;
       
+      // Skip files that haven't been modified (only existing files with no changes)
+      if (fileData.isExisting && !fileData.file && !fileData.isNew) return;
+      
       if (fileData.file instanceof File) {
-        // New file upload
+        // New file upload or replacement
         data.append(key, fileData.file);
         
         // Append metadata for exam results
@@ -2788,11 +2793,8 @@ const handleSubmitAfterReview = async () => {
       }
     });
     
-    // IMPORTANT: Append fee breakdowns as JSON strings
-    if (feeBreakdowns.feesDay && feeBreakdowns.feesDay.length > 0) {
-      data.append('feesDayDistributionJson', JSON.stringify(feeBreakdowns.feesDay));
-      console.log('✅ Appending feesDayDistributionJson:', feeBreakdowns.feesDay);
-    }
+    // IMPORTANT: Append fee breakdowns as JSON strings (BOARDING SCHOOL ONLY - NO DAY FEES)
+    // Day fees are not appended because this is a boarding school
     
     if (feeBreakdowns.feesBoarding && feeBreakdowns.feesBoarding.length > 0) {
       data.append('feesBoardingDistributionJson', JSON.stringify(feeBreakdowns.feesBoarding));
@@ -2804,16 +2806,8 @@ const handleSubmitAfterReview = async () => {
       console.log('✅ Appending admissionFeeDistribution:', feeBreakdowns.admissionFee);
     }
     
-    // Append year/term/description for fee documents
-    if (formData.feesDayDistributionPdf?.year) {
-      data.append('feesDayYear', formData.feesDayDistributionPdf.year);
-    }
-    if (formData.feesDayDistributionPdf?.term) {
-      data.append('feesDayTerm', formData.feesDayDistributionPdf.term);
-    }
-    if (formData.feesDayDistributionPdf?.description) {
-      data.append('feesDayDescription', formData.feesDayDistributionPdf.description);
-    }
+    // Append year/term/description for boarding fee documents only
+    // Day fees are not appended because this is a boarding school
     
     if (formData.feesBoardingDistributionPdf?.year) {
       data.append('feesBoardingYear', formData.feesBoardingDistributionPdf.year);
@@ -3062,34 +3056,27 @@ const getExistingPdfData = (field) => {
                 }
                 onRemove={() => handleFileRemove('curriculumPDF')}
                 label="Curriculum PDF"
-                required={true}
+                required={false}
                 existingPdf={getExistingPdfData('curriculumPDF')}
                 onCancelExisting={(existingFile) => handleCancelExisting('curriculumPDF', existingFile)}
                 onRemoveExisting={() => handleRemoveExisting('curriculumPDF')}
                 type="curriculum"
+                description="Optional: Upload the official school curriculum document outlining all subjects, courses, and academic programs offered."
               />
             </div>
           </div>
         );
       
-      case 1: // Fee Structures
+      case 1: // Boarding Fee Structures
         return (
           <div className="space-y-8">
-            <div className="w-full max-w-2xl">
-              <ModernPdfUpload
-                pdfFile={formData.feesDayDistributionPdf?.file || null}
-                onPdfChange={(file, year, description, term) => 
-                  handleFileChange('feesDayDistributionPdf', file, year, description, term)
-                }
-                onRemove={() => handleFileRemove('feesDayDistributionPdf')}
-                label="Day School Fees PDF"
-                existingPdf={getExistingPdfData('feesDayDistributionPdf')}
-                onCancelExisting={(existingFile) => handleCancelExisting('feesDayDistributionPdf', existingFile)}
-                onRemoveExisting={() => handleRemoveExisting('feesDayDistributionPdf')}
-                feeBreakdown={feeBreakdowns.feesDay}
-                onFeeBreakdownChange={(breakdown) => handleFeeBreakdownChange('feesDay', breakdown)}
-                type="day"
-              />
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-4">
+              <div className="flex items-center gap-2">
+                <FaInfoCircle className="text-blue-600" />
+                <p className="text-sm font-bold text-blue-800">
+                  This is a boarding school. Day fees section has been removed. Only boarding fees are required.
+                </p>
+              </div>
             </div>
             
             <div className="w-full max-w-2xl">
@@ -3100,6 +3087,7 @@ const getExistingPdfData = (field) => {
                 }
                 onRemove={() => handleFileRemove('feesBoardingDistributionPdf')}
                 label="Boarding School Fees PDF"
+                required={true}
                 existingPdf={getExistingPdfData('feesBoardingDistributionPdf')}
                 onCancelExisting={(existingFile) => handleCancelExisting('feesBoardingDistributionPdf', existingFile)}
                 onRemoveExisting={() => handleRemoveExisting('feesBoardingDistributionPdf')}
@@ -3114,6 +3102,15 @@ const getExistingPdfData = (field) => {
       case 2: // Admission
         return (
           <div className="space-y-6">
+            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-4">
+              <div className="flex items-center gap-2">
+                <FaInfoCircle className="text-green-600" />
+                <p className="text-sm font-bold text-green-800">
+                  Admission fees are completely separate from boarding fees and start with empty fields.
+                </p>
+              </div>
+            </div>
+            
             <div className="w-full max-w-2xl">
               <ModernPdfUpload
                 pdfFile={formData.admissionFeePdf?.file || null}
@@ -3122,6 +3119,7 @@ const getExistingPdfData = (field) => {
                 }
                 onRemove={() => handleFileRemove('admissionFeePdf')}
                 label="Admission Fee PDF"
+                required={false}
                 existingPdf={getExistingPdfData('admissionFeePdf')}
                 onCancelExisting={(existingFile) => handleCancelExisting('admissionFeePdf', existingFile)}
                 onRemoveExisting={() => handleRemoveExisting('admissionFeePdf')}
@@ -3133,7 +3131,7 @@ const getExistingPdfData = (field) => {
           </div>
         );
       
-      case 3: // Exam Results
+      case 3: // Exam Results  
         return (
           <div className="space-y-8">
             {[
@@ -3182,7 +3180,7 @@ const getExistingPdfData = (field) => {
           </div>
         );
 
-      case 4: // Review
+      case 4: // Review  
         return (
           <div className="space-y-6">
             <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-6 border-2 border-teal-200">

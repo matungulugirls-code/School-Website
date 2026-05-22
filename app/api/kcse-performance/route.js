@@ -55,11 +55,34 @@ const getKcseDocumentFromAPI = async () => {
   }
 };
 
-// Fetch school statistics
+// Fetch school statistics from school-stats API
 const getSchoolStats = async () => {
   try {
-    const schoolStats = await prisma.schoolStats.findFirst();
-    return schoolStats ? { ...defaultStats, ...schoolStats } : defaultStats;
+    // Fetch from school-stats API endpoint
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/school-stats`, {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.warn(`⚠️ School stats API returned status ${response.status}`);
+      return defaultStats;
+    }
+
+    const data = await response.json();
+    
+    if (data.success && data.stats) {
+      // Merge API stats with defaults to ensure all fields exist
+      return {
+        ...defaultStats,
+        ...data.stats,
+      };
+    }
+
+    return defaultStats;
   } catch (error) {
     console.warn('⚠️ School stats fetch failed:', error.message);
     return defaultStats;
