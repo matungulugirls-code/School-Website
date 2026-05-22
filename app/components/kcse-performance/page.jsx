@@ -540,7 +540,7 @@ export default function KcsePerformancePage() {
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500">
                   <span className="text-[8px] font-black text-white">MG</span>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/82">Matungulu Girls</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white">Matungulu Girls</span>
               </div>
 
               <div className="flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
@@ -556,7 +556,7 @@ export default function KcsePerformancePage() {
                   <span className="block text-emerald-200 sm:inline"> Gallery</span>
                 </h1>
                 <div className="mb-5 mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-emerald-300 to-teal-300" />
-                <p className="max-w-2xl text-sm font-medium leading-relaxed text-emerald-50/82 sm:text-base">
+                <p className="max-w-2xl text-sm font-medium leading-relaxed text-white sm:text-base">
                   Browse official KCSE documents, public result archives, mean score movement and current academic targets in one performance gallery.
                 </p>
               </div>
