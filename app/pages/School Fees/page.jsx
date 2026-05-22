@@ -24,6 +24,9 @@ import {
   FiPrinter,
   FiShare2,
   FiRefreshCw,
+  FiAlertTriangle,
+  FiShield,
+  FiLock,
 } from 'react-icons/fi';
 import {
   IoSparkles,
@@ -45,16 +48,17 @@ import {
   IoStatsChartOutline,
   IoPeopleOutline,
   IoTimeOutline,
+  IoWarningOutline,
 } from 'react-icons/io5';
 import { MdOutlineAdUnits } from 'react-icons/md';
-import { FaWhatsapp, FaLeaf, FaUniversity, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaWhatsapp, FaLeaf, FaUniversity, FaPhone, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
 import { CircularProgress, Box, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
-// Hero Section Component - Matching KCSE Performance style
+// Hero Section Component - Reduced height on large screens
 const FeesHero = ({ stats, activeTabLabel, onRefresh, refreshing }) => {
   return (
-    <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[85%] xl:w-[80%]">
+    <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[90%] xl:w-[90%]">
       <img
         src="/Matungulu/9.jpeg"
         alt="Matungulu Girls Senior School fee structure"
@@ -63,8 +67,8 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh, refreshing }) => {
       <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(6,78,59,0.96),rgba(15,91,76,0.9),rgba(15,23,42,0.72))]" />
       <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:40px_40px]" />
 
-      <div className="relative z-10 p-6 sm:p-10">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      <div className="relative z-10 px-4 py-5 sm:px-6 sm:py-6 md:px-8 md:py-5 lg:py-4 xl:py-4">
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-sm">
             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500">
               <span className="text-[8px] font-black text-white">MG</span>
@@ -78,33 +82,33 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh, refreshing }) => {
           </div>
         </div>
 
-        <div className="mt-8 max-w-4xl space-y-5">
+        <div className="mt-4 max-w-4xl space-y-3 sm:mt-5 md:mt-4 lg:mt-3">
           <div>
-            <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+            <h1 className="text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl">
               School Fees
               <span className="block text-emerald-200 sm:inline"> Structure</span>
             </h1>
-            <div className="mb-5 mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-emerald-300 to-teal-300" />
-            <p className="max-w-2xl text-sm font-medium leading-relaxed text-white sm:text-base">
+            <div className="mb-3 mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-emerald-300 to-teal-300 sm:mb-4 sm:mt-4" />
+            <p className="max-w-2xl text-xs font-medium leading-relaxed text-white sm:text-sm md:text-base">
               View {activeTabLabel.toLowerCase()} fees, download the official fee structure,
               and understand exactly what each payment covers — all in one clear, easy-to-navigate layout.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-2 pt-1 sm:gap-3 sm:pt-2">
             <button
               onClick={onRefresh}
               disabled={refreshing}
-              className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-white px-6 py-3 text-sm font-black text-[#0f5b4c] shadow-lg transition-all duration-300 active:scale-95 disabled:opacity-50"
+              className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-white px-4 py-2 text-xs font-black text-[#0f5b4c] shadow-lg transition-all duration-300 active:scale-95 disabled:opacity-50 sm:px-5 sm:py-2.5 sm:text-sm"
             >
               {refreshing ? (
                 <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f5b4c]/20 border-t-[#0f5b4c]" />
-                  <span>Updating Fees...</span>
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-[#0f5b4c]/20 border-t-[#0f5b4c] sm:h-4 sm:w-4" />
+                  <span>Updating...</span>
                 </>
               ) : (
                 <>
-                  <FiRefreshCw className="text-sm transition-transform duration-500 group-hover:rotate-180" />
+                  <FiRefreshCw className="text-xs transition-transform duration-500 group-hover:rotate-180 sm:text-sm" />
                   <span>Refresh Fees</span>
                 </>
               )}
@@ -112,18 +116,18 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh, refreshing }) => {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-sm">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Fee Items</p>
-            <p className="mt-1 text-2xl font-black text-white">{stats.totalItems}</p>
+        <div className="mt-4 flex flex-wrap gap-3 sm:mt-5 sm:gap-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-200 sm:text-[10px]">Fee Items</p>
+            <p className="mt-1 text-xl font-black text-white sm:text-2xl">{stats.totalItems}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-sm">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Annual Total</p>
-            <p className="mt-1 text-2xl font-black text-white">KSh {stats.totalAmount.toLocaleString()}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-200 sm:text-[10px]">Annual Total</p>
+            <p className="mt-1 text-xl font-black text-white sm:text-2xl">KSh {stats.totalAmount.toLocaleString()}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-sm">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Updated</p>
-            <p className="mt-1 text-2xl font-black text-white">{stats.lastUpdated}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
+            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-200 sm:text-[10px]">Updated</p>
+            <p className="mt-1 text-xl font-black text-white sm:text-2xl">{stats.lastUpdated}</p>
           </div>
         </div>
       </div>
@@ -304,11 +308,18 @@ const InsightCard = ({ icon: Icon, label, value, sublabel, gradient = 'from-emer
   );
 };
 
-// Payment Instructions Component - Simplified but styled consistently
+// Payment Instructions Card with Precautions
 const PaymentInstructionsCard = ({ onContact }) => {
   const bankAccounts = [
     { bank: 'KCB Tala', account: '1107262992' },
     { bank: 'Equity Bank Tala', account: '0900261636074' },
+  ];
+
+  const precautions = [
+    { icon: FiShield, text: 'Always verify the admission number before making any payment.', color: 'text-emerald-600' },
+    { icon: FiLock, text: 'Do not send fees to personal bank accounts or mobile numbers.', color: 'text-blue-600' },
+    { icon: FiAlertTriangle, text: 'Report any suspicious payment requests to the school finance office immediately.', color: 'text-amber-600' },
+    { icon: FaShieldAlt, text: 'Only use the official payment methods listed below.', color: 'text-purple-600' },
   ];
 
   return (
@@ -328,7 +339,23 @@ const PaymentInstructionsCard = ({ onContact }) => {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      {/* Precautions Section */}
+      <div className="mt-5 rounded-2xl border border-amber-100 bg-amber-50/50 p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <IoWarningOutline className="text-amber-600 text-sm" />
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-amber-700">Important Precautions</p>
+        </div>
+        <div className="space-y-2">
+          {precautions.map((precaution, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <precaution.icon className={`${precaution.color} text-xs mt-0.5 shrink-0`} />
+              <p className="text-xs leading-5 text-slate-700">{precaution.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
         {bankAccounts.map((account) => (
           <div key={account.account} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <div className="flex items-start gap-3">
@@ -362,12 +389,22 @@ const PaymentInstructionsCard = ({ onContact }) => {
         </div>
       </div>
 
+      {/* Additional Security Note */}
+      <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 p-3">
+        <div className="flex items-center gap-2">
+          <FiCheckCircle className="text-emerald-600 text-sm" />
+          <p className="text-xs font-medium text-emerald-800">
+            Always request an official receipt after making any payment.
+          </p>
+        </div>
+      </div>
+
       <button
         onClick={onContact}
         className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
       >
         <FaPhone size={15} />
-        Contact School
+        Contact School for Clarification
       </button>
     </div>
   );
@@ -521,10 +558,10 @@ export default function SchoolFeesPage() {
   const [selectedFeeItem, setSelectedFeeItem] = useState(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [pdfPreview, setPdfPreview] = useState(null);
-  const [activeTab, setActiveTab] = useState('boarding'); // Default to boarding (removed day)
+  const [activeTab, setActiveTab] = useState('boarding');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Tabs configuration - Only Boarding and Admission (removed Day Scholars)
+  // Tabs configuration - Only Boarding and Admission
   const tabs = [
     { id: 'boarding', name: 'Boarders', icon: IoBedOutline },
     { id: 'admission', name: 'Admission', icon: MdOutlineAdUnits }
@@ -744,10 +781,10 @@ export default function SchoolFeesPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/25 to-purple-50/20 p-4 text-slate-950 md:p-6">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/25 to-purple-50/20 p-3 text-slate-950 sm:p-4 md:p-6">
       <Toaster position="top-right" richColors />
 
-      <div className="mx-auto w-full space-y-6 md:w-[85%]">
+      <div className="mx-auto w-full space-y-5 sm:space-y-6 md:w-[90%]">
         <FeesHero 
           stats={{ totalItems: filteredItems.length, totalAmount, lastUpdated: getLastUpdated() }} 
           activeTabLabel={currentTabLabel} 
@@ -755,22 +792,22 @@ export default function SchoolFeesPage() {
           refreshing={refreshing}
         />
 
-        <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-6">
+        <section className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4 md:gap-6">
           {metricCards.map((metric) => (
             <MetricCard key={metric.label} {...metric} />
           ))}
         </section>
 
-        <section className="flex flex-col gap-8 lg:flex-row">
-          <div className="min-w-0 flex-1 space-y-5 sm:space-y-8">
+        <section className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+          <div className="min-w-0 flex-1 space-y-4 sm:space-y-6">
             <div className="flex flex-col justify-between gap-3 px-1 sm:flex-row sm:items-end sm:gap-4">
               <div className="flex items-center gap-3 sm:gap-4">
-                <div className="shrink-0 rounded-2xl bg-emerald-900 p-3 shadow-lg">
-                  <IoWalletOutline className="text-xl text-white sm:text-2xl" />
+                <div className="shrink-0 rounded-2xl bg-emerald-900 p-2 shadow-lg sm:p-3">
+                  <IoWalletOutline className="text-lg text-white sm:text-xl" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">Fee Ledger</h2>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 sm:text-xs">
+                  <h2 className="text-lg font-extrabold tracking-tight text-slate-900 sm:text-xl md:text-2xl">Fee Ledger</h2>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:text-[10px]">
                     {filteredItems.length} fee items - {currentTabLabel} section
                   </p>
                 </div>
@@ -789,13 +826,13 @@ export default function SchoolFeesPage() {
                       setActiveTab(tab.id);
                       setSearchTerm('');
                     }}
-                    className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-all ${
+                    className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold transition-all sm:px-4 sm:py-2 sm:text-sm ${
                       isActive
                         ? 'bg-emerald-700 text-white shadow-md shadow-emerald-100'
                         : 'bg-white text-slate-600 border border-slate-200 hover:border-emerald-200'
                     }`}
                   >
-                    <Icon size={16} />
+                    <Icon size={14} className="sm:text-base" />
                     {tab.name}
                   </button>
                 );
@@ -807,20 +844,20 @@ export default function SchoolFeesPage() {
               <div className="flex flex-col items-center gap-2 sm:gap-3 md:flex-row">
                 <div className="group relative w-full flex-1">
                   <div className="relative flex items-center rounded-2xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-slate-900 focus-within:ring-2 focus-within:ring-slate-900/5">
-                    <div className="flex items-center justify-center pl-4 pr-3">
-                      <FiSearch className="text-slate-400 transition-colors group-focus-within:text-slate-900" size={16} />
+                    <div className="flex items-center justify-center pl-3 pr-2 sm:pl-4 sm:pr-3">
+                      <FiSearch className="text-slate-400 transition-colors group-focus-within:text-slate-900" size={14} />
                     </div>
                     <input
                       type="text"
-                      placeholder={`Search ${currentTabLabel} fees by name or description...`}
+                      placeholder={`Search ${currentTabLabel} fees...`}
                       value={searchTerm}
                       onChange={(event) => setSearchTerm(event.target.value)}
-                      className="w-full bg-transparent py-4 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                      className="w-full bg-transparent py-2.5 text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none sm:py-3 sm:text-sm"
                     />
                     {searchTerm && (
                       <button onClick={() => setSearchTerm('')} className="pr-2" aria-label="Clear search">
-                        <div className="rounded-xl bg-slate-100 p-2 text-slate-900">
-                          <FiX className="h-3.5 w-3.5" />
+                        <div className="rounded-xl bg-slate-100 p-1.5 text-slate-900 sm:p-2">
+                          <FiX className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </div>
                       </button>
                     )}
@@ -831,21 +868,21 @@ export default function SchoolFeesPage() {
 
             {/* Fee Items List */}
             {filteredItems.length === 0 ? (
-              <div className="rounded-[32px] border-2 border-dashed border-slate-200 bg-slate-50 py-12 text-center sm:py-16">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm">
-                  <FiDollarSign className="text-2xl text-slate-300" />
+              <div className="rounded-[32px] border-2 border-dashed border-slate-200 bg-slate-50 py-10 text-center sm:py-12 md:py-16">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm sm:h-14 sm:w-14 md:h-16 md:w-16">
+                  <FiDollarSign className="text-xl text-slate-300 sm:text-2xl" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900">No fee items found</h3>
-                <p className="mt-1 text-sm text-slate-500">Try adjusting your search or switch to another fee section.</p>
+                <h3 className="text-base font-bold text-slate-900 sm:text-lg">No fee items found</h3>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Try adjusting your search or switch to another fee section.</p>
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="mt-4 rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-bold text-slate-700 transition-all hover:bg-slate-50"
+                  className="mt-3 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-50 sm:mt-4 sm:px-5 sm:py-2 sm:text-sm"
                 >
                   Clear Search
                 </button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {filteredItems.map((item, index) => (
                   <FeeLedgerItem
                     key={item.id || index}
@@ -861,9 +898,9 @@ export default function SchoolFeesPage() {
           </div>
 
           {/* Sidebar */}
-          <aside className="space-y-6 lg:w-[380px]">
-            <div className="space-y-6 lg:sticky lg:top-24">
-              {/* Payment Instructions Card */}
+          <aside className="space-y-5 lg:w-[360px] xl:w-[380px]">
+            <div className="space-y-5 lg:sticky lg:top-24">
+              {/* Payment Instructions Card with Precautions */}
               <PaymentInstructionsCard onContact={() => router.push("/pages/contact")} />
 
               {/* PDF Document Card */}
@@ -878,12 +915,12 @@ export default function SchoolFeesPage() {
                   onView={handleViewPDF}
                 />
               ) : (
-                <div className="rounded-[28px] border-2 border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm">
-                    <FiFileText className="text-2xl text-slate-300" />
+                <div className="rounded-[28px] border-2 border-dashed border-slate-200 bg-slate-50 p-5 text-center sm:p-6">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm sm:h-14 sm:w-14 md:h-16 md:w-16">
+                    <FiFileText className="text-xl text-slate-300 sm:text-2xl" />
                   </div>
-                  <h3 className="mt-3 text-lg font-bold text-slate-900">No PDF available</h3>
-                  <p className="mt-1 text-sm text-slate-500">The downloadable fee document for this section has not been uploaded.</p>
+                  <h3 className="mt-3 text-base font-bold text-slate-900 sm:text-lg">No PDF available</h3>
+                  <p className="mt-1 text-xs text-slate-500 sm:text-sm">The downloadable fee document for this section has not been uploaded.</p>
                 </div>
               )}
 
@@ -909,29 +946,33 @@ export default function SchoolFeesPage() {
               />
 
               {/* Info Box */}
-              <div className="rounded-[28px] border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/25 p-6 shadow-sm">
+              <div className="rounded-[28px] border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/25 p-5 shadow-sm sm:p-6">
                 <div className="mb-4 flex items-center gap-3">
                   <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 p-2 shadow-md">
-                    <IoSchoolOutline className="text-lg text-white" />
+                    <IoSchoolOutline className="text-base text-white sm:text-lg" />
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-900">Important Notes</h4>
-                    <p className="text-[10px] font-black uppercase tracking-wider text-emerald-600">Fee Guidelines</p>
+                    <p className="text-[9px] font-black uppercase tracking-wider text-emerald-600 sm:text-[10px]">Fee Guidelines</p>
                   </div>
                 </div>
 
-                <ul className="space-y-3 text-sm leading-6 text-slate-600">
+                <ul className="space-y-2 text-xs leading-6 text-slate-600 sm:text-sm">
                   <li className="flex gap-2">
-                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0" />
+                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0 text-xs" />
                     <span>Review the correct section before making payment.</span>
                   </li>
                   <li className="flex gap-2">
-                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0" />
+                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0 text-xs" />
                     <span>Use the downloadable fee structure for reference.</span>
                   </li>
                   <li className="flex gap-2">
-                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0" />
+                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0 text-xs" />
                     <span>Contact bursar for clarifications on balances.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <FiCheckCircle className="mt-0.5 text-emerald-600 shrink-0 text-xs" />
+                    <span>Keep all payment receipts for future reference.</span>
                   </li>
                 </ul>
               </div>
