@@ -242,16 +242,16 @@ const StaffSkeleton = ({ viewMode }) => {
 };
 
 const StatsPill = ({ icon: Icon, value, label }) => (
-  <div className="rounded-2xl border border-white/12 bg-white/6 px-4 py-3 backdrop-blur-sm sm:px-5">
-    <div className="flex items-center gap-2">
+  <div className="rounded-lg sm:rounded-2xl border border-white/12 bg-white/6 px-2.5 sm:px-4 py-2 sm:py-3 backdrop-blur-sm">
+    <div className="flex items-center gap-1.5 sm:gap-2">
       {Icon && (
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-[#f8c95f]">
-          <Icon size={14} />
+        <div className="flex h-6 sm:h-8 w-6 sm:w-8 items-center justify-center rounded-lg sm:rounded-xl bg-white/10 text-[#f8c95f] flex-shrink-0">
+          <Icon size={12} />
         </div>
       )}
-      <div>
-        <span className="block text-lg font-black text-white sm:text-xl">{value}</span>
-        <span className="block text-[9px] font-semibold uppercase tracking-[0.24em] text-white/45">{label}</span>
+      <div className="min-w-0">
+        <span className="block text-sm sm:text-lg font-black text-white">{value}</span>
+        <span className="block text-[7px] sm:text-[9px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.24em] text-white/45">{label}</span>
       </div>
     </div>
   </div>
@@ -1137,7 +1137,7 @@ export default function StaffDirectory() {
       
       {/* ── Sticky Header ── */}
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/88 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-3 py-2 sm:gap-3 sm:px-6 sm:py-3 lg:flex-row lg:items-center lg:justify-between">
           
           <Link href="/" className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1a1a2e] via-[#244863] to-[#d7a73d] p-[1px] shadow-sm">
@@ -1157,43 +1157,43 @@ export default function StaffDirectory() {
       
 
             <div className="relative w-full lg:max-w-md">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
+              <FiSearch className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search departments, teacher names, or subjects..."
-                className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm font-bold shadow-sm outline-none transition-all focus:border-[#1a1a2e] focus:ring-4 focus:ring-[#1a1a2e]/5"
+                placeholder="Search names, subjects..."
+                className="w-full rounded-lg sm:rounded-2xl border border-slate-200 bg-white py-2.5 sm:py-3 pl-10 sm:pl-11 pr-9 sm:pr-10 text-xs sm:text-sm font-bold shadow-sm outline-none transition-all focus:border-[#1a1a2e] focus:ring-4 focus:ring-[#1a1a2e]/5"
               />
               {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                  <FiX size={14} />
+                <button onClick={() => setSearchQuery('')} className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                  <FiX size={12} />
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 onClick={fetchStaffData}
                 disabled={loading}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-bold text-slate-600 transition-all hover:border-[#1a1a2e] hover:text-[#1a1a2e] disabled:opacity-50"
+                className="flex items-center gap-1 rounded-lg sm:rounded-xl border border-slate-200 px-2.5 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold text-slate-600 transition-all hover:border-[#1a1a2e] hover:text-[#1a1a2e] disabled:opacity-50 whitespace-nowrap"
               >
-                <FiRefreshCw size={12} className={loading ? 'animate-spin' : ''} />
-                <span>{loading ? 'Loading...' : 'Refresh'}</span>
+                <FiRefreshCw size={11} className={loading ? 'animate-spin' : ''} />
+                <span className="hidden sm:inline">{loading ? 'Loading...' : 'Refresh'}</span>
               </button>
               
-              <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1">
+              <div className="flex rounded-lg sm:rounded-xl border border-slate-200 bg-slate-50 p-0.5 sm:p-1">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`rounded-lg p-2 transition-all ${viewMode === 'grid' ? 'bg-[#1a1a2e] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                  className={`rounded-md p-1.5 sm:p-2 transition-all ${viewMode === 'grid' ? 'bg-[#1a1a2e] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
                 >
-                  <FiGrid size={14} />
+                  <FiGrid size={12} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`rounded-lg p-2 transition-all ${viewMode === 'list' ? 'bg-[#1a1a2e] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                  className={`rounded-md p-1.5 sm:p-2 transition-all ${viewMode === 'list' ? 'bg-[#1a1a2e] text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
                 >
-                  <FiList size={14} />
+                  <FiList size={12} />
                 </button>
               </div>
             </div>
