@@ -1280,6 +1280,156 @@ function AdmissionFeeBreakdownModal({
   );
 }
 
+// Edit Document Metadata Modal for Exam Results
+function EditDocumentMetadataModal({ 
+  open, 
+  onClose, 
+  onSave, 
+  fileName,
+  existingData = {}
+}) {
+  const [year, setYear] = useState(existingData.year || '');
+  const [term, setTerm] = useState(existingData.term || '');
+  const [description, setDescription] = useState(existingData.description || '');
+
+  useEffect(() => {
+    setYear(existingData.year || '');
+    setTerm(existingData.term || '');
+    setDescription(existingData.description || '');
+  }, [existingData, open]);
+
+  const handleSave = () => {
+    if (!year || !term || !description) {
+      toast.error('Please fill in year, term, and description');
+      return;
+    }
+
+    onSave({ year, term, description });
+    onClose();
+  };
+
+  return (
+    <Modal open={open} onClose={onClose}>
+      <Box sx={{
+        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        width: '95vw',
+        maxWidth: '500px',
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 24,
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
+      }}>
+        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 p-6 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+                <FaPencilAlt className="text-lg" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold">Edit Document Metadata</h2>
+                <p className="text-white/90 text-sm mt-1 font-bold">
+                  Update information for {fileName}
+                </p>
+              </div>
+            </div>
+            <button 
+              onClick={onClose}
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200"
+            >
+              <FaTimes className="text-lg" />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Year *
+                </label>
+                <input
+                  type="number"
+                  min="2000"
+                  max="2100"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  placeholder="e.g., 2024"
+                  className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm font-bold"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Term *
+                </label>
+                <select
+                  value={term}
+                  onChange={(e) => setTerm(e.target.value)}
+                  className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm font-bold"
+                  required
+                >
+                  <option value="">Select Term</option>
+                  <option value="Term 1">Term 1</option>
+                  <option value="Term 2">Term 2</option>
+                  <option value="Term 3">Term 3</option>
+                  <option value="Annual">Annual</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Description *
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe what this document contains..."
+                rows="4"
+                className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm font-bold resize-none"
+                required
+              />
+            </div>
+            
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <FaInfoCircle className="text-blue-600" />
+                <h4 className="text-sm font-bold text-gray-900">Editing Document Metadata</h4>
+              </div>
+              <p className="text-xs text-gray-600 font-bold">
+                These changes will update the document's metadata in the system. The document file itself will not be affected.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-200 p-6 bg-white">
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:border-gray-400 hover:bg-gray-50 transition duration-200 font-bold"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition duration-200 font-bold shadow flex items-center gap-2"
+            >
+              <FaSave className="text-sm" />
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </Box>
+    </Modal>
+  );
+}
+
 // Document Metadata Modal for Exam Results and Additional Files with Term Field
 function DocumentMetadataModal({ 
   open, 
@@ -2085,6 +2235,8 @@ function ModernDocumentCard({
   admissionBreakdown = null,
   onReplace = null,
   onRemove = null,
+  onEdit = null,
+  onDelete = null,
   existing = false,
   type = 'default',
   fileSize = null,
@@ -2092,10 +2244,13 @@ function ModernDocumentCard({
 }) {
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showEditMetadataModal, setShowEditMetadataModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const breakdown = feeBreakdown || admissionBreakdown;
   const totalAmount = breakdown?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
   const categoriesCount = breakdown?.length || 0;
+  const isExamResult = type === 'results';
 
   // Prepare document data for the details modal
   const documentData = {
@@ -2149,8 +2304,17 @@ function ModernDocumentCard({
             </div>
           </div>
           
-          {existing && (onReplace || onRemove) && (
+          {existing && (onReplace || onRemove || onEdit || onDelete) && (
             <div className="flex gap-2">
+              {isExamResult && onEdit && (
+                <button
+                  onClick={() => setShowEditMetadataModal(true)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors border border-blue-200"
+                  title="Edit Metadata"
+                >
+                  <FaPencilAlt size={14} />
+                </button>
+              )}
               <button
                 onClick={onReplace}
                 className="p-2 text-teal-600 hover:bg-teal-50 rounded-xl transition-colors border border-teal-200"
@@ -2159,9 +2323,9 @@ function ModernDocumentCard({
                 <FaUpload size={14} />
               </button>
               <button
-                onClick={onRemove}
+                onClick={() => setShowDeleteConfirm(true)}
                 className="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors border border-red-200"
-                title="Remove PDF"
+                title="Delete PDF"
               >
                 <FaTrash size={14} />
               </button>
@@ -2237,6 +2401,80 @@ function ModernDocumentCard({
         onClose={() => setShowDetailsModal(false)}
         documentData={documentData}
       />
+      
+      {/* Edit Metadata Modal for Exam Results */}
+      {isExamResult && (
+        <EditDocumentMetadataModal
+          open={showEditMetadataModal}
+          onClose={() => setShowEditMetadataModal(false)}
+          onSave={(updatedMetadata) => {
+            if (onEdit) {
+              onEdit(updatedMetadata);
+            }
+            setShowEditMetadataModal(false);
+            toast.success('Metadata updated successfully');
+          }}
+          fileName={pdfName || title}
+          existingData={{ year, term, description }}
+        />
+      )}
+      
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle className="font-bold text-gray-900">
+          Delete Document?
+        </DialogTitle>
+        <DialogContent>
+          <div className="py-4">
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
+              <div className="flex items-start gap-3">
+                <FaExclamationTriangle className="text-red-600 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="text-sm font-bold text-red-800 mb-2">This action cannot be undone</h4>
+                  <p className="text-sm text-red-700 font-bold">
+                    Deleting <strong>{title}</strong> will permanently remove:
+                  </p>
+                  <ul className="text-sm text-red-700 font-bold mt-2 ml-4 space-y-1">
+                    <li>• The uploaded document file</li>
+                    <li>• All associated metadata (year, term, description)</li>
+                    {feeBreakdown || admissionBreakdown ? <li>• Fee breakdown information</li> : null}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <p className="text-sm text-gray-700 font-bold">
+              Are you sure you want to delete this document?
+            </p>
+          </div>
+        </DialogContent>
+        <DialogActions className="p-4">
+          <button
+            onClick={() => setShowDeleteConfirm(false)}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-bold"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              setShowDeleteConfirm(false);
+              if (onDelete) {
+                onDelete();
+              } else if (onRemove) {
+                onRemove();
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold flex items-center gap-2"
+          >
+            <FaTrash size={14} />
+            Delete Permanently
+          </button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
@@ -3447,6 +3685,8 @@ export default function SchoolDocumentsPage() {
   const [showModal, setShowModal] = useState(false);
   const [confirmText, setConfirmText] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDocumentField, setDeleteDocumentField] = useState(null);
+  const [editingMetadata, setEditingMetadata] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -3539,6 +3779,107 @@ const handleDeleteDocument = async () => {
   } catch (error) {
     console.error('Delete failed:', error);
     toast.error(error.message || 'Failed to delete document');
+  } finally {
+    setActionLoading(false);
+  }
+};
+
+// NEW: Handle deletion of individual documents
+const handleDeleteIndividualDocument = async (field) => {
+  try {
+    setActionLoading(true);
+    
+    const adminToken = localStorage.getItem('admin_token');
+    const deviceToken = localStorage.getItem('device_token');
+    
+    if (!adminToken || !deviceToken) {
+      toast.error('Authentication required. Please login again.');
+      window.location.href = '/pages/adminLogin';
+      return;
+    }
+    
+    // Send request to delete specific document field
+    const response = await fetch(`/api/schooldocuments?deleteField=${field}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${adminToken}`,
+        'x-device-token': deviceToken
+      }
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+        localStorage.removeItem('device_token');
+        toast.error('Session expired. Please login again.');
+        setTimeout(() => window.location.href = '/pages/adminLogin', 1000);
+        return;
+      }
+      throw new Error(`Failed to delete document: ${response.status}`);
+    }
+
+    const result = await response.json();
+    toast.success('Document and metadata deleted successfully');
+    setDeleteDocumentField(null);
+    await loadData();
+  } catch (error) {
+    console.error('Delete failed:', error);
+    toast.error(error.message || 'Failed to delete document');
+  } finally {
+    setActionLoading(false);
+  }
+};
+
+// NEW: Handle updating exam metadata
+const handleUpdateExamMetadata = async (field, metadata) => {
+  try {
+    setActionLoading(true);
+    
+    const adminToken = localStorage.getItem('admin_token');
+    const deviceToken = localStorage.getItem('device_token');
+    
+    if (!adminToken || !deviceToken) {
+      toast.error('Authentication required. Please login again.');
+      window.location.href = '/pages/adminLogin';
+      return;
+    }
+    
+    const data = new FormData();
+    data.append('updateField', field);
+    data.append('year', metadata.year);
+    data.append('term', metadata.term);
+    data.append('description', metadata.description);
+    
+    const response = await fetch(`/api/schooldocuments`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${adminToken}`,
+        'x-device-token': deviceToken
+      },
+      body: data
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+        localStorage.removeItem('device_token');
+        toast.error('Session expired. Please login again.');
+        setTimeout(() => window.location.href = '/pages/adminLogin', 1000);
+        return;
+      }
+      throw new Error(`Failed to update metadata: ${response.status}`);
+    }
+
+    const result = await response.json();
+    toast.success('Metadata updated successfully');
+    setEditingMetadata(null);
+    await loadData();
+  } catch (error) {
+    console.error('Update failed:', error);
+    toast.error(error.message || 'Failed to update metadata');
   } finally {
     setActionLoading(false);
   }
@@ -3844,11 +4185,7 @@ const hasDocuments = documents && (
                   uploadDate={documents.curriculumUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove curriculum document?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onDelete={() => handleDeleteIndividualDocument('curriculumPDF')}
                 />
               )}
               
@@ -3867,11 +4204,7 @@ const hasDocuments = documents && (
                   uploadDate={documents.feesDayUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove day school fees document?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onDelete={() => handleDeleteIndividualDocument('feesDayDistributionPdf')}
                 />
               )}
               
@@ -3890,11 +4223,7 @@ const hasDocuments = documents && (
                   uploadDate={documents.feesBoardingUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove boarding fees document?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onDelete={() => handleDeleteIndividualDocument('feesBoardingDistributionPdf')}
                 />
               )}
               
@@ -3913,11 +4242,7 @@ const hasDocuments = documents && (
                   uploadDate={documents.admissionFeeUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove admission fees document?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onDelete={() => handleDeleteIndividualDocument('admissionFeePdf')}
                 />
               )}
               
@@ -3936,11 +4261,8 @@ const hasDocuments = documents && (
                   uploadDate={documents.form1ResultsUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove Form 1 results?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onEdit={(metadata) => handleUpdateExamMetadata('form1Results', metadata)}
+                  onDelete={() => handleDeleteIndividualDocument('form1ResultsPdf')}
                 />
               )}
               
@@ -3958,11 +4280,8 @@ const hasDocuments = documents && (
                   uploadDate={documents.form2ResultsUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove Form 2 results?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onEdit={(metadata) => handleUpdateExamMetadata('form2Results', metadata)}
+                  onDelete={() => handleDeleteIndividualDocument('form2ResultsPdf')}
                 />
               )}
               
@@ -3980,11 +4299,8 @@ const hasDocuments = documents && (
                   uploadDate={documents.form3ResultsUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove Form 3 results?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onEdit={(metadata) => handleUpdateExamMetadata('form3Results', metadata)}
+                  onDelete={() => handleDeleteIndividualDocument('form3ResultsPdf')}
                 />
               )}
               
@@ -4002,11 +4318,8 @@ const hasDocuments = documents && (
                   uploadDate={documents.form4ResultsUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove Form 4 results?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onEdit={(metadata) => handleUpdateExamMetadata('form4Results', metadata)}
+                  onDelete={() => handleDeleteIndividualDocument('form4ResultsPdf')}
                 />
               )}
               
@@ -4024,11 +4337,8 @@ const hasDocuments = documents && (
                   uploadDate={documents.mockExamsUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove mock exams results?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onEdit={(metadata) => handleUpdateExamMetadata('mockExams', metadata)}
+                  onDelete={() => handleDeleteIndividualDocument('mockExamsResultsPdf')}
                 />
               )}
               
@@ -4046,11 +4356,8 @@ const hasDocuments = documents && (
                   uploadDate={documents.kcseUploadDate}
                   existing={true}
                   onReplace={() => setShowModal(true)}
-                  onRemove={() => {
-                    if (confirm("Remove KCSE results?")) {
-                      // Handle removal
-                    }
-                  }}
+                  onEdit={(metadata) => handleUpdateExamMetadata('kcse', metadata)}
+                  onDelete={() => handleDeleteIndividualDocument('kcseResultsPdf')}
                 />
               )}
             </div>
