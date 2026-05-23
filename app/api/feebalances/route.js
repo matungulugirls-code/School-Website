@@ -1557,6 +1557,14 @@ export async function POST(request) {
 // GET - Fetch fee balances, uploads, or statistics (PUBLIC - no authentication required)
 export async function GET(request) {
   try {
+    // ✅ SECURITY: Authenticate all GET requests - prevent unauthorized fee data access
+    const auth = authenticateRequest(request);
+    if (!auth.authenticated) {
+      return auth.response;
+    }
+
+    console.log(`💰 Fee balance data access from: ${auth.user.name} (${auth.user.role})`);
+
     const url = new URL(request.url);
     const action = url.searchParams.get('action');
     const admissionNumber = url.searchParams.get('admissionNumber');
