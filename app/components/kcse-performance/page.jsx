@@ -360,7 +360,8 @@ const DocumentPreviewModal = ({ document, onClose, onShare }) => {
 };
 
 export default function KcsePerformancePage() {
-  const [payload, setPayload] = useState({ stats: defaultStats, documents: [] });
+  // ✅ Start with empty stats - only populate from API
+  const [payload, setPayload] = useState({ stats: {}, documents: [] });
   const [activeSource, setActiveSource] = useState('school-documents');
   const [selectedYear, setSelectedYear] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -380,8 +381,9 @@ export default function KcsePerformancePage() {
         throw new Error(data.error || 'Unable to load KCSE performance');
       }
 
+      // ✅ Use ONLY API data, NOT merged with defaults
       setPayload({
-        stats: { ...defaultStats, ...(data.stats || {}) },
+        stats: data.stats || {},
         documents: Array.isArray(data.documents) ? data.documents : [],
       });
 
@@ -389,7 +391,8 @@ export default function KcsePerformancePage() {
     } catch (error) {
       console.error(error);
       toast.error('Could not load KCSE performance data');
-      setPayload((current) => ({ ...current, stats: current.stats || defaultStats }));
+      // On error, keep empty stats (not defaults)
+      setPayload((current) => ({ ...current, stats: current.stats || {} }));
     } finally {
       setLoading(false);
       if (showRefresh) setRefreshing(false);
@@ -400,12 +403,13 @@ export default function KcsePerformancePage() {
     fetchPerformance();
   }, []);
 
-  const stats = payload.stats || defaultStats;
+  // ✅ Use ONLY API data - no fallback to defaults
+  const stats = payload.stats || {};
   const documents = payload.documents || [];
-  const meanScore = Number(stats.meanScore) || defaultStats.meanScore;
-  const previousMean = Number(stats.lastYearMean) || defaultStats.lastYearMean;
-  const targetMean = Number(stats.targetMean) || defaultStats.targetMean;
-  const movement = meanScore - previousMean;
+  const meanScore = Number(stats.meanScore) || 0;
+  const previousMean = Number(stats.lastYearMean) || 0;
+  const targetMean = Number(stats.targetMean) || 0;
+  const movement = previousMean > 0 ? meanScore - previousMean : 0;
 
   const progress = useMemo(() => {
     if (!targetMean) return 0;
@@ -440,19 +444,20 @@ export default function KcsePerformancePage() {
   const latestDocument = documents[0] || null;
   const documentCount = documents.length;
 
+  // ✅ Metrics only show actual API data
   const metricCards = [
     {
       icon: FiBarChart2,
       label: 'Mean Score',
-      value: formatScore(meanScore),
-      note: `${movement >= 0 ? '+' : ''}${movement.toFixed(2)} from previous mean.`,
+      value: meanScore > 0 ? formatScore(meanScore) : 'N/A',
+      note: previousMean > 0 && meanScore > 0 ? `${movement >= 0 ? '+' : ''}${movement.toFixed(2)} from previous mean.` : 'No data available',
       gradient: 'from-emerald-500 to-teal-500',
     },
     {
       icon: FiTarget,
       label: 'Target Mean',
-      value: formatScore(targetMean),
-      note: `${progress}% of the academic target reached.`,
+      value: targetMean > 0 ? formatScore(targetMean) : 'N/A',
+      note: targetMean > 0 ? `${progress}% of the academic target reached.` : 'Target not set',
       gradient: 'from-purple-500 to-pink-500',
     },
     {
@@ -465,8 +470,8 @@ export default function KcsePerformancePage() {
     {
       icon: FiCalendar,
       label: 'Latest Year',
-      value: latestDocument?.year ? String(latestDocument.year) : 'Archive',
-      note: latestDocument ? formatDate(latestDocument.uploadDate) : 'Waiting for KCSE documents.',
+      value: latestDocument?.year ? String(latestDocument.year) : 'N/A',
+      note: latestDocument ? formatDate(latestDocument.uploadDate) : 'No documents available',
       gradient: 'from-amber-500 to-orange-500',
     },
   ];
@@ -791,13 +796,13 @@ export default function KcsePerformancePage() {
                 </div>
 
                 <blockquote className="text-xl font-black leading-tight text-slate-950">
-                  &quot;{stats.slogan || defaultStats.slogan}&quot;
+                  &quot;{stats.slogan || 'KCSE Performance Data'}&quot;
                 </blockquote>
                 <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
-                  {stats.sloganDescription || defaultStats.sloganDescription}
+                  {stats.sloganDescription || 'Performance metrics from official school documents'}
                 </p>
                 <p className="mt-4 border-t border-emerald-100 pt-3 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
-                  {stats.sloganAuthor || defaultStats.sloganAuthor}
+                  {stats.sloganAuthor || 'Matungulu Girls Senior School'}
                 </p>
               </div>
 
