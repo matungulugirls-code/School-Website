@@ -26,14 +26,7 @@ import { IoClose, IoSchoolOutline, IoSparkles } from 'react-icons/io5';
 import { Box, CircularProgress, Stack } from '@mui/material';
 import { Toaster, toast } from 'sonner';
 
-const defaultStats = {
-  meanScore: 8.14,
-  lastYearMean: 7.85,
-  targetMean: 8.5,
-  slogan: 'Committed to Excellence',
-  sloganDescription: 'Every learner, every subject, every term moving with purpose.',
-  sloganAuthor: 'Matungulu Girls Senior School',
-};
+// defaultStats removed – now using API only
 
 const sourceOptions = [
   { id: 'school-documents', name: 'Official Upload', icon: FiAward, gradient: 'from-emerald-500 to-teal-500' },
@@ -360,55 +353,84 @@ const DocumentPreviewModal = ({ document, onClose, onShare }) => {
 };
 
 export default function KcsePerformancePage() {
-  // ✅ Start with empty stats - only populate from API
-  const [payload, setPayload] = useState({ stats: {}, documents: [] });
+  // Stats from /api/school-stats
+  const [schoolStats, setSchoolStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  // Documents from /api/kcse-performance
+  const [documents, setDocuments] = useState([]);
+  const [documentsLoading, setDocumentsLoading] = useState(true);
+
   const [activeSource, setActiveSource] = useState('school-documents');
   const [selectedYear, setSelectedYear] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [selectedDocument, setSelectedDocument] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchPerformance = async (showRefresh = false) => {
+  // Fetch school stats from dedicated endpoint
+  const fetchSchoolStats = async () => {
+    setStatsLoading(true);
+    try {
+      const response = await fetch('/api/school-stats', { cache: 'no-store' });
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to load school statistics');
+      }
+
+      setSchoolStats(data.stats || null);
+    } catch (error) {
+      console.error(error);
+      toast.error('Could not load school performance stats');
+      setSchoolStats(null);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
+  // Fetch KCSE documents from existing endpoint
+  const fetchDocuments = async (showRefresh = false) => {
     if (showRefresh) setRefreshing(true);
+    setDocumentsLoading(true);
 
     try {
       const response = await fetch('/api/kcse-performance', { cache: 'no-store' });
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Unable to load KCSE performance');
+        throw new Error(data.error || 'Unable to load KCSE documents');
       }
 
-      // ✅ Use ONLY API data, NOT merged with defaults
-      setPayload({
-        stats: data.stats || {},
-        documents: Array.isArray(data.documents) ? data.documents : [],
-      });
+      setDocuments(Array.isArray(data.documents) ? data.documents : []);
 
-      if (showRefresh) toast.success('KCSE performance refreshed');
+      if (showRefresh) toast.success('KCSE documents refreshed');
     } catch (error) {
       console.error(error);
-      toast.error('Could not load KCSE performance data');
-      // On error, keep empty stats (not defaults)
-      setPayload((current) => ({ ...current, stats: current.stats || {} }));
+      toast.error('Could not load KCSE documents');
+      setDocuments([]);
     } finally {
-      setLoading(false);
+      setDocumentsLoading(false);
       if (showRefresh) setRefreshing(false);
     }
   };
 
+  // Combined refresh
+  const refreshAll = async () => {
+    setRefreshing(true);
+    await Promise.all([fetchSchoolStats(), fetchDocuments()]);
+    setRefreshing(false);
+    toast.success('Performance data updated');
+  };
+
   useEffect(() => {
-    fetchPerformance();
+    fetchSchoolStats();
+    fetchDocuments();
   }, []);
 
-  // ✅ Use ONLY API data - no fallback to defaults
-  const stats = payload.stats || {};
-  const documents = payload.documents || [];
-  const meanScore = Number(stats.meanScore) || 0;
-  const previousMean = Number(stats.lastYearMean) || 0;
-  const targetMean = Number(stats.targetMean) || 0;
+  // Derive values from school stats (API data only, no fallback defaults)
+  const meanScore = schoolStats?.meanScore ? Number(schoolStats.meanScore) : 0;
+  const previousMean = schoolStats?.lastYearMean ? Number(schoolStats.lastYearMean) : 0;
+  const targetMean = schoolStats?.targetMean ? Number(schoolStats.targetMean) : 0;
   const movement = previousMean > 0 ? meanScore - previousMean : 0;
 
   const progress = useMemo(() => {
@@ -444,7 +466,7 @@ export default function KcsePerformancePage() {
   const latestDocument = documents[0] || null;
   const documentCount = documents.length;
 
-  // ✅ Metrics only show actual API data
+  // Metrics based on real API data (or "N/A" if missing)
   const metricCards = [
     {
       icon: FiBarChart2,
@@ -494,7 +516,10 @@ export default function KcsePerformancePage() {
     setSelectedYear('all');
   };
 
-  if (loading) {
+  // Show loading until both stats and documents are fetched
+  const isLoading = statsLoading || documentsLoading;
+
+  if (isLoading) {
     return (
       <Box className="flex min-h-[70vh] items-center justify-center bg-transparent p-4">
         <Stack spacing={2} alignItems="center" className="w-full">
@@ -568,7 +593,7 @@ export default function KcsePerformancePage() {
 
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <button
-                  onClick={() => fetchPerformance(true)}
+                  onClick={refreshAll}
                   disabled={refreshing}
                   className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-white px-6 py-3 text-sm font-black text-[#0f5b4c] shadow-lg transition-all duration-300 active:scale-95 disabled:opacity-50"
                 >
@@ -796,13 +821,13 @@ export default function KcsePerformancePage() {
                 </div>
 
                 <blockquote className="text-xl font-black leading-tight text-slate-950">
-                  &quot;{stats.slogan || 'KCSE Performance Data'}&quot;
+                  &quot;{schoolStats?.slogan || 'KCSE Performance Data'}&quot;
                 </blockquote>
                 <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
-                  {stats.sloganDescription || 'Performance metrics from official school documents'}
+                  {schoolStats?.sloganDescription || 'Performance metrics from official school documents'}
                 </p>
                 <p className="mt-4 border-t border-emerald-100 pt-3 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
-                  {stats.sloganAuthor || 'Matungulu Girls Senior School'}
+                  {schoolStats?.sloganAuthor || 'Matungulu Girls Senior School'}
                 </p>
               </div>
 
