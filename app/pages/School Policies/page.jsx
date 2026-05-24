@@ -246,11 +246,10 @@ export default function TermsAndConditions() {
 
               <div className="flex items-center gap-2 sm:gap-3">
                 <button
-                  onClick={refreshData}
                   className="flex h-10 items-center gap-2 rounded-lg border border-white/20 bg-white px-3 py-2 text-sm font-bold text-emerald-900 transition-all hover:bg-white/90 sm:px-4"
                 >
                   <FiShield size={16} />
-                  <span className="hidden sm:inline">Refresh</span>
+                  <span className="hidden sm:inline">Policies</span>
                 </button>
               </div>
             </div>
