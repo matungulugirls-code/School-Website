@@ -155,9 +155,8 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery" }) => {
     <motion.article
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
       onClick={() => onOpen(issue)}
-      className={`group w-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${
+      className={`group w-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:shadow-lg ${
         isList ? "grid lg:grid-cols-[minmax(300px,0.85fr)_minmax(0,1.25fr)]" : "flex h-full flex-col"
       }`}
     >
@@ -167,7 +166,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery" }) => {
             src={issue.thumbnail}
             alt={issue.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-slate-100">
@@ -229,7 +228,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery" }) => {
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
           <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400">
             Open Reader
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300" />
           </span>
           <div className="flex items-center gap-2">
             {issue.pdfUrl && (
@@ -243,7 +242,7 @@ const MagazineCard = ({ issue, onOpen, viewMode = "gallery" }) => {
                 <Download className="h-4 w-4" />
               </a>
             )}
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white transition group-hover:translate-x-0.5">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white transition">
               <ArrowRight className="h-4 w-4" />
             </span>
           </div>

@@ -573,11 +573,11 @@ const HubCard = ({ item, onView }) => {
   return (
     <button
       onClick={onView}
-      className="group grid w-full overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.25fr)]"
+      className="group grid w-full overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:shadow-lg lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.25fr)]"
     >
       <div className="relative min-h-[260px] w-full bg-slate-100 sm:min-h-[320px] lg:min-h-full">
         {image ? (
-          <img src={image} alt={item.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+          <img src={image} alt={item.title} className="h-full w-full object-cover transition duration-500" />
         ) : (
           <div className={`flex h-full w-full items-center justify-center ${theme.bg}`}>
             <Icon className={`text-4xl ${theme.text}`} />
@@ -664,7 +664,7 @@ const HubCard = ({ item, onView }) => {
 
         <div className="mt-auto flex items-center justify-between pt-6">
           <span className="text-xs font-black uppercase tracking-wider text-slate-400">View Details</span>
-          <span className={`ml-2 flex h-9 w-9 items-center justify-center rounded-xl ${theme.iconBg} text-white transition group-hover:translate-x-0.5`}>
+          <span className={`ml-2 flex h-9 w-9 items-center justify-center rounded-xl ${theme.iconBg} text-white transition`}>
             <FiChevronRight className="text-sm" />
           </span>
         </div>
