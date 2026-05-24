@@ -227,50 +227,42 @@ export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-[#f5f7f2] px-4 py-4 sm:px-6 sm:py-6 md:px-8">
       <div className="mx-auto w-full md:w-[90%]">
-        <section className="relative overflow-hidden rounded-[2rem] border border-[#d7e8dd] bg-[#102b23] p-6 text-white shadow-[0_24px_80px_-50px_rgba(15,23,42,0.55)] sm:p-8 lg:p-10">
-          <div className="absolute -right-16 top-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
-          <div className="absolute left-0 top-24 h-56 w-56 rounded-full bg-teal-400/10 blur-3xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_30%),linear-gradient(140deg,rgba(255,255,255,0.05),transparent_45%)]" />
+        {/* Modern Header with Background Image */}
+        <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[85%] xl:w-[80%]">
+          <img
+            src="/Matungulu/9.jpeg"
+            alt="Matungulu Girls Senior School policies and rules"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(10,40,70,0.96),rgba(15,60,100,0.9),rgba(15,23,42,0.72))]" />
+          <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:40px_40px]" />
 
-          <div className="relative z-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200">
-                <FiShield className="text-sm" />
-School Policies 
+          <div className="relative z-10 p-6 sm:p-10">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-sm">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500"></div>
+                <span className="text-xs font-bold uppercase tracking-wide text-white">Matungulu Girls</span>
               </div>
-              <p className="mt-5 text-[11px] font-black uppercase tracking-[0.28em] text-emerald-300/80">
-                Matungulu Girls Senior School
-              </p>
-         <h1 className="mt-3 max-w-4xl text-3xl font-black leading-none tracking-tight text-white sm:text-4xl lg:text-5xl">
-  School policies,
-  <span className="block bg-gradient-to-r from-emerald-200 to-teal-300 bg-clip-text text-transparent">
-    designed for transparency and everyday use.
-  </span>
-</h1>
-<p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
-  A fresh, searchable handbook for students, staff, and parents. Find the rules
-  that matter, understand expectations instantly, and navigate every section in
-  a layout that works beautifully on any device.
-</p>
+
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  onClick={refreshData}
+                  className="flex h-10 items-center gap-2 rounded-lg border border-white/20 bg-white px-3 py-2 text-sm font-bold text-emerald-900 transition-all hover:bg-white/90 sm:px-4"
+                >
+                  <FiShield size={16} />
+                  <span className="hidden sm:inline">Refresh</span>
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              {quickFacts.map((fact) => {
-                const Icon = fact.icon;
-                return (
-                  <div key={fact.label} className="rounded-[1.4rem] border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                    <div className="flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-emerald-200">
-                        <Icon size={16} />
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-[0.18em] text-white/45">Info</span>
-                    </div>
-                    <p className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-emerald-200">{fact.label}</p>
-                    <p className="mt-1 text-2xl font-black text-white">{fact.value}</p>
-                    <p className="mt-1 text-xs leading-6 text-white/60">{fact.note}</p>
-                  </div>
-                );
-              })}
+            <div className="mt-8 max-w-3xl">
+              <h1 className="text-3xl font-black text-white sm:text-4xl md:text-5xl">
+                School Policies &amp; <span className="bg-gradient-to-r from-emerald-300 to-teal-300 bg-clip-text text-transparent">Rules</span>
+              </h1>
+              <div className="mt-3 h-1 w-20 rounded-full bg-gradient-to-r from-emerald-300 to-teal-300" />
+              <p className="mt-5 max-w-2xl text-base text-white/90 sm:text-lg">
+                Comprehensive guidelines for academic excellence, student conduct, boarding regulations, and school discipline at Matungulu Girls Senior School.
+              </p>
             </div>
           </div>
         </section>
