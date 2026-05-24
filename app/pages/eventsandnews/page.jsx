@@ -200,16 +200,22 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
         <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(135deg,#172033_0%,#2d4258_62%,#f2c357_160%)]" />
 
         <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
-          <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 bg-slate-200 shadow-lg sm:h-48 md:h-56">
+          <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 bg-gradient-to-br from-slate-200 to-slate-300 shadow-lg sm:h-48 md:h-56">
           <img
             src={imageUrl}
             alt={event.title}
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = EVENT_FALLBACK_IMAGE;
+              e.currentTarget.style.objectFit = 'contain';
             }}
+            onLoad={(e) => {
+              e.currentTarget.style.visibility = 'visible';
+            }}
+            style={{ visibility: 'visible' }}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/48 via-[#172033]/8 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/48 via-[#172033]/8 to-transparent pointer-events-none" />
           
           <div className="absolute top-3 sm:top-4 left-3 sm:left-4 flex flex-col gap-1.5 sm:gap-2">
             <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-sm border ${theme.bg} ${theme.text} ${theme.border}`}>
@@ -450,13 +456,19 @@ const ModernNewsCard = ({ news, onView, onShare, onBookmark, viewMode = 'grid', 
       >
         <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(135deg,#efe4d0_0%,#ffffff_42%,#dce6ef_100%)]" />
         <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
-        <div className="relative h-36 overflow-hidden rounded-[24px] border border-white shadow-lg sm:h-44 md:h-48 w-full shrink-0">
+        <div className="relative h-36 overflow-hidden rounded-[24px] border border-white bg-gradient-to-br from-slate-200 to-slate-300 shadow-lg sm:h-44 md:h-48 w-full shrink-0">
           <img
             src={imageUrl}
             alt={news.title}
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = NEWS_FALLBACK_IMAGE;
+              e.currentTarget.style.objectFit = 'contain';
             }}
+            onLoad={(e) => {
+              e.currentTarget.style.visibility = 'visible';
+            }}
+            style={{ visibility: 'visible' }}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           
@@ -1286,110 +1298,90 @@ export default function ModernEventsNewsPage() {
       
       <div className="w-full md:w-[85%] mx-auto space-y-6">
         
-{/* Modern Hero Header - Staff/Team aligned theme */}
-<div className="relative mb-8 overflow-hidden rounded-lg border border-[#d9d0c3] bg-teal-700 text-white shadow-[0_30px_80px_-50px_rgba(15,23,42,0.82)]">
-  {/* Background Glows */}
-  <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#f2c357]/10 blur-3xl" />
-  <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
-  <div className="absolute inset-y-0 right-[36%] w-px bg-white/10 hidden lg:block" />
-  
-  <div className="relative z-10 grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
-    <div className="p-6 md:p-10">
-      <div className="flex flex-col justify-between gap-6 h-full">
-      <div>
-        {/* School Branding */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-8 w-1 rounded-full bg-[#f2c357] shadow-[0_0_15px_rgba(242,195,87,0.5)]" />
-          <div>
-            <h2 className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#f2c357]">
-              Matungulu Girls Senior School
-            </h2>
-            <p className="text-[8px] sm:text-[10px] italic font-medium text-white/45 tracking-widest uppercase">
-              "Committed to Excellence"
-            </p>
+        {/* Modern Header with Background Image - KCSE Style */}
+        <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[85%] xl:w-[80%]">
+          <img
+            src="/Matungulu/9.jpeg"
+            alt="Matungulu Girls Senior School events and news"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(6,78,59,0.96),rgba(15,91,76,0.9),rgba(15,23,42,0.72))]" />
+          <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:40px_40px]" />
+
+          <div className="relative z-10 p-6 sm:p-10">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-sm">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500">
+                  <span className="text-[8px] font-black text-white">MG</span>
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white">Matungulu Girls</span>
+              </div>
+
+              <div className="flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                <span className="text-[9px] font-bold uppercase tracking-wider text-white/65">News & Events Live</span>
+              </div>
+            </div>
+
+            <div className="mt-8 max-w-4xl space-y-5">
+              <div>
+                <h1 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                  Events & News
+                  <span className="block text-emerald-200 sm:inline"> Gallery</span>
+                </h1>
+                <div className="mb-5 mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-emerald-300 to-teal-300" />
+                <p className="max-w-2xl text-sm font-medium leading-relaxed text-white sm:text-base">
+                  Stay connected with the moments that define our school. From academic events and cultural celebrations to important announcements and school news.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  onClick={refreshData}
+                  disabled={refreshing}
+                  className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-xl bg-white px-6 py-3 text-sm font-black text-emerald-900 shadow-lg transition-all duration-300 active:scale-95 disabled:opacity-50"
+                >
+                  {refreshing ? (
+                    <>
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-900/20 border-t-emerald-900" />
+                      <span>Updating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiRefreshCw className="text-sm transition-transform duration-500 group-hover:rotate-180" />
+                      <span>Refresh Events</span>
+                    </>
+                  )}
+                </button>
+
+                <div className="flex rounded-xl border border-white/20 bg-white/10 p-1 backdrop-blur-md">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all duration-200 ${
+                      viewMode === 'grid'
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                        : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    <FiGrid size={16} />
+                    <span className="hidden sm:inline">Grid View</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all duration-200 ${
+                      viewMode === 'list'
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                        : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    <FiList size={16} />
+                    <span className="hidden sm:inline">List View</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        {/* Title */}
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl border border-white/10 bg-white/10 p-2 backdrop-blur-md">
-            <IoSchoolOutline className="text-xl text-[#f2c357] sm:text-2xl md:text-3xl" />
-          </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight">
-            School <span className="bg-gradient-to-r from-[#f2c357] to-[#fff3c4] bg-clip-text text-transparent">Events & News</span>
-          </h1>
-        </div>
-        <p className="mt-5 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
-     Stay connected with the moments that define our School MatG. From the excitement of game day and the brilliance of our seasonal concerts to the essential updates that keep our families informed, this is your home for everything happening on and off campus. Explore our latest headlines and mark your calendars for the milestones ahead.        </p>
-      </div>
-
-
-      </div>
-    </div>
-
-    <div className="border-t border-white/10 p-6 md:p-10 lg:border-t-0">
-      <div className="flex h-full flex-col justify-between">
-         {/* Refresh & View Toggle Group */}
-<div className="flex flex-nowrap items-center gap-2 sm:gap-3 w-auto">
-  {/* Refresh Button - Moderate & Proportional */}
-  <button
-    onClick={refreshData}
-    disabled={refreshing}
-    className="flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 font-bold text-[10px] tracking-widest text-white backdrop-blur-xl transition-all hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-70 sm:px-5 sm:text-xs"
-  >
-    {refreshing ? (
-      <>
-        <svg className="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span>REFRESHING...</span>
-      </>
-    ) : (
-      <>
-        <FiRefreshCw className="text-sm sm:text-base" />
-        <span>REFRESH UPDATES</span>
-      </>
-    )}
-  </button>
-
-  {/* View Toggle - Compact & Matching Height */}
-  <div className="hidden h-12 items-center rounded-xl border border-white/20 bg-white/10 p-1 backdrop-blur-xl md:flex">
-    <button
-      onClick={() => setViewMode('grid')}
-      className={`h-8 w-8 sm:w-10 flex items-center justify-center rounded-lg transition-all ${
-        viewMode === 'grid' 
-          ? 'bg-[#f2c357] text-[#172033] shadow-lg shadow-[#172033]/30' 
-          : 'text-white/55 hover:text-white'
-      }`}
-    >
-      <FiGrid size={12} className="sm:size-[16px]" />
-    </button>
-    <button
-      onClick={() => setViewMode('list')}
-      className={`h-8 w-8 sm:w-10 flex items-center justify-center rounded-lg transition-all ${
-        viewMode === 'list' 
-          ? 'bg-[#f2c357] text-[#172033] shadow-lg shadow-[#172033]/30' 
-          : 'text-white/55 hover:text-white'
-      }`}
-    >
-      <FiList size={12} className="sm:size-[16px]" />
-    </button>
-  </div>
-</div>
-
-
-        {/* Additional Info */}
-        <div className="mt-5 text-xs sm:text-sm text-white/60">
-          <span className="inline-flex items-center gap-1">
-            <IoSparkles className="text-[#f2c357]" size={14} />
-            Click on any event or news item for detailed information
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        </section>
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-10">
           {stats.map((stat, index) => {
