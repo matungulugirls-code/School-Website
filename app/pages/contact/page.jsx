@@ -604,7 +604,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-1">Call Us</p>
-                    <p className="text-xs font-bold text-slate-800">0734610130</p>
+                    <p className="text-xs font-bold text-slate-800">+254 734 610130</p>
                   </div>
                 </div>
 
