@@ -299,8 +299,8 @@ const ModernGalleryCard = ({ gallery, onView, onFavorite, viewMode = 'grid', onS
         itemType="https://schema.org/ImageGallery"
       >
         <div className="relative bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-          {/* Image Container */}
-          <div className="relative h-52 w-full shrink-0 bg-gradient-to-br from-slate-100 to-slate-200">
+          {/* Image Container - Full width responsive with proper aspect ratio */}
+          <div className="relative w-full bg-gradient-to-br from-slate-100 to-slate-200 aspect-video sm:aspect-square md:aspect-[4/3] overflow-hidden">
             {gallery.files && gallery.files[0] ? (
               <>
                 <img
@@ -308,7 +308,7 @@ const ModernGalleryCard = ({ gallery, onView, onFavorite, viewMode = 'grid', onS
                   alt={getImageAltText(gallery, 0)}
                   title={getImageAltText(gallery, 0)}
                   loading="lazy"
-                  className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 bg-gradient-to-br from-slate-50 to-slate-100 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => setImageLoaded(true)}
                   onError={() => setImageError(true)}
                   itemProp="image"
