@@ -28,13 +28,12 @@ const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true 
   if (!open) return null;
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${blur ? 'backdrop-blur-md' : 'bg-black/50'}`}>
+    <div className={`fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 ${blur ? 'backdrop-blur-md' : 'bg-black/50'}`}>
       <div 
-        className="relative bg-white/95 rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-white/40"
+        className="relative bg-white/95 rounded-t-3xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-white/40 w-full sm:w-auto max-h-[90vh] sm:max-h-none flex flex-col sm:flex-row"
         style={{ 
-          width: '90%',
+          width: 'auto',
           maxWidth: maxWidth,
-          maxHeight: '90vh',
           background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%)'
         }}
       >
@@ -46,7 +45,9 @@ const ModernModal = ({ children, open, onClose, maxWidth = '800px', blur = true 
             <FiX className="text-gray-600 w-5 h-5" />
           </button>
         </div>
-        {children}
+        <div className="overflow-y-auto flex-1">
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -598,7 +599,7 @@ const ModernGalleryDetailModal = ({ gallery, onClose, onShare }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 bg-slate-900/90 backdrop-blur-sm">
-      <div className="relative w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-3xl bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
+      <div className="relative w-full h-screen sm:h-auto sm:max-h-[90vh] sm:max-w-3xl bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
         
         {/* Close Button */}
         <button 
@@ -609,12 +610,12 @@ const ModernGalleryDetailModal = ({ gallery, onClose, onShare }) => {
         </button>
 
         {/* Hero Image */}
-        <div className="relative h-[30vh] sm:h-[350px] w-full shrink-0">
+        <div className="relative h-[50vh] sm:h-[40vh] md:h-[350px] w-full shrink-0">
           {gallery.files && gallery.files[selectedIndex] ? (
             <img
               src={gallery.files[selectedIndex]}
               alt={getImageAltText(gallery, selectedIndex)}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain bg-slate-100"
             />
           ) : (
             <div className={`w-full h-full bg-gradient-to-r ${categoryStyle.gradient}`} />
