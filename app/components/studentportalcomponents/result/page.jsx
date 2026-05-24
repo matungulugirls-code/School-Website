@@ -623,11 +623,7 @@ function DocumentCard({ document, type = 'additional' }) {
 // Zeraki click handler
 const handleZerakiClick = (e) => {
   e.preventDefault();
-  window.location.href = "zeraki://";
-  const fallback = setTimeout(() => {
-    window.location.href = "https://zeraki.app"; 
-  }, 1500);
-  window.onblur = () => clearTimeout(fallback);
+  window.location.href = "https://www.zeraki.app/zeraki-analytics";
 };
 
 // ==================== MAIN COMPONENT ====================
@@ -842,7 +838,7 @@ export default function ModernResultsView({
             </div>
 
             <a
-              href="https://zeraki.app"
+              href="https://www.zeraki.app/zeraki-analytics"
               onClick={handleZerakiClick}
               className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm transition-all duration-300 hover:border-blue-200 hover:bg-slate-100 sm:px-6 sm:py-3 sm:text-base"
             >

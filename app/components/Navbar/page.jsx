@@ -86,7 +86,7 @@ const academicLinks = [
   },
   {
     name: 'Zeraki Analytics',
-    href: 'https://analytics.zeraki.app/',
+    href: 'https://www.zeraki.app/zeraki-analytics',
     icon: FiExternalLink,
     description: 'External analytics platform',
     external: true,

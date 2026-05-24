@@ -183,7 +183,7 @@ export default function NavigationSidebar({
 
         {/* External Link */}
         <a
-          href="https://analytics.zeraki.app/"
+          href="https://www.zeraki.app/zeraki-analytics"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-5 flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 text-slate-700 transition-all hover:border-blue-200 hover:shadow-md"
