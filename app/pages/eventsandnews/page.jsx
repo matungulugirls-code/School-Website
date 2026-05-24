@@ -197,22 +197,14 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
         onClick={() => onView(event)}
         className="group relative cursor-pointer overflow-hidden rounded-[28px] border border-[#d9d0c3] bg-white shadow-[0_28px_70px_-52px_rgba(15,23,42,0.5)] transition-all duration-300 hover:-translate-y-1 sm:rounded-[30px] md:rounded-[34px]"
       >
-        <div className="absolute inset-x-0 top-0 h-28 bg-[linear-gradient(135deg,#172033_0%,#2d4258_62%,#f2c357_160%)]" />
-
-        <div className="relative px-4 pt-4 sm:px-5 sm:pt-5">
-          <div className="relative h-40 overflow-hidden rounded-[24px] border border-white/60 bg-gradient-to-br from-slate-200 to-slate-300 shadow-lg sm:h-48 md:h-56">
+        <div className="relative h-40 overflow-hidden rounded-t-[24px] border-b border-white/60 bg-gradient-to-br from-slate-200 to-slate-300 shadow-lg sm:h-48 md:h-56">
           <img
             src={imageUrl}
             alt={event.title}
-            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = EVENT_FALLBACK_IMAGE;
               e.currentTarget.style.objectFit = 'contain';
             }}
-            onLoad={(e) => {
-              e.currentTarget.style.visibility = 'visible';
-            }}
-            style={{ visibility: 'visible' }}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#172033]/48 via-[#172033]/8 to-transparent pointer-events-none" />
@@ -250,7 +242,6 @@ const ModernEventCard = ({ event, onView, onShare, onCalendar, onBookmark, viewM
               <p className="text-[9px] font-black uppercase tracking-[0.22em] text-white/45">Venue</p>
               <p className="mt-1 max-w-[110px] truncate text-xs font-black sm:max-w-[160px] sm:text-sm">{event.location || 'Main School Hall'}</p>
             </div>
-          </div>
           </div>
         </div>
 
