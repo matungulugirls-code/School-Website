@@ -7,7 +7,7 @@ const SCHOOL_NAME = 'Matungulu Girls Senior School';
 const SCHOOL_LOCATION = 'Matungulu, Machakos County';
 const SCHOOL_MOTTO = 'Committed to Excellence';
 const CONTACT_PHONE = '0734610130';
-const CONTACT_EMAIL = 'info@Matungulu Girls highSchool.sc.ke';
+const CONTACT_EMAIL = 'matungulugirls@gmail.com';
 
 // Email Templates
 const emailTemplates = {

@@ -614,7 +614,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-1">Email Us</p>
-                    <p className="text-xs font-bold text-slate-800">info@matungulu-girls.sc.ke</p>
+                    <p className="text-xs font-bold text-slate-800">matungulugirls@gmail.com</p>
                   </div>
                 </div>
 
