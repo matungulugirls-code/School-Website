@@ -262,16 +262,16 @@ const DocumentPreviewModal = ({ document, onClose, onShare }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 p-0 backdrop-blur-sm sm:p-4">
-      <div className="flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-[92vh] sm:max-w-5xl sm:rounded-[36px]">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-[92vh] sm:max-w-5xl sm:rounded-[36px]">
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-[200] rounded-full border border-white/20 bg-black/20 p-2 text-white backdrop-blur-md transition-transform active:scale-95 hover:bg-black/40"
+          aria-label="Close KCSE preview"
+        >
+          <IoClose size={21} />
+        </button>
         <div className={`relative overflow-hidden bg-gradient-to-r ${style.gradient} px-4 py-5 text-white sm:px-6`}>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.12)_1px,transparent_0)] [background-size:30px_30px]" />
-          <button
-            onClick={onClose}
-            className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-black/20 p-2 text-white backdrop-blur-md transition-transform active:scale-95"
-            aria-label="Close KCSE preview"
-          >
-            <IoClose size={21} />
-          </button>
 
           <div className="relative z-10 pr-12">
             <div className="mb-3 flex flex-wrap items-center gap-2">
