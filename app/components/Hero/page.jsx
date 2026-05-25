@@ -362,15 +362,15 @@ export default function ModernHero() {
     </div>
   )}
 
-  {/* 2. The Actual Buttons - Now they stay side-by-side */}
-  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+  {/* 2. The Actual Buttons - Now they stay side-by-side on all screens */}
+  <div className="flex flex-nowrap items-center gap-2 sm:gap-3 overflow-x-auto">
     <button
       onClick={handleSlideButtonClick}
       disabled={navigationBlocked}
-      className="group relative px-4 sm:px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 
+      className="group relative shrink-0 px-4 sm:px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 
         text-white rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20
         hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-300
-        flex items-center justify-center sm:justify-start gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap w-full sm:w-auto"
+        flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
     >
       {slide.cta}
       <ArrowRight className="w-3 sm:w-4 h-3 sm:h-4 group-hover:translate-x-1 transition-transform" />
@@ -378,9 +378,9 @@ export default function ModernHero() {
 
     <button
       onClick={openVideoModal}
-      className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border border-white/30 
+      className="group flex shrink-0 items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border border-white/30 
         text-white font-semibold text-xs sm:text-sm backdrop-blur-sm bg-white/5
-        hover:bg-white/10 hover:border-white/50 transition-all w-full sm:w-auto"
+        hover:bg-white/10 hover:border-white/50 transition-all whitespace-nowrap"
     >
       <Play className="w-3 sm:w-4 h-3 sm:h-4 group-hover:scale-110 transition-transform" />
       <span>{isMobile ? 'Tour' : 'Watch Tour'}</span>

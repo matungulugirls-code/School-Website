@@ -220,17 +220,17 @@ function PortalWorkspaceHome({
               Your academics, learning files, guidance updates, and finance records are ready in one secure Matungulu Girls workspace.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-nowrap gap-3 overflow-x-auto sm:flex-wrap">
               <button
                 onClick={() => onNavigate('results')}
-                className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100"
+                className="inline-flex shrink-0 items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100"
               >
                 Open Results
                 <FaArrowRight className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => onNavigate('resources')}
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15"
+                className="inline-flex shrink-0 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15"
               >
                 Enter Learning Vault
                 <FiArrowUpRight className="h-4 w-4 text-emerald-300" />
