@@ -355,37 +355,39 @@ const PaymentInstructionsCard = ({ onContact }) => {
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        {bankAccounts.map((account) => (
-          <div key={account.account} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <div className="flex items-start gap-3">
-              <FaUniversity className="mt-1 text-emerald-600" />
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">{account.bank}</p>
-                <p className="mt-1 text-lg font-black text-slate-950">Account No. {account.account}</p>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+        <div className="grid gap-4">
+          {bankAccounts.map((account) => (
+            <div key={account.account} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div className="flex items-start gap-3">
+                <FaUniversity className="mt-1 text-emerald-600" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">{account.bank}</p>
+                  <p className="mt-1 text-lg font-black text-slate-950">Account No. {account.account}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <div className="mt-5 rounded-2xl bg-[#102d24] p-5 text-white">
-        <div className="flex items-center gap-2">
-          <IoCardOutline className="text-emerald-200" />
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-emerald-200">M-Pesa Pay Bill (M-KARO)</p>
-        </div>
-        <div className="mt-3 space-y-2">
-          <p className="text-sm leading-6 text-white/82">
-            <span className="font-bold">Business Number:</span> 522533
-          </p>
-          <p className="text-sm leading-6 text-white/82">
-            <span className="font-bold">Account Number:</span> 7984032#ADMN0 (Replace ADMN0 with Admission Number)
-          </p>
-        </div>
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3">
-          <p className="text-xs leading-6 text-white/75">
-            <span className="font-bold text-emerald-200">Example:</span> 7984032#11111
-          </p>
+        <div className="rounded-2xl bg-[#102d24] p-5 text-white">
+          <div className="flex items-center gap-2">
+            <IoCardOutline className="text-emerald-200" />
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-emerald-200">M-Pesa Pay Bill (M-KARO)</p>
+          </div>
+          <div className="mt-3 space-y-2">
+            <p className="text-sm leading-6 text-white/82">
+              <span className="font-bold">Business Number:</span> 522533
+            </p>
+            <p className="text-sm leading-6 text-white/82">
+              <span className="font-bold">Account Number:</span> 7984032#ADMN0 (Replace ADMN0 with Admission Number)
+            </p>
+          </div>
+          <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3">
+            <p className="text-xs leading-6 text-white/75">
+              <span className="font-bold text-emerald-200">Example:</span> 7984032#11111
+            </p>
+          </div>
         </div>
       </div>
 
