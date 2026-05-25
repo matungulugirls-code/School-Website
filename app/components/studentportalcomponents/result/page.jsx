@@ -659,12 +659,7 @@ export default function ModernResultsView({
       if (!response.ok) {
         console.warn('⚠️ School documents API not available, using empty structure');
         setDocumentData({
-          form1ResultsPdf: null,
-          form2ResultsPdf: null,
-          form3ResultsPdf: null,
-          form4ResultsPdf: null,
           kcseResultsPdf: null,
-          mockExamsResultsPdf: null,
           additionalDocuments: []
         });
         return;
@@ -677,24 +672,14 @@ export default function ModernResultsView({
         console.log('✅ School documents loaded successfully');
       } else {
         setDocumentData({
-          form1ResultsPdf: null,
-          form2ResultsPdf: null,
-          form3ResultsPdf: null,
-          form4ResultsPdf: null,
           kcseResultsPdf: null,
-          mockExamsResultsPdf: null,
           additionalDocuments: []
         });
       }
     } catch (error) {
       console.error('❌ Error in school documents fetch:', error);
       setDocumentData({
-        form1ResultsPdf: null,
-        form2ResultsPdf: null,
-        form3ResultsPdf: null,
-        form4ResultsPdf: null,
         kcseResultsPdf: null,
-        mockExamsResultsPdf: null,
         additionalDocuments: []
       });
     } finally {
@@ -721,11 +706,6 @@ export default function ModernResultsView({
     const studentForm = student?.form?.replace('Form ', '') || '4';
     
     const examFields = [
-      { key: 'form1ResultsPdf', form: '1', name: 'Form 1 Results' },
-      { key: 'form2ResultsPdf', form: '2', name: 'Form 2 Results' },
-      { key: 'form3ResultsPdf', form: '3', name: 'Form 3 Results' },
-      { key: 'form4ResultsPdf', form: '4', name: 'Form 4 Results' },
-      { key: 'mockExamsResultsPdf', form: '4', name: 'Mock Exams Results' },
       { key: 'kcseResultsPdf', form: '4', name: 'KCSE Results' }
     ];
     

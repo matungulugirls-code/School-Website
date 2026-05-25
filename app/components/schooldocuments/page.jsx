@@ -1974,47 +1974,7 @@ const [formData, setFormData] = useState(() => {
       descriptionField: 'admissionFeeDescription',
       termField: 'admissionFeeTerm'
     },
-    // Exam results
-    { 
-      key: 'form1ResultsPdf',
-      nameField: 'form1ResultsPdfName',
-      sizeField: 'form1ResultsPdfSize',
-      yearField: 'form1ResultsYear',
-      descriptionField: 'form1ResultsDescription',
-      termField: 'form1ResultsTerm'
-    },
-    { 
-      key: 'form2ResultsPdf',
-      nameField: 'form2ResultsPdfName',
-      sizeField: 'form2ResultsPdfSize',
-      yearField: 'form2ResultsYear',
-      descriptionField: 'form2ResultsDescription',
-      termField: 'form2ResultsTerm'
-    },
-    { 
-      key: 'form3ResultsPdf',
-      nameField: 'form3ResultsPdfName',
-      sizeField: 'form3ResultsPdfSize',
-      yearField: 'form3ResultsYear',
-      descriptionField: 'form3ResultsDescription',
-      termField: 'form3ResultsTerm'
-    },
-    { 
-      key: 'form4ResultsPdf',
-      nameField: 'form4ResultsPdfName',
-      sizeField: 'form4ResultsPdfSize',
-      yearField: 'form4ResultsYear',
-      descriptionField: 'form4ResultsDescription',
-      termField: 'form4ResultsTerm'
-    },
-    { 
-      key: 'mockExamsResultsPdf',
-      nameField: 'mockExamsPdfName',
-      sizeField: 'mockExamsPdfSize',
-      yearField: 'mockExamsYear',
-      descriptionField: 'mockExamsDescription',
-      termField: 'mockExamsTerm'
-    },
+    // Exam results - ONLY KCSE
     { 
       key: 'kcseResultsPdf',
       nameField: 'kcsePdfName',
@@ -2201,40 +2161,9 @@ const handleSubmitAfterReview = async () => {
     
     // Append year/term/description for boarding fee documents only if they exist
     
-    // Exam results metadata - only for actual exam result documents
-    if (formData.form1ResultsPdf?.file && (examMetadata.form1ResultsYear || examMetadata.form1ResultsTerm || examMetadata.form1ResultsDescription)) {
-      if (examMetadata.form1ResultsYear) data.append('form1ResultsYear', examMetadata.form1ResultsYear);
-      if (examMetadata.form1ResultsTerm) data.append('form1ResultsTerm', examMetadata.form1ResultsTerm);
-      if (examMetadata.form1ResultsDescription) data.append('form1ResultsDescription', examMetadata.form1ResultsDescription);
-    }
-    
-    if (formData.form2ResultsPdf?.file && (examMetadata.form2ResultsYear || examMetadata.form2ResultsTerm || examMetadata.form2ResultsDescription)) {
-      if (examMetadata.form2ResultsYear) data.append('form2ResultsYear', examMetadata.form2ResultsYear);
-      if (examMetadata.form2ResultsTerm) data.append('form2ResultsTerm', examMetadata.form2ResultsTerm);
-      if (examMetadata.form2ResultsDescription) data.append('form2ResultsDescription', examMetadata.form2ResultsDescription);
-    }
-    
-    if (formData.form3ResultsPdf?.file && (examMetadata.form3ResultsYear || examMetadata.form3ResultsTerm || examMetadata.form3ResultsDescription)) {
-      if (examMetadata.form3ResultsYear) data.append('form3ResultsYear', examMetadata.form3ResultsYear);
-      if (examMetadata.form3ResultsTerm) data.append('form3ResultsTerm', examMetadata.form3ResultsTerm);
-      if (examMetadata.form3ResultsDescription) data.append('form3ResultsDescription', examMetadata.form3ResultsDescription);
-    }
-    
-    if (formData.form4ResultsPdf?.file && (examMetadata.form4ResultsYear || examMetadata.form4ResultsTerm || examMetadata.form4ResultsDescription)) {
-      if (examMetadata.form4ResultsYear) data.append('form4ResultsYear', examMetadata.form4ResultsYear);
-      if (examMetadata.form4ResultsTerm) data.append('form4ResultsTerm', examMetadata.form4ResultsTerm);
-      if (examMetadata.form4ResultsDescription) data.append('form4ResultsDescription', examMetadata.form4ResultsDescription);
-    }
-    
-    if (formData.mockExamsResultsPdf?.file && (examMetadata.mockExamsYear || examMetadata.mockExamsTerm || examMetadata.mockExamsDescription)) {
-      if (examMetadata.mockExamsYear) data.append('mockExamsYear', examMetadata.mockExamsYear);
-      if (examMetadata.mockExamsTerm) data.append('mockExamsTerm', examMetadata.mockExamsTerm);
-      if (examMetadata.mockExamsDescription) data.append('mockExamsDescription', examMetadata.mockExamsDescription);
-    }
-    
     // KCSE Results - NO METADATA (just the document)
-    // No metadata appended for KCSE results
-    console.log('✅ KCSE results uploaded without metadata');
+    // Only KCSE results allowed - uploaded as pure documents without metadata
+    console.log('✅ KCSE results uploaded without metadata - only KCSE allowed in results tab');
     
     
     // Send request with authentication
@@ -2535,17 +2464,12 @@ const getExistingPdfData = (field) => {
               <div className="flex items-center gap-2">
                 <FaInfoCircle className="text-orange-600" />
                 <p className="text-sm font-bold text-orange-800">
-                  Upload exam results documents - KCSE results are uploaded as simple documents without metadata or descriptions.
+                  Upload KCSE results document only - no metadata or descriptions required. Pure document upload only.
                 </p>
               </div>
             </div>
 
             {[
-              { key: 'form1Results', label: 'Form 1 Results', field: 'form1ResultsPdf' },
-              { key: 'form2Results', label: 'Form 2 Results', field: 'form2ResultsPdf' },
-              { key: 'form3Results', label: 'Form 3 Results', field: 'form3ResultsPdf' },
-              { key: 'form4Results', label: 'Form 4 Results', field: 'form4ResultsPdf' },
-              { key: 'mockExams', label: 'Mock Exams Results', field: 'mockExamsResultsPdf' },
               { key: 'kcse', label: 'KCSE Results', field: 'kcseResultsPdf' }
             ].map((exam) => (
               <div key={exam.key} className="w-full max-w-2xl">
@@ -2618,11 +2542,6 @@ const getExistingPdfData = (field) => {
                       feesDayDistributionPdf: 'Day School Fees',
                       feesBoardingDistributionPdf: 'Boarding School Fees',
                       admissionFeePdf: 'Admission Fees',
-                      form1ResultsPdf: 'Form 1 Results',
-                      form2ResultsPdf: 'Form 2 Results',
-                      form3ResultsPdf: 'Form 3 Results',
-                      form4ResultsPdf: 'Form 4 Results',
-                      mockExamsResultsPdf: 'Mock Exams Results',
                       kcseResultsPdf: 'KCSE Results'
                     };
                     
@@ -3060,11 +2979,6 @@ const hasDocuments = documents && (
   documents.feesDayDistributionPdf ||
   documents.feesBoardingDistributionPdf ||
   documents.admissionFeePdf ||
-  documents.form1ResultsPdf ||
-  documents.form2ResultsPdf ||
-  documents.form3ResultsPdf ||
-  documents.form4ResultsPdf ||
-  documents.mockExamsResultsPdf ||
   documents.kcseResultsPdf
 );
 
@@ -3398,102 +3312,7 @@ const hasDocuments = documents && (
                 />
               )}
               
-              {/* EXAM RESULTS DOCUMENTS */}
-              {/* Form 1 Results */}
-              {documents.form1ResultsPdf && (
-                <ModernDocumentCard
-                  title="Form 1 Results"
-                  description={documents.form1ResultsDescription || "Form 1 examination results"}
-                  pdfUrl={documents.form1ResultsPdf}
-                  pdfName={documents.form1ResultsPdfName || "form1-results.pdf"}
-                  year={documents.form1ResultsYear}
-                  term={documents.form1ResultsTerm}
-                  type="results"
-                  fileSize={documents.form1ResultsPdfSize}
-                  uploadDate={documents.form1ResultsUploadDate}
-                  existing={true}
-                  onReplace={() => setShowModal(true)}
-                  onEdit={(metadata) => handleUpdateExamMetadata('form1Results', metadata)}
-                  onDelete={() => handleDeleteIndividualDocument('form1ResultsPdf')}
-                />
-              )}
-              
-              {/* Form 2 Results */}
-              {documents.form2ResultsPdf && (
-                <ModernDocumentCard
-                  title="Form 2 Results"
-                  description={documents.form2ResultsDescription || "Form 2 examination results"}
-                  pdfUrl={documents.form2ResultsPdf}
-                  pdfName={documents.form2ResultsPdfName || "form2-results.pdf"}
-                  year={documents.form2ResultsYear}
-                  term={documents.form2ResultsTerm}
-                  type="results"
-                  fileSize={documents.form2ResultsPdfSize}
-                  uploadDate={documents.form2ResultsUploadDate}
-                  existing={true}
-                  onReplace={() => setShowModal(true)}
-                  onEdit={(metadata) => handleUpdateExamMetadata('form2Results', metadata)}
-                  onDelete={() => handleDeleteIndividualDocument('form2ResultsPdf')}
-                />
-              )}
-              
-              {/* Form 3 Results */}
-              {documents.form3ResultsPdf && (
-                <ModernDocumentCard
-                  title="Form 3 Results"
-                  description={documents.form3ResultsDescription || "Form 3 examination results"}
-                  pdfUrl={documents.form3ResultsPdf}
-                  pdfName={documents.form3ResultsPdfName || "form3-results.pdf"}
-                  year={documents.form3ResultsYear}
-                  term={documents.form3ResultsTerm}
-                  type="results"
-                  fileSize={documents.form3ResultsPdfSize}
-                  uploadDate={documents.form3ResultsUploadDate}
-                  existing={true}
-                  onReplace={() => setShowModal(true)}
-                  onEdit={(metadata) => handleUpdateExamMetadata('form3Results', metadata)}
-                  onDelete={() => handleDeleteIndividualDocument('form3ResultsPdf')}
-                />
-              )}
-              
-              {/* Form 4 Results */}
-              {documents.form4ResultsPdf && (
-                <ModernDocumentCard
-                  title="Form 4 Results"
-                  description={documents.form4ResultsDescription || "Form 4 examination results"}
-                  pdfUrl={documents.form4ResultsPdf}
-                  pdfName={documents.form4ResultsPdfName || "form4-results.pdf"}
-                  year={documents.form4ResultsYear}
-                  term={documents.form4ResultsTerm}
-                  type="results"
-                  fileSize={documents.form4ResultsPdfSize}
-                  uploadDate={documents.form4ResultsUploadDate}
-                  existing={true}
-                  onReplace={() => setShowModal(true)}
-                  onEdit={(metadata) => handleUpdateExamMetadata('form4Results', metadata)}
-                  onDelete={() => handleDeleteIndividualDocument('form4ResultsPdf')}
-                />
-              )}
-              
-              {/* Mock Exams Results */}
-              {documents.mockExamsResultsPdf && (
-                <ModernDocumentCard
-                  title="Mock Exams Results"
-                  description={documents.mockExamsDescription || "Mock examination results"}
-                  pdfUrl={documents.mockExamsResultsPdf}
-                  pdfName={documents.mockExamsPdfName || "mock-exams-results.pdf"}
-                  year={documents.mockExamsYear}
-                  term={documents.mockExamsTerm}
-                  type="results"
-                  fileSize={documents.mockExamsPdfSize}
-                  uploadDate={documents.mockExamsUploadDate}
-                  existing={true}
-                  onReplace={() => setShowModal(true)}
-                  onEdit={(metadata) => handleUpdateExamMetadata('mockExams', metadata)}
-                  onDelete={() => handleDeleteIndividualDocument('mockExamsResultsPdf')}
-                />
-              )}
-              
+              {/* EXAM RESULTS DOCUMENTS - ONLY KCSE */}
               {/* KCSE Results */}
               {documents.kcseResultsPdf && (
                 <ModernDocumentCard

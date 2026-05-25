@@ -263,52 +263,7 @@ const cleanDocumentResponse = (document) => {
     admissionFeeYear: document.admissionFeeYear,
     admissionFeeTerm: document.admissionFeeTerm,
     
-    // Form 1 Results PDF
-    form1ResultsPdf: document.form1ResultsPdf,
-    form1ResultsPdfName: document.form1ResultsPdfName,
-    form1ResultsPdfSize: document.form1ResultsPdfSize,
-    form1ResultsDescription: document.form1ResultsDescription,
-    form1ResultsYear: document.form1ResultsYear,
-    form1ResultsTerm: document.form1ResultsTerm,
-    form1ResultsUploadDate: document.form1ResultsUploadDate,
-    
-    // Form 2 Results PDF
-    form2ResultsPdf: document.form2ResultsPdf,
-    form2ResultsPdfName: document.form2ResultsPdfName,
-    form2ResultsPdfSize: document.form2ResultsPdfSize,
-    form2ResultsDescription: document.form2ResultsDescription,
-    form2ResultsYear: document.form2ResultsYear,
-    form2ResultsTerm: document.form2ResultsTerm,
-    form2ResultsUploadDate: document.form2ResultsUploadDate,
-    
-    // Form 3 Results PDF
-    form3ResultsPdf: document.form3ResultsPdf,
-    form3ResultsPdfName: document.form3ResultsPdfName,
-    form3ResultsPdfSize: document.form3ResultsPdfSize,
-    form3ResultsDescription: document.form3ResultsDescription,
-    form3ResultsYear: document.form3ResultsYear,
-    form3ResultsTerm: document.form3ResultsTerm,
-    form3ResultsUploadDate: document.form3ResultsUploadDate,
-    
-    // Form 4 Results PDF
-    form4ResultsPdf: document.form4ResultsPdf,
-    form4ResultsPdfName: document.form4ResultsPdfName,
-    form4ResultsPdfSize: document.form4ResultsPdfSize,
-    form4ResultsDescription: document.form4ResultsDescription,
-    form4ResultsYear: document.form4ResultsYear,
-    form4ResultsTerm: document.form4ResultsTerm,
-    form4ResultsUploadDate: document.form4ResultsUploadDate,
-    
-    // Mock Exams PDF
-    mockExamsResultsPdf: document.mockExamsResultsPdf,
-    mockExamsPdfName: document.mockExamsPdfName,
-    mockExamsPdfSize: document.mockExamsPdfSize,
-    mockExamsDescription: document.mockExamsDescription,
-    mockExamsYear: document.mockExamsYear,
-    mockExamsTerm: document.mockExamsTerm,
-    mockExamsUploadDate: document.mockExamsUploadDate,
-    
-    // KCSE Results PDF
+    // KCSE Results PDF - ONLY exam result type allowed
     kcseResultsPdf: document.kcseResultsPdf,
     kcsePdfName: document.kcsePdfName,
     kcsePdfSize: document.kcsePdfSize,
