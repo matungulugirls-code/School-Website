@@ -365,7 +365,7 @@ const PaymentInstructionsCard = ({ onContact }) => {
               <span className="font-bold">Business Number:</span> 522533
             </p>
             <p className="text-sm leading-6 text-white/82">
-              <span className="font-bold">Account Number:</span> 7984032#ADMN0 (Replace ADMN0 with Admission Number)
+              <span className="font-bold">Account Number:</span> 7984032#ADMN0 (Replace ADMN0 with Student's Admission Number)
             </p>
           </div>
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3">
