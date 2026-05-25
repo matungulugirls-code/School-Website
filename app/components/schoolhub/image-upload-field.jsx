@@ -101,7 +101,7 @@ export default function ImageUploadField({
             Images
           </p>
           <p className="mt-1 text-xs font-semibold text-slate-500">
-            Multiple images supported. Each image must be less than 4.2MB.
+            Multiple images supported. Each image must be less than 4.2MB. <span className="text-red-600 font-bold">Total collection must not exceed 4.5MB.</span>
           </p>
         </div>
         <button

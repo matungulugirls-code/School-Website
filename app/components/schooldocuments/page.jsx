@@ -1192,7 +1192,7 @@ function ModernPdfUpload({
       case 'boarding':
         return "Upload the fee structure for boarding students. This document should include accommodation, meals, and all boarding-related charges.";
       case 'admission':
-        return "Upload the admission fee document outlining all charges new students need to pay upon admission.";
+        return "Upload the admission letter document. Max size: 4.5MB total for admission documents.";
       case 'results':
         return "Upload the examination results document. Ensure it includes proper grading, subject scores, and student performance data.";
       default:
@@ -1740,7 +1740,7 @@ function DocumentDetailsModal({
       case 'curriculum': return 'Curriculum Document';
       case 'day': return 'Day School Fees';
       case 'boarding': return 'Boarding School Fees';
-      case 'admission': return 'Admission Fees';
+      case 'admission': return 'Admission Letter';
       case 'results': return 'Examination Results';
       default: return 'Document';
     }
@@ -2041,9 +2041,9 @@ const [formData, setFormData] = useState(() => {
     },
     { 
       id: 'admission', 
-      label: 'Admission Fees', 
+      label: 'Admission Letter', 
       icon: FaUserCheck, 
-      description: 'Admission fee documents (separate from boarding)' 
+      description: 'Admission letter documents for new students' 
     },
     { 
       id: 'exams', 
@@ -2407,14 +2407,14 @@ const getExistingPdfData = (field) => {
           </div>
         );
       
-      case 2: // Admission
+      case 2: // Admission Letter
         return (
           <div className="space-y-6">
             <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-4">
               <div className="flex items-center gap-2">
                 <FaInfoCircle className="text-green-600" />
                 <p className="text-sm font-bold text-green-800">
-                  Upload admission documents only - no metadata or fee breakdowns required.
+                  Upload admission letter documents (max 4.5MB total) - no metadata or fee breakdowns required.
                 </p>
               </div>
             </div>

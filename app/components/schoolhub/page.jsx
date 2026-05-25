@@ -808,6 +808,15 @@ const HubItemModal = ({ open, onClose, onSave, initial, defaultType }) => {
 
           {activeTab === 'media' && (
             <FormPanel title="Image Gallery" subtitle="Multiple images, previews and removals" icon={FiImage} theme={typeTheme}>
+              <div className="mb-6 rounded-2xl border-2 border-amber-200 bg-amber-50 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white font-bold text-sm">!</div>
+                  <div>
+                    <p className="font-bold text-amber-900">Image Collection Size Limit</p>
+                    <p className="mt-1 text-sm text-amber-800">The total collection of selected images must not exceed <span className="font-bold">4.5MB</span>. Each individual image can be up to 4.2MB.</p>
+                  </div>
+                </div>
+              </div>
               <ImageUploadField existingImages={normalizeSchoolImages(initial)} files={imageFiles} removedImages={removedImages} error={uploadError} setError={setUploadError} onChange={({ files, removedImages: nextRemoved }) => { setImageFiles(files); setRemovedImages(nextRemoved); }} />
             </FormPanel>
           )}
