@@ -2521,7 +2521,7 @@ const getExistingPdfData = (field) => {
                       curriculumPDF: 'Curriculum Document',
                       feesDayDistributionPdf: 'Day School Fees',
                       feesBoardingDistributionPdf: 'Boarding School Fees',
-                      admissionFeePdf: 'Admission Fees',
+                      admissionFeePdf: 'Admission Letter',
                       kcseResultsPdf: 'KCSE Results'
                     };
                     
@@ -3274,11 +3274,11 @@ const hasDocuments = documents && (
                 />
               )}
               
-              {/* ADMISSION FEES DOCUMENT */}
+              {/* ADMISSION LETTER DOCUMENT */}
               {documents.admissionFeePdf && (
                 <ModernDocumentCard
-                  title="Admission Fees"
-                  description="Admission and registration fees structure"
+                  title="Admission Letter"
+                  description="Admission letter for new students"
                   pdfUrl={documents.admissionFeePdf}
                   pdfName={documents.admissionFeePdfName || "admission-fees.pdf"}
                   year={documents.admissionFeeYear}

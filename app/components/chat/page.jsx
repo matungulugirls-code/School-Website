@@ -399,7 +399,7 @@ We provide a supportive learning environment that promotes intellectual growth, 
 **Admission Fee:** ${schoolData.admissionFee ? `KES ${schoolData.admissionFee.toLocaleString()}` : 'Contact for details'}
 **Admission Capacity:** ${schoolData.admissionCapacity || 'Limited slots available'}
 
-${documentData?.admissionFeePdf ? `**Download Admission Fee Structure:** ${documentData.admissionFeePdfName || 'Admission Fees'}` : ''}
+${documentData?.admissionFeePdf ? `**Download Admission Letter:** ${documentData.admissionFeePdfName || 'Admission Letter'}` : ''}
 
 ${documentData?.admissionFeeDistribution ? `**Admission Fee Distribution:**
 ${formatFeeDistribution(documentData.admissionFeeDistribution)}` : ''}
