@@ -388,7 +388,7 @@ const PaymentInstructionsCard = ({ onContact }) => {
 
       <button
         onClick={onContact}
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
+        className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3 text-sm font-black text-white transition-colors hover:bg-emerald-800"
       >
         <FaPhone size={15} />
         Contact School for Clarification
