@@ -22,7 +22,12 @@ Disallow: /generated/
 Disallow: /pages/adminLogin
 Disallow: /pages/forgotpassword
 Disallow: /pages/resetpassword
+Disallow: /pages/studentpasswordreset
 Disallow: /pages/StudentPortal
+Disallow: /pages/Clubs%20and%20Societies
+Disallow: /pages/Student%20Council
+Disallow: /pages/student-council
+Disallow: /pages/Societies
 
 # Block specific query parameters that may create duplicate content
 Disallow: /*?utm_
