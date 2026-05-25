@@ -748,17 +748,6 @@ export default function SchoolFeesPage() {
   const totalAmount = getCurrentTotal();
   const currentTabLabel = tabs.find((tab) => tab.id === activeTab)?.name || 'Fees';
 
-  // Stats for metric cards - only showing PDF status since distribution data is not available
-  const metricCards = [
-    {
-      icon: FiCalendar,
-      label: 'Status',
-      value: pdfInfo?.url ? 'Ready' : 'Pending',
-      note: pdfInfo?.url ? 'PDF document available for download' : 'PDF not yet uploaded',
-      gradient: pdfInfo?.url ? 'from-emerald-500 to-teal-500' : 'from-amber-500 to-orange-500',
-    },
-  ];
-
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/25 to-purple-50/20 p-3 text-slate-950 sm:p-4 md:p-6">
       <Toaster position="top-right" richColors />
@@ -771,11 +760,8 @@ export default function SchoolFeesPage() {
           refreshing={refreshing}
         />
 
-        <section className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4 md:gap-6">
-          {metricCards.map((metric) => (
-            <MetricCard key={metric.label} {...metric} />
-          ))}
-        </section>
+        {/* Payment Instructions - Top Section */}
+        <PaymentInstructionsCard onContact={() => router.push("/pages/contact")} />
 
         <section className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           <div className="min-w-0 flex-1 space-y-4 sm:space-y-6">
@@ -860,9 +846,6 @@ export default function SchoolFeesPage() {
           {/* Sidebar */}
           <aside className="space-y-5 lg:w-[360px] xl:w-[380px]">
             <div className="space-y-5 lg:sticky lg:top-24">
-              {/* Payment Instructions Card with Precautions */}
-              <PaymentInstructionsCard onContact={() => router.push("/pages/contact")} />
-
               {/* PDF Document Card */}
               {pdfInfo?.url ? (
                 <FeesDocumentCard
@@ -885,26 +868,6 @@ export default function SchoolFeesPage() {
               )}
 
               {/* Insight Cards */}
-              <InsightCard
-                icon={IoWalletOutline}
-                label="Total Estimate"
-                value={`KSh ${totalAmount.toLocaleString()}`}
-                sublabel={`Annual estimated total for ${currentTabLabel.toLowerCase()}.`}
-              />
-              <InsightCard
-                icon={IoStatsChartOutline}
-                label="Visible Items"
-                value={String(filteredItems.length)}
-                sublabel="Matches your current tab and search filter."
-                gradient="from-purple-500 to-pink-500"
-              />
-              <InsightCard
-                icon={IoReceiptOutline}
-                label="Payment Status"
-                value={pdfInfo?.url ? 'PDF Ready' : 'Awaiting PDF'}
-                sublabel="Downloadable fee document status."
-              />
-
               {/* Info Box */}
               <div className="rounded-[28px] border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/25 p-5 shadow-sm sm:p-6">
                 <div className="mb-4 flex items-center gap-3">
