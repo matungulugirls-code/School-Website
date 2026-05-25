@@ -2016,28 +2016,8 @@ const [formData, setFormData] = useState(() => {
     admissionFee: []
   });
 
-  // COMPLETE FIX: Preload existing exam metadata
+  // COMPLETE FIX: Preload existing exam metadata - ONLY KCSE (Form 1-4 and Mock Exams removed)
   const [examMetadata, setExamMetadata] = useState({
-    form1ResultsYear: documents?.form1ResultsYear?.toString() || '',
-    form1ResultsTerm: documents?.form1ResultsTerm || '',
-    form1ResultsDescription: documents?.form1ResultsDescription || '',
-    
-    form2ResultsYear: documents?.form2ResultsYear?.toString() || '',
-    form2ResultsTerm: documents?.form2ResultsTerm || '',
-    form2ResultsDescription: documents?.form2ResultsDescription || '',
-    
-    form3ResultsYear: documents?.form3ResultsYear?.toString() || '',
-    form3ResultsTerm: documents?.form3ResultsTerm || '',
-    form3ResultsDescription: documents?.form3ResultsDescription || '',
-    
-    form4ResultsYear: documents?.form4ResultsYear?.toString() || '',
-    form4ResultsTerm: documents?.form4ResultsTerm || '',
-    form4ResultsDescription: documents?.form4ResultsDescription || '',
-    
-    mockExamsYear: documents?.mockExamsYear?.toString() || '',
-    mockExamsTerm: documents?.mockExamsTerm || '',
-    mockExamsDescription: documents?.mockExamsDescription || '',
-    
     kcseYear: documents?.kcseYear?.toString() || '',
     kcseTerm: documents?.kcseTerm || '',
     kcseDescription: documents?.kcseDescription || ''

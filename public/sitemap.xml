@@ -171,6 +171,50 @@
     </image:image>
   </url>
 
+  <url>
+    <loc>https://matungulugirls.school/pages/Clubs%20and%20Societies</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Clubs and Societies</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulugirls.school/pages/Societies</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Societies</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulugirls.school/pages/Student%20Council</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.68</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Student Council</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulugirls.school/pages/student-council</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.68</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Student Council</image:title>
+    </image:image>
+  </url>
+
   <!-- Content & News -->
   <url>
     <loc>https://matungulugirls.school/pages/eventsandnews</loc>

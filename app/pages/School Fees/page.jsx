@@ -561,9 +561,10 @@ export default function SchoolFeesPage() {
   const [activeTab, setActiveTab] = useState('boarding');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Tabs configuration - Only Boarding and Admission
+  // Tabs configuration - Boarding, Day School, and Admission
   const tabs = [
     { id: 'boarding', name: 'Boarders', icon: IoBedOutline },
+    { id: 'day', name: 'Day School', icon: IoSchoolOutline },
     { id: 'admission', name: 'Admission', icon: MdOutlineAdUnits }
   ];
 
@@ -601,6 +602,8 @@ export default function SchoolFeesPage() {
     if (!documentData) return [];
     
     switch(activeTab) {
+      case 'day':
+        return documentData.feesDayDistributionJson || [];
       case 'boarding':
         return documentData.feesBoardingDistributionJson || [];
       case 'admission':
@@ -621,6 +624,14 @@ export default function SchoolFeesPage() {
     if (!documentData) return null;
     
     switch(activeTab) {
+      case 'day':
+        return {
+          url: documentData.feesDayDistributionPdf,
+          name: documentData.feesDayPdfName,
+          size: documentData.feesDayPdfSize,
+          date: documentData.feesDayUploadDate,
+          description: documentData.feesDayDescription
+        };
       case 'boarding':
         return {
           url: documentData.feesBoardingDistributionPdf,
@@ -814,7 +825,7 @@ export default function SchoolFeesPage() {
               </div>
             </div>
 
-            {/* Tab Switcher - Only Boarding and Admission */}
+            {/* Tab Switcher - Boarding, Day School, and Admission */}
             <div className="flex gap-2 border-b border-slate-200 pb-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
