@@ -557,11 +557,6 @@ model SchoolDocument {
   admissionFeeYear          Int?
   admissionFeeTerm          String?   @db.VarChar(50)
 
-  // Fee breakdown JSON fields
-  feesDayDistributionJson      Json?
-  feesBoardingDistributionJson Json?
-  admissionFeeDistribution     Json?
-
   // Form 1 Results PDF
   form1ResultsPdf         String?   @db.Text
   form1ResultsPdfName     String?   @db.VarChar(255)

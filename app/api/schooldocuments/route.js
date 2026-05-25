@@ -263,11 +263,6 @@ const cleanDocumentResponse = (document) => {
     admissionFeeYear: document.admissionFeeYear,
     admissionFeeTerm: document.admissionFeeTerm,
     
-    // Fee breakdown JSON fields
-    feesDayDistributionJson: document.feesDayDistributionJson,
-    feesBoardingDistributionJson: document.feesBoardingDistributionJson,
-    admissionFeeDistribution: document.admissionFeeDistribution,
-    
     // Form 1 Results PDF
     form1ResultsPdf: document.form1ResultsPdf,
     form1ResultsPdfName: document.form1ResultsPdfName,
@@ -523,42 +518,8 @@ export async function POST(req) {
       updatedAt: new Date()
     };
 
-
- // Parse JSON fields
-const feesDayDistributionJson = formData.get("feesDayDistributionJson");
-const feesBoardingDistributionJson = formData.get("feesBoardingDistributionJson");
-const admissionFeeDistribution = formData.get("admissionFeeDistribution");
-
-if (feesDayDistributionJson) {
-  try {
-    // Make sure to properly parse the JSON string
-    const parsed = JSON.parse(feesDayDistributionJson);
-    updateData.feesDayDistributionJson = parsed;
-    console.log('✅ Parsed feesDayDistributionJson:', parsed);
-  } catch (e) {
-    console.error("❌ Error parsing feesDayDistributionJson:", e);
-  }
-}
-
-if (feesBoardingDistributionJson) {
-  try {
-    const parsed = JSON.parse(feesBoardingDistributionJson);
-    updateData.feesBoardingDistributionJson = parsed;
-    console.log('✅ Parsed feesBoardingDistributionJson:', parsed);
-  } catch (e) {
-    console.error("❌ Error parsing feesBoardingDistributionJson:", e);
-  }
-}
-
-if (admissionFeeDistribution) {
-  try {
-    const parsed = JSON.parse(admissionFeeDistribution);
-    updateData.admissionFeeDistribution = parsed;
-    console.log('✅ Parsed admissionFeeDistribution:', parsed);
-  } catch (e) {
-    console.error("❌ Error parsing admissionFeeDistribution:", e);
-  }
-}
+    // NOTE: Fee breakdown JSON handling has been removed
+    // Only document PDFs are now uploaded - no fee breakdown data
 
     // Process all fields (documents + exams)
     for (const field of allFields) {
