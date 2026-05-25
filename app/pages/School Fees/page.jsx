@@ -115,21 +115,6 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh, refreshing }) => {
             </button>
           </div>
         </div>
-
-        <div className="mt-4 flex flex-wrap gap-3 sm:mt-5 sm:gap-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-200 sm:text-[10px]">Fee Items</p>
-            <p className="mt-1 text-xl font-black text-white sm:text-2xl">{stats.totalItems}</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-200 sm:text-[10px]">Annual Total</p>
-            <p className="mt-1 text-xl font-black text-white sm:text-2xl">KSh {stats.totalAmount.toLocaleString()}</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-2.5">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-200 sm:text-[10px]">Updated</p>
-            <p className="mt-1 text-xl font-black text-white sm:text-2xl">{stats.lastUpdated}</p>
-          </div>
-        </div>
       </div>
     </section>
   );
