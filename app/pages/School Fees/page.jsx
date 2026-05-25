@@ -561,10 +561,9 @@ export default function SchoolFeesPage() {
   const [activeTab, setActiveTab] = useState('boarding');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Tabs configuration - Boarding, Day School, and Admission
+  // Tabs configuration - Boarding and Admission Letter
   const tabs = [
     { id: 'boarding', name: 'Boarders', icon: IoBedOutline },
-    { id: 'day', name: 'Day School', icon: IoSchoolOutline },
     { id: 'admission', name: 'Admission', icon: MdOutlineAdUnits }
   ];
 
@@ -602,8 +601,6 @@ export default function SchoolFeesPage() {
     if (!documentData) return [];
     
     switch(activeTab) {
-      case 'day':
-        return documentData.feesDayDistributionJson || [];
       case 'boarding':
         return documentData.feesBoardingDistributionJson || [];
       case 'admission':
@@ -624,14 +621,6 @@ export default function SchoolFeesPage() {
     if (!documentData) return null;
     
     switch(activeTab) {
-      case 'day':
-        return {
-          url: documentData.feesDayDistributionPdf,
-          name: documentData.feesDayPdfName,
-          size: documentData.feesDayPdfSize,
-          date: documentData.feesDayUploadDate,
-          description: documentData.feesDayDescription
-        };
       case 'boarding':
         return {
           url: documentData.feesBoardingDistributionPdf,
@@ -759,35 +748,14 @@ export default function SchoolFeesPage() {
   const totalAmount = getCurrentTotal();
   const currentTabLabel = tabs.find((tab) => tab.id === activeTab)?.name || 'Fees';
 
-  // Stats for metric cards
+  // Stats for metric cards - only showing PDF status since distribution data is not available
   const metricCards = [
     {
-      icon: FiDollarSign,
-      label: 'Annual Total',
-      value: `KSh ${totalAmount.toLocaleString()}`,
-      note: `Combined estimated annual amount for ${currentTabLabel.toLowerCase()}.`,
-      gradient: 'from-emerald-500 to-teal-500',
-    },
-    {
-      icon: FiFileText,
-      label: 'Fee Items',
-      value: String(filteredItems.length),
-      note: `${filteredItems.length} fee line items for ${currentTabLabel.toLowerCase()}.`,
-      gradient: 'from-purple-500 to-pink-500',
-    },
-    {
-      icon: FiAward,
-      label: 'Categories',
-      value: String(getUniqueCategories()),
-      note: 'Distinct fee categories in current section.',
-      gradient: 'from-emerald-500 to-teal-500',
-    },
-    {
       icon: FiCalendar,
-      label: 'Last Updated',
-      value: getLastUpdated(),
-      note: pdfInfo?.url ? 'PDF document available' : 'PDF not yet uploaded',
-      gradient: 'from-amber-500 to-orange-500',
+      label: 'Status',
+      value: pdfInfo?.url ? 'Ready' : 'Pending',
+      note: pdfInfo?.url ? 'PDF document available for download' : 'PDF not yet uploaded',
+      gradient: pdfInfo?.url ? 'from-emerald-500 to-teal-500' : 'from-amber-500 to-orange-500',
     },
   ];
 
@@ -814,18 +782,18 @@ export default function SchoolFeesPage() {
             <div className="flex flex-col justify-between gap-3 px-1 sm:flex-row sm:items-end sm:gap-4">
               <div className="flex items-center gap-3 sm:gap-4">
                 <div className="shrink-0 rounded-2xl bg-emerald-900 p-2 shadow-lg sm:p-3">
-                  <IoWalletOutline className="text-lg text-white sm:text-xl" />
+                  <IoDocumentTextOutline className="text-lg text-white sm:text-xl" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-extrabold tracking-tight text-slate-900 sm:text-xl md:text-2xl">Fee Ledger</h2>
+                  <h2 className="text-lg font-extrabold tracking-tight text-slate-900 sm:text-xl md:text-2xl">Fee Structure Document</h2>
                   <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:text-[10px]">
-                    {filteredItems.length} fee items - {currentTabLabel} section
+                    {currentTabLabel} - Download PDF
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Tab Switcher - Boarding, Day School, and Admission */}
+            {/* Tab Switcher - Boarding and Admission Letter */}
             <div className="flex gap-2 border-b border-slate-200 pb-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -850,62 +818,43 @@ export default function SchoolFeesPage() {
               })}
             </div>
 
-            {/* Search Bar */}
-            <div className="rounded-[28px] border border-slate-200/60 bg-white/80 p-2 shadow-lg shadow-slate-200/40 backdrop-blur-md sm:p-3">
-              <div className="flex flex-col items-center gap-2 sm:gap-3 md:flex-row">
-                <div className="group relative w-full flex-1">
-                  <div className="relative flex items-center rounded-2xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-slate-900 focus-within:ring-2 focus-within:ring-slate-900/5">
-                    <div className="flex items-center justify-center pl-3 pr-2 sm:pl-4 sm:pr-3">
-                      <FiSearch className="text-slate-400 transition-colors group-focus-within:text-slate-900" size={14} />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder={`Search ${currentTabLabel} fees...`}
-                      value={searchTerm}
-                      onChange={(event) => setSearchTerm(event.target.value)}
-                      className="w-full bg-transparent py-2.5 text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none sm:py-3 sm:text-sm"
-                    />
-                    {searchTerm && (
-                      <button onClick={() => setSearchTerm('')} className="pr-2" aria-label="Clear search">
-                        <div className="rounded-xl bg-slate-100 p-1.5 text-slate-900 sm:p-2">
-                          <FiX className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                        </div>
+            {/* Download Fee Structure PDF */}
+            <div className="rounded-[28px] border-2 border-emerald-200 bg-emerald-50 p-6 sm:p-8">
+              <div className="flex items-start gap-4 sm:gap-6">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-lg sm:h-16 sm:w-16">
+                  <FiFileText className="text-2xl sm:text-3xl" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-bold text-emerald-900 sm:text-xl">Fee Structure PDF</h3>
+                  <p className="mt-1 text-sm text-emerald-700">
+                    Download the complete {currentTabLabel.toLowerCase()} fee structure document with all itemized charges and payment details.
+                  </p>
+                  {pdfInfo?.url && (
+                    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+                      <button
+                        onClick={() => handleDownloadPDF(pdfInfo.url, pdfInfo.name)}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-all shadow-md hover:shadow-lg sm:px-5 sm:py-3"
+                      >
+                        <FiDownload className="text-base" />
+                        Download PDF
                       </button>
-                    )}
-                  </div>
+                      <button
+                        onClick={() => handleViewPDF(pdfInfo.url)}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-200 bg-white px-4 py-2.5 text-sm font-bold text-emerald-700 hover:bg-emerald-50 transition-all sm:px-5 sm:py-3"
+                      >
+                        <FiExternalLink className="text-base" />
+                        View PDF
+                      </button>
+                    </div>
+                  )}
+                  {!pdfInfo?.url && (
+                    <p className="mt-3 text-xs font-semibold text-emerald-600">
+                      PDF document will be available soon. Check back later.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-
-            {/* Fee Items List */}
-            {filteredItems.length === 0 ? (
-              <div className="rounded-[32px] border-2 border-dashed border-slate-200 bg-slate-50 py-10 text-center sm:py-12 md:py-16">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm sm:h-14 sm:w-14 md:h-16 md:w-16">
-                  <FiDollarSign className="text-xl text-slate-300 sm:text-2xl" />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 sm:text-lg">No fee items found</h3>
-                <p className="mt-1 text-xs text-slate-500 sm:text-sm">Try adjusting your search or switch to another fee section.</p>
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="mt-3 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-50 sm:mt-4 sm:px-5 sm:py-2 sm:text-sm"
-                >
-                  Clear Search
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-3 sm:space-y-4">
-                {filteredItems.map((item, index) => (
-                  <FeeLedgerItem
-                    key={item.id || index}
-                    item={item}
-                    onInfo={(item) => {
-                      setSelectedFeeItem(item);
-                      setShowInfoModal(true);
-                    }}
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Sidebar */}
