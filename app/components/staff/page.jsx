@@ -847,13 +847,25 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
     quote: staff?.quote || '',
     joinDate: staff?.joinDate || new Date().toISOString().split('T')[0],
     education: staff?.education || '',
-    experience: staff?.experience || ''
+    experience: staff?.experience || '',
+    // CBE fields
+    cbeRoleType: staff?.cbeRoleType || 'TEACHER',
+    cbePathwayId: staff?.cbePathwayId ? String(staff.cbePathwayId) : '',
+    cbeTrackId: staff?.cbeTrackId ? String(staff.cbeTrackId) : '',
   });
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(staff?.image || '');
   const [imageError, setImageError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  
+  // CBE and multi-image states
+  const [cbePathways, setCbePathways] = useState([]);
+  const [cbeTracks, setCbeTracks] = useState([]);
+  const [departmentImages, setDepartmentImages] = useState([]);
+  const [departmentImageFiles, setDepartmentImageFiles] = useState([]);
+  const [cbeLoading, setCbeLoading] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
 
   const isTeacherForm = formData.staffType === 'Teacher' || formData.role === 'Teacher';
 
@@ -1056,6 +1068,34 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
     setImageError('');
   };
 
+  // Fetch CBE pathways and tracks
+  useEffect(() => {
+    const fetchCBEData = async () => {
+      try {
+        setCbeLoading(true);
+        const res = await fetch('/api/cbe');
+        if (res.ok) {
+          const data = await res.json();
+          setCbePathways(data.data || []);
+          
+          // If staff has a pathway, load tracks
+          if (staff?.cbePathwayId) {
+            const pathway = data.data?.find(p => p.id === staff.cbePathwayId);
+            if (pathway?.tracks) {
+              setCbeTracks(pathway.tracks);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching CBE data:', error);
+      } finally {
+        setCbeLoading(false);
+      }
+    };
+
+    fetchCBEData();
+  }, [staff?.cbePathwayId]);
+
   const handleChange = (field, value) => {
     if (field === 'departmentId') {
       const selectedDepartment = normalizedDepartmentOptions.find((dept) => String(dept.id) === String(value));
@@ -1063,6 +1103,19 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
         ...prev,
         departmentId: value,
         department: selectedDepartment?.name || prev.department
+      }));
+      return;
+    }
+
+    if (field === 'cbePathwayId') {
+      const selectedPathway = cbePathways.find(p => String(p.id) === String(value));
+      if (selectedPathway?.tracks) {
+        setCbeTracks(selectedPathway.tracks);
+      }
+      setFormData(prev => ({
+        ...prev,
+        cbePathwayId: value,
+        cbeTrackId: '' // Reset track when pathway changes
       }));
       return;
     }
@@ -1081,6 +1134,68 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
 
   const handleGenderChange = (gender) => {
     setFormData(prev => ({ ...prev, gender }));
+  };
+
+  // Handle department image uploads
+  const handleDepartmentImageChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    const totalImages = departmentImages.length + departmentImageFiles.length + files.length;
+    
+    if (totalImages > 3) {
+      alert(`Maximum 3 images allowed. Current: ${departmentImages.length + departmentImageFiles.length}`);
+      return;
+    }
+
+    setDepartmentImageFiles(prev => [...prev, ...files]);
+  };
+
+  const uploadDepartmentImages = async () => {
+    if (!formData.departmentId || departmentImageFiles.length === 0) return;
+
+    try {
+      setUploadingImages(true);
+      const formDataMulti = new FormData();
+      formDataMulti.append('departmentId', formData.departmentId);
+      
+      departmentImageFiles.forEach(file => {
+        formDataMulti.append('images', file);
+      });
+
+      const res = await fetch('/api/staff/departments/upload', {
+        method: 'POST',
+        body: formDataMulti,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setDepartmentImages(prev => [...prev, ...data.data]);
+        setDepartmentImageFiles([]);
+        alert('Images uploaded successfully!');
+      } else {
+        alert('Failed to upload images');
+      }
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      alert('Error uploading images');
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  const deleteDepartmentImage = async (imageId, publicId) => {
+    try {
+      const res = await fetch(`/api/staff/departments/upload?imageId=${imageId}&publicId=${publicId}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setDepartmentImages(prev => prev.filter(img => img.id !== imageId));
+        alert('Image deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      alert('Error deleting image');
+    }
   };
 
   const isStepValid = () => {
@@ -1294,6 +1409,83 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                             required
                           />
                         </div>
+
+                        {/* CBE Role Type */}
+                        <div className="bg-gradient-to-br from-violet-50 to-violet-100 rounded-2xl p-5 border border-violet-200">
+                          <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                            <FaCrown className="text-violet-600" /> CBE Role Type
+                          </label>
+                          <div className="grid grid-cols-3 gap-2">
+                            {['TEACHER', 'HOP', 'HOT'].map((role) => (
+                              <button
+                                key={role}
+                                type="button"
+                                onClick={() => handleChange('cbeRoleType', role)}
+                                className={`p-2 rounded-lg transition-all text-xs font-bold ${
+                                  formData.cbeRoleType === role
+                                    ? 'bg-violet-600 text-white shadow-lg'
+                                    : 'bg-white border-2 border-violet-200 hover:border-violet-400'
+                                }`}
+                              >
+                                {role === 'HOT' ? 'Head of Track' : role === 'HOP' ? 'Head of Pathway' : 'Teacher'}
+                              </button>
+                            ))}
+                          </div>
+                          <p className="mt-2 text-xs font-semibold text-slate-600">
+                            HOT = Head of Track | HOP = Head of Pathway | TEACHER = Regular Teacher
+                          </p>
+                        </div>
+
+                        {/* CBE Pathway Selection */}
+                        <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-5 border border-indigo-200">
+                          <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                            <FiTarget className="text-indigo-600" /> CBE Pathway
+                          </label>
+                          {cbeLoading ? (
+                            <div className="text-center py-3 text-sm text-gray-500">Loading pathways...</div>
+                          ) : (
+                            <select
+                              value={formData.cbePathwayId}
+                              onChange={(e) => handleChange('cbePathwayId', e.target.value)}
+                              className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-base font-bold"
+                            >
+                              <option value="">Select pathway...</option>
+                              {cbePathways.map((pathway) => (
+                                <option key={pathway.id} value={pathway.id}>
+                                  {pathway.name}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        </div>
+
+                        {/* CBE Track Selection (conditional on pathway) */}
+                        {formData.cbePathwayId && cbeTracks.length > 0 && (
+                          <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-5 border border-pink-200">
+                            <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                              <FiTarget className="text-pink-600" /> CBE Track
+                            </label>
+                            <div className="grid grid-cols-1 gap-2">
+                              {cbeTracks.map((track) => (
+                                <button
+                                  key={track.id}
+                                  type="button"
+                                  onClick={() => handleChange('cbeTrackId', track.id)}
+                                  className={`p-3 rounded-lg transition-all text-sm font-bold text-left ${
+                                    String(formData.cbeTrackId) === String(track.id)
+                                      ? 'bg-pink-600 text-white shadow-lg'
+                                      : 'bg-white border-2 border-pink-200 hover:border-pink-400'
+                                  }`}
+                                >
+                                  <div>{track.name}</div>
+                                  <div className={`text-xs mt-1 ${String(formData.cbeTrackId) === String(track.id) ? 'text-pink-100' : 'text-gray-600'}`}>
+                                    {track.description}
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </>
                     ) : (
                       <>

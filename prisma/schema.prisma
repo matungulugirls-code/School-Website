@@ -94,7 +94,7 @@ model Subscriber {
 }
 
 model Assignment {
-  id                 Int      @id @default(autoincrement())
+  id                 Int                           @id @default(autoincrement())
   title              String
   subject            String
   className          String
@@ -102,46 +102,46 @@ model Assignment {
   dueDate            DateTime
   dateAssigned       DateTime
   status             String
-  description        String   @db.Text
-  instructions       String?  @db.Text
+  description        String                        @db.Text
+  instructions       String?                       @db.Text
   assignmentFiles    Json
   attachments        Json
   priority           String
   estimatedTime      String?
-  additionalWork     String?  @db.Text
-  teacherRemarks     String?  @db.Text
-  feedback           String?  @db.Text
+  additionalWork     String?                       @db.Text
+  teacherRemarks     String?                       @db.Text
+  feedback           String?                       @db.Text
   learningObjectives Json
   targetCriteria     Json?
-  senderReference    String   @default("0793472960") @db.VarChar(20)
-  deliveryStatus     String   @default("prepared") @db.VarChar(50)
+  senderReference    String                        @default("0793472960") @db.VarChar(20)
+  deliveryStatus     String                        @default("prepared") @db.VarChar(50)
   deliverySummary    Json?
   deliveryRecipients AssignmentDeliveryRecipient[]
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime                      @default(now())
+  updatedAt          DateTime                      @updatedAt
 }
 
 model Resource {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(400)
-  subject     String   @db.VarChar(100)
-  teacher     String   @db.VarChar(100)
-  className   String   @db.VarChar(50)
-  description String?  @db.Text
-  category    String   @default("general") @db.VarChar(100)
-  type        String   @default("document") @db.VarChar(50)
-  files       Json // Array of file objects (like assignmentFiles)
-  accessLevel String   @default("student") @db.VarChar(20)
-  uploadedBy  String   @default("System") @db.VarChar(100)
-  downloads   Int      @default(0)
-  isActive    Boolean  @default(true)
-  targetCriteria Json?
-  senderReference String @default("0793472960") @db.VarChar(20)
-  deliveryStatus String @default("prepared") @db.VarChar(50)
-  deliverySummary Json?
+  id                 Int                         @id @default(autoincrement())
+  title              String                      @db.VarChar(400)
+  subject            String                      @db.VarChar(100)
+  teacher            String                      @db.VarChar(100)
+  className          String                      @db.VarChar(50)
+  description        String?                     @db.Text
+  category           String                      @default("general") @db.VarChar(100)
+  type               String                      @default("document") @db.VarChar(50)
+  files              Json // Array of file objects (like assignmentFiles)
+  accessLevel        String                      @default("student") @db.VarChar(20)
+  uploadedBy         String                      @default("System") @db.VarChar(100)
+  downloads          Int                         @default(0)
+  isActive           Boolean                     @default(true)
+  targetCriteria     Json?
+  senderReference    String                      @default("0793472960") @db.VarChar(20)
+  deliveryStatus     String                      @default("prepared") @db.VarChar(50)
+  deliverySummary    Json?
   deliveryRecipients ResourceDeliveryRecipient[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt          DateTime                    @default(now())
+  updatedAt          DateTime                    @updatedAt
 
   @@index([subject])
   @@index([className])
@@ -261,32 +261,43 @@ model News {
 }
 
 model Staff {
-  id               Int      @id @default(autoincrement())
+  id               Int              @id @default(autoincrement())
   name             String
   role             String
-  staffType        String?  @default("Leadership") @db.VarChar(50)
+  staffType        String?          @default("Leadership") @db.VarChar(50)
   position         String?
   department       String?
   departmentId     Int?
   departmentRecord StaffDepartment? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
-  subjectOffered   String?  @db.VarChar(255)
-  education        String?  @db.Text
-  experience       String?  @db.Text
+  subjectOffered   String?          @db.VarChar(255)
+  education        String?          @db.Text
+  experience       String?          @db.Text
   email            String?
   phone            String?
-  bio              String?  @db.Text
-  quote            String?  @db.Text
-  gender           String?  @default("male") // ← ADD THIS
-  status           String?  @default("active") // ← ADD THIS
-  joinDate         String? // ← ADD THIS
+  bio              String?          @db.Text
+  quote            String?          @db.Text
+  gender           String?          @default("male")
+  status           String?          @default("active")
+  joinDate         String?
   responsibilities Json?
   expertise        Json?
   achievements     Json?
   image            String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+
+  // CBE fields
+  cbeRoleType  CBERoleType? @default(TEACHER)
+  cbePathwayId Int?
+  cbeTrackId   Int?
+  cbePathway   CBEPathway?  @relation(fields: [cbePathwayId], references: [id], onDelete: SetNull)
+  cbeTrack     CBETrack?    @relation(fields: [cbeTrackId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([departmentId])
+  @@index([cbePathwayId])
+  @@index([cbeTrackId])
+  @@index([cbeRoleType])
 }
 
 // ==========================================
@@ -295,27 +306,48 @@ model Staff {
 
 enum DepartmentCategory {
   CBC
+  CBE
   EIGHT_FOUR_FOUR
   TEACHING
   SUPPORT
 }
 
+enum CBEPathwayType {
+  STEM
+  ARTS_SPORT_SCIENCE
+  SOCIAL_SCIENCES
+}
+
+enum CBERoleType {
+  HOT
+  HOP
+  TEACHER
+}
+
+enum CBETrackType {
+  APPLIED
+  TECHNICAL
+  PERFORMANCE
+  HUMANITIES
+  LANGUAGE_BUSINESS
+}
+
 model StaffDepartment {
-  id           Int                    @id @default(autoincrement())
-  name         String                 @db.VarChar(255)
-  category     DepartmentCategory
-  description  String?                @db.Text
-  image        String?                @db.Text
-  images       StaffDepartmentImage[]
-  staffCount   Int                    @default(0)
-  headName     String?                @db.VarChar(255)
-  assistantHeadName String?           @db.VarChar(255)
-  extra        Json?
-  isActive     Boolean                @default(true)
-  displayOrder Int                    @default(0)
-  teachers     Staff[]
-  createdAt    DateTime               @default(now())
-  updatedAt    DateTime               @updatedAt
+  id                Int                    @id @default(autoincrement())
+  name              String                 @db.VarChar(255)
+  category          DepartmentCategory
+  description       String?                @db.Text
+  image             String?                @db.Text
+  images            StaffDepartmentImage[]
+  staffCount        Int                    @default(0)
+  headName          String?                @db.VarChar(255)
+  assistantHeadName String?                @db.VarChar(255)
+  extra             Json?
+  isActive          Boolean                @default(true)
+  displayOrder      Int                    @default(0)
+  teachers          Staff[]
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
 
   @@index([category])
   @@index([isActive])
@@ -338,6 +370,48 @@ model StaffDepartmentImage {
   @@index([staffDepartmentId])
   @@index([displayOrder])
   @@map("staff_department_images")
+}
+
+// ==========================================
+// CBE (Competency-Based Education) Models
+// ==========================================
+
+model CBEPathway {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  type         CBEPathwayType @unique
+  description  String?        @db.Text
+  image        String?        @db.Text
+  displayOrder Int            @default(0)
+  isActive     Boolean        @default(true)
+  tracks       CBETrack[]
+  staff        Staff[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([displayOrder])
+  @@map("cbe_pathways")
+}
+
+model CBETrack {
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(255)
+  type         CBETrackType
+  description  String?      @db.Text
+  pathwayId    Int
+  pathway      CBEPathway   @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
+  displayOrder Int          @default(0)
+  isActive     Boolean      @default(true)
+  staff        Staff[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@unique([pathwayId, type])
+  @@index([pathwayId])
+  @@index([isActive])
+  @@map("cbe_tracks")
 }
 
 // ==========================================
@@ -821,28 +895,28 @@ model StudentBulkUpload {
 }
 
 model databaseStudent {
-  id              String       @id @default(cuid())
-  admissionNumber String       @unique @db.VarChar(50)
-  firstName       String       @db.VarChar(100)
-  middleName      String?      @db.VarChar(100)
-  lastName        String       @db.VarChar(100)
-  fullName        String?      @db.VarChar(255)
-  form            String       @db.VarChar(20)
-  gradeLevel      String?      @db.VarChar(50)
-  className       String?      @db.VarChar(100)
-  status          String       @default("active")
-  stream          String?      @db.VarChar(50)
-  dateOfBirth     DateTime?
-  gender          String?      @db.VarChar(20)
-  parentPhone     String?      @db.VarChar(20)
-  studentPhone    String?      @db.VarChar(20)
-  whatsappPhone   String?      @db.VarChar(20)
-  email           String?      @db.VarChar(100)
-  address         String?      @db.VarChar(255)
-  uploadedCategory String?     @db.VarChar(100)
-  uploadBatchId   String?
-  createdAt       DateTime     @default(now())
-  feeBalances     FeeBalance[] @relation("StudentFeeBalances")
+  id                   String                        @id @default(cuid())
+  admissionNumber      String                        @unique @db.VarChar(50)
+  firstName            String                        @db.VarChar(100)
+  middleName           String?                       @db.VarChar(100)
+  lastName             String                        @db.VarChar(100)
+  fullName             String?                       @db.VarChar(255)
+  form                 String                        @db.VarChar(20)
+  gradeLevel           String?                       @db.VarChar(50)
+  className            String?                       @db.VarChar(100)
+  status               String                        @default("active")
+  stream               String?                       @db.VarChar(50)
+  dateOfBirth          DateTime?
+  gender               String?                       @db.VarChar(20)
+  parentPhone          String?                       @db.VarChar(20)
+  studentPhone         String?                       @db.VarChar(20)
+  whatsappPhone        String?                       @db.VarChar(20)
+  email                String?                       @db.VarChar(100)
+  address              String?                       @db.VarChar(255)
+  uploadedCategory     String?                       @db.VarChar(100)
+  uploadBatchId        String?
+  createdAt            DateTime                      @default(now())
+  feeBalances          FeeBalance[]                  @relation("StudentFeeBalances")
   assignmentDeliveries AssignmentDeliveryRecipient[] @relation("StudentAssignmentDeliveries")
   resourceDeliveries   ResourceDeliveryRecipient[]   @relation("StudentResourceDeliveries")
 
@@ -987,25 +1061,25 @@ model ArchivedStudentPortalCredential {
 }
 
 model StudentPasswordResetRequest {
-  id              String    @id @default(cuid())
-  admissionNumber String    @db.VarChar(50)
-  requestType     String    @default("forgot") @db.VarChar(50)
-  fullName        String?   @db.VarChar(255)
-  email           String?   @db.VarChar(100)
-  parentEmail     String?   @db.VarChar(100)
-  parentPhone     String?   @db.VarChar(20)
-  message         String?   @db.Text
-  tokenHash       String?   @db.VarChar(191)
-  expiresAt       DateTime?
-  usedAt          DateTime?
-  status          String    @default("pending")
-  adminNote       String?   @db.Text
-  requestedByIp   String?   @db.VarChar(100)
-  requestedByUserAgent String? @db.VarChar(255)
-  requestedAt     DateTime  @default(now())
-  resolvedAt      DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                   String    @id @default(cuid())
+  admissionNumber      String    @db.VarChar(50)
+  requestType          String    @default("forgot") @db.VarChar(50)
+  fullName             String?   @db.VarChar(255)
+  email                String?   @db.VarChar(100)
+  parentEmail          String?   @db.VarChar(100)
+  parentPhone          String?   @db.VarChar(20)
+  message              String?   @db.Text
+  tokenHash            String?   @db.VarChar(191)
+  expiresAt            DateTime?
+  usedAt               DateTime?
+  status               String    @default("pending")
+  adminNote            String?   @db.Text
+  requestedByIp        String?   @db.VarChar(100)
+  requestedByUserAgent String?   @db.VarChar(255)
+  requestedAt          DateTime  @default(now())
+  resolvedAt           DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   @@index([admissionNumber])
   @@index([requestType])
