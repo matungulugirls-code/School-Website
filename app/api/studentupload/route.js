@@ -1297,9 +1297,15 @@ const parsePDF = async (file) => {
 const parseCSV = async (file) => {
   try {
     const text = await file.text();
-    console.log('CSV content preview:', text.substring(0, 500));
+    
+    if (!text || text.trim().length === 0) {
+      throw new Error('CSV file is empty');
+    }
+    
+    console.log(`📄 CSV content size: ${text.length} bytes, preview: ${text.substring(0, 100)}`);
     
     const delimiters = ['\t', ',', ';'];
+    let lastError = null;
     
     for (const delimiter of delimiters) {
       try {
@@ -1307,49 +1313,65 @@ const parseCSV = async (file) => {
           parse(text, {
             header: true,
             skipEmptyLines: true,
+            dynamicTyping: false,
             delimiter,
             transformHeader: mapStudentUploadHeader,
             complete: (results) => {
-              const headers = results.meta.fields || [];
-              console.log('CSV headers:', headers);
-              
-              if (headers.length === 0) {
-                reject(new Error('No headers found in CSV file'));
-                return;
+              try {
+                const headers = results.meta.fields || [];
+                console.log(`✅ CSV parsed with delimiter "${delimiter}":`, headers.length, 'columns');
+                
+                if (headers.length === 0) {
+                  reject(new Error('No headers found in CSV file'));
+                  return;
+                }
+                
+                const headerValidation = hasRequiredStudentHeaders(headers);
+                if (!headerValidation.isValid) {
+                  reject(new Error(`Missing required columns: ${headerValidation.missingColumns.join(', ')}`));
+                  return;
+                }
+                
+                const data = results.data
+                  .map((row, index) => {
+                    // Skip empty rows
+                    if (!row || Object.keys(row).every(k => !row[k])) {
+                      return null;
+                    }
+                    return normalizeStudentUploadRow(row, index);
+                  })
+                  .filter(item => item !== null);
+                
+                console.log(`✅ CSV validation complete: ${data.length} valid rows from ${results.data.length} total`);
+                
+                if (data.length === 0) {
+                  reject(new Error('No valid student records found after processing. Verify data format and required fields.'));
+                  return;
+                }
+                
+                resolve(data);
+              } catch (processError) {
+                reject(processError);
               }
-              
-              const headerValidation = hasRequiredStudentHeaders(headers);
-              if (!headerValidation.isValid) {
-                reject(new Error(`Missing required columns: ${headerValidation.missingColumns.join(', ')}. Found headers: ${headers.join(', ')}`));
-                return;
-              }
-              
-              const data = results.data
-                .map((row, index) => normalizeStudentUploadRow(row, index))
-                .filter(item => item !== null);
-              
-              console.log(`CSV parsing completed: ${data.length} valid rows out of ${results.data.length}`);
-              
-              if (data.length === 0) {
-                reject(new Error('No valid student data found in CSV file. Please check your file format.'));
-                return;
-              }
-              
-              resolve(data);
             },
-            error: reject
+            error: (parseError) => {
+              console.warn(`⚠️ CSV parsing error with delimiter "${delimiter}":`, parseError.message);
+              reject(parseError);
+            }
           });
         });
       } catch (delimiterError) {
-        console.log(`Delimiter "${delimiter}" failed:`, delimiterError.message);
+        lastError = delimiterError;
+        console.log(`⚠️ Delimiter "${delimiter}" failed, trying next...`);
         continue;
       }
     }
     
-    throw new Error('Could not parse CSV. Please check that your file contains admission number, student name, class or grade, and phone columns.');
+    // All delimiters failed
+    throw new Error(`Could not parse CSV with any delimiter. Last error: ${lastError?.message || 'Unknown'}. Please verify file format has headers: admission#, name, class/grade.`);
     
   } catch (error) {
-    console.error('CSV parsing error:', error);
+    console.error('❌ CSV parsing error:', error.message);
     throw new Error(`CSV parsing failed: ${error.message}`);
   }
 };
@@ -1358,31 +1380,62 @@ const parseCSV = async (file) => {
 const parseExcel = async (file) => {
   try {
     const buffer = await file.arrayBuffer();
-    const workbook = XLSX.read(buffer, { type: 'buffer', cellDates: true });
-    const sheetName = workbook.SheetNames[0];
+    
+    // Read workbook with extended options for better compatibility
+    const workbook = XLSX.read(buffer, { 
+      type: 'buffer', 
+      cellDates: true,
+      cellFormula: false,
+      cellHTML: false,
+      cellNF: false
+    });
+    
+    // Find a sheet with actual data (skip empty sheets)
+    let sheetName = null;
+    for (const name of workbook.SheetNames) {
+      const sheet = workbook.Sheets[name];
+      if (sheet && Object.keys(sheet).length > 1) {
+        sheetName = name;
+        break;
+      }
+    }
+    
+    if (!sheetName) {
+      throw new Error('No data found in any worksheet');
+    }
+    
     const worksheet = workbook.Sheets[sheetName];
     
-    // Convert to JSON - this should preserve your exact headers
+    // Convert to JSON with robust options
     const jsonData = XLSX.utils.sheet_to_json(worksheet, {
       defval: '',
       raw: false,
-      dateNF: 'yyyy-mm-dd'
+      dateNF: 'yyyy-mm-dd',
+      blankrows: false
     });
     
-    console.log(`Excel raw data: ${jsonData.length} rows`);
+    console.log(`✅ Excel parsed: ${jsonData.length} rows from sheet "${sheetName}"`);
     
     if (jsonData.length === 0) {
-      throw new Error('Excel file appears to be empty');
+      throw new Error('No data rows found in Excel file. Please ensure the sheet contains data below the headers.');
     }
     
-    // Log the exact structure
-    console.log('First Excel row:', jsonData[0]);
-    console.log('All headers:', Object.keys(jsonData[0]));
+    // Validate that headers exist
+    if (jsonData[0] && Object.keys(jsonData[0]).length === 0) {
+      throw new Error('Excel file has no headers. Please add column headers in the first row.');
+    }
+    
+    // Log the exact structure for debugging
+    const headerKeys = jsonData[0] ? Object.keys(jsonData[0]) : [];
+    console.log(`📋 Headers found (${headerKeys.length}):`, headerKeys.slice(0, 5).join(', '), headerKeys.length > 5 ? '...' : '');
     
     const normalizeHeaders = (row) => {
       const normalized = {};
       Object.entries(row || {}).forEach(([key, value]) => {
-        normalized[mapStudentUploadHeader(key)] = value;
+        const mappedKey = mapStudentUploadHeader(key);
+        if (value !== undefined && value !== null && value !== '') {
+          normalized[mappedKey] = value;
+        }
       });
       return normalized;
     };
@@ -1390,31 +1443,40 @@ const parseExcel = async (file) => {
     const data = jsonData
       .map((row, index) => {
         try {
+          // Skip empty rows
+          if (!row || Object.keys(row).every(k => !row[k])) {
+            return null;
+          }
+          
           const normalizedRow = normalizeHeaders(row);
           const student = normalizeStudentUploadRow(normalizedRow, index);
           
-          if (index < 3) {
-            console.log(`Parsed student ${index + 1}:`, student);
+          if (index < 2) {
+            console.log(`📝 Row ${index + 1} mapped:`, {
+              admission: student.admissionNumber,
+              name: student.firstName + ' ' + student.lastName,
+              form: student.form
+            });
           }
           
           return student;
         } catch (error) {
-          console.error(`Error parsing Excel row ${index + 2}:`, error);
+          console.warn(`⚠️ Warning: Could not parse row ${index + 2}: ${error.message}`);
           return null;
         }
       })
       .filter(item => item !== null);
     
-    console.log(`Excel parsing completed: ${data.length} valid rows out of ${jsonData.length}`);
+    console.log(`✅ Excel validation complete: ${data.length} valid rows out of ${jsonData.length}`);
     
     if (data.length === 0) {
-      throw new Error('No valid student data found in Excel file. Required columns: admission number, student name, class or grade, and phone.');
+      throw new Error('No valid student records found. Check that required fields (admission#, name, class/grade) are present and properly formatted.');
     }
     
     return data;
     
   } catch (error) {
-    console.error('Excel parsing error:', error);
+    console.error('❌ Excel parsing error:', error.message);
     throw new Error(`Excel parsing failed: ${error.message}`);
   }
 };
@@ -1504,6 +1566,8 @@ const validateStudent = (student, index) => {
 
 // GET - Main endpoint with consistent statistics (PUBLIC - no authentication required)
 export async function GET(request) {
+  let startTime = Date.now();
+  
   try {
     const url = new URL(request.url);
     const action = url.searchParams.get('action');
@@ -1516,184 +1580,263 @@ export async function GET(request) {
     const search = url.searchParams.get('search') || '';
     const sortBy = url.searchParams.get('sortBy') || 'createdAt';
     const sortOrder = url.searchParams.get('sortOrder') || 'desc';
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '20');
+    
+    // Validate and sanitize pagination parameters
+    let page = parseInt(url.searchParams.get('page') || '1');
+    let limit = parseInt(url.searchParams.get('limit') || '20');
+    
+    // Prevent invalid pagination values
+    if (isNaN(page) || page < 1) page = 1;
+    if (isNaN(limit) || limit < 1) limit = 20;
+    if (limit > 500) limit = 500; // Max limit to prevent data dump
+    
     const includeStats = url.searchParams.get('includeStats') !== 'false';
+
+    // Validate sortBy to prevent injection
+    const allowedSortFields = ['createdAt', 'updatedAt', 'admissionNumber', 'firstName', 'lastName', 'form', 'className'];
+    const validSortBy = allowedSortFields.includes(sortBy) ? sortBy : 'createdAt';
+    const validSortOrder = sortOrder === 'asc' ? 'asc' : 'desc';
 
     // Build filters
     const filters = { form, stream, gender, className, uploadedCategory, status, search };
     const where = buildWhereClause(filters);
 
-if (action === 'uploads') {
-  const uploads = await prisma.studentBulkUpload.findMany({
-    orderBy: { uploadDate: 'desc' },
-    skip: (page - 1) * limit,
-    take: limit,
-    select: {
-      id: true,
-      fileName: true,
-      fileType: true,
-      status: true,
-      uploadDate: true,
-      uploadedBy: true,
-      processedDate: true,
-      totalRows: true,
-      validRows: true,
-      skippedRows: true,
-      errorRows: true,
-      errorLog: true
-    }
-  });
+    if (action === 'uploads') {
+      try {
+        const uploads = await prisma.studentBulkUpload.findMany({
+          orderBy: { uploadDate: 'desc' },
+          skip: Math.max(0, (page - 1) * limit),
+          take: limit,
+          select: {
+            id: true,
+            fileName: true,
+            fileType: true,
+            status: true,
+            uploadDate: true,
+            uploadedBy: true,
+            processedDate: true,
+            totalRows: true,
+            validRows: true,
+            skippedRows: true,
+            errorRows: true,
+            errorLog: true
+          }
+        });
 
-  const total = await prisma.studentBulkUpload.count();
-  
-  return NextResponse.json({
-    success: true,
-    uploads,
-    pagination: { 
-      page, 
-      limit, 
-      total, 
-      pages: Math.ceil(total / limit) 
-    }
-  });
-}
-    if (action === 'contacts') {
-      const parseQueryList = (key) =>
-        (url.searchParams.get(key) || '')
-          .split(',')
-          .map(item => item.trim())
-          .filter(Boolean);
-
-      const criteria = {
-        channel: 'whatsapp',
-        senderReference: SCHOOL_COMMUNICATION_NUMBER,
-        grades: parseQueryList('grades').map(normalizeAcademicLevel).filter(Boolean),
-        classes: parseQueryList('classes'),
-        categories: parseQueryList('categories'),
-        studentIds: parseQueryList('studentIds')
-      };
-
-      if (form && form !== 'all') criteria.grades.push(normalizeAcademicLevel(form));
-      if (className && className !== 'all') criteria.classes.push(className);
-      if (uploadedCategory && uploadedCategory !== 'all') criteria.categories.push(uploadedCategory);
-
-      criteria.grades = [...new Set(criteria.grades)];
-      criteria.classes = [...new Set(criteria.classes)];
-      criteria.categories = [...new Set(criteria.categories)];
-
-      const resolved = await resolveDeliveryRecipients(criteria);
-
-      return NextResponse.json({
-        success: true,
-        senderReference: criteria.senderReference,
-        deliveryChannel: 'whatsapp',
-        criteria,
-        recipientCount: resolved.recipients.length,
-        missingPhoneCount: resolved.missingPhoneCount,
-        totalMatchedStudents: resolved.totalMatched,
-        contacts: resolved.recipients.slice(0, limit)
-      });
-    }
-    if (action === 'stats') {
-      // Calculate fresh statistics with filters
-      const statsResult = await calculateStatistics(where);
-      
-      // Update cache for consistency
-      if (Object.keys(where).length === 0) {
-        await updateCachedStats(statsResult.stats);
+        const total = await prisma.studentBulkUpload.count();
+        
+        console.log(`✅ Fetched ${uploads.length} upload records in ${Date.now() - startTime}ms`);
+        
+        return NextResponse.json({
+          success: true,
+          uploads: uploads || [],
+          pagination: { 
+            page, 
+            limit, 
+            total, 
+            pages: Math.ceil(total / limit) 
+          }
+        });
+      } catch (dbError) {
+        console.error('❌ Database error fetching uploads:', dbError);
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Failed to fetch upload records',
+            message: process.env.NODE_ENV === 'development' ? dbError.message : 'Database error'
+          },
+          { status: 500 }
+        );
       }
-      
-      return NextResponse.json({
-        success: true,
-        data: {
-          stats: statsResult.stats,
-          filters,
-          validation: statsResult.validation,
-          timestamp: new Date().toISOString()
+    }
+    if (action === 'contacts') {
+      try {
+        const parseQueryList = (key) =>
+          (url.searchParams.get(key) || '')
+            .split(',')
+            .map(item => item.trim())
+            .filter(Boolean);
+
+        const criteria = {
+          channel: 'whatsapp',
+          senderReference: SCHOOL_COMMUNICATION_NUMBER,
+          grades: parseQueryList('grades').map(normalizeAcademicLevel).filter(Boolean),
+          classes: parseQueryList('classes'),
+          categories: parseQueryList('categories'),
+          studentIds: parseQueryList('studentIds')
+        };
+
+        if (form && form !== 'all') criteria.grades.push(normalizeAcademicLevel(form));
+        if (className && className !== 'all') criteria.classes.push(className);
+        if (uploadedCategory && uploadedCategory !== 'all') criteria.categories.push(uploadedCategory);
+
+        criteria.grades = [...new Set(criteria.grades)];
+        criteria.classes = [...new Set(criteria.classes)];
+        criteria.categories = [...new Set(criteria.categories)];
+
+        const resolved = await resolveDeliveryRecipients(criteria);
+
+        console.log(`✅ Resolved ${resolved.recipients.length} delivery recipients in ${Date.now() - startTime}ms`);
+
+        return NextResponse.json({
+          success: true,
+          senderReference: criteria.senderReference,
+          deliveryChannel: 'whatsapp',
+          criteria,
+          recipientCount: resolved.recipients.length,
+          missingPhoneCount: resolved.missingPhoneCount,
+          totalMatchedStudents: resolved.totalMatched,
+          contacts: resolved.recipients.slice(0, limit)
+        });
+      } catch (dbError) {
+        console.error('❌ Error resolving contacts:', dbError);
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Failed to resolve delivery contacts',
+            message: process.env.NODE_ENV === 'development' ? dbError.message : 'Processing error'
+          },
+          { status: 500 }
+        );
+      }
+    }
+    
+    if (action === 'stats') {
+      try {
+        // Calculate fresh statistics with filters
+        const statsResult = await calculateStatistics(where);
+        
+        // Update cache for consistency
+        if (Object.keys(where).length === 0) {
+          await updateCachedStats(statsResult.stats);
         }
-      });
+        
+        console.log(`✅ Calculated statistics in ${Date.now() - startTime}ms`);
+        
+        return NextResponse.json({
+          success: true,
+          data: {
+            stats: statsResult.stats,
+            filters,
+            validation: statsResult.validation,
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (dbError) {
+        console.error('❌ Error calculating statistics:', dbError);
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Failed to calculate statistics',
+            message: process.env.NODE_ENV === 'development' ? dbError.message : 'Calculation error'
+          },
+          { status: 500 }
+        );
+      }
     }
 
     // Get students with pagination
-    const orderBy = {};
-    orderBy[sortBy] = sortOrder;
+    try {
+      const orderBy = {};
+      orderBy[validSortBy] = validSortOrder;
 
-    const [students, total] = await Promise.all([
-      prisma.databaseStudent.findMany({
-        where,
-        orderBy,
-        skip: (page - 1) * limit,
-        take: limit,
-        select: {
-          id: true,
-          admissionNumber: true,
-          firstName: true,
-          middleName: true,
-          lastName: true,
-          fullName: true,
-          form: true,
-          gradeLevel: true,
-          className: true,
-          stream: true,
-          dateOfBirth: true,
-          gender: true,
-          parentPhone: true,
-          studentPhone: true,
-          whatsappPhone: true,
-          email: true,
-          address: true,
-          uploadedCategory: true,
-          status: true,
-          createdAt: true,
-          updatedAt: true,
-          uploadBatchId: true,
-          uploadBatch: {
-            select: {
-              fileName: true,
-              uploadDate: true
+      const [students, total] = await Promise.all([
+        prisma.databaseStudent.findMany({
+          where,
+          orderBy,
+          skip: Math.max(0, (page - 1) * limit),
+          take: limit,
+          select: {
+            id: true,
+            admissionNumber: true,
+            firstName: true,
+            middleName: true,
+            lastName: true,
+            fullName: true,
+            form: true,
+            gradeLevel: true,
+            className: true,
+            stream: true,
+            dateOfBirth: true,
+            gender: true,
+            parentPhone: true,
+            studentPhone: true,
+            whatsappPhone: true,
+            email: true,
+            address: true,
+            uploadedCategory: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
+            uploadBatchId: true,
+            uploadBatch: {
+              select: {
+                fileName: true,
+                uploadDate: true
+              }
             }
           }
-        }
-      }),
-      prisma.databaseStudent.count({ where })
-    ]);
+        }),
+        prisma.databaseStudent.count({ where })
+      ]);
 
-    // Calculate statistics for this filtered set
-    let statsResult = null;
-    if (includeStats) {
-      statsResult = await calculateStatistics(where);
-      
-      // If no filters, update cache
-      if (Object.keys(where).length === 0) {
-        await updateCachedStats(statsResult.stats);
+      // Calculate statistics for this filtered set
+      let statsResult = null;
+      if (includeStats) {
+        statsResult = await calculateStatistics(where);
+        
+        // If no filters, update cache
+        if (Object.keys(where).length === 0) {
+          await updateCachedStats(statsResult.stats);
+        }
       }
+
+      console.log(`✅ Fetched ${students.length} students in ${Date.now() - startTime}ms`);
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          students: students || [],
+          stats: statsResult?.stats || null,
+          filters,
+          validation: statsResult?.validation || null,
+          pagination: { 
+            page, 
+            limit, 
+            total, 
+            pages: Math.ceil(total / limit) 
+          },
+          timestamp: new Date().toISOString()
+        }
+      });
+    } catch (dbError) {
+      console.error('❌ Error fetching students:', dbError);
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Failed to fetch students',
+          message: process.env.NODE_ENV === 'development' ? dbError.message : 'Database error',
+          details: {
+            filters,
+            timestamp: new Date().toISOString()
+          }
+        },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        students,
-        stats: statsResult?.stats || null,
-        filters,
-        validation: statsResult?.validation || null,
-        pagination: { 
-          page, 
-          limit, 
-          total, 
-          pages: Math.ceil(total / limit) 
-        },
-        timestamp: new Date().toISOString()
-      }
-    });
-
   } catch (error) {
-    console.error('GET error:', error);
+    console.error('❌ GET error:', error);
     return NextResponse.json(
       { 
         success: false, 
         error: error.message || 'Failed to fetch data',
-        timestamp: new Date().toISOString()
+        message: 'An unexpected error occurred while processing your request',
+        timestamp: new Date().toISOString(),
+        debug: process.env.NODE_ENV === 'development' ? {
+          errorName: error.name,
+          stack: error.stack
+        } : undefined
       },
       { status: 500 }
     );
@@ -2045,25 +2188,30 @@ await prisma.$transaction(async (tx) => {
       });
       
     } catch (error) {
-      console.error('Processing error:', error);
+      console.error('❌ Processing error during file parse:', error.message);
       const safeErrorMessage = normalizeStudentUploadFailure(error);
       
       // Update batch as failed
-      await prisma.studentBulkUpload.update({
-        where: { id: batchId },
-        data: {
-          status: 'failed',
-          processedDate: new Date(),
-          errorRows: 1,
-          errorLog: [safeErrorMessage]
-        }
-      });
+      try {
+        await prisma.studentBulkUpload.update({
+          where: { id: batchId },
+          data: {
+            status: 'failed',
+            processedDate: new Date(),
+            errorRows: 1,
+            errorLog: [safeErrorMessage]
+          }
+        });
+      } catch (updateError) {
+        console.error('❌ Failed to update batch status:', updateError);
+      }
       
       throw new Error(safeErrorMessage);
     }
     
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error('❌ POST error:', error.message);
+    
     const isClientError = [
       'No file provided',
       'Upload type is required',
@@ -2078,15 +2226,24 @@ await prisma.$transaction(async (tx) => {
       'took too long',
       'interrupted'
     ].some((phrase) => (error.message || '').includes(phrase));
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: error.message || 'Upload failed',
-        authenticated: true,
-        suggestion: 'Check that your file has the required columns: admission number, student name, class or grade, and phone. For large files, keep this page open until the upload finishes.'
-      },
-      { status: isClientError ? 400 : 500 }
-    );
+    
+    const statusCode = isClientError ? 400 : 500;
+    const errorResponse = {
+      success: false,
+      error: error.message || 'Upload processing failed',
+      authenticated: true,
+      timestamp: new Date().toISOString(),
+      suggestion: 'Verify file format: admission#, name, class/grade, phone required. For large files, keep page open until completion.'
+    };
+    
+    if (process.env.NODE_ENV === 'development') {
+      errorResponse.debug = {
+        errorType: error.name,
+        stack: error.stack?.split('\n').slice(0, 5) || []
+      };
+    }
+    
+    return NextResponse.json(errorResponse, { status: statusCode });
   }
 }
 
