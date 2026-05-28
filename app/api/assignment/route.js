@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../libs/prisma";
 import cloudinary from "../../../libs/cloudinary";
+import {
+  buildDeliveryCriteriaFromFormData,
+  prepareAssignmentDelivery,
+  SCHOOL_COMMUNICATION_NUMBER
+} from "../../../libs/delivery";
 
 // ==================== TOKEN VERIFICATION ====================
 class DeviceTokenManager {
@@ -415,7 +420,11 @@ const cleanAssignmentResponse = (assignment) => {
   return {
     ...assignment,
     assignmentFileAttachments,
-    attachmentAttachments
+    attachmentAttachments,
+    senderReference: assignment.senderReference || SCHOOL_COMMUNICATION_NUMBER,
+    deliveryStatus: assignment.deliveryStatus || assignment.deliverySummary?.status || 'prepared',
+    deliverySummary: assignment.deliverySummary || null,
+    targetCriteria: assignment.targetCriteria || null
   };
 };
 
@@ -491,6 +500,7 @@ export async function POST(request) {
     const additionalWork = formData.get("additionalWork")?.toString().trim() || "";
     const teacherRemarks = formData.get("teacherRemarks")?.toString().trim() || "";
     const learningObjectives = formData.get("learningObjectives")?.toString();
+    const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className);
 
     // Validate required fields
     if (!title || !subject || !className || !teacher) {
@@ -546,27 +556,43 @@ export async function POST(request) {
     }
 
     // FIX: Create assignment with dateAssigned field
-    const assignment = await prisma.assignment.create({
-      data: {
-        title,
-        subject,
-        className,
-        teacher,
-        dueDate: dueDate ? new Date(dueDate) : null,
-        dateAssigned: new Date(), // FIX: Added required field
-        status,
-        description,
-        instructions,
-        priority,
-        estimatedTime,
-        additionalWork,
-        teacherRemarks,
-        assignmentFiles,
-        attachments,
-        learningObjectives: learningObjectivesArray,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
+    const assignment = await prisma.$transaction(async (tx) => {
+      const createdAssignment = await tx.assignment.create({
+        data: {
+          title,
+          subject,
+          className,
+          teacher,
+          dueDate: dueDate ? new Date(dueDate) : null,
+          dateAssigned: new Date(), // FIX: Added required field
+          status,
+          description,
+          instructions,
+          priority,
+          estimatedTime,
+          additionalWork,
+          teacherRemarks,
+          assignmentFiles,
+          attachments,
+          learningObjectives: learningObjectivesArray,
+          targetCriteria: deliveryCriteria,
+          senderReference: deliveryCriteria.senderReference,
+          deliveryStatus: 'preparing',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+      });
+
+      const deliverySummary = await prepareAssignmentDelivery(tx, createdAssignment.id, deliveryCriteria);
+
+      return tx.assignment.update({
+        where: { id: createdAssignment.id },
+        data: {
+          deliverySummary,
+          deliveryStatus: deliverySummary.status,
+          updatedAt: new Date()
+        }
+      });
     });
 
     console.log(`✅ Assignment created with ID: ${assignment.id}`);

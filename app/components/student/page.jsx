@@ -103,12 +103,28 @@ const normalizeLocalMobilePhone = (value = '') => {
   return String(value || '').trim();
 };
 
+const ACADEMIC_LEVELS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4', 'Form 1', 'Form 2'];
+const STUDENT_TEMPLATE_HEADERS = [
+  'Admission Number',
+  'Student Name',
+  'Class/Grade',
+  'Stream',
+  'Parent Phone',
+  'Student Phone',
+  'WhatsApp Phone',
+  'Uploaded Category',
+  'Email'
+];
+
 // Helper function for form colors
 // Add these functions right after the existing getFormColor function:
 
 // Helper function for form colors
 function getFormColor(form) {
   switch (form) {
+    case 'Grade 10': return 'from-sky-600 to-teal-700';
+    case 'Grade 11': return 'from-indigo-600 to-teal-700';
+    case 'Grade 12': return 'from-violet-600 to-emerald-700';
     case 'Form 1': return 'from-teal-600 to-teal-800';
     case 'Form 2': return 'from-emerald-500 to-emerald-700';
     case 'Form 3': return 'from-amber-500 to-amber-700';
@@ -120,6 +136,9 @@ function getFormColor(form) {
 // Helper function for form badge colors (NEW - ADD THIS)
 function getFormBadgeColor(form) {
   switch (form) {
+    case 'Grade 10': return 'bg-gradient-to-r from-sky-600 to-teal-700 text-white';
+    case 'Grade 11': return 'bg-gradient-to-r from-indigo-600 to-teal-700 text-white';
+    case 'Grade 12': return 'bg-gradient-to-r from-violet-600 to-emerald-700 text-white';
     case 'Form 1': return 'bg-gradient-to-r from-teal-600 to-teal-800 text-white';
     case 'Form 2': return 'bg-gradient-to-r from-emerald-500 to-emerald-700 text-white';
     case 'Form 3': return 'bg-gradient-to-r from-amber-500 to-amber-700 text-white';
@@ -326,7 +345,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    const validExtensions = ['.csv', '.xlsx', '.xls'];
+    const validExtensions = ['.csv', '.xlsx', '.xls', '.pdf'];
     
     if (selectedFile) {
       const ext = selectedFile.name.toLowerCase();
@@ -334,7 +353,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
         onFileSelect(selectedFile);
         sooner.success('File selected successfully');
       } else {
-        sooner.error('Please upload an Excel or CSV file');
+        sooner.error('Please upload a PDF, Excel, or CSV file');
         if (fileInputRef.current) fileInputRef.current.value = '';
       }
     }
@@ -392,17 +411,17 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
 
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.2em] text-teal-700">
-                Excel student register
+                Student contact register
               </p>
               <h3 className="mt-2 text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
-                {dragActive ? 'Drop the spreadsheet here' : file ? 'Spreadsheet selected' : 'Upload student spreadsheet'}
+                {dragActive ? 'Drop the file here' : file ? 'Student file selected' : 'Upload student contact file'}
               </h3>
               <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-500">
-                Use the Excel template for student records. CSV still works for older exports.
+                Upload PDF, Excel, CSV, or spreadsheet files with names, admission numbers, classes, and phone contacts.
               </p>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {['.xlsx', '.xls', '.csv'].map((type) => (
+                {['.xlsx', '.xls', '.csv', '.pdf'].map((type) => (
                   <span key={type} className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-black uppercase text-slate-600 shadow-sm">
                     {type}
                   </span>
@@ -444,7 +463,7 @@ function ModernFileUpload({ onFileSelect, file, onRemove, dragActive, onDrag }) 
       <input
         ref={fileInputRef}
         type="file"
-        accept=".csv,.xlsx,.xls"
+        accept=".csv,.xlsx,.xls,.pdf"
         onChange={handleFileChange}
         className="hidden"
       />
@@ -473,18 +492,6 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
   };
 
   if (!student) return null;
-
-  const calculateAge = (dob) => {
-    if (!dob) return 'N/A';
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  };
 
   return (
     <>
@@ -538,12 +545,12 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
             </div>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {student.firstName} {student.middleName || ''} {student.lastName}
+                  {student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' ')}
                 </h3>
                 <p className="text-gray-600">Admission #{student.admissionNumber}</p>
                 <div className="flex flex-wrap gap-2 mt-3">
-                  <span className={`px-3 py-1 rounded-lg text-sm font-bold text-white bg-gradient-to-r ${getFormColor(student.form)}`}>
-                    {student.form}
+                  <span className={`px-3 py-1 rounded-lg text-sm font-bold text-white bg-gradient-to-r ${getFormColor(student.gradeLevel || student.form)}`}>
+                    {student.gradeLevel || student.form}
                   </span>
                   {student.stream && (
                     <span className="px-3 py-1 rounded-lg text-sm font-bold bg-teal-100 text-teal-800">
@@ -563,24 +570,6 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
 
             {/* Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Personal Info */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FiUser className="text-teal-700" />
-                  Personal Information
-                </h4>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Date of Birth</span>
-                    <span className="font-semibold">{formatDate(student.dateOfBirth)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Age</span>
-                    <span className="font-semibold">{calculateAge(student.dateOfBirth)} years</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Academic Info */}
               <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -589,12 +578,34 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                 </h4>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Form Level</span>
-                    <span className="font-semibold">{student.form}</span>
+                    <span className="text-gray-600">Class / Grade</span>
+                    <span className="font-semibold">{student.gradeLevel || student.form}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Stream</span>
-                    <span className="font-semibold">{student.stream || 'N/A'}</span>
+                    <span className="text-gray-600">Class Name</span>
+                    <span className="font-semibold">{student.className || student.stream || 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Uploaded Category</span>
+                    <span className="font-semibold">{student.uploadedCategory || 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Record Info */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <FiDatabase className="text-teal-700" />
+                  Record Information
+                </h4>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Status</span>
+                    <span className="font-semibold">{student.status || 'N/A'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Updated</span>
+                    <span className="font-semibold">{formatDate(student.updatedAt || student.createdAt)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Admission Date</span>
@@ -618,9 +629,13 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                     <p className="text-gray-600 mb-1">Parent Phone</p>
                     <p className="font-semibold">{student.parentPhone || 'N/A'}</p>
                   </div>
-                  <div className="md:col-span-2">
-                    <p className="text-gray-600 mb-1">Address</p>
-                    <p className="font-semibold">{student.address || 'N/A'}</p>
+                  <div>
+                    <p className="text-gray-600 mb-1">Student Phone</p>
+                    <p className="font-semibold">{student.studentPhone || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600 mb-1">WhatsApp Delivery Phone</p>
+                    <p className="font-semibold">{student.whatsappPhone || student.parentPhone || student.studentPhone || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -650,19 +665,28 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
     middleName: student?.middleName || '',
     lastName: student?.lastName || '',
     admissionNumber: student?.admissionNumber || '',
-    form: student?.form || 'Form 1',
+    form: student?.gradeLevel || student?.form || ACADEMIC_LEVELS[0],
     stream: student?.stream || '',
-    gender: 'Female',
-    dateOfBirth: student?.dateOfBirth ? student.dateOfBirth.split('T')[0] : '',
+    className: student?.className || '',
     email: student?.email || '',
     parentPhone: student?.parentPhone || '',
-    address: student?.address || '',
+    studentPhone: student?.studentPhone || '',
+    whatsappPhone: student?.whatsappPhone || '',
+    uploadedCategory: student?.uploadedCategory || '',
     status: student?.status || 'active'
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await onSave(student.id, formData);
+    const fullName = [formData.firstName, formData.middleName, formData.lastName].filter(Boolean).join(' ').trim();
+    const className = formData.className?.trim() || [formData.form, formData.stream].filter(Boolean).join(' ');
+    await onSave(student.id, {
+      ...formData,
+      fullName,
+      gradeLevel: formData.form,
+      className,
+      whatsappPhone: formData.whatsappPhone || formData.parentPhone || formData.studentPhone
+    });
   };
 
   return (
@@ -747,17 +771,6 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.dateOfBirth}
-                    onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                  />
-                </div>
               </div>
             </div>
 
@@ -779,18 +792,17 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Form *
+                    Class / Grade *
                   </label>
                   <select
                     required
                     value={formData.form}
-                    onChange={(e) => setFormData({...formData, form: e.target.value})}
+                    onChange={(e) => setFormData({...formData, form: e.target.value, className: formData.className || e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
                   >
-                    <option value="Form 1">Form 1</option>
-                    <option value="Form 2">Form 2</option>
-                    <option value="Form 3">Form 3</option>
-                    <option value="Form 4">Form 4</option>
+                    {ACADEMIC_LEVELS.map((level) => (
+                      <option key={level} value={level}>{level}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -815,6 +827,18 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Class Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.className}
+                    onChange={(e) => setFormData({...formData, className: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
+                    placeholder="Grade 10 A"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Status *
                   </label>
                   <select
@@ -829,6 +853,18 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     <option value="transferred">Transferred</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Uploaded Category
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.uploadedCategory}
+                    onChange={(e) => setFormData({...formData, uploadedCategory: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
+                    placeholder="2026 Grade 10"
+                  />
+                </div>
               </div>
             </div>
 
@@ -838,7 +874,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address
+                    Email Address (optional)
                   </label>
                   <input
                     type="email"
@@ -849,7 +885,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Parent Phone
+                    Parent / Guardian Phone
                   </label>
                   <input
                     type="tel"
@@ -859,15 +895,28 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     placeholder="07XXXXXXXX"
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Address
+                    Student Phone
                   </label>
-                  <textarea
-                    value={formData.address}
-                    onChange={(e) => setFormData({...formData, address: e.target.value})}
-                    rows={3}
+                  <input
+                    type="tel"
+                    value={formData.studentPhone}
+                    onChange={(e) => setFormData({...formData, studentPhone: normalizeLocalMobilePhone(e.target.value)})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
+                    placeholder="07XXXXXXXX"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    WhatsApp Delivery Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.whatsappPhone}
+                    onChange={(e) => setFormData({...formData, whatsappPhone: normalizeLocalMobilePhone(e.target.value)})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
+                    placeholder="07XXXXXXXX"
                   />
                 </div>
               </div>
@@ -1211,7 +1260,7 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
   const totalStudents = stats.totalStudents || 0;
   const activeStudents = demographics.statusDistribution?.find(s => s.name === 'Active')?.value || 0;
   const streamCount = Object.keys(stats.streamStats || {}).length;
-  const ageGroupCount = (demographics.ageGroups || []).length;
+  const contactGroupCount = (demographics.ageGroups || []).length;
   
   return (
     <div className="bg-white rounded-2xl p-6 border-2 border-gray-300 shadow-2xl">
@@ -1290,7 +1339,7 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
           <div className="text-2xl font-bold text-teal-700">
             {formDistribution.length.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-teal-900">Forms</div>
+          <div className="text-sm font-semibold text-teal-900">Classes</div>
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-amber-50 to-amber-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-amber-700">
@@ -1300,9 +1349,9 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
         </div>
         <div className="text-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-lg transition-all duration-300">
           <div className="text-2xl font-bold text-gray-700">
-            {ageGroupCount.toLocaleString()}
+            {contactGroupCount.toLocaleString()}
           </div>
-          <div className="text-sm font-semibold text-gray-900">Age Groups</div>
+          <div className="text-sm font-semibold text-gray-900">Contact Groups</div>
         </div>
       </div>
       
@@ -1313,12 +1362,14 @@ function StatisticsSummaryCard({ stats, demographics, onRefresh }) {
             <span className="text-gray-700 font-bold">Data Consistency Check</span>
             <span className={`px-3 py-1 rounded-lg font-bold text-sm ${
               stats.totalStudents === (stats.globalStats.form1 + stats.globalStats.form2 + 
-                stats.globalStats.form3 + stats.globalStats.form4)
+                stats.globalStats.form3 + stats.globalStats.form4 + (stats.globalStats.grade10 || 0) +
+                (stats.globalStats.grade11 || 0) + (stats.globalStats.grade12 || 0))
                 ? 'bg-green-100 text-green-800'
                 : 'bg-red-100 text-red-800'
             }`}>
               {stats.totalStudents === (stats.globalStats.form1 + stats.globalStats.form2 + 
-                stats.globalStats.form3 + stats.globalStats.form4)
+                stats.globalStats.form3 + stats.globalStats.form4 + (stats.globalStats.grade10 || 0) +
+                (stats.globalStats.grade11 || 0) + (stats.globalStats.grade12 || 0))
                 ? '✓ Consistent'
                 : '⚠ Inconsistent'}
             </span>
@@ -1354,8 +1405,6 @@ function EnhancedFilterPanel({
       form: '',
       stream: '',
       status: '',
-      minAge: '',
-      maxAge: '',
       sortBy: 'createdAt',
       sortOrder: 'desc'
     };
@@ -1397,7 +1446,7 @@ function EnhancedFilterPanel({
               type="text"
               value={localFilters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
-              placeholder="Name, admission, email..."
+              placeholder="Name, admission, phone..."
               className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
             />
           </div>
@@ -1405,15 +1454,15 @@ function EnhancedFilterPanel({
 
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-2">
-            Form Level
+            Class / Grade
           </label>
           <select
             value={localFilters.form}
             onChange={(e) => handleFilterChange('form', e.target.value)}
             className="w-full px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
           >
-            <option value="">All Forms</option>
-            {['Form 1', 'Form 2', 'Form 3', 'Form 4'].map(form => (
+            <option value="">All Classes</option>
+            {ACADEMIC_LEVELS.map(form => (
               <option key={form} value={form}>{form}</option>
             ))}
           </select>
@@ -1456,32 +1505,6 @@ function EnhancedFilterPanel({
         <div className="mt-8 pt-8 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">
-              Age Range
-            </label>
-            <div className="flex gap-3">
-              <input
-                type="number"
-                min="10"
-                max="25"
-                value={localFilters.minAge}
-                onChange={(e) => handleFilterChange('minAge', e.target.value)}
-                placeholder="Min"
-                className="flex-1 px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
-              />
-              <input
-                type="number"
-                min="10"
-                max="25"
-                value={localFilters.maxAge}
-                onChange={(e) => handleFilterChange('maxAge', e.target.value)}
-                placeholder="Max"
-                className="flex-1 px-4 py-3.5 bg-white border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 transition-all duration-300 text-base"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">
               Sort By
             </label>
             <select
@@ -1493,7 +1516,7 @@ function EnhancedFilterPanel({
               <option value="admissionNumber">Admission Number</option>
               <option value="firstName">First Name</option>
               <option value="lastName">Last Name</option>
-              <option value="form">Form Level</option>
+              <option value="form">Class / Grade</option>
             </select>
           </div>
         </div>
@@ -1518,12 +1541,12 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
 
   const handleConfirm = () => {
     if (uploadType === 'new' && selectedForms.length === 0) {
-      sooner.error('Please select at least one form for new upload');
+      sooner.error('Please select at least one class or grade for new upload');
       return;
     }
     
     if (uploadType === 'update' && !targetForm) {
-      sooner.error('Please select a target form for update');
+      sooner.error('Please select a target class or grade for update');
       return;
     }
     
@@ -1607,7 +1630,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 text-sm sm:text-base">New Upload</h4>
-                      <p className="text-xs sm:text-sm text-gray-600">Add new students to selected forms</p>
+                      <p className="text-xs sm:text-sm text-gray-600">Add new students to selected classes</p>
                     </div>
                   </div>
                   {uploadType === 'new' && (
@@ -1632,7 +1655,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 text-sm sm:text-base">Update Upload</h4>
-                      <p className="text-xs sm:text-sm text-gray-600">Update existing form with new data</p>
+                      <p className="text-xs sm:text-sm text-gray-600">Update an existing class with new data</p>
                     </div>
                   </div>
                   {uploadType === 'update' && (
@@ -1649,10 +1672,10 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
             {uploadType === 'new' && (
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">
-                  Select Forms to Upload <span className="text-xs sm:text-sm text-gray-500">(Choose one or more)</span>
+                  Select Classes to Upload <span className="text-xs sm:text-sm text-gray-500">(Choose one or more)</span>
                 </h3>
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                  {['Form 1', 'Form 2', 'Form 3', 'Form 4'].map((form) => (
+                  {ACADEMIC_LEVELS.map((form) => (
                     <div
                       key={form}
                       onClick={() => handleFormToggle(form)}
@@ -1677,7 +1700,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                 {selectedForms.length > 0 && (
                   <div className="mt-2 text-xs sm:text-sm text-gray-600">
                     <FiInfo className="inline mr-1" />
-                    Only students in selected forms will be processed
+                    Only students in selected classes will be processed
                   </div>
                 )}
               </div>
@@ -1685,9 +1708,9 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
 
             {uploadType === 'update' && (
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Select Form to Update</h3>
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Select Class to Update</h3>
                 <div className="space-y-2 sm:space-y-3">
-                  {['Form 1', 'Form 2', 'Form 3', 'Form 4'].map((form) => (
+                  {ACADEMIC_LEVELS.map((form) => (
                     <div
                       key={form}
                       onClick={() => setTargetForm(form)}
@@ -1705,7 +1728,7 @@ function UploadStrategyModal({ open, onClose, onConfirm, loading }) {
                           <div>
                             <h4 className="font-bold text-sm sm:text-base">{form}</h4>
                             <p className={`text-xs sm:text-sm ${targetForm === form ? 'text-emerald-100' : 'text-gray-500'}`}>
-                              Replace all students in {form}
+                              Update students in {form}
                             </p>
                           </div>
                         </div>
@@ -2052,8 +2075,6 @@ export default function ModernStudentBulkUpload() {
     form: '',
     stream: '',
     status: '',
-    minAge: '',
-    maxAge: '',
     sortBy: 'createdAt',
     sortOrder: 'desc'
   });
@@ -2063,7 +2084,7 @@ export default function ModernStudentBulkUpload() {
     formStats: {},
     streamStats: {},
     ageStats: {},
-    globalStats: { totalStudents: 0, form1: 0, form2: 0, form3: 0, form4: 0 },
+    globalStats: { totalStudents: 0, form1: 0, form2: 0, form3: 0, form4: 0, grade10: 0, grade11: 0, grade12: 0 },
     validation: { isValid: true }
   });
 
@@ -2102,13 +2123,13 @@ export default function ModernStudentBulkUpload() {
       : payloadOrMessage?.error || payloadOrMessage?.message || 'Upload failed';
 
     if (message.includes('Invalid file type')) {
-      return 'Upload an Excel or CSV file that matches the current student template.';
+      return 'Upload a PDF, Excel, or CSV file that matches the current student contact template.';
     }
     if (message.includes('No readable student rows') || message.includes('empty')) {
       return 'The file looks empty or unreadable. Confirm the first row contains student data and the sheet is not blank.';
     }
     if (message.includes('Missing required columns')) {
-      return `${message}. Use the current template so admission number, first name, last name, and form are present.`;
+      return `${message}. Use the current template so admission number, student name, class or grade, and phone contacts are present.`;
     }
     if (message.includes('took too long') || message.includes('timed out')) {
       return 'The student upload is taking longer than expected. Please retry, keep this page open, and use the current template for large files.';
@@ -2182,6 +2203,9 @@ const getAuthHeaders = (isProtected = false) => {
           form2: 0,
           form3: 0,
           form4: 0,
+          grade10: 0,
+          grade11: 0,
+          grade12: 0,
           updatedAt: new Date()
         };
         
@@ -2203,28 +2227,17 @@ const getAuthHeaders = (isProtected = false) => {
             statusDistribution[status] = (statusDistribution[status] || 0) + 1;
           });
           
-          const ageDistribution = {
-            'Under 13': 0,
-            '13-15': 0,
-            '16-17': 0,
-            '18-20': 0,
-            '21+': 0
+          const contactDistribution = {
+            'WhatsApp ready': allStudents.filter(student => student.whatsappPhone || student.parentPhone || student.studentPhone).length,
+            'Parent phone': allStudents.filter(student => student.parentPhone).length,
+            'Student phone': allStudents.filter(student => student.studentPhone).length,
+            'Optional email': allStudents.filter(student => student.email).length
           };
           
-          allStudents.forEach(student => {
-            if (student.dateOfBirth) {
-              const dob = new Date(student.dateOfBirth);
-              const age = new Date().getFullYear() - dob.getFullYear();
-              
-              if (age < 13) ageDistribution['Under 13']++;
-              else if (age >= 13 && age <= 15) ageDistribution['13-15']++;
-              else if (age >= 16 && age <= 17) ageDistribution['16-17']++;
-              else if (age >= 18 && age <= 20) ageDistribution['18-20']++;
-              else if (age > 20) ageDistribution['21+']++;
-            }
-          });
-          
           const formDistribution = {
+            'Grade 10': apiStats.grade10 || 0,
+            'Grade 11': apiStats.grade11 || 0,
+            'Grade 12': apiStats.grade12 || 0,
             'Form 1': apiStats.form1 || 0,
             'Form 2': apiStats.form2 || 0,
             'Form 3': apiStats.form3 || 0,
@@ -2235,6 +2248,9 @@ const getAuthHeaders = (isProtected = false) => {
             name,
             value,
             color: 
+              name === 'Grade 10' ? '#0284C7' :
+              name === 'Grade 11' ? '#4F46E5' :
+              name === 'Grade 12' ? '#7C3AED' :
               name === 'Form 1' ? '#0D9488' :
               name === 'Form 2' ? '#10B981' :
               name === 'Form 3' ? '#F59E0B' :
@@ -2254,7 +2270,7 @@ const getAuthHeaders = (isProtected = false) => {
               ][index % 10]
             }));
           
-          const ageChartData = Object.entries(ageDistribution)
+          const contactChartData = Object.entries(contactDistribution)
             .filter(([_, value]) => value > 0)
             .map(([name, value], index) => ({
               name,
@@ -2275,16 +2291,18 @@ const getAuthHeaders = (isProtected = false) => {
             formStats: formDistribution,
             streamStats: streamDistribution,
             statusStats: statusDistribution,
-            ageStats: ageDistribution,
+            ageStats: contactDistribution,
             validation: {
-              isValid: totalStudents === (apiStats.form1 + apiStats.form2 + apiStats.form3 + apiStats.form4)
+              isValid: totalStudents === ((apiStats.form1 || 0) + (apiStats.form2 || 0) + 
+                (apiStats.form3 || 0) + (apiStats.form4 || 0) + (apiStats.grade10 || 0) +
+                (apiStats.grade11 || 0) + (apiStats.grade12 || 0))
             }
           });
           
           setDemographics({
             formDistribution: formChartData,
             streamDistribution: streamChartData,
-            ageGroups: ageChartData,
+            ageGroups: contactChartData,
             statusDistribution: statusChartData
           });
           
@@ -2441,8 +2459,6 @@ const loadUploadHistory = async (page = 1) => {
       form: '',
       stream: '',
       status: '',
-      minAge: '',
-      maxAge: '',
       sortBy: 'createdAt',
       sortOrder: 'desc'
     });
@@ -2740,11 +2756,33 @@ const updateStudent = async (studentId, studentData) => {
 };
 
  const downloadCSVTemplate = () => {
-  window.location.href = "/csv/form_1_students.csv";
-};
+    const sampleRows = [
+      STUDENT_TEMPLATE_HEADERS,
+      ['ADM001', 'Jane Wanjiku Mwangi', 'Grade 10', 'A', '0793472960', '', '0793472960', '2026 Grade 10', '']
+    ];
+    const csvContent = sampleRows
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'student_contact_upload_template.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
 const downloadExcelTemplate = () => {
-  window.location.href = "/excel/form_1_students.xlsx";
+  const worksheetData = [
+    STUDENT_TEMPLATE_HEADERS,
+    ['ADM001', 'Jane Wanjiku Mwangi', 'Grade 10', 'A', '0793472960', '', '0793472960', '2026 Grade 10', '']
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(worksheetData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Student Contacts');
+  XLSX.writeFile(wb, 'student_contact_upload_template.xlsx');
 };
 
 
@@ -2754,26 +2792,20 @@ const downloadExcelTemplate = () => {
       return;
     }
 
-    const headers = ['Admission Number', 'First Name', 'Middle Name', 'Last Name', 'Form', 'Stream', 'Date of Birth', 'Age', 'Status', 'Email', 'Parent Phone', 'Address'];
-    const data = students.map(student => {
-      const dob = student.dateOfBirth ? new Date(student.dateOfBirth) : null;
-      const age = dob ? new Date().getFullYear() - dob.getFullYear() : '';
-      
-      return [
-        student.admissionNumber,
-        student.firstName,
-        student.middleName || '',
-        student.lastName,
-        student.form,
-        student.stream || '',
-        dob ? dob.toLocaleDateString() : '',
-        age,
-        student.status,
-        student.email || '',
-        student.parentPhone || '',
-        student.address || ''
-      ];
-    });
+    const headers = ['Admission Number', 'Student Name', 'Class/Grade', 'Class Name', 'Stream', 'Status', 'Parent Phone', 'Student Phone', 'WhatsApp Phone', 'Uploaded Category', 'Email'];
+    const data = students.map(student => [
+      student.admissionNumber,
+      student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' '),
+      student.gradeLevel || student.form,
+      student.className || '',
+      student.stream || '',
+      student.status,
+      student.parentPhone || '',
+      student.studentPhone || '',
+      student.whatsappPhone || '',
+      student.uploadedCategory || '',
+      student.email || ''
+    ]);
 
     const csvContent = [
       headers.join(','),
@@ -2800,26 +2832,20 @@ const downloadExcelTemplate = () => {
     }
 
     const worksheetData = [
-      ['Admission Number', 'First Name', 'Middle Name', 'Last Name', 'Form', 'Stream', 'Date of Birth', 'Age', 'Status', 'Email', 'Parent Phone', 'Address'],
-      ...students.map(student => {
-        const dob = student.dateOfBirth ? new Date(student.dateOfBirth) : null;
-        const age = dob ? new Date().getFullYear() - dob.getFullYear() : '';
-        
-        return [
-          student.admissionNumber,
-          student.firstName,
-          student.middleName || '',
-          student.lastName,
-          student.form,
-          student.stream || '',
-          dob ? dob.toLocaleDateString() : '',
-          age,
-          student.status,
-          student.email || '',
-          student.parentPhone || '',
-          student.address || ''
-        ];
-      })
+      ['Admission Number', 'Student Name', 'Class/Grade', 'Class Name', 'Stream', 'Status', 'Parent Phone', 'Student Phone', 'WhatsApp Phone', 'Uploaded Category', 'Email'],
+      ...students.map(student => [
+        student.admissionNumber,
+        student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' '),
+        student.gradeLevel || student.form,
+        student.className || '',
+        student.stream || '',
+        student.status,
+        student.parentPhone || '',
+        student.studentPhone || '',
+        student.whatsappPhone || '',
+        student.uploadedCategory || '',
+        student.email || ''
+      ])
     ];
 
     try {
@@ -3071,7 +3097,7 @@ const downloadExcelTemplate = () => {
                         </div>
                         
                         <div className="bg-white rounded-xl p-4 border border-emerald-200">
-                          <h4 className="font-bold text-gray-900 mb-2">Target Forms</h4>
+                          <h4 className="font-bold text-gray-900 mb-2">Target Classes</h4>
                           <div className="flex flex-wrap gap-2">
                             {uploadStrategy.uploadType === 'new' 
                               ? uploadStrategy.selectedForms.map(form => (
@@ -3104,14 +3130,14 @@ const downloadExcelTemplate = () => {
                               </li>
                               <li className="flex items-center gap-2">
                                 <FiCheckCircle className="text-green-500" />
-                                <span>Only processes selected forms</span>
+                                <span>Only processes selected classes</span>
                               </li>
                             </>
                           ) : (
                             <>
                               <li className="flex items-center gap-2">
                                 <FiCheckCircle className="text-green-500" />
-                                <span>Replaces entire form batch safely</span>
+                                <span>Updates the selected class safely</span>
                               </li>
                               <li className="flex items-center gap-2">
                                 <FiCheckCircle className="text-green-500" />
@@ -3328,7 +3354,7 @@ const downloadExcelTemplate = () => {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-emerald-800 font-bold">Supported Formats</span>
-                      <span className="font-bold text-emerald-700">Excel, CSV</span>
+                      <span className="font-bold text-emerald-700">PDF, Excel, CSV</span>
                     </div>
                   </div>
                 </div>
@@ -3359,7 +3385,7 @@ const downloadExcelTemplate = () => {
                       value={filters.search}
                       onChange={(e) => handleFilterChange('search', e.target.value)}
                       onKeyDown={handleSearch}
-                      placeholder="Search students by name, admission number, email, or address"
+                      placeholder="Search students by name, admission number, phone, or category"
                       className="w-full pl-14 pr-4 py-4 bg-white border-2 border-gray-400 rounded-2xl focus:ring-4 focus:ring-teal-600 focus:border-teal-700 transition-all duration-300 text-base"
                     />
                   </div>
@@ -3548,7 +3574,7 @@ const downloadExcelTemplate = () => {
                           .filter(Boolean)
                           .join(' ');
                         const isActive = (student.status || '').toLowerCase() === 'active';
-                        const contactLine = student.email || student.parentPhone || student.address || 'No contact details recorded';
+                        const contactLine = student.whatsappPhone || student.parentPhone || student.studentPhone || student.email || 'No contact details recorded';
 
                         return (
                           <div
@@ -3568,7 +3594,7 @@ const downloadExcelTemplate = () => {
                                   <div className="min-w-0 flex-1">
                                     <div className="flex flex-wrap items-center gap-2">
                                       <h4 className="truncate text-base font-bold text-slate-900">
-                                        {fullName}
+                                        {student.fullName || fullName}
                                       </h4>
                                       <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
                                         #{student.admissionNumber}
@@ -3586,11 +3612,11 @@ const downloadExcelTemplate = () => {
                                   Class
                                 </p>
                                 <div className="flex flex-wrap gap-2">
-                                  <span className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-bold ${getFormBadgeColor(student.form)}`}>
-                                    {student.form || 'Not assigned'}
+                                  <span className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-bold ${getFormBadgeColor(student.gradeLevel || student.form)}`}>
+                                    {student.gradeLevel || student.form || 'Not assigned'}
                                   </span>
                                   <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
-                                    {student.stream || 'No stream'}
+                                    {student.className || student.stream || 'No stream'}
                                   </span>
                                 </div>
                               </div>
@@ -3601,11 +3627,11 @@ const downloadExcelTemplate = () => {
                                 </p>
                                 <div className="space-y-1">
                                   <p className="text-sm font-semibold text-slate-800">
-                                    {student.parentPhone || student.email || 'Not provided'}
+                                    {student.whatsappPhone || student.parentPhone || student.studentPhone || 'Not provided'}
                                   </p>
-                                  {student.address && (
+                                  {(student.uploadedCategory || student.email) && (
                                     <p className="truncate text-xs text-slate-500">
-                                      {student.address}
+                                      {student.uploadedCategory || student.email}
                                     </p>
                                   )}
                                 </div>
@@ -3741,7 +3767,7 @@ const downloadExcelTemplate = () => {
                 trend={12.3}
               />
               <StudentStatisticsCard
-                title="Forms Tracked"
+                title="Classes Tracked"
                 value={(demographics.formDistribution || []).filter(item => item.value > 0).length}
                 icon={IoSchool}
                 color="from-teal-600 to-teal-800"
@@ -3768,8 +3794,8 @@ const downloadExcelTemplate = () => {
               <StudentsChart
                 data={demographics.formDistribution}
                 type="pie"
-                title="Form Distribution"
-                colors={['#0D9488', '#10B981', '#F59E0B', '#047857']}
+                title="Class Distribution"
+                colors={['#0284C7', '#4F46E5', '#7C3AED', '#0D9488', '#10B981', '#F59E0B', '#047857']}
                 height={400}
               />
               <StudentsChart
@@ -3791,7 +3817,7 @@ const downloadExcelTemplate = () => {
               <StudentsChart
                 data={demographics.ageGroups}
                 type="pie"
-                title="Age Distribution"
+                title="Contact Coverage"
                 colors={['#0D9488', '#10B981', '#F59E0B', '#047857']}
                 height={400}
               />
@@ -3932,7 +3958,7 @@ const downloadExcelTemplate = () => {
                                     </span>
                                     {upload.metadata.selectedForms && (
                                       <span className="ml-2 px-2 py-1 rounded text-xs font-bold bg-gray-100 text-gray-700">
-                                        {upload.metadata.selectedForms.length} forms
+                                        {upload.metadata.selectedForms.length} classes
                                       </span>
                                     )}
                                     {upload.metadata.targetForm && (

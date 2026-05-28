@@ -55,7 +55,8 @@ import {
   FiCopy,
   FiShare2,
   FiInfo, 
-  FiHeart
+  FiHeart,
+  FiMessageCircle
 } from 'react-icons/fi';
 
 import {
@@ -76,6 +77,9 @@ import {
   IoCheckmarkCircleOutline
 } from 'react-icons/io5';
 import { Modal, Box, CircularProgress } from '@mui/material';
+
+const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
+const DELIVERY_LEVEL_OPTIONS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4', 'Form 1', 'Form 2'];
 
 // Modern Loading Spinner Component
 const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'indeterminate', value = 0 }) => {
@@ -453,6 +457,12 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
                 {assignment.className}
               </div>
             )}
+            {assignment.deliverySummary && (
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-100">
+                <FiSend className="w-3 h-3" />
+                {assignment.deliverySummary.recipientCount || 0} prepared
+              </div>
+            )}
           </div>
         </div>
 
@@ -661,6 +671,10 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
     instructions: assignment?.instructions || '',
     additionalWork: assignment?.additionalWork || '',
     teacherRemarks: assignment?.teacherRemarks || '',
+    targetGrades: assignment?.targetCriteria?.grades || [],
+    targetClasses: assignment?.targetCriteria?.classes || (assignment?.className ? [assignment.className] : []),
+    targetCategories: assignment?.targetCriteria?.categories || [],
+    deliveryCategoryInput: '',
   });
 
   // File states with size tracking
@@ -679,12 +693,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
   
   // Class options
   const classOptions = [
-    'Form 1',
-    'Form 2', 
-    'Form 3',
-    'Form 4',
-    'Form 5',
-    'Form 6'
+    ...DELIVERY_LEVEL_OPTIONS
   ];
 
   // Subject options
@@ -936,6 +945,18 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const toggleTargetValue = (field, value) => {
+    setFormData(prev => {
+      const selected = prev[field] || [];
+      return {
+        ...prev,
+        [field]: selected.includes(value)
+          ? selected.filter(item => item !== value)
+          : [...selected, value]
+      };
+    });
+  };
+
   // Get size color based on current usage
   const getSizeColor = () => {
     if (totalSizeMB > 4.5) return 'text-red-600';
@@ -975,9 +996,19 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
       return;
     }
     
+    const deliveryReadyData = {
+      ...formData,
+      targetClasses: formData.targetClasses.length > 0
+        ? formData.targetClasses
+        : (formData.targetGrades.length > 0 || formData.targetCategories.length > 0 ? [] : [formData.className].filter(Boolean)),
+      targetGrades: formData.targetGrades.length > 0 ? formData.targetGrades : [],
+      targetCategories: formData.targetCategories,
+      senderReference: SCHOOL_COMMUNICATION_NUMBER
+    };
+
     // Call parent's onSave with all data
     await onSave(
-      formData, 
+      deliveryReadyData, 
       assignment?.id, 
       assignmentFiles, 
       attachments, 
@@ -1179,6 +1210,96 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                     <option key={className} value={className}>{className}</option>
                   ))}
                 </select>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-teal-100 bg-white p-5 shadow-sm">
+              <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="flex items-center gap-2 text-base font-black text-slate-900">
+                    <FiSend className="text-teal-700" />
+                    WhatsApp Delivery Preparation
+                  </h3>
+                  <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                    Sender reference {SCHOOL_COMMUNICATION_NUMBER}
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1.5 text-xs font-black text-teal-800">
+                  <FiMessageCircle />
+                  Contact preview on save
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <p className="mb-2 text-sm font-bold text-slate-700">Class / Grade recipients</p>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {DELIVERY_LEVEL_OPTIONS.map((level) => {
+                      const selected = formData.targetGrades.includes(level);
+                      return (
+                        <button
+                          key={level}
+                          type="button"
+                          onClick={() => toggleTargetValue('targetGrades', level)}
+                          className={`rounded-xl border px-3 py-2 text-sm font-bold transition ${
+                            selected
+                              ? 'border-teal-600 bg-teal-700 text-white shadow-md'
+                              : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-teal-300'
+                          }`}
+                          disabled={loading}
+                        >
+                          {level}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-2 text-sm font-bold text-slate-700">Uploaded category filters</p>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <input
+                      type="text"
+                      value={formData.deliveryCategoryInput}
+                      onChange={(e) => handleChange('deliveryCategoryInput', e.target.value)}
+                      className="flex-1 rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 font-bold focus:border-teal-600 focus:ring-2 focus:ring-teal-600"
+                      placeholder="e.g., 2026 Grade 10"
+                      disabled={loading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const category = formData.deliveryCategoryInput.trim();
+                        if (!category || formData.targetCategories.includes(category)) return;
+                        setFormData(prev => ({
+                          ...prev,
+                          targetCategories: [...prev.targetCategories, category],
+                          deliveryCategoryInput: ''
+                        }));
+                      }}
+                      className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-black text-white disabled:opacity-50"
+                      disabled={loading || !formData.deliveryCategoryInput.trim()}
+                    >
+                      Add
+                    </button>
+                  </div>
+                  {formData.targetCategories.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {formData.targetCategories.map(category => (
+                        <button
+                          key={category}
+                          type="button"
+                          onClick={() => toggleTargetValue('targetCategories', category)}
+                          className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-800"
+                          disabled={loading}
+                        >
+                          {category}
+                          <FiX className="h-3 w-3" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -1721,12 +1842,7 @@ export default function AssignmentsManager() {
 
   // Class options
   const classOptions = [
-    'Form 1',
-    'Form 2', 
-    'Form 3',
-    'Form 4',
-    'Form 5',
-    'Form 6'
+    ...DELIVERY_LEVEL_OPTIONS
   ];
 
   // Notification handler
@@ -1779,6 +1895,10 @@ export default function AssignmentsManager() {
       teacherRemarks: apiAssignment.teacherRemarks || '',
       feedback: apiAssignment.feedback || null,
       learningObjectives: apiAssignment.learningObjectives || [],
+      targetCriteria: apiAssignment.targetCriteria || null,
+      deliverySummary: apiAssignment.deliverySummary || null,
+      deliveryStatus: apiAssignment.deliveryStatus || 'prepared',
+      senderReference: apiAssignment.senderReference || SCHOOL_COMMUNICATION_NUMBER,
       createdAt: apiAssignment.createdAt || new Date().toISOString(),
       updatedAt: apiAssignment.updatedAt || new Date().toISOString(),
       
@@ -1820,12 +1940,13 @@ export default function AssignmentsManager() {
       avgCompletion: assignmentsList.reduce((acc, a) => acc + (a.completionRate || 0), 0) / (assignmentsList.length || 1),
       
       // Class stats
+      grade10: assignmentsList.filter(a => a.className === 'Grade 10').length,
+      grade11: assignmentsList.filter(a => a.className === 'Grade 11').length,
+      grade12: assignmentsList.filter(a => a.className === 'Grade 12').length,
       form1: assignmentsList.filter(a => a.className === 'Form 1').length,
       form2: assignmentsList.filter(a => a.className === 'Form 2').length,
       form3: assignmentsList.filter(a => a.className === 'Form 3').length,
-      form4: assignmentsList.filter(a => a.className === 'Form 4').length,
-      form5: assignmentsList.filter(a => a.className === 'Form 5').length,
-      form6: assignmentsList.filter(a => a.className === 'Form 6').length
+      form4: assignmentsList.filter(a => a.className === 'Form 4').length
     };
     setStats(stats);
   };
@@ -2136,6 +2257,10 @@ export default function AssignmentsManager() {
       formDataToSend.append('instructions', formData.instructions);
       formDataToSend.append('additionalWork', formData.additionalWork);
       formDataToSend.append('teacherRemarks', formData.teacherRemarks);
+      (formData.targetGrades || []).forEach(level => formDataToSend.append('targetGrades', level));
+      (formData.targetClasses || []).forEach(className => formDataToSend.append('targetClasses', className));
+      (formData.targetCategories || []).forEach(category => formDataToSend.append('targetCategories', category));
+      formDataToSend.append('senderReference', formData.senderReference || SCHOOL_COMMUNICATION_NUMBER);
       
       // Handle learning objectives
       const learningObjectivesString = JSON.stringify(learningObjectives || []);
@@ -2239,10 +2364,11 @@ export default function AssignmentsManager() {
         // Refresh the list
         await fetchAssignments();
         setShowModal(false);
+        const recipientCount = result.assignment?.deliverySummary?.recipientCount;
         showNotification(
           'success',
           id ? 'Updated' : 'Created',
-          `Assignment ${id ? 'updated' : 'created'} successfully!`
+          `Assignment ${id ? 'updated' : 'created'} successfully!${Number.isFinite(recipientCount) ? ` ${recipientCount} WhatsApp recipient(s) prepared.` : ''}`
         );
       } else {
         throw new Error(result.error || 'Failed to save assignment');
@@ -2687,8 +2813,8 @@ export default function AssignmentsManager() {
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Form 1</p>
-                <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.form1 || 0}</p>
+                <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Grade 10</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.grade10 || 0}</p>
               </div>
               <div className="p-3 bg-teal-100 text-teal-700 rounded-2xl">
                 <FiUsers className="text-lg" />
@@ -2699,10 +2825,22 @@ export default function AssignmentsManager() {
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Form 2</p>
-                <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.form2 || 0}</p>
+                <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Grade 11</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.grade11 || 0}</p>
               </div>
               <div className="p-3 bg-green-100 text-green-600 rounded-2xl">
+                <FiUsers className="text-lg" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Grade 12</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.grade12 || 0}</p>
+              </div>
+              <div className="p-3 bg-emerald-100 text-emerald-700 rounded-2xl">
                 <FiUsers className="text-lg" />
               </div>
             </div>
@@ -2714,7 +2852,7 @@ export default function AssignmentsManager() {
                 <p className="text-xs lg:text-sm font-bold text-gray-600 mb-1">Form 3</p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">{stats.form3 || 0}</p>
               </div>
-              <div className="p-3 bg-emerald-100 text-emerald-700 rounded-2xl">
+              <div className="p-3 bg-amber-100 text-amber-600 rounded-2xl">
                 <FiUsers className="text-lg" />
               </div>
             </div>

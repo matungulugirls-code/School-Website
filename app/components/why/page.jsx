@@ -447,11 +447,11 @@ const getSchoolStats = () => {
   const pathways = [
  {
   id: "stem",
-  name: "STEM Pathway",
+  name: "Science, Technology, Engineering & Mathematics (STEM)",
   icon: IoFlaskOutline,
   color: "from-blue-600 to-cyan-500",
-  description: "Science, Technology, Engineering & Mathematics",
-  subjects: ["Maths", "Integrated Science", "Computer Science", "Pre-Tech", "Health Ed"],
+  description: "Specialized pathway for STEM excellence and technical careers",
+  subjects: ["Mathematics (Core/Essential)", "Biology", "Chemistry", "Physics", "General Science", "Agriculture", "Home Science", "Aviation", "Building Construction", "Electricity", "Metalwork", "Power Mechanics", "Woodwork", "Media Technology", "Marine & Fisheries Technology", "Computer Studies"],
   careers: [
     "Medical Doctor",
     "Surgeon",
@@ -598,11 +598,11 @@ const getSchoolStats = () => {
 },
  {
   id: "arts",
-  name: "Arts & Sports",
+  name: "Arts & Sport Science",
   icon: IoAccessibilityOutline,
   color: "from-purple-600 to-pink-500",
   description: "Creative Arts, Performing Arts & Athletic Excellence",
-  subjects: ["Visual Arts", "Music", "PE", "Creative Design", "Performing Arts"],
+  subjects: ["Sports and Recreation", "Music & Dance", "Theatre & Film", "Fine Arts", "Physical Education"],
   careers: [
     // Visual Arts & Design
     "Graphic Designer",
@@ -697,8 +697,8 @@ const getSchoolStats = () => {
   name: "Social Sciences",
   icon: IoNewspaperOutline,
   color: "from-amber-600 to-orange-500",
-  description: "Humanities, Languages & Civic Education",
-  subjects: ["Social Studies", "Religious Ed", "Business", "Languages", "Life Skills"],
+  description: "Humanities, Languages, Social Studies & Civic Education",
+  subjects: ["Literature in English", "Religious Education", "Fasihi ya Kiswahili", "Indigenous Languages", "Arabic", "French", "German", "Mandarin Chinese", "History & Citizenship", "Geography", "Business Studies", "Sign Language"],
   careers: [
     // ========== LAW & GOVERNANCE ==========
     "Advocate / Lawyer",
@@ -1818,16 +1818,13 @@ const getSchoolStats = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {[
-                 { name: "Mathematics", icon: FiCpu },
                 { name: "English", icon: FiBook },
+                { name: "Essential Mathematics", icon: FiCpu },
+                { name: "Core Mathematics", icon: FiCpu },
                 { name: "Kiswahili", icon: FiGlobe },
-                { name: "Integrated Science", icon: FiActivity },
-                { name: "Social Studies", icon: FiUsers },
-                { name: "Religious Education", icon: FiHeart },
-                { name: "Creative Arts", icon: FiPenTool },
-                { name: "Agriculture", icon: FiDroplet },
-                { name: "Life Skills", icon: FiStar },
-                { name: "Physical Education", icon: FiTarget },
+                { name: "Kenya Sign Language", icon: FiUsers },
+                { name: "Community Service Learning", icon: FiHeart },
+                { name: "Physical Education & L.C.T", icon: FiTarget },
               ].map((subj, i) => {
                 const SubjIcon = subj.icon;
                 return (

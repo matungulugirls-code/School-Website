@@ -112,6 +112,11 @@ model Assignment {
   teacherRemarks     String?  @db.Text
   feedback           String?  @db.Text
   learningObjectives Json
+  targetCriteria     Json?
+  senderReference    String   @default("0793472960") @db.VarChar(20)
+  deliveryStatus     String   @default("prepared") @db.VarChar(50)
+  deliverySummary    Json?
+  deliveryRecipients AssignmentDeliveryRecipient[]
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
@@ -130,6 +135,11 @@ model Resource {
   uploadedBy  String   @default("System") @db.VarChar(100)
   downloads   Int      @default(0)
   isActive    Boolean  @default(true)
+  targetCriteria Json?
+  senderReference String @default("0793472960") @db.VarChar(20)
+  deliveryStatus String @default("prepared") @db.VarChar(50)
+  deliverySummary Json?
+  deliveryRecipients ResourceDeliveryRecipient[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -140,6 +150,58 @@ model Resource {
   @@index([accessLevel])
   @@index([createdAt])
   @@map("resources")
+}
+
+model AssignmentDeliveryRecipient {
+  id               String           @id @default(cuid())
+  assignmentId     Int
+  studentId        String?
+  admissionNumber  String           @db.VarChar(50)
+  studentName      String           @db.VarChar(255)
+  className        String?          @db.VarChar(100)
+  gradeLevel       String?          @db.VarChar(50)
+  uploadedCategory String?          @db.VarChar(100)
+  whatsappPhone    String           @db.VarChar(20)
+  senderReference  String           @default("0793472960") @db.VarChar(20)
+  channel          String           @default("whatsapp") @db.VarChar(30)
+  status           String           @default("prepared") @db.VarChar(50)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  assignment       Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student          databaseStudent? @relation("StudentAssignmentDeliveries", fields: [studentId], references: [id], onDelete: SetNull)
+
+  @@unique([assignmentId, admissionNumber])
+  @@index([assignmentId])
+  @@index([studentId])
+  @@index([whatsappPhone])
+  @@index([status])
+  @@map("assignment_delivery_recipients")
+}
+
+model ResourceDeliveryRecipient {
+  id               String           @id @default(cuid())
+  resourceId       Int
+  studentId        String?
+  admissionNumber  String           @db.VarChar(50)
+  studentName      String           @db.VarChar(255)
+  className        String?          @db.VarChar(100)
+  gradeLevel       String?          @db.VarChar(50)
+  uploadedCategory String?          @db.VarChar(100)
+  whatsappPhone    String           @db.VarChar(20)
+  senderReference  String           @default("0793472960") @db.VarChar(20)
+  channel          String           @default("whatsapp") @db.VarChar(30)
+  status           String           @default("prepared") @db.VarChar(50)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  resource         Resource         @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  student          databaseStudent? @relation("StudentResourceDeliveries", fields: [studentId], references: [id], onDelete: SetNull)
+
+  @@unique([resourceId, admissionNumber])
+  @@index([resourceId])
+  @@index([studentId])
+  @@index([whatsappPhone])
+  @@index([status])
+  @@map("resource_delivery_recipients")
 }
 
 model CounselingEvent {
@@ -764,17 +826,25 @@ model databaseStudent {
   firstName       String       @db.VarChar(100)
   middleName      String?      @db.VarChar(100)
   lastName        String       @db.VarChar(100)
+  fullName        String?      @db.VarChar(255)
   form            String       @db.VarChar(20)
+  gradeLevel      String?      @db.VarChar(50)
+  className       String?      @db.VarChar(100)
   status          String       @default("active")
   stream          String?      @db.VarChar(50)
   dateOfBirth     DateTime?
   gender          String?      @db.VarChar(20)
   parentPhone     String?      @db.VarChar(20)
+  studentPhone    String?      @db.VarChar(20)
+  whatsappPhone   String?      @db.VarChar(20)
   email           String?      @db.VarChar(100)
   address         String?      @db.VarChar(255)
+  uploadedCategory String?     @db.VarChar(100)
   uploadBatchId   String?
   createdAt       DateTime     @default(now())
   feeBalances     FeeBalance[] @relation("StudentFeeBalances")
+  assignmentDeliveries AssignmentDeliveryRecipient[] @relation("StudentAssignmentDeliveries")
+  resourceDeliveries   ResourceDeliveryRecipient[]   @relation("StudentResourceDeliveries")
 
   results StudentResult[]
 
@@ -783,6 +853,10 @@ model databaseStudent {
 
   @@index([admissionNumber])
   @@index([form])
+  @@index([gradeLevel])
+  @@index([className])
+  @@index([uploadedCategory])
+  @@index([whatsappPhone])
   @@index([uploadBatchId])
   @@map("students")
 }
@@ -794,6 +868,9 @@ model StudentStats {
   form2         Int      @default(0)
   form3         Int      @default(0)
   form4         Int      @default(0)
+  grade10       Int      @default(0)
+  grade11       Int      @default(0)
+  grade12       Int      @default(0)
   updatedAt     DateTime @updatedAt
 
   @@map("student_stats")

@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import cloudinary from "../../../../libs/cloudinary";
+import {
+  buildDeliveryCriteriaFromFormData,
+  prepareResourceDelivery,
+  SCHOOL_COMMUNICATION_NUMBER
+} from "../../../../libs/delivery";
 
 // ==================== AUTHENTICATION ====================
 class DeviceTokenManager {
@@ -318,6 +323,10 @@ const cleanResourceResponse = (resource) => {
     uploadedBy: resource.uploadedBy,
     downloads: resource.downloads,
     isActive: resource.isActive,
+    senderReference: resource.senderReference || SCHOOL_COMMUNICATION_NUMBER,
+    deliveryStatus: resource.deliveryStatus || resource.deliverySummary?.status || 'prepared',
+    deliverySummary: resource.deliverySummary || null,
+    targetCriteria: resource.targetCriteria || null,
     createdAt: resource.createdAt,
     updatedAt: resource.updatedAt
   };
@@ -464,6 +473,10 @@ async function handleFormUpdate(request, id, existingResource) {
     if (accessLevel !== null && accessLevel !== undefined) updateData.accessLevel = accessLevel;
     if (uploadedBy !== null && uploadedBy !== undefined) updateData.uploadedBy = uploadedBy;
     if (isActive !== null && isActive !== undefined) updateData.isActive = isActive === "true";
+    const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className || existingResource.className, category || existingResource.category);
+    updateData.targetCriteria = deliveryCriteria;
+    updateData.senderReference = deliveryCriteria.senderReference;
+    updateData.deliveryStatus = 'preparing';
 
     // Handle file updates
     const existingFilesStr = formData.get("existingFiles");
@@ -536,9 +549,22 @@ async function handleFormUpdate(request, id, existingResource) {
 
     console.log("💾 Saving to database...");
 
-    const resource = await prisma.resource.update({
-      where: { id: id },
-      data: updateData,
+    const resource = await prisma.$transaction(async (tx) => {
+      const savedResource = await tx.resource.update({
+        where: { id: id },
+        data: updateData,
+      });
+
+      const deliverySummary = await prepareResourceDelivery(tx, savedResource.id, deliveryCriteria);
+
+      return tx.resource.update({
+        where: { id: savedResource.id },
+        data: {
+          deliverySummary,
+          deliveryStatus: deliverySummary.status,
+          updatedAt: new Date()
+        }
+      });
     });
 
     console.log("✅ Update successful");
