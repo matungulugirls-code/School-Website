@@ -333,25 +333,34 @@ enum CBETrackType {
 }
 
 model StaffDepartment {
-  id                Int                    @id @default(autoincrement())
-  name              String                 @db.VarChar(255)
+  id                Int                       @id @default(autoincrement())
+  name              String                   @db.VarChar(255)
   category          DepartmentCategory
-  description       String?                @db.Text
-  image             String?                @db.Text
+  description       String?                  @db.Text
+  image             String?                  @db.Text
   images            StaffDepartmentImage[]
-  staffCount        Int                    @default(0)
-  headName          String?                @db.VarChar(255)
-  assistantHeadName String?                @db.VarChar(255)
+  staffCount        Int                      @default(0)
+  headName          String?                  @db.VarChar(255)
+  assistantHeadName String?                  @db.VarChar(255)
   extra             Json?
-  isActive          Boolean                @default(true)
-  displayOrder      Int                    @default(0)
+  isActive          Boolean                  @default(true)
+  displayOrder      Int                      @default(0)
   teachers          Staff[]
-  createdAt         DateTime               @default(now())
-  updatedAt         DateTime               @updatedAt
+  
+  // CBE-specific fields
+  cbePathwayId      Int?
+  cbeTrackId        Int?
+  cbePathway        CBEPathway?              @relation(fields: [cbePathwayId], references: [id], onDelete: SetNull)
+  cbeTrack          CBETrack?                @relation(fields: [cbeTrackId], references: [id], onDelete: SetNull)
+  
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
 
   @@index([category])
   @@index([isActive])
   @@index([displayOrder])
+  @@index([cbePathwayId])
+  @@index([cbeTrackId])
   @@map("staff_departments")
 }
 
@@ -377,17 +386,19 @@ model StaffDepartmentImage {
 // ==========================================
 
 model CBEPathway {
-  id           Int            @id @default(autoincrement())
-  name         String         @db.VarChar(255)
-  type         CBEPathwayType @unique
-  description  String?        @db.Text
-  image        String?        @db.Text
-  displayOrder Int            @default(0)
-  isActive     Boolean        @default(true)
+  id           Int                    @id @default(autoincrement())
+  name         String                 @db.VarChar(255)
+  type         CBEPathwayType         @unique
+  description  String?                @db.Text
+  image        String?                @db.Text
+  images       CBEPathwayImage[]
+  displayOrder Int                    @default(0)
+  isActive     Boolean                @default(true)
   tracks       CBETrack[]
   staff        Staff[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  departments  StaffDepartment[]
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
 
   @@index([type])
   @@index([isActive])
@@ -395,23 +406,60 @@ model CBEPathway {
   @@map("cbe_pathways")
 }
 
+model CBEPathwayImage {
+  id           Int            @id @default(autoincrement())
+  cbePathwayId Int
+  url          String         @db.Text
+  publicId     String?        @db.Text
+  caption      String?        @db.VarChar(255)
+  altText      String?        @db.VarChar(255)
+  displayOrder Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  cbePathway   CBEPathway     @relation(fields: [cbePathwayId], references: [id], onDelete: Cascade)
+
+  @@index([cbePathwayId])
+  @@index([displayOrder])
+  @@map("cbe_pathway_images")
+}
+
 model CBETrack {
-  id           Int          @id @default(autoincrement())
-  name         String       @db.VarChar(255)
+  id           Int                   @id @default(autoincrement())
+  name         String                @db.VarChar(255)
   type         CBETrackType
-  description  String?      @db.Text
+  description  String?               @db.Text
+  image        String?               @db.Text
+  images       CBETrackImage[]
   pathwayId    Int
-  pathway      CBEPathway   @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
-  displayOrder Int          @default(0)
-  isActive     Boolean      @default(true)
+  pathway      CBEPathway            @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
+  displayOrder Int                   @default(0)
+  isActive     Boolean               @default(true)
   staff        Staff[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  departments  StaffDepartment[]
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
 
   @@unique([pathwayId, type])
   @@index([pathwayId])
   @@index([isActive])
   @@map("cbe_tracks")
+}
+
+model CBETrackImage {
+  id           Int         @id @default(autoincrement())
+  cbeTrackId   Int
+  url          String      @db.Text
+  publicId     String?     @db.Text
+  caption      String?     @db.VarChar(255)
+  altText      String?     @db.VarChar(255)
+  displayOrder Int         @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  cbeTrack     CBETrack    @relation(fields: [cbeTrackId], references: [id], onDelete: Cascade)
+
+  @@index([cbeTrackId])
+  @@index([displayOrder])
+  @@map("cbe_track_images")
 }
 
 // ==========================================

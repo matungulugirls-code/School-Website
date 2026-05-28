@@ -1031,108 +1031,53 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
         overflow: 'hidden',
         background: 'linear-gradient(135deg, #f8fafc 0%, #ecfdf5 100%)'
       }}>
-   {/* Modern Assignment Modal Header */}
- <div className="group relative bg-gradient-to-br from-teal-700 via-emerald-700 to-green-700 p-6 text-white overflow-hidden">
+   {/* Simple Assignment Modal Header */}
+ <div className="bg-slate-950 p-6 text-white overflow-hidden border-b border-slate-800">
+  <div className="h-1 -mx-6 -mt-6 bg-gradient-to-r from-teal-500 via-emerald-400 to-slate-400 mb-6" />
   
-  {/* Animated Gradient Orbs */}
-  <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-white/20 to-transparent rounded-full blur-3xl animate-pulse" />
-  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-3xl animate-pulse delay-1000" />
-  
-  {/* Floating Particles */}
-  <div className="absolute inset-0 opacity-10">
-    <div className="absolute top-4 left-1/4 w-1 h-1 bg-white rounded-full animate-ping" />
-    <div className="absolute bottom-8 right-1/3 w-1.5 h-1.5 bg-white rounded-full animate-ping delay-300" />
-    <div className="absolute top-12 right-1/4 w-1 h-1 bg-white rounded-full animate-ping delay-700" />
-  </div>
-  
-  {/* Subtle Grid Pattern */}
-  <div className="absolute inset-0 opacity-[0.03]" style={{ 
-    backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-    backgroundSize: '30px 30px'
-  }} />
-  
-  {/* Shine Effect Overlay */}
-  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full" style={{ transform: 'skewX(-20deg)' }} />
-  
-  <div className="relative z-10">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-5">
-        
-        {/* Icon Container with Enhanced Animation */}
-        <div className="relative">
-          {/* Multi-layer Glow Effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity" />
-          <div className="absolute inset-0 bg-white/20 rounded-2xl blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
-          
-          {/* Main Icon */}
-          <div className="relative p-3.5 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30 shadow-2xl transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
-            <IoDocumentTextOutline className="text-2xl" />
-          </div>
-          
-          {/* Animated Ring */}
-          <div className="absolute -inset-1 border-2 border-white/30 rounded-2xl opacity-0 group-hover:opacity-100 animate-ping" />
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-4">
+      {/* Simple Icon */}
+      <div className="p-2 bg-slate-800 rounded-xl">
+        <IoDocumentTextOutline className="text-2xl text-teal-400" />
+      </div>
+      
+      {/* Text Content */}
+      <div>
+        {/* Badge */}
+        <div className="flex items-center gap-2 mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-800 rounded-full text-[10px] font-black uppercase tracking-wider border border-slate-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+            {assignment ? 'EDIT MODE' : 'CREATE MODE'}
+          </span>
         </div>
         
-        {/* Text Content */}
-        <div>
-          {/* Action Badge */}
-          <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] font-black uppercase tracking-wider border border-white/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
-              {assignment ? 'EDIT MODE' : 'CREATE MODE'}
-            </span>
-          </div>
-          
-          {/* Title with Gradient */}
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-tight">
-            {assignment ? 'Edit' : 'Create'}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-teal-100">
-              Assignment
-            </span>
-          </h2>
-          
-          {/* Description with Icon */}
-          <div className="flex items-center gap-2 mt-2">
-            <FiInfo className="w-3.5 h-3.5 text-white/70" />
-            <p className="text-white/80 text-sm font-medium">
-              {assignment ? 'Update assignment information and files' : 'Fill in the details to create a new assignment'}
-            </p>
-          </div>
+        {/* Title */}
+        <h2 className="text-2xl md:text-3xl font-black tracking-tight">
+          {assignment ? 'Edit' : 'Create'} Assignment
+        </h2>
+        
+        {/* Description */}
+        <div className="flex items-center gap-2 mt-2">
+          <FiInfo className="w-3.5 h-3.5 text-slate-400" />
+          <p className="text-slate-300 text-sm font-medium">
+            {assignment ? 'Update assignment information and files' : 'Fill in the details to create a new assignment'}
+          </p>
+        </div>
         </div>
       </div>
       
-      {/* Close Button - Enhanced */}
+      {/* Close Button - Simple */}
       {!loading && (
         <button 
           onClick={onClose} 
-          className="group/btn relative p-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-xl border border-white/20 transition-all duration-300 active:scale-90 overflow-hidden"
+          className="p-2 bg-slate-800 hover:bg-red-600/20 rounded-xl border border-slate-700 hover:border-red-600/50 transition-colors"
         >
-          {/* Button Shine Effect */}
-          <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          
-          <FiX className="text-xl relative z-10 group-hover/btn:rotate-90 transition-transform duration-300" />
-          
-          {/* Tooltip */}
-          <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[9px] font-bold bg-slate-900 text-white px-2 py-1 rounded-lg opacity-0 group-hover/btn:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
-            Close
-          </span>
+          <FiX className="text-xl text-slate-300 hover:text-red-400" />
         </button>
       )}
     </div>
-    
-    {/* Progress Steps - Optional Enhancement for Multi-step Forms */}
-    {!assignment && (
-      <div className="mt-6 flex items-center gap-2">
-        <div className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
-          <div className="w-1/3 h-full bg-white rounded-full animate-pulse" />
-        </div>
-        <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Step 1 of 3</span>
-      </div>
-    )}
   </div>
-  
-  {/* Bottom Accent */}
-  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 </div>
 
         <div className="max-h-[calc(95vh-150px)] overflow-y-auto">

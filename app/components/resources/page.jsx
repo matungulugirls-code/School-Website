@@ -405,160 +405,91 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
         flexDirection: 'column',
         outline: 'none'
       }}>
-{/* Modern Header - Educational Resource */}
-<div className="group relative bg-gradient-to-br from-slate-50 to-white rounded-t-[2rem] overflow-hidden border-b border-slate-200/50">
-  
-  {/* Subtle Background Pattern */}
-  <div className="absolute inset-0 opacity-[0.02]" style={{ 
-    backgroundImage: `radial-gradient(circle at 20px 20px, #3B82F6 1px, transparent 1px)`,
-    backgroundSize: '40px 40px'
-  }} />
-  
-  {/* Decorative Gradient Orbs */}
-  <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-teal-200/30 to-green-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
-  <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-emerald-200/30 to-green-200/30 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
-  
-  {/* Floating Icon Elements */}
-  <div className="absolute top-10 right-20 opacity-5 group-hover:opacity-10 transition-opacity">
-    <FiBookOpen size={60} className="text-slate-400" />
-  </div>
-  <div className="absolute bottom-5 left-10 opacity-5 group-hover:opacity-10 transition-opacity rotate-12">
-    <FiFileText size={40} className="text-slate-400" />
-  </div>
-  
-  <div className="relative p-8 pb-6 z-10">
-    <div className="flex justify-between items-start gap-6">
-      {/* Left Content */}
-      <div className="flex-1 space-y-4">
-        
-        {/* Premium Category Badge */}
-        <div className="flex items-center gap-3">
-          {/* Icon Container with Glow */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-600 to-indigo-600 rounded-xl blur-md opacity-50 group-hover:opacity-70 transition-opacity" />
-            <div className="relative p-2.5 bg-gradient-to-br from-teal-600 to-indigo-600 rounded-xl shadow-lg transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
-              <FiFolder className="text-white" size={18} />
-            </div>
-          </div>
-          
-          {/* Animated Badge */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-teal-400/20 rounded-full blur-md" />
-            <span className="relative text-[10px] font-black uppercase tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-indigo-600">
-              Educational Resource
-            </span>
-          </div>
-        </div>
-        
-        {/* Title with Gradient */}
-        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight group-hover:translate-x-1 transition-transform duration-300">
+{/* Simple Header - Educational Resource */}
+<div className="bg-slate-950 rounded-t-[2rem] overflow-hidden border-b border-slate-800">
+  <div className="h-1 bg-gradient-to-r from-teal-500 via-emerald-400 to-slate-400" />
+  <div className="p-6 sm:p-8 text-white">
+    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex-1">
+        <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">
+          Educational Resource
+        </p>
+        <h1 className="mt-2 text-3xl md:text-4xl font-black tracking-tight leading-tight">
           {resource.title}
         </h1>
-        
-        {/* Quick Stats */}
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-500">
-            <FiClock size={14} className="text-slate-400" />
-            <span className="font-medium">Updated {new Date(resource.updatedAt || Date.now()).toLocaleDateString()}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-slate-500">
-            <FiEye size={14} className="text-slate-400" />
-            <span className="font-medium">{resource.views || 0} views</span>
-          </div>
-        </div>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+          {resource.description || "No detailed description provided."}
+        </p>
       </div>
-      
-      {/* Close Button - Enhanced */}
       <button 
         onClick={onClose} 
-        className="group/btn relative flex-shrink-0 p-3 bg-white hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-2xl border border-slate-200/80 hover:border-red-200/80 shadow-sm hover:shadow-md transition-all duration-300 active:scale-90 overflow-hidden"
+        className="flex-shrink-0 p-3 bg-slate-800 hover:bg-red-500/20 text-slate-300 hover:text-red-400 rounded-2xl border border-slate-700 hover:border-red-500/30 transition-all"
       >
-        {/* Button Shine Effect */}
-        <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-red-100/30 to-transparent" />
-        
-        <FiX size={22} className="relative z-10" />
-        
-        {/* Tooltip */}
-        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-slate-900 text-white px-2 py-1 rounded-lg opacity-0 group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">
-          Close
-        </span>
+        <FiX size={22} />
       </button>
     </div>
 
-    {/* Tags Bar - Enhanced with Animations */}
-    <div className="flex flex-wrap gap-2 mt-8">
+    {/* Simple Tags Bar */}
+    <div className="flex flex-wrap gap-2 mt-6">
       {/* Resource Type Tag */}
-      <div className={`group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 hover:shadow-md ${typeColor.bg} ${typeColor.text} border ${typeColor.border}`}>
-        {/* Tag Shine Effect */}
-        <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-        
-        <span className={`relative w-2 h-2 rounded-full ${typeColor.icon} group-hover/tag:animate-pulse`} />
-        <span className="relative">{resource.type || 'Resource'}</span>
-      </div>
+      <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold ${typeColor.bg} ${typeColor.text} border ${typeColor.border}`}>
+        <span className={`w-2 h-2 rounded-full ${typeColor.icon}`} />
+        {resource.type || 'Resource'}
+      </span>
       
       {/* Category Tag */}
       {resource.category && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-green-50 to-green-100/50 text-green-700 border border-green-200 hover:border-green-300 transition-all duration-300 hover:scale-105 hover:shadow-md">
-          <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          
-          <FiTag size={12} className="relative text-green-500" />
-          <span className="relative">{resource.category}</span>
-        </div>
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-green-900/40 text-green-300 border border-green-700">
+          <FiTag size={12} />
+          {resource.category}
+        </span>
       )}
       
       {/* Class Tag */}
       {resource.className && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-slate-800 to-slate-900 text-white border border-slate-700 hover:border-slate-600 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-          <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-          
-          <FiUsers size={12} className="relative text-slate-300" />
-          <span className="relative">{resource.className}</span>
-        </div>
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-600">
+          <FiUsers size={12} />
+          {resource.className}
+        </span>
       )}
 
-      {resource.deliverySummary && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-100 hover:border-teal-200 transition-all duration-300 hover:scale-105 hover:shadow-md">
-          <FiSend size={12} className="relative text-teal-600" />
-          <span className="relative">{resource.deliverySummary.recipientCount || 0} prepared</span>
-        </div>
-      )}
-      
-      {/* Additional Metadata Tags */}
+      {/* Subject Tag */}
       {resource.subject && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-emerald-50 to-teal-100/50 text-emerald-700 border border-emerald-200 hover:border-emerald-300 transition-all duration-300 hover:scale-105 hover:shadow-md">
-          <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          
-          <FiBook size={12} className="relative text-emerald-500" />
-          <span className="relative">{resource.subject}</span>
-        </div>
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-teal-900/40 text-teal-300 border border-teal-700">
+          <FiBook size={12} />
+          {resource.subject}
+        </span>
       )}
       
+      {/* Difficulty Tag */}
       {resource.difficulty && (
-        <div className="group/tag relative overflow-hidden flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-amber-50 to-orange-100/50 text-amber-700 border border-amber-200 hover:border-amber-300 transition-all duration-300 hover:scale-105 hover:shadow-md">
-          <div className="absolute inset-0 -translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          
-          <FiTrendingUp size={12} className="relative text-amber-500" />
-          <span className="relative capitalize">{resource.difficulty}</span>
-        </div>
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-amber-900/40 text-amber-300 border border-amber-700">
+          <FiTrendingUp size={12} />
+          {resource.difficulty.charAt(0).toUpperCase() + resource.difficulty.slice(1)}
+        </span>
+      )}
+
+      {/* Delivery Summary Tag */}
+      {resource.deliverySummary && (
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-emerald-900/40 text-emerald-300 border border-emerald-700">
+          <FiSend size={12} />
+          {resource.deliverySummary.recipientCount || 0} prepared
+        </span>
       )}
     </div>
-    
-    {/* Progress Bar - Optional Enhancement */}
-    {resource.progress !== undefined && (
-      <div className="mt-6 flex items-center gap-4">
-        <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-teal-500 to-indigo-500 rounded-full transition-all duration-1000"
-            style={{ width: `${resource.progress}%` }}
-          />
-        </div>
-        <span className="text-xs font-bold text-slate-600">{resource.progress}% Complete</span>
+
+    {/* Quick Stats */}
+    <div className="flex flex-wrap items-center gap-4 mt-6 text-xs text-slate-400">
+      <div className="flex items-center gap-1.5">
+        <FiClock size={14} />
+        Updated {new Date(resource.updatedAt || Date.now()).toLocaleDateString()}
       </div>
-    )}
+      <div className="flex items-center gap-1.5">
+        <FiEye size={14} />
+        {resource.views || 0} views
+      </div>
+    </div>
   </div>
-  
-  {/* Bottom Accent Border */}
-  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
 </div>
 
         {/* Content Body */}
