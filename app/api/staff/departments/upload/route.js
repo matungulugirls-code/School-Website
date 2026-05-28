@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../libs/prisma";
-import cloudinary from "../../../../libs/cloudinary";
+import { prisma } from "../../../../../libs/prisma";
+import cloudinary from "../../../../../libs/cloudinary";
 
 export const dynamic = "force-dynamic";
 
