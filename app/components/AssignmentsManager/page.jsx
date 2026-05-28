@@ -1078,7 +1078,6 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
       )}
     </div>
   </div>
-</div>
 
         <div className="max-h-[calc(95vh-150px)] overflow-y-auto">
           <form onSubmit={handleFormSubmit} className="p-6 space-y-6">
