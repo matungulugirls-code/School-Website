@@ -2305,6 +2305,24 @@ export default function AssignmentsManager() {
       const result = await response.json();
 
       if (result.success) {
+        let sentCount = null;
+        const savedAssignmentId = result.assignment?.id;
+        if (savedAssignmentId) {
+          try {
+            const deliveryResponse = await fetch('/api/assignment/delivery', {
+              method: 'POST',
+              headers: { ...headers, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ assignmentId: savedAssignmentId }),
+            });
+            const deliveryResult = await deliveryResponse.json();
+            if (deliveryResult.success) {
+              sentCount = deliveryResult.data?.successCount || 0;
+            }
+          } catch (deliveryError) {
+            console.error('Assignment WhatsApp delivery failed:', deliveryError);
+          }
+        }
+
         // Refresh the list
         await fetchAssignments();
         setShowModal(false);
@@ -2312,7 +2330,7 @@ export default function AssignmentsManager() {
         showNotification(
           'success',
           id ? 'Updated' : 'Created',
-          `Assignment ${id ? 'updated' : 'created'} successfully!${Number.isFinite(recipientCount) ? ` ${recipientCount} WhatsApp recipient(s) prepared.` : ''}`
+          `Assignment ${id ? 'updated' : 'created'} successfully!${Number.isFinite(sentCount) ? ` ${sentCount} WhatsApp message(s) sent.` : Number.isFinite(recipientCount) ? ` ${recipientCount} WhatsApp recipient(s) prepared.` : ''}`
         );
       } else {
         throw new Error(result.error || 'Failed to save assignment');

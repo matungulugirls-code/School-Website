@@ -164,7 +164,7 @@ const authenticateWriteRequest = (req) => {
 
 // ==================== ROUTE HANDLERS ====================
 
-const VALID_CATEGORIES = new Set(["CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
+const VALID_CATEGORIES = new Set(["CBE", "CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
 
 const isSchemaCompatibilityError = (error) => {
   const message = String(error?.message || "").toLowerCase();
@@ -212,6 +212,10 @@ const LEGACY_DEPARTMENT_SELECT = {
   displayOrder: true,
   createdAt: true,
   updatedAt: true,
+  cbePathwayId: true,
+  cbeTrackId: true,
+  cbePathway: true,
+  cbeTrack: true,
   images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
 };
 
@@ -225,6 +229,10 @@ const normalizeDepartmentRecord = (department = {}) => ({
     null,
   images: Array.isArray(department.images) ? department.images : [],
   teachers: Array.isArray(department.teachers) ? department.teachers : [],
+  cbePathwayId: department.cbePathwayId ?? null,
+  cbeTrackId: department.cbeTrackId ?? null,
+  cbePathway: department.cbePathway || null,
+  cbeTrack: department.cbeTrack || null,
   staffCount: Array.isArray(department.teachers) && department.teachers.length > 0
     ? department.teachers.length
     : Number(department.staffCount) || 0,
@@ -281,6 +289,8 @@ export async function GET(req) {
         orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
         include: {
           images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+          cbePathway: true,
+          cbeTrack: true,
           teachers: {
             where: {
               staffType: "Teacher",
@@ -295,8 +305,13 @@ export async function GET(req) {
               department: true,
               role: true,
               staffType: true,
+              cbeRoleType: true,
+              cbePathwayId: true,
+              cbeTrackId: true,
+              cbePathway: true,
+              cbeTrack: true,
             },
-            orderBy: { name: "asc" },
+            orderBy: [{ cbeRoleType: "asc" }, { name: "asc" }],
           },
         },
       });
@@ -324,6 +339,8 @@ export async function GET(req) {
             displayOrder: true,
             createdAt: true,
             updatedAt: true,
+            cbePathwayId: true,
+            cbeTrackId: true,
           },
         });
         departments = departments.map((department) =>
@@ -387,6 +404,8 @@ export async function POST(req) {
     const staffCountRaw = formData.get("staffCount");
     const displayOrderRaw = formData.get("displayOrder");
     const isActiveRaw = formData.get("isActive");
+    const cbePathwayIdRaw = formData.get("cbePathwayId");
+    const cbeTrackIdRaw = formData.get("cbeTrackId");
 
     if (!name || !category) {
       return NextResponse.json(
@@ -418,6 +437,21 @@ export async function POST(req) {
     if (!Number.isFinite(displayOrder)) {
       return NextResponse.json(
         { success: false, error: "displayOrder must be a valid number" },
+        { status: 400 }
+      );
+    }
+
+    const cbePathwayId = cbePathwayIdRaw ? Number(cbePathwayIdRaw) : null;
+    const cbeTrackId = cbeTrackIdRaw ? Number(cbeTrackIdRaw) : null;
+    if (category === "CBE" && cbePathwayIdRaw && !Number.isFinite(cbePathwayId)) {
+      return NextResponse.json(
+        { success: false, error: "CBE pathway must be valid" },
+        { status: 400 }
+      );
+    }
+    if (category === "CBE" && cbeTrackIdRaw && !Number.isFinite(cbeTrackId)) {
+      return NextResponse.json(
+        { success: false, error: "CBE track must be valid" },
         { status: 400 }
       );
     }
@@ -469,6 +503,8 @@ export async function POST(req) {
       displayOrder: Math.floor(displayOrder),
       isActive,
       image: primaryImage,
+      cbePathwayId: category === "CBE" ? cbePathwayId : null,
+      cbeTrackId: category === "CBE" ? cbeTrackId : null,
       extra: mergeAssistantHeadNameIntoExtra(extra, assistantHeadName || null),
       images: uploadedImages.length
         ? {
@@ -496,7 +532,12 @@ export async function POST(req) {
         throw error;
       }
 
-      const { assistantHeadName: _ignored, ...legacyData } = createData;
+      const {
+        assistantHeadName: _ignored,
+        cbePathwayId: _ignoredCbePathwayId,
+        cbeTrackId: _ignoredCbeTrackId,
+        ...legacyData
+      } = createData;
       department = await prisma.staffDepartment.create({
         data: legacyData,
         select: LEGACY_DEPARTMENT_SELECT,

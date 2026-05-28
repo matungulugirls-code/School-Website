@@ -163,7 +163,7 @@ const authenticateWriteRequest = (req) => {
   return { authenticated: true, user: validationResult.user };
 };
 
-const VALID_CATEGORIES = new Set(["CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
+const VALID_CATEGORIES = new Set(["CBE", "CBC", "EIGHT_FOUR_FOUR", "TEACHING", "SUPPORT"]);
 
 const isSchemaCompatibilityError = (error) => {
   const message = String(error?.message || "").toLowerCase();
@@ -196,6 +196,10 @@ const normalizeDepartmentRecord = (department = {}) => ({
     null,
   images: Array.isArray(department.images) ? department.images : [],
   teachers: Array.isArray(department.teachers) ? department.teachers : [],
+  cbePathwayId: department.cbePathwayId ?? null,
+  cbeTrackId: department.cbeTrackId ?? null,
+  cbePathway: department.cbePathway || null,
+  cbeTrack: department.cbeTrack || null,
   staffCount: Array.isArray(department.teachers) && department.teachers.length > 0
     ? department.teachers.length
     : Number(department.staffCount) || 0,
@@ -214,6 +218,8 @@ export async function GET(_req, { params }) {
         where: { id },
         include: {
           images: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] },
+          cbePathway: true,
+          cbeTrack: true,
           teachers: {
             where: { staffType: "Teacher", status: "active" },
             select: {
@@ -234,8 +240,13 @@ export async function GET(_req, { params }) {
               responsibilities: true,
               expertise: true,
               achievements: true,
+              cbeRoleType: true,
+              cbePathwayId: true,
+              cbeTrackId: true,
+              cbePathway: true,
+              cbeTrack: true,
             },
-            orderBy: { name: "asc" },
+            orderBy: [{ cbeRoleType: "asc" }, { name: "asc" }],
           },
         },
       });
@@ -337,6 +348,35 @@ export async function PUT(req, { params }) {
         );
       }
       data.category = cat;
+    }
+
+    const finalCategory = data.category || existing.category;
+    const cbePathwayIdRaw = formData.get("cbePathwayId");
+    if (cbePathwayIdRaw !== null) {
+      const cbePathwayId = cbePathwayIdRaw === "" ? null : Number(cbePathwayIdRaw);
+      if (cbePathwayId !== null && !Number.isFinite(cbePathwayId)) {
+        return NextResponse.json(
+          { success: false, error: "CBE pathway must be valid", authenticated: true },
+          { status: 400 }
+        );
+      }
+      data.cbePathwayId = finalCategory === "CBE" ? cbePathwayId : null;
+    } else if (finalCategory !== "CBE") {
+      data.cbePathwayId = null;
+    }
+
+    const cbeTrackIdRaw = formData.get("cbeTrackId");
+    if (cbeTrackIdRaw !== null) {
+      const cbeTrackId = cbeTrackIdRaw === "" ? null : Number(cbeTrackIdRaw);
+      if (cbeTrackId !== null && !Number.isFinite(cbeTrackId)) {
+        return NextResponse.json(
+          { success: false, error: "CBE track must be valid", authenticated: true },
+          { status: 400 }
+        );
+      }
+      data.cbeTrackId = finalCategory === "CBE" ? cbeTrackId : null;
+    } else if (finalCategory !== "CBE") {
+      data.cbeTrackId = null;
     }
 
     const description = formData.get("description");

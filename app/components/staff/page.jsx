@@ -927,6 +927,11 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
     });
   }
 
+  const selectedDepartmentOption = normalizedDepartmentOptions.find(
+    (dept) => String(dept.id) === String(formData.departmentId)
+  );
+  const isCbeTeacherDepartment = selectedDepartmentOption?.category === 'CBE';
+
   useEffect(() => {
     if (staff?.image && typeof staff.image === 'string') {
       const formattedImage = staff.image.startsWith('/') ? staff.image : `/${staff.image}`;
@@ -1096,13 +1101,26 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
     fetchCBEData();
   }, [staff?.cbePathwayId]);
 
+  useEffect(() => {
+    if (!formData.cbePathwayId || cbePathways.length === 0) return;
+    const selectedPathway = cbePathways.find((pathway) => String(pathway.id) === String(formData.cbePathwayId));
+    setCbeTracks(selectedPathway?.tracks || []);
+  }, [formData.cbePathwayId, cbePathways]);
+
   const handleChange = (field, value) => {
     if (field === 'departmentId') {
       const selectedDepartment = normalizedDepartmentOptions.find((dept) => String(dept.id) === String(value));
       setFormData(prev => ({
         ...prev,
         departmentId: value,
-        department: selectedDepartment?.name || prev.department
+        department: selectedDepartment?.name || prev.department,
+        cbeRoleType: selectedDepartment?.category === 'CBE' ? prev.cbeRoleType : 'TEACHER',
+        cbePathwayId: selectedDepartment?.category === 'CBE'
+          ? (selectedDepartment?.cbePathwayId ? String(selectedDepartment.cbePathwayId) : prev.cbePathwayId)
+          : '',
+        cbeTrackId: selectedDepartment?.category === 'CBE'
+          ? (selectedDepartment?.cbeTrackId ? String(selectedDepartment.cbeTrackId) : prev.cbeTrackId)
+          : ''
       }));
       return;
     }
@@ -1410,6 +1428,8 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                           />
                         </div>
 
+                        {isCbeTeacherDepartment && (
+                          <>
                         {/* CBE Role Type */}
                         <div className="bg-gradient-to-br from-violet-50 to-violet-100 rounded-2xl p-5 border border-violet-200">
                           <label className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
@@ -1485,6 +1505,8 @@ function ModernStaffModal({ onClose, onSave, staff, loading, existingDeputyCount
                               ))}
                             </div>
                           </div>
+                        )}
+                          </>
                         )}
                       </>
                     ) : (
@@ -2097,7 +2119,7 @@ function StyledTagInput({ label, value, onChange, placeholder, disabled, color =
 }
 
 const STAFF_DEPARTMENT_CATEGORIES = [
-  { value: 'CBC', label: 'CBC Department', icon: FiBook, color: 'from-blue-500 to-cyan-600' },
+  { value: 'CBE', label: 'CBE Department', icon: FiBook, color: 'from-blue-500 to-cyan-600' },
   { value: 'EIGHT_FOUR_FOUR', label: '8-4-4 Department', icon: FiAward, color: 'from-amber-500 to-orange-600' },
   { value: 'TEACHING', label: 'Teaching Department', icon: FiBriefcase, color: 'from-emerald-500 to-teal-600' },
   { value: 'SUPPORT', label: 'Support / Non-Teaching', icon: FiShield, color: 'from-slate-700 to-slate-900' }
@@ -2158,6 +2180,8 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
     description: department?.description || '',
     displayOrder: department?.displayOrder || 0,
     isActive: department?.isActive !== false,
+    cbePathwayId: department?.cbePathwayId ? String(department.cbePathwayId) : '',
+    cbeTrackId: department?.cbeTrackId ? String(department.cbeTrackId) : '',
     focusAreas: Array.isArray(extra.focusAreas) ? extra.focusAreas.join(', ') : (extra.focusAreas || ''),
     subjects: Array.isArray(extra.subjects) ? extra.subjects.join(', ') : (extra.subjects || ''),
     location: extra.location || '',
@@ -2170,10 +2194,44 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
       : [department?.image].filter(isAllowedDepartmentImage)
   );
   const [imageError, setImageError] = useState('');
+  const [cbePathways, setCbePathways] = useState([]);
+  const [cbeTracks, setCbeTracks] = useState([]);
+  const isCbeDepartment = formData.category === 'CBE';
   const hasDepartmentImage = imageFiles.length > 0 || imagePreviews.length > 0 || Boolean(getDepartmentImage(department));
 
+  useEffect(() => {
+    const fetchCbeStructure = async () => {
+      try {
+        const response = await fetch('/api/cbe');
+        const data = await response.json();
+        const pathways = data.success ? (data.data || []) : [];
+        setCbePathways(pathways);
+        const selectedPathway = pathways.find((pathway) => String(pathway.id) === String(formData.cbePathwayId));
+        setCbeTracks(selectedPathway?.tracks || []);
+      } catch (error) {
+        console.error('Unable to load CBE pathways:', error);
+        setCbePathways([]);
+        setCbeTracks([]);
+      }
+    };
+
+    fetchCbeStructure();
+  }, []);
+
   const updateField = (field, value) => {
-    setFormData((previous) => ({ ...previous, [field]: value }));
+    setFormData((previous) => {
+      if (field === 'category' && value !== 'CBE') {
+        return { ...previous, category: value, cbePathwayId: '', cbeTrackId: '' };
+      }
+
+      if (field === 'cbePathwayId') {
+        const selectedPathway = cbePathways.find((pathway) => String(pathway.id) === String(value));
+        setCbeTracks(selectedPathway?.tracks || []);
+        return { ...previous, cbePathwayId: value, cbeTrackId: '' };
+      }
+
+      return { ...previous, [field]: value };
+    });
   };
 
   const handleImageChange = (files) => {
@@ -2187,10 +2245,16 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
     }
 
     setImageError('');
-    setImageFiles(selectedFiles);
+    const finalFiles = isCbeDepartment ? selectedFiles.slice(0, 3) : selectedFiles;
+    if (isCbeDepartment && selectedFiles.length > 3) {
+      setImageError('CBE departments can have a maximum of 3 images.');
+      return;
+    }
+
+    setImageFiles(finalFiles);
     setImagePreviews([
       ...(department?.images?.map((image) => image.url) || []),
-      ...selectedFiles.map((file) => URL.createObjectURL(file)),
+      ...finalFiles.map((file) => URL.createObjectURL(file)),
     ]);
   };
 
@@ -2215,6 +2279,8 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
     payload.append('description', formData.description.trim());
     payload.append('displayOrder', String(Number(formData.displayOrder) || 0));
     payload.append('isActive', formData.isActive ? 'true' : 'false');
+    payload.append('cbePathwayId', isCbeDepartment ? formData.cbePathwayId : '');
+    payload.append('cbeTrackId', isCbeDepartment ? formData.cbeTrackId : '');
     payload.append('extra', JSON.stringify({
       focusAreas: toList(formData.focusAreas),
       subjects: toList(formData.subjects),
@@ -2298,27 +2364,62 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
-                    HOD Name
+                    {isCbeDepartment ? 'HOT Name' : 'HOD Name'}
                   </label>
                   <input
                     value={formData.headName}
                     onChange={(event) => updateField('headName', event.target.value)}
                     className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold outline-none focus:border-blue-500"
-                    placeholder="Head of Department"
+                    placeholder={isCbeDepartment ? 'Head of Track' : 'Head of Department'}
                   />
                 </div>
                 <div>
                   <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
-                    AHOD Name
+                    {isCbeDepartment ? 'HOP Name' : 'AHOD Name'}
                   </label>
                   <input
                     value={formData.assistantHeadName}
                     onChange={(event) => updateField('assistantHeadName', event.target.value)}
                     className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold outline-none focus:border-blue-500"
-                    placeholder="Assistant HOD"
+                    placeholder={isCbeDepartment ? 'Head of Pathway' : 'Assistant HOD'}
                   />
                 </div>
               </div>
+
+              {isCbeDepartment && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                      CBE Pathway
+                    </label>
+                    <select
+                      value={formData.cbePathwayId}
+                      onChange={(event) => updateField('cbePathwayId', event.target.value)}
+                      className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold outline-none focus:border-blue-500"
+                    >
+                      <option value="">Select pathway</option>
+                      {cbePathways.map((pathway) => (
+                        <option key={pathway.id} value={pathway.id}>{pathway.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-500">
+                      CBE Track
+                    </label>
+                    <select
+                      value={formData.cbeTrackId}
+                      onChange={(event) => updateField('cbeTrackId', event.target.value)}
+                      className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold outline-none focus:border-blue-500"
+                    >
+                      <option value="">Select track</option>
+                      {cbeTracks.map((track) => (
+                        <option key={track.id} value={track.id}>{track.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div>
@@ -2376,7 +2477,9 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
                     onChange={(event) => handleImageChange(event.target.files)}
                     className="w-full text-sm text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-bold file:text-blue-700"
                   />
-                  <p className="mt-2 text-xs font-semibold text-slate-500">Required. Upload real Matungulu Girls department images. Each image must be under 3 MB.</p>
+                  <p className="mt-2 text-xs font-semibold text-slate-500">
+                    Required. {isCbeDepartment ? 'Upload 1 to 3 CBE department images.' : 'Upload real Matungulu Girls department images.'} Each image must be under 3 MB.
+                  </p>
                   {imageError && <p className="mt-2 text-xs font-bold text-red-600">{imageError}</p>}
                 </div>
               </div>

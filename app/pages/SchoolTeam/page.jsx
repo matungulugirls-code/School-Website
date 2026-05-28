@@ -337,8 +337,10 @@ const getDepartmentTeacherCount = (department) => {
 
 const getDepartmentCategoryLabel = (category) => {
   switch (category) {
+    case 'CBE':
+      return 'CBE Department';
     case 'CBC':
-      return 'CBC Department';
+      return 'CBE Department';
     case 'EIGHT_FOUR_FOUR':
       return '8-4-4 Department';
     case 'TEACHING':
@@ -432,6 +434,7 @@ const DepartmentCard = ({ department }) => {
   const headName = department?.headName || '';
   const assistantHeadName = department?.assistantHeadName || '';
   const teachers = Array.isArray(department?.teachers) ? department.teachers : [];
+  const isCbeDepartment = department?.category === 'CBE' || department?.category === 'CBC';
 
   return (
     <article className="overflow-hidden rounded-lg sm:rounded-xl lg:rounded-[30px] border border-slate-300 bg-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.42)]">
@@ -482,13 +485,13 @@ const DepartmentCard = ({ department }) => {
             {headName && (
               <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 sm:px-2.5 lg:px-3 py-1 sm:py-1.5 text-[8px] sm:text-[9px] lg:text-[11px] font-extrabold text-slate-800 whitespace-nowrap">
                 <FiUser size={9} className="sm:size-[10px] lg:size-[11px]" />
-                <span className="hidden sm:inline">HOD:</span> <span className="line-clamp-1">{headName}</span>
+                <span className="hidden sm:inline">{isCbeDepartment ? 'HOT:' : 'HOD:'}</span> <span className="line-clamp-1">{headName}</span>
               </span>
             )}
             {assistantHeadName && (
               <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 sm:px-2.5 lg:px-3 py-1 sm:py-1.5 text-[8px] sm:text-[9px] lg:text-[11px] font-extrabold text-slate-800 whitespace-nowrap">
                 <FiUser size={9} className="sm:size-[10px] lg:size-[11px]" />
-                <span className="hidden sm:inline">AHOD:</span> <span className="line-clamp-1">{assistantHeadName}</span>
+                <span className="hidden sm:inline">{isCbeDepartment ? 'HOP:' : 'AHOD:'}</span> <span className="line-clamp-1">{assistantHeadName}</span>
               </span>
             )}
           </div>
@@ -821,7 +824,7 @@ export default function StaffDirectory() {
 
   // Department groupings (public, privacy-safe)
   const [departmentsByCategory, setDepartmentsByCategory] = useState({
-    CBC: [],
+    CBE: [],
     EIGHT_FOUR_FOUR: [],
     TEACHING: [],
     SUPPORT: []
@@ -974,7 +977,7 @@ export default function StaffDirectory() {
       if (data.success) {
         const grouped = data.departmentsByCategory || {};
         setDepartmentsByCategory({
-          CBC: grouped.CBC || [],
+          CBE: [...(grouped.CBE || []), ...(grouped.CBC || [])],
           EIGHT_FOUR_FOUR: grouped.EIGHT_FOUR_FOUR || [],
           TEACHING: grouped.TEACHING || [],
           SUPPORT: grouped.SUPPORT || []
@@ -984,7 +987,7 @@ export default function StaffDirectory() {
       }
     } catch (err) {
       console.error('Error fetching departments:', err);
-      setDepartmentsByCategory({ CBC: [], EIGHT_FOUR_FOUR: [], TEACHING: [], SUPPORT: [] });
+      setDepartmentsByCategory({ CBE: [], EIGHT_FOUR_FOUR: [], TEACHING: [], SUPPORT: [] });
     } finally {
       setDepartmentsLoading(false);
     }
@@ -1051,13 +1054,13 @@ export default function StaffDirectory() {
         0
       );
 
-    const cbc = departmentsByCategory.CBC || [];
+    const cbe = departmentsByCategory.CBE || [];
     const eight = departmentsByCategory.EIGHT_FOUR_FOUR || [];
     const teaching = departmentsByCategory.TEACHING || [];
     const support = departmentsByCategory.SUPPORT || [];
 
-    const totalDepartments = cbc.length + eight.length + teaching.length + support.length;
-    const teachingStaffCount = sum(cbc) + sum(eight) + sum(teaching);
+    const totalDepartments = cbe.length + eight.length + teaching.length + support.length;
+    const teachingStaffCount = sum(cbe) + sum(eight) + sum(teaching);
     const supportStaffCount = sum(support);
 
     return { totalDepartments, teachingStaffCount, supportStaffCount };
@@ -1088,7 +1091,7 @@ export default function StaffDirectory() {
       });
 
     return {
-      CBC: filterList(departmentsByCategory.CBC),
+      CBE: filterList(departmentsByCategory.CBE),
       EIGHT_FOUR_FOUR: filterList(departmentsByCategory.EIGHT_FOUR_FOUR),
       TEACHING: filterList(departmentsByCategory.TEACHING),
       SUPPORT: filterList(departmentsByCategory.SUPPORT),
@@ -1096,7 +1099,7 @@ export default function StaffDirectory() {
   }, [departmentsByCategory, searchQuery]);
 
   const filteredDepartmentCount = useMemo(() => {
-    const c = filteredDepartmentsByCategory.CBC?.length || 0;
+    const c = filteredDepartmentsByCategory.CBE?.length || 0;
     const e = filteredDepartmentsByCategory.EIGHT_FOUR_FOUR?.length || 0;
     const t = filteredDepartmentsByCategory.TEACHING?.length || 0;
     const s = filteredDepartmentsByCategory.SUPPORT?.length || 0;
@@ -1104,7 +1107,7 @@ export default function StaffDirectory() {
   }, [filteredDepartmentsByCategory]);
 
   const filteredTeachingDepartmentCount = useMemo(() => {
-    const c = filteredDepartmentsByCategory.CBC?.length || 0;
+    const c = filteredDepartmentsByCategory.CBE?.length || 0;
     const e = filteredDepartmentsByCategory.EIGHT_FOUR_FOUR?.length || 0;
     const t = filteredDepartmentsByCategory.TEACHING?.length || 0;
     return c + e + t;
@@ -1545,9 +1548,9 @@ export default function StaffDirectory() {
                     <HierarchySection title="School Leadership" iconKey="leadership" staff={staffByHierarchy.leadership} viewMode={viewMode} isFirst />
 
                     <DepartmentGroupSection
-                      title="CBC Departments"
+                      title="CBE Departments"
                       icon={FiLayers}
-                      departments={filteredDepartmentsByCategory.CBC}
+                      departments={filteredDepartmentsByCategory.CBE}
                       subtitle="Department teams with mapped teachers"
                     />
 
@@ -1583,9 +1586,9 @@ export default function StaffDirectory() {
                 ) : selectedHierarchy === 'teaching' ? (
                   <div className="space-y-6">
                     <DepartmentGroupSection
-                      title="CBC Departments"
+                      title="CBE Departments"
                       icon={FiLayers}
-                      departments={filteredDepartmentsByCategory.CBC}
+                      departments={filteredDepartmentsByCategory.CBE}
                     />
                     <DepartmentGroupSection
                       title="8-4-4 Departments"

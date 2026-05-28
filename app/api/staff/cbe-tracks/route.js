@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../libs/prisma";
+import { prisma } from "../../../../libs/prisma";
 import {
   isFileUpload,
   uploadSchoolImagesFromFormData,
   validateSchoolImage,
-} from "../../../libs/schoolContentUpload";
+} from "../../../../libs/schoolContentUpload";
 
 export const dynamic = "force-dynamic";
 

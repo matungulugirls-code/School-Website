@@ -278,6 +278,11 @@ const STAFF_MODERN_SELECT = {
   department: true,
   departmentId: true,
   subjectOffered: true,
+  cbeRoleType: true,
+  cbePathwayId: true,
+  cbeTrackId: true,
+  cbePathway: true,
+  cbeTrack: true,
   education: true,
   experience: true,
   email: true,
@@ -331,6 +336,11 @@ const normalizeStaffRecord = (staff = {}) => ({
   staffType: staff.staffType || (staff.role === "Teacher" ? "Teacher" : "Leadership"),
   departmentId: staff.departmentId ?? null,
   subjectOffered: staff.subjectOffered || "",
+  cbeRoleType: staff.cbeRoleType || "TEACHER",
+  cbePathwayId: staff.cbePathwayId ?? null,
+  cbeTrackId: staff.cbeTrackId ?? null,
+  cbePathway: staff.cbePathway || null,
+  cbeTrack: staff.cbeTrack || null,
   gender: staff.gender || "male",
   status: staff.status || "active",
   joinDate: staff.joinDate || "",
@@ -506,6 +516,9 @@ export async function POST(req) {
     const joinDate = formData.get("joinDate") || new Date().toISOString().split('T')[0];
 
     const isTeacher = staffType === "Teacher" || role === "Teacher";
+    const cbeRoleType = (formData.get("cbeRoleType") || "TEACHER").toString().trim();
+    const cbePathwayId = Number(formData.get("cbePathwayId") || NaN);
+    const cbeTrackId = Number(formData.get("cbeTrackId") || NaN);
 
     // 🔹 Validate required fields
     if (!name || !role) {
@@ -547,7 +560,7 @@ export async function POST(req) {
 
       selectedDepartment = await prisma.staffDepartment.findFirst({
         where: { id: departmentId, isActive: true },
-        select: { id: true, name: true }
+        select: { id: true, name: true, category: true, cbePathwayId: true, cbeTrackId: true }
       });
 
       if (!selectedDepartment) {
@@ -728,6 +741,13 @@ export async function POST(req) {
         department: isTeacher ? selectedDepartment.name : (department || null),
         departmentId: isTeacher ? selectedDepartment.id : null,
         subjectOffered: isTeacher ? subjectOffered : null,
+        cbeRoleType: isTeacher && selectedDepartment?.category === "CBE" ? cbeRoleType : "TEACHER",
+        cbePathwayId: isTeacher && selectedDepartment?.category === "CBE"
+          ? (Number.isFinite(cbePathwayId) ? cbePathwayId : selectedDepartment.cbePathwayId)
+          : null,
+        cbeTrackId: isTeacher && selectedDepartment?.category === "CBE"
+          ? (Number.isFinite(cbeTrackId) ? cbeTrackId : selectedDepartment.cbeTrackId)
+          : null,
         email: email || null,
         phone: phone || null,
         bio: bio || null,

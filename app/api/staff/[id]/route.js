@@ -277,6 +277,11 @@ const STAFF_MODERN_SELECT = {
   department: true,
   departmentId: true,
   subjectOffered: true,
+  cbeRoleType: true,
+  cbePathwayId: true,
+  cbeTrackId: true,
+  cbePathway: true,
+  cbeTrack: true,
   education: true,
   experience: true,
   email: true,
@@ -330,6 +335,11 @@ const normalizeStaffRecord = (staff = {}) => ({
   staffType: staff.staffType || (staff.role === "Teacher" ? "Teacher" : "Leadership"),
   departmentId: staff.departmentId ?? null,
   subjectOffered: staff.subjectOffered || "",
+  cbeRoleType: staff.cbeRoleType || "TEACHER",
+  cbePathwayId: staff.cbePathwayId ?? null,
+  cbeTrackId: staff.cbeTrackId ?? null,
+  cbePathway: staff.cbePathway || null,
+  cbeTrack: staff.cbeTrack || null,
   gender: staff.gender || "male",
   status: staff.status || "active",
   joinDate: staff.joinDate || "",
@@ -678,7 +688,7 @@ export async function PUT(req, { params }) {
 
       const selectedDepartment = await prisma.staffDepartment.findFirst({
         where: { id: departmentId, isActive: true },
-        select: { id: true, name: true }
+        select: { id: true, name: true, category: true, cbePathwayId: true, cbeTrackId: true }
       });
 
       if (!selectedDepartment) {
@@ -694,6 +704,20 @@ export async function PUT(req, { params }) {
 
       data.departmentId = selectedDepartment.id;
       data.department = selectedDepartment.name;
+
+      if (selectedDepartment.category === "CBE") {
+        const cbeRoleType = (formData.get("cbeRoleType") || existingStaff.cbeRoleType || "TEACHER").toString().trim();
+        const cbePathwayId = Number(formData.get("cbePathwayId") || selectedDepartment.cbePathwayId || NaN);
+        const cbeTrackId = Number(formData.get("cbeTrackId") || selectedDepartment.cbeTrackId || NaN);
+
+        data.cbeRoleType = ["HOT", "HOP", "TEACHER"].includes(cbeRoleType) ? cbeRoleType : "TEACHER";
+        data.cbePathwayId = Number.isFinite(cbePathwayId) ? cbePathwayId : null;
+        data.cbeTrackId = Number.isFinite(cbeTrackId) ? cbeTrackId : null;
+      } else {
+        data.cbeRoleType = "TEACHER";
+        data.cbePathwayId = null;
+        data.cbeTrackId = null;
+      }
     } else {
       const submittedRole = formValue(formData, "role");
       const submittedPosition = formValue(formData, "position");
@@ -705,6 +729,9 @@ export async function PUT(req, { params }) {
       if (submittedDepartment !== undefined) data.department = submittedDepartment.trim() || null;
       data.departmentId = null;
       data.subjectOffered = null;
+      data.cbeRoleType = "TEACHER";
+      data.cbePathwayId = null;
+      data.cbeTrackId = null;
     }
 
     [

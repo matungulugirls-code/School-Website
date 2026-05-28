@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(req) {
   try {
-    const pathways = await prisma.CBEPathway.findMany({
+    const pathways = await prisma.cBEPathway.findMany({
       where: { isActive: true },
       include: {
         tracks: {
@@ -44,11 +44,11 @@ export async function POST(req) {
 
     if (action === "seed") {
       // Clear existing data
-      await prisma.CBETrack.deleteMany({});
-      await prisma.CBEPathway.deleteMany({});
+      await prisma.cBETrack.deleteMany({});
+      await prisma.cBEPathway.deleteMany({});
 
       // Seed CBE Pathways
-      const stem = await prisma.CBEPathway.create({
+      const stem = await prisma.cBEPathway.create({
         data: {
           name: "Science, Technology, Engineering & Mathematics",
           type: "STEM",
@@ -78,7 +78,7 @@ export async function POST(req) {
         include: { tracks: true },
       });
 
-      const arts = await prisma.CBEPathway.create({
+      const arts = await prisma.cBEPathway.create({
         data: {
           name: "Arts & Sport Science",
           type: "ARTS_SPORT_SCIENCE",
@@ -107,7 +107,7 @@ export async function POST(req) {
         include: { tracks: true },
       });
 
-      const social = await prisma.CBEPathway.create({
+      const social = await prisma.cBEPathway.create({
         data: {
           name: "Social Sciences",
           type: "SOCIAL_SCIENCES",

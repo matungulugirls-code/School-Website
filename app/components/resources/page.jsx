@@ -2068,6 +2068,24 @@ const handleSubmit = async (formData, id) => {
     const result = await response.json();
 
     if (result.success) {
+      let sentCount = null;
+      const savedResourceId = result.resource?.id;
+      if (savedResourceId) {
+        try {
+          const deliveryResponse = await fetch('/api/resources/delivery', {
+            method: 'POST',
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ resourceId: savedResourceId }),
+          });
+          const deliveryResult = await deliveryResponse.json();
+          if (deliveryResult.success) {
+            sentCount = deliveryResult.data?.successCount || 0;
+          }
+        } catch (deliveryError) {
+          console.error('Resource WhatsApp delivery failed:', deliveryError);
+        }
+      }
+
       // Refresh the list
       await fetchResources();
       setShowModal(false);
@@ -2075,7 +2093,7 @@ const handleSubmit = async (formData, id) => {
       showNotification(
         'success',
         id ? 'Updated' : 'Created',
-        `Resource ${id ? 'updated' : 'created'} successfully!${Number.isFinite(recipientCount) ? ` ${recipientCount} WhatsApp recipient(s) prepared.` : ''}`
+        `Resource ${id ? 'updated' : 'created'} successfully!${Number.isFinite(sentCount) ? ` ${sentCount} WhatsApp message(s) sent.` : Number.isFinite(recipientCount) ? ` ${recipientCount} WhatsApp recipient(s) prepared.` : ''}`
       );
     } else {
       throw new Error(result.error);

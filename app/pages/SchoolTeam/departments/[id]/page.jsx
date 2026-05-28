@@ -18,8 +18,10 @@ import {
 
 const getCategoryLabel = (category) => {
   switch (category) {
+    case 'CBE':
+      return 'CBE Department';
     case 'CBC':
-      return 'CBC Department';
+      return 'CBE Department';
     case 'EIGHT_FOUR_FOUR':
       return '8-4-4 Department';
     case 'TEACHING':
@@ -248,6 +250,7 @@ export default function DepartmentDetailsPage({ params }) {
 
   const images = useMemo(() => getDepartmentImages(department), [department]);
   const teachers = useMemo(() => Array.isArray(department?.teachers) ? department.teachers : [], [department]);
+  const isCbeDepartment = department?.category === 'CBE' || department?.category === 'CBC';
   const extra = department?.extra && typeof department.extra === 'object' ? department.extra : {};
   const heroImage = images[0];
 
@@ -312,8 +315,8 @@ export default function DepartmentDetailsPage({ params }) {
 
           <div className="mt-3 sm:mt-5 lg:mt-7 grid gap-2 sm:gap-2.5 lg:gap-3 sm:grid-cols-2">
             <DetailPill icon={FiUsers} label="Teachers" value={teachers.length || Number(department.staffCount) || 0} />
-            <DetailPill icon={FiUser} label="HOD" value={department.headName} />
-            <DetailPill icon={FiBriefcase} label="AHOD" value={department.assistantHeadName} />
+            <DetailPill icon={FiUser} label={isCbeDepartment ? 'HOT' : 'HOD'} value={department.headName} />
+            <DetailPill icon={FiBriefcase} label={isCbeDepartment ? 'HOP' : 'AHOD'} value={department.assistantHeadName} />
             <DetailPill icon={FiCalendar} label="Updated" value={department.updatedAt ? new Date(department.updatedAt).toLocaleDateString() : ''} />
           </div>
 
