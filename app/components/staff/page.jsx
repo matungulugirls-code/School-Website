@@ -2171,6 +2171,7 @@ const MAX_DEPARTMENT_IMAGE_SIZE = 3 * 1024 * 1024;
 
 function DepartmentFormModal({ department, onClose, onSave, loading }) {
   const extra = parseDepartmentExtra(department?.extra);
+  const departmentImageInputRef = useRef(null);
   const [formData, setFormData] = useState({
     name: department?.name || '',
     category: department?.category || 'TEACHING',
@@ -2234,13 +2235,14 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
     });
   };
 
-  const handleImageChange = (files) => {
+  const handleDepartmentImageFileChange = (files) => {
     const selectedFiles = Array.from(files || []);
     if (!selectedFiles.length) return;
 
     const oversized = selectedFiles.find((file) => file.size > MAX_DEPARTMENT_IMAGE_SIZE);
     if (oversized) {
       setImageError(`"${oversized.name}" is larger than 3 MB.`);
+      if (departmentImageInputRef.current) departmentImageInputRef.current.value = '';
       return;
     }
 
@@ -2248,6 +2250,7 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
     const finalFiles = isCbeDepartment ? selectedFiles.slice(0, 3) : selectedFiles;
     if (isCbeDepartment && selectedFiles.length > 3) {
       setImageError('CBE departments can have a maximum of 3 images.');
+      if (departmentImageInputRef.current) departmentImageInputRef.current.value = '';
       return;
     }
 
@@ -2256,6 +2259,11 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
       ...(department?.images?.map((image) => image.url) || []),
       ...finalFiles.map((file) => URL.createObjectURL(file)),
     ]);
+    
+    // Reset file input to allow re-selecting the same file
+    if (departmentImageInputRef.current) {
+      departmentImageInputRef.current.value = '';
+    }
   };
 
   const toList = (value) => value
@@ -2471,10 +2479,11 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
                     </div>
                   )}
                   <input
+                    ref={departmentImageInputRef}
                     type="file"
                     accept="image/*"
                     multiple
-                    onChange={(event) => handleImageChange(event.target.files)}
+                    onChange={(event) => handleDepartmentImageFileChange(event.target.files)}
                     className="w-full text-sm text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-bold file:text-blue-700"
                   />
                   <p className="mt-2 text-xs font-semibold text-slate-500">
