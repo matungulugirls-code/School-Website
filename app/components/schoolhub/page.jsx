@@ -326,7 +326,7 @@ const ModernLoadingSpinner = ({ message = "Loading school hub data...", size = "
 };
 
 // Image Upload Field Component
-const ImageUploadField = ({ existingImages = [], files = [], removedImages = [], onChange, error, setError }) => {
+export const ImageUploadField = ({ existingImages = [], files = [], removedImages = [], onChange, error, setError }) => {
   const inputRef = useRef(null);
   const [dragActive, setDragActive] = useState(false);
   const [previews, setPreviews] = useState([]);

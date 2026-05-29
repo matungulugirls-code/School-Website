@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { ImageUploadField } from '../schoolhub/page';
 import { 
   FiPlus, 
   FiSearch, 
@@ -2194,6 +2195,7 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
       ? department.images.map((image) => image.url).filter(isAllowedDepartmentImage)
       : [department?.image].filter(isAllowedDepartmentImage)
   );
+  const [imagesToRemove, setImagesToRemove] = useState([]);
   const [imageError, setImageError] = useState('');
   const [cbePathways, setCbePathways] = useState([]);
   const [cbeTracks, setCbeTracks] = useState([]);
@@ -2296,12 +2298,19 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
       notes: formData.notes.trim()
     }));
 
+    // include any removed image urls so server can delete them
+    if (imagesToRemove && imagesToRemove.length > 0) {
+      imagesToRemove.forEach((url) => payload.append('imagesToRemove', url));
+    }
+
     if (imageFiles.length > 0) {
       imageFiles.forEach((file) => payload.append('images', file));
-    } else if (department?.image) {
-      payload.append('image', department.image);
-    } else if (department?.images?.[0]?.url) {
-      payload.append('image', department.images[0].url);
+    } else {
+      // If no new files, attach an existing primary image only if it wasn't removed
+      const primaryCandidate = department?.image || department?.images?.[0]?.url;
+      if (primaryCandidate && !(imagesToRemove || []).includes(primaryCandidate)) {
+        payload.append('image', primaryCandidate);
+      }
     }
 
     onSave(payload, department?.id);
@@ -2471,20 +2480,22 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
                   Department Image <span className="text-red-500">*</span>
                 </label>
                 <div className="rounded-2xl border-2 border-dashed border-slate-200 p-4">
-                  {imagePreviews.length > 0 && (
-                    <div className="mb-3 grid grid-cols-2 gap-2">
-                      {imagePreviews.map((preview, index) => (
-                        <img key={`${preview}-${index}`} src={preview} alt="Department preview" className="h-28 w-full rounded-xl object-cover" />
-                      ))}
-                    </div>
-                  )}
-                  <input
-                    ref={departmentImageInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(event) => handleDepartmentImageFileChange(event.target.files)}
-                    className="w-full text-sm text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-bold file:text-blue-700"
+                  <ImageUploadField
+                    existingImages={((department?.images || []).length > 0)
+                      ? department.images.map(img => ({ url: img.url }))
+                      : (department?.image ? [{ url: department.image }] : [])}
+                    files={imageFiles}
+                    removedImages={imagesToRemove}
+                    onChange={({ files: newFiles = [], removedImages: newRemoved = [] }) => {
+                      setImageFiles(newFiles);
+                      setImagesToRemove(newRemoved);
+                      setImagePreviews([
+                        ...((department?.images || []).map(i => i.url).filter(url => !newRemoved.includes(url))),
+                        ...newFiles.map((file) => URL.createObjectURL(file)),
+                      ]);
+                    }}
+                    error={imageError}
+                    setError={setImageError}
                   />
                   <p className="mt-2 text-xs font-semibold text-slate-500">
                     Required. {isCbeDepartment ? 'Upload 1 to 3 CBE department images.' : 'Upload real Matungulu Girls department images.'} Each image must be under 3 MB.
