@@ -507,15 +507,17 @@ function ModernDetailModal({ session, onClose, onContact }) {
   if (!session) return null;
 
   const getCategoryStyle = (category) => {
+    const normalizedCategory = String(category || '').toLowerCase();
     const styles = {
       academic: { gradient: 'from-green-500 to-teal-500', icon: FiCalendar },
+      academics: { gradient: 'from-green-500 to-teal-500', icon: FiCalendar },
       emotional: { gradient: 'from-teal-500 to-slate-500', icon: FiMessageSquare },
       devotion: { gradient: 'from-indigo-500 to-teal-500', icon: FiStar },
       worship: { gradient: 'from-amber-500 to-orange-500', icon: FiStar },
       support: { gradient: 'from-emerald-500 to-green-500', icon: FiPhoneCall },
       drugs: { gradient: 'from-red-500 to-rose-500', icon: FiAlertTriangle }
     };
-    return styles[category] || { gradient: 'from-slate-500 to-slate-600', icon: FiBookOpen };
+    return styles[normalizedCategory] || { gradient: 'from-slate-500 to-slate-600', icon: FiBookOpen };
   };
 
   const categoryStyle = getCategoryStyle(session.category);
@@ -662,8 +664,8 @@ function ModernDetailModal({ session, onClose, onContact }) {
               <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
                   <div className={`w-2 h-2 rounded-full ${
-                    session.priority === 'high' ? 'bg-red-500' :
-                    session.priority === 'medium' ? 'bg-amber-500' :
+                    String(session.priority || '').toLowerCase() === 'high' ? 'bg-red-500' :
+                    String(session.priority || '').toLowerCase() === 'medium' ? 'bg-amber-500' :
                     'bg-emerald-500'
                   }`} />
                   <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400">Priority</p>
@@ -1894,15 +1896,25 @@ const fetchAllData = useCallback(async () => {
     
     if (guidanceData.success) {
       // Process guidance sessions
-      const processedGuidance = (guidanceData.events || []).map(session => {
+      const guidanceItems = guidanceData.events || guidanceData.guidance || guidanceData.sessions || [];
+      const processedGuidance = guidanceItems.map(session => {
         const imageSource = 
           session.image || 
           session.imageUrl || 
           session.image_url || 
           session.thumbnail;
+
+        const category = session.category || 'Academics';
+        const priority = session.priority || 'Medium';
+        const type = session.type || 'Guidance Session';
         
         return {
           ...session,
+          title: session.title || `${session.counselor || 'Counselor'} - ${category} Session`,
+          category: category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
+          priority: priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase(),
+          type,
+          date: session.date || session.createdAt || new Date().toISOString(),
           image: imageSource ? 
             (imageSource.startsWith('http') ? imageSource : 
              imageSource.startsWith('/') ? imageSource : 

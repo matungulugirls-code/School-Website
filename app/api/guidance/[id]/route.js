@@ -2,6 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from '../../../../libs/prisma';
 import cloudinary from '../../../../libs/cloudinary';
 
+const decodeJwtPayload = (token) => {
+  const payload = token.split('.')[1];
+  const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const paddedPayload = normalizedPayload.padEnd(
+    normalizedPayload.length + ((4 - normalizedPayload.length % 4) % 4),
+    '='
+  );
+
+  return JSON.parse(Buffer.from(paddedPayload, 'base64').toString('utf-8'));
+};
+
 // ==================== AUTHENTICATION UTILITIES ====================
 
 // Device Token Manager
@@ -39,7 +50,7 @@ class DeviceTokenManager {
       // Parse admin token payload
       let adminPayload;
       try {
-        adminPayload = JSON.parse(atob(adminParts[1]));
+        adminPayload = decodeJwtPayload(adminToken);
         
         // Check expiration
         const currentTime = Date.now() / 1000;
@@ -49,7 +60,7 @@ class DeviceTokenManager {
         
         // Check user role - only counselors/admins can manage counseling events
         const userRole = adminPayload.role || adminPayload.userRole;
-        const validRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'PRINCIPAL', 'COUNSELOR', 'TEACHER', 'STAFF'];
+        const validRoles = ['ADMIN', 'SUPER_ADMIN', 'ADMINISTRATOR', 'PRINCIPAL', 'COUNSELOR', 'TEACHER', 'STAFF'];
         
         if (!userRole || !validRoles.includes(userRole.toUpperCase())) {
           return { 

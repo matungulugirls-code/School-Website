@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { toast, Toaster } from 'sonner';
 import CircularProgress from '@mui/material/CircularProgress';
 import {
@@ -10,6 +10,8 @@ import {
   FiBriefcase, FiAward, FiMail, FiPhone, FiShield, FiArrowLeft, FiArrowRight, FiZap, FiGlobe,
   FiLinkedin, FiTwitter, FiStar, FiFilter, FiTrash2, FiCheck, FiTrendingDown, FiTrendingUp as FiTrendingUp2
 } from 'react-icons/fi';
+
+import { FaFemale, FaMale } from 'react-icons/fa';
 
 
 import { 
@@ -1596,10 +1598,6 @@ const ModernMemberModal = ({
     { value: 'guidanceTeacher', label: 'Guidance & Counselling Teacher', icon: <FiBriefcase />, color: 'text-blue-600', bgColor: 'bg-blue-100' },
     { value: 'nurse', label: 'School Nurse', icon: <FiUserCheck />, color: 'text-red-600', bgColor: 'bg-red-100' },
     { value: 'boardingHod', label: 'Head of Boarding', icon: <FiAward />, color: 'text-purple-600', bgColor: 'bg-purple-100' },
-    { value: 'matron', label: 'Matron (NTS)', icon: <FiUserPlus />, color: 'text-pink-600', bgColor: 'bg-pink-100' },
-    { value: 'secretary', label: 'Secretary (NTS)', icon: <FiUsers />, color: 'text-green-600', bgColor: 'bg-green-100' },
-    { value: 'accountsClerk', label: 'Accounts Clerk (NTS)', icon: <FiBarChart2 />, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
-    { value: 'bursar', label: 'Bursar (NTS)', icon: <FiShield />, color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
   ];
   
   const selectedRole = roleOptions.find(r => r.value === formData.role) || roleOptions[0];
@@ -2099,25 +2097,19 @@ const handleSubmit = async (e) => {
                   <label className="block text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4">
                     Category
                   </label>
-                  <div className="grid grid-cols-2 gap-3 md:gap-4">
-                    {[
-                      { value: 'guidance', label: 'Guidance Team' },
-                      { value: 'nts', label: 'Non-Teaching Staff' }
-                    ].map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => handleFieldChange('category', option.value)}
-                        className={`p-4 rounded-xl md:rounded-2xl font-bold transition-all border-2 ${
-                          (formData.category || 'guidance') === option.value
-                            ? 'border-purple-600 bg-purple-50 text-purple-600'
-                            : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-                        }`}
-                        disabled={isLoading}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
+                  <div className="grid grid-cols-1 gap-3 md:gap-4">
+                    <button
+                      type="button"
+                      onClick={() => handleFieldChange('category', 'guidance')}
+                      className={`p-4 rounded-xl md:rounded-2xl font-bold transition-all border-2 ${
+                        (formData.category || 'guidance') === 'guidance'
+                          ? 'border-purple-600 bg-purple-50 text-purple-600'
+                          : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                      }`}
+                      disabled={isLoading}
+                    >
+                      Guidance Team
+                    </button>
                   </div>
                 </div>
               </div>
@@ -3102,6 +3094,7 @@ export default function GuidanceCounselingTab() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(true);
   const [teamLoading, setTeamLoading] = useState(true);
+  const guidanceTeamMembers = teamMembers.filter(member => member.category === 'guidance');
   // Add this state near the other states
 const [memberDetailModal, setMemberDetailModal] = useState({
   open: false,
@@ -3942,14 +3935,14 @@ const confirmDeleteTeam = async () => {
   </p>
 </div>
 
-          ) : teamMembers.length === 0 ? (
+          ) : guidanceTeamMembers.length === 0 ? (
             <div className="bg-white rounded-2xl border-2 border-dashed border-gray-300 p-12 text-center">
               <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl mb-6">
                 <FiUsers className="text-gray-400 w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">No Team Members Yet</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">No Guidance Team Members Yet</h3>
               <p className="text-gray-600 max-w-md mx-auto mb-8">
-                Start building your guidance team by adding patrons, matrons, and guidance teachers.
+                Start building your guidance team by adding the guidance teacher, nurse, and boarding head.
               </p>
               <button
                 onClick={() => setMemberModal({ open: true, member: null })}
@@ -3975,17 +3968,13 @@ const confirmDeleteTeam = async () => {
       
       <div className="flex items-baseline justify-between">
         <h3 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-          {teamMembers.length}
+          {guidanceTeamMembers.length}
         </h3>
         <div className="flex items-center text-emerald-500 text-sm font-medium">
           <FiArrowUpRight className="w-4 h-4 mr-0.5" />
-          <span>+{Math.floor(teamMembers.length * 0.12)}</span>
+          <span>+{Math.floor(guidanceTeamMembers.length * 0.12)}</span>
         </div>
       </div>
-      
-      <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-wider">
-        Total Members
-      </p>
       
       <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-800">
         <p className="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">
@@ -4006,7 +3995,7 @@ const confirmDeleteTeam = async () => {
       
       <div className="flex items-baseline justify-between">
         <h3 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-          {teamMembers.filter(m => m.role === 'patron').length}
+          {guidanceTeamMembers.filter(m => m.role === 'patron').length}
         </h3>
         <div className="flex items-center text-emerald-500 text-sm font-medium">
           <FiArrowUpRight className="w-4 h-4 mr-0.5" />
@@ -4037,7 +4026,7 @@ const confirmDeleteTeam = async () => {
       
       <div className="flex items-baseline justify-between">
         <h3 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-          {teamMembers.filter(m => m.role === 'matron').length}
+          {guidanceTeamMembers.filter(m => m.role === 'matron').length}
         </h3>
         <div className="flex items-center text-emerald-500 text-sm font-medium">
           <FiArrowUpRight className="w-4 h-4 mr-0.5" />
@@ -4068,7 +4057,7 @@ const confirmDeleteTeam = async () => {
       
       <div className="flex items-baseline justify-between">
         <h3 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-          {teamMembers.filter(m => m.role === 'guidanceTeacher').length}
+          {guidanceTeamMembers.filter(m => m.role === 'guidanceTeacher').length}
         </h3>
         <div className="flex items-center text-emerald-500 text-sm font-medium">
           <FiArrowUpRight className="w-4 h-4 mr-0.5" />
@@ -4091,13 +4080,13 @@ const confirmDeleteTeam = async () => {
               
               {/* Members Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-             {teamMembers.map((member) => (
+             {guidanceTeamMembers.map((member) => (
   <ModernTeamCard
     key={member.id}
     member={member}
     onEdit={() => setMemberModal({ open: true, member })}
     onDelete={() => handleDeleteMember(member)}
-    onClick={() => handleViewMember(member)} // Add this line
+    onClick={() => handleViewMember(member)}
   />
 ))}
               </div>

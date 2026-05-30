@@ -7,6 +7,17 @@ import {
   SCHOOL_COMMUNICATION_NUMBER
 } from "../../../libs/delivery";
 
+const decodeJwtPayload = (token) => {
+  const payload = token.split('.')[1];
+  const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const paddedPayload = normalizedPayload.padEnd(
+    normalizedPayload.length + ((4 - normalizedPayload.length % 4) % 4),
+    '='
+  );
+
+  return JSON.parse(Buffer.from(paddedPayload, 'base64').toString('utf-8'));
+};
+
 // ==================== TOKEN VERIFICATION ====================
 class DeviceTokenManager {
   static validateTokensFromHeaders(headers) {
@@ -38,7 +49,7 @@ class DeviceTokenManager {
 
       let adminPayload;
       try {
-        adminPayload = JSON.parse(atob(adminParts[1]));
+        adminPayload = decodeJwtPayload(adminToken);
         
         const currentTime = Date.now() / 1000;
         if (adminPayload.exp && adminPayload.exp < currentTime) {
@@ -46,7 +57,7 @@ class DeviceTokenManager {
         }
         
         const userRole = adminPayload.role || adminPayload.userRole || '';
-        const validRoles = ['ADMIN', 'SUPER_ADMIN', 'administrator', 'PRINCIPAL', 'TEACHER', 'teacher'];
+        const validRoles = ['ADMIN', 'SUPER_ADMIN', 'ADMINISTRATOR', 'PRINCIPAL', 'TEACHER'];
         
         if (!validRoles.includes(userRole.toUpperCase())) {
           return { 

@@ -2,146 +2,220 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
+const CATEGORIES = {
+  GUIDANCE: 'guidance',
+  NTS: 'nts',
+};
+
+const GENDERS = {
+  MALE: 'male',
+  FEMALE: 'female',
+};
+
+const DEFAULT_IMAGES = {
+  [GENDERS.MALE]: '/male.png',
+  [GENDERS.FEMALE]: '/female.png',
+};
+
+const schoolContact = {
+  email: 'matunguluguirls@gmail.com',
+  phone: '+254723123456',
+};
+
+const guidanceTeamMembers = [
+  {
+    name: 'Isabella Musyoka',
+    role: 'guidanceTeacher',
+    title: 'Head of Guidance and Counselling',
+    bio: 'Dedicated guidance and counselling professional with extensive experience in student support and academic guidance.',
+    gender: GENDERS.FEMALE,
+    category: CATEGORIES.GUIDANCE,
+  },
+  {
+    name: 'Faith Njeri',
+    role: 'careerCounsellor',
+    title: 'Career Counsellor',
+    bio: 'Provides career guidance, university application support, and personal counselling to students.',
+    gender: GENDERS.FEMALE,
+    category: CATEGORIES.GUIDANCE,
+  },
+  {
+    name: 'David Mwangi',
+    role: 'studentSupportOfficer',
+    title: 'Student Support Officer',
+    bio: 'Supports student wellbeing, academic interventions, and guidance programmes at the school.',
+    gender: GENDERS.MALE,
+    category: CATEGORIES.GUIDANCE,
+  },
+];
+
+const nonTeachingDepartment = {
+  name: 'Non Teaching',
+  departmentCode: 'NT',
+  description: 'Non-teaching staff department for administrative and support services.',
+  image: '/female.png',
+};
+
+const nonTeachingStaff = [
+  {
+    name: 'Mary',
+    role: 'secretary',
+    position: 'School Secretary',
+    bio: 'Administrative support and secretarial services for school operations and management.',
+    gender: GENDERS.FEMALE,
+    status: 'active',
+  },
+  {
+    name: 'Winny',
+    role: 'accountsClerk',
+    position: 'Accounts and Finance Clerk',
+    bio: 'Manages school finance records, invoicing and financial documentation.',
+    gender: GENDERS.FEMALE,
+    status: 'active',
+  },
+  {
+    name: 'Kelvin',
+    role: 'bursar',
+    position: 'School Bursar',
+    bio: 'Oversees all school financial matters, budgeting and resource management.',
+    gender: GENDERS.MALE,
+    status: 'active',
+  },
+];
+
 async function seedGuidanceTeam() {
   try {
     console.log('🌱 Seeding Guidance and Counselling Team...');
 
-    // Clear existing team members (optional - set to false if you want to keep existing data)
-    const shouldClear = false; // Change to true to clear existing data
-    
+    const shouldClear = false; // Set to true to clear existing guidance and NTS records before seeding
+
     if (shouldClear) {
       await prisma.teamMember.deleteMany({
         where: {
-          category: 'guidance'
-        }
+          category: CATEGORIES.GUIDANCE,
+        },
       });
       console.log('✅ Cleared existing guidance team members');
+
+      await prisma.staff.deleteMany({
+        where: {
+          department: 'Non Teaching',
+        },
+      });
+      console.log('✅ Cleared existing non-teaching staff members');
+
+      await prisma.staffDepartment.deleteMany({
+        where: {
+          name: 'Non Teaching',
+        },
+      });
+      console.log('✅ Cleared existing Non Teaching department');
     }
 
-    // School contact details
-    const schoolEmail = 'info@matungulugirlshs.com';
-    const schoolPhone = '+254723123456'; // Update with actual school phone
+    const preparedGuidanceMembers = guidanceTeamMembers.map((member) => ({
+      ...member,
+      phone: schoolContact.phone,
+      email: schoolContact.email,
+      image: member.image || DEFAULT_IMAGES[member.gender] || DEFAULT_IMAGES[GENDERS.FEMALE],
+    }));
 
-    // Guidance Team Data
-    const guidanceTeamData = [
-      {
-        name: 'Isabella Musyoka',
-        role: 'guidanceTeacher',
-        title: 'Head of Guidance and Counselling',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Dedicated guidance and counselling professional with extensive experience in student support and academic guidance.',
-        gender: 'female',
-        category: 'guidance',
-        image: '/Matungulu/female.png'
-      },
-      {
-        name: 'Madam Kanana',
-        role: 'nurse',
-        title: 'School Nurse',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Experienced nurse providing health and wellness support to all students. Available for medical consultations and health education.',
-        gender: 'female',
-        category: 'guidance',
-        image: '/Matungulu/female.png'
-      },
-      {
-        name: 'Carol Philip',
-        role: 'boardingHod',
-        title: 'Head of Boarding',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Experienced boarding administrator ensuring student safety, comfort and discipline in the boarding facility.',
-        gender: 'female',
-        category: 'guidance',
-        image: '/Matungulu/female.png'
-      }
-    ];
+    let createdGuidance = 0;
+    let updatedGuidance = 0;
 
-    // NTS (Non-Teaching Staff) - Matron Group
-    const ntsData = [
-      {
-        name: 'NTS - Matron',
-        role: 'matron',
-        title: 'Matron (Non-Teaching Staff)',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Matron responsible for overseeing student welfare, meals and general boarding house management.',
-        gender: 'female',
-        category: 'nts',
-        image: '/Matungulu/female.png'
-      },
-      {
-        name: 'Secretary',
-        role: 'secretary',
-        title: 'School Secretary',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Administrative support and secretarial services for school operations and management.',
-        gender: 'female',
-        category: 'nts',
-        image: '/Matungulu/female.png'
-      },
-      {
-        name: 'Accounts Clerk',
-        role: 'accountsClerk',
-        title: 'Accounts and Finance Clerk',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Manages school finance records, invoicing and financial documentation.',
-        gender: 'female',
-        category: 'nts',
-        image: '/Matungulu/female.png'
-      },
-      {
-        name: 'Bursar',
-        role: 'bursar',
-        title: 'School Bursar',
-        phone: schoolPhone,
-        email: schoolEmail,
-        bio: 'Oversees all school financial matters, budgeting and resource management.',
-        gender: 'female',
-        category: 'nts',
-        image: '/Matungulu/female.png'
-      }
-    ];
-
-    // Combine all data
-    const allTeamMembers = [...guidanceTeamData, ...ntsData];
-
-    // Create or update team members
-    let createdCount = 0;
-    for (const member of allTeamMembers) {
+    for (const member of preparedGuidanceMembers) {
       const existing = await prisma.teamMember.findFirst({
-        where: {
-          name: member.name
-        }
+        where: { name: member.name },
       });
 
       if (existing && !shouldClear) {
-        // Update existing member
         await prisma.teamMember.update({
           where: { id: existing.id },
-          data: member
+          data: member,
         });
-        console.log(`✏️  Updated: ${member.name} (${member.role})`);
+        console.log(`✏️  Updated guidance member: ${member.name}`);
+        updatedGuidance += 1;
       } else {
-        // Create new member
         await prisma.teamMember.create({
-          data: member
+          data: member,
         });
-        console.log(`✅ Created: ${member.name} (${member.role})`);
-        createdCount++;
+        console.log(`✅ Created guidance member: ${member.name}`);
+        createdGuidance += 1;
       }
     }
 
-    console.log(`\n✅ Guidance team seeding complete!`);
-    console.log(`📊 Summary:`);
-    console.log(`   - Guidance Team: ${guidanceTeamData.length} members`);
-    console.log(`   - Non-Teaching Staff (NTS): ${ntsData.length} members`);
-    console.log(`   - Total: ${allTeamMembers.length} team members`);
+    let department = await prisma.staffDepartment.findFirst({
+      where: { name: nonTeachingDepartment.name },
+    });
 
+    if (!department) {
+      department = await prisma.staffDepartment.create({
+        data: {
+          name: nonTeachingDepartment.name,
+          category: 'SUPPORT',
+          description: nonTeachingDepartment.description,
+          image: nonTeachingDepartment.image,
+        },
+      });
+      console.log(`✅ Created department: ${department.name}`);
+    } else {
+      department = await prisma.staffDepartment.update({
+        where: { id: department.id },
+        data: {
+          description: nonTeachingDepartment.description,
+          image: nonTeachingDepartment.image,
+          category: 'SUPPORT',
+        },
+      });
+      console.log(`✏️  Updated department: ${department.name}`);
+    }
+
+    let createdStaff = 0;
+    let updatedStaff = 0;
+
+    for (const staff of nonTeachingStaff) {
+      const existingStaff = await prisma.staff.findFirst({
+        where: { name: staff.name },
+      });
+
+      const staffData = {
+        ...staff,
+        phone: schoolContact.phone,
+        email: schoolContact.email,
+        image: staff.image || DEFAULT_IMAGES[staff.gender] || DEFAULT_IMAGES[GENDERS.FEMALE],
+        department: department.name,
+        departmentRecord: {
+          connect: { id: department.id },
+        },
+      };
+
+      if (existingStaff && !shouldClear) {
+        await prisma.staff.update({
+          where: { id: existingStaff.id },
+          data: staffData,
+        });
+        console.log(`✏️  Updated non-teaching staff: ${staff.name}`);
+        updatedStaff += 1;
+      } else {
+        await prisma.staff.create({
+          data: staffData,
+        });
+        console.log(`✅ Created non-teaching staff: ${staff.name}`);
+        createdStaff += 1;
+      }
+    }
+
+    const guidanceCount = preparedGuidanceMembers.length;
+    const ntsCount = nonTeachingStaff.length;
+
+    console.log('\n✅ Seeding complete!');
+    console.log('📊 Summary:');
+    console.log(`   - Guidance Team: ${guidanceCount} members`);
+    console.log(`   - Non Teaching Department: 1 department`);
+    console.log(`   - Non Teaching Staff: ${ntsCount} members`);
+    console.log(`   - Guidance Created: ${createdGuidance}`);
+    console.log(`   - Guidance Updated: ${updatedGuidance}`);
+    console.log(`   - Staff Created: ${createdStaff}`);
+    console.log(`   - Staff Updated: ${updatedStaff}`);
   } catch (error) {
     console.error('❌ Seeding error:', error);
     throw error;
@@ -150,7 +224,6 @@ async function seedGuidanceTeam() {
   }
 }
 
-// Run the seed
 seedGuidanceTeam().catch((e) => {
   console.error(e);
   process.exit(1);
