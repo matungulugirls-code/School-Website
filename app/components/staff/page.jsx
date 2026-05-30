@@ -2317,8 +2317,8 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
-      <div className="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/60 p-6 backdrop-blur-sm">
+    <div className="max-h-[96vh] w-full max-w-6xl overflow-hidden rounded-3xl bg-white shadow-2xl">
         <div className="flex items-center justify-between bg-slate-900 p-5 text-white">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-300">
@@ -2333,7 +2333,7 @@ function DepartmentFormModal({ department, onClose, onSave, loading }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="max-h-[calc(92vh-92px)] overflow-y-auto p-5 sm:p-6">
+        <form onSubmit={handleSubmit} className="max-h-[calc(96vh-112px)] overflow-y-auto p-6 sm:p-8">
           <div className="grid gap-5 lg:grid-cols-2">
             <div className="space-y-4">
               <div>

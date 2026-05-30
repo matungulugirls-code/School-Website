@@ -1,39 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
+import { normalizePhoneNumber, sendWhatsAppMessage } from "../../../../libs/whatsapp";
 
 export const dynamic = "force-dynamic";
-
-// Helper: Normalize phone number to Kenyan format (0-prefixed)
-const normalizePhoneNumber = (phone) => {
-  if (!phone) return null;
-  const digits = String(phone).replace(/\D/g, "");
-  if (/^07\d{8}$/.test(digits)) return digits;
-  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
-  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
-  if (/^254\d{9}$/.test(digits)) return `0${digits.slice(3)}`;
-  return null;
-};
-
-// Helper: Send WhatsApp message via SMS gateway
-const sendWhatsAppMessage = async (phoneNumber, message) => {
-  try {
-    console.log(`📱 [WhatsApp] To: ${phoneNumber}`);
-    console.log(`📱 [WhatsApp] Message: ${message}`);
-
-    return {
-      success: true,
-      phoneNumber,
-      timestamp: new Date().toISOString(),
-    };
-  } catch (error) {
-    console.error("Error sending WhatsApp message:", error);
-    return {
-      success: false,
-      error: error.message,
-      phoneNumber,
-    };
-  }
-};
 
 /**
  * GET /api/resources/delivery/[id]
@@ -122,14 +91,34 @@ export async function POST(req) {
       },
     });
 
-    if (recipients.length === 0) {
-      return NextResponse.json(
-        { success: false, error: "No recipients found to send messages to" },
-        { status: 404 }
-      );
-    }
+    console.log(`📨 Resource delivery recipients found: ${recipients.length}`);
 
-    // Prepare and send messages
+    if (recipients.length === 0) {
+      await prisma.resource.update({
+        where: { id: resourceId },
+        data: {
+          deliveryStatus: 'no_recipients',
+          deliverySummary: {
+            successCount: 0,
+            failureCount: 0,
+            totalRecipients: 0,
+            sentAt: new Date().toISOString(),
+            results: [],
+          },
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'WhatsApp delivery completed. No recipients found.',
+        data: {
+          successCount: 0,
+          failureCount: 0,
+          totalRecipients: 0,
+          results: [],
+        },
+      });
+    }
     const sendResults = [];
     let successCount = 0;
     let failureCount = 0;

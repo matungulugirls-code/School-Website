@@ -1,58 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
+import { normalizePhoneNumber, sendWhatsAppMessage } from "../../../../libs/whatsapp";
 
 export const dynamic = "force-dynamic";
-
-// Helper: Normalize phone number to Kenyan format (0-prefixed)
-const normalizePhoneNumber = (phone) => {
-  if (!phone) return null;
-  const digits = String(phone).replace(/\D/g, "");
-  if (/^07\d{8}$/.test(digits)) return digits;
-  if (/^7\d{8}$/.test(digits)) return `0${digits}`;
-  if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
-  if (/^254\d{9}$/.test(digits)) return `0${digits.slice(3)}`;
-  return null;
-};
-
-// Helper: Send WhatsApp message via SMS gateway (Africa's Talking or similar)
-const sendWhatsAppMessage = async (phoneNumber, message) => {
-  try {
-    // This is a placeholder for the actual WhatsApp sending implementation
-    // You can integrate with:
-    // 1. Africa's Talking WhatsApp API
-    // 2. Twilio
-    // 3. MessageBird
-    // 4. Custom WhatsApp Business API
-
-    // For now, we'll log the message and return success
-    console.log(`📱 [WhatsApp] To: ${phoneNumber}`);
-    console.log(`📱 [WhatsApp] Message: ${message}`);
-
-    // TODO: Implement actual WhatsApp sending service
-    // Example with Africa's Talking:
-    // const at = africastalking({
-    //   apiKey: process.env.AFRICASTALKING_API_KEY,
-    //   username: process.env.AFRICASTALKING_USERNAME,
-    // });
-    // const result = await at.SMS.send({
-    //   to: [phoneNumber],
-    //   message: message,
-    // });
-
-    return {
-      success: true,
-      phoneNumber,
-      timestamp: new Date().toISOString(),
-    };
-  } catch (error) {
-    console.error("Error sending WhatsApp message:", error);
-    return {
-      success: false,
-      error: error.message,
-      phoneNumber,
-    };
-  }
-};
 
 /**
  * GET /api/assignment/delivery/[id]
@@ -147,11 +97,33 @@ export async function POST(req) {
       },
     });
 
+    console.log(`📨 Assignment delivery recipients found: ${recipients.length}`);
+
     if (recipients.length === 0) {
-      return NextResponse.json(
-        { success: false, error: "No recipients found to send messages to" },
-        { status: 404 }
-      );
+      await prisma.assignment.update({
+        where: { id: assignmentId },
+        data: {
+          deliveryStatus: 'no_recipients',
+          deliverySummary: {
+            successCount: 0,
+            failureCount: 0,
+            totalRecipients: 0,
+            sentAt: new Date().toISOString(),
+            results: [],
+          },
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'WhatsApp delivery completed. No recipients found.',
+        data: {
+          successCount: 0,
+          failureCount: 0,
+          totalRecipients: 0,
+          results: [],
+        },
+      });
     }
 
     // Prepare and send messages
