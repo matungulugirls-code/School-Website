@@ -1140,7 +1140,7 @@ const normalizeStudentUploadRow = (row = {}, index = 0) => {
   const className = buildClassName(form, stream, rawClassName);
   const parentPhone = normalizeLocalMobilePhone(row.parentPhone || row.phone || row.whatsappPhone || '');
   const studentPhone = normalizeLocalMobilePhone(row.studentPhone || '');
-  const whatsappPhone = normalizeLocalMobilePhone(row.whatsappPhone || parentPhone || studentPhone || '');
+  const whatsappPhone = normalizeLocalMobilePhone(row.whatsappPhone) || parentPhone || studentPhone;
   const email = row.email ? String(row.email).trim() : null;
   const uploadedCategory = String(row.uploadedCategory || row.category || form || '').trim() || null;
   const fullName = buildStudentFullName({ fullName: fullNameInput, firstName, middleName, lastName });
@@ -1187,9 +1187,9 @@ const buildStudentPersistenceData = (student, uploadBatchId, formOverride = null
   const form = formOverride || student.form;
   const fullName = buildStudentFullName({ ...student, form });
   const className = buildClassName(form, student.stream, student.className);
-  const parentPhone = normalizeLocalMobilePhone(student.parentPhone || student.whatsappPhone || student.studentPhone || '');
+  const parentPhone = normalizeLocalMobilePhone(student.parentPhone) || normalizeLocalMobilePhone(student.whatsappPhone) || normalizeLocalMobilePhone(student.studentPhone);
   const studentPhone = normalizeLocalMobilePhone(student.studentPhone || '');
-  const whatsappPhone = normalizeLocalMobilePhone(student.whatsappPhone || parentPhone || studentPhone || '');
+  const whatsappPhone = normalizeLocalMobilePhone(student.whatsappPhone) || parentPhone || studentPhone;
 
   return {
     admissionNumber: student.admissionNumber,
@@ -2304,9 +2304,9 @@ export async function PUT(request) {
         updateData.gradeLevel = updateData.gradeLevel || updateData.form;
       }
 
-      updateData.parentPhone = normalizeLocalMobilePhone(updateData.parentPhone || updateData.whatsappPhone || updateData.studentPhone || '');
+      updateData.parentPhone = normalizeLocalMobilePhone(updateData.parentPhone) || normalizeLocalMobilePhone(updateData.whatsappPhone) || normalizeLocalMobilePhone(updateData.studentPhone);
       updateData.studentPhone = normalizeLocalMobilePhone(updateData.studentPhone || '');
-      updateData.whatsappPhone = normalizeLocalMobilePhone(updateData.whatsappPhone || updateData.parentPhone || updateData.studentPhone || '');
+      updateData.whatsappPhone = normalizeLocalMobilePhone(updateData.whatsappPhone) || updateData.parentPhone || updateData.studentPhone;
       updateData.fullName = buildStudentFullName(updateData);
       updateData.className = buildClassName(updateData.form || currentStudent.form, updateData.stream || currentStudent.stream, updateData.className);
 

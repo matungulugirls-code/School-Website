@@ -620,7 +620,6 @@ function ModernResourceModal({ onClose, onSave, resource, loading }) {
   const [formData, setFormData] = useState({
     title: resource?.title || '',
     description: resource?.description || '',
-    subject: resource?.subject || '',
     className: resource?.className || '',
     teacher: resource?.teacher || '',
     category: resource?.category || 'General',
@@ -693,9 +692,7 @@ useEffect(() => {
   const isSubmitDisabled = 
     loading || 
     !formData.title.trim() || 
-    !formData.subject || 
     !formData.className || 
-    !formData.teacher ||
     (files.length === 0 && existingFiles.length === 0 && !resource) ||
     totalSizeMB > 4.5 ||
     fileSizeError;
@@ -705,21 +702,7 @@ useEffect(() => {
     ...DELIVERY_LEVEL_OPTIONS
   ];
 
-  // Subject options
-  const subjectOptions = [
-    'Mathematics',
-    'Science',
-    'English',
-    'History',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'Computer Science',
-    'Art',
-    'Music',
-    'Physical Education',
-    'Geography'
-  ];
+  // Subject intentionally removed to simplify the create/edit form
 
   // Category options
   const categoryOptions = [
@@ -852,9 +835,9 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate required fields
-    if (!formData.title.trim() || !formData.subject || !formData.className || !formData.teacher) {
-      alert('Please fill in all required fields');
+    // Validate required fields: keep minimal set (title and class)
+    if (!formData.title.trim() || !formData.className) {
+      alert('Please fill in all required fields (title and class)');
       return;
     }
     
@@ -1035,41 +1018,20 @@ useEffect(() => {
               />
             </div>
 
-            {/* Subject and Class in Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-base font-bold text-gray-800 mb-3">
-                  Subject *
-                </label>
-                <select
-                  required
-                  value={formData.subject}
-                  onChange={(e) => handleChange('subject', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
-                >
-                  <option value="">Select Subject</option>
-                  {subjectOptions.map(subject => (
-                    <option key={subject} value={subject}>{subject}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-base font-bold text-gray-800 mb-3">
-                  Class *
-                </label>
-                <select
-                  required
-                  value={formData.className}
-                  onChange={(e) => handleChange('className', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
-                >
-                  <option value="">Select Class</option>
-                  {classOptions.map(className => (
-                    <option key={className} value={className}>{className}</option>
-                  ))}
-                </select>
-              </div>
+            {/* Class selection (simplified) */}
+            <div>
+              <label className="block text-base font-bold text-gray-800 mb-3">Class *</label>
+              <select
+                required
+                value={formData.className}
+                onChange={(e) => handleChange('className', e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
+              >
+                <option value="">Select Class</option>
+                {classOptions.map(className => (
+                  <option key={className} value={className}>{className}</option>
+                ))}
+              </select>
             </div>
 
             <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
@@ -1088,76 +1050,9 @@ useEffect(() => {
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div>
-                  <p className="mb-2 text-sm font-bold text-slate-700">Recipient Grades</p>
-                  <div className="flex flex-wrap gap-2">
-                    {DELIVERY_LEVEL_OPTIONS.map((level) => {
-                      const selected = formData.targetGrades.includes(level);
-                      return (
-                        <button
-                          key={level}
-                          type="button"
-                          onClick={() => toggleTargetValue('targetGrades', level)}
-                          className={`rounded-xl border px-3 py-2 text-sm font-bold transition ${
-                            selected
-                              ? 'border-teal-600 bg-teal-700 text-white'
-                              : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-teal-300'
-                          }`}
-                          disabled={loading}
-                        >
-                          {level}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="mb-2 text-sm font-bold text-slate-700">Category Filters (optional)</p>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={formData.deliveryCategoryInput}
-                      onChange={(e) => handleChange('deliveryCategoryInput', e.target.value)}
-                      className="flex-1 rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 font-bold focus:border-teal-600 focus:ring-2 focus:ring-teal-600"
-                      placeholder="e.g., 2026 Grade 10"
-                      disabled={loading}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const category = formData.deliveryCategoryInput.trim();
-                        if (!category || formData.targetCategories.includes(category)) return;
-                        setFormData(prev => ({
-                          ...prev,
-                          targetCategories: [...prev.targetCategories, category],
-                          deliveryCategoryInput: ''
-                        }));
-                      }}
-                      className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-black text-white disabled:opacity-50"
-                      disabled={loading || !formData.deliveryCategoryInput.trim()}
-                    >
-                      Add
-                    </button>
-                  </div>
-                  {formData.targetCategories.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {formData.targetCategories.map(category => (
-                        <button
-                          key={category}
-                          type="button"
-                          onClick={() => toggleTargetValue('targetCategories', category)}
-                          className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-800"
-                          disabled={loading}
-                        >
-                          {category}
-                          <FiX className="h-3 w-3" />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <div className="mt-4">
+                <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
+                <p className="text-sm text-slate-600">Messages will be sent to the selected class via WhatsApp (Delivery Desk).</p>
               </div>
             </div>
 
@@ -1188,69 +1083,6 @@ useEffect(() => {
                 className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-gray-50"
                 placeholder="Describe the resource..."
               />
-            </div>
-
-            {/* Category and Access Level in Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-base font-bold text-gray-800 mb-3">
-                  Category
-                </label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => handleChange('category', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
-                >
-                  {categoryOptions.map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-base font-bold text-gray-800 mb-3">
-                  Access Level
-                </label>
-                <select
-                  value={formData.accessLevel}
-                  onChange={(e) => handleChange('accessLevel', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-gray-50"
-                >
-                  <option value="student">Student</option>
-                  <option value="teacher">Teacher</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Uploaded By and Active Status in Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-base font-bold text-gray-800 mb-3">
-                  Uploaded By
-                </label>
-                <input
-                  type="text"
-                  value={formData.uploadedBy}
-                  onChange={(e) => handleChange('uploadedBy', e.target.value)}
-                  className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-gray-50"
-                  placeholder="Enter uploader name"
-                />
-              </div>
-
-              {/* Active Status */}
-              <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  checked={formData.isActive}
-                  onChange={(e) => handleChange('isActive', e.target.checked)}
-                  className="w-5 h-5 text-green-600 rounded focus:ring-green-500 cursor-pointer"
-                />
-                <label htmlFor="isActive" className="text-base font-bold text-gray-800 cursor-pointer">
-                  Active (Visible to users)
-                </label>
-              </div>
             </div>
 
             {/* File Upload Section */}
@@ -1343,10 +1175,10 @@ useEffect(() => {
                           : 'border-slate-200 bg-slate-50/50 hover:bg-teal-50/30 hover:border-teal-400'
                       }`}
                     >
-                      <div className={`p-4 rounded-2xl mb-4 transition-transform ${
+                      <div className={`p-4 rounded-2xl mb-4 ${
                         totalSizeMB > 4.5 
                           ? 'bg-red-100' 
-                          : 'bg-white shadow-sm group-hover:scale-100'
+                          : 'bg-white shadow-sm'
                       }`}>
                         <FiUpload className={`text-3xl ${
                           totalSizeMB > 4.5 ? 'text-red-600' : 'text-teal-600'
@@ -1408,7 +1240,7 @@ useEffect(() => {
                           const fileSizeMB = fileObj.size ? (fileObj.size / (1024 * 1024)).toFixed(1) : 0;
                           
                           return (
-                            <div key={`new-${index}`} className={`group flex items-center justify-between p-4 rounded-2xl border transition-all ${
+                            <div key={`new-${index}`} className={`group flex items-center justify-between p-4 rounded-2xl border ${
                               totalSizeMB > 4.5
                                 ? 'bg-red-50/50 border-red-200'
                                 : 'bg-white border-slate-100 hover:border-teal-200 hover:shadow-sm'

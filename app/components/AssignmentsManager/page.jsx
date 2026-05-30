@@ -660,17 +660,11 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
   const [formData, setFormData] = useState({
     title: assignment?.title || '',
     description: assignment?.description || '',
-    dueDate: assignment?.dueDate ? new Date(assignment.dueDate).toISOString().split('T')[0] : '',
-    dateAssigned: assignment?.dateAssigned ? new Date(assignment.dateAssigned).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-    subject: assignment?.subject || '',
+    // simplified: keep only title, description, class, teacher and delivery-related fields
+    subject: '',
+    dueDate: '',
     className: assignment?.className || '',
     teacher: assignment?.teacher || '',
-    status: assignment?.status || 'pending',
-    priority: assignment?.priority || 'medium',
-    estimatedTime: assignment?.estimatedTime || '',
-    instructions: assignment?.instructions || '',
-    additionalWork: assignment?.additionalWork || '',
-    teacherRemarks: assignment?.teacherRemarks || '',
     targetGrades: assignment?.targetCriteria?.grades || [],
     targetClasses: assignment?.targetCriteria?.classes || (assignment?.className ? [assignment.className] : []),
     targetCategories: assignment?.targetCriteria?.categories || [],
@@ -696,21 +690,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
     ...DELIVERY_LEVEL_OPTIONS
   ];
 
-  // Subject options
-  const subjectOptions = [
-    'Mathematics',
-    'Science',
-    'English',
-    'History',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'Computer Science',
-    'Art',
-    'Music',
-    'Physical Education',
-    'Geography'
-  ];
+  // Subject options intentionally removed to simplify the form
 
   // Initialize with assignment data
   useEffect(() => {
@@ -981,18 +961,8 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
       return;
     }
     
-    if (!formData.subject) {
-      alert('Please select a subject');
-      return;
-    }
-    
     if (!formData.className) {
       alert('Please select a class');
-      return;
-    }
-    
-    if (!formData.dueDate) {
-      alert('Please select a due date');
       return;
     }
     
@@ -1115,27 +1085,6 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
             </div>
 
             {/* Subject and Class in Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <span className="text-red-500">*</span>
-                  <FiBookOpen className="text-emerald-600" />
-                  Subject
-                </label>
-                <select
-                  required
-                  value={formData.subject}
-                  onChange={(e) => handleChange('subject', e.target.value)}
-                  className="w-full  px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
-                  disabled={loading}
-                >
-                  <option value="">Select Subject</option>
-                  {subjectOptions.map(subject => (
-                    <option key={subject} value={subject}>{subject}</option>
-                  ))}
-                </select>
-              </div>
-
               <div>
                 <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
                   <span className="text-red-500">*</span>
@@ -1155,7 +1104,6 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                   ))}
                 </select>
               </div>
-            </div>
 
             <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
               <div className="flex items-center gap-4">
@@ -1173,76 +1121,9 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 </div>
               </div>
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div>
-                  <p className="mb-2 text-sm font-bold text-slate-700">Recipient Grades</p>
-                  <div className="flex flex-wrap gap-2">
-                    {DELIVERY_LEVEL_OPTIONS.map((level) => {
-                      const selected = formData.targetGrades.includes(level);
-                      return (
-                        <button
-                          key={level}
-                          type="button"
-                          onClick={() => toggleTargetValue('targetGrades', level)}
-                          className={`rounded-xl border px-3 py-2 text-sm font-bold transition ${
-                            selected
-                              ? 'border-teal-600 bg-teal-700 text-white'
-                              : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-teal-300'
-                          }`}
-                          disabled={loading}
-                        >
-                          {level}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="mb-2 text-sm font-bold text-slate-700">Category Filters (optional)</p>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={formData.deliveryCategoryInput}
-                      onChange={(e) => handleChange('deliveryCategoryInput', e.target.value)}
-                      className="flex-1 rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 font-bold focus:border-teal-600 focus:ring-2 focus:ring-teal-600"
-                      placeholder="e.g., 2026 Grade 10"
-                      disabled={loading}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const category = formData.deliveryCategoryInput.trim();
-                        if (!category || formData.targetCategories.includes(category)) return;
-                        setFormData(prev => ({
-                          ...prev,
-                          targetCategories: [...prev.targetCategories, category],
-                          deliveryCategoryInput: ''
-                        }));
-                      }}
-                      className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-black text-white disabled:opacity-50"
-                      disabled={loading || !formData.deliveryCategoryInput.trim()}
-                    >
-                      Add
-                    </button>
-                  </div>
-                  {formData.targetCategories.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {formData.targetCategories.map(category => (
-                        <button
-                          key={category}
-                          type="button"
-                          onClick={() => toggleTargetValue('targetCategories', category)}
-                          className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-800"
-                          disabled={loading}
-                        >
-                          {category}
-                          <FiX className="h-3 w-3" />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <div className="mt-4">
+                <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
+                <p className="text-sm text-slate-600">Messages will be sent to the selected class via WhatsApp (Delivery Desk).</p>
               </div>
             </div>
 
@@ -1280,191 +1161,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               />
             </div>
 
-            {/* Dates in Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <span className="text-red-500">*</span>
-                  <FiCalendar className="text-emerald-600" />
-                  Due Date
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={formData.dueDate}
-                  onChange={(e) => handleChange('dueDate', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
-                  disabled={loading}
-                />
-              </div>
-              
-              <div>
-                <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <FiCalendar className="text-emerald-600" />
-                  Date Assigned
-                </label>
-                <input
-                  type="date"
-                  value={formData.dateAssigned}
-                  onChange={(e) => handleChange('dateAssigned', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
-                  disabled={loading}
-                />
-              </div>
-            </div>
-
-            {/* Status and Priority in Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <FiCheckCircle className="text-green-500" />
-                  Status
-                </label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => handleChange('status', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
-                  disabled={loading}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in progress">In Progress</option>
-                  <option value="completed">Completed</option>
-                  <option value="overdue">Overdue</option>
-                  <option value="assigned">Assigned</option>
-                </select>
-              </div>
-
-              <div>
-                <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <FiTarget className="text-orange-500" />
-                  Priority
-                </label>
-                <select
-                  value={formData.priority}
-                  onChange={(e) => handleChange('priority', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-gray-50"
-                  disabled={loading}
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Estimated Time - Full Width */}
-            <div>
-              <label className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiClock className="text-amber-500" />
-                Estimated Time
-              </label>
-              <input
-                type="text"
-                value={formData.estimatedTime}
-                onChange={(e) => handleChange('estimatedTime', e.target.value)}
-                className="w-full font-bold  px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-gray-50"
-                placeholder="e.g., 2 Weeks, 5 Months"
-                disabled={loading}
-              />
-            </div>
-
-            {/* Learning Objectives */}
-            <div>
-              <label className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiTarget className="text-emerald-600" />
-                Learning Objectives
-              </label>
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newObjective}
-                    onChange={(e) => setNewObjective(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddObjective())}
-                    className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50"
-                    placeholder="Enter learning objective..."
-                    disabled={loading}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddObjective}
-                    disabled={loading || !newObjective.trim()}
-                    className="px-4 py-3 bg-teal-700 text-white rounded-xl font-bold disabled:opacity-50"
-                  >
-                    Add
-                  </button>
-                </div>
-                
-                {learningObjectives.length > 0 && (
-                  <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {learningObjectives.map((objective, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-teal-50 rounded-xl border border-teal-200">
-                        <div className="flex items-center gap-2">
-                          <FiCheckCircle className="text-teal-600" />
-                          <span className="text-sm font-medium text-gray-800">{objective}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveObjective(index)}
-                          className="text-red-500 hover:text-red-700 p-1"
-                          disabled={loading}
-                        >
-                          <FiX />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Instructions - Full Width */}
-            <div>
-              <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiBookOpen className="text-green-500" />
-                Instructions
-              </label>
-              <textarea
-                value={formData.instructions}
-                onChange={(e) => handleChange('instructions', e.target.value)}
-                rows="3"
-                className="w-full px-4 py-3 border-2 font-bold  border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50"
-                placeholder="Provide detailed instructions..."
-                disabled={loading}
-              />
-            </div>
-
-            {/* Additional Work - Full Width */}
-            <div>
-              <label className=" text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiFileText className="text-teal-700" />
-                Additional Work
-              </label>
-              <textarea
-                value={formData.additionalWork}
-                onChange={(e) => handleChange('additionalWork', e.target.value)}
-                rows="3"
-                className="w-full px-4 py-3 font-bold border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-600 focus:border-teal-600 bg-gray-50"
-                placeholder="Any additional work or extra credit..."
-                disabled={loading}
-              />
-            </div>
-
-            {/* Teacher Remarks - Full Width */}
-            <div>
-              <label className="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiEdit className="text-amber-500" />
-                Teacher Remarks
-              </label>
-              <textarea
-                value={formData.teacherRemarks}
-                onChange={(e) => handleChange('teacherRemarks', e.target.value)}
-                rows="2"
-                className="w-full px-4 py-3 border-2 font-bold border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-gray-50"
-                placeholder="Teacher's remarks or notes..."
-                disabled={loading}
-              />
-            </div>
+            {/* Dates removed - simplified form per request */}
 
             {/* File Upload Section */}
             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border-2 border-teal-200">
@@ -1515,9 +1212,9 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
 
                 {/* Vercel Size Warning */}
                 {totalSizeMB > 4.5 && (
-                  <div className="p-4 bg-red-50/50 border border-red-100 rounded-2xl animate-in fade-in zoom-in duration-300">
+                  <div className="p-4 bg-red-50/50 border border-red-100 rounded-2xl">
                     <div className="flex items-center gap-4">
-                      <div className="p-2 bg-red-500 text-white rounded-lg shadow-lg shadow-red-200">
+                      <div className="p-2 bg-red-500 text-white rounded-lg">
                         <FiAlertCircle size={20} />
                       </div>
                       <div className="flex-1">
@@ -1526,7 +1223,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                       </div>
                       <button
                         onClick={() => { setAssignmentFiles([]); setAttachments([]); }}
-                        className="px-4 py-2 bg-white text-red-600 text-xs font-black uppercase tracking-wider rounded-xl border border-red-100 shadow-sm hover:bg-red-50 transition-all"
+                        className="px-4 py-2 bg-white text-red-600 text-xs font-black uppercase tracking-wider rounded-xl border border-red-100 hover:bg-red-50"
                       >
                         Reset
                       </button>
@@ -1537,7 +1234,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 {/* Size Progress Bar */}
                 <div className="relative w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                   <div 
-                    className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out ${
+                    className={`absolute top-0 left-0 h-full ${
                       totalSizeMB > 4.5 ? 'bg-red-500' : totalSizeMB > 3.5 ? 'bg-amber-500' : 'bg-teal-700'
                     }`}
                     style={{ width: `${Math.min((totalSizeMB / 4.5) * 100, 100)}%` }}
@@ -1692,7 +1389,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               
               <button 
                 type="submit"
-                disabled={loading || totalSizeMB > 4.5 || !formData.title.trim() || !formData.subject || !formData.className || !formData.dueDate}
+                disabled={loading || totalSizeMB > 4.5 || !formData.title.trim() || !formData.className}
                 className="px-6 py-3 text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 bg-gradient-to-r from-teal-700 to-emerald-700 text-sm hover:from-teal-800 hover:to-emerald-800 transition-all"
               >
                 {loading ? (

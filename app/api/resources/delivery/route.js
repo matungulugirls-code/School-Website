@@ -124,33 +124,29 @@ export async function POST(req) {
     let failureCount = 0;
 
     for (const recipient of recipients) {
-      // Get parent phone number
-      let phoneNumber =
-        recipient.whatsappPhone ||
-        recipient.student?.whatsappPhone ||
-        recipient.student?.parentPhone ||
-        recipient.student?.studentPhone ||
-        recipient.whatsappPhone;
+      // Prefer uploaded student phones (student.whatsappPhone -> parentPhone -> studentPhone)
+      const candidates = [
+        recipient.student?.whatsappPhone,
+        recipient.student?.parentPhone,
+        recipient.student?.studentPhone,
+        recipient.whatsappPhone // fallback to recipient-level override
+      ];
 
-      if (!phoneNumber) {
-        sendResults.push({
-          recipientId: recipient.id,
-          admissionNumber: recipient.admissionNumber,
-          success: false,
-          error: "No phone number available",
-        });
-        failureCount++;
-        continue;
+      let normalizedPhone = null;
+      for (const cand of candidates) {
+        const norm = normalizePhoneNumber(cand);
+        if (norm) {
+          normalizedPhone = norm;
+          break;
+        }
       }
 
-      // Normalize phone number
-      const normalizedPhone = normalizePhoneNumber(phoneNumber);
       if (!normalizedPhone) {
         sendResults.push({
           recipientId: recipient.id,
           admissionNumber: recipient.admissionNumber,
           success: false,
-          error: "Invalid phone number format",
+          error: "No phone number available",
         });
         failureCount++;
         continue;

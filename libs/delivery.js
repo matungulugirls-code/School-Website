@@ -219,7 +219,7 @@ export const resolveDeliveryRecipients = async (criteria = {}, tx = prisma) => {
   const seenPhones = new Set();
 
   for (const student of students) {
-    const whatsappPhone = normalizeLocalMobilePhone(student.whatsappPhone || student.parentPhone || student.studentPhone);
+    const whatsappPhone = normalizeLocalMobilePhone(student.whatsappPhone) || normalizeLocalMobilePhone(student.parentPhone) || normalizeLocalMobilePhone(student.studentPhone);
     if (!whatsappPhone) {
       missingPhoneStudents.push(student);
       continue;
