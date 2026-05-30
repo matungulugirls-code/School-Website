@@ -1298,12 +1298,14 @@ model BatchDeletionLog {
 model TeamMember {
   id        Int      @id @default(autoincrement())
   name      String
-  role      String // "patron", "matron", "teacher", "assistant"
+  role      String // "guidanceTeacher", "nurse", "boardingHod", "matron", "secretary", "accountsClerk", "bursar"
   title     String?
   phone     String?
   email     String?
   bio       String?  @db.Text
   image     String?
+  gender    String? // "male" or "female" - used to select default image from Matungulu folder
+  category  String @default("guidance") // "guidance" or "nts" (non-teaching staff)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

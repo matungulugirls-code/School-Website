@@ -235,8 +235,10 @@ export async function POST(req) {
     }
     
     let imageUrl = null;
+    const gender = formData.get("gender") || "male";
+    const category = formData.get("category") || "guidance";
     
-    // Handle image upload if provided
+    // Handle image upload if provided, otherwise use default gender-based image
     if (imageFile && imageFile.size > 0) {
       // Validate image type
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
@@ -276,6 +278,10 @@ export async function POST(req) {
           { status: 500 }
         );
       }
+    } else {
+      // Use default gender-based image from Matungulu folder
+      const genderImage = gender === "female" ? "/Matungulu/female.png" : "/Matungulu/male.png";
+      imageUrl = genderImage;
     }
     
     // Create new team member with audit trail
@@ -288,6 +294,8 @@ export async function POST(req) {
         email,
         bio,
         image: imageUrl,
+        gender,
+        category,
         // Audit trail
       }
     });

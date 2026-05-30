@@ -1575,11 +1575,13 @@ const ModernMemberModal = ({
   // Initial empty form state
   const initialFormData = {
     name: '',
-    role: 'teacher',
+    role: 'guidanceTeacher',
     title: '',
     phone: '',
     email: '',
     bio: '',
+    gender: 'female',
+    category: 'guidance',
     image: null,
     imagePreview: '',
   };
@@ -1591,10 +1593,13 @@ const ModernMemberModal = ({
   
   // Role icons and colors
   const roleOptions = [
-    { value: 'teacher', label: 'Guidance Teacher', icon: <FiBriefcase />, color: 'text-blue-600', bgColor: 'bg-blue-100' },
-    { value: 'patron', label: 'Patron', icon: <FiAward />, color: 'text-purple-600', bgColor: 'bg-purple-100' },
-    { value: 'matron', label: 'Matron', icon: <FiUserCheck />, color: 'text-pink-600', bgColor: 'bg-pink-100' },
-    { value: 'assistant', label: 'Assistant', icon: <FiUserPlus />, color: 'text-gray-600', bgColor: 'bg-gray-100' },
+    { value: 'guidanceTeacher', label: 'Guidance & Counselling Teacher', icon: <FiBriefcase />, color: 'text-blue-600', bgColor: 'bg-blue-100' },
+    { value: 'nurse', label: 'School Nurse', icon: <FiUserCheck />, color: 'text-red-600', bgColor: 'bg-red-100' },
+    { value: 'boardingHod', label: 'Head of Boarding', icon: <FiAward />, color: 'text-purple-600', bgColor: 'bg-purple-100' },
+    { value: 'matron', label: 'Matron (NTS)', icon: <FiUserPlus />, color: 'text-pink-600', bgColor: 'bg-pink-100' },
+    { value: 'secretary', label: 'Secretary (NTS)', icon: <FiUsers />, color: 'text-green-600', bgColor: 'bg-green-100' },
+    { value: 'accountsClerk', label: 'Accounts Clerk (NTS)', icon: <FiBarChart2 />, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
+    { value: 'bursar', label: 'Bursar (NTS)', icon: <FiShield />, color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
   ];
   
   const selectedRole = roleOptions.find(r => r.value === formData.role) || roleOptions[0];
@@ -1611,11 +1616,13 @@ const ModernMemberModal = ({
         // Editing existing member
         setFormData({
           name: member.name || '',
-          role: member.role || 'teacher',
+          role: member.role || 'guidanceTeacher',
           title: member.title || '',
           phone: member.phone || '',
           email: member.email || '',
           bio: member.bio || '',
+          gender: member.gender || 'female',
+          category: member.category || 'guidance',
           image: null,
           imagePreview: member.image || '',
         });
@@ -1737,6 +1744,8 @@ const handleSubmit = async (e) => {
     submitData.append('phone', formData.phone.trim());
     submitData.append('email', formData.email.trim());
     submitData.append('bio', formData.bio.trim());
+    submitData.append('gender', formData.gender);
+    submitData.append('category', formData.category);
     
     // Only append image if a new one is uploaded
     if (formData.image) {
@@ -2056,6 +2065,61 @@ const handleSubmit = async (e) => {
                     Provide detailed information about the team member's role and background
                   </p>
                 </div>
+
+                {/* Gender Selection */}
+                <div>
+                  <label className="block text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4">
+                    Gender
+                  </label>
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
+                    {[
+                      { value: 'female', label: 'Female', icon: <FaFemale /> },
+                      { value: 'male', label: 'Male', icon: <FaMale /> }
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => handleFieldChange('gender', option.value)}
+                        className={`p-4 rounded-xl md:rounded-2xl font-bold transition-all border-2 flex items-center justify-center gap-2 ${
+                          (formData.gender || 'male') === option.value
+                            ? 'border-blue-600 bg-blue-50 text-blue-600'
+                            : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                        }`}
+                        disabled={isLoading}
+                      >
+                        {option.icon}
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Category Selection */}
+                <div>
+                  <label className="block text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4">
+                    Category
+                  </label>
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
+                    {[
+                      { value: 'guidance', label: 'Guidance Team' },
+                      { value: 'nts', label: 'Non-Teaching Staff' }
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => handleFieldChange('category', option.value)}
+                        className={`p-4 rounded-xl md:rounded-2xl font-bold transition-all border-2 ${
+                          (formData.category || 'guidance') === option.value
+                            ? 'border-purple-600 bg-purple-50 text-purple-600'
+                            : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                        }`}
+                        disabled={isLoading}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
               
               {/* Action Buttons */}
@@ -2116,33 +2180,61 @@ const ModernTeamCard = ({ member, onEdit, onDelete, onClick }) => {
   // Role configuration matching modal gradients
   const getRoleConfig = (role) => {
     const configs = {
-      teacher: {
+      guidanceTeacher: {
         icon: <FiBriefcase className="w-4 h-4" />,
         gradient: 'from-blue-600 to-indigo-400',
         textColor: 'text-blue-600',
         bgColor: 'bg-gradient-to-br from-blue-600 to-indigo-400',
         label: 'Guidance Teacher'
       },
-      patron: {
+      nurse: {
+        icon: <FiUserCheck className="w-4 h-4" />,
+        gradient: 'from-red-600 to-orange-400',
+        textColor: 'text-red-600',
+        bgColor: 'bg-gradient-to-br from-red-600 to-orange-400',
+        label: 'School Nurse'
+      },
+      boardingHod: {
         icon: <FiAward className="w-4 h-4" />,
         gradient: 'from-purple-600 to-pink-400',
         textColor: 'text-purple-600',
         bgColor: 'bg-gradient-to-br from-purple-600 to-pink-400',
-        label: 'Patron'
+        label: 'Head of Boarding'
       },
       matron: {
-        icon: <FiUserCheck className="w-4 h-4" />,
+        icon: <FiUserPlus className="w-4 h-4" />,
         gradient: 'from-emerald-500 to-teal-400',
         textColor: 'text-emerald-600',
         bgColor: 'bg-gradient-to-br from-emerald-500 to-teal-400',
-        label: 'Matron'
+        label: 'Matron (NTS)'
       },
-      assistant: {
-        icon: <FiUserPlus className="w-4 h-4" />,
-        gradient: 'from-gray-600 to-slate-500',
-        textColor: 'text-gray-600',
-        bgColor: 'bg-gradient-to-br from-gray-600 to-slate-500',
-        label: 'Assistant'
+      secretary: {
+        icon: <FiUsers className="w-4 h-4" />,
+        gradient: 'from-green-600 to-emerald-400',
+        textColor: 'text-green-600',
+        bgColor: 'bg-gradient-to-br from-green-600 to-emerald-400',
+        label: 'Secretary (NTS)'
+      },
+      accountsClerk: {
+        icon: <FiBarChart2 className="w-4 h-4" />,
+        gradient: 'from-yellow-600 to-amber-400',
+        textColor: 'text-yellow-600',
+        bgColor: 'bg-gradient-to-br from-yellow-600 to-amber-400',
+        label: 'Accounts Clerk (NTS)'
+      },
+      bursar: {
+        icon: <FiShield className="w-4 h-4" />,
+        gradient: 'from-indigo-600 to-blue-400',
+        textColor: 'text-indigo-600',
+        bgColor: 'bg-gradient-to-br from-indigo-600 to-blue-400',
+        label: 'Bursar (NTS)'
+      },
+      teacher: {
+        icon: <FiBriefcase className="w-4 h-4" />,
+        gradient: 'from-blue-600 to-indigo-400',
+        textColor: 'text-blue-600',
+        bgColor: 'bg-gradient-to-br from-blue-600 to-indigo-400',
+        label: 'Guidance Teacher'
       }
     };
     return configs[role] || configs.teacher;
@@ -2796,6 +2888,55 @@ const handleSubmit = async (e) => {
 
   const getRoleConfig = (role) => {
     const configs = {
+      guidanceTeacher: {
+        icon: <FiBriefcase className="w-6 h-6" />,
+        gradient: 'from-blue-600 to-indigo-400',
+        textColor: 'text-blue-600',
+        bgColor: 'bg-gradient-to-br from-blue-600 to-indigo-400',
+        label: 'Guidance Teacher'
+      },
+      nurse: {
+        icon: <FiUserCheck className="w-6 h-6" />,
+        gradient: 'from-red-600 to-orange-400',
+        textColor: 'text-red-600',
+        bgColor: 'bg-gradient-to-br from-red-600 to-orange-400',
+        label: 'School Nurse'
+      },
+      boardingHod: {
+        icon: <FiAward className="w-6 h-6" />,
+        gradient: 'from-purple-600 to-pink-400',
+        textColor: 'text-purple-600',
+        bgColor: 'bg-gradient-to-br from-purple-600 to-pink-400',
+        label: 'Head of Boarding'
+      },
+      matron: {
+        icon: <FiUserPlus className="w-6 h-6" />,
+        gradient: 'from-emerald-500 to-teal-400',
+        textColor: 'text-emerald-600',
+        bgColor: 'bg-gradient-to-br from-emerald-500 to-teal-400',
+        label: 'Matron (NTS)'
+      },
+      secretary: {
+        icon: <FiUsers className="w-6 h-6" />,
+        gradient: 'from-green-600 to-emerald-400',
+        textColor: 'text-green-600',
+        bgColor: 'bg-gradient-to-br from-green-600 to-emerald-400',
+        label: 'Secretary (NTS)'
+      },
+      accountsClerk: {
+        icon: <FiBarChart2 className="w-6 h-6" />,
+        gradient: 'from-yellow-600 to-amber-400',
+        textColor: 'text-yellow-600',
+        bgColor: 'bg-gradient-to-br from-yellow-600 to-amber-400',
+        label: 'Accounts Clerk (NTS)'
+      },
+      bursar: {
+        icon: <FiShield className="w-6 h-6" />,
+        gradient: 'from-indigo-600 to-blue-400',
+        textColor: 'text-indigo-600',
+        bgColor: 'bg-gradient-to-br from-indigo-600 to-blue-400',
+        label: 'Bursar (NTS)'
+      },
       teacher: {
         icon: <FiBriefcase className="w-6 h-6" />,
         gradient: 'from-blue-600 to-indigo-400',
@@ -2809,20 +2950,6 @@ const handleSubmit = async (e) => {
         textColor: 'text-purple-600',
         bgColor: 'bg-gradient-to-br from-purple-600 to-pink-400',
         label: 'Patron'
-      },
-      matron: {
-        icon: <FiUserCheck className="w-6 h-6" />,
-        gradient: 'from-emerald-500 to-teal-400',
-        textColor: 'text-emerald-600',
-        bgColor: 'bg-gradient-to-br from-emerald-500 to-teal-400',
-        label: 'Matron'
-      },
-      assistant: {
-        icon: <FiUserPlus className="w-6 h-6" />,
-        gradient: 'from-gray-600 to-slate-500',
-        textColor: 'text-gray-600',
-        bgColor: 'bg-gradient-to-br from-gray-600 to-slate-500',
-        label: 'Assistant'
       }
     };
     return configs[role] || configs.teacher;
@@ -3941,7 +4068,7 @@ const confirmDeleteTeam = async () => {
       
       <div className="flex items-baseline justify-between">
         <h3 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-          {teamMembers.filter(m => m.role === 'teacher').length}
+          {teamMembers.filter(m => m.role === 'guidanceTeacher').length}
         </h3>
         <div className="flex items-center text-emerald-500 text-sm font-medium">
           <FiArrowUpRight className="w-4 h-4 mr-0.5" />

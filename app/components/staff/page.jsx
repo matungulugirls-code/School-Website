@@ -2871,6 +2871,7 @@ function StaffDepartmentManager({ showNotification }) {
 export default function StaffManager() {
   const [staff, setStaff] = useState([]);
   const [filteredStaff, setFilteredStaff] = useState([]);
+  const [ntsStaff, setNtsStaff] = useState([]); // NEW: NTS staff from TeamMember table
   const [departmentOptions, setDepartmentOptions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
@@ -2992,6 +2993,7 @@ useEffect(() => {
   
   checkAuth();
   fetchStaff();
+  fetchNtsStaff(true); // NEW: Fetch NTS staff on component mount
   fetchDepartmentOptions(true);
 }, []);
 
@@ -3071,6 +3073,31 @@ const fetchDepartmentOptions = async (quiet = false) => {
     setDepartmentOptions([]);
     if (!quiet) {
       showNotification('error', 'Department Fetch Failed', error.message || 'Failed to fetch departments');
+    }
+  }
+};
+
+// NEW: Fetch Non-Teaching Staff (NTS) from TeamMember table
+const fetchNtsStaff = async (quiet = false) => {
+  try {
+    const response = await fetch('/api/guidanceteam', {
+      headers: getAuthHeaders()
+    });
+
+    const data = await response.json();
+
+    if (data.success && data.members) {
+      // Filter to get only NTS members (category === 'nts')
+      const ntsMembers = data.members.filter(m => m.category === 'nts');
+      setNtsStaff(ntsMembers);
+    } else {
+      setNtsStaff([]);
+    }
+  } catch (error) {
+    console.error('Error fetching NTS staff:', error);
+    setNtsStaff([]);
+    if (!quiet) {
+      console.warn('NTS staff fetch failed - non-critical');
     }
   }
 };
