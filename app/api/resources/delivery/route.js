@@ -4,6 +4,64 @@ import { normalizePhoneNumber, sendWhatsAppMessage } from "../../../../libs/what
 
 export const dynamic = "force-dynamic";
 
+const decodeJwtPayload = (token) => {
+  const payload = token.split('.')[1];
+  const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const paddedPayload = normalizedPayload.padEnd(
+    normalizedPayload.length + ((4 - normalizedPayload.length % 4) % 4),
+    '='
+  );
+
+  return JSON.parse(Buffer.from(paddedPayload, 'base64').toString('utf-8'));
+};
+
+const authenticateDeliveryRequest = (req) => {
+  const adminToken = req.headers.get('x-admin-token') || req.headers.get('authorization')?.replace('Bearer ', '');
+  const deviceToken = req.headers.get('x-device-token');
+
+  if (!adminToken || !deviceToken) {
+    return {
+      authenticated: false,
+      response: NextResponse.json(
+        { success: false, error: 'Access Denied', message: 'Admin and device tokens are required' },
+        { status: 401 }
+      )
+    };
+  }
+
+  try {
+    if (adminToken.split('.').length !== 3) throw new Error('Invalid admin token format');
+    JSON.parse(Buffer.from(deviceToken, 'base64').toString('utf-8'));
+
+    const adminPayload = decodeJwtPayload(adminToken);
+    if (adminPayload.exp && adminPayload.exp < Date.now() / 1000) {
+      throw new Error('Admin token has expired');
+    }
+
+    const userRole = String(adminPayload.role || adminPayload.userRole || '').toUpperCase();
+    const validRoles = ['ADMIN', 'SUPER_ADMIN', 'ADMINISTRATOR', 'PRINCIPAL', 'TEACHER', 'STAFF'];
+    if (!validRoles.includes(userRole)) {
+      return {
+        authenticated: false,
+        response: NextResponse.json(
+          { success: false, error: 'Access Denied', message: 'You do not have permission to send resource delivery messages' },
+          { status: 403 }
+        )
+      };
+    }
+
+    return { authenticated: true, user: adminPayload };
+  } catch (error) {
+    return {
+      authenticated: false,
+      response: NextResponse.json(
+        { success: false, error: 'Access Denied', message: error.message || 'Invalid authentication headers' },
+        { status: 401 }
+      )
+    };
+  }
+};
+
 /**
  * GET /api/resources/delivery/[id]
  * Get delivery status and details for a resource
@@ -47,6 +105,9 @@ export async function GET(req) {
  */
 export async function POST(req) {
   try {
+    const auth = authenticateDeliveryRequest(req);
+    if (!auth.authenticated) return auth.response;
+
     const body = await req.json();
     const { resourceId, recipientIds } = body;
 
@@ -142,6 +203,11 @@ export async function POST(req) {
       }
 
       if (!normalizedPhone) {
+        await prisma.resourceDeliveryRecipient.update({
+          where: { id: recipient.id },
+          data: { status: "failed", updatedAt: new Date() },
+        });
+
         sendResults.push({
           recipientId: recipient.id,
           admissionNumber: recipient.admissionNumber,
@@ -176,6 +242,10 @@ export async function POST(req) {
         });
       } else {
         failureCount++;
+        await prisma.resourceDeliveryRecipient.update({
+          where: { id: recipient.id },
+          data: { status: "failed", updatedAt: new Date() },
+        });
       }
 
       sendResults.push({
@@ -227,6 +297,9 @@ export async function POST(req) {
  */
 export async function PUT(req) {
   try {
+    const auth = authenticateDeliveryRequest(req);
+    if (!auth.authenticated) return auth.response;
+
     const body = await req.json();
     const { resourceId, failedRecipientIds } = body;
 

@@ -2149,255 +2149,80 @@ export default function AssignmentsManager() {
         loading={deleting || bulkDeleting}
       />
 
- {/* Modern Responsive Header – Assignments Theme */}
-<div className="relative mb-6 sm:mb-8 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem]
-                bg-gradient-to-br from-teal-800 via-emerald-800 to-green-800
-                p-4 sm:p-6 md:p-8 shadow-xl sm:shadow-2xl">
-
-  {/* Abstract Gradient Orbs - Purple/Blue Theme */}
-  <div className="absolute top-[-25%] right-[-10%] w-[250px] h-[250px] md:w-[420px] md:h-[420px] 
-                  bg-gradient-to-br from-emerald-500/30 via-teal-500/20 to-green-500/30 
-                  rounded-full blur-[100px] pointer-events-none animate-pulse" />
-  
-  <div className="absolute bottom-[-25%] left-[-10%] w-[200px] h-[200px] md:w-[340px] md:h-[340px] 
-                  bg-gradient-to-tr from-teal-500/20 via-emerald-500/10 to-green-500/20 
-                  rounded-full blur-[80px] pointer-events-none" />
-  
-  {/* Central Floating Orb */}
-  <div className="absolute top-[30%] right-[20%] w-[180px] h-[180px] 
-                  bg-gradient-to-r from-teal-500/20 to-emerald-500/20 
-                  rounded-full blur-[70px] pointer-events-none animate-pulse" />
-  
-  {/* Subtle Grid Pattern */}
-  <div className="absolute inset-0 opacity-[0.02]" 
-       style={{ 
-         backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-         backgroundSize: '40px 40px'
-       }} />
-  
-  {/* Shine Effect Overlay */}
-  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 
-                  bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full 
-                  group-hover:translate-x-full" 
-       style={{ transform: 'skewX(-20deg)' }} />
-
-  <div className="relative z-10">
-    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-6">
-
-      {/* Left Content */}
-      <div className="flex-1 min-w-0">
-        
-        {/* Premium Institution Badge */}
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="h-7 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-green-400 
-                          rounded-full shadow-[0_0_15px_rgba(20,184,166,0.5)]" />
-          <div>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-200">
-              Matungulu Girls Senior School
-            </h2>
-            <p className="text-[9px] italic font-medium text-white/40 tracking-widest uppercase">
-              Academic Tasks
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-
-          {/* Icon with Multi-layer Glow */}
-          <div className="relative shrink-0 self-start">
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500 to-emerald-500
-                            rounded-xl sm:rounded-2xl blur-md sm:blur-lg opacity-70" />
-            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-teal-700 to-emerald-700
-                            rounded-xl sm:rounded-2xl shadow-2xl transform group-hover:scale-105 
-                            group-hover:rotate-3 transition-all duration-500">
-              <FiClipboard className="text-white w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="flex-1 min-w-0">
-
-            {/* Security Badge */}
-            <div className="hidden xs:inline-flex items-center gap-1.5 px-2.5 py-1 
-                            bg-gradient-to-r from-teal-500/20 to-emerald-500/20 
-                            backdrop-blur-sm rounded-full mb-2 sm:mb-3 max-w-max 
-                            border border-white/10">
-              <FiShield className="w-2.5 h-2.5 text-emerald-300" />
-              <span className="text-[9px] font-bold text-emerald-300 uppercase tracking-wider">
-                Academic Portal
-              </span>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl
-                           font-black text-white tracking-tight leading-tight">
-              Assignments <span className="block sm:inline">& </span>
-              <span className="text-transparent bg-clip-text
-                               bg-gradient-to-r from-emerald-200 to-teal-200">
-                Manager
-              </span>
-            </h1>
-
-            {/* Description */}
-            <p className="mt-2 sm:mt-3 text-sm xs:text-base sm:text-lg
-                          text-emerald-100/90 font-medium
-                          max-w-2xl leading-relaxed
-                          line-clamp-2 sm:line-clamp-none">
-              Create, organize, distribute, and track student assignments across classes and subjects.
-            </p>
-
-            {/* Quick Stats Pills */}
-            <div className="flex flex-wrap items-center gap-2 mt-4">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
-                              bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
-                  Service: Active
-                </span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
-                              bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <FiClipboard className="w-3 h-3 text-emerald-400" />
-                <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
-                  {stats?.total || 0} Assignments
-                </span>
-              </div>
-              {stats?.overdue > 0 && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
-                              bg-rose-500/20 backdrop-blur-sm rounded-full border border-rose-500/20">
-                  <FiAlertTriangle className="w-3 h-3 text-rose-400" />
-                  <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider">
-                    {stats.overdue} Overdue
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+{/* ── Clean Responsive Assignments Header ── */}
+<div className="relative mb-6 overflow-hidden rounded-2xl bg-[#064e3b] p-4 shadow-sm sm:mb-8 sm:p-6">
+  <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    
+    {/* Left Content */}
+    <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+      {/* Icon */}
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10">
+        <FiClipboard className="h-6 w-6 text-white" />
       </div>
 
-      {/* Right Content */}
-      <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between
-                      lg:flex-col lg:items-end gap-3 sm:gap-4">
+      {/* Text */}
+      <div className="min-w-0 flex-1">
+        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-100/80">
+          Matungulu Girls Senior School
+        </p>
 
-        {/* Actions */}
-        <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 w-full xs:w-auto">
-          
-          {/* Refresh Button - Glass Effect */}
-          <button
-            onClick={() => fetchAssignments(true)}
-            disabled={refreshing}
-            className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
-                       px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-white/10 backdrop-blur-sm border border-white/20
-                       rounded-xl sm:rounded-2xl text-white font-semibold
-                       hover:bg-white/15 active:scale-95 transition-all
-                       disabled:opacity-60 w-full xs:w-auto min-w-[120px]"
-          >
-            {/* Button Shine Effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full 
-                            transition-transform duration-1000 
-                            bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            
-            {refreshing ? (
-              <>
-                <CircularProgress size={16} color="inherit" />
-                <span className="text-xs sm:text-sm">Refreshing...</span>
-              </>
-            ) : (
-              <>
-                <FiRotateCw className="w-4 h-4 group-hover/btn:rotate-180 transition-transform duration-500" />
-                <span className="text-xs sm:text-sm">Refresh</span>
-              </>
-            )}
-            
-            {/* Live Badge */}
-            <span className="hidden sm:inline-block ml-1 px-1.5 py-0.5 
-                             rounded-md bg-white/10 text-[9px] font-black 
-                             text-white/60 border border-white/10">
-              LIVE
-            </span>
-          </button>
+        <h1 className="text-2xl font-black leading-tight text-white sm:text-3xl md:text-4xl">
+          Assignments Manager
+        </h1>
 
-          {/* Create Button - Gradient Primary */}
-           <button
-             onClick={handleCreate}
-             className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
-                       px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-gradient-to-r from-teal-600 via-emerald-600 to-green-600
-                       hover:from-teal-700 hover:via-emerald-700 hover:to-green-700
-                       text-white rounded-xl sm:rounded-2xl font-semibold
-                       active:scale-95 transition-all
-                       shadow-[0_8px_20px_rgba(20,184,166,0.3)] 
-                       hover:shadow-[0_12px_30px_rgba(20,184,166,0.4)]
-                       w-full xs:w-auto"
-           >
-            {/* Button Shine Effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full 
-                            transition-transform duration-1000 
-                            bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            
-            <FiPlus className="w-4 h-4 group-hover/btn:rotate-90 transition-transform duration-300" />
-            <span className="text-xs sm:text-sm whitespace-nowrap">Create Assignment</span>
-            
-            {/* Pulse Indicator */}
-            <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full 
-                               rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-            </span>
-          </button>
-        </div>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50/75 sm:text-base">
+          Create, organize, and manage student assignments across classes and subjects.
+        </p>
 
-        {/* Today's Stats - Desktop */}
-        <div className="hidden lg:flex flex-col items-end">
-          <span className="text-[9px] font-bold text-emerald-300/70 uppercase tracking-widest">
-            Due This Week
-          </span>
-          <span className="text-2xl font-black text-white">
-            {stats?.thisWeek || 0}
-          </span>
+        {/* Simple Stats */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <div className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85">
+            {stats?.total || 0} Assignments
+          </div>
+
+          <div className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85">
+            {stats?.thisWeek || 0} Due This Week
+          </div>
+
+          {stats?.overdue > 0 && (
+            <div className="rounded-full bg-rose-500/20 px-3 py-1.5 text-xs font-semibold text-rose-100">
+              {stats.overdue} Overdue
+            </div>
+          )}
         </div>
       </div>
     </div>
-    
-    {/* Enhanced Status Bar */}
-    <div className="mt-6 pt-4 border-t border-white/10 
-                    flex flex-wrap items-center gap-4 sm:gap-6 
-                    text-[10px] font-bold uppercase tracking-wider">
-      
-      {/* Service Status */}
-      <div className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="text-white/40">Status:</span>
-        <span className="text-emerald-400">Operational</span>
-      </div>
-      
-      {/* Security Badge */}
-      <div className="flex items-center gap-2">
-        <FiShield className="w-3 h-3 text-emerald-400" />
-        <span className="text-white/40">Security:</span>
-        <span className="text-emerald-400">Encrypted</span>
-      </div>
-      
-      {/* Total Assignments */}
-      <div className="flex items-center gap-2">
-        <FiClipboard className="w-3 h-3 text-emerald-400" />
-        <span className="text-white/40">Total:</span>
-        <span className="text-emerald-400 font-black">{stats?.total || 0} Tasks</span>
-      </div>
-      
-      {/* Last Updated */}
-      <div className="flex items-center gap-2 ml-auto">
-        <FiClock className="w-3 h-3 text-white/30" />
-        <span className="text-white/40">
-          Updated: {new Date().toLocaleTimeString()}
-        </span>
-      </div>
+
+    {/* Right Actions */}
+    <div className="flex w-full flex-col gap-2 sm:flex-row lg:w-auto lg:justify-end">
+      <button
+        onClick={() => fetchAssignments(true)}
+        disabled={refreshing}
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+      >
+        {refreshing ? (
+          <>
+            <CircularProgress size={16} color="inherit" />
+            <span>Refreshing...</span>
+          </>
+        ) : (
+          <>
+            <FiRotateCw className="h-4 w-4" />
+            <span>Refresh</span>
+          </>
+        )}
+      </button>
+
+      <button
+        onClick={handleCreate}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 active:scale-95 sm:w-auto"
+      >
+        <FiPlus className="h-4 w-4" />
+        <span>Create Assignment</span>
+      </button>
     </div>
   </div>
 </div>
-
       {/* Bulk Actions Section */}
       {selectedAssignments.size > 0 && (
         <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-2xl p-4 shadow-lg">

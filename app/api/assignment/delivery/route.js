@@ -4,6 +4,64 @@ import { normalizePhoneNumber, sendWhatsAppMessage } from "../../../../libs/what
 
 export const dynamic = "force-dynamic";
 
+const decodeJwtPayload = (token) => {
+  const payload = token.split('.')[1];
+  const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const paddedPayload = normalizedPayload.padEnd(
+    normalizedPayload.length + ((4 - normalizedPayload.length % 4) % 4),
+    '='
+  );
+
+  return JSON.parse(Buffer.from(paddedPayload, 'base64').toString('utf-8'));
+};
+
+const authenticateDeliveryRequest = (req) => {
+  const adminToken = req.headers.get('x-admin-token') || req.headers.get('authorization')?.replace('Bearer ', '');
+  const deviceToken = req.headers.get('x-device-token');
+
+  if (!adminToken || !deviceToken) {
+    return {
+      authenticated: false,
+      response: NextResponse.json(
+        { success: false, error: 'Access Denied', message: 'Admin and device tokens are required' },
+        { status: 401 }
+      )
+    };
+  }
+
+  try {
+    if (adminToken.split('.').length !== 3) throw new Error('Invalid admin token format');
+    JSON.parse(Buffer.from(deviceToken, 'base64').toString('utf-8'));
+
+    const adminPayload = decodeJwtPayload(adminToken);
+    if (adminPayload.exp && adminPayload.exp < Date.now() / 1000) {
+      throw new Error('Admin token has expired');
+    }
+
+    const userRole = String(adminPayload.role || adminPayload.userRole || '').toUpperCase();
+    const validRoles = ['ADMIN', 'SUPER_ADMIN', 'ADMINISTRATOR', 'PRINCIPAL', 'TEACHER', 'STAFF'];
+    if (!validRoles.includes(userRole)) {
+      return {
+        authenticated: false,
+        response: NextResponse.json(
+          { success: false, error: 'Access Denied', message: 'You do not have permission to send assignment delivery messages' },
+          { status: 403 }
+        )
+      };
+    }
+
+    return { authenticated: true, user: adminPayload };
+  } catch (error) {
+    return {
+      authenticated: false,
+      response: NextResponse.json(
+        { success: false, error: 'Access Denied', message: error.message || 'Invalid authentication headers' },
+        { status: 401 }
+      )
+    };
+  }
+};
+
 /**
  * GET /api/assignment/delivery/[id]
  * Get delivery status and details for an assignment
@@ -24,7 +82,7 @@ export async function GET(req) {
 
     const deliveryRecipients = await prisma.assignmentDeliveryRecipient.findMany({
       where: { assignmentId },
-      orderBy: [{ cbeRoleType: "asc" }, { createdAt: "asc" }],
+      orderBy: [{ createdAt: "asc" }],
     });
 
     return NextResponse.json({
@@ -53,6 +111,9 @@ export async function GET(req) {
  */
 export async function POST(req) {
   try {
+    const auth = authenticateDeliveryRequest(req);
+    if (!auth.authenticated) return auth.response;
+
     const body = await req.json();
     const { assignmentId, recipientIds } = body;
 
@@ -150,6 +211,11 @@ export async function POST(req) {
       }
 
       if (!normalizedPhone) {
+        await prisma.assignmentDeliveryRecipient.update({
+          where: { id: recipient.id },
+          data: { status: "failed", updatedAt: new Date() },
+        });
+
         sendResults.push({
           recipientId: recipient.id,
           admissionNumber: recipient.admissionNumber,
@@ -167,7 +233,10 @@ export async function POST(req) {
           ? `${recipient.student.firstName} ${recipient.student.lastName}`.trim()
           : "Student");
 
-      const message = `Hi, please check the new assignment: "${assignment.title}". Subject: ${assignment.subject}. Due: ${new Date(assignment.dueDate).toLocaleDateString()}. Instructions: ${assignment.description?.substring(0, 100) || "See details in student portal"}...`;
+      const dueDateText = assignment.dueDate
+        ? new Date(assignment.dueDate).toLocaleDateString()
+        : "Check the student portal";
+      const message = `Hi, please check the new assignment: "${assignment.title}". Subject: ${assignment.subject}. Due: ${dueDateText}. Instructions: ${assignment.description?.substring(0, 100) || "See details in student portal"}...`;
 
       // Send WhatsApp message
       const sendResult = await sendWhatsAppMessage(normalizedPhone, message);
@@ -184,6 +253,10 @@ export async function POST(req) {
         });
       } else {
         failureCount++;
+        await prisma.assignmentDeliveryRecipient.update({
+          where: { id: recipient.id },
+          data: { status: "failed", updatedAt: new Date() },
+        });
       }
 
       sendResults.push({
@@ -235,6 +308,9 @@ export async function POST(req) {
  */
 export async function PUT(req) {
   try {
+    const auth = authenticateDeliveryRequest(req);
+    if (!auth.authenticated) return auth.response;
+
     const body = await req.json();
     const { assignmentId, failedRecipientIds } = body;
 
@@ -304,7 +380,10 @@ export async function PUT(req) {
         continue;
       }
 
-      const message = `Reminder: Assignment "${assignment.title}" is due on ${new Date(assignment.dueDate).toLocaleDateString()}. Please submit on time.`;
+      const dueDateText = assignment.dueDate
+        ? new Date(assignment.dueDate).toLocaleDateString()
+        : "the date shown in the student portal";
+      const message = `Reminder: Assignment "${assignment.title}" is due on ${dueDateText}. Please submit on time.`;
       const sendResult = await sendWhatsAppMessage(normalizedPhone, message);
 
       if (sendResult.success) {
