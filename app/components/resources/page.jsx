@@ -2081,220 +2081,74 @@ const handleSubmit = async (formData, id) => {
                   bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full 
                   group-hover:translate-x-full" 
        style={{ transform: 'skewX(-20deg)' }} />
-
-  <div className="relative z-10">
-    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-6">
-
-      {/* Left Content */}
-      <div className="flex-1 min-w-0">
-        
-        {/* Premium Institution Badge */}
-        <div className="flex items-center gap-2.5 mb-4">
-          <div className="h-7 w-1 bg-gradient-to-b from-indigo-400 via-green-400 to-violet-400 
-                          rounded-full shadow-[0_0_15px_rgba(129,140,248,0.5)]" />
-          <div>
-            <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-200">
-              Matungulu Girls Senior School
-            </h2>
-            <p className="text-[9px] italic font-medium text-white/40 tracking-widest uppercase">
-              Digital Resource Hub
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-
-          {/* Icon with Multi-layer Glow */}
-          <div className="relative shrink-0 self-start">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-green-500
-                            rounded-xl sm:rounded-2xl blur-md sm:blur-lg opacity-70" />
-            <div className="relative p-3 sm:p-4 bg-gradient-to-br from-indigo-600 to-green-600
-                            rounded-xl sm:rounded-2xl shadow-2xl transform group-hover:scale-105 
-                            group-hover:rotate-3 transition-all duration-500">
-              <FiFolder className="text-white w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="flex-1 min-w-0">
-
-            {/* Security Badge */}
-            <div className="hidden xs:inline-flex items-center gap-1.5 px-2.5 py-1 
-                            bg-gradient-to-r from-indigo-500/20 to-green-500/20 
-                            backdrop-blur-sm rounded-full mb-2 sm:mb-3 max-w-max 
-                            border border-white/10">
-              <FiShield className="w-2.5 h-2.5 text-indigo-300" />
-              <span className="text-[9px] font-bold text-indigo-300 uppercase tracking-wider">
-                Secure Portal
-              </span>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl
-                           font-black text-white tracking-tight leading-tight">
-              Resources <span className="block sm:inline">& </span>
-              <span className="text-transparent bg-clip-text
-                               bg-gradient-to-r from-indigo-200 to-green-200">
-                Manager
-              </span>
-            </h1>
-
-            {/* Description */}
-            <p className="mt-2 sm:mt-3 text-sm xs:text-base sm:text-lg
-                          text-indigo-100/90 font-medium
-                          max-w-2xl leading-relaxed
-                          line-clamp-2 sm:line-clamp-none">
-              Centralized hub for uploading, organizing, and securely managing learning resources and documents.
-            </p>
-
-            {/* Quick Stats Pills */}
-            <div className="flex flex-wrap items-center gap-2 mt-4">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
-                              bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
-                  Service: Active
-                </span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
-                              bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <FiFolder className="w-3 h-3 text-indigo-400" />
-                <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
-                  {stats?.total || 0} Resources
-                </span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 
-                              bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <FiFileText className="w-3 h-3 text-amber-400" />
-                <span className="text-[10px] font-bold text-white/80 uppercase tracking-wider">
-                  {stats?.totalFiles || 0} Files
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+{/* ── Clean Responsive Resources Header ── */}
+<div className="relative z-10 rounded-2xl bg-[#071527] p-4 sm:p-6 shadow-sm">
+  <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    
+    {/* Left Content */}
+    <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+      {/* Icon */}
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10">
+        <FiFolder className="h-6 w-6 text-white" />
       </div>
 
-      {/* Right Content */}
-      <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between
-                      lg:flex-col lg:items-end gap-3 sm:gap-4">
+      {/* Text */}
+      <div className="min-w-0 flex-1">
+        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-blue-200/80">
+          Matungulu Girls Senior School
+        </p>
 
-        {/* Actions */}
-        <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 w-full xs:w-auto">
-          
-          {/* Refresh Button - Glass Effect */}
-          <button
-            onClick={() => fetchResources(true)}
-            disabled={refreshing}
-            className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
-                       px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-white/10 backdrop-blur-sm border border-white/20
-                       rounded-xl sm:rounded-2xl text-white font-semibold
-                       hover:bg-white/15 active:scale-95 transition-all
-                       disabled:opacity-60 w-full xs:w-auto min-w-[120px]"
-          >
-            {/* Button Shine Effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full 
-                            transition-transform duration-1000 
-                            bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            
-            {refreshing ? (
-              <>
-                <CircularProgress size={16} color="inherit" />
-                <span className="text-xs sm:text-sm">Refreshing...</span>
-              </>
-            ) : (
-              <>
-                <FiRotateCw className="w-4 h-4 group-hover/btn:rotate-180 transition-transform duration-500" />
-                <span className="text-xs sm:text-sm">Refresh</span>
-              </>
-            )}
-            
-            {/* Live Badge */}
-            <span className="hidden sm:inline-block ml-1 px-1.5 py-0.5 
-                             rounded-md bg-white/10 text-[9px] font-black 
-                             text-white/60 border border-white/10">
-              LIVE
-            </span>
-          </button>
+        <h1 className="text-2xl font-black leading-tight text-white sm:text-3xl md:text-4xl">
+          Resources Manager
+        </h1>
 
-          {/* Upload Button - Gradient Primary */}
-          <button
-            onClick={handleCreate}
-            className="group/btn relative overflow-hidden flex items-center justify-center gap-2.5
-                       px-4 sm:px-5 py-2.5 sm:py-3
-                       bg-gradient-to-r from-indigo-500 via-green-500 to-violet-500
-                       hover:from-indigo-600 hover:via-green-600 hover:to-violet-600
-                       text-white rounded-xl sm:rounded-2xl font-semibold
-                       active:scale-95 transition-all
-                       shadow-[0_8px_20px_rgba(139,92,246,0.3)] 
-                       hover:shadow-[0_12px_30px_rgba(139,92,246,0.4)]
-                       w-full xs:w-auto"
-          >
-            {/* Button Shine Effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full 
-                            transition-transform duration-1000 
-                            bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            
-            <FiPlus className="w-4 h-4 group-hover/btn:rotate-90 transition-transform duration-300" />
-            <span className="text-xs sm:text-sm whitespace-nowrap">Upload Resource</span>
-            
-            {/* Pulse Indicator */}
-            <span className="relative flex h-2 w-2 ml-1">
-              <span className="animate-ping absolute inline-flex h-full w-full 
-                               rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-            </span>
-          </button>
-        </div>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-blue-100/75 sm:text-base">
+          Upload, organize, and manage school learning resources and documents in one place.
+        </p>
 
-        {/* Today's Stats - Desktop */}
-        <div className="hidden lg:flex flex-col items-end">
-          <span className="text-[9px] font-bold text-indigo-300/70 uppercase tracking-widest">
-            Total Files
-          </span>
-          <span className="text-2xl font-black text-white">
-            {stats?.totalFiles || 0}
-          </span>
+        {/* Simple Stats */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <div className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85">
+            {stats?.total || 0} Resources
+          </div>
+
+          <div className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85">
+            {stats?.totalFiles || 0} Files
+          </div>
         </div>
       </div>
     </div>
-    
-    {/* Enhanced Status Bar */}
-    <div className="mt-6 pt-4 border-t border-white/10 
-                    flex flex-wrap items-center gap-4 sm:gap-6 
-                    text-[10px] font-bold uppercase tracking-wider">
-      
-      {/* Service Status */}
-      <div className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="text-white/40">Status:</span>
-        <span className="text-emerald-400">Operational</span>
-      </div>
-      
-      {/* Security Badge */}
-      <div className="flex items-center gap-2">
-        <FiShield className="w-3 h-3 text-indigo-400" />
-        <span className="text-white/40">Security:</span>
-        <span className="text-indigo-400">Encrypted</span>
-      </div>
-      
-      {/* Total Resources */}
-      <div className="flex items-center gap-2">
-        <FiFolder className="w-3 h-3 text-green-400" />
-        <span className="text-white/40">Resources:</span>
-        <span className="text-green-400 font-black">{stats?.total || 0}</span>
-      </div>
-      
-      {/* Last Updated */}
-      <div className="flex items-center gap-2 ml-auto">
-        <FiClock className="w-3 h-3 text-white/30" />
-        <span className="text-white/40">
-          Updated: {new Date().toLocaleTimeString()}
-        </span>
-      </div>
+
+    {/* Right Actions */}
+    <div className="flex w-full flex-col gap-2 sm:flex-row lg:w-auto lg:justify-end">
+      <button
+        onClick={() => fetchResources(true)}
+        disabled={refreshing}
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+      >
+        {refreshing ? (
+          <>
+            <CircularProgress size={16} color="inherit" />
+            <span>Refreshing...</span>
+          </>
+        ) : (
+          <>
+            <FiRotateCw className="h-4 w-4" />
+            <span>Refresh</span>
+          </>
+        )}
+      </button>
+
+      <button
+        onClick={handleCreate}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-95 sm:w-auto"
+      >
+        <FiPlus className="h-4 w-4" />
+        <span>Upload Resource</span>
+      </button>
     </div>
   </div>
+</div>
 </div>
 
 
