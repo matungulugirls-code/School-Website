@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import path from "path";
 import { prisma } from "../../../../libs/prisma";
-import { normalizePhoneNumber, sendWhatsAppMessage } from "../../../../libs/whatsapp";
+import { normalizeEmailAddress, sendDeliveryEmail } from "../../../../libs/emailDelivery";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,7 @@ const authenticateDeliveryRequest = (req) => {
       return {
         authenticated: false,
         response: NextResponse.json(
-          { success: false, error: 'Access Denied', message: 'You do not have permission to send assignment delivery messages' },
+          { success: false, error: 'Access Denied', message: 'You do not have permission to send assignment delivery emails' },
           { status: 403 }
         )
       };
@@ -62,10 +63,78 @@ const authenticateDeliveryRequest = (req) => {
   }
 };
 
-/**
- * GET /api/assignment/delivery/[id]
- * Get delivery status and details for an assignment
- */
+const getStudentName = (recipient) =>
+  recipient.studentName ||
+  (recipient.student
+    ? `${recipient.student.firstName || ''} ${recipient.student.lastName || ''}`.trim()
+    : '') ||
+  'Student';
+
+const buildAssignmentEmail = (assignment, studentName) => {
+  const dueDateText = assignment.dueDate
+    ? new Date(assignment.dueDate).toLocaleDateString()
+    : 'Check the student portal';
+  const teacherName = assignment.teacher || 'The subject teacher';
+  const classStream = assignment.className || 'Check the student portal';
+  const subject = `New assignment: ${assignment.title}`;
+  const text = [
+    'Dear Parent/Guardian,',
+    '',
+    `A new assignment has been shared for ${studentName}.`,
+    `Title: ${assignment.title}`,
+    `Subject: ${assignment.subject}`,
+    `Teacher: ${teacherName}`,
+    `Class / Stream: ${classStream}`,
+    `Due: ${dueDateText}`,
+    '',
+    `Instructions: ${assignment.description || 'Please check the student portal for details.'}`,
+    '',
+    'Regards,',
+    'Matungulu Girls Senior School'
+  ].join('\n');
+  const html = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
+      <p>Dear Parent/Guardian,</p>
+      <p>A new assignment has been shared for <strong>${studentName}</strong>.</p>
+      <ul>
+        <li><strong>Title:</strong> ${assignment.title}</li>
+        <li><strong>Subject:</strong> ${assignment.subject}</li>
+        <li><strong>Teacher:</strong> ${teacherName}</li>
+        <li><strong>Class / Stream:</strong> ${classStream}</li>
+        <li><strong>Due:</strong> ${dueDateText}</li>
+      </ul>
+      <p><strong>Instructions:</strong> ${assignment.description || 'Please check the student portal for details.'}</p>
+      <p>Regards,<br/>Matungulu Girls Senior School</p>
+    </div>
+  `;
+
+  return { subject, text, html };
+};
+
+const attachmentFromUrl = (url, fallbackName = 'attachment') => {
+  if (!url || typeof url !== 'string') return null;
+
+  const cleanUrl = url.split('?')[0];
+  const filename = decodeURIComponent(cleanUrl.split('/').pop() || fallbackName);
+
+  if (/^https?:\/\//i.test(url)) {
+    return { filename, path: url };
+  }
+
+  const publicPath = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
+  return {
+    filename,
+    path: path.join(process.cwd(), 'public', publicPath),
+  };
+};
+
+const buildAssignmentAttachments = (assignment) => [
+  ...(Array.isArray(assignment.assignmentFiles) ? assignment.assignmentFiles : []),
+  ...(Array.isArray(assignment.attachments) ? assignment.attachments : []),
+]
+  .map((url, index) => attachmentFromUrl(url, `assignment-file-${index + 1}`))
+  .filter(Boolean);
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -79,7 +148,6 @@ export async function GET(req) {
     }
 
     const assignmentId = parseInt(assignmentIdStr);
-
     const deliveryRecipients = await prisma.assignmentDeliveryRecipient.findMany({
       where: { assignmentId },
       orderBy: [{ createdAt: "asc" }],
@@ -91,7 +159,7 @@ export async function GET(req) {
       count: deliveryRecipients.length,
     });
   } catch (error) {
-    console.error("Error fetching delivery recipients:", error);
+    console.error("Error fetching assignment delivery recipients:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
@@ -99,16 +167,6 @@ export async function GET(req) {
   }
 }
 
-/**
- * POST /api/assignment/delivery/send
- * Send pending WhatsApp messages to students/parents
- *
- * Request body:
- * {
- *   assignmentId: int,
- *   recipientIds: string[] (optional - send to specific recipients only)
- * }
- */
 export async function POST(req) {
   try {
     const auth = authenticateDeliveryRequest(req);
@@ -124,7 +182,6 @@ export async function POST(req) {
       );
     }
 
-    // Fetch assignment details
     const assignment = await prisma.assignment.findUnique({
       where: { id: assignmentId },
     });
@@ -136,20 +193,15 @@ export async function POST(req) {
       );
     }
 
-    // Fetch delivery recipients
     const where = { assignmentId };
-    if (recipientIds && recipientIds.length > 0) {
-      where.id = { in: recipientIds };
-    }
+    if (recipientIds?.length) where.id = { in: recipientIds };
 
     const recipients = await prisma.assignmentDeliveryRecipient.findMany({
       where,
       include: {
         student: {
           select: {
-            whatsappPhone: true,
-            parentPhone: true,
-            studentPhone: true,
+            email: true,
             firstName: true,
             lastName: true,
             admissionNumber: true,
@@ -158,14 +210,13 @@ export async function POST(req) {
       },
     });
 
-    console.log(`📨 Assignment delivery recipients found: ${recipients.length}`);
-
     if (recipients.length === 0) {
       await prisma.assignment.update({
         where: { id: assignmentId },
         data: {
           deliveryStatus: 'no_recipients',
           deliverySummary: {
+            channel: 'email',
             successCount: 0,
             failureCount: 0,
             totalRecipients: 0,
@@ -177,79 +228,47 @@ export async function POST(req) {
 
       return NextResponse.json({
         success: true,
-        message: 'WhatsApp delivery completed. No recipients found.',
-        data: {
-          successCount: 0,
-          failureCount: 0,
-          totalRecipients: 0,
-          results: [],
-        },
+        message: 'Email delivery completed. No recipients found.',
+        data: { successCount: 0, failureCount: 0, totalRecipients: 0, results: [] },
       });
     }
 
-    // Prepare and send messages
     const sendResults = [];
     let successCount = 0;
     let failureCount = 0;
 
     for (const recipient of recipients) {
-      // Prefer uploaded student phones (student.whatsappPhone -> parentPhone -> studentPhone)
-      const candidates = [
-        recipient.student?.whatsappPhone,
-        recipient.student?.parentPhone,
-        recipient.student?.studentPhone,
-        recipient.whatsappPhone // fallback to recipient-level override
-      ];
+      const parentEmail = normalizeEmailAddress(recipient.student?.email);
+      const studentName = getStudentName(recipient);
 
-      let normalizedPhone = null;
-      for (const cand of candidates) {
-        const norm = normalizePhoneNumber(cand);
-        if (norm) {
-          normalizedPhone = norm;
-          break;
-        }
-      }
-
-      if (!normalizedPhone) {
+      if (!parentEmail) {
+        failureCount++;
         await prisma.assignmentDeliveryRecipient.update({
           where: { id: recipient.id },
           data: { status: "failed", updatedAt: new Date() },
         });
-
         sendResults.push({
           recipientId: recipient.id,
           admissionNumber: recipient.admissionNumber,
+          studentName,
           success: false,
-          error: "No phone number available",
+          error: "No parent email address available",
         });
-        failureCount++;
         continue;
       }
 
-      // Build message
-      const studentName =
-        recipient.studentName ||
-        (recipient.student
-          ? `${recipient.student.firstName} ${recipient.student.lastName}`.trim()
-          : "Student");
-
-      const dueDateText = assignment.dueDate
-        ? new Date(assignment.dueDate).toLocaleDateString()
-        : "Check the student portal";
-      const message = `Hi, please check the new assignment: "${assignment.title}". Subject: ${assignment.subject}. Due: ${dueDateText}. Instructions: ${assignment.description?.substring(0, 100) || "See details in student portal"}...`;
-
-      // Send WhatsApp message
-      const sendResult = await sendWhatsAppMessage(normalizedPhone, message);
+      const emailContent = buildAssignmentEmail(assignment, studentName);
+      const sendResult = await sendDeliveryEmail({
+        to: parentEmail,
+        ...emailContent,
+        attachments: buildAssignmentAttachments(assignment),
+      });
 
       if (sendResult.success) {
         successCount++;
-        // Update recipient status
         await prisma.assignmentDeliveryRecipient.update({
           where: { id: recipient.id },
-          data: {
-            status: "sent",
-            updatedAt: new Date(),
-          },
+          data: { status: "sent", updatedAt: new Date() },
         });
       } else {
         failureCount++;
@@ -263,17 +282,17 @@ export async function POST(req) {
         recipientId: recipient.id,
         admissionNumber: recipient.admissionNumber,
         studentName,
-        phoneNumber: normalizedPhone,
+        email: parentEmail,
         ...sendResult,
       });
     }
 
-    // Update assignment delivery status
     await prisma.assignment.update({
       where: { id: assignmentId },
       data: {
         deliveryStatus: successCount > 0 ? "sent" : "failed",
         deliverySummary: {
+          channel: 'email',
           successCount,
           failureCount,
           totalRecipients: recipients.length,
@@ -285,16 +304,11 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: `WhatsApp delivery completed. ${successCount} sent, ${failureCount} failed`,
-      data: {
-        successCount,
-        failureCount,
-        totalRecipients: recipients.length,
-        results: sendResults,
-      },
+      message: `Email delivery completed. ${successCount} sent, ${failureCount} failed`,
+      data: { successCount, failureCount, totalRecipients: recipients.length, results: sendResults },
     });
   } catch (error) {
-    console.error("Error sending WhatsApp messages:", error);
+    console.error("Error sending assignment delivery emails:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
@@ -302,10 +316,6 @@ export async function POST(req) {
   }
 }
 
-/**
- * PUT /api/assignment/delivery/resend
- * Resend failed WhatsApp messages
- */
 export async function PUT(req) {
   try {
     const auth = authenticateDeliveryRequest(req);
@@ -314,40 +324,13 @@ export async function PUT(req) {
     const body = await req.json();
     const { assignmentId, failedRecipientIds } = body;
 
-    if (!assignmentId || !failedRecipientIds || failedRecipientIds.length === 0) {
+    if (!assignmentId || !failedRecipientIds?.length) {
       return NextResponse.json(
         { success: false, error: "Assignment ID and failed recipient IDs are required" },
         { status: 400 }
       );
     }
 
-    // Fetch failed recipients
-    const recipients = await prisma.assignmentDeliveryRecipient.findMany({
-      where: {
-        assignmentId,
-        id: { in: failedRecipientIds },
-      },
-      include: {
-        student: {
-          select: {
-            whatsappPhone: true,
-            parentPhone: true,
-            studentPhone: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
-
-    if (recipients.length === 0) {
-      return NextResponse.json(
-        { success: false, error: "No recipients found" },
-        { status: 404 }
-      );
-    }
-
-    // Get assignment details
     const assignment = await prisma.assignment.findUnique({
       where: { id: assignmentId },
     });
@@ -359,50 +342,56 @@ export async function PUT(req) {
       );
     }
 
-    // Resend messages
+    const recipients = await prisma.assignmentDeliveryRecipient.findMany({
+      where: { assignmentId, id: { in: failedRecipientIds } },
+      include: {
+        student: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
     const resendResults = [];
     let successCount = 0;
 
     for (const recipient of recipients) {
-      const phoneNumber =
-        recipient.whatsappPhone ||
-        recipient.student?.whatsappPhone ||
-        recipient.student?.parentPhone ||
-        recipient.student?.studentPhone;
+      const parentEmail = normalizeEmailAddress(recipient.student?.email);
+      const studentName = getStudentName(recipient);
 
-      const normalizedPhone = normalizePhoneNumber(phoneNumber);
-      if (!normalizedPhone) {
+      if (!parentEmail) {
         resendResults.push({
           recipientId: recipient.id,
           success: false,
-          error: "Invalid phone number",
+          error: "Invalid parent email address",
         });
         continue;
       }
 
-      const dueDateText = assignment.dueDate
-        ? new Date(assignment.dueDate).toLocaleDateString()
-        : "the date shown in the student portal";
-      const message = `Reminder: Assignment "${assignment.title}" is due on ${dueDateText}. Please submit on time.`;
-      const sendResult = await sendWhatsAppMessage(normalizedPhone, message);
+      const emailContent = buildAssignmentEmail(assignment, studentName);
+      const sendResult = await sendDeliveryEmail({
+        to: parentEmail,
+        ...emailContent,
+        attachments: buildAssignmentAttachments(assignment),
+      });
 
       if (sendResult.success) {
         successCount++;
         await prisma.assignmentDeliveryRecipient.update({
           where: { id: recipient.id },
-          data: { status: "sent" },
+          data: { status: "sent", updatedAt: new Date() },
         });
       }
 
-      resendResults.push({
-        recipientId: recipient.id,
-        ...sendResult,
-      });
+      resendResults.push({ recipientId: recipient.id, email: parentEmail, ...sendResult });
     }
 
     return NextResponse.json({
       success: true,
-      message: `Resent ${successCount} messages`,
+      message: `Resent ${successCount} email(s)`,
       data: {
         successCount,
         failureCount: resendResults.length - successCount,
@@ -410,7 +399,7 @@ export async function PUT(req) {
       },
     });
   } catch (error) {
-    console.error("Error resending messages:", error);
+    console.error("Error resending assignment delivery emails:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }

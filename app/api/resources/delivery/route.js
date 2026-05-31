@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import path from "path";
 import { prisma } from "../../../../libs/prisma";
-import { normalizePhoneNumber, sendWhatsAppMessage } from "../../../../libs/whatsapp";
+import { normalizeEmailAddress, sendDeliveryEmail } from "../../../../libs/emailDelivery";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,7 @@ const authenticateDeliveryRequest = (req) => {
       return {
         authenticated: false,
         response: NextResponse.json(
-          { success: false, error: 'Access Denied', message: 'You do not have permission to send resource delivery messages' },
+          { success: false, error: 'Access Denied', message: 'You do not have permission to send resource delivery emails' },
           { status: 403 }
         )
       };
@@ -62,10 +63,68 @@ const authenticateDeliveryRequest = (req) => {
   }
 };
 
-/**
- * GET /api/resources/delivery/[id]
- * Get delivery status and details for a resource
- */
+const getStudentName = (recipient) =>
+  recipient.studentName ||
+  (recipient.student
+    ? `${recipient.student.firstName || ''} ${recipient.student.lastName || ''}`.trim()
+    : '') ||
+  'Student';
+
+const buildResourceEmail = (resource, studentName) => {
+  const subject = `New learning resource: ${resource.title}`;
+  const text = [
+    'Dear Parent/Guardian,',
+    '',
+    `A new learning resource has been shared for ${studentName}.`,
+    `Title: ${resource.title}`,
+    `Subject: ${resource.subject}`,
+    '',
+    `Description: ${resource.description || 'Please check the student portal for details.'}`,
+    '',
+    'Regards,',
+    'Matungulu Girls Senior School'
+  ].join('\n');
+  const html = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
+      <p>Dear Parent/Guardian,</p>
+      <p>A new learning resource has been shared for <strong>${studentName}</strong>.</p>
+      <ul>
+        <li><strong>Title:</strong> ${resource.title}</li>
+        <li><strong>Subject:</strong> ${resource.subject}</li>
+      </ul>
+      <p><strong>Description:</strong> ${resource.description || 'Please check the student portal for details.'}</p>
+      <p>Regards,<br/>Matungulu Girls Senior School</p>
+    </div>
+  `;
+
+  return { subject, text, html };
+};
+
+const attachmentFromResourceFile = (file, fallbackName = 'resource-file') => {
+  if (!file) return null;
+  const url = typeof file === 'string' ? file : file.url;
+  if (!url || typeof url !== 'string') return null;
+
+  const cleanUrl = url.split('?')[0];
+  const filename = typeof file === 'object' && file.name
+    ? file.name
+    : decodeURIComponent(cleanUrl.split('/').pop() || fallbackName);
+
+  if (/^https?:\/\//i.test(url)) {
+    return { filename, path: url };
+  }
+
+  const publicPath = cleanUrl.startsWith('/') ? cleanUrl.slice(1) : cleanUrl;
+  return {
+    filename,
+    path: path.join(process.cwd(), 'public', publicPath),
+  };
+};
+
+const buildResourceAttachments = (resource) => (Array.isArray(resource.files) ? resource.files : [])
+  .map((file, index) => attachmentFromResourceFile(file, `resource-file-${index + 1}`))
+  .filter(Boolean);
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -79,7 +138,6 @@ export async function GET(req) {
     }
 
     const resourceId = parseInt(resourceIdStr);
-
     const deliveryRecipients = await prisma.resourceDeliveryRecipient.findMany({
       where: { resourceId },
       orderBy: [{ createdAt: "asc" }],
@@ -91,7 +149,7 @@ export async function GET(req) {
       count: deliveryRecipients.length,
     });
   } catch (error) {
-    console.error("Error fetching delivery recipients:", error);
+    console.error("Error fetching resource delivery recipients:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
@@ -99,10 +157,6 @@ export async function GET(req) {
   }
 }
 
-/**
- * POST /api/resources/delivery/send
- * Send pending WhatsApp messages to students/parents for resource
- */
 export async function POST(req) {
   try {
     const auth = authenticateDeliveryRequest(req);
@@ -118,7 +172,6 @@ export async function POST(req) {
       );
     }
 
-    // Fetch resource details
     const resource = await prisma.resource.findUnique({
       where: { id: resourceId },
     });
@@ -130,20 +183,15 @@ export async function POST(req) {
       );
     }
 
-    // Fetch delivery recipients
     const where = { resourceId };
-    if (recipientIds && recipientIds.length > 0) {
-      where.id = { in: recipientIds };
-    }
+    if (recipientIds?.length) where.id = { in: recipientIds };
 
     const recipients = await prisma.resourceDeliveryRecipient.findMany({
       where,
       include: {
         student: {
           select: {
-            whatsappPhone: true,
-            parentPhone: true,
-            studentPhone: true,
+            email: true,
             firstName: true,
             lastName: true,
             admissionNumber: true,
@@ -152,14 +200,13 @@ export async function POST(req) {
       },
     });
 
-    console.log(`📨 Resource delivery recipients found: ${recipients.length}`);
-
     if (recipients.length === 0) {
       await prisma.resource.update({
         where: { id: resourceId },
         data: {
           deliveryStatus: 'no_recipients',
           deliverySummary: {
+            channel: 'email',
             successCount: 0,
             failureCount: 0,
             totalRecipients: 0,
@@ -171,74 +218,47 @@ export async function POST(req) {
 
       return NextResponse.json({
         success: true,
-        message: 'WhatsApp delivery completed. No recipients found.',
-        data: {
-          successCount: 0,
-          failureCount: 0,
-          totalRecipients: 0,
-          results: [],
-        },
+        message: 'Email delivery completed. No recipients found.',
+        data: { successCount: 0, failureCount: 0, totalRecipients: 0, results: [] },
       });
     }
+
     const sendResults = [];
     let successCount = 0;
     let failureCount = 0;
 
     for (const recipient of recipients) {
-      // Prefer uploaded student phones (student.whatsappPhone -> parentPhone -> studentPhone)
-      const candidates = [
-        recipient.student?.whatsappPhone,
-        recipient.student?.parentPhone,
-        recipient.student?.studentPhone,
-        recipient.whatsappPhone // fallback to recipient-level override
-      ];
+      const parentEmail = normalizeEmailAddress(recipient.student?.email);
+      const studentName = getStudentName(recipient);
 
-      let normalizedPhone = null;
-      for (const cand of candidates) {
-        const norm = normalizePhoneNumber(cand);
-        if (norm) {
-          normalizedPhone = norm;
-          break;
-        }
-      }
-
-      if (!normalizedPhone) {
+      if (!parentEmail) {
+        failureCount++;
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
           data: { status: "failed", updatedAt: new Date() },
         });
-
         sendResults.push({
           recipientId: recipient.id,
           admissionNumber: recipient.admissionNumber,
+          studentName,
           success: false,
-          error: "No phone number available",
+          error: "No parent email address available",
         });
-        failureCount++;
         continue;
       }
 
-      // Build message
-      const studentName =
-        recipient.studentName ||
-        (recipient.student
-          ? `${recipient.student.firstName} ${recipient.student.lastName}`.trim()
-          : "Student");
-
-      const message = `Hi, a new learning resource has been shared: "${resource.title}". Subject: ${resource.subject}. Description: ${resource.description?.substring(0, 100) || "See details in student portal"}...`;
-
-      // Send WhatsApp message
-      const sendResult = await sendWhatsAppMessage(normalizedPhone, message);
+      const emailContent = buildResourceEmail(resource, studentName);
+      const sendResult = await sendDeliveryEmail({
+        to: parentEmail,
+        ...emailContent,
+        attachments: buildResourceAttachments(resource),
+      });
 
       if (sendResult.success) {
         successCount++;
-        // Update recipient status
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
-          data: {
-            status: "sent",
-            updatedAt: new Date(),
-          },
+          data: { status: "sent", updatedAt: new Date() },
         });
       } else {
         failureCount++;
@@ -252,17 +272,17 @@ export async function POST(req) {
         recipientId: recipient.id,
         admissionNumber: recipient.admissionNumber,
         studentName,
-        phoneNumber: normalizedPhone,
+        email: parentEmail,
         ...sendResult,
       });
     }
 
-    // Update resource delivery status
     await prisma.resource.update({
       where: { id: resourceId },
       data: {
         deliveryStatus: successCount > 0 ? "sent" : "failed",
         deliverySummary: {
+          channel: 'email',
           successCount,
           failureCount,
           totalRecipients: recipients.length,
@@ -274,16 +294,11 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: `WhatsApp delivery completed. ${successCount} sent, ${failureCount} failed`,
-      data: {
-        successCount,
-        failureCount,
-        totalRecipients: recipients.length,
-        results: sendResults,
-      },
+      message: `Email delivery completed. ${successCount} sent, ${failureCount} failed`,
+      data: { successCount, failureCount, totalRecipients: recipients.length, results: sendResults },
     });
   } catch (error) {
-    console.error("Error sending WhatsApp messages:", error);
+    console.error("Error sending resource delivery emails:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }
@@ -291,10 +306,6 @@ export async function POST(req) {
   }
 }
 
-/**
- * PUT /api/resources/delivery/resend
- * Resend failed WhatsApp messages
- */
 export async function PUT(req) {
   try {
     const auth = authenticateDeliveryRequest(req);
@@ -303,40 +314,13 @@ export async function PUT(req) {
     const body = await req.json();
     const { resourceId, failedRecipientIds } = body;
 
-    if (!resourceId || !failedRecipientIds || failedRecipientIds.length === 0) {
+    if (!resourceId || !failedRecipientIds?.length) {
       return NextResponse.json(
         { success: false, error: "Resource ID and failed recipient IDs are required" },
         { status: 400 }
       );
     }
 
-    // Fetch failed recipients
-    const recipients = await prisma.resourceDeliveryRecipient.findMany({
-      where: {
-        resourceId,
-        id: { in: failedRecipientIds },
-      },
-      include: {
-        student: {
-          select: {
-            whatsappPhone: true,
-            parentPhone: true,
-            studentPhone: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
-
-    if (recipients.length === 0) {
-      return NextResponse.json(
-        { success: false, error: "No recipients found" },
-        { status: 404 }
-      );
-    }
-
-    // Get resource details
     const resource = await prisma.resource.findUnique({
       where: { id: resourceId },
     });
@@ -348,47 +332,56 @@ export async function PUT(req) {
       );
     }
 
-    // Resend messages
+    const recipients = await prisma.resourceDeliveryRecipient.findMany({
+      where: { resourceId, id: { in: failedRecipientIds } },
+      include: {
+        student: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
     const resendResults = [];
     let successCount = 0;
 
     for (const recipient of recipients) {
-      const phoneNumber =
-        recipient.whatsappPhone ||
-        recipient.student?.whatsappPhone ||
-        recipient.student?.parentPhone ||
-        recipient.student?.studentPhone;
+      const parentEmail = normalizeEmailAddress(recipient.student?.email);
+      const studentName = getStudentName(recipient);
 
-      const normalizedPhone = normalizePhoneNumber(phoneNumber);
-      if (!normalizedPhone) {
+      if (!parentEmail) {
         resendResults.push({
           recipientId: recipient.id,
           success: false,
-          error: "Invalid phone number",
+          error: "Invalid parent email address",
         });
         continue;
       }
 
-      const message = `Reminder: Learning resource "${resource.title}" is now available in the student portal. Please access it.`;
-      const sendResult = await sendWhatsAppMessage(normalizedPhone, message);
+      const emailContent = buildResourceEmail(resource, studentName);
+      const sendResult = await sendDeliveryEmail({
+        to: parentEmail,
+        ...emailContent,
+        attachments: buildResourceAttachments(resource),
+      });
 
       if (sendResult.success) {
         successCount++;
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
-          data: { status: "sent" },
+          data: { status: "sent", updatedAt: new Date() },
         });
       }
 
-      resendResults.push({
-        recipientId: recipient.id,
-        ...sendResult,
-      });
+      resendResults.push({ recipientId: recipient.id, email: parentEmail, ...sendResult });
     }
 
     return NextResponse.json({
       success: true,
-      message: `Resent ${successCount} messages`,
+      message: `Resent ${successCount} email(s)`,
       data: {
         successCount,
         failureCount: resendResults.length - successCount,
@@ -396,7 +389,7 @@ export async function PUT(req) {
       },
     });
   } catch (error) {
-    console.error("Error resending messages:", error);
+    console.error("Error resending resource delivery emails:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }

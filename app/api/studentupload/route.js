@@ -185,13 +185,13 @@ const extractAcademicLevel = (...values) => {
     const direct = normalizeAcademicLevel(text);
     if (VALID_STUDENT_LEVELS.includes(direct)) return direct;
 
-    const match = text.match(/\b(grade\s*1[0-2]|g\s*1[0-2]|form\s*[1-4]|f\s*[1-4])\b/i);
+    const match = text.match(/\b(grade\s*1[0-2]|g\s*1[0-2]|form\s*[3-4]|f\s*[3-4])\b/i);
     if (match) {
       const matchedLevel = normalizeAcademicLevel(match[1]);
       if (VALID_STUDENT_LEVELS.includes(matchedLevel)) return matchedLevel;
     }
 
-    const numericMatch = text.match(/\b([1-4])\b/);
+    const numericMatch = text.match(/\b(10|11|12|3|4)\b/);
     if (numericMatch) {
       const matchedLevel = normalizeAcademicLevel(numericMatch[1]);
       if (VALID_STUDENT_LEVELS.includes(matchedLevel)) return matchedLevel;
@@ -1092,20 +1092,8 @@ const mapStudentUploadHeader = (header = '') => {
   if (normalized.includes('stream')) {
     return 'stream';
   }
-  if (normalized.includes('whatsapp') || normalized.includes('mobilemoney')) {
-    return 'whatsappPhone';
-  }
-  if (normalized.includes('studentphone') || normalized.includes('learnerphone') || loose === 'phone') {
-    return 'studentPhone';
-  }
-  if (normalized.includes('parentphone') || normalized.includes('guardianphone') || normalized.includes('contactphone') || normalized.includes('phone') || normalized.includes('mobile')) {
-    return 'parentPhone';
-  }
   if (normalized.includes('email')) {
     return 'email';
-  }
-  if (normalized.includes('category') || normalized.includes('cohort') || normalized.includes('group')) {
-    return 'uploadedCategory';
   }
 
   return normalized;
@@ -1115,13 +1103,17 @@ const hasRequiredStudentHeaders = (headers = []) => {
   const hasAdmission = headers.includes('admissionNumber');
   const hasName = headers.includes('fullName') || (headers.includes('firstName') && headers.includes('lastName'));
   const hasClassInfo = headers.includes('form') || headers.includes('gradeLevel') || headers.includes('className');
+  const hasStream = headers.includes('stream');
+  const hasEmail = headers.includes('email');
 
   return {
-    isValid: hasAdmission && hasName && hasClassInfo,
+    isValid: hasAdmission && hasName && hasClassInfo && hasStream && hasEmail,
     missingColumns: [
       !hasAdmission ? 'admissionNumber' : null,
       !hasName ? 'student name (fullName or firstName + lastName)' : null,
-      !hasClassInfo ? 'class information (grade, form, or className)' : null
+      !hasClassInfo ? 'class information (grade, form, or className)' : null,
+      !hasStream ? 'stream' : null,
+      !hasEmail ? 'parent email or email' : null
     ].filter(Boolean)
   };
 };
@@ -1138,11 +1130,8 @@ const normalizeStudentUploadRow = (row = {}, index = 0) => {
   const form = extractAcademicLevel(row.form, row.gradeLevel, rawClassName);
   const stream = String(row.stream || '').trim() || null;
   const className = buildClassName(form, stream, rawClassName);
-  const parentPhone = normalizeLocalMobilePhone(row.parentPhone || row.phone || row.whatsappPhone || '');
-  const studentPhone = normalizeLocalMobilePhone(row.studentPhone || '');
-  const whatsappPhone = normalizeLocalMobilePhone(row.whatsappPhone) || parentPhone || studentPhone;
   const email = row.email ? String(row.email).trim() : null;
-  const uploadedCategory = String(row.uploadedCategory || row.category || form || '').trim() || null;
+  const uploadedCategory = form || null;
   const fullName = buildStudentFullName({ fullName: fullNameInput, firstName, middleName, lastName });
 
   const hasAnyContent = [
@@ -1154,9 +1143,6 @@ const normalizeStudentUploadRow = (row = {}, index = 0) => {
     rawForm,
     rawClassName,
     stream,
-    parentPhone,
-    studentPhone,
-    whatsappPhone,
     email,
     uploadedCategory
   ].some(Boolean);
@@ -1174,9 +1160,9 @@ const normalizeStudentUploadRow = (row = {}, index = 0) => {
     gradeLevel: form,
     className,
     stream,
-    parentPhone,
-    studentPhone,
-    whatsappPhone,
+    parentPhone: null,
+    studentPhone: null,
+    whatsappPhone: null,
     email,
     uploadedCategory,
     status: String(row.status || 'active').trim() || 'active'
@@ -1187,9 +1173,6 @@ const buildStudentPersistenceData = (student, uploadBatchId, formOverride = null
   const form = formOverride || student.form;
   const fullName = buildStudentFullName({ ...student, form });
   const className = buildClassName(form, student.stream, student.className);
-  const parentPhone = normalizeLocalMobilePhone(student.parentPhone) || normalizeLocalMobilePhone(student.whatsappPhone) || normalizeLocalMobilePhone(student.studentPhone);
-  const studentPhone = normalizeLocalMobilePhone(student.studentPhone || '');
-  const whatsappPhone = normalizeLocalMobilePhone(student.whatsappPhone) || parentPhone || studentPhone;
 
   return {
     admissionNumber: student.admissionNumber,
@@ -1201,9 +1184,9 @@ const buildStudentPersistenceData = (student, uploadBatchId, formOverride = null
     gradeLevel: student.gradeLevel || form,
     className,
     stream: student.stream || null,
-    parentPhone,
-    studentPhone,
-    whatsappPhone,
+    parentPhone: null,
+    studentPhone: null,
+    whatsappPhone: null,
     email: student.email || null,
     uploadedCategory: student.uploadedCategory || form,
     dateOfBirth: null,
@@ -1222,10 +1205,9 @@ const parseStudentRowsFromPlainText = (text = '') => {
 
   return lines
     .map((line, index) => {
-      if (/admission|adm\s*no|student\s*name|parent\s*phone/i.test(line) && index < 5) return null;
+      if (/admission|adm\s*no|student\s*name|parent\s*email|email/i.test(line) && index < 5) return null;
 
       const admissionMatch = line.match(/\b\d{4,10}\b/);
-      const phoneMatches = line.match(/(?:\+?254|0)?7\d{8}\b/g) || [];
       const emailMatch = line.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
       const level = extractAcademicLevel(line);
 
@@ -1234,10 +1216,10 @@ const parseStudentRowsFromPlainText = (text = '') => {
       let nameText = line
         .replace(admissionMatch[0], ' ')
         .replace(emailMatch?.[0] || '', ' ')
-        .replace(/\b(?:grade\s*1[0-2]|g\s*1[0-2]|form\s*[1-4]|f\s*[1-4])\b/ig, ' ')
+        .replace(/\b(?:grade\s*1[0-2]|g\s*1[0-2]|form\s*[3-4]|f\s*[3-4])\b/ig, ' ')
         .replace(/(?:\+?254|0)?7\d{8}\b/g, ' ')
         .replace(/[|,;:\t]+/g, ' ')
-        .replace(/\b(admission|adm|no|student|name|parent|phone|class|grade|form|stream)\b/ig, ' ')
+        .replace(/\b(admission|adm|no|student|name|parent|email|class|grade|form|stream)\b/ig, ' ')
         .replace(/\s+/g, ' ')
         .trim();
 
@@ -1246,9 +1228,6 @@ const parseStudentRowsFromPlainText = (text = '') => {
         fullName: nameText,
         form: level,
         className: level,
-        parentPhone: phoneMatches[0] || '',
-        whatsappPhone: phoneMatches[0] || '',
-        studentPhone: phoneMatches[1] || '',
         email: emailMatch?.[0] || ''
       }, index);
     })
@@ -1284,7 +1263,7 @@ const parsePDF = async (file) => {
     const data = parseStudentRowsFromPlainText(text);
 
     if (data.length === 0) {
-      throw new Error('No readable student rows were found in the PDF. Use a text-based PDF with admission number, student name, class/grade, and phone columns.');
+      throw new Error('No readable student rows were found in the PDF. Use a text-based PDF with admission number, student name, class/grade, stream, and parent email columns.');
     }
 
     return data;
@@ -1368,7 +1347,7 @@ const parseCSV = async (file) => {
     }
     
     // All delimiters failed
-    throw new Error(`Could not parse CSV with any delimiter. Last error: ${lastError?.message || 'Unknown'}. Please verify file format has headers: admission#, name, class/grade.`);
+    throw new Error(`Could not parse CSV with any delimiter. Last error: ${lastError?.message || 'Unknown'}. Please verify file format has headers: admission number, name, class/grade, stream, and parent email.`);
     
   } catch (error) {
     console.error('❌ CSV parsing error:', error.message);
@@ -1489,8 +1468,8 @@ const validateStudent = (student, index) => {
   // Admission number
   if (!student.admissionNumber) {
     errors.push(`Row ${rowNumber}: Admission number is required`);
-  } else if (!/^\d{4,10}$/.test(student.admissionNumber)) {
-    errors.push(`Row ${rowNumber}: Admission number must be 4-10 digits (got: ${student.admissionNumber})`);
+  } else if (!/^[A-Za-z0-9/_-]{2,30}$/.test(student.admissionNumber)) {
+    errors.push(`Row ${rowNumber}: Admission number must be 2-30 letters, numbers, dashes, underscores, or slashes (got: ${student.admissionNumber})`);
   }
   
   // Names
@@ -1542,13 +1521,13 @@ const validateStudent = (student, index) => {
     }
   }
   
-  if (student.email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(student.email)) {
-      errors.push(`Row ${rowNumber}: Email is invalid`);
-    } else if (student.email.length > 100) {
-      errors.push(`Row ${rowNumber}: Email too long (max 100 chars)`);
-    }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!student.email) {
+    errors.push(`Row ${rowNumber}: Parent email is required`);
+  } else if (!emailRegex.test(student.email)) {
+    errors.push(`Row ${rowNumber}: Email is invalid`);
+  } else if (student.email.length > 100) {
+    errors.push(`Row ${rowNumber}: Email too long (max 100 chars)`);
   }
   
   if (student.className && student.className.length > 100) {

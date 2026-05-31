@@ -1,13 +1,14 @@
 import { prisma } from './prisma';
+import { normalizeEmailAddress } from './emailDelivery';
 
 export const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
+export const SCHOOL_COMMUNICATION_EMAIL = process.env.EMAIL_USER || 'school@example.com';
+const EMAIL_DELIVERY_REFERENCE = 'email';
 
 export const ACADEMIC_LEVEL_OPTIONS = [
   'Grade 10',
   'Grade 11',
   'Grade 12',
-  'Form 1',
-  'Form 2',
   'Form 3',
   'Form 4'
 ];
@@ -44,16 +45,6 @@ export const normalizeAcademicLevel = (value = '') => {
     g12: 'Grade 12',
     'g 12': 'Grade 12',
     '12': 'Grade 12',
-    form1: 'Form 1',
-    'form 1': 'Form 1',
-    f1: 'Form 1',
-    'f 1': 'Form 1',
-    '1': 'Form 1',
-    form2: 'Form 2',
-    'form 2': 'Form 2',
-    f2: 'Form 2',
-    'f 2': 'Form 2',
-    '2': 'Form 2',
     form3: 'Form 3',
     'form 3': 'Form 3',
     f3: 'Form 3',
@@ -131,10 +122,10 @@ export const buildDeliveryCriteriaFromFormData = (formData, fallbackClassName = 
     ? explicitCategories
     : unique([fallbackCategory].map(item => String(item || '').trim()).filter(Boolean));
 
-  const senderReference = normalizeLocalMobilePhone(formData.get?.('senderReference')) || SCHOOL_COMMUNICATION_NUMBER;
+  const senderReference = EMAIL_DELIVERY_REFERENCE;
 
   return {
-    channel: 'whatsapp',
+    channel: 'email',
     senderReference,
     grades,
     classes,
@@ -203,6 +194,7 @@ export const resolveDeliveryRecipients = async (criteria = {}, tx = prisma) => {
       className: true,
       gradeLevel: true,
       uploadedCategory: true,
+      email: true,
       parentPhone: true,
       studentPhone: true,
       whatsappPhone: true
@@ -215,19 +207,19 @@ export const resolveDeliveryRecipients = async (criteria = {}, tx = prisma) => {
   });
 
   const recipients = [];
-  const missingPhoneStudents = [];
-  const seenPhones = new Set();
+  const missingEmailStudents = [];
+  const seenEmails = new Set();
 
   for (const student of students) {
-    const whatsappPhone = normalizeLocalMobilePhone(student.whatsappPhone) || normalizeLocalMobilePhone(student.parentPhone) || normalizeLocalMobilePhone(student.studentPhone);
-    if (!whatsappPhone) {
-      missingPhoneStudents.push(student);
+    const parentEmail = normalizeEmailAddress(student.email);
+    if (!parentEmail) {
+      missingEmailStudents.push(student);
       continue;
     }
 
-    const duplicateKey = `${student.admissionNumber}:${whatsappPhone}`;
-    if (seenPhones.has(duplicateKey)) continue;
-    seenPhones.add(duplicateKey);
+    const duplicateKey = `${student.admissionNumber}:${parentEmail}`;
+    if (seenEmails.has(duplicateKey)) continue;
+    seenEmails.add(duplicateKey);
 
     recipients.push({
       studentId: student.id,
@@ -236,24 +228,26 @@ export const resolveDeliveryRecipients = async (criteria = {}, tx = prisma) => {
       className: student.className || [student.form, student.stream].filter(Boolean).join(' ') || student.form || null,
       gradeLevel: student.gradeLevel || student.form || null,
       uploadedCategory: student.uploadedCategory || null,
-      whatsappPhone
+      parentEmail,
+      whatsappPhone: normalizeLocalMobilePhone(student.whatsappPhone) || normalizeLocalMobilePhone(student.parentPhone) || SCHOOL_COMMUNICATION_NUMBER
     });
   }
 
   return {
     recipients,
-    missingPhoneCount: missingPhoneStudents.length,
+    missingEmailCount: missingEmailStudents.length,
     totalMatched: students.length
   };
 };
 
 export const buildDeliverySummary = (criteria, resolvedRecipients) => ({
-  channel: 'whatsapp',
-  senderReference: criteria.senderReference || SCHOOL_COMMUNICATION_NUMBER,
+  channel: 'email',
+  senderReference: criteria.senderReference || EMAIL_DELIVERY_REFERENCE,
   status: resolvedRecipients.recipients.length > 0 ? 'prepared' : 'no_recipients',
   recipientCount: resolvedRecipients.recipients.length,
   totalMatchedStudents: resolvedRecipients.totalMatched,
-  missingPhoneCount: resolvedRecipients.missingPhoneCount,
+  missingPhoneCount: 0,
+  missingEmailCount: resolvedRecipients.missingEmailCount,
   criteria: {
     grades: criteria.grades || [],
     classes: criteria.classes || [],
@@ -274,9 +268,15 @@ export const prepareAssignmentDelivery = async (tx, assignmentId, criteria) => {
     await tx.assignmentDeliveryRecipient.createMany({
       data: resolved.recipients.map(recipient => ({
         assignmentId,
-        ...recipient,
-        senderReference: criteria.senderReference || SCHOOL_COMMUNICATION_NUMBER,
-        channel: 'whatsapp',
+        studentId: recipient.studentId,
+        admissionNumber: recipient.admissionNumber,
+        studentName: recipient.studentName,
+        className: recipient.className,
+        gradeLevel: recipient.gradeLevel,
+        uploadedCategory: recipient.uploadedCategory,
+        whatsappPhone: recipient.whatsappPhone,
+        senderReference: criteria.senderReference || EMAIL_DELIVERY_REFERENCE,
+        channel: 'email',
         status: 'prepared'
       })),
       skipDuplicates: true
@@ -297,9 +297,15 @@ export const prepareResourceDelivery = async (tx, resourceId, criteria) => {
     await tx.resourceDeliveryRecipient.createMany({
       data: resolved.recipients.map(recipient => ({
         resourceId,
-        ...recipient,
-        senderReference: criteria.senderReference || SCHOOL_COMMUNICATION_NUMBER,
-        channel: 'whatsapp',
+        studentId: recipient.studentId,
+        admissionNumber: recipient.admissionNumber,
+        studentName: recipient.studentName,
+        className: recipient.className,
+        gradeLevel: recipient.gradeLevel,
+        uploadedCategory: recipient.uploadedCategory,
+        whatsappPhone: recipient.whatsappPhone,
+        senderReference: criteria.senderReference || EMAIL_DELIVERY_REFERENCE,
+        channel: 'email',
         status: 'prepared'
       })),
       skipDuplicates: true

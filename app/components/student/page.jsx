@@ -103,17 +103,13 @@ const normalizeLocalMobilePhone = (value = '') => {
   return String(value || '').trim();
 };
 
-const ACADEMIC_LEVELS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4', 'Form 1', 'Form 2'];
+const ACADEMIC_LEVELS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4'];
 const STUDENT_TEMPLATE_HEADERS = [
   'Admission Number',
   'Student Name',
   'Class/Grade',
   'Stream',
-  'Parent Phone',
-  'Student Phone',
-  'WhatsApp Phone',
-  'Uploaded Category',
-  'Email'
+  'Parent Email'
 ];
 
 // Helper function for form colors
@@ -125,8 +121,6 @@ function getFormColor(form) {
     case 'Grade 10': return 'from-sky-600 to-teal-700';
     case 'Grade 11': return 'from-indigo-600 to-teal-700';
     case 'Grade 12': return 'from-violet-600 to-emerald-700';
-    case 'Form 1': return 'from-teal-600 to-teal-800';
-    case 'Form 2': return 'from-emerald-500 to-emerald-700';
     case 'Form 3': return 'from-amber-500 to-amber-700';
     case 'Form 4': return 'from-emerald-600 to-emerald-800';
     default: return 'from-gray-400 to-gray-600';
@@ -139,8 +133,6 @@ function getFormBadgeColor(form) {
     case 'Grade 10': return 'bg-gradient-to-r from-sky-600 to-teal-700 text-white';
     case 'Grade 11': return 'bg-gradient-to-r from-indigo-600 to-teal-700 text-white';
     case 'Grade 12': return 'bg-gradient-to-r from-violet-600 to-emerald-700 text-white';
-    case 'Form 1': return 'bg-gradient-to-r from-teal-600 to-teal-800 text-white';
-    case 'Form 2': return 'bg-gradient-to-r from-emerald-500 to-emerald-700 text-white';
     case 'Form 3': return 'bg-gradient-to-r from-amber-500 to-amber-700 text-white';
     case 'Form 4': return 'bg-gradient-to-r from-emerald-600 to-emerald-800 text-white';
     default: return 'bg-gradient-to-r from-gray-400 to-gray-600 text-white';
@@ -634,7 +626,7 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                     <p className="font-semibold">{student.studentPhone || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 mb-1">WhatsApp Delivery Phone</p>
+                    <p className="text-gray-600 mb-1">Legacy Delivery Phone</p>
                     <p className="font-semibold">{student.whatsappPhone || student.parentPhone || student.studentPhone || 'N/A'}</p>
                   </div>
                 </div>
@@ -874,7 +866,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address (optional)
+                    Parent / Guardian Email (optional)
                   </label>
                   <input
                     type="email"
@@ -909,7 +901,7 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    WhatsApp Delivery Phone
+                    Legacy Delivery Phone
                   </label>
                   <input
                     type="tel"
@@ -2228,18 +2220,14 @@ const getAuthHeaders = (isProtected = false) => {
           });
           
           const contactDistribution = {
-            'WhatsApp ready': allStudents.filter(student => student.whatsappPhone || student.parentPhone || student.studentPhone).length,
-            'Parent phone': allStudents.filter(student => student.parentPhone).length,
-            'Student phone': allStudents.filter(student => student.studentPhone).length,
-            'Optional email': allStudents.filter(student => student.email).length
+            'Parent email ready': allStudents.filter(student => student.email).length,
+            'Missing parent email': allStudents.filter(student => !student.email).length
           };
           
           const formDistribution = {
             'Grade 10': apiStats.grade10 || 0,
             'Grade 11': apiStats.grade11 || 0,
             'Grade 12': apiStats.grade12 || 0,
-            'Form 1': apiStats.form1 || 0,
-            'Form 2': apiStats.form2 || 0,
             'Form 3': apiStats.form3 || 0,
             'Form 4': apiStats.form4 || 0
           };
@@ -2251,8 +2239,6 @@ const getAuthHeaders = (isProtected = false) => {
               name === 'Grade 10' ? '#0284C7' :
               name === 'Grade 11' ? '#4F46E5' :
               name === 'Grade 12' ? '#7C3AED' :
-              name === 'Form 1' ? '#0D9488' :
-              name === 'Form 2' ? '#10B981' :
               name === 'Form 3' ? '#F59E0B' :
               '#047857'
           }));
@@ -2350,8 +2336,9 @@ const handleAuthError = (error) => {
           }));
           
           const formChartData = [
-            { name: 'Form 1', value: apiStats.form1 || 0, color: '#0D9488' },
-            { name: 'Form 2', value: apiStats.form2 || 0, color: '#10B981' },
+            { name: 'Grade 10', value: apiStats.grade10 || 0, color: '#0284C7' },
+            { name: 'Grade 11', value: apiStats.grade11 || 0, color: '#4F46E5' },
+            { name: 'Grade 12', value: apiStats.grade12 || 0, color: '#7C3AED' },
             { name: 'Form 3', value: apiStats.form3 || 0, color: '#F59E0B' },
             { name: 'Form 4', value: apiStats.form4 || 0, color: '#047857' }
           ];
@@ -2758,7 +2745,7 @@ const updateStudent = async (studentId, studentData) => {
  const downloadCSVTemplate = () => {
     const sampleRows = [
       STUDENT_TEMPLATE_HEADERS,
-      ['ADM001', 'Jane Wanjiku Mwangi', 'Grade 10', 'A', '0793472960', '', '0793472960', '2026 Grade 10', '']
+      ['ADM001', 'Jane Wanjiku Mwangi', 'Grade 10', 'A', 'parent@example.com']
     ];
     const csvContent = sampleRows
       .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
@@ -2777,7 +2764,7 @@ const updateStudent = async (studentId, studentData) => {
 const downloadExcelTemplate = () => {
   const worksheetData = [
     STUDENT_TEMPLATE_HEADERS,
-    ['ADM001', 'Jane Wanjiku Mwangi', 'Grade 10', 'A', '0793472960', '', '0793472960', '2026 Grade 10', '']
+    ['ADM001', 'Jane Wanjiku Mwangi', 'Grade 10', 'A', 'parent@example.com']
   ];
   const ws = XLSX.utils.aoa_to_sheet(worksheetData);
   const wb = XLSX.utils.book_new();
@@ -2792,18 +2779,12 @@ const downloadExcelTemplate = () => {
       return;
     }
 
-    const headers = ['Admission Number', 'Student Name', 'Class/Grade', 'Class Name', 'Stream', 'Status', 'Parent Phone', 'Student Phone', 'WhatsApp Phone', 'Uploaded Category', 'Email'];
+    const headers = ['Admission Number', 'Student Name', 'Class/Grade', 'Stream', 'Parent Email'];
     const data = students.map(student => [
       student.admissionNumber,
       student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' '),
       student.gradeLevel || student.form,
-      student.className || '',
       student.stream || '',
-      student.status,
-      student.parentPhone || '',
-      student.studentPhone || '',
-      student.whatsappPhone || '',
-      student.uploadedCategory || '',
       student.email || ''
     ]);
 
@@ -2832,18 +2813,12 @@ const downloadExcelTemplate = () => {
     }
 
     const worksheetData = [
-      ['Admission Number', 'Student Name', 'Class/Grade', 'Class Name', 'Stream', 'Status', 'Parent Phone', 'Student Phone', 'WhatsApp Phone', 'Uploaded Category', 'Email'],
+      ['Admission Number', 'Student Name', 'Class/Grade', 'Stream', 'Parent Email'],
       ...students.map(student => [
         student.admissionNumber,
         student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' '),
         student.gradeLevel || student.form,
-        student.className || '',
         student.stream || '',
-        student.status,
-        student.parentPhone || '',
-        student.studentPhone || '',
-        student.whatsappPhone || '',
-        student.uploadedCategory || '',
         student.email || ''
       ])
     ];
@@ -3020,10 +2995,10 @@ const downloadExcelTemplate = () => {
                 trend={8.5}
               />
               <StudentStatisticsCard
-                title="Form 1 Students"
-                value={stats.globalStats?.form1 || 0}
+                title="Grade 10 Students"
+                value={stats.globalStats?.grade10 || 0}
                 icon={IoSchool}
-                color="from-teal-600 to-teal-800"
+                color="from-sky-600 to-teal-700"
                 trend={5.2}
               />
               <StudentStatisticsCard

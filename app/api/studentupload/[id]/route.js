@@ -12,6 +12,7 @@ const normalizeLocalMobilePhone = (value = '') => {
 
 const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
 const STUDENT_ARCHIVE_RETENTION_DAYS = 60;
+const VALID_STUDENT_LEVELS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4'];
 
 const buildStudentFullName = (student = {}) =>
   [student.firstName, student.middleName, student.lastName]
@@ -305,7 +306,7 @@ export async function PUT(request, { params }) {
       );
     }
 
-    const validForms = ['Form 1', 'Form 2', 'Form 3', 'Form 4'];
+    const validForms = VALID_STUDENT_LEVELS;
     if (!validForms.includes(data.form)) {
       return NextResponse.json(
         { 

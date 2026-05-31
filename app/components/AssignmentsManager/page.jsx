@@ -1112,7 +1112,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                 </div>
                 <div className="flex-1">
                   <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-slate-500">Delivery Desk</p>
-                  <h3 className="mt-1 text-lg font-black text-slate-950">WhatsApp Delivery</h3>
+                  <h3 className="mt-1 text-lg font-black text-slate-950">Email Delivery</h3>
                   <p className="mt-1 text-sm text-slate-600">Select recipient grades and optional categories. Contacts previewed on save.</p>
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-black text-teal-800">
@@ -1123,7 +1123,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
 
               <div className="mt-4">
                 <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
-                <p className="text-sm text-slate-600">Messages will be sent to the selected class via WhatsApp (Delivery Desk).</p>
+                <p className="text-sm text-slate-600">Assignment notices will be sent to parent email addresses for the selected class.</p>
               </div>
             </div>
 
@@ -2018,7 +2018,7 @@ export default function AssignmentsManager() {
               console.warn('Assignment delivery endpoint returned an error:', deliveryResult.error);
             }
           } catch (deliveryError) {
-            console.error('Assignment WhatsApp delivery failed:', deliveryError);
+            console.error('Assignment email delivery failed:', deliveryError);
           }
         }
 
@@ -2029,7 +2029,7 @@ export default function AssignmentsManager() {
         showNotification(
           'success',
           id ? 'Updated' : 'Created',
-          `Assignment ${id ? 'updated' : 'created'} successfully!${Number.isFinite(sentCount) ? ` ${sentCount} WhatsApp message(s) sent.` : Number.isFinite(recipientCount) ? ` ${recipientCount} WhatsApp recipient(s) prepared.` : ''}`
+          `Assignment ${id ? 'updated' : 'created'} successfully!${Number.isFinite(sentCount) ? ` ${sentCount} email(s) sent.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
         );
       } else {
         throw new Error(result.error || 'Failed to save assignment');
