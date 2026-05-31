@@ -2815,6 +2815,21 @@ const downloadExcelTemplate = () => {
     return <Spinner  />;
   }
 
+  const totalStudentCount = Number(stats.totalStudents || stats.globalStats?.totalStudents || 0);
+  const grade10Count = Number(stats.globalStats?.grade10 || 0);
+  const activeStudentCount = Number(demographics.statusDistribution?.find(s => s.name === 'Active')?.value || 0);
+  const trackedStreamCount = Object.keys(stats.streamStats || {}).length;
+  const percentOfTotal = (value) => totalStudentCount > 0
+    ? Math.round((Number(value || 0) / totalStudentCount) * 100)
+    : 0;
+  const countProgress = (value, step = 10) => Math.min(Number(value || 0) * step, 100);
+  const uploadCardTrends = {
+    totalStudents: countProgress(totalStudentCount, 2),
+    grade10: percentOfTotal(grade10Count),
+    active: percentOfTotal(activeStudentCount),
+    streams: countProgress(trackedStreamCount, 20)
+  };
+
   return (
     <div className="p-6 space-y-6">
       <CustomToaster />
@@ -2933,28 +2948,28 @@ const downloadExcelTemplate = () => {
                 value={stats.totalStudents}
                 icon={FiUsers}
                 color="from-emerald-600 to-emerald-800"
-                trend={8.5}
+                trend={uploadCardTrends.totalStudents}
               />
               <StudentStatisticsCard
                 title="Grade 10 Students"
                 value={stats.globalStats?.grade10 || 0}
                 icon={IoSchool}
                 color="from-sky-600 to-teal-700"
-                trend={5.2}
+                trend={uploadCardTrends.grade10}
               />
               <StudentStatisticsCard
                 title="Active Students"
-                value={demographics.statusDistribution?.find(s => s.name === 'Active')?.value || 0}
+                value={activeStudentCount}
                 icon={FiAward}
                 color="from-emerald-500 to-emerald-700"
-                trend={12.3}
+                trend={uploadCardTrends.active}
               />
               <StudentStatisticsCard
                 title="Streams Tracked"
-                value={Object.keys(stats.streamStats || {}).length}
+                value={trackedStreamCount}
                 icon={FiLayers}
                 color="from-emerald-600 to-green-700"
-                trend={2.1}
+                trend={uploadCardTrends.streams}
               />
             </div>
 
