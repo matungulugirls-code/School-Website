@@ -2319,17 +2319,33 @@ const handleAuthError = (error) => {
 const loadUploadHistory = async (page = 1) => {
   setHistoryLoading(true);
   try {
-    // Add status=completed to the API call
     const res = await fetch(`/api/studentupload?action=uploads&page=${page}&limit=30`);
+    
+    if (!res.ok) {
+      console.error(`Upload history API returned status: ${res.status}`);
+      sooner.error(`Failed to load upload history (HTTP ${res.status})`);
+      setHistoryLoading(false);
+      return;
+    }
+    
     const data = await res.json();
+    
     if (data.success) {
-      setUploadHistory(data.uploads || []);
+      const uploads = data.uploads || [];
+      setUploadHistory(uploads);
+      if (uploads.length === 0) {
+        console.log('No upload history found');
+      } else {
+        console.log(`Loaded ${uploads.length} upload records`);
+      }
     } else {
-      sooner.error('Failed to load upload history');
+      const errorMsg = data.message || data.error || 'Unknown error';
+      console.error('Upload history API error:', errorMsg);
+      sooner.error(`Failed to load upload history: ${errorMsg}`);
     }
   } catch (error) {
-    console.error('Failed to load history:', error);
-    sooner.error('Failed to load upload history');
+    console.error('Failed to load upload history:', error);
+    sooner.error(`Upload history error: ${error.message}`);
   } finally {
     setHistoryLoading(false);
   }
@@ -2702,11 +2718,12 @@ const downloadExcelTemplate = () => {
       return;
     }
 
-    const headers = ['Admission Number', 'Student Name', 'Class/Grade', 'Stream', 'Parent Email'];
+    const headers = ['Admission Number', 'Student Name', 'Academic Level', 'Form/Grade', 'Stream', 'Parent Email'];
     const data = students.map(student => [
       student.admissionNumber,
       student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' '),
-      student.gradeLevel || student.form,
+      student.form || student.gradeLevel || '',  // Academic Level (e.g., Form 3, Grade 10)
+      student.gradeLevel || student.form || '',   // Grade Level backup
       student.stream || '',
       student.email || ''
     ]);
@@ -2726,7 +2743,7 @@ const downloadExcelTemplate = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    sooner.success(`Exported ${students.length} students to CSV`);
+    sooner.success(`Exported ${students.length} students to CSV with form/grade levels`);
   };
 
   const exportStudentsToExcel = () => {
@@ -2736,11 +2753,12 @@ const downloadExcelTemplate = () => {
     }
 
     const worksheetData = [
-      ['Admission Number', 'Student Name', 'Class/Grade', 'Stream', 'Parent Email'],
+      ['Admission Number', 'Student Name', 'Academic Level', 'Form/Grade', 'Stream', 'Parent Email'],
       ...students.map(student => [
         student.admissionNumber,
         student.fullName || [student.firstName, student.middleName, student.lastName].filter(Boolean).join(' '),
-        student.gradeLevel || student.form,
+        student.form || student.gradeLevel || '',  // Academic Level (e.g., Form 3, Grade 10)
+        student.gradeLevel || student.form || '',   // Grade Level backup
         student.stream || '',
         student.email || ''
       ])
@@ -2751,7 +2769,7 @@ const downloadExcelTemplate = () => {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Students');
       XLSX.writeFile(wb, `students_export_${new Date().toISOString().split('T')[0]}.xlsx`);
-      sooner.success(`Exported ${students.length} students to Excel`);
+      sooner.success(`Exported ${students.length} students to Excel with form/grade levels`);
     } catch (err) {
       console.error('Excel export failed', err);
       sooner.error('Failed to export to Excel');

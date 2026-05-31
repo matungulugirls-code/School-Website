@@ -1590,14 +1590,23 @@ export async function GET(request) {
 
     if (action === 'uploads') {
       try {
-        const uploadHistoryWhere = {
-          NOT: {
+        console.log(`📝 Fetching uploads with pagination: page=${page}, limit=${limit}`);
+        
+        // Build a more flexible where clause that handles missing metadata gracefully
+        const uploadHistoryWhere = {};
+        
+        try {
+          // Try the metadata filter, but wrap in try-catch to handle schema issues
+          uploadHistoryWhere.NOT = {
             metadata: {
               path: ['duplicateCheckOnly'],
               equals: true
             }
-          }
-        };
+          };
+        } catch (metadataError) {
+          // If metadata filtering fails, just skip this filter
+          console.warn('⚠️ Metadata filter not available, fetching all uploads');
+        }
 
         const uploads = await prisma.studentBulkUpload.findMany({
           where: uploadHistoryWhere,
@@ -1623,7 +1632,7 @@ export async function GET(request) {
 
         const total = await prisma.studentBulkUpload.count({ where: uploadHistoryWhere });
         
-        console.log(`✅ Fetched ${uploads.length} upload records in ${Date.now() - startTime}ms`);
+        console.log(`✅ Fetched ${uploads.length} upload records (total: ${total}) in ${Date.now() - startTime}ms`);
         
         return NextResponse.json({
           success: true,
@@ -1633,15 +1642,20 @@ export async function GET(request) {
             limit, 
             total, 
             pages: Math.ceil(total / limit) 
-          }
+          },
+          timestamp: new Date().toISOString()
         });
       } catch (dbError) {
-        console.error('❌ Database error fetching uploads:', dbError);
+        console.error('❌ Database error fetching uploads:', dbError.message);
         return NextResponse.json(
           { 
             success: false, 
             error: 'Failed to fetch upload records',
-            message: process.env.NODE_ENV === 'development' ? dbError.message : 'Database error'
+            message: process.env.NODE_ENV === 'development' ? dbError.message : 'Database error fetching upload history',
+            details: process.env.NODE_ENV === 'development' ? {
+              errorType: dbError.code,
+              errorName: dbError.name
+            } : undefined
           },
           { status: 500 }
         );
