@@ -1591,28 +1591,9 @@ export async function GET(request) {
     if (action === 'uploads') {
       try {
         console.log(`📝 Fetching uploads with pagination: page=${page}, limit=${limit}`);
-        
-        // Build a more flexible where clause that handles missing metadata gracefully
-        const uploadHistoryWhere = {};
-        
-        try {
-          // Try the metadata filter, but wrap in try-catch to handle schema issues
-          uploadHistoryWhere.NOT = {
-            metadata: {
-              path: ['duplicateCheckOnly'],
-              equals: true
-            }
-          };
-        } catch (metadataError) {
-          // If metadata filtering fails, just skip this filter
-          console.warn('⚠️ Metadata filter not available, fetching all uploads');
-        }
 
-        const uploads = await prisma.studentBulkUpload.findMany({
-          where: uploadHistoryWhere,
+        const allUploads = await prisma.studentBulkUpload.findMany({
           orderBy: { uploadDate: 'desc' },
-          skip: Math.max(0, (page - 1) * limit),
-          take: limit,
           select: {
             id: true,
             fileName: true,
@@ -1630,7 +1611,12 @@ export async function GET(request) {
           }
         });
 
-        const total = await prisma.studentBulkUpload.count({ where: uploadHistoryWhere });
+        const visibleUploads = allUploads.filter(upload => !upload.metadata?.duplicateCheckOnly);
+        const total = visibleUploads.length;
+        const uploads = visibleUploads.slice(
+          Math.max(0, (page - 1) * limit),
+          Math.max(0, (page - 1) * limit) + limit
+        );
         
         console.log(`✅ Fetched ${uploads.length} upload records (total: ${total}) in ${Date.now() - startTime}ms`);
         
