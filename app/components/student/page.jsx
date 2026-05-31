@@ -574,12 +574,8 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                     <span className="font-semibold">{student.gradeLevel || student.form}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Class Name</span>
-                    <span className="font-semibold">{student.className || student.stream || 'N/A'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Uploaded Category</span>
-                    <span className="font-semibold">{student.uploadedCategory || 'N/A'}</span>
+                    <span className="text-gray-600">Stream</span>
+                    <span className="font-semibold">{student.stream || 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -614,20 +610,8 @@ function StudentDetailModal({ student, onClose, onEdit, onDelete }) {
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <p className="text-gray-600 mb-1">Email Address</p>
+                    <p className="text-gray-600 mb-1">Parent Email</p>
                     <p className="font-semibold">{student.email || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 mb-1">Parent Phone</p>
-                    <p className="font-semibold">{student.parentPhone || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 mb-1">Student Phone</p>
-                    <p className="font-semibold">{student.studentPhone || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600 mb-1">Legacy Delivery Phone</p>
-                    <p className="font-semibold">{student.whatsappPhone || student.parentPhone || student.studentPhone || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -659,25 +643,23 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
     admissionNumber: student?.admissionNumber || '',
     form: student?.gradeLevel || student?.form || ACADEMIC_LEVELS[0],
     stream: student?.stream || '',
-    className: student?.className || '',
     email: student?.email || '',
-    parentPhone: student?.parentPhone || '',
-    studentPhone: student?.studentPhone || '',
-    whatsappPhone: student?.whatsappPhone || '',
-    uploadedCategory: student?.uploadedCategory || '',
     status: student?.status || 'active'
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const fullName = [formData.firstName, formData.middleName, formData.lastName].filter(Boolean).join(' ').trim();
-    const className = formData.className?.trim() || [formData.form, formData.stream].filter(Boolean).join(' ');
+    const className = [formData.form, formData.stream].filter(Boolean).join(' ');
     await onSave(student.id, {
       ...formData,
       fullName,
       gradeLevel: formData.form,
       className,
-      whatsappPhone: formData.whatsappPhone || formData.parentPhone || formData.studentPhone
+      parentPhone: null,
+      studentPhone: null,
+      whatsappPhone: null,
+      uploadedCategory: formData.form
     });
   };
 
@@ -819,18 +801,6 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Class Name
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.className}
-                    onChange={(e) => setFormData({...formData, className: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                    placeholder="Grade 10 A"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Status *
                   </label>
                   <select
@@ -845,18 +815,6 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
                     <option value="transferred">Transferred</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Uploaded Category
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.uploadedCategory}
-                    onChange={(e) => setFormData({...formData, uploadedCategory: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                    placeholder="2026 Grade 10"
-                  />
-                </div>
               </div>
             </div>
 
@@ -866,49 +824,14 @@ function StudentEditModal({ student, onClose, onSave, loading }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Parent / Guardian Email (optional)
+                    Parent / Guardian Email *
                   </label>
                   <input
                     type="email"
+                    required
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Parent / Guardian Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.parentPhone}
-                    onChange={(e) => setFormData({...formData, parentPhone: normalizeLocalMobilePhone(e.target.value)})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                    placeholder="07XXXXXXXX"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Student Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.studentPhone}
-                    onChange={(e) => setFormData({...formData, studentPhone: normalizeLocalMobilePhone(e.target.value)})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                    placeholder="07XXXXXXXX"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Legacy Delivery Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.whatsappPhone}
-                    onChange={(e) => setFormData({...formData, whatsappPhone: normalizeLocalMobilePhone(e.target.value)})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-600"
-                    placeholder="07XXXXXXXX"
                   />
                 </div>
               </div>
@@ -3288,7 +3211,7 @@ const downloadExcelTemplate = () => {
                       <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <span className="text-teal-800 font-bold text-base">2</span>
                       </div>
-                      <span className="text-teal-800 font-semibold text-base">Admission numbers must be unique (4-10 digits)</span>
+                      <span className="text-teal-800 font-semibold text-base">Only these columns are scanned: admission number, student name, class/grade, stream, parent email</span>
                     </li>
                     <li className="flex items-start gap-4">
                       <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -3549,7 +3472,7 @@ const downloadExcelTemplate = () => {
                           .filter(Boolean)
                           .join(' ');
                         const isActive = (student.status || '').toLowerCase() === 'active';
-                        const contactLine = student.whatsappPhone || student.parentPhone || student.studentPhone || student.email || 'No contact details recorded';
+                        const contactLine = student.email || 'No parent email recorded';
 
                         return (
                           <div
@@ -3602,13 +3525,8 @@ const downloadExcelTemplate = () => {
                                 </p>
                                 <div className="space-y-1">
                                   <p className="text-sm font-semibold text-slate-800">
-                                    {student.whatsappPhone || student.parentPhone || student.studentPhone || 'Not provided'}
+                                    {student.email || 'No parent email'}
                                   </p>
-                                  {(student.uploadedCategory || student.email) && (
-                                    <p className="truncate text-xs text-slate-500">
-                                      {student.uploadedCategory || student.email}
-                                    </p>
-                                  )}
                                 </div>
                               </div>
 

@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import { prisma } from '../../../libs/prisma';
 import {
   ACADEMIC_LEVEL_OPTIONS,
-  SCHOOL_COMMUNICATION_NUMBER,
+  SCHOOL_COMMUNICATION_EMAIL,
   normalizeAcademicLevel,
   resolveDeliveryRecipients
 } from '../../../libs/delivery';
@@ -19,8 +19,6 @@ const normalizeLocalMobilePhone = (value = '') => {
   if (/^2547\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
   return String(value || '').trim();
 };
-
-const isLocalMobilePhone = (value = '') => /^07\d{8}$/.test(String(value || ''));
 
 // ==================== AUTHENTICATION UTILITIES ====================
 
@@ -173,9 +171,6 @@ const normalizeColumnKey = (value = '') =>
 
 const getSourceRowNumber = (record, fallbackIndex = 0) =>
   Number(record?.sourceRowNumber || record?.__rowNumber || fallbackIndex + 2);
-
-const normalizeLooseKey = (value = '') =>
-  normalizeColumnKey(value).replace(/student|learner|pupil/g, '');
 
 const extractAcademicLevel = (...values) => {
   for (const value of values) {
@@ -477,7 +472,7 @@ const normalizeStudentUploadFailure = (error) => {
   }
 
   if (lowerMessage.includes('pdf parsing failed')) {
-    return 'The PDF file could not be read. Confirm it is text-based and includes admission number, student name, class or grade, and phone columns.';
+    return 'The PDF file could not be read. Confirm it is text-based and includes admission number, student name, class or grade, stream, and parent email columns.';
   }
 
   if (lowerMessage.includes('no readable student rows') || lowerMessage.includes('empty')) {
@@ -1061,9 +1056,24 @@ const processUpdateUpload = async (students, uploadBatchId, targetForm, tx = pri
 };
 
 // ========== CSV PARSING ==========
+const STUDENT_UPLOAD_FIELD_KEYS = new Set([
+  'admissionNumber',
+  'firstName',
+  'middleName',
+  'lastName',
+  'fullName',
+  'className',
+  'form',
+  'gradeLevel',
+  'stream',
+  'email'
+]);
+
+const ignoredUploadHeader = (header = '') =>
+  `__ignored_${normalizeColumnKey(header) || 'column'}`;
+
 const mapStudentUploadHeader = (header = '') => {
   const normalized = normalizeColumnKey(header);
-  const loose = normalizeLooseKey(header);
 
   if (normalized.includes('admission') || normalized.includes('admno') || normalized === 'adm') {
     return 'admissionNumber';
@@ -1096,15 +1106,16 @@ const mapStudentUploadHeader = (header = '') => {
     return 'email';
   }
 
-  return normalized;
+  return ignoredUploadHeader(header);
 };
 
 const hasRequiredStudentHeaders = (headers = []) => {
-  const hasAdmission = headers.includes('admissionNumber');
-  const hasName = headers.includes('fullName') || (headers.includes('firstName') && headers.includes('lastName'));
-  const hasClassInfo = headers.includes('form') || headers.includes('gradeLevel') || headers.includes('className');
-  const hasStream = headers.includes('stream');
-  const hasEmail = headers.includes('email');
+  const studentHeaders = headers.filter(header => STUDENT_UPLOAD_FIELD_KEYS.has(header));
+  const hasAdmission = studentHeaders.includes('admissionNumber');
+  const hasName = studentHeaders.includes('fullName') || (studentHeaders.includes('firstName') && studentHeaders.includes('lastName'));
+  const hasClassInfo = studentHeaders.includes('form') || studentHeaders.includes('gradeLevel') || studentHeaders.includes('className');
+  const hasStream = studentHeaders.includes('stream');
+  const hasEmail = studentHeaders.includes('email');
 
   return {
     isValid: hasAdmission && hasName && hasClassInfo && hasStream && hasEmail,
@@ -1118,19 +1129,28 @@ const hasRequiredStudentHeaders = (headers = []) => {
   };
 };
 
+const pickStudentUploadFields = (row = {}) =>
+  Object.entries(row || {}).reduce((picked, [key, value]) => {
+    if (STUDENT_UPLOAD_FIELD_KEYS.has(key)) {
+      picked[key] = value;
+    }
+    return picked;
+  }, {});
+
 const normalizeStudentUploadRow = (row = {}, index = 0) => {
-  const admissionNumber = String(row.admissionNumber || '').trim();
-  const fullNameInput = String(row.fullName || row.name || '').trim();
+  const uploadRow = pickStudentUploadFields(row);
+  const admissionNumber = String(uploadRow.admissionNumber || '').trim();
+  const fullNameInput = String(uploadRow.fullName || '').trim();
   const splitName = splitStudentName(fullNameInput);
-  const firstName = String(row.firstName || splitName.firstName || '').trim();
-  const middleName = String(row.middleName || splitName.middleName || '').trim() || null;
-  const lastName = String(row.lastName || splitName.lastName || '').trim();
-  const rawClassName = String(row.className || '').trim();
-  const rawForm = String(row.form || row.gradeLevel || rawClassName || '').trim();
-  const form = extractAcademicLevel(row.form, row.gradeLevel, rawClassName);
-  const stream = String(row.stream || '').trim() || null;
+  const firstName = String(uploadRow.firstName || splitName.firstName || '').trim();
+  const middleName = String(uploadRow.middleName || splitName.middleName || '').trim() || null;
+  const lastName = String(uploadRow.lastName || splitName.lastName || '').trim();
+  const rawClassName = String(uploadRow.className || '').trim();
+  const rawForm = String(uploadRow.form || uploadRow.gradeLevel || rawClassName || '').trim();
+  const form = extractAcademicLevel(uploadRow.form, uploadRow.gradeLevel, rawClassName);
+  const stream = String(uploadRow.stream || '').trim() || null;
   const className = buildClassName(form, stream, rawClassName);
-  const email = row.email ? String(row.email).trim() : null;
+  const email = uploadRow.email ? String(uploadRow.email).trim() : null;
   const uploadedCategory = form || null;
   const fullName = buildStudentFullName({ fullName: fullNameInput, firstName, middleName, lastName });
 
@@ -1165,7 +1185,7 @@ const normalizeStudentUploadRow = (row = {}, index = 0) => {
     whatsappPhone: null,
     email,
     uploadedCategory,
-    status: String(row.status || 'active').trim() || 'active'
+    status: 'active'
   };
 };
 
@@ -1412,7 +1432,7 @@ const parseExcel = async (file) => {
       const normalized = {};
       Object.entries(row || {}).forEach(([key, value]) => {
         const mappedKey = mapStudentUploadHeader(key);
-        if (value !== undefined && value !== null && value !== '') {
+        if (STUDENT_UPLOAD_FIELD_KEYS.has(mappedKey) && value !== undefined && value !== null && value !== '') {
           normalized[mappedKey] = value;
         }
       });
@@ -1509,18 +1529,6 @@ const validateStudent = (student, index) => {
     errors.push(`Row ${rowNumber}: Stream too long (max 50 chars)`);
   }
   
-  const contactPhones = [
-    ['Parent phone', student.parentPhone],
-    ['Student phone', student.studentPhone],
-    ['WhatsApp phone', student.whatsappPhone]
-  ].filter(([, value]) => value);
-
-  for (const [label, value] of contactPhones) {
-    if (!isLocalMobilePhone(value)) {
-      errors.push(`Row ${rowNumber}: ${label} must be in 07XXXXXXXX format`);
-    }
-  }
-  
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!student.email) {
     errors.push(`Row ${rowNumber}: Parent email is required`);
@@ -1534,10 +1542,6 @@ const validateStudent = (student, index) => {
     errors.push(`Row ${rowNumber}: Class information too long (max 100 chars)`);
   }
 
-  if (student.uploadedCategory && student.uploadedCategory.length > 100) {
-    errors.push(`Row ${rowNumber}: Uploaded category too long (max 100 chars)`);
-  }
-  
   return { isValid: errors.length === 0, errors };
 };
 
@@ -1637,8 +1641,8 @@ export async function GET(request) {
             .filter(Boolean);
 
         const criteria = {
-          channel: 'whatsapp',
-          senderReference: SCHOOL_COMMUNICATION_NUMBER,
+          channel: 'email',
+          senderReference: SCHOOL_COMMUNICATION_EMAIL,
           grades: parseQueryList('grades').map(normalizeAcademicLevel).filter(Boolean),
           classes: parseQueryList('classes'),
           categories: parseQueryList('categories'),
@@ -1660,10 +1664,10 @@ export async function GET(request) {
         return NextResponse.json({
           success: true,
           senderReference: criteria.senderReference,
-          deliveryChannel: 'whatsapp',
+          deliveryChannel: 'email',
           criteria,
           recipientCount: resolved.recipients.length,
-          missingPhoneCount: resolved.missingPhoneCount,
+          missingEmailCount: resolved.missingEmailCount,
           totalMatchedStudents: resolved.totalMatched,
           contacts: resolved.recipients.slice(0, limit)
         });
@@ -2212,7 +2216,7 @@ await prisma.$transaction(async (tx) => {
       error: error.message || 'Upload processing failed',
       authenticated: true,
       timestamp: new Date().toISOString(),
-      suggestion: 'Verify file format: admission#, name, class/grade, phone required. For large files, keep page open until completion.'
+      suggestion: 'Verify file format: admission number, name, class/grade, stream, and parent email are required. For large files, keep page open until completion.'
     };
     
     if (process.env.NODE_ENV === 'development') {
