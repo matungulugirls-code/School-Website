@@ -1772,26 +1772,26 @@ export async function GET(request) {
             status: true,
             createdAt: true,
             updatedAt: true,
-            uploadBatchId: true,
-            uploadBatch: {
-              select: {
-                fileName: true,
-                uploadDate: true
-              }
-            }
+            uploadBatchId: true
           }
         }),
         prisma.databaseStudent.count({ where })
       ]);
 
-      // Calculate statistics for this filtered set
+      // Calculate statistics for this filtered set (resilient)
       let statsResult = null;
       if (includeStats) {
-        statsResult = await calculateStatistics(where);
-        
-        // If no filters, update cache
-        if (Object.keys(where).length === 0) {
-          await updateCachedStats(statsResult.stats);
+        try {
+          statsResult = await calculateStatistics(where);
+
+          // If no filters, update cache
+          if (Object.keys(where).length === 0 && statsResult && statsResult.stats) {
+            await updateCachedStats(statsResult.stats);
+          }
+        } catch (statsError) {
+          console.error('⚠️ Failed to calculate statistics for students:', statsError?.message || statsError);
+          // Continue and return students even if stats calculation fails
+          statsResult = null;
         }
       }
 
