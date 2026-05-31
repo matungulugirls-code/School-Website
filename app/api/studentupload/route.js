@@ -580,7 +580,11 @@ const buildWhereClause = (params) => {
   if (gender && gender !== 'all') where.gender = gender;
   if (className && className !== 'all') where.className = className;
   if (uploadedCategory && uploadedCategory !== 'all') where.uploadedCategory = uploadedCategory;
-  if (status && status !== 'all') where.status = status;
+  if (status && status !== 'all') {
+    where.status = status;
+  } else if (status !== 'all') {
+    where.status = 'active';
+  }
   
   if (search && search.trim()) {
     const searchTerm = search.trim();
@@ -1586,7 +1590,17 @@ export async function GET(request) {
 
     if (action === 'uploads') {
       try {
+        const uploadHistoryWhere = {
+          NOT: {
+            metadata: {
+              path: ['duplicateCheckOnly'],
+              equals: true
+            }
+          }
+        };
+
         const uploads = await prisma.studentBulkUpload.findMany({
+          where: uploadHistoryWhere,
           orderBy: { uploadDate: 'desc' },
           skip: Math.max(0, (page - 1) * limit),
           take: limit,
@@ -1602,11 +1616,12 @@ export async function GET(request) {
             validRows: true,
             skippedRows: true,
             errorRows: true,
-            errorLog: true
+            errorLog: true,
+            metadata: true
           }
         });
 
-        const total = await prisma.studentBulkUpload.count();
+        const total = await prisma.studentBulkUpload.count({ where: uploadHistoryWhere });
         
         console.log(`✅ Fetched ${uploads.length} upload records in ${Date.now() - startTime}ms`);
         
@@ -1738,16 +1753,8 @@ export async function GET(request) {
             fullName: true,
             form: true,
             gradeLevel: true,
-            className: true,
             stream: true,
-            dateOfBirth: true,
-            gender: true,
-            parentPhone: true,
-            studentPhone: true,
-            whatsappPhone: true,
             email: true,
-            address: true,
-            uploadedCategory: true,
             status: true,
             createdAt: true,
             updatedAt: true,
@@ -1981,22 +1988,8 @@ export async function POST(request) {
           duplicates = await checkDuplicateAdmissionNumbers(rawData, targetForm);
         }
 
-        await prisma.studentBulkUpload.update({
-          where: { id: batchId },
-          data: {
-            status: 'completed',
-            processedDate: new Date(),
-            totalRows: rawData.length,
-            validRows: Math.max(0, rawData.length - duplicates.length),
-            skippedRows: duplicates.length,
-            errorRows: 0,
-            metadata: {
-              ...uploadBatch.metadata,
-              duplicateCheckOnly: true,
-              duplicatesFound: duplicates.length,
-              checkedAt: new Date().toISOString()
-            }
-          }
+        await prisma.studentBulkUpload.delete({
+          where: { id: batchId }
         });
         
         return NextResponse.json({
@@ -2145,7 +2138,7 @@ await prisma.$transaction(async (tx) => {
 });
       
       // Recalculate to ensure consistency
-      const finalStats = await calculateStatistics({});
+      const finalStats = await calculateStatistics({ status: 'active' });
       
       console.log(`✅ Student upload completed by ${auth.user.name}: ${processingStats.validRows} students processed`);
       
@@ -2345,7 +2338,7 @@ export async function PUT(request) {
     });
 
     // Recalculate to ensure consistency
-    const finalStats = await calculateStatistics({});
+    const finalStats = await calculateStatistics({ status: 'active' });
 
     console.log(`✅ Student updated by ${auth.user.name}: ${result.firstName} ${result.lastName}`);
 
@@ -2506,7 +2499,7 @@ export async function DELETE(request) {
       });
 
       // Recalculate to ensure consistency
-      const finalStats = await calculateStatistics({});
+      const finalStats = await calculateStatistics({ status: 'active' });
 
       console.log(`✅ Batch deleted by ${auth.user.name}: ${result.batch.fileName} (${result.deletedCount} students)`);
 
@@ -2604,7 +2597,7 @@ export async function DELETE(request) {
       });
 
       // Recalculate to ensure consistency
-      const finalStats = await calculateStatistics({});
+      const finalStats = await calculateStatistics({ status: 'active' });
 
       console.log(`✅ Student deleted by ${auth.user.name}: ${result.student.firstName} ${result.student.lastName}`);
 

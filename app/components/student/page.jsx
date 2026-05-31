@@ -3514,7 +3514,7 @@ const downloadExcelTemplate = () => {
                                     {student.gradeLevel || student.form || 'Not assigned'}
                                   </span>
                                   <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
-                                    {student.className || student.stream || 'No stream'}
+                                    {student.stream || 'No stream'}
                                   </span>
                                 </div>
                               </div>
