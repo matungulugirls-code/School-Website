@@ -3194,7 +3194,7 @@ if (loading && view === 'fees' && schoolFees.length === 0) {
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatisticsCard title="Total Fees" value={stats.totalRecords} icon={IoCash} color="from-purple-500 to-purple-700" trend={8.5} />
-              <StatisticsCard title="Form 1 Fees" value={chartData.formDistribution.find(f => f.name === 'Form 1')?.value || 0} icon={IoSchool} color="from-blue-500 to-blue-700" trend={5.2} />
+              <StatisticsCard title="Grade 10 Fees" value={chartData.formDistribution.find(f => f.name === 'Grade 10')?.value || 0} icon={IoSchool} color="from-sky-600 to-teal-700" trend={5.2} />
               <StatisticsCard title="Paid Fees" value={chartData.statusDistribution.find(s => s.name === 'paid')?.value || 0} icon={FiCheckCircle} color="from-emerald-500 to-emerald-700" trend={12.3} />
               <StatisticsCard title="Pending Fees" value={chartData.statusDistribution.find(s => s.name === 'pending')?.value || 0} icon={FiAlertCircle} color="from-red-500 to-red-700" trend={-2.1} />
             </div>
