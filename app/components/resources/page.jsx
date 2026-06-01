@@ -626,6 +626,7 @@ function ModernResourceModal({ onClose, onSave, resource, loading }) {
   const [formData, setFormData] = useState({
     title: resource?.title || '',
     description: resource?.description || '',
+    subject: resource?.subject || '',
     className: resource?.className || '',
     teacher: resource?.teacher || '',
     category: resource?.category || 'General',
@@ -1038,6 +1039,18 @@ useEffect(() => {
                   <option key={className} value={className}>{className}</option>
                 ))}
               </select>
+            </div>
+
+            {/* Subject selection with search */}
+            <div>
+              <label className="block text-base font-bold text-gray-800 mb-3">Subject</label>
+              <SearchableSubjectDropdown
+                value={formData.subject}
+                onChange={(value) => handleChange('subject', value)}
+                options={ALL_SUBJECTS}
+                placeholder="Select or search subject..."
+                className="w-full"
+              />
             </div>
 
             <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
