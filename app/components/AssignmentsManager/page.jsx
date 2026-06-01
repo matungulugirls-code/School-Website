@@ -666,8 +666,7 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
   const [formData, setFormData] = useState({
     title: assignment?.title || '',
     description: assignment?.description || '',
-    // simplified: keep only title, description, class, teacher and delivery-related fields
-    subject: '',
+    subject: assignment?.subject || '',
     dueDate: '',
     className: assignment?.className || '',
     teacher: assignment?.teacher || '',
@@ -1110,6 +1109,18 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
                   ))}
                 </select>
               </div>
+
+            {/* Subject selection with search */}
+            <div>
+              <label className="block text-base font-bold text-gray-800 mb-3">Subject</label>
+              <SearchableSubjectDropdown
+                value={formData.subject}
+                onChange={(value) => handleChange('subject', value)}
+                options={ALL_SUBJECTS}
+                placeholder="Select or search subject..."
+                className="w-full"
+              />
+            </div>
 
             <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
               <div className="flex items-center gap-4">
