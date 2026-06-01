@@ -226,8 +226,11 @@ export async function POST(req) {
     const sendResults = [];
     let successCount = 0;
     let failureCount = 0;
+    let rateLimitEncountered = false;
+    let rateLimitWaitTime = 0;
 
-    for (const recipient of recipients) {
+    for (let recipientIndex = 0; recipientIndex < recipients.length; recipientIndex++) {
+      const recipient = recipients[recipientIndex];
       const parentEmail = normalizeEmailAddress(recipient.student?.email);
       const studentName = getStudentName(recipient);
 
@@ -247,6 +250,12 @@ export async function POST(req) {
         continue;
       }
 
+      // If we hit rate limit, pause before continuing
+      if (rateLimitEncountered && rateLimitWaitTime > 0) {
+        await new Promise(resolve => setTimeout(resolve, rateLimitWaitTime));
+        rateLimitWaitTime = 0;
+      }
+
       const emailContent = buildResourceEmail(resource, studentName);
       const sendResult = await sendDeliveryEmail({
         to: parentEmail,
@@ -256,12 +265,29 @@ export async function POST(req) {
 
       if (sendResult.success) {
         successCount++;
+        rateLimitEncountered = false; // Reset rate limit flag on success
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
           data: { status: "sent", updatedAt: new Date() },
         });
       } else {
         failureCount++;
+        
+        // Check if this is a rate limit error
+        const isRateLimit = sendResult.error?.includes('454') || 
+                           sendResult.error?.includes('Too many login attempts') ||
+                           sendResult.responseCode === 454;
+        
+        if (isRateLimit) {
+          rateLimitEncountered = true;
+          // Exponential backoff: start with 5 seconds, then increase
+          rateLimitWaitTime = Math.min(
+            5000 * Math.pow(2, failureCount / 3),
+            120000 // Max 2 minutes
+          );
+          console.warn(`Rate limit detected after ${successCount + failureCount} emails. Waiting ${rateLimitWaitTime}ms`);
+        }
+        
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
           data: { status: "failed", updatedAt: new Date() },

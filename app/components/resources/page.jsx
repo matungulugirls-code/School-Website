@@ -83,6 +83,12 @@ import {
   IoChevronForwardOutline,
   IoCheckmarkCircleOutline
 } from 'react-icons/io5';
+
+// Import subject list and components
+import { ALL_SUBJECTS } from '../../constants/subjects';
+import SearchableSubjectDropdown from '../SearchableSubjectDropdown';
+import DeliveryProgressIndicator from '../DeliveryProgressIndicator';
+
 // Rest of your component logic goes here...
 
 const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
@@ -1408,6 +1414,18 @@ export default function ResourcesManager() {
     message: ''
   });
 
+  // Delivery progress state
+  const [deliveryProgress, setDeliveryProgress] = useState({
+    isOpen: false,
+    totalRecipients: 0,
+    sentCount: 0,
+    failedCount: 0,
+    currentRecipient: '',
+    isComplete: false,
+    failedRecipients: [],
+    isLoading: false,
+  });
+
   // Status options
   const statusOptions = [
     { value: 'all', label: 'All Status', color: 'gray' },
@@ -1439,18 +1457,7 @@ export default function ResourcesManager() {
   // Subject options
   const subjectOptions = [
     'All Subjects',
-    'Mathematics',
-    'Science',
-    'English',
-    'History',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'Computer Science',
-    'Art',
-    'Music',
-    'Physical Education',
-    'Geography'
+    ...ALL_SUBJECTS
   ];
 
   // Category options
@@ -2339,17 +2346,13 @@ const handleSubmit = async (formData, id) => {
             ))}
           </select>
 
-          <select
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50 cursor-pointer text-md "
-          >
-            {subjectOptions.map(subject => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-          </select>
+          <SearchableSubjectDropdown
+            value={selectedSubject === 'All Subjects' ? 'all' : selectedSubject}
+            onChange={(value) => setSelectedSubject(value === 'all' ? 'All Subjects' : value)}
+            options={ALL_SUBJECTS}
+            placeholder="Search subjects..."
+            className="w-full"
+          />
 
           <select
             value={selectedCategory}
@@ -2783,6 +2786,26 @@ const handleSubmit = async (formData, id) => {
           onEdit={handleEdit}
         />
       )}
+
+      {/* Delivery Progress Indicator */}
+      <DeliveryProgressIndicator
+        isOpen={deliveryProgress.isOpen}
+        totalRecipients={deliveryProgress.totalRecipients}
+        sentCount={deliveryProgress.sentCount}
+        failedCount={deliveryProgress.failedCount}
+        currentRecipient={deliveryProgress.currentRecipient}
+        isComplete={deliveryProgress.isComplete}
+        failedRecipients={deliveryProgress.failedRecipients}
+        isLoading={deliveryProgress.isLoading}
+        onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
+        onRetry={async () => {
+          if (selectedResource?.id && deliveryProgress.failedRecipients.length > 0) {
+            const failedIds = deliveryProgress.failedRecipients.map(r => r.recipientId);
+            // Implement retry logic
+            console.log('Retrying failed recipients:', failedIds);
+          }
+        }}
+      />
     </div>
   );
 }

@@ -76,6 +76,12 @@ import {
   IoChevronForwardOutline,
   IoCheckmarkCircleOutline
 } from 'react-icons/io5';
+
+// Import subject list and components
+import { ALL_SUBJECTS } from '../../constants/subjects';
+import SearchableSubjectDropdown from '../SearchableSubjectDropdown';
+import DeliveryProgressIndicator from '../DeliveryProgressIndicator';
+
 import { Modal, Box, CircularProgress } from '@mui/material';
 
 const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
@@ -1448,6 +1454,18 @@ export default function AssignmentsManager() {
     message: ''
   });
 
+  // Delivery progress state
+  const [deliveryProgress, setDeliveryProgress] = useState({
+    isOpen: false,
+    totalRecipients: 0,
+    sentCount: 0,
+    failedCount: 0,
+    currentRecipient: '',
+    isComplete: false,
+    failedRecipients: [],
+    isLoading: false,
+  });
+
   // Status options
   const statusOptions = [
     { value: 'pending', label: 'Pending', color: 'yellow' },
@@ -1466,18 +1484,7 @@ export default function AssignmentsManager() {
 
   // Subject options
   const subjectOptions = [
-    'Mathematics',
-    'Science',
-    'English',
-    'History',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'Computer Science',
-    'Art',
-    'Music',
-    'Physical Education',
-    'Geography'
+    ...ALL_SUBJECTS
   ];
 
   // Class options
@@ -2385,18 +2392,13 @@ export default function AssignmentsManager() {
             ))}
           </select>
 
-          <select
+          <SearchableSubjectDropdown
             value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 bg-gray-50 cursor-pointer text-sm"
-          >
-            <option value="all">All Subjects</option>
-            {subjectOptions.map(subject => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => setSelectedSubject(value)}
+            options={ALL_SUBJECTS}
+            placeholder="Search subjects..."
+            className="w-full"
+          />
 
           <select
             value={selectedPriority}
@@ -2850,6 +2852,26 @@ export default function AssignmentsManager() {
           onEdit={handleEdit}
         />
       )}
+
+      {/* Delivery Progress Indicator */}
+      <DeliveryProgressIndicator
+        isOpen={deliveryProgress.isOpen}
+        totalRecipients={deliveryProgress.totalRecipients}
+        sentCount={deliveryProgress.sentCount}
+        failedCount={deliveryProgress.failedCount}
+        currentRecipient={deliveryProgress.currentRecipient}
+        isComplete={deliveryProgress.isComplete}
+        failedRecipients={deliveryProgress.failedRecipients}
+        isLoading={deliveryProgress.isLoading}
+        onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
+        onRetry={async () => {
+          if (selectedAssignment?.id && deliveryProgress.failedRecipients.length > 0) {
+            const failedIds = deliveryProgress.failedRecipients.map(r => r.recipientId);
+            // Implement retry logic
+            console.log('Retrying failed recipients:', failedIds);
+          }
+        }}
+      />
     </div>
   );
 }
