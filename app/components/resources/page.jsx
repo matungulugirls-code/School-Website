@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Modal, Box, CircularProgress } from '@mui/material';
 
 // Consolidated Feather Icons (Fi) - All Duplicates Removed
@@ -1424,6 +1424,8 @@ export default function ResourcesManager() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [stats, setStats] = useState(null);
+  const deliveryCancelRef = useRef(false);
+  const deliveryAbortRef = useRef(null);
 
   // NEW: Bulk delete states
   const [selectedResources, setSelectedResources] = useState(new Set());
@@ -1587,6 +1589,9 @@ const fetchResourceDeliveryRecipients = async (resourceId) => {
 };
 
 const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
+  deliveryCancelRef.current = false;
+  deliveryAbortRef.current = null;
+
   const deliverableRecipients = recipients
     .map((recipient) => ({
       ...recipient,
@@ -1616,6 +1621,8 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
   }
 
   for (let index = 0; index < deliverableRecipients.length; index += 1) {
+    if (deliveryCancelRef.current) break;
+
     const recipient = deliverableRecipients[index];
     const recipientLabel = recipient.studentName || recipient.email || recipient.admissionNumber || `Recipient ${index + 1}`;
 
@@ -1628,14 +1635,21 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
 
     try {
       const controller = new AbortController();
+      deliveryAbortRef.current = controller;
       const timeoutId = setTimeout(() => controller.abort(), 90000);
-      const deliveryResponse = await fetch('/api/resources/delivery', {
-        method: 'POST',
-        headers: { ...headers, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resourceId, recipientIds: [recipient.id] }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
+      let deliveryResponse;
+
+      try {
+        deliveryResponse = await fetch('/api/resources/delivery', {
+          method: 'POST',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resourceId, recipientIds: [recipient.id] }),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timeoutId);
+        deliveryAbortRef.current = null;
+      }
 
       const deliveryResult = await deliveryResponse.json().catch(() => ({}));
       const resultItem = deliveryResult.data?.results?.[0];
@@ -1653,6 +1667,16 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
         });
       }
     } catch (error) {
+      if (deliveryCancelRef.current) {
+        setDeliveryProgress(prev => ({
+          ...prev,
+          isLoading: false,
+          isComplete: true,
+          currentRecipient: 'Delivery cancelled by user.',
+        }));
+        break;
+      }
+
       failedCount += 1;
       failedRecipients.push({
         ...recipient,
@@ -1676,6 +1700,18 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
   }
 
   return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients };
+};
+
+const cancelResourceDelivery = () => {
+  deliveryCancelRef.current = true;
+  deliveryAbortRef.current?.abort();
+  setDeliveryProgress(prev => ({
+    ...prev,
+    isLoading: false,
+    isComplete: true,
+    currentRecipient: 'Delivery cancelled by user.',
+  }));
+  showNotification('warning', 'Delivery Cancelled', 'Email delivery was stopped. Already processed recipients are unchanged.');
 };
 
 const retryFailedResourceDelivery = async (resourceId, failedRecipients) => {
@@ -2965,6 +3001,7 @@ const handleSubmit = async (formData, id) => {
         isComplete={deliveryProgress.isComplete}
         failedRecipients={deliveryProgress.failedRecipients}
         isLoading={deliveryProgress.isLoading}
+        onCancel={cancelResourceDelivery}
         onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
         onRetry={async () => {
           if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {

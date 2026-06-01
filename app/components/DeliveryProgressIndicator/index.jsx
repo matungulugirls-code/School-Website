@@ -28,6 +28,7 @@ export const DeliveryProgressIndicator = ({
   isComplete = false,
   failedRecipients = [],
   onRetry,
+  onCancel,
   onClose,
   isLoading = false
 }) => {
@@ -80,7 +81,7 @@ export const DeliveryProgressIndicator = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[2200] p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-teal-500 to-green-500 px-6 py-4">
@@ -152,6 +153,7 @@ export const DeliveryProgressIndicator = ({
           {isComplete && hasFailures && (
             <div className="bg-red-50 border border-red-200 rounded-lg overflow-hidden">
               <button
+                type="button"
                 onClick={() => setExpandFailures(!expandFailures)}
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-red-100 transition-colors"
               >
@@ -209,6 +211,7 @@ export const DeliveryProgressIndicator = ({
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex gap-3">
           {isComplete && hasFailures && (
             <button
+              type="button"
               onClick={handleRetry}
               disabled={retrying}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
@@ -218,7 +221,18 @@ export const DeliveryProgressIndicator = ({
             </button>
           )}
 
+          {isLoading && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 px-4 py-2 rounded-lg font-medium transition-colors bg-red-500 hover:bg-red-600 text-white"
+            >
+              Cancel
+            </button>
+          )}
+
           <button
+            type="button"
             onClick={onClose}
             disabled={isLoading}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${

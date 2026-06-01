@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   FiPlus,
   FiSearch,
@@ -55,6 +55,7 @@ import {
   FiCopy,
   FiShare2,
   FiInfo, 
+  FiFilter,
   FiHeart,
   FiMessageCircle
 } from 'react-icons/fi';
@@ -1462,6 +1463,8 @@ export default function AssignmentsManager() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [stats, setStats] = useState(null);
+  const deliveryCancelRef = useRef(false);
+  const deliveryAbortRef = useRef(null);
   
   // Bulk delete states
   const [selectedAssignments, setSelectedAssignments] = useState(new Set());
@@ -1647,6 +1650,9 @@ export default function AssignmentsManager() {
   };
 
   const sendAssignmentDeliveryBatch = async (assignmentId, recipients, headers) => {
+    deliveryCancelRef.current = false;
+    deliveryAbortRef.current = null;
+
     const deliverableRecipients = recipients
       .map((recipient) => ({
         ...recipient,
@@ -1676,6 +1682,8 @@ export default function AssignmentsManager() {
     }
 
     for (let index = 0; index < deliverableRecipients.length; index += 1) {
+      if (deliveryCancelRef.current) break;
+
       const recipient = deliverableRecipients[index];
       const recipientLabel = recipient.studentName || recipient.email || recipient.admissionNumber || `Recipient ${index + 1}`;
 
@@ -1688,14 +1696,21 @@ export default function AssignmentsManager() {
 
       try {
         const controller = new AbortController();
+        deliveryAbortRef.current = controller;
         const timeoutId = setTimeout(() => controller.abort(), 90000);
-        const deliveryResponse = await fetch('/api/assignment/delivery', {
-          method: 'POST',
-          headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ assignmentId, recipientIds: [recipient.id] }),
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
+        let deliveryResponse;
+
+        try {
+          deliveryResponse = await fetch('/api/assignment/delivery', {
+            method: 'POST',
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ assignmentId, recipientIds: [recipient.id] }),
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timeoutId);
+          deliveryAbortRef.current = null;
+        }
 
         const deliveryResult = await deliveryResponse.json().catch(() => ({}));
         const resultItem = deliveryResult.data?.results?.[0];
@@ -1713,6 +1728,16 @@ export default function AssignmentsManager() {
           });
         }
       } catch (error) {
+        if (deliveryCancelRef.current) {
+          setDeliveryProgress(prev => ({
+            ...prev,
+            isLoading: false,
+            isComplete: true,
+            currentRecipient: 'Delivery cancelled by user.',
+          }));
+          break;
+        }
+
         failedCount += 1;
         failedRecipients.push({
           ...recipient,
@@ -1736,6 +1761,18 @@ export default function AssignmentsManager() {
     }
 
     return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients };
+  };
+
+  const cancelAssignmentDelivery = () => {
+    deliveryCancelRef.current = true;
+    deliveryAbortRef.current?.abort();
+    setDeliveryProgress(prev => ({
+      ...prev,
+      isLoading: false,
+      isComplete: true,
+      currentRecipient: 'Delivery cancelled by user.',
+    }));
+    showNotification('warning', 'Delivery Cancelled', 'Email delivery was stopped. Already processed recipients are unchanged.');
   };
 
   const retryFailedAssignmentDelivery = async (assignmentId, failedRecipients) => {
@@ -1871,6 +1908,19 @@ export default function AssignmentsManager() {
   const totalPages = Math.ceil(filteredAssignments.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const hasActiveAssignmentFilters = searchTerm ||
+    selectedStatus !== 'all' ||
+    selectedSubject !== 'all' ||
+    selectedPriority !== 'all' ||
+    selectedClass !== 'all';
+
+  const clearAssignmentFilters = () => {
+    setSearchTerm('');
+    setSelectedStatus('all');
+    setSelectedSubject('all');
+    setSelectedPriority('all');
+    setSelectedClass('all');
+  };
 
   // View assignment
   const handleView = (assignment) => {
@@ -2533,6 +2583,24 @@ export default function AssignmentsManager() {
 
       {/* Filters Section */}
       <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-lg border border-gray-200">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
+              <FiFilter className="text-teal-700" />
+              Filters
+            </p>
+            <h2 className="mt-1 text-lg font-black text-slate-950">Refine assignment records</h2>
+          </div>
+          <button
+            type="button"
+            onClick={clearAssignmentFilters}
+            disabled={!hasActiveAssignmentFilters}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 py-3 text-sm font-black text-slate-700 transition hover:border-teal-200 hover:bg-teal-50 hover:text-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <FiFilter />
+            Clear All Filters
+          </button>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
           <div className="lg:col-span-2 relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -2985,12 +3053,7 @@ export default function AssignmentsManager() {
               </button>
               
               <button 
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedStatus('all');
-                  setSelectedSubject('all');
-                  setSelectedClass('all');
-                }}
+                onClick={clearAssignmentFilters}
                 className="px-6 py-3.5 rounded-2xl font-semibold border-2 border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-700 hover:bg-white transition-all duration-300"
               >
                 Clear Filters
@@ -3029,6 +3092,7 @@ export default function AssignmentsManager() {
         isComplete={deliveryProgress.isComplete}
         failedRecipients={deliveryProgress.failedRecipients}
         isLoading={deliveryProgress.isLoading}
+        onCancel={cancelAssignmentDelivery}
         onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
         onRetry={async () => {
           if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
