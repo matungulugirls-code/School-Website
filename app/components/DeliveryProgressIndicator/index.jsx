@@ -34,9 +34,19 @@ export const DeliveryProgressIndicator = ({
   const [expandFailures, setExpandFailures] = useState(false);
   const [retrying, setRetrying] = useState(false);
 
+  useEffect(() => {
+    if (isComplete && failedCount > 0) {
+      setExpandFailures(true);
+    }
+  }, [isComplete, failedCount]);
+
   if (!isOpen) return null;
 
-  const percentage = totalRecipients > 0 ? Math.round((sentCount / totalRecipients) * 100) : 0;
+  const processedCount = Math.min(totalRecipients, sentCount + failedCount);
+  const activeRecipientNumber = isLoading && !isComplete
+    ? Math.min(totalRecipients, processedCount + 1)
+    : processedCount;
+  const percentage = totalRecipients > 0 ? Math.round((processedCount / totalRecipients) * 100) : 0;
   const hasFailures = failedCount > 0;
 
   const handleRetry = async () => {
@@ -56,7 +66,7 @@ export const DeliveryProgressIndicator = ({
   };
 
   const getStatusMessage = () => {
-    if (!isComplete) return `Sending to ${sentCount} of ${totalRecipients} recipients...`;
+    if (!isComplete) return `Sending to ${activeRecipientNumber} of ${totalRecipients} recipients...`;
     if (failedCount === 0) return '✓ Successfully delivered to all recipients!';
     if (sentCount === 0) return '✗ Failed to deliver to any recipients';
     return `✓ Delivered to ${sentCount} recipient(s), ${failedCount} failed`;
@@ -166,6 +176,11 @@ export const DeliveryProgressIndicator = ({
                       <div className="font-medium text-gray-800">
                         {recipient.studentName || recipient.email}
                       </div>
+                      {(recipient.email || recipient.admissionNumber) && (
+                        <div className="text-gray-500 text-xs mt-1">
+                          {[recipient.email, recipient.admissionNumber].filter(Boolean).join(' | ')}
+                        </div>
+                      )}
                       <div className="text-gray-600 text-xs mt-1">
                         {recipient.error || 'Unknown error'}
                       </div>

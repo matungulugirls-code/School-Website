@@ -254,6 +254,8 @@ function Notification({
   type = 'success', 
   title, 
   message, 
+  actionLabel,
+  onAction,
   duration = 5000 
 }) {
   const [progress, setProgress] = useState(100);
@@ -351,6 +353,16 @@ function Notification({
             <div className="flex-1">
               <h4 className={`font-bold ${styles.title} mb-1`}>{title}</h4>
               <p className="text-gray-700 text-sm">{message}</p>
+              {actionLabel && onAction && (
+                <button
+                  type="button"
+                  onClick={onAction}
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-slate-800 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
+                >
+                  <FiRotateCw size={14} />
+                  {actionLabel}
+                </button>
+              )}
             </div>
             <button 
               onClick={onClose}
@@ -1462,7 +1474,9 @@ export default function AssignmentsManager() {
     open: false,
     type: 'success',
     title: '',
-    message: ''
+    message: '',
+    actionLabel: '',
+    onAction: null
   });
 
   // Delivery progress state
@@ -1493,23 +1507,20 @@ export default function AssignmentsManager() {
     { value: 'high', label: 'High', color: 'red' }
   ];
 
-  // Subject options
-  const subjectOptions = [
-    ...ALL_SUBJECTS
-  ];
-
   // Class options
   const classOptions = [
     ...DELIVERY_LEVEL_OPTIONS
   ];
 
   // Notification handler
-  const showNotification = (type, title, message) => {
+  const showNotification = (type, title, message, action = {}) => {
     setNotification({
       open: true,
       type,
       title,
-      message
+      message,
+      actionLabel: action.label || '',
+      onAction: action.onClick || null
     });
   };
 
@@ -1622,6 +1633,136 @@ export default function AssignmentsManager() {
       'Authorization': `Bearer ${adminToken}`,
       'x-device-token': deviceToken
     };
+  };
+
+  const fetchAssignmentDeliveryRecipients = async (assignmentId) => {
+    const response = await fetch(`/api/assignment/delivery?assignmentId=${assignmentId}`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Could not load assignment delivery recipients');
+    }
+
+    return result.data || [];
+  };
+
+  const sendAssignmentDeliveryBatch = async (assignmentId, recipients, headers) => {
+    const deliverableRecipients = recipients
+      .map((recipient) => ({
+        ...recipient,
+        id: recipient.id || recipient.recipientId
+      }))
+      .filter((recipient) => recipient.id);
+
+    const totalRecipients = deliverableRecipients.length;
+    const failedRecipients = [];
+    let sentCount = 0;
+    let failedCount = 0;
+
+    setDeliveryProgress({
+      isOpen: true,
+      totalRecipients,
+      sentCount: 0,
+      failedCount: 0,
+      currentRecipient: totalRecipients ? 'Preparing email delivery...' : 'No recipients found',
+      isComplete: totalRecipients === 0,
+      failedRecipients: [],
+      isLoading: totalRecipients > 0,
+      itemId: assignmentId,
+    });
+
+    if (totalRecipients === 0) {
+      return { successCount: 0, failureCount: 0, totalRecipients: 0, failedRecipients: [] };
+    }
+
+    for (let index = 0; index < deliverableRecipients.length; index += 1) {
+      const recipient = deliverableRecipients[index];
+      const recipientLabel = recipient.studentName || recipient.email || recipient.admissionNumber || `Recipient ${index + 1}`;
+
+      setDeliveryProgress(prev => ({
+        ...prev,
+        currentRecipient: `${index + 1} of ${totalRecipients}: ${recipientLabel}`,
+        isLoading: true,
+        isComplete: false,
+      }));
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 90000);
+        const deliveryResponse = await fetch('/api/assignment/delivery', {
+          method: 'POST',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ assignmentId, recipientIds: [recipient.id] }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        const deliveryResult = await deliveryResponse.json().catch(() => ({}));
+        const resultItem = deliveryResult.data?.results?.[0];
+        const delivered = deliveryResponse.ok && deliveryResult.success && (deliveryResult.data?.successCount > 0 || resultItem?.success);
+
+        if (delivered) {
+          sentCount += 1;
+        } else {
+          failedCount += 1;
+          failedRecipients.push({
+            ...recipient,
+            recipientId: recipient.id,
+            email: resultItem?.email || recipient.email,
+            error: resultItem?.error || deliveryResult.error || 'Email could not be delivered',
+          });
+        }
+      } catch (error) {
+        failedCount += 1;
+        failedRecipients.push({
+          ...recipient,
+          recipientId: recipient.id,
+          error: error.name === 'AbortError'
+            ? 'Delivery timed out. Check the connection and retry this recipient.'
+            : error.message || 'Network error while sending email',
+        });
+      }
+
+      setDeliveryProgress(prev => ({
+        ...prev,
+        sentCount,
+        failedCount,
+        failedRecipients: [...failedRecipients],
+        isLoading: index < deliverableRecipients.length - 1,
+        isComplete: index === deliverableRecipients.length - 1,
+        currentRecipient: index === deliverableRecipients.length - 1 ? '' : prev.currentRecipient,
+        itemId: assignmentId,
+      }));
+    }
+
+    return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients };
+  };
+
+  const retryFailedAssignmentDelivery = async (assignmentId, failedRecipients) => {
+    if (!assignmentId || failedRecipients.length === 0) return;
+
+    try {
+      const headers = getAuthHeaders();
+      const result = await sendAssignmentDeliveryBatch(assignmentId, failedRecipients, headers);
+
+      if (result.failureCount === 0) {
+        showNotification('success', 'Delivery Complete', `Retried and delivered ${result.successCount} assignment email(s).`);
+      } else {
+        showNotification(
+          'warning',
+          'Retry Incomplete',
+          `${result.successCount} delivered, ${result.failureCount} still failed.`,
+          { label: 'Retry Failed', onClick: () => retryFailedAssignmentDelivery(assignmentId, result.failedRecipients) }
+        );
+      }
+    } catch (error) {
+      showNotification(
+        'error',
+        'Retry Failed',
+        error.message || 'Could not retry failed assignment emails.',
+        { label: 'Retry Failed', onClick: () => retryFailedAssignmentDelivery(assignmentId, failedRecipients) }
+      );
+    }
   };
 
   // Fetch assignments with refresh support
@@ -2019,24 +2160,34 @@ export default function AssignmentsManager() {
       const result = await response.json();
 
       if (result.success) {
-        let sentCount = null;
+        let deliveryResult = null;
+        let deliveryInterrupted = false;
         const savedAssignmentId = result.assignment?.id;
         if (savedAssignmentId) {
           try {
-            const deliveryResponse = await fetch('/api/assignment/delivery', {
-              method: 'POST',
-              headers: { ...headers, 'Content-Type': 'application/json' },
-              body: JSON.stringify({ assignmentId: savedAssignmentId }),
-            });
-            const deliveryResult = await deliveryResponse.json();
-            console.log('📬 Assignment delivery response:', deliveryResponse.status, deliveryResult);
-            if (deliveryResult.success) {
-              sentCount = deliveryResult.data?.successCount || 0;
-            } else {
-              console.warn('Assignment delivery endpoint returned an error:', deliveryResult.error);
+            const recipients = await fetchAssignmentDeliveryRecipients(savedAssignmentId);
+            deliveryResult = await sendAssignmentDeliveryBatch(savedAssignmentId, recipients, headers);
+
+            if (deliveryResult.failureCount > 0) {
+              showNotification(
+                deliveryResult.successCount > 0 ? 'warning' : 'error',
+                deliveryResult.successCount > 0 ? 'Partial Delivery' : 'Delivery Failed',
+                `${deliveryResult.successCount} assignment email(s) delivered, ${deliveryResult.failureCount} failed.`,
+                { label: 'Retry Failed', onClick: () => retryFailedAssignmentDelivery(savedAssignmentId, deliveryResult.failedRecipients) }
+              );
             }
           } catch (deliveryError) {
             console.error('Assignment email delivery failed:', deliveryError);
+            deliveryInterrupted = true;
+            showNotification(
+              'error',
+              'Delivery Interrupted',
+              deliveryError.message || 'Network or timeout error while sending assignment emails.',
+              { label: 'Retry', onClick: async () => {
+                const recipients = await fetchAssignmentDeliveryRecipients(savedAssignmentId);
+                await sendAssignmentDeliveryBatch(savedAssignmentId, recipients, headers);
+              }}
+            );
           }
         }
 
@@ -2044,11 +2195,13 @@ export default function AssignmentsManager() {
         await fetchAssignments();
         setShowModal(false);
         const recipientCount = result.assignment?.deliverySummary?.recipientCount;
-        showNotification(
-          'success',
-          id ? 'Updated' : 'Created',
-          `Assignment ${id ? 'updated' : 'created'} successfully!${Number.isFinite(sentCount) ? ` ${sentCount} email(s) sent.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
-        );
+        if (!deliveryInterrupted && (!deliveryResult || deliveryResult.failureCount === 0)) {
+          showNotification(
+            'success',
+            id ? 'Updated' : 'Created',
+            `Assignment ${id ? 'updated' : 'created'} successfully!${deliveryResult ? ` ${deliveryResult.successCount} email(s) delivered.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
+          );
+        }
       } else {
         throw new Error(result.error || 'Failed to save assignment');
       }
@@ -2153,6 +2306,8 @@ export default function AssignmentsManager() {
         type={notification.type}
         title={notification.title}
         message={notification.message}
+        actionLabel={notification.actionLabel}
+        onAction={notification.onAction}
       />
 
       {/* Delete Confirmation Modal */}
@@ -2876,10 +3031,8 @@ export default function AssignmentsManager() {
         isLoading={deliveryProgress.isLoading}
         onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
         onRetry={async () => {
-          if (selectedAssignment?.id && deliveryProgress.failedRecipients.length > 0) {
-            const failedIds = deliveryProgress.failedRecipients.map(r => r.recipientId);
-            // Implement retry logic
-            console.log('Retrying failed recipients:', failedIds);
+          if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
+            await retryFailedAssignmentDelivery(deliveryProgress.itemId, deliveryProgress.failedRecipients);
           }
         }}
       />

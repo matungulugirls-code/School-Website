@@ -135,6 +135,52 @@ const buildAssignmentAttachments = (assignment) => [
   .map((url, index) => attachmentFromUrl(url, `assignment-file-${index + 1}`))
   .filter(Boolean);
 
+const mergeDeliveryResults = (previousResults = [], nextResults = []) => {
+  const merged = new Map();
+  previousResults.forEach((result) => {
+    if (result?.recipientId) merged.set(result.recipientId, result);
+  });
+  nextResults.forEach((result) => {
+    if (result?.recipientId) merged.set(result.recipientId, result);
+  });
+  return Array.from(merged.values());
+};
+
+const summarizeRecipientStatuses = async (assignmentId, previousSummary, nextResults) => {
+  const allRecipients = await prisma.assignmentDeliveryRecipient.findMany({
+    where: { assignmentId },
+    select: { id: true, status: true },
+  });
+
+  const successCount = allRecipients.filter((recipient) => recipient.status === 'sent').length;
+  const failureCount = allRecipients.filter((recipient) => recipient.status === 'failed').length;
+  const pendingCount = allRecipients.length - successCount - failureCount;
+  const status = allRecipients.length === 0
+    ? 'no_recipients'
+    : pendingCount > 0
+      ? (successCount > 0 || failureCount > 0 ? 'sending' : 'prepared')
+      : failureCount === 0
+        ? 'sent'
+        : successCount > 0
+          ? 'partial'
+          : 'failed';
+
+  return {
+    channel: 'email',
+    senderReference: previousSummary?.senderReference || 'email',
+    status,
+    successCount,
+    failureCount,
+    pendingCount,
+    totalRecipients: allRecipients.length,
+    sentAt: new Date().toISOString(),
+    results: mergeDeliveryResults(
+      Array.isArray(previousSummary?.results) ? previousSummary.results : [],
+      nextResults
+    ),
+  };
+};
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -313,18 +359,13 @@ export async function POST(req) {
       });
     }
 
+    const deliverySummary = await summarizeRecipientStatuses(assignmentId, assignment.deliverySummary, sendResults);
+
     await prisma.assignment.update({
       where: { id: assignmentId },
       data: {
-        deliveryStatus: successCount > 0 ? "sent" : "failed",
-        deliverySummary: {
-          channel: 'email',
-          successCount,
-          failureCount,
-          totalRecipients: recipients.length,
-          sentAt: new Date().toISOString(),
-          results: sendResults,
-        },
+        deliveryStatus: deliverySummary.status,
+        deliverySummary,
       },
     });
 
@@ -389,8 +430,13 @@ export async function PUT(req) {
       const studentName = getStudentName(recipient);
 
       if (!parentEmail) {
+        await prisma.assignmentDeliveryRecipient.update({
+          where: { id: recipient.id },
+          data: { status: "failed", updatedAt: new Date() },
+        });
         resendResults.push({
           recipientId: recipient.id,
+          studentName,
           success: false,
           error: "Invalid parent email address",
         });
@@ -410,10 +456,24 @@ export async function PUT(req) {
           where: { id: recipient.id },
           data: { status: "sent", updatedAt: new Date() },
         });
+      } else {
+        await prisma.assignmentDeliveryRecipient.update({
+          where: { id: recipient.id },
+          data: { status: "failed", updatedAt: new Date() },
+        });
       }
 
       resendResults.push({ recipientId: recipient.id, email: parentEmail, ...sendResult });
     }
+
+    const deliverySummary = await summarizeRecipientStatuses(assignmentId, assignment.deliverySummary, resendResults);
+    await prisma.assignment.update({
+      where: { id: assignmentId },
+      data: {
+        deliveryStatus: deliverySummary.status,
+        deliverySummary,
+      },
+    });
 
     return NextResponse.json({
       success: true,

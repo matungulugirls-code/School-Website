@@ -261,6 +261,8 @@ function Notification({
   type = 'success', 
   title, 
   message, 
+  actionLabel,
+  onAction,
   duration = 5000 
 }) {
   const [progress, setProgress] = useState(100);
@@ -358,6 +360,16 @@ function Notification({
             <div className="flex-1">
               <h4 className={`font-bold ${styles.title} mb-1`}>{title}</h4>
               <p className="text-gray-700 text-md ">{message}</p>
+              {actionLabel && onAction && (
+                <button
+                  type="button"
+                  onClick={onAction}
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-slate-800 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
+                >
+                  <FiRotateCw size={14} />
+                  {actionLabel}
+                </button>
+              )}
             </div>
             <button 
               onClick={onClose}
@@ -1424,7 +1436,9 @@ export default function ResourcesManager() {
     open: false,
     type: 'success',
     title: '',
-    message: ''
+    message: '',
+    actionLabel: '',
+    onAction: null
   });
 
   // Delivery progress state
@@ -1468,11 +1482,6 @@ export default function ResourcesManager() {
   ];
 
   // Subject options
-  const subjectOptions = [
-    'All Subjects',
-    ...ALL_SUBJECTS
-  ];
-
   // Category options
   const categoryOptions = [
     'All Categories',
@@ -1495,12 +1504,14 @@ export default function ResourcesManager() {
   ];
 
   // Notification handler
-  const showNotification = (type, title, message) => {
+  const showNotification = (type, title, message, action = {}) => {
     setNotification({
       open: true,
       type,
       title,
-      message
+      message,
+      actionLabel: action.label || '',
+      onAction: action.onClick || null
     });
   };
 
@@ -1564,6 +1575,136 @@ export default function ResourcesManager() {
   };
 };
 
+const fetchResourceDeliveryRecipients = async (resourceId) => {
+  const response = await fetch(`/api/resources/delivery?resourceId=${resourceId}`);
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || 'Could not load resource delivery recipients');
+  }
+
+  return result.data || [];
+};
+
+const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
+  const deliverableRecipients = recipients
+    .map((recipient) => ({
+      ...recipient,
+      id: recipient.id || recipient.recipientId
+    }))
+    .filter((recipient) => recipient.id);
+
+  const totalRecipients = deliverableRecipients.length;
+  const failedRecipients = [];
+  let sentCount = 0;
+  let failedCount = 0;
+
+  setDeliveryProgress({
+    isOpen: true,
+    totalRecipients,
+    sentCount: 0,
+    failedCount: 0,
+    currentRecipient: totalRecipients ? 'Preparing email delivery...' : 'No recipients found',
+    isComplete: totalRecipients === 0,
+    failedRecipients: [],
+    isLoading: totalRecipients > 0,
+    itemId: resourceId,
+  });
+
+  if (totalRecipients === 0) {
+    return { successCount: 0, failureCount: 0, totalRecipients: 0, failedRecipients: [] };
+  }
+
+  for (let index = 0; index < deliverableRecipients.length; index += 1) {
+    const recipient = deliverableRecipients[index];
+    const recipientLabel = recipient.studentName || recipient.email || recipient.admissionNumber || `Recipient ${index + 1}`;
+
+    setDeliveryProgress(prev => ({
+      ...prev,
+      currentRecipient: `${index + 1} of ${totalRecipients}: ${recipientLabel}`,
+      isLoading: true,
+      isComplete: false,
+    }));
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 90000);
+      const deliveryResponse = await fetch('/api/resources/delivery', {
+        method: 'POST',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resourceId, recipientIds: [recipient.id] }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      const deliveryResult = await deliveryResponse.json().catch(() => ({}));
+      const resultItem = deliveryResult.data?.results?.[0];
+      const delivered = deliveryResponse.ok && deliveryResult.success && (deliveryResult.data?.successCount > 0 || resultItem?.success);
+
+      if (delivered) {
+        sentCount += 1;
+      } else {
+        failedCount += 1;
+        failedRecipients.push({
+          ...recipient,
+          recipientId: recipient.id,
+          email: resultItem?.email || recipient.email,
+          error: resultItem?.error || deliveryResult.error || 'Email could not be delivered',
+        });
+      }
+    } catch (error) {
+      failedCount += 1;
+      failedRecipients.push({
+        ...recipient,
+        recipientId: recipient.id,
+        error: error.name === 'AbortError'
+          ? 'Delivery timed out. Check the connection and retry this recipient.'
+          : error.message || 'Network error while sending email',
+      });
+    }
+
+    setDeliveryProgress(prev => ({
+      ...prev,
+      sentCount,
+      failedCount,
+      failedRecipients: [...failedRecipients],
+      isLoading: index < deliverableRecipients.length - 1,
+      isComplete: index === deliverableRecipients.length - 1,
+      currentRecipient: index === deliverableRecipients.length - 1 ? '' : prev.currentRecipient,
+      itemId: resourceId,
+    }));
+  }
+
+  return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients };
+};
+
+const retryFailedResourceDelivery = async (resourceId, failedRecipients) => {
+  if (!resourceId || failedRecipients.length === 0) return;
+
+  try {
+    const headers = getAuthHeaders();
+    const result = await sendResourceDeliveryBatch(resourceId, failedRecipients, headers);
+
+    if (result.failureCount === 0) {
+      showNotification('success', 'Delivery Complete', `Retried and delivered ${result.successCount} resource email(s).`);
+    } else {
+      showNotification(
+        'warning',
+        'Retry Incomplete',
+        `${result.successCount} delivered, ${result.failureCount} still failed.`,
+        { label: 'Retry Failed', onClick: () => retryFailedResourceDelivery(resourceId, result.failedRecipients) }
+      );
+    }
+  } catch (error) {
+    showNotification(
+      'error',
+      'Retry Failed',
+      error.message || 'Could not retry failed resource emails.',
+      { label: 'Retry Failed', onClick: () => retryFailedResourceDelivery(resourceId, failedRecipients) }
+    );
+  }
+};
+
   // NEW: Bulk delete function
   const handleBulkDelete = () => {
     if (selectedResources.size === 0) {
@@ -1577,7 +1718,7 @@ export default function ResourcesManager() {
   // Fetch resources
   const fetchResources = async (isRefresh = false) => {
     setSelectedType('all');
-    setSelectedSubject('All Subjects');
+    setSelectedSubject('all');
     setSelectedCategory('All Categories');
     setSelectedClass('All Classes');
     setSelectedAccessLevel('all');
@@ -1688,7 +1829,7 @@ export default function ResourcesManager() {
     }
 
     // Subject filter
-    if (selectedSubject !== 'All Subjects') {
+    if (selectedSubject !== 'all') {
       filtered = filtered.filter(resource => resource.subject === selectedSubject);
     }
 
@@ -1729,7 +1870,7 @@ export default function ResourcesManager() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const hasActiveFilters = selectedType !== 'all' ||
-    selectedSubject !== 'All Subjects' ||
+    selectedSubject !== 'all' ||
     selectedCategory !== 'All Categories' ||
     selectedClass !== 'All Classes' ||
     selectedAccessLevel !== 'all' ||
@@ -1738,7 +1879,7 @@ export default function ResourcesManager() {
 
   const clearResourceFilters = () => {
     setSelectedType('all');
-    setSelectedSubject('All Subjects');
+    setSelectedSubject('all');
     setSelectedCategory('All Categories');
     setSelectedClass('All Classes');
     setSelectedAccessLevel('all');
@@ -1921,24 +2062,34 @@ const handleSubmit = async (formData, id) => {
     const result = await response.json();
 
     if (result.success) {
-      let sentCount = null;
+      let deliveryResult = null;
+      let deliveryInterrupted = false;
       const savedResourceId = result.resource?.id;
       if (savedResourceId) {
         try {
-          const deliveryResponse = await fetch('/api/resources/delivery', {
-            method: 'POST',
-            headers: { ...headers, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ resourceId: savedResourceId }),
-          });
-          const deliveryResult = await deliveryResponse.json();
-          console.log('📬 Resource delivery response:', deliveryResponse.status, deliveryResult);
-          if (deliveryResult.success) {
-            sentCount = deliveryResult.data?.successCount || 0;
-          } else {
-            console.warn('Resource delivery endpoint returned an error:', deliveryResult.error);
+          const recipients = await fetchResourceDeliveryRecipients(savedResourceId);
+          deliveryResult = await sendResourceDeliveryBatch(savedResourceId, recipients, headers);
+
+          if (deliveryResult.failureCount > 0) {
+            showNotification(
+              deliveryResult.successCount > 0 ? 'warning' : 'error',
+              deliveryResult.successCount > 0 ? 'Partial Delivery' : 'Delivery Failed',
+              `${deliveryResult.successCount} resource email(s) delivered, ${deliveryResult.failureCount} failed.`,
+              { label: 'Retry Failed', onClick: () => retryFailedResourceDelivery(savedResourceId, deliveryResult.failedRecipients) }
+            );
           }
         } catch (deliveryError) {
           console.error('Resource email delivery failed:', deliveryError);
+          deliveryInterrupted = true;
+          showNotification(
+            'error',
+            'Delivery Interrupted',
+            deliveryError.message || 'Network or timeout error while sending resource emails.',
+            { label: 'Retry', onClick: async () => {
+              const recipients = await fetchResourceDeliveryRecipients(savedResourceId);
+              await sendResourceDeliveryBatch(savedResourceId, recipients, headers);
+            }}
+          );
         }
       }
 
@@ -1946,11 +2097,13 @@ const handleSubmit = async (formData, id) => {
       await fetchResources();
       setShowModal(false);
       const recipientCount = result.resource?.deliverySummary?.recipientCount;
-      showNotification(
-        'success',
-        id ? 'Updated' : 'Created',
-        `Resource ${id ? 'updated' : 'created'} successfully!${Number.isFinite(sentCount) ? ` ${sentCount} email(s) sent.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
-      );
+      if (!deliveryInterrupted && (!deliveryResult || deliveryResult.failureCount === 0)) {
+        showNotification(
+          'success',
+          id ? 'Updated' : 'Created',
+          `Resource ${id ? 'updated' : 'created'} successfully!${deliveryResult ? ` ${deliveryResult.successCount} email(s) delivered.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
+        );
+      }
     } else {
       throw new Error(result.error);
     }
@@ -2054,6 +2207,8 @@ const handleSubmit = async (formData, id) => {
         type={notification.type}
         title={notification.title}
         message={notification.message}
+        actionLabel={notification.actionLabel}
+        onAction={notification.onAction}
       />
 
       {/* Delete Confirmation Modal */}
@@ -2360,8 +2515,8 @@ const handleSubmit = async (formData, id) => {
           </select>
 
           <SearchableSubjectDropdown
-            value={selectedSubject === 'All Subjects' ? 'all' : selectedSubject}
-            onChange={(value) => setSelectedSubject(value === 'all' ? 'All Subjects' : value)}
+            value={selectedSubject}
+            onChange={(value) => setSelectedSubject(value)}
             options={ALL_SUBJECTS}
             placeholder="Search subjects..."
             className="w-full"
@@ -2755,13 +2910,13 @@ const handleSubmit = async (formData, id) => {
             </div>
             
             <h3 className="text-2xl font-bold text-slate-900 mb-3">
-              {searchTerm || selectedType !== 'all' || selectedSubject !== 'All Subjects' 
+              {searchTerm || selectedType !== 'all' || selectedSubject !== 'all' 
                 ? 'No resources match your search' 
                 : 'Your resource library is empty'}
             </h3>
             
             <p className="text-slate-600 text-base mb-8 max-w-md mx-auto">
-              {searchTerm || selectedType !== 'all' || selectedSubject !== 'All Subjects' 
+              {searchTerm || selectedType !== 'all' || selectedSubject !== 'all' 
                 ? 'Try adjusting your filters or search keywords to find what you need.' 
                 : 'Start building your digital classroom by uploading your first resource.'}
             </p>
@@ -2812,10 +2967,8 @@ const handleSubmit = async (formData, id) => {
         isLoading={deliveryProgress.isLoading}
         onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
         onRetry={async () => {
-          if (selectedResource?.id && deliveryProgress.failedRecipients.length > 0) {
-            const failedIds = deliveryProgress.failedRecipients.map(r => r.recipientId);
-            // Implement retry logic
-            console.log('Retrying failed recipients:', failedIds);
+          if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
+            await retryFailedResourceDelivery(deliveryProgress.itemId, deliveryProgress.failedRecipients);
           }
         }}
       />

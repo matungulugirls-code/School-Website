@@ -81,6 +81,7 @@ export const SearchableSubjectDropdown = ({
 
       {/* Dropdown Trigger Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-gray-50 cursor-pointer text-md text-left flex items-center justify-between transition-all ${
           isOpen ? 'ring-2 ring-green-500 border-green-500' : ''
@@ -92,6 +93,7 @@ export const SearchableSubjectDropdown = ({
         <div className="flex items-center gap-2">
           {allowClear && value && value !== 'all' && (
             <button
+              type="button"
               onClick={handleClear}
               className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
               title="Clear selection"
@@ -123,6 +125,7 @@ export const SearchableSubjectDropdown = ({
               />
               {searchTerm && (
                 <button
+                  type="button"
                   onClick={() => setSearchTerm('')}
                   className="absolute right-3 p-1 hover:bg-gray-200 rounded"
                   title="Clear search"
@@ -138,6 +141,7 @@ export const SearchableSubjectDropdown = ({
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <button
+                  type="button"
                   key={option}
                   onClick={() => handleSelect(option)}
                   className={`w-full px-4 py-3 text-left hover:bg-gray-100 transition-colors border-b border-gray-100 last:border-b-0 ${
@@ -165,6 +169,7 @@ export const SearchableSubjectDropdown = ({
           {(searchTerm || (value && value !== 'all')) && (
             <div className="p-3 border-t border-gray-200 bg-gray-50">
               <button
+                type="button"
                 onClick={() => {
                   setSearchTerm('');
                   onChange('all');
