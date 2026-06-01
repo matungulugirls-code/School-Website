@@ -513,6 +513,10 @@ export async function POST(request) {
     const learningObjectives = formData.get("learningObjectives")?.toString();
     const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className);
 
+    // Calculate dueDate: use provided date or default to 7 days from today
+    const dateAssignedDate = new Date();
+    const calculatedDueDate = dueDate ? new Date(dueDate) : new Date(dateAssignedDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+
     // Validate required fields
     if (!title || !subject || !className || !teacher) {
       return NextResponse.json(
@@ -574,8 +578,8 @@ export async function POST(request) {
           subject,
           className,
           teacher,
-          dueDate: dueDate ? new Date(dueDate) : null,
-          dateAssigned: new Date(), // FIX: Added required field
+          dueDate: calculatedDueDate,
+          dateAssigned: dateAssignedDate,
           status,
           description,
           instructions,
