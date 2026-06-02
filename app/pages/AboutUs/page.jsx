@@ -155,7 +155,7 @@ export default function AboutPage() {
       <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden sm:min-h-[85vh]">
         <div className="absolute inset-0 overflow-hidden rounded-t-md">
           <Image
-            src="/Matungulu/IMG_0067.jpg"
+            src="/Matungulu/29.jpeg"
             alt="Matungulu Girls Senior School"
             fill
             className="object-cover opacity-35 scale-[1.02] sm:opacity-40"
@@ -340,7 +340,7 @@ export default function AboutPage() {
             <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-emerald-300/40 blur-3xl" />
             <div className="relative overflow-hidden rounded-[1.6rem]">
               <Image
-                src="/Matungulu/IMG_0073.jpg"
+                src="/Matungulu/29.jpeg"
                 alt="Students at Matungulu Girls"
                 width={1200}
                 height={1200}

@@ -1548,7 +1548,7 @@ export default function AdminLoginPage() {
   {/* Layer 2: Hero Image with Vignette */}
   <div 
     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105 opacity-30"
-    style={{ backgroundImage: "url('/Matungulu/IMG_0073.jpg')" }}
+    style={{ backgroundImage: "url('/hero/MatG1.jpg')" }}
   ></div>
   <div className="absolute inset-0 bg-gradient-to-t from-[#050a05] via-[#050a05]/60 to-transparent"></div>
 

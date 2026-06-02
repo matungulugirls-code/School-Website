@@ -443,7 +443,7 @@ export default function ModernHero() {
       gradient: "from-rose-500 via-pink-400 to-emerald-600",
       description: "At Matungulu Girls Senior School, we're pioneering a new era of education. With a 94% KCSE success rate and state-of-the-art STEM facilities, we're not just teaching—we're inspiring the next generation of leaders and innovators.",
       background: "bg-gradient-to-br from-rose-900/90 via-pink-900/80 to-emerald-900/70",
-      image: "/Matungulu/IMG_0073.jpg",
+      image: "/student.jpg",
       stats: { 
         students: "1200+ Active Learners", 
         excellence: "94% KCSE Success", 
@@ -461,7 +461,7 @@ export default function ModernHero() {
       gradient: "from-emerald-500 via-teal-400 to-rose-600",
       description: "Beyond academics, we cultivate well-rounded individuals through 15+ clubs, competitive sports teams, and comprehensive life skills training. Our balanced approach ensures students develop essential competencies for lifelong success.",
       background: "bg-gradient-to-br from-emerald-900/90 via-teal-900/80 to-rose-900/70",
-      image: "/Matungulu/IMG_0068.jpg",
+      image: "/im.jpg",
       stats: { 
         teams: "10+ Sports Teams", 
         clubs: "15+ Clubs", 
@@ -479,7 +479,7 @@ export default function ModernHero() {
       gradient: "from-pink-500 via-rose-400 to-emerald-600",
       description: "Experience cutting-edge education with our technology-enhanced smart classrooms, advanced computer labs, and comprehensive digital literacy programs. We prepare students for careers in an increasingly technological world.",
       background: "bg-gradient-to-br from-pink-900/90 via-rose-900/80 to-emerald-900/70",
-      image: "/Matungulu/IMG_0081.jpg",
+      image: "/im2.jpeg",
       stats: { 
         labs: "3 Modern Labs", 
         tech: "Digital Classrooms", 

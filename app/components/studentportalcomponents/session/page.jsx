@@ -61,7 +61,7 @@ const DEFAULT_SESSIONS = [
     description: 'Weekly devotion session to strengthen students in religious study and worship. Strengthen your faith and build spiritual resilience.',
     notes: 'Focus on spiritual growth and moral development. Bring your Bible and notebook.',
     priority: 'high',
-    image: '/Matungulu/IMG_0068.jpg',
+    image: '/Matungulu/26.jpeg',
     featured: true,
     location: 'School Chapel'
   },
@@ -77,7 +77,7 @@ const DEFAULT_SESSIONS = [
     description: 'Youth worship session with CU and YCS active worship groups. Experience powerful praise and worship with fellow students.',
     notes: 'Music, praise, and fellowship. All students welcome.',
     priority: 'high',
-    image: '/Matungulu/IMG_0067.jpg',
+    image: '/Matungulu/28.jpeg',
     featured: true,
     location: 'Matungulu, Machakos County'
   }

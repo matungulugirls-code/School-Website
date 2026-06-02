@@ -60,7 +60,7 @@ const FeesHero = ({ stats, activeTabLabel, onRefresh, refreshing }) => {
   return (
     <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[90%] xl:w-[90%]">
       <img
-        src="/Matungulu/IMG_0081.jpg"
+        src="/Matungulu/9.jpeg"
         alt="Matungulu Girls Senior School fee structure"
         className="absolute inset-0 h-full w-full object-cover"
       />

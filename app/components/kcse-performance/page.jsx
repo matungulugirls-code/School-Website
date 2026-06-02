@@ -557,7 +557,7 @@ export default function KcsePerformancePage() {
       <div className="mx-auto w-full space-y-6 md:w-[85%]">
         <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[85%] xl:w-[80%]">
           <img
-            src="/Matungulu/IMG_0081.jpg"
+            src="/Matungulu/9.jpeg"
             alt="Matungulu Girls Senior School academic performance"
             className="absolute inset-0 h-full w-full object-cover"
           />

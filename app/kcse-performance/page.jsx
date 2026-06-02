@@ -15,7 +15,7 @@ export const metadata = {
     siteName: 'Matungulu Girls Senior School',
     images: [
       {
-        url: '/Matungulu/IMG_0081.jpg',
+        url: '/Matungulu/9.jpeg',
         width: 1200,
         height: 630,
         alt: 'Matungulu Girls Senior School KCSE Performance',
