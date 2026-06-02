@@ -187,9 +187,7 @@ function getRegistrationSuccessTemplate(user) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                       <td align="center" style="padding-bottom: 12px;">
-                        <div style="display: inline-block; background: rgba(255,255,255,0.1); border-radius: 50%; width: 56px; height: 56px; line-height: 56px; text-align: center;">
-                          <span style="font-size: 28px;">🎓</span>
-                        </div>
+                        <div style="display: inline-block; background: rgba(255,255,255,0.12); border-radius: 50%; width: 56px; height: 56px; line-height: 56px; text-align: center; color: #ffffff; font-size: 18px; font-weight: 800;">MG</div>
                       </td>
                     </tr>
                     <tr>
@@ -204,7 +202,7 @@ function getRegistrationSuccessTemplate(user) {
                     </tr>
                     <tr>
                       <td align="center">
-                        <span style="display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); padding: 6px 18px; border-radius: 24px; font-size: clamp(10px, 2.5vw, 11px); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.95);">✓ Account Active</span>
+                        <span style="display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); padding: 6px 18px; border-radius: 24px; font-size: clamp(10px, 2.5vw, 11px); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.95);">Account Active</span>
                       </td>
                     </tr>
                   </table>
@@ -219,7 +217,6 @@ function getRegistrationSuccessTemplate(user) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #334155; margin-bottom: 6%;">
                     <tr>
                       <td style="padding: 6% 5%; text-align: center;">
-                        <span style="font-size: clamp(36px, 10vw, 48px); display: block; margin-bottom: 10px;">✅</span>
                         <h2 style="color: #0f172a; font-size: clamp(17px, 4.5vw, 20px); font-weight: 700; margin: 0 0 6px; letter-spacing: -0.01em;">Welcome Aboard!</h2>
                         <p style="color: #475569; font-size: clamp(13px, 3.5vw, 15px); margin: 0; line-height: 1.5;">Your account is now fully active and ready to use</p>
                       </td>
@@ -240,7 +237,7 @@ function getRegistrationSuccessTemplate(user) {
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #475569;">
                           <tr>
                             <td style="padding: 5% 5%;">
-                              <p style="font-size: clamp(10px, 2.5vw, 11px); font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.06em; margin: 0 0 6px;">👤 Account Role</p>
+                              <p style="font-size: clamp(10px, 2.5vw, 11px); font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.06em; margin: 0 0 6px;">Account Role</p>
                               <p style="font-size: clamp(14px, 3.5vw, 16px); font-weight: 700; color: #0f172a; margin: 0; word-break: break-word;">${user.role}</p>
                             </td>
                           </tr>
@@ -252,7 +249,7 @@ function getRegistrationSuccessTemplate(user) {
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #475569;">
                           <tr>
                             <td style="padding: 5% 5%;">
-                              <p style="font-size: clamp(10px, 2.5vw, 11px); font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.06em; margin: 0 0 6px;">📧 Email Address</p>
+                              <p style="font-size: clamp(10px, 2.5vw, 11px); font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.06em; margin: 0 0 6px;">Email Address</p>
                               <p style="font-size: clamp(14px, 3.5vw, 16px); font-weight: 700; color: #0f172a; margin: 0; word-break: break-word;">${user.email}</p>
                             </td>
                           </tr>
@@ -265,48 +262,41 @@ function getRegistrationSuccessTemplate(user) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #334155; margin-bottom: 6%;">
                     <tr>
                       <td style="padding: 6% 5%;">
-                        <h3 style="color: #0f172a; font-size: clamp(15px, 4vw, 17px); font-weight: 700; margin: 0 0 5%;">✨ Dashboard Features & Privileges</h3>
+                        <h3 style="color: #0f172a; font-size: clamp(15px, 4vw, 17px); font-weight: 700; margin: 0 0 5%;">Dashboard Features & Privileges</h3>
                         
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                           <tr>
                             <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">📊</span>
                               <strong>Dashboard Access:</strong> Monitor school operations and statistics
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">👨‍🎓</span>
                               <strong>Student Management:</strong> Manage student records and information
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">📝</span>
                               <strong>Admissions:</strong> Handle admission applications and enrollment
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">📅</span>
                               <strong>Academic Calendar:</strong> Manage school events and schedules
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">📢</span>
                               <strong>Communications:</strong> Send announcements and newsletters
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">⚙️</span>
                               <strong>System Settings:</strong> Configure school information and policies
                             </td>
                           </tr>
                           <tr>
                             <td style="padding: 10px 0; font-size: clamp(13px, 3.2vw, 14px); color: #334155; line-height: 1.5;">
-                              <span style="font-size: 18px; margin-right: 8px; vertical-align: middle;">📊</span>
                               <strong>Reports:</strong> Generate and view school reports
                             </td>
                           </tr>
@@ -319,7 +309,7 @@ function getRegistrationSuccessTemplate(user) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 6%;">
                     <tr>
                       <td style="padding: 6% 5%; text-align: center;">
-                        <h3 style="color: #0f172a; font-size: clamp(15px, 3.8vw, 16px); font-weight: 700; margin: 0 0 8px;">🚀 Get Started Now</h3>
+                        <h3 style="color: #0f172a; font-size: clamp(15px, 3.8vw, 16px); font-weight: 700; margin: 0 0 8px;">Get Started Now</h3>
                         <p style="margin: 0 0 16px; font-size: clamp(13px, 3.2vw, 14px); color: #475569;">Access your dashboard and start managing the school system</p>
                         <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://matungulugirls.school'}/MainDashboard" 
                            style="display: inline-block; 
@@ -333,7 +323,7 @@ function getRegistrationSuccessTemplate(user) {
                                   font-weight: 600; 
                                   font-size: clamp(14px, 3.5vw, 15px); 
                                   text-align: center;
-                                  border: none;">Open Dashboard →</a>
+                                  border: none;">Open Dashboard</a>
                       </td>
                     </tr>
                   </table>
@@ -342,13 +332,13 @@ function getRegistrationSuccessTemplate(user) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; margin-bottom: 6%;">
                     <tr>
                       <td style="padding: 5% 5%;">
-                        <h3 style="color: #0f172a; font-size: clamp(14px, 3.5vw, 15px); font-weight: 700; margin: 0 0 4%;">🔐 Login Information</h3>
+                        <h3 style="color: #0f172a; font-size: clamp(14px, 3.5vw, 15px); font-weight: 700; margin: 0 0 4%;">Login Information</h3>
                         
                         <!-- Email credential -->
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 8px; border-left: 4px solid #475569; margin-bottom: 10px;">
                           <tr>
                             <td style="padding: 12px;">
-                              <p style="font-size: clamp(10px, 2.5vw, 11px); color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 4px;">📧 Email</p>
+                              <p style="font-size: clamp(10px, 2.5vw, 11px); color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 4px;">Email</p>
                               <p style="font-size: clamp(13px, 3.2vw, 14px); color: #1e293b; font-weight: 700; margin: 0; word-break: break-word;">${user.email}</p>
                             </td>
                           </tr>
@@ -358,14 +348,14 @@ function getRegistrationSuccessTemplate(user) {
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 8px; border-left: 4px solid #475569;">
                           <tr>
                             <td style="padding: 12px;">
-                              <p style="font-size: clamp(10px, 2.5vw, 11px); color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 4px;">🔑 Password</p>
+                              <p style="font-size: clamp(10px, 2.5vw, 11px); color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 4px;">Password</p>
                               <p style="font-size: clamp(13px, 3.2vw, 14px); color: #1e293b; font-weight: 700; margin: 0;">Use the password you set during registration</p>
                             </td>
                           </tr>
                         </table>
                         
                         <p style="margin: 12px 0 0; font-size: clamp(11px, 2.8vw, 12px); color: #475569;">
-                          ⚠️ <strong>Important:</strong> Keep your login credentials safe and never share them with anyone.
+                          <strong>Important:</strong> Keep your login credentials safe and never share them with anyone.
                         </p>
                       </td>
                     </tr>
@@ -375,7 +365,7 @@ function getRegistrationSuccessTemplate(user) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #475569; margin-bottom: 6%;">
                     <tr>
                       <td style="padding: 5% 5%;">
-                        <h3 style="color: #0f172a; font-size: clamp(14px, 3.5vw, 15px); font-weight: 700; margin: 0 0 3%;">💡 Need Help?</h3>
+                        <h3 style="color: #0f172a; font-size: clamp(14px, 3.5vw, 15px); font-weight: 700; margin: 0 0 3%;">Need Help?</h3>
                         <p style="font-size: clamp(12px, 3vw, 13px); color: #475569; line-height: 1.6; margin: 0;">
                           If you have any questions or need assistance with the dashboard, please contact the IT department or school administrator at <strong>${CONTACT_EMAIL}</strong> or <strong>${CONTACT_PHONE}</strong>.
                         </p>
@@ -409,7 +399,7 @@ function getRegistrationSuccessTemplate(user) {
                   <p style="color: #94a3b8; font-size: clamp(12px, 3vw, 13px); margin: 4px 0 0;">Public Boarding School</p>
                   <div style="width: 40px; height: 2px; background: #475569; margin: 14px auto;"></div>
                   <p style="color: #64748b; font-size: clamp(10px, 2.5vw, 11px); margin: 0 0 4px;">© ${new Date().getFullYear()} ${SCHOOL_NAME}. All rights reserved.</p>
-                  <p style="color: #64748b; font-size: clamp(10px, 2.5vw, 11px); margin: 0;">📞 ${CONTACT_PHONE} | 📧 ${CONTACT_EMAIL}</p>
+                  <p style="color: #64748b; font-size: clamp(10px, 2.5vw, 11px); margin: 0;">${CONTACT_PHONE} | ${CONTACT_EMAIL}</p>
                 </td>
               </tr>
               
@@ -434,7 +424,7 @@ async function sendRegistrationEmail(user) {
         address: process.env.EMAIL_USER
       },
       to: user.email,
-      subject: `✅ Account Created Successfully - ${SCHOOL_NAME}`,
+      subject: `Account Created Successfully - ${SCHOOL_NAME}`,
       html: getRegistrationSuccessTemplate(user)
     };
 

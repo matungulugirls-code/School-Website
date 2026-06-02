@@ -12,6 +12,8 @@ const RETRY_CONFIG = {
   rateLimit: 100, // Minimum ms between retries for rate limit errors
 };
 
+const DAILY_LIMIT_RETRY_AFTER_MS = 24 * 60 * 60 * 1000;
+
 // Rate limit tracking
 let lastEmailTime = 0;
 let consecutiveErrors = 0;
@@ -23,11 +25,29 @@ export const normalizeEmailAddress = (value = '') => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : null;
 };
 
-const isRateLimitError = (error) => {
+const getErrorText = (error) => [
+  error?.message,
+  error?.response,
+  error?.code,
+  error?.command,
+].filter(Boolean).join(' ');
+
+export const isDailySendingLimitError = (error) => {
+  const text = getErrorText(error).toLowerCase();
+
+  return (
+    text.includes('daily user sending limit exceeded') ||
+    text.includes('5.4.5') ||
+    text.includes('daily sending limit exceeded')
+  );
+};
+
+export const isRateLimitError = (error) => {
   const message = error?.message || String(error);
   const response = error?.response || '';
   
   return (
+    isDailySendingLimitError(error) ||
     message.includes('454') || // Too many login attempts
     message.includes('Too many login attempts') ||
     message.includes('EAUTH') ||
@@ -36,10 +56,11 @@ const isRateLimitError = (error) => {
   );
 };
 
-const isTransientError = (error) => {
+export const isTransientError = (error) => {
   const message = error?.message || String(error);
   
   return (
+    isDailySendingLimitError(error) ||
     isRateLimitError(error) ||
     message.includes('ETIMEDOUT') ||
     message.includes('ECONNREFUSED') ||
@@ -47,6 +68,54 @@ const isTransientError = (error) => {
     message.includes('timeout') ||
     message.includes('temporarily unavailable')
   );
+};
+
+export const getEmailErrorDetails = (error) => {
+  const dailyLimit = isDailySendingLimitError(error);
+  const rateLimited = isRateLimitError(error);
+  const transient = isTransientError(error);
+
+  if (dailyLimit) {
+    return {
+      category: 'daily_sending_limit',
+      isDailyLimit: true,
+      isRateLimit: true,
+      isTransient: true,
+      retryable: true,
+      retryAfterMs: DAILY_LIMIT_RETRY_AFTER_MS,
+      retryAfterSeconds: Math.ceil(DAILY_LIMIT_RETRY_AFTER_MS / 1000),
+      retryAfterLabel: 'about 24 hours',
+      userMessage: 'Gmail daily sending limit exceeded. Please wait about 24 hours, then retry the unsent parent emails.',
+    };
+  }
+
+  if (rateLimited) {
+    return {
+      category: 'rate_limited',
+      isDailyLimit: false,
+      isRateLimit: true,
+      isTransient: true,
+      retryable: true,
+      retryAfterMs: 5 * 60 * 1000,
+      retryAfterSeconds: 5 * 60,
+      retryAfterLabel: 'a few minutes',
+      userMessage: 'Gmail is temporarily rate limiting email delivery. Please wait a few minutes, then retry the unsent parent emails.',
+    };
+  }
+
+  return {
+    category: transient ? 'transient' : 'permanent',
+    isDailyLimit: false,
+    isRateLimit: false,
+    isTransient: transient,
+    retryable: transient,
+    retryAfterMs: transient ? RETRY_CONFIG.maxDelay : 0,
+    retryAfterSeconds: transient ? Math.ceil(RETRY_CONFIG.maxDelay / 1000) : 0,
+    retryAfterLabel: transient ? 'a short while' : null,
+    userMessage: transient
+      ? 'Email delivery failed temporarily. Please retry later.'
+      : error?.message || 'Email could not be delivered.',
+  };
 };
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -89,17 +158,18 @@ const getEmailTransporter = () => {
   }
 
   return nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
-    pool: {
-      maxConnections: 1, // Limit connections to avoid overwhelming Gmail
-      maxMessages: 100,
-      rateDelta: 1000,
-      rateLimit: 10, // 10 emails per second max
-    },
+    pool: true,
+    maxConnections: 1, // Limit connections to avoid overwhelming Gmail
+    maxMessages: 100,
+    rateDelta: 1000,
+    rateLimit: 10, // 10 emails per second max
   });
 };
 
@@ -146,8 +216,9 @@ export const sendDeliveryEmail = async ({ to, subject, text, html, attachments =
       };
     } catch (error) {
       lastError = error;
-      const isRateLimit = isRateLimitError(error);
-      const isTransient = isTransientError(error);
+      const errorDetails = getEmailErrorDetails(error);
+      const isRateLimit = errorDetails.isRateLimit;
+      const isTransient = errorDetails.isTransient;
 
       console.error(
         `Email delivery attempt ${attempt + 1}/${RETRY_CONFIG.maxRetries} failed:`,
@@ -158,8 +229,15 @@ export const sendDeliveryEmail = async ({ to, subject, text, html, attachments =
           responseCode: error?.responseCode,
           isRateLimit,
           isTransient,
+          category: errorDetails.category,
         }
       );
+
+      if (errorDetails.isDailyLimit) {
+        rateLimitResetTime = Date.now() + DAILY_LIMIT_RETRY_AFTER_MS;
+        console.warn('Gmail daily sending limit exceeded. Further retries should wait about 24 hours.');
+        break;
+      }
 
       // If this is a rate limit error, increase cool-down time
       if (isRateLimit) {
@@ -197,6 +275,7 @@ export const sendDeliveryEmail = async ({ to, subject, text, html, attachments =
     email: normalizedTo,
     code: lastError?.code,
     responseCode: lastError?.responseCode,
+    ...getEmailErrorDetails(lastError),
     attempts: attempt + 1,
   };
 };

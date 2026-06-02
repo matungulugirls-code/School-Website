@@ -1491,6 +1491,7 @@ export default function AssignmentsManager() {
     currentRecipient: '',
     isComplete: false,
     failedRecipients: [],
+    retryMessage: '',
     isLoading: false,
   });
 
@@ -1664,6 +1665,8 @@ export default function AssignmentsManager() {
     const failedRecipients = [];
     let sentCount = 0;
     let failedCount = 0;
+    let retryMessage = '';
+    let batchPausedForRetry = false;
 
     setDeliveryProgress({
       isOpen: true,
@@ -1673,6 +1676,7 @@ export default function AssignmentsManager() {
       currentRecipient: totalRecipients ? 'Preparing email delivery...' : 'No recipients found',
       isComplete: totalRecipients === 0,
       failedRecipients: [],
+      retryMessage: '',
       isLoading: totalRecipients > 0,
       itemId: assignmentId,
     });
@@ -1715,17 +1719,34 @@ export default function AssignmentsManager() {
         const deliveryResult = await deliveryResponse.json().catch(() => ({}));
         const resultItem = deliveryResult.data?.results?.[0];
         const delivered = deliveryResponse.ok && deliveryResult.success && (deliveryResult.data?.successCount > 0 || resultItem?.success);
+        const shouldRetryLater = Boolean(resultItem?.retryable || deliveryResult.data?.retryLaterCount > 0);
+        const retryLaterMessage = deliveryResult.data?.retryMessage ||
+          resultItem?.userMessage ||
+          `Gmail has paused delivery. Please wait ${deliveryResult.data?.retryAfterLabel || resultItem?.retryAfterLabel || 'about 24 hours'}, then retry the unsent parent emails.`;
 
         if (delivered) {
           sentCount += 1;
         } else {
-          failedCount += 1;
           failedRecipients.push({
             ...recipient,
             recipientId: recipient.id,
             email: resultItem?.email || recipient.email,
             error: resultItem?.error || deliveryResult.error || 'Email could not be delivered',
           });
+
+          if (shouldRetryLater) {
+            retryMessage = retryLaterMessage;
+            failedRecipients.push(
+              ...deliverableRecipients.slice(index + 1).map((remainingRecipient) => ({
+                ...remainingRecipient,
+                recipientId: remainingRecipient.id,
+                error: 'Not attempted because Gmail reached its sending limit. Retry this recipient later.',
+              }))
+            );
+            batchPausedForRetry = true;
+          }
+
+          failedCount = failedRecipients.length;
         }
       } catch (error) {
         if (deliveryCancelRef.current) {
@@ -1753,14 +1774,19 @@ export default function AssignmentsManager() {
         sentCount,
         failedCount,
         failedRecipients: [...failedRecipients],
-        isLoading: index < deliverableRecipients.length - 1,
-        isComplete: index === deliverableRecipients.length - 1,
-        currentRecipient: index === deliverableRecipients.length - 1 ? '' : prev.currentRecipient,
+        retryMessage,
+        isLoading: !batchPausedForRetry && index < deliverableRecipients.length - 1,
+        isComplete: batchPausedForRetry || index === deliverableRecipients.length - 1,
+        currentRecipient: batchPausedForRetry
+          ? 'Email delivery paused. Retry the unsent parent emails later.'
+          : index === deliverableRecipients.length - 1 ? '' : prev.currentRecipient,
         itemId: assignmentId,
       }));
+
+      if (batchPausedForRetry) break;
     }
 
-    return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients };
+    return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients, retryMessage };
   };
 
   const cancelAssignmentDelivery = () => {
@@ -1787,8 +1813,8 @@ export default function AssignmentsManager() {
       } else {
         showNotification(
           'warning',
-          'Retry Incomplete',
-          `${result.successCount} delivered, ${result.failureCount} still failed.`,
+          result.retryMessage ? 'Delivery Paused' : 'Retry Incomplete',
+          result.retryMessage || `${result.successCount} delivered, ${result.failureCount} still failed.`,
           { label: 'Retry Failed', onClick: () => retryFailedAssignmentDelivery(assignmentId, result.failedRecipients) }
         );
       }
@@ -1799,6 +1825,33 @@ export default function AssignmentsManager() {
         error.message || 'Could not retry failed assignment emails.',
         { label: 'Retry Failed', onClick: () => retryFailedAssignmentDelivery(assignmentId, failedRecipients) }
       );
+    }
+  };
+
+  const hasUnsentAssignmentEmails = (assignment) => {
+    const summary = assignment.deliverySummary || {};
+    return (
+      ['failed', 'partial', 'retry_later', 'partial_retry_later'].includes(assignment.deliveryStatus) ||
+      (summary.failureCount || 0) > 0 ||
+      (summary.retryLaterCount || 0) > 0
+    );
+  };
+
+  const retryUnsentAssignmentDelivery = async (assignment) => {
+    if (!assignment?.id) return;
+
+    try {
+      const recipients = await fetchAssignmentDeliveryRecipients(assignment.id);
+      const unsentRecipients = recipients.filter((recipient) => recipient.status !== 'sent');
+
+      if (unsentRecipients.length === 0) {
+        showNotification('success', 'Already Delivered', 'There are no unsent assignment emails to retry.');
+        return;
+      }
+
+      await retryFailedAssignmentDelivery(assignment.id, unsentRecipients);
+    } catch (error) {
+      showNotification('error', 'Retry Failed', error.message || 'Could not load unsent assignment recipients.');
     }
   };
 
@@ -2221,8 +2274,10 @@ export default function AssignmentsManager() {
             if (deliveryResult.failureCount > 0) {
               showNotification(
                 deliveryResult.successCount > 0 ? 'warning' : 'error',
-                deliveryResult.successCount > 0 ? 'Partial Delivery' : 'Delivery Failed',
-                `${deliveryResult.successCount} assignment email(s) delivered, ${deliveryResult.failureCount} failed.`,
+                deliveryResult.retryMessage
+                  ? 'Delivery Paused'
+                  : deliveryResult.successCount > 0 ? 'Partial Delivery' : 'Delivery Failed',
+                deliveryResult.retryMessage || `${deliveryResult.successCount} assignment email(s) delivered, ${deliveryResult.failureCount} failed.`,
                 { label: 'Retry Failed', onClick: () => retryFailedAssignmentDelivery(savedAssignmentId, deliveryResult.failedRecipients) }
               );
             }
@@ -2961,6 +3016,16 @@ export default function AssignmentsManager() {
                               <FiEdit2 className="w-4 h-4" />
                               <span>Edit</span>
                             </button>
+
+                            {hasUnsentAssignmentEmails(assignment) && (
+                              <button
+                                onClick={() => retryUnsentAssignmentDelivery(assignment)}
+                                className="flex items-center gap-1.5 text-orange-600 font-bold text-sm cursor-pointer"
+                              >
+                                <FiRotateCw className="w-4 h-4" />
+                                <span>Retry Unsent</span>
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -3091,6 +3156,7 @@ export default function AssignmentsManager() {
         currentRecipient={deliveryProgress.currentRecipient}
         isComplete={deliveryProgress.isComplete}
         failedRecipients={deliveryProgress.failedRecipients}
+        retryMessage={deliveryProgress.retryMessage}
         isLoading={deliveryProgress.isLoading}
         onCancel={cancelAssignmentDelivery}
         onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}

@@ -144,9 +144,14 @@ const summarizeRecipientStatuses = async (resourceId, previousSummary, nextResul
 
   const successCount = allRecipients.filter((recipient) => recipient.status === 'sent').length;
   const failureCount = allRecipients.filter((recipient) => recipient.status === 'failed').length;
-  const pendingCount = allRecipients.length - successCount - failureCount;
+  const retryLaterCount = allRecipients.filter((recipient) => recipient.status === 'retry_later').length;
+  const pendingCount = allRecipients.length - successCount - failureCount - retryLaterCount;
+  const retryableResult = nextResults.find((result) => result?.retryable && result?.retryAfterMs);
+  const activeRetryableResult = retryLaterCount > 0 ? retryableResult : null;
   const status = allRecipients.length === 0
     ? 'no_recipients'
+    : retryLaterCount > 0
+      ? (successCount > 0 || failureCount > 0 ? 'partial_retry_later' : 'retry_later')
     : pendingCount > 0
       ? (successCount > 0 || failureCount > 0 ? 'sending' : 'prepared')
       : failureCount === 0
@@ -161,8 +166,13 @@ const summarizeRecipientStatuses = async (resourceId, previousSummary, nextResul
     status,
     successCount,
     failureCount,
+    retryLaterCount,
     pendingCount,
+    recipientCount: allRecipients.length,
     totalRecipients: allRecipients.length,
+    retryAfterMs: activeRetryableResult?.retryAfterMs || null,
+    retryAfterLabel: activeRetryableResult?.retryAfterLabel || null,
+    retryMessage: activeRetryableResult?.userMessage || null,
     sentAt: new Date().toISOString(),
     results: mergeDeliveryResults(
       Array.isArray(previousSummary?.results) ? previousSummary.results : [],
@@ -272,8 +282,8 @@ export async function POST(req) {
     const sendResults = [];
     let successCount = 0;
     let failureCount = 0;
-    let rateLimitEncountered = false;
-    let rateLimitWaitTime = 0;
+    let retryLaterCount = 0;
+    let deliveryPaused = false;
 
     for (let recipientIndex = 0; recipientIndex < recipients.length; recipientIndex++) {
       const recipient = recipients[recipientIndex];
@@ -296,12 +306,6 @@ export async function POST(req) {
         continue;
       }
 
-      // If we hit rate limit, pause before continuing
-      if (rateLimitEncountered && rateLimitWaitTime > 0) {
-        await new Promise(resolve => setTimeout(resolve, rateLimitWaitTime));
-        rateLimitWaitTime = 0;
-      }
-
       const emailContent = buildResourceEmail(resource, studentName);
       const sendResult = await sendDeliveryEmail({
         to: parentEmail,
@@ -311,33 +315,24 @@ export async function POST(req) {
 
       if (sendResult.success) {
         successCount++;
-        rateLimitEncountered = false; // Reset rate limit flag on success
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
           data: { status: "sent", updatedAt: new Date() },
         });
       } else {
         failureCount++;
-        
-        // Check if this is a rate limit error
-        const isRateLimit = sendResult.error?.includes('454') || 
-                           sendResult.error?.includes('Too many login attempts') ||
-                           sendResult.responseCode === 454;
-        
-        if (isRateLimit) {
-          rateLimitEncountered = true;
-          // Exponential backoff: start with 5 seconds, then increase
-          rateLimitWaitTime = Math.min(
-            5000 * Math.pow(2, failureCount / 3),
-            120000 // Max 2 minutes
-          );
-          console.warn(`Rate limit detected after ${successCount + failureCount} emails. Waiting ${rateLimitWaitTime}ms`);
-        }
+        const shouldRetryLater = sendResult.retryable && (sendResult.isDailyLimit || sendResult.isRateLimit);
+        if (shouldRetryLater) retryLaterCount++;
         
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
-          data: { status: "failed", updatedAt: new Date() },
+          data: { status: shouldRetryLater ? "retry_later" : "failed", updatedAt: new Date() },
         });
+
+        if (shouldRetryLater) {
+          deliveryPaused = true;
+          console.warn(sendResult.userMessage || 'Email delivery paused because Gmail asked us to retry later.');
+        }
       }
 
       sendResults.push({
@@ -347,6 +342,8 @@ export async function POST(req) {
         email: parentEmail,
         ...sendResult,
       });
+
+      if (deliveryPaused) break;
     }
 
     const deliverySummary = await summarizeRecipientStatuses(resourceId, resource.deliverySummary, sendResults);
@@ -361,8 +358,20 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: `Email delivery completed. ${successCount} sent, ${failureCount} failed`,
-      data: { successCount, failureCount, totalRecipients: recipients.length, results: sendResults },
+      message: retryLaterCount > 0
+        ? `Email delivery paused. ${successCount} sent, ${retryLaterCount} should be retried later.`
+        : `Email delivery completed. ${successCount} sent, ${failureCount} failed`,
+      data: {
+        successCount,
+        failureCount,
+        retryLaterCount,
+        totalRecipients: recipients.length,
+        processedCount: sendResults.length,
+        retryAfterMs: deliverySummary.retryAfterMs,
+        retryAfterLabel: deliverySummary.retryAfterLabel,
+        retryMessage: deliverySummary.retryMessage,
+        results: sendResults
+      },
     });
   } catch (error) {
     console.error("Error sending resource delivery emails:", error);
@@ -414,6 +423,8 @@ export async function PUT(req) {
 
     const resendResults = [];
     let successCount = 0;
+    let retryLaterCount = 0;
+    let deliveryPaused = false;
 
     for (const recipient of recipients) {
       const parentEmail = normalizeEmailAddress(recipient.student?.email);
@@ -447,13 +458,17 @@ export async function PUT(req) {
           data: { status: "sent", updatedAt: new Date() },
         });
       } else {
+        const shouldRetryLater = sendResult.retryable && (sendResult.isDailyLimit || sendResult.isRateLimit);
+        if (shouldRetryLater) retryLaterCount++;
         await prisma.resourceDeliveryRecipient.update({
           where: { id: recipient.id },
-          data: { status: "failed", updatedAt: new Date() },
+          data: { status: shouldRetryLater ? "retry_later" : "failed", updatedAt: new Date() },
         });
+        if (shouldRetryLater) deliveryPaused = true;
       }
 
       resendResults.push({ recipientId: recipient.id, email: parentEmail, ...sendResult });
+      if (deliveryPaused) break;
     }
 
     const deliverySummary = await summarizeRecipientStatuses(resourceId, resource.deliverySummary, resendResults);
@@ -471,6 +486,10 @@ export async function PUT(req) {
       data: {
         successCount,
         failureCount: resendResults.length - successCount,
+        retryLaterCount,
+        retryAfterMs: deliverySummary.retryAfterMs,
+        retryAfterLabel: deliverySummary.retryAfterLabel,
+        retryMessage: deliverySummary.retryMessage,
         results: resendResults,
       },
     });

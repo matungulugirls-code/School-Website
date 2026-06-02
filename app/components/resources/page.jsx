@@ -1452,6 +1452,7 @@ export default function ResourcesManager() {
     currentRecipient: '',
     isComplete: false,
     failedRecipients: [],
+    retryMessage: '',
     isLoading: false,
   });
 
@@ -1603,6 +1604,8 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
   const failedRecipients = [];
   let sentCount = 0;
   let failedCount = 0;
+  let retryMessage = '';
+  let batchPausedForRetry = false;
 
   setDeliveryProgress({
     isOpen: true,
@@ -1612,6 +1615,7 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
     currentRecipient: totalRecipients ? 'Preparing email delivery...' : 'No recipients found',
     isComplete: totalRecipients === 0,
     failedRecipients: [],
+    retryMessage: '',
     isLoading: totalRecipients > 0,
     itemId: resourceId,
   });
@@ -1654,17 +1658,34 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
       const deliveryResult = await deliveryResponse.json().catch(() => ({}));
       const resultItem = deliveryResult.data?.results?.[0];
       const delivered = deliveryResponse.ok && deliveryResult.success && (deliveryResult.data?.successCount > 0 || resultItem?.success);
+      const shouldRetryLater = Boolean(resultItem?.retryable || deliveryResult.data?.retryLaterCount > 0);
+      const retryLaterMessage = deliveryResult.data?.retryMessage ||
+        resultItem?.userMessage ||
+        `Gmail has paused delivery. Please wait ${deliveryResult.data?.retryAfterLabel || resultItem?.retryAfterLabel || 'about 24 hours'}, then retry the unsent parent emails.`;
 
       if (delivered) {
         sentCount += 1;
       } else {
-        failedCount += 1;
         failedRecipients.push({
           ...recipient,
           recipientId: recipient.id,
           email: resultItem?.email || recipient.email,
           error: resultItem?.error || deliveryResult.error || 'Email could not be delivered',
         });
+
+        if (shouldRetryLater) {
+          retryMessage = retryLaterMessage;
+          failedRecipients.push(
+            ...deliverableRecipients.slice(index + 1).map((remainingRecipient) => ({
+              ...remainingRecipient,
+              recipientId: remainingRecipient.id,
+              error: 'Not attempted because Gmail reached its sending limit. Retry this recipient later.',
+            }))
+          );
+          batchPausedForRetry = true;
+        }
+
+        failedCount = failedRecipients.length;
       }
     } catch (error) {
       if (deliveryCancelRef.current) {
@@ -1692,14 +1713,19 @@ const sendResourceDeliveryBatch = async (resourceId, recipients, headers) => {
       sentCount,
       failedCount,
       failedRecipients: [...failedRecipients],
-      isLoading: index < deliverableRecipients.length - 1,
-      isComplete: index === deliverableRecipients.length - 1,
-      currentRecipient: index === deliverableRecipients.length - 1 ? '' : prev.currentRecipient,
+      retryMessage,
+      isLoading: !batchPausedForRetry && index < deliverableRecipients.length - 1,
+      isComplete: batchPausedForRetry || index === deliverableRecipients.length - 1,
+      currentRecipient: batchPausedForRetry
+        ? 'Email delivery paused. Retry the unsent parent emails later.'
+        : index === deliverableRecipients.length - 1 ? '' : prev.currentRecipient,
       itemId: resourceId,
     }));
+
+    if (batchPausedForRetry) break;
   }
 
-  return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients };
+  return { successCount: sentCount, failureCount: failedCount, totalRecipients, failedRecipients, retryMessage };
 };
 
 const cancelResourceDelivery = () => {
@@ -1726,8 +1752,8 @@ const retryFailedResourceDelivery = async (resourceId, failedRecipients) => {
     } else {
       showNotification(
         'warning',
-        'Retry Incomplete',
-        `${result.successCount} delivered, ${result.failureCount} still failed.`,
+        result.retryMessage ? 'Delivery Paused' : 'Retry Incomplete',
+        result.retryMessage || `${result.successCount} delivered, ${result.failureCount} still failed.`,
         { label: 'Retry Failed', onClick: () => retryFailedResourceDelivery(resourceId, result.failedRecipients) }
       );
     }
@@ -1738,6 +1764,33 @@ const retryFailedResourceDelivery = async (resourceId, failedRecipients) => {
       error.message || 'Could not retry failed resource emails.',
       { label: 'Retry Failed', onClick: () => retryFailedResourceDelivery(resourceId, failedRecipients) }
     );
+  }
+};
+
+const hasUnsentResourceEmails = (resource) => {
+  const summary = resource.deliverySummary || {};
+  return (
+    ['failed', 'partial', 'retry_later', 'partial_retry_later'].includes(resource.deliveryStatus) ||
+    (summary.failureCount || 0) > 0 ||
+    (summary.retryLaterCount || 0) > 0
+  );
+};
+
+const retryUnsentResourceDelivery = async (resource) => {
+  if (!resource?.id) return;
+
+  try {
+    const recipients = await fetchResourceDeliveryRecipients(resource.id);
+    const unsentRecipients = recipients.filter((recipient) => recipient.status !== 'sent');
+
+    if (unsentRecipients.length === 0) {
+      showNotification('success', 'Already Delivered', 'There are no unsent resource emails to retry.');
+      return;
+    }
+
+    await retryFailedResourceDelivery(resource.id, unsentRecipients);
+  } catch (error) {
+    showNotification('error', 'Retry Failed', error.message || 'Could not load unsent resource recipients.');
   }
 };
 
@@ -2109,8 +2162,10 @@ const handleSubmit = async (formData, id) => {
           if (deliveryResult.failureCount > 0) {
             showNotification(
               deliveryResult.successCount > 0 ? 'warning' : 'error',
-              deliveryResult.successCount > 0 ? 'Partial Delivery' : 'Delivery Failed',
-              `${deliveryResult.successCount} resource email(s) delivered, ${deliveryResult.failureCount} failed.`,
+              deliveryResult.retryMessage
+                ? 'Delivery Paused'
+                : deliveryResult.successCount > 0 ? 'Partial Delivery' : 'Delivery Failed',
+              deliveryResult.retryMessage || `${deliveryResult.successCount} resource email(s) delivered, ${deliveryResult.failureCount} failed.`,
               { label: 'Retry Failed', onClick: () => retryFailedResourceDelivery(savedResourceId, deliveryResult.failedRecipients) }
             );
           }
@@ -2876,6 +2931,16 @@ const handleSubmit = async (formData, id) => {
       <FiEdit2 className="w-4 h-4" />
       <span>Edit</span>
     </button>
+
+    {hasUnsentResourceEmails(resource) && (
+      <button
+        onClick={() => retryUnsentResourceDelivery(resource)}
+        className="flex items-center gap-1.5 text-orange-600 font-bold text-sm cursor-pointer"
+      >
+        <FiRotateCw className="w-4 h-4" />
+        <span>Retry Unsent</span>
+      </button>
+    )}
   </div>
 </td>
                     </tr>
@@ -3000,6 +3065,7 @@ const handleSubmit = async (formData, id) => {
         currentRecipient={deliveryProgress.currentRecipient}
         isComplete={deliveryProgress.isComplete}
         failedRecipients={deliveryProgress.failedRecipients}
+        retryMessage={deliveryProgress.retryMessage}
         isLoading={deliveryProgress.isLoading}
         onCancel={cancelResourceDelivery}
         onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}

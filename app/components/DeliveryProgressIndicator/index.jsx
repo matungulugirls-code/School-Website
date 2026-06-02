@@ -27,6 +27,7 @@ export const DeliveryProgressIndicator = ({
   currentRecipient = '',
   isComplete = false,
   failedRecipients = [],
+  retryMessage = '',
   onRetry,
   onCancel,
   onClose,
@@ -148,6 +149,12 @@ export const DeliveryProgressIndicator = ({
           <div className={`text-center text-sm font-semibold ${getStatusColor()}`}>
             {getStatusMessage()}
           </div>
+
+          {isComplete && hasFailures && retryMessage && (
+            <div className="rounded-lg border border-orange-200 bg-orange-50 p-3 text-sm font-medium text-orange-800">
+              {retryMessage}
+            </div>
+          )}
 
           {/* Failed Recipients List (if complete and has failures) */}
           {isComplete && hasFailures && (
