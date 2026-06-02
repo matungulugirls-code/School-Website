@@ -245,7 +245,7 @@ export default function ContactPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/30 via-emerald-950/80 to-emerald-950 z-20"></div>
           
           <Image
-      src="/hero/MatG1.jpg"
+      src="/Matungulu/IMG_0067.jpg"
             alt="Campus"
             fill
             className="object-cover opacity-50 transition-transform duration-[10s] ease-out group-hover:scale-110"

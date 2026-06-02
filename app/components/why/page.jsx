@@ -58,21 +58,10 @@ const [achievementsLoading, setAchievementsLoading] = useState(true);
 const [statsLoading, setStatsLoading] = useState(false);
   // School images for carousel
   const schoolImages = [
-    { src: "/Matungulu/29.jpeg", alt: "Matungulu Girls Campus" },
-    { src: "/Matungulu/2.jpeg", alt: "Matungulu Girls" },
-    { src: "/Matungulu/30.jpeg", alt: "Matungulu Girls Senior School" },
-   { src: "/Matungulu/3.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/4.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/5.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/6.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/7.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/8.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/9.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/10.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/11.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/12.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/13.jpeg", alt: "Matungulu Girls Senior School" },
-    { src: "/Matungulu/14.jpeg", alt: "Matungulu Girls Senior School" },
+    { src: "/Matungulu/IMG_0067.jpg", alt: "Matungulu Girls campus monument" },
+    { src: "/Matungulu/IMG_0073.jpg", alt: "Matungulu Girls academic block" },
+    { src: "/Matungulu/IMG_0068.jpg", alt: "Matungulu Girls career pathways sign" },
+    { src: "/Matungulu/IMG_0081.jpg", alt: "Matungulu Girls courtyard" },
     { src: "/Matungulu/15.jpeg", alt: "Matungulu Girls Senior School" },
     { src: "/Matungulu/16.jpeg", alt: "Matungulu Girls Senior School" },
     { src: "/Matungulu/17.jpeg", alt: "Matungulu Girls Senior School" },
@@ -254,7 +243,7 @@ const getAchievements = () => {
         impact: achievement.awardingBody || 'Achievement',
         stats: `${achievement.category || 'Achievement'} | ${achievement.year || ''}`,
         icon: getCategoryIcon(achievement.category),
-        image: imageUrl || "/hero/MatG1.jpg",
+        image: imageUrl || "/Matungulu/IMG_0073.jpg",
         achievedAt,
         highlights
       };
@@ -335,7 +324,7 @@ const getSchoolStats = () => {
         "Consistently ranked among top-performing girls' schools in Machakos County with impressive KCSE results and university placements. Our students achieve mean scores above 8.0 with over 80% qualifying for direct university entry.",
       metrics: "Top Performer",
       icon: <FiAward size={20} />,
-      image: "/Matungulu/7.jpeg",
+      image: "/Matungulu/IMG_0073.jpg",
     },
     {
       id: 2,
@@ -347,7 +336,7 @@ const getSchoolStats = () => {
         "Balancing academic rigor with spiritual growth, sports, music, drama, and leadership programs for well-rounded individuals. We offer over 15 clubs and societies for talent development.",
       metrics: "Complete Education",
       icon: <FiUsers size={20} />,
-      image: "/Matungulu/22.jpeg",
+      image: "/Matungulu/IMG_0068.jpg",
     },
     {
       id: 3,
@@ -359,7 +348,7 @@ const getSchoolStats = () => {
         "In recognition of consistent excellence, the Ministry of Education conferred Category One (C1) National School status during our 60th-anniversary celebrations in April 2026.",
       metrics: "National School",
       icon: <FiShield size={20} />,
-      image: "/Matungulu/21.jpeg",
+      image: "/Matungulu/IMG_0081.jpg",
     },
     {
       id: 4,
@@ -370,7 +359,7 @@ const getSchoolStats = () => {
         "Well-equipped science laboratories, computer labs, library, and serene learning environment in Matungulu's beautiful landscape with modern boarding facilities.",
       metrics: "Premier Infrastructure",
       icon: <FiGlobe size={20} />,
-      image: "/Matungulu/30.jpeg",
+      image: "/Matungulu/IMG_0067.jpg",
     },
   ];
 
@@ -1635,7 +1624,7 @@ const getSchoolStats = () => {
         <div className="relative rounded-3xl border p-6 md:p-12 overflow-hidden shadow-sm">
           {/* Logo watermark */}
           <img
-            src="/hero/MatG1.jpg"
+            src="/Matungulu/IMG_0073.jpg"
             alt=""
             className="absolute right-4 bottom-4 w-28 md:w-40 opacity-[0.03] pointer-events-none select-none"
           />

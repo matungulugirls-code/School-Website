@@ -1099,7 +1099,7 @@ const DEFAULT_SESSIONS = [
     description: 'Weekly devotion session to strengthen students in religious study and worship. Strengthen your faith and build spiritual resilience.',
     notes: 'Focus on spiritual growth and moral development. Bring your Bible and notebook.',
     priority: 'high',
-    image: '/Matungulu/26.jpeg',
+    image: '/Matungulu/IMG_0068.jpg',
     featured: true,
     location: 'A.I.C Matungulu Girls'
   },
@@ -1115,7 +1115,7 @@ const DEFAULT_SESSIONS = [
     description: 'Youth worship session with CU and YCS active worship groups. Experience powerful praise and worship with fellow students.',
     notes: 'Music, praise, and fellowship. All students welcome.',
     priority: 'high',
-    image: '/Matungulu/28.jpeg',
+    image: '/Matungulu/IMG_0067.jpg',
     featured: true,
     location: 'Matungulu Girls'
   }
@@ -1367,7 +1367,7 @@ export default function StudentCounseling() {
         {/* Modern Header with Background Image */}
         <section className="relative mx-auto overflow-hidden rounded-2xl shadow-2xl md:w-[90%] md:rounded-xl lg:w-[85%] xl:w-[80%]">
           <img
-            src="/Matungulu/9.jpeg"
+            src="/Matungulu/IMG_0081.jpg"
             alt="Matungulu Girls Senior School guidance and counselling"
             className="absolute inset-0 h-full w-full object-cover"
           />
