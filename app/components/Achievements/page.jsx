@@ -107,7 +107,7 @@ function TagInput({ label, tags, onTagsChange, placeholder = "Type and press Ent
 }
 
 // ==================== IMAGE UPLOAD COMPONENT ====================
-function ImageUpload({ images, onImagesChange, maxImages = 5 }) {
+function ImageUpload({ images, onImagesChange, maxImages = 5, onImageRemoved }) {
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -145,7 +145,7 @@ function ImageUpload({ images, onImagesChange, maxImages = 5 }) {
   const handleRemoveImage = (index) => {
     const newImages = [...images];
     if (newImages[index].url) {
-      setImagesToDelete(prev => [...prev, newImages[index].url]);
+      onImageRemoved?.(newImages[index].url);
     }
     if (newImages[index].preview) {
       URL.revokeObjectURL(newImages[index].preview);
@@ -473,6 +473,7 @@ function AchievementModal({ onClose, onSave, achievement, loading }) {
                 <ImageUpload
                   images={images}
                   onImagesChange={setImages}
+                  onImageRemoved={(url) => setImagesToDelete(prev => [...prev, url])}
                   maxImages={5}
                 />
               </div>
