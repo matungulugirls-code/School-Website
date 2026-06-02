@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../libs/prisma";
 import cloudinary from "../../../libs/cloudinary";
-import {
-  buildDeliveryCriteriaFromFormData,
-  prepareAssignmentDelivery,
-  SCHOOL_COMMUNICATION_NUMBER
-} from "../../../libs/delivery";
+const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
@@ -511,8 +507,6 @@ export async function POST(request) {
     const additionalWork = formData.get("additionalWork")?.toString().trim() || "";
     const teacherRemarks = formData.get("teacherRemarks")?.toString().trim() || "";
     const learningObjectives = formData.get("learningObjectives")?.toString();
-    const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className);
-
     // Calculate dueDate: use provided date or default to 7 days from today
     const dateAssignedDate = new Date();
     const calculatedDueDate = dueDate ? new Date(dueDate) : new Date(dateAssignedDate.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -590,24 +584,14 @@ export async function POST(request) {
           assignmentFiles,
           attachments,
           learningObjectives: learningObjectivesArray,
-          targetCriteria: deliveryCriteria,
-          senderReference: deliveryCriteria.senderReference,
-          deliveryStatus: 'preparing',
+          deliverySummary: null,
+          deliveryStatus: 'disabled',
           createdAt: new Date(),
           updatedAt: new Date()
         },
       });
 
-      const deliverySummary = await prepareAssignmentDelivery(tx, createdAssignment.id, deliveryCriteria);
-
-      return tx.assignment.update({
-        where: { id: createdAssignment.id },
-        data: {
-          deliverySummary,
-          deliveryStatus: deliverySummary.status,
-          updatedAt: new Date()
-        }
-      });
+      return createdAssignment;
     });
 
     console.log(`✅ Assignment created with ID: ${assignment.id}`);

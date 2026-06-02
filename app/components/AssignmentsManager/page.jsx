@@ -87,6 +87,7 @@ import { Modal, Box, CircularProgress } from '@mui/material';
 
 const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 const DELIVERY_LEVEL_OPTIONS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4', 'Form 1', 'Form 2'];
+const EMAIL_DELIVERY_ENABLED = false;
 
 // Modern Loading Spinner Component
 const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'indeterminate', value = 0 }) => {
@@ -476,7 +477,7 @@ function ModernAssignmentDetailModal({ assignment, onClose, onEdit }) {
                 {assignment.className}
               </div>
             )}
-            {assignment.deliverySummary && (
+            {EMAIL_DELIVERY_ENABLED && assignment.deliverySummary && (
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-100">
                 <FiSend className="w-3 h-3" />
                 {assignment.deliverySummary.recipientCount || 0} prepared
@@ -1135,27 +1136,29 @@ function ModernAssignmentModal({ onClose, onSave, assignment, loading }) {
               />
             </div>
 
-            <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
-                  <FiSend className="h-5 w-5" />
+            {EMAIL_DELIVERY_ENABLED && (
+              <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
+                    <FiSend className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-slate-500">Delivery Desk</p>
+                    <h3 className="mt-1 text-lg font-black text-slate-950">Email Delivery</h3>
+                    <p className="mt-1 text-sm text-slate-600">Select recipient grades and optional categories. Contacts previewed on save.</p>
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-black text-teal-800">
+                    <FiMessageCircle />
+                    Preview on save
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-slate-500">Delivery Desk</p>
-                  <h3 className="mt-1 text-lg font-black text-slate-950">Email Delivery</h3>
-                  <p className="mt-1 text-sm text-slate-600">Select recipient grades and optional categories. Contacts previewed on save.</p>
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-black text-teal-800">
-                  <FiMessageCircle />
-                  Preview on save
-                </div>
-              </div>
 
-              <div className="mt-4">
-                <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
-                <p className="text-sm text-slate-600">Assignment notices will be sent to parent email addresses for the selected class.</p>
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
+                  <p className="text-sm text-slate-600">Assignment notices will be sent to parent email addresses for the selected class.</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Teacher - Full Width */}
             <div>
@@ -2162,7 +2165,6 @@ export default function AssignmentsManager() {
       (formData.targetGrades || []).forEach(level => formDataToSend.append('targetGrades', level));
       (formData.targetClasses || []).forEach(className => formDataToSend.append('targetClasses', className));
       (formData.targetCategories || []).forEach(category => formDataToSend.append('targetCategories', category));
-      formDataToSend.append('senderReference', formData.senderReference || SCHOOL_COMMUNICATION_NUMBER);
       
       // Handle learning objectives
       const learningObjectivesString = JSON.stringify(learningObjectives || []);
@@ -2266,7 +2268,7 @@ export default function AssignmentsManager() {
         let deliveryResult = null;
         let deliveryInterrupted = false;
         const savedAssignmentId = result.assignment?.id;
-        if (savedAssignmentId) {
+        if (EMAIL_DELIVERY_ENABLED && savedAssignmentId) {
           try {
             const recipients = await fetchAssignmentDeliveryRecipients(savedAssignmentId);
             deliveryResult = await sendAssignmentDeliveryBatch(savedAssignmentId, recipients, headers);
@@ -2299,12 +2301,11 @@ export default function AssignmentsManager() {
         // Refresh the list
         await fetchAssignments();
         setShowModal(false);
-        const recipientCount = result.assignment?.deliverySummary?.recipientCount;
         if (!deliveryInterrupted && (!deliveryResult || deliveryResult.failureCount === 0)) {
           showNotification(
             'success',
             id ? 'Updated' : 'Created',
-            `Assignment ${id ? 'updated' : 'created'} successfully!${deliveryResult ? ` ${deliveryResult.successCount} email(s) delivered.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
+            `Assignment ${id ? 'updated' : 'created'} successfully!`
           );
         }
       } else {
@@ -3017,7 +3018,7 @@ export default function AssignmentsManager() {
                               <span>Edit</span>
                             </button>
 
-                            {hasUnsentAssignmentEmails(assignment) && (
+                            {EMAIL_DELIVERY_ENABLED && hasUnsentAssignmentEmails(assignment) && (
                               <button
                                 onClick={() => retryUnsentAssignmentDelivery(assignment)}
                                 className="flex items-center gap-1.5 text-orange-600 font-bold text-sm cursor-pointer"
@@ -3147,25 +3148,26 @@ export default function AssignmentsManager() {
         />
       )}
 
-      {/* Delivery Progress Indicator */}
-      <DeliveryProgressIndicator
-        isOpen={deliveryProgress.isOpen}
-        totalRecipients={deliveryProgress.totalRecipients}
-        sentCount={deliveryProgress.sentCount}
-        failedCount={deliveryProgress.failedCount}
-        currentRecipient={deliveryProgress.currentRecipient}
-        isComplete={deliveryProgress.isComplete}
-        failedRecipients={deliveryProgress.failedRecipients}
-        retryMessage={deliveryProgress.retryMessage}
-        isLoading={deliveryProgress.isLoading}
-        onCancel={cancelAssignmentDelivery}
-        onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
-        onRetry={async () => {
-          if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
-            await retryFailedAssignmentDelivery(deliveryProgress.itemId, deliveryProgress.failedRecipients);
-          }
-        }}
-      />
+      {EMAIL_DELIVERY_ENABLED && (
+        <DeliveryProgressIndicator
+          isOpen={deliveryProgress.isOpen}
+          totalRecipients={deliveryProgress.totalRecipients}
+          sentCount={deliveryProgress.sentCount}
+          failedCount={deliveryProgress.failedCount}
+          currentRecipient={deliveryProgress.currentRecipient}
+          isComplete={deliveryProgress.isComplete}
+          failedRecipients={deliveryProgress.failedRecipients}
+          retryMessage={deliveryProgress.retryMessage}
+          isLoading={deliveryProgress.isLoading}
+          onCancel={cancelAssignmentDelivery}
+          onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
+          onRetry={async () => {
+            if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
+              await retryFailedAssignmentDelivery(deliveryProgress.itemId, deliveryProgress.failedRecipients);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

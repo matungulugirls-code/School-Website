@@ -93,6 +93,7 @@ import DeliveryProgressIndicator from '../DeliveryProgressIndicator';
 
 const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 const DELIVERY_LEVEL_OPTIONS = ['Grade 10', 'Grade 11', 'Grade 12', 'Form 3', 'Form 4', 'Form 1', 'Form 2'];
+const EMAIL_DELIVERY_ENABLED = false;
 
 // Modern Loading Spinner Component
 const Spinner = ({ size = 40, color = 'inherit', thickness = 3.6, variant = 'indeterminate', value = 0 }) => {
@@ -488,7 +489,7 @@ function ModernResourceDetailModal({ resource, onClose, onEdit }) {
       )}
 
       {/* Delivery Summary Tag */}
-      {resource.deliverySummary && (
+      {EMAIL_DELIVERY_ENABLED && resource.deliverySummary && (
         <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-emerald-900/40 text-emerald-300 border border-emerald-700">
           <FiSend size={12} />
           {resource.deliverySummary.recipientCount || 0} prepared
@@ -909,7 +910,6 @@ useEffect(() => {
     deliveryTargetGrades.forEach(level => formDataToSend.append('targetGrades', level));
     deliveryTargetClasses.forEach(className => formDataToSend.append('targetClasses', className));
     deliveryTargetCategories.forEach(category => formDataToSend.append('targetCategories', category));
-    formDataToSend.append('senderReference', SCHOOL_COMMUNICATION_NUMBER);
 
     if (resource) {
       formDataToSend.append('action', 'update');
@@ -1065,27 +1065,29 @@ useEffect(() => {
               />
             </div>
 
-            <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
-                  <FiSend className="h-5 w-5" />
+            {EMAIL_DELIVERY_ENABLED && (
+              <div className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f5b4c,#d4b15f)] text-white">
+                    <FiSend className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-slate-500">Delivery Desk</p>
+                    <h3 className="mt-1 text-lg font-black text-slate-950">Email Delivery</h3>
+                    <p className="mt-1 text-sm text-slate-600">Select recipient grades and optional categories. Contacts previewed on save.</p>
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-black text-teal-800">
+                    <FiMessageCircle />
+                    Preview on save
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-[11px] font-extrabold uppercase tracking-[0.28em] text-slate-500">Delivery Desk</p>
-                  <h3 className="mt-1 text-lg font-black text-slate-950">Email Delivery</h3>
-                  <p className="mt-1 text-sm text-slate-600">Select recipient grades and optional categories. Contacts previewed on save.</p>
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-black text-teal-800">
-                  <FiMessageCircle />
-                  Preview on save
-                </div>
-              </div>
 
-              <div className="mt-4">
-                <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
-                <p className="text-sm text-slate-600">Resource notices will be sent to parent email addresses for the selected class.</p>
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-bold text-slate-700">Delivery</p>
+                  <p className="text-sm text-slate-600">Resource notices will be sent to parent email addresses for the selected class.</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Teacher - Full Width */}
             <div>
@@ -2154,7 +2156,7 @@ const handleSubmit = async (formData, id) => {
       let deliveryResult = null;
       let deliveryInterrupted = false;
       const savedResourceId = result.resource?.id;
-      if (savedResourceId) {
+      if (EMAIL_DELIVERY_ENABLED && savedResourceId) {
         try {
           const recipients = await fetchResourceDeliveryRecipients(savedResourceId);
           deliveryResult = await sendResourceDeliveryBatch(savedResourceId, recipients, headers);
@@ -2187,12 +2189,11 @@ const handleSubmit = async (formData, id) => {
       // Refresh the list
       await fetchResources();
       setShowModal(false);
-      const recipientCount = result.resource?.deliverySummary?.recipientCount;
       if (!deliveryInterrupted && (!deliveryResult || deliveryResult.failureCount === 0)) {
         showNotification(
           'success',
           id ? 'Updated' : 'Created',
-          `Resource ${id ? 'updated' : 'created'} successfully!${deliveryResult ? ` ${deliveryResult.successCount} email(s) delivered.` : Number.isFinite(recipientCount) ? ` ${recipientCount} email recipient(s) prepared.` : ''}`
+          `Resource ${id ? 'updated' : 'created'} successfully!`
         );
       }
     } else {
@@ -2932,7 +2933,7 @@ const handleSubmit = async (formData, id) => {
       <span>Edit</span>
     </button>
 
-    {hasUnsentResourceEmails(resource) && (
+    {EMAIL_DELIVERY_ENABLED && hasUnsentResourceEmails(resource) && (
       <button
         onClick={() => retryUnsentResourceDelivery(resource)}
         className="flex items-center gap-1.5 text-orange-600 font-bold text-sm cursor-pointer"
@@ -3056,25 +3057,26 @@ const handleSubmit = async (formData, id) => {
         />
       )}
 
-      {/* Delivery Progress Indicator */}
-      <DeliveryProgressIndicator
-        isOpen={deliveryProgress.isOpen}
-        totalRecipients={deliveryProgress.totalRecipients}
-        sentCount={deliveryProgress.sentCount}
-        failedCount={deliveryProgress.failedCount}
-        currentRecipient={deliveryProgress.currentRecipient}
-        isComplete={deliveryProgress.isComplete}
-        failedRecipients={deliveryProgress.failedRecipients}
-        retryMessage={deliveryProgress.retryMessage}
-        isLoading={deliveryProgress.isLoading}
-        onCancel={cancelResourceDelivery}
-        onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
-        onRetry={async () => {
-          if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
-            await retryFailedResourceDelivery(deliveryProgress.itemId, deliveryProgress.failedRecipients);
-          }
-        }}
-      />
+      {EMAIL_DELIVERY_ENABLED && (
+        <DeliveryProgressIndicator
+          isOpen={deliveryProgress.isOpen}
+          totalRecipients={deliveryProgress.totalRecipients}
+          sentCount={deliveryProgress.sentCount}
+          failedCount={deliveryProgress.failedCount}
+          currentRecipient={deliveryProgress.currentRecipient}
+          isComplete={deliveryProgress.isComplete}
+          failedRecipients={deliveryProgress.failedRecipients}
+          retryMessage={deliveryProgress.retryMessage}
+          isLoading={deliveryProgress.isLoading}
+          onCancel={cancelResourceDelivery}
+          onClose={() => setDeliveryProgress(prev => ({ ...prev, isOpen: false }))}
+          onRetry={async () => {
+            if (deliveryProgress.itemId && deliveryProgress.failedRecipients.length > 0) {
+              await retryFailedResourceDelivery(deliveryProgress.itemId, deliveryProgress.failedRecipients);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

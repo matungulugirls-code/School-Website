@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import cloudinary from "../../../../libs/cloudinary";
-import {
-  buildDeliveryCriteriaFromFormData,
-  prepareAssignmentDelivery,
-  SCHOOL_COMMUNICATION_NUMBER
-} from "../../../../libs/delivery";
+const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
@@ -545,8 +541,6 @@ export async function PUT(request, { params }) {
     const teacherRemarks = formData.get("teacherRemarks")?.toString().trim() || existingAssignment.teacherRemarks;
     const learningObjectives = formData.get("learningObjectives")?.toString();
     const dateAssigned = formData.get("dateAssigned")?.toString() || existingAssignment.dateAssigned;
-    const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className);
-    
     console.log('📝 Fields extracted:', { title, subject, className, teacher, dueDate });
 
     let updatedAssignmentFiles = [...existingAssignment.assignmentFiles];
@@ -685,23 +679,13 @@ export async function PUT(request, { params }) {
           assignmentFiles: updatedAssignmentFiles,
           attachments: updatedAttachments,
           learningObjectives: learningObjectivesArray,
-          targetCriteria: deliveryCriteria,
-          senderReference: deliveryCriteria.senderReference,
-          deliveryStatus: 'preparing',
+          deliverySummary: null,
+          deliveryStatus: 'disabled',
           updatedAt: new Date()
         },
       });
 
-      const deliverySummary = await prepareAssignmentDelivery(tx, savedAssignment.id, deliveryCriteria);
-
-      return tx.assignment.update({
-        where: { id: savedAssignment.id },
-        data: {
-          deliverySummary,
-          deliveryStatus: deliverySummary.status,
-          updatedAt: new Date()
-        }
-      });
+      return savedAssignment;
     });
 
     console.log('✅ Update successful:', updatedAssignment.id);

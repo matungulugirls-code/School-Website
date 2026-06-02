@@ -4,6 +4,7 @@ import { prisma } from "../../../../libs/prisma";
 import { normalizeEmailAddress, sendDeliveryEmail } from "../../../../libs/emailDelivery";
 
 export const dynamic = "force-dynamic";
+const EMAIL_DELIVERY_ENABLED = false;
 
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
@@ -225,6 +226,14 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
+    if (!EMAIL_DELIVERY_ENABLED) {
+      return NextResponse.json({
+        success: false,
+        error: 'Email delivery is disabled',
+        message: 'Assignment email delivery is disabled. Assignments now appear in the student portal without sending parent emails.',
+      }, { status: 403 });
+    }
+
     const auth = authenticateDeliveryRequest(req);
     if (!auth.authenticated) return auth.response;
 
@@ -394,6 +403,14 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
+    if (!EMAIL_DELIVERY_ENABLED) {
+      return NextResponse.json({
+        success: false,
+        error: 'Email delivery is disabled',
+        message: 'Assignment email delivery is disabled. Assignments now appear in the student portal without sending parent emails.',
+      }, { status: 403 });
+    }
+
     const auth = authenticateDeliveryRequest(req);
     if (!auth.authenticated) return auth.response;
 

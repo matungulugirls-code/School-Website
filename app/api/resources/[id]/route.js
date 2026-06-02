@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../libs/prisma";
 import cloudinary from "../../../../libs/cloudinary";
-import {
-  buildDeliveryCriteriaFromFormData,
-  prepareResourceDelivery,
-  SCHOOL_COMMUNICATION_NUMBER
-} from "../../../../libs/delivery";
+const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
@@ -484,10 +480,8 @@ async function handleFormUpdate(request, id, existingResource) {
     if (accessLevel !== null && accessLevel !== undefined) updateData.accessLevel = accessLevel;
     if (uploadedBy !== null && uploadedBy !== undefined) updateData.uploadedBy = uploadedBy;
     if (isActive !== null && isActive !== undefined) updateData.isActive = isActive === "true";
-    const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className || existingResource.className, category || existingResource.category);
-    updateData.targetCriteria = deliveryCriteria;
-    updateData.senderReference = deliveryCriteria.senderReference;
-    updateData.deliveryStatus = 'preparing';
+    updateData.deliverySummary = null;
+    updateData.deliveryStatus = 'disabled';
 
     // Handle file updates
     const existingFilesStr = formData.get("existingFiles");
@@ -561,20 +555,9 @@ async function handleFormUpdate(request, id, existingResource) {
     console.log("💾 Saving to database...");
 
     const resource = await prisma.$transaction(async (tx) => {
-      const savedResource = await tx.resource.update({
+      return tx.resource.update({
         where: { id: id },
         data: updateData,
-      });
-
-      const deliverySummary = await prepareResourceDelivery(tx, savedResource.id, deliveryCriteria);
-
-      return tx.resource.update({
-        where: { id: savedResource.id },
-        data: {
-          deliverySummary,
-          deliveryStatus: deliverySummary.status,
-          updatedAt: new Date()
-        }
       });
     });
 

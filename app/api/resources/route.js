@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../libs/prisma";
 import cloudinary from "../../../libs/cloudinary";
-import {
-  buildDeliveryCriteriaFromFormData,
-  prepareResourceDelivery,
-  SCHOOL_COMMUNICATION_NUMBER
-} from "../../../libs/delivery";
+const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
@@ -412,8 +408,6 @@ export async function POST(request) {
     const category = formData.get("category")?.trim() || "general";
     const accessLevel = formData.get("accessLevel")?.trim() || "student";
     const uploadedBy = formData.get("uploadedBy")?.trim() || auth.user.name;
-    const deliveryCriteria = buildDeliveryCriteriaFromFormData(formData, className, category);
-
     // Validate required fields
     if (!title || !subject || !teacher || !className) {
       return NextResponse.json(
@@ -479,22 +473,12 @@ export async function POST(request) {
           uploadedBy,
           downloads: 0,
           isActive: true,
-          targetCriteria: deliveryCriteria,
-          senderReference: deliveryCriteria.senderReference,
-          deliveryStatus: 'preparing'
+          deliverySummary: null,
+          deliveryStatus: 'disabled'
         },
       });
 
-      const deliverySummary = await prepareResourceDelivery(tx, createdResource.id, deliveryCriteria);
-
-      return tx.resource.update({
-        where: { id: createdResource.id },
-        data: {
-          deliverySummary,
-          deliveryStatus: deliverySummary.status,
-          updatedAt: new Date()
-        }
-      });
+      return createdResource;
     });
 
     console.log(`✅ Resource created with ID: ${resource.id}`);
