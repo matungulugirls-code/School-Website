@@ -144,6 +144,9 @@ function ImageUpload({ images, onImagesChange, maxImages = 5 }) {
 
   const handleRemoveImage = (index) => {
     const newImages = [...images];
+    if (newImages[index].url) {
+      setImagesToDelete(prev => [...prev, newImages[index].url]);
+    }
     if (newImages[index].preview) {
       URL.revokeObjectURL(newImages[index].preview);
     }
@@ -294,16 +297,32 @@ function AchievementModal({ onClose, onSave, achievement, loading }) {
       formDataObj.append('displayOrder', formData.displayOrder);
       formDataObj.append('achievedDate', formData.achievedDate);
       
+      const retainedImages = images
+        .filter(img => !img.file && (img.url || img.preview))
+        .map(({ url, public_id, caption, bytes, format }) => ({
+          url: url || '',
+          public_id: public_id || '',
+          caption: caption || '',
+          ...(bytes ? { bytes } : {}),
+          ...(format ? { format } : {})
+        }))
+        .filter(img => img.url);
+
+      const newImageCaptions = [];
+      
       // Add new images
       images.forEach(img => {
         if (img.file) {
           formDataObj.append('images', img.file);
+          newImageCaptions.push(img.caption || '');
         }
       });
+      formDataObj.append('imageCaptions', JSON.stringify(newImageCaptions));
       
       // Handle existing images
       if (isEditMode) {
         formDataObj.append('keepExistingImages', 'true');
+        formDataObj.append('existingImages', JSON.stringify(retainedImages));
         if (imagesToDelete.length > 0) {
           formDataObj.append('imagesToDelete', JSON.stringify(imagesToDelete));
         }
