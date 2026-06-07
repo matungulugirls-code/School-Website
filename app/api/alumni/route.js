@@ -9,7 +9,16 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const VALID_CATEGORIES = new Set(["ALUMNI", "BOM", "CURRENT_PRINCIPAL", "PAST_PRINCIPAL"]);
+const VALID_CATEGORIES = new Set(["ALUMNI", "BOM", "PTA", "CURRENT_PRINCIPAL", "PAST_PRINCIPAL"]);
+const LEGACY_CATEGORY_MAP = {
+  PRINCIPAL_CURRENT: "CURRENT_PRINCIPAL",
+  PRINCIPAL_PREVIOUS: "PAST_PRINCIPAL",
+};
+
+const normalizeCategoryType = (value) => {
+  const category = (value || "").toString().trim();
+  return LEGACY_CATEGORY_MAP[category] || category;
+};
 
 const decodeJwtPayload = (token) => {
   const payload = token.split(".")[1];
@@ -178,6 +187,7 @@ const cleanProfileResponse = (profile) => {
   if (!profile) return null;
   return {
     ...profile,
+    section: profile.categoryType,
     achievements: Array.isArray(profile.achievements) ? profile.achievements : parseAchievements(profile.achievements),
     images: normalizeProfileImages(profile),
   };
@@ -191,7 +201,7 @@ const groupProfiles = (profiles) =>
       acc[key].push(profile);
       return acc;
     },
-    { ALUMNI: [], BOM: [], CURRENT_PRINCIPAL: [], PAST_PRINCIPAL: [] }
+    { ALUMNI: [], BOM: [], PTA: [], CURRENT_PRINCIPAL: [], PAST_PRINCIPAL: [] }
   );
 
 const validateIncomingImages = (incomingFiles) => {
@@ -210,7 +220,7 @@ const validateIncomingImages = (incomingFiles) => {
 export async function GET(req) {
   try {
     const url = new URL(req.url);
-    const categoryType = url.searchParams.get("categoryType");
+    const categoryType = normalizeCategoryType(url.searchParams.get("categoryType") || url.searchParams.get("section"));
     const includeInactive = url.searchParams.get("includeInactive") === "1";
 
     let isAdmin = false;
@@ -246,7 +256,9 @@ export async function GET(req) {
     return NextResponse.json({
       success: true,
       profiles,
+      records: profiles,
       profilesByCategory: groupProfiles(profiles),
+      recordsBySection: groupProfiles(profiles),
       count: profiles.length,
     });
   } catch (error) {
@@ -265,7 +277,7 @@ export async function POST(req) {
 
     const formData = await req.formData();
     const name = (formData.get("name") || "").toString().trim();
-    const categoryType = (formData.get("categoryType") || "").toString().trim();
+    const categoryType = normalizeCategoryType(formData.get("categoryType") || formData.get("section"));
 
     if (!name || !categoryType) {
       return NextResponse.json(

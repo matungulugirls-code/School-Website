@@ -10,7 +10,16 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const VALID_CATEGORIES = new Set(["ALUMNI", "BOM", "CURRENT_PRINCIPAL", "PAST_PRINCIPAL"]);
+const VALID_CATEGORIES = new Set(["ALUMNI", "BOM", "PTA", "CURRENT_PRINCIPAL", "PAST_PRINCIPAL"]);
+const LEGACY_CATEGORY_MAP = {
+  PRINCIPAL_CURRENT: "CURRENT_PRINCIPAL",
+  PRINCIPAL_PREVIOUS: "PAST_PRINCIPAL",
+};
+
+const normalizeCategoryType = (value) => {
+  const category = (value || "").toString().trim();
+  return LEGACY_CATEGORY_MAP[category] || category;
+};
 
 const decodeJwtPayload = (token) => {
   const payload = token.split(".")[1];
@@ -161,6 +170,7 @@ const cleanProfileResponse = (profile) =>
   profile
     ? {
         ...profile,
+        section: profile.categoryType,
         achievements: Array.isArray(profile.achievements) ? profile.achievements : parseAchievements(profile.achievements),
         images: normalizeProfileImages(profile),
       }
@@ -263,9 +273,9 @@ export async function PUT(req, { params }) {
       data.name = trimmed;
     }
 
-    const categoryType = formData.get("categoryType");
+    const categoryType = formData.get("categoryType") || formData.get("section");
     if (categoryType !== null) {
-      const category = categoryType.toString().trim();
+      const category = normalizeCategoryType(categoryType);
       if (!VALID_CATEGORIES.has(category)) {
         return NextResponse.json({ success: false, error: "Invalid categoryType", authenticated: true }, { status: 400 });
       }

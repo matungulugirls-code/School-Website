@@ -40,6 +40,8 @@ const primaryLinks = [
 ];
 
 const utilityLinks = [
+  { name: 'Assignments', href: '/assignments', icon: FiFileText },
+  { name: 'Resources & Exams', href: '/resources-exams', icon: FiBookOpen },
   { name: 'KCSE Performance', href: '/kcse-performance', icon: FiTrendingUp },
   { name: 'Student Portal', href: '/pages/StudentPortal', icon: FiFileText },
   { name: 'School Fees', href: '/pages/School Fees', icon: FiDollarSign },
@@ -132,10 +134,9 @@ const schoolHubLinks = [
   },
   {
     name: 'Alumni',
-    href: 'https://www.facebook.com/groups/53636547389',
-    icon: FiExternalLink,
-    description: 'Connect with fellow alumnae',
-    external: true,
+    href: '/alumni',
+    icon: FiUsers,
+    description: 'Alumni, BOM, PTA and principal leadership',
   },
 ];
 

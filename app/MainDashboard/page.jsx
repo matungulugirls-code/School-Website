@@ -24,7 +24,6 @@ import {
   FiSmartphone,
   FiArrowLeft,
   FiArchive,
-  FiMessageSquare,
   FiKey,
 } from 'react-icons/fi';
 import { 
@@ -56,10 +55,10 @@ import Careers from "../components/career/page";
 import Student from "../components/student/page";
 import Fees from "../components/fees/page";
 import SchoolDocs from "../components/schooldocuments/page";
-import SMSManager from "../components/sms/page";
 import AchievementsManager from "../components/Achievements/page";
 import SchoolHubManager from '../components/schoolhub/page';
 import StudentPasswordRequests from '../components/studentpasswordrequests/page';
+import AlumniGovernanceManager from '../components/alumni/page';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -80,7 +79,7 @@ export default function AdminDashboard() {
     totalStudent: 0,
     totalFees: 0,
     schooldocuments: 0,
-    sms: 0,
+    alumniProfiles: 0,
     achievements: 0,
     departments: 0,
   });
@@ -688,7 +687,7 @@ const loadingMessages = [
         studentRes,
         feesRes,
         schooldocumentsRes,
-        smsRes,
+        alumniRes,
         achievementsRes,
         departmentsRes
       ] = await Promise.allSettled([
@@ -704,7 +703,7 @@ const loadingMessages = [
         fetch('/api/studentupload?status=all&includeStats=true&limit=5000'),
         fetch('/api/feebalances'),
         fetch('/api/schooldocuments'),
-        fetch('/api/sms'),
+        fetch('/api/alumni?includeInactive=1', staffHeaders ? { headers: staffHeaders } : {}),
         fetch('/api/achievements'),
         fetch('/api/staff/departments?grouped=1'),
       ]);
@@ -721,7 +720,7 @@ const loadingMessages = [
       const student = studentRes.status === 'fulfilled' ? await studentRes.value.json() : { students: [] };
       const fees = feesRes.status === 'fulfilled' ? await feesRes.value.json() : { feebalances: [] };
       const schoolDocs = schooldocumentsRes.status === 'fulfilled' ? await schooldocumentsRes.value.json() : { documents: [] };
-      const sms = smsRes.status === 'fulfilled' ? await smsRes.value.json() : { sms: [] };
+      const alumni = alumniRes.status === 'fulfilled' ? await alumniRes.value.json() : { profiles: [] };
 
       const achievements = achievementsRes.status === 'fulfilled' ? await achievementsRes.value.json() : { achievements: [] };
       const departments = departmentsRes.status === 'fulfilled' ? await departmentsRes.value.json() : { departments: [] };
@@ -747,7 +746,7 @@ const loadingMessages = [
         galleryItems: gallery.galleries?.length || 0,
         guidanceSessions: guidance.events?.length || 0,
         Resources: resources.resources?.length || 0,
-        sms: sms.campaigns?.length || sms.sms?.length || 0,
+        alumniProfiles: alumni.profiles?.length || alumni.records?.length || 0,
         Careers: careerTotal,
         totalStudent: studentTotal,
         totalFees: fees.feebalances?.length || 0,
@@ -1104,8 +1103,6 @@ const handleLogout = () => {
         return <GalleryManager />;
       case 'careers':
         return <Careers />; 
-        case 'sms':      
-          return <SMSManager />;
 
       case 'subscribers':
         return <SubscriberManager />;
@@ -1119,7 +1116,9 @@ const handleLogout = () => {
         return <Fees />;
       case 'school-hub':
         return <SchoolHubManager />;
-      case 'admins-profile':
+      case 'alumni':
+        return <AlumniGovernanceManager />;
+     case 'admins-profile':
         return <AdminManager user={user} />;
 
 
@@ -1168,6 +1167,12 @@ const handleLogout = () => {
       icon: IoSchoolOutline,
       badge: 'teal'
     },
+       {
+      id: 'alumni',
+      label: 'Alumni & Governance',
+      icon: FiUsers,
+      badge: 'blue'
+    },
     { 
       id: 'assignments', 
       label: 'Assignments', 
@@ -1203,12 +1208,6 @@ const handleLogout = () => {
       label: 'Careers',
       icon: FiCalendar,
       badge: 'lime'
-    },
-    { 
-      id: 'sms',
-      label: 'SMS Management',
-      icon: FiMessageSquare,
-      badge: 'orange'
     },
     { 
       id: 'newsevents', 

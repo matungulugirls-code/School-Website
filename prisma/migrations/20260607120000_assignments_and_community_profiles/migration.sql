@@ -8,7 +8,7 @@ CREATE TABLE `community_profiles` (
   `name` VARCHAR(255) NOT NULL,
   `position` VARCHAR(255) NULL,
   `description` TEXT NULL,
-  `categoryType` ENUM('ALUMNI', 'BOM', 'CURRENT_PRINCIPAL', 'PAST_PRINCIPAL') NOT NULL,
+  `categoryType` ENUM('ALUMNI', 'BOM', 'PTA', 'CURRENT_PRINCIPAL', 'PAST_PRINCIPAL') NOT NULL,
   `image` TEXT NULL,
   `achievements` JSON NOT NULL,
   `yearsServed` VARCHAR(100) NULL,

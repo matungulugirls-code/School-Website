@@ -336,28 +336,28 @@ enum CBETrackType {
 }
 
 model StaffDepartment {
-  id                Int                       @id @default(autoincrement())
-  name              String                   @db.VarChar(255)
+  id                Int                    @id @default(autoincrement())
+  name              String                 @db.VarChar(255)
   category          DepartmentCategory
-  description       String?                  @db.Text
-  image             String?                  @db.Text
+  description       String?                @db.Text
+  image             String?                @db.Text
   images            StaffDepartmentImage[]
-  staffCount        Int                      @default(0)
-  headName          String?                  @db.VarChar(255)
-  assistantHeadName String?                  @db.VarChar(255)
+  staffCount        Int                    @default(0)
+  headName          String?                @db.VarChar(255)
+  assistantHeadName String?                @db.VarChar(255)
   extra             Json?
-  isActive          Boolean                  @default(true)
-  displayOrder      Int                      @default(0)
+  isActive          Boolean                @default(true)
+  displayOrder      Int                    @default(0)
   teachers          Staff[]
-  
+
   // CBE-specific fields
-  cbePathwayId      Int?
-  cbeTrackId        Int?
-  cbePathway        CBEPathway?              @relation(fields: [cbePathwayId], references: [id], onDelete: SetNull)
-  cbeTrack          CBETrack?                @relation(fields: [cbeTrackId], references: [id], onDelete: SetNull)
-  
-  createdAt         DateTime                 @default(now())
-  updatedAt         DateTime                 @updatedAt
+  cbePathwayId Int?
+  cbeTrackId   Int?
+  cbePathway   CBEPathway? @relation(fields: [cbePathwayId], references: [id], onDelete: SetNull)
+  cbeTrack     CBETrack?   @relation(fields: [cbeTrackId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([category])
   @@index([isActive])
@@ -389,19 +389,19 @@ model StaffDepartmentImage {
 // ==========================================
 
 model CBEPathway {
-  id           Int                    @id @default(autoincrement())
-  name         String                 @db.VarChar(255)
-  type         CBEPathwayType         @unique
-  description  String?                @db.Text
-  image        String?                @db.Text
+  id           Int               @id @default(autoincrement())
+  name         String            @db.VarChar(255)
+  type         CBEPathwayType    @unique
+  description  String?           @db.Text
+  image        String?           @db.Text
   images       CBEPathwayImage[]
-  displayOrder Int                    @default(0)
-  isActive     Boolean                @default(true)
+  displayOrder Int               @default(0)
+  isActive     Boolean           @default(true)
   tracks       CBETrack[]
   staff        Staff[]
   departments  StaffDepartment[]
-  createdAt    DateTime               @default(now())
-  updatedAt    DateTime               @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 
   @@index([type])
   @@index([isActive])
@@ -410,16 +410,16 @@ model CBEPathway {
 }
 
 model CBEPathwayImage {
-  id           Int            @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   cbePathwayId Int
-  url          String         @db.Text
-  publicId     String?        @db.Text
-  caption      String?        @db.VarChar(255)
-  altText      String?        @db.VarChar(255)
-  displayOrder Int            @default(0)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  cbePathway   CBEPathway     @relation(fields: [cbePathwayId], references: [id], onDelete: Cascade)
+  url          String     @db.Text
+  publicId     String?    @db.Text
+  caption      String?    @db.VarChar(255)
+  altText      String?    @db.VarChar(255)
+  displayOrder Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  cbePathway   CBEPathway @relation(fields: [cbePathwayId], references: [id], onDelete: Cascade)
 
   @@index([cbePathwayId])
   @@index([displayOrder])
@@ -427,20 +427,20 @@ model CBEPathwayImage {
 }
 
 model CBETrack {
-  id           Int                   @id @default(autoincrement())
-  name         String                @db.VarChar(255)
+  id           Int               @id @default(autoincrement())
+  name         String            @db.VarChar(255)
   type         CBETrackType
-  description  String?               @db.Text
-  image        String?               @db.Text
+  description  String?           @db.Text
+  image        String?           @db.Text
   images       CBETrackImage[]
   pathwayId    Int
-  pathway      CBEPathway            @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
-  displayOrder Int                   @default(0)
-  isActive     Boolean               @default(true)
+  pathway      CBEPathway        @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
+  displayOrder Int               @default(0)
+  isActive     Boolean           @default(true)
   staff        Staff[]
   departments  StaffDepartment[]
-  createdAt    DateTime              @default(now())
-  updatedAt    DateTime              @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 
   @@unique([pathwayId, type])
   @@index([pathwayId])
@@ -449,16 +449,16 @@ model CBETrack {
 }
 
 model CBETrackImage {
-  id           Int         @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   cbeTrackId   Int
-  url          String      @db.Text
-  publicId     String?     @db.Text
-  caption      String?     @db.VarChar(255)
-  altText      String?     @db.VarChar(255)
-  displayOrder Int         @default(0)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  cbeTrack     CBETrack    @relation(fields: [cbeTrackId], references: [id], onDelete: Cascade)
+  url          String   @db.Text
+  publicId     String?  @db.Text
+  caption      String?  @db.VarChar(255)
+  altText      String?  @db.VarChar(255)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  cbeTrack     CBETrack @relation(fields: [cbeTrackId], references: [id], onDelete: Cascade)
 
   @@index([cbeTrackId])
   @@index([displayOrder])
@@ -531,25 +531,26 @@ model SchoolHubImage {
 enum CommunityProfileCategory {
   ALUMNI
   BOM
+  PTA
   CURRENT_PRINCIPAL
   PAST_PRINCIPAL
 }
 
 model CommunityProfile {
-  id            Int                       @id @default(autoincrement())
-  name          String                    @db.VarChar(255)
-  position      String?                   @db.VarChar(255)
-  description   String?                   @db.Text
-  categoryType  CommunityProfileCategory
-  image         String?                   @db.Text
-  images        CommunityProfileImage[]
-  achievements  Json                      @default("[]")
-  yearsServed   String?                   @db.VarChar(100)
-  displayOrder  Int                       @default(0)
-  isActive      Boolean                   @default(true)
-  isPublished   Boolean                   @default(true)
-  createdAt     DateTime                  @default(now())
-  updatedAt     DateTime                  @updatedAt
+  id           Int                      @id @default(autoincrement())
+  name         String                   @db.VarChar(255)
+  position     String?                  @db.VarChar(255)
+  description  String?                  @db.Text
+  categoryType CommunityProfileCategory
+  image        String?                  @db.Text
+  images       CommunityProfileImage[]
+  achievements Json                     @default("[]")
+  yearsServed  String?                  @db.VarChar(100)
+  displayOrder Int                      @default(0)
+  isActive     Boolean                  @default(true)
+  isPublished  Boolean                  @default(true)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
 
   @@index([categoryType])
   @@index([displayOrder])
@@ -1359,7 +1360,7 @@ model TeamMember {
   bio       String?  @db.Text
   image     String?
   gender    String? // "male" or "female" - used to select default image from Matungulu folder
-  category  String @default("guidance") // "guidance" or "nts" (non-teaching staff)
+  category  String   @default("guidance") // "guidance" or "nts" (non-teaching staff)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

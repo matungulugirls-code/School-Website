@@ -69,7 +69,40 @@
     </image:image>
   </url>
 
+  <url>
+    <loc>https://matungulugirls.school/assignments</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Assignments</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://matungulugirls.school/resources-exams</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Learning Resources and Exams</image:title>
+    </image:image>
+  </url>
+
   <!-- School Information -->
+  <url>
+    <loc>https://matungulugirls.school/alumni</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.78</priority>
+    <image:image>
+      <image:loc>https://matungulugirls.school/MatG.jpg</image:loc>
+      <image:title>Alumni and Governance</image:title>
+    </image:image>
+  </url>
+
   <url>
     <loc>https://matungulugirls.school/pages/SchoolTeam</loc>
     <lastmod>2026-05-25</lastmod>

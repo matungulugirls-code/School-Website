@@ -41,7 +41,6 @@ import {
   FiTrendingDown as FiTrendingDownSolid,
   FiActivity as FiActivitySolid,
   FiBriefcase,
-  FiSend,
   FiLayers,  // ADD THIS LINE
 } from 'react-icons/fi';
 
@@ -482,26 +481,26 @@ const decodeJWTToken = (token) => {
   }
 };
 
-// ========== SMS OVERVIEW CARD (replaces Student Engagement) ==========
-const SmsOverviewCard = ({ smsStats, recentCampaigns }) => {
-  const total = smsStats?.total || 0;
-  const drafts = smsStats?.draft || 0;
-  const sent = smsStats?.sent || 0;
-  const campaigns = recentCampaigns || [];
+// ========== ALUMNI DEMOGRAPHICS CARD ==========
+const AlumniDemographicsCard = ({ alumniStats, recentProfiles }) => {
+  const total = alumniStats?.total || 0;
+  const active = alumniStats?.active || 0;
+  const published = alumniStats?.published || 0;
+  const profiles = recentProfiles || [];
 
   return (
     <div className="group relative bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
 
       {/* Top Glow Accent */}
-      <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-blue-500/10 blur-2xl group-hover:bg-blue-500/20 transition-colors" />
+      <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-emerald-500/10 blur-2xl group-hover:bg-emerald-500/20 transition-colors" />
 
       <div className="flex items-center justify-between mb-6 relative z-10">
         <div>
-          <h3 className="text-lg font-black text-slate-800 tracking-tight">SMS Campaigns</h3>
-          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Communication Hub</p>
+          <h3 className="text-lg font-black text-slate-800 tracking-tight">Alumni Demographics</h3>
+          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Community Profiles</p>
         </div>
-        <div className="p-3 rounded-2xl bg-blue-50 border border-blue-100 text-blue-600 shadow-sm transition-transform group-hover:scale-100">
-          <FiSend className="text-xl" />
+        <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 shadow-sm transition-transform group-hover:scale-100">
+          <FiUsers className="text-xl" />
         </div>
       </div>
 
@@ -511,40 +510,56 @@ const SmsOverviewCard = ({ smsStats, recentCampaigns }) => {
           <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Total</span>
           <div className="flex items-baseline gap-1 mt-1">
             <span className="text-2xl font-black text-slate-900">{total}</span>
-            <span className="text-xs font-bold text-slate-400">campaigns</span>
+            <span className="text-xs font-bold text-slate-400">profiles</span>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-amber-50/80 rounded-xl p-3 border border-amber-100">
-            <span className="text-[10px] font-black text-amber-600 uppercase">Draft</span>
-            <p className="text-xl font-black text-amber-700 mt-1">{drafts}</p>
-          </div>
           <div className="bg-emerald-50/80 rounded-xl p-3 border border-emerald-100">
-            <span className="text-[10px] font-black text-emerald-600 uppercase">Sent</span>
-            <p className="text-xl font-black text-emerald-700 mt-1">{sent}</p>
+            <span className="text-[10px] font-black text-emerald-600 uppercase">Active</span>
+            <p className="text-xl font-black text-emerald-700 mt-1">{active}</p>
+          </div>
+          <div className="bg-blue-50/80 rounded-xl p-3 border border-blue-100">
+            <span className="text-[10px] font-black text-blue-600 uppercase">Published</span>
+            <p className="text-xl font-black text-blue-700 mt-1">{published}</p>
           </div>
         </div>
       </div>
 
-      {/* Recent Campaigns */}
       <div className="mb-4">
-        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-3">Recent Campaigns</h4>
+        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-3">Category Split</h4>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { label: "Alumni", value: alumniStats?.alumni || 0, tone: "border-emerald-100 bg-emerald-50/70 text-emerald-700", valueTone: "text-emerald-800" },
+            { label: "BOM", value: alumniStats?.bom || 0, tone: "border-blue-100 bg-blue-50/70 text-blue-700", valueTone: "text-blue-800" },
+            { label: "PTA", value: alumniStats?.pta || 0, tone: "border-amber-100 bg-amber-50/70 text-amber-700", valueTone: "text-amber-800" },
+            { label: "Principals", value: (alumniStats?.currentPrincipal || 0) + (alumniStats?.pastPrincipals || 0), tone: "border-purple-100 bg-purple-50/70 text-purple-700", valueTone: "text-purple-800" },
+          ].map((item) => (
+            <div key={item.label} className={`rounded-xl border p-3 ${item.tone}`}>
+              <p className="text-[10px] font-black uppercase">{item.label}</p>
+              <p className={`mt-1 text-xl font-black ${item.valueTone}`}>{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-3">Latest Profiles</h4>
         <div className="space-y-3">
-          {campaigns.length > 0 ? (
-            campaigns.slice(0, 3).map((campaign, index) => (
+          {profiles.length > 0 ? (
+            profiles.slice(0, 3).map((profile, index) => (
               <div key={index} className="flex items-center justify-between p-2 bg-slate-50 rounded-xl border border-slate-100">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`p-1.5 rounded-lg ${campaign.status === 'sent' ? 'bg-emerald-100' : 'bg-amber-100'}`}>
-                    <FiSend className={`w-3 h-3 ${campaign.status === 'sent' ? 'text-emerald-600' : 'text-amber-600'}`} />
+                  <div className="p-1.5 rounded-lg bg-emerald-100">
+                    <FiUser className="w-3 h-3 text-emerald-600" />
                   </div>
-                  <span className="text-xs font-bold text-slate-700 truncate">{campaign.title || 'Untitled'}</span>
+                  <span className="text-xs font-bold text-slate-700 truncate">{profile.name || 'Untitled profile'}</span>
                 </div>
-                <span className="text-[10px] font-bold text-slate-400">{campaign.recipientCount || 0} recipients</span>
+                <span className="text-[10px] font-bold text-slate-400">{profile.categoryType || profile.section}</span>
               </div>
             ))
           ) : (
-            <p className="text-xs text-slate-400 text-center py-2">No recent campaigns</p>
+            <p className="text-xs text-slate-400 text-center py-2">No alumni profiles yet</p>
           )}
         </div>
       </div>
@@ -568,18 +583,22 @@ export default function DashboardOverview() {
     totalNews: 0,
     totalDepartments: 0,
     totalAchievements: 0,
-    featuredAchievements: 0
+    featuredAchievements: 0,
+    totalAlumniProfiles: 0,
+    activeAlumniProfiles: 0
   });
 
-  // New SMS stats
-  const [smsStats, setSmsStats] = useState({
+  const [alumniStats, setAlumniStats] = useState({
     total: 0,
-    draft: 0,
-    sent: 0,
-    totalRecipients: 0,
-    successRate: 0
+    active: 0,
+    published: 0,
+    alumni: 0,
+    bom: 0,
+    pta: 0,
+    currentPrincipal: 0,
+    pastPrincipals: 0
   });
-  const [recentSmsCampaigns, setRecentSmsCampaigns] = useState([]);
+  const [recentAlumniProfiles, setRecentAlumniProfiles] = useState([]);
 
   const [recentActivity, setRecentActivity] = useState([]);
   const [performanceData, setPerformanceData] = useState([]);
@@ -760,7 +779,7 @@ const [growthMetrics, setGrowthMetrics] = useState({
         adminsRes,
         resourcesRes,
         emailCampaignsRes,
-        smsRes,
+        alumniRes,
         achievementsRes,
         schoolStatsRes,
         departmentsRes
@@ -777,7 +796,7 @@ const [growthMetrics, setGrowthMetrics] = useState({
         fetch('/api/register'),
         fetch('/api/resources'),
         fetch('/api/emails'),
-        fetch('/api/sms'),
+        fetch('/api/alumni?includeInactive=1', staffHeaders ? { headers: staffHeaders } : {}),
         fetch('/api/achievements'),
         fetch('/api/school-stats'),
         fetch('/api/staff/departments?grouped=1')
@@ -833,41 +852,24 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
       const resources = resourcesRes.status === 'fulfilled' ? await resourcesRes.value.json() : { resources: [] };
       const emailCampaignsData = emailCampaignsRes.status === 'fulfilled' ? await emailCampaignsRes.value.json() : { campaigns: [] };
 
-      // Process SMS campaigns
-      const smsData = smsRes.status === 'fulfilled' ? await smsRes.value.json() : { campaigns: [] };
-      let computedSmsStats = {
-        total: 0,
-        draft: 0,
-        sent: 0,
-        totalRecipients: 0,
-        successRate: 0
+      const alumniData = alumniRes.status === 'fulfilled' ? await alumniRes.value.json() : { profiles: [] };
+      const alumniProfiles = alumniData.profiles || alumniData.records || [];
+      const computedAlumniStats = {
+        total: alumniProfiles.length,
+        active: alumniProfiles.filter((profile) => profile.isActive !== false).length,
+        published: alumniProfiles.filter((profile) => profile.isPublished !== false).length,
+        alumni: alumniProfiles.filter((profile) => (profile.categoryType || profile.section) === 'ALUMNI').length,
+        bom: alumniProfiles.filter((profile) => (profile.categoryType || profile.section) === 'BOM').length,
+        pta: alumniProfiles.filter((profile) => (profile.categoryType || profile.section) === 'PTA').length,
+        currentPrincipal: alumniProfiles.filter((profile) => (profile.categoryType || profile.section) === 'CURRENT_PRINCIPAL').length,
+        pastPrincipals: alumniProfiles.filter((profile) => (profile.categoryType || profile.section) === 'PAST_PRINCIPAL').length,
       };
-      if (smsData.success) {
-        const campaigns = smsData.campaigns || [];
-        const draftCount = campaigns.filter(c => c.status === 'draft').length;
-        const sentCount = campaigns.filter(c => c.status === 'sent').length;
-        const totalRecipients = campaigns.reduce((acc, c) => acc + (c.recipients ? c.recipients.split(',').length : 0), 0);
-        const successRate = sentCount > 0 ? Math.round((sentCount / campaigns.length) * 100) : 0;
-
-        computedSmsStats = {
-          total: campaigns.length,
-          draft: draftCount,
-          sent: sentCount,
-          totalRecipients,
-          successRate
-        };
-        setSmsStats(computedSmsStats);
-
-        // Get recent campaigns for display
-        const recent = campaigns
-          .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+      setAlumniStats(computedAlumniStats);
+      setRecentAlumniProfiles(
+        [...alumniProfiles]
+          .sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0))
           .slice(0, 3)
-          .map(c => ({
-            ...c,
-            recipientCount: c.recipients ? c.recipients.split(',').length : 0
-          }));
-        setRecentSmsCampaigns(recent);
-      }
+      );
 
       const achievementsData = achievementsRes.status === 'fulfilled'
         ? await achievementsRes.value.json()
@@ -1040,7 +1042,9 @@ if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
         totalAssignments,
         totalDepartments,
         totalAchievements: achievementSummaryData.total,
-        featuredAchievements: achievementSummaryData.featured
+        featuredAchievements: achievementSummaryData.featured,
+        totalAlumniProfiles: computedAlumniStats.total,
+        activeAlumniProfiles: computedAlumniStats.active
       };
 
       setStats(updatedStats);
@@ -1105,11 +1109,11 @@ setGrowthMetrics({
           description: 'Student support engagement'
         },
         {
-          label: 'SMS Campaigns',
-          value: computedSmsStats.total,
+          label: 'Alumni Profiles',
+          value: computedAlumniStats.total,
           change: 0,
           color: 'green',
-          description: 'Total SMS campaigns created'
+          description: 'Alumni and governance records'
         }
       ];
 
@@ -1144,12 +1148,12 @@ setGrowthMetrics({
           calculation: `${achievementSummaryData.featured} featured`
         },
         {
-          label: 'SMS Campaigns',
-          value: `${computedSmsStats.total}`,
+          label: 'Alumni Profiles',
+          value: `${computedAlumniStats.total}`,
           change: 0,
-          icon: computedSmsStats.total > 0 ? FiTrendingUp : FiTrendingDown,
-          color: computedSmsStats.total > 0 ? 'blue' : 'red',
-          calculation: 'Total campaigns'
+          icon: computedAlumniStats.total > 0 ? FiTrendingUp : FiTrendingDown,
+          color: computedAlumniStats.total > 0 ? 'blue' : 'red',
+          calculation: `${computedAlumniStats.published} published`
         },
       ];
 
@@ -1958,10 +1962,9 @@ const StatCard = ({ icon: Icon, label, value, change, color, subtitle, trend }) 
           })}
         </div>
 
-        {/* Main Stats Grid - Updated with SMS Overview Card replacing Student Engagement */}
+        {/* Main Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {/* SMS Overview Card (replaces Student Engagement) */}
-          <SmsOverviewCard smsStats={smsStats} recentCampaigns={recentSmsCampaigns} />
+          <AlumniDemographicsCard alumniStats={alumniStats} recentProfiles={recentAlumniProfiles} />
 
           {/* Staff Distribution Card */}
           <div className="bg-white rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] overflow-hidden">
