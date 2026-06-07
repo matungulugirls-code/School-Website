@@ -246,8 +246,6 @@ export default function ModernNavbar() {
         <div className="hidden border-b border-white/10 bg-[#0b3b35] py-2 text-white lg:block">
           <div className="mx-auto flex min-h-12 max-w-7xl items-center justify-end gap-5 px-6 xl:justify-between">
             <div className="hidden items-center gap-5 text-[11px] font-black uppercase tracking-[0.2em] text-white xl:flex">
-              <span>Matungulu Girls</span>
-              <span className="h-1 w-1 rounded-full bg-emerald-300" />
               <span>Committed to Excellence</span>
             </div>
 
