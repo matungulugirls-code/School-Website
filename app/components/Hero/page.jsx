@@ -46,9 +46,10 @@ const heroSlides = [
     subtitle: "KCSE 2025 & Beyond",
     description: "Ranked among the top schools in Machakos County, we achieved a mean score of 8.14 (B plain) with 84% university transition rate. Our STEM, Humanities, and Creative Arts pathways prepare students for global success.",
     image: "/hero/MatG1.jpg",
+    mobileImage: "/hero/MatG1.jpg",
     tags: ["CBC Pathways", "We are Champions", "STEM Focus", "Career Guidance"],
     cta: "Explore Academics",
-    link: "/pages/Admission",
+    link: "/pages/admissions",
   },
   {
     title: "Holistic",
@@ -56,9 +57,10 @@ const heroSlides = [
     subtitle: "Beyond the Classroom",
     description: "National Science Fair winners, award‑winning sports teams, vibrant music and drama clubs, and leadership programs. We nurture confident, compassionate, and accomplished young women.",
     image: "/Matungulu/29.jpeg",
+    mobileImage: "/Matungulu/29.jpeg",
     tags: ["Science Fair Winner", "Sports & Arts", "Leadership", "Empowerment"],
     cta: "Our History",
-    link: "/pages/About Us",
+    link: "/pages/AboutUs",
   }
 ];
 
@@ -243,6 +245,10 @@ export default function ModernHero() {
   const slide = heroSlides[currentSlide];
   const colors = accentColors.primary;
 
+  const getSlideImage = (s) => {
+    return isMobile ? (s.mobileImage || s.image) : s.image;
+  };
+
   // Helper to format stats with fallback values
   const getStatValue = (key, fallback) => {
     if (!statsLoading && schoolStats && schoolStats[key]) {
@@ -262,7 +268,7 @@ export default function ModernHero() {
           }`}
         >
           <img
-            src={s.image}
+            src={getSlideImage(s)}
             alt={s.title}
             className="w-full h-full object-cover object-center md:object-center"
             style={{

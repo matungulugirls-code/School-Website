@@ -102,6 +102,9 @@ model Assignment {
   dueDate            DateTime
   dateAssigned       DateTime
   status             String
+  isPublished        Boolean                       @default(true)
+  isVisible          Boolean                       @default(true)
+  publishedAt        DateTime?
   description        String                        @db.Text
   instructions       String?                       @db.Text
   assignmentFiles    Json
@@ -519,6 +522,57 @@ model SchoolHubImage {
   @@index([schoolHubItemId])
   @@index([displayOrder])
   @@map("school_hub_images")
+}
+
+// ==========================================
+// Unified Alumni, BOM, and Principals Module
+// ==========================================
+
+enum CommunityProfileCategory {
+  ALUMNI
+  BOM
+  CURRENT_PRINCIPAL
+  PAST_PRINCIPAL
+}
+
+model CommunityProfile {
+  id            Int                       @id @default(autoincrement())
+  name          String                    @db.VarChar(255)
+  position      String?                   @db.VarChar(255)
+  description   String?                   @db.Text
+  categoryType  CommunityProfileCategory
+  image         String?                   @db.Text
+  images        CommunityProfileImage[]
+  achievements  Json                      @default("[]")
+  yearsServed   String?                   @db.VarChar(100)
+  displayOrder  Int                       @default(0)
+  isActive      Boolean                   @default(true)
+  isPublished   Boolean                   @default(true)
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
+
+  @@index([categoryType])
+  @@index([displayOrder])
+  @@index([isActive])
+  @@index([isPublished])
+  @@map("community_profiles")
+}
+
+model CommunityProfileImage {
+  id                 Int              @id @default(autoincrement())
+  communityProfileId Int
+  url                String           @db.Text
+  publicId           String?          @db.Text
+  caption            String?          @db.VarChar(255)
+  altText            String?          @db.VarChar(255)
+  displayOrder       Int              @default(0)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  communityProfile   CommunityProfile @relation(fields: [communityProfileId], references: [id], onDelete: Cascade)
+
+  @@index([communityProfileId])
+  @@index([displayOrder])
+  @@map("community_profile_images")
 }
 
 model EmailCampaign {

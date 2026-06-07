@@ -3,6 +3,17 @@ import { prisma } from "../../../libs/prisma";
 import cloudinary from "../../../libs/cloudinary";
 const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 
+const parseBoolean = (value, fallback = true) => {
+  if (value === null || value === undefined || value === "") return fallback;
+  if (typeof value === "boolean") return value;
+  return value.toString() === "true" || value.toString() === "1";
+};
+
+const cleanAssignmentFileName = (name = "") => {
+  const decoded = decodeURIComponent(String(name).split("?")[0].split("#")[0]);
+  return decoded.replace(/^(?:\d{8,}[-_])+/, "") || decoded || "download";
+};
+
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
   const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
@@ -334,8 +345,8 @@ const getFileInfoFromUrl = (url) => {
       }
     }
     
-    // Decode URI component to get original filename
-    fileName = decodeURIComponent(fileName);
+    // Decode URI component and remove upload timestamp prefixes.
+    fileName = cleanAssignmentFileName(fileName);
     
     // Determine file type from extension
     const getFileTypeFromExtension = (ext) => {
@@ -428,6 +439,9 @@ const cleanAssignmentResponse = (assignment) => {
     ...assignment,
     assignmentFileAttachments,
     attachmentAttachments,
+    files: [...assignmentFileAttachments, ...attachmentAttachments],
+    isPublished: assignment.isPublished ?? true,
+    isVisible: assignment.isVisible ?? true,
     senderReference: assignment.senderReference || SCHOOL_COMMUNICATION_NUMBER,
     deliveryStatus: assignment.deliveryStatus || assignment.deliverySummary?.status || 'prepared',
     deliverySummary: assignment.deliverySummary || null,
@@ -448,12 +462,17 @@ export async function GET(request) {
     const className = searchParams.get('className');
     const teacher = searchParams.get('teacher');
     const status = searchParams.get('status');
+    const publicOnly = searchParams.get('public') === '1' || searchParams.get('published') === '1';
     
     const whereClause = {};
     if (subject) whereClause.subject = { contains: subject, mode: 'insensitive' };
     if (className) whereClause.className = { contains: className, mode: 'insensitive' };
     if (teacher) whereClause.teacher = { contains: teacher, mode: 'insensitive' };
     if (status) whereClause.status = status;
+    if (publicOnly) {
+      whereClause.isPublished = true;
+      whereClause.isVisible = true;
+    }
     
     const assignments = await prisma.assignment.findMany({
       where: whereClause,
@@ -507,6 +526,8 @@ export async function POST(request) {
     const additionalWork = formData.get("additionalWork")?.toString().trim() || "";
     const teacherRemarks = formData.get("teacherRemarks")?.toString().trim() || "";
     const learningObjectives = formData.get("learningObjectives")?.toString();
+    const isPublished = parseBoolean(formData.get("isPublished"), true);
+    const isVisible = parseBoolean(formData.get("isVisible"), true);
     // Calculate dueDate: use provided date or default to 7 days from today
     const dateAssignedDate = new Date();
     const calculatedDueDate = dueDate ? new Date(dueDate) : new Date(dateAssignedDate.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -575,6 +596,9 @@ export async function POST(request) {
           dueDate: calculatedDueDate,
           dateAssigned: dateAssignedDate,
           status,
+          isPublished,
+          isVisible,
+          publishedAt: isPublished ? new Date() : null,
           description,
           instructions,
           priority,

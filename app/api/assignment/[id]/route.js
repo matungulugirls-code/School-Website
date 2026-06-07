@@ -3,6 +3,17 @@ import { prisma } from "../../../../libs/prisma";
 import cloudinary from "../../../../libs/cloudinary";
 const SCHOOL_COMMUNICATION_NUMBER = '0793472960';
 
+const parseBoolean = (value, fallback = true) => {
+  if (value === null || value === undefined || value === "") return fallback;
+  if (typeof value === "boolean") return value;
+  return value.toString() === "true" || value.toString() === "1";
+};
+
+const cleanAssignmentFileName = (name = "") => {
+  const decoded = decodeURIComponent(String(name).split("?")[0].split("#")[0]);
+  return decoded.replace(/^(?:\d{8,}[-_])+/, "") || decoded || "download";
+};
+
 const decodeJwtPayload = (token) => {
   const payload = token.split('.')[1];
   const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
@@ -351,8 +362,8 @@ const getFileInfoFromUrl = (url) => {
       }
     }
     
-    // Decode URI component to get original filename
-    fileName = decodeURIComponent(fileName);
+    // Decode URI component and remove upload timestamp prefixes.
+    fileName = cleanAssignmentFileName(fileName);
     
     // Determine file type from extension
     const getFileTypeFromExtension = (ext) => {
@@ -445,6 +456,9 @@ const cleanAssignmentResponse = (assignment) => {
     ...assignment,
     assignmentFileAttachments,
     attachmentAttachments,
+    files: [...assignmentFileAttachments, ...attachmentAttachments],
+    isPublished: assignment.isPublished ?? true,
+    isVisible: assignment.isVisible ?? true,
     senderReference: assignment.senderReference || SCHOOL_COMMUNICATION_NUMBER,
     deliveryStatus: assignment.deliveryStatus || assignment.deliverySummary?.status || 'prepared',
     deliverySummary: assignment.deliverySummary || null,
@@ -471,7 +485,8 @@ export async function GET(request, { params }) {
       where: { id: assignmentId } 
     });
     
-    if (!assignment) {
+    const publicOnly = new URL(request.url).searchParams.get('public') === '1';
+    if (!assignment || (publicOnly && (!assignment.isPublished || !assignment.isVisible))) {
       return NextResponse.json(
         { success: false, error: "Assignment not found" }, 
         { status: 404 }
@@ -541,6 +556,12 @@ export async function PUT(request, { params }) {
     const teacherRemarks = formData.get("teacherRemarks")?.toString().trim() || existingAssignment.teacherRemarks;
     const learningObjectives = formData.get("learningObjectives")?.toString();
     const dateAssigned = formData.get("dateAssigned")?.toString() || existingAssignment.dateAssigned;
+    const isPublished = formData.has("isPublished")
+      ? parseBoolean(formData.get("isPublished"), true)
+      : existingAssignment.isPublished;
+    const isVisible = formData.has("isVisible")
+      ? parseBoolean(formData.get("isVisible"), true)
+      : existingAssignment.isVisible;
     console.log('📝 Fields extracted:', { title, subject, className, teacher, dueDate });
 
     let updatedAssignmentFiles = [...existingAssignment.assignmentFiles];
@@ -670,6 +691,9 @@ export async function PUT(request, { params }) {
           dueDate: dueDate ? new Date(dueDate) : existingAssignment.dueDate,
           dateAssigned: dateAssigned ? new Date(dateAssigned) : existingAssignment.dateAssigned, // FIX: Added dateAssigned
           status,
+          isPublished,
+          isVisible,
+          publishedAt: isPublished ? (existingAssignment.publishedAt || new Date()) : null,
           description,
           instructions,
           priority,
