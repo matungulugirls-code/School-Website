@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { FiEdit, FiImage, FiPlus, FiRefreshCw, FiSave, FiTrash2, FiUsers, FiX } from "react-icons/fi";
 import { toast } from "sonner";
 
+const MAX_PROFILE_IMAGE_SIZE = 4.2 * 1024 * 1024;
+
 const SECTION_OPTIONS = [
   { value: "ALUMNI", label: "Alumni Gallery" },
   { value: "BOM", label: "Board of Management" },
@@ -28,6 +30,30 @@ const emptyForm = {
   existingImages: [],
 };
 
+const formatMb = (bytes) => `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+
+const normalizeRecordImages = (record) => {
+  const related = Array.isArray(record?.images)
+    ? record.images.map((image) => ({
+        id: image?.id,
+        url: image?.url || image,
+        altText: image?.altText || record?.name || "Profile image",
+        caption: image?.caption || "",
+      }))
+    : [];
+
+  const legacy = record?.image
+    ? [{ url: record.image, altText: record?.name || "Profile image", caption: "" }]
+    : [];
+
+  const seen = new Set();
+  return [...related, ...legacy].filter((image) => {
+    if (!image?.url || seen.has(image.url)) return false;
+    seen.add(image.url);
+    return true;
+  });
+};
+
 const getAuthHeaders = () => {
   const adminToken = localStorage.getItem("admin_token");
   const deviceToken = localStorage.getItem("device_token");
@@ -39,6 +65,7 @@ const getAuthHeaders = () => {
 };
 
 function RecordModal({ record, onClose, onSaved }) {
+  const normalizedExistingImages = useMemo(() => normalizeRecordImages(record), [record]);
   const [form, setForm] = useState(() => record ? {
     categoryType: record.categoryType || record.section || "ALUMNI",
     name: record.name || "",
@@ -52,16 +79,29 @@ function RecordModal({ record, onClose, onSaved }) {
     image: null,
     images: [],
     existingImage: record.image || "",
-    existingImages: Array.isArray(record.images) ? record.images : [],
+    existingImages: normalizedExistingImages.filter((image) => image.url !== record.image),
   } : emptyForm);
+  const [imageError, setImageError] = useState("");
   const [saving, setSaving] = useState(false);
   const originalImageUrls = useMemo(() => {
     if (!record) return [];
-    return [
-      record.image,
-      ...(Array.isArray(record.images) ? record.images.map((image) => image?.url) : []),
-    ].filter(Boolean);
+    return normalizeRecordImages(record).map((image) => image.url);
   }, [record]);
+  const selectedPrimaryPreview = useMemo(
+    () => (form.image ? URL.createObjectURL(form.image) : ""),
+    [form.image]
+  );
+  const selectedGalleryPreviews = useMemo(
+    () => form.images.map((file) => ({ file, url: URL.createObjectURL(file) })),
+    [form.images]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (selectedPrimaryPreview) URL.revokeObjectURL(selectedPrimaryPreview);
+      selectedGalleryPreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
+    };
+  }, [selectedPrimaryPreview, selectedGalleryPreviews]);
 
   const update = (field, value) => setForm((previous) => ({ ...previous, [field]: value }));
 
@@ -70,6 +110,41 @@ function RecordModal({ record, onClose, onSaved }) {
       ...previous,
       existingImages: previous.existingImages.filter((item) => item.url !== url),
     }));
+  };
+
+  const addImageFiles = (field, fileList) => {
+    const incoming = Array.from(fileList || []);
+    if (field === "image") {
+      const file = incoming[0] || null;
+      if (!file) return update("image", null);
+      if (!file.type?.startsWith("image/")) {
+        setImageError(`${file.name} is not an image.`);
+        return;
+      }
+      if (file.size > MAX_PROFILE_IMAGE_SIZE) {
+        setImageError(`${file.name} is ${formatMb(file.size)}. Max is 4.2MB.`);
+        return;
+      }
+      setImageError("");
+      update("image", file);
+      return;
+    }
+
+    const valid = [];
+    const rejected = [];
+    incoming.forEach((file) => {
+      if (!file.type?.startsWith("image/")) rejected.push(`${file.name} is not an image.`);
+      else if (file.size > MAX_PROFILE_IMAGE_SIZE) rejected.push(`${file.name} is ${formatMb(file.size)}. Max is 4.2MB.`);
+      else valid.push(file);
+    });
+
+    if (rejected.length) setImageError(rejected[0]);
+    else setImageError("");
+    if (valid.length) update("images", [...form.images, ...valid]);
+  };
+
+  const removeNewGalleryImage = (index) => {
+    update("images", form.images.filter((_, itemIndex) => itemIndex !== index));
   };
 
   const handleSubmit = async (event) => {
@@ -162,11 +237,11 @@ function RecordModal({ record, onClose, onSaved }) {
           </label>
           <label className="space-y-2">
             <span className="text-xs font-black uppercase tracking-widest text-slate-500">Primary Image</span>
-            <input type="file" accept="image/*" onChange={(event) => update("image", event.target.files?.[0] || null)} className="w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-bold file:text-blue-700" />
+            <input type="file" accept="image/*" onChange={(event) => addImageFiles("image", event.target.files)} className="w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-bold file:text-blue-700" />
           </label>
           <label className="space-y-2">
             <span className="text-xs font-black uppercase tracking-widest text-slate-500">Gallery Images</span>
-            <input type="file" accept="image/*" multiple onChange={(event) => update("images", Array.from(event.target.files || []))} className="w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-bold file:text-blue-700" />
+            <input type="file" accept="image/*" multiple onChange={(event) => addImageFiles("images", event.target.files)} className="w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-bold file:text-blue-700" />
           </label>
           <label className="flex items-center gap-3 rounded-lg bg-slate-50 p-4 text-sm font-bold text-slate-700">
             <input type="checkbox" checked={form.isActive} onChange={(event) => update("isActive", event.target.checked)} className="h-5 w-5" />
@@ -178,9 +253,15 @@ function RecordModal({ record, onClose, onSaved }) {
           </label>
         </div>
 
-        {(form.existingImage || form.existingImages.length > 0) && (
+        {imageError && (
+          <div className="mx-5 mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+            {imageError}
+          </div>
+        )}
+
+        {(form.existingImage || form.existingImages.length > 0 || selectedPrimaryPreview || selectedGalleryPreviews.length > 0) && (
           <div className="border-t border-slate-100 px-5 pb-5">
-            <p className="mb-3 text-xs font-black uppercase tracking-widest text-slate-500">Existing Images</p>
+            <p className="mb-3 text-xs font-black uppercase tracking-widest text-slate-500">Review Images</p>
             <div className="grid gap-3 sm:grid-cols-4">
               {form.existingImage && (
                 <div className="relative rounded-lg border border-slate-200 bg-slate-50 p-2">
@@ -190,12 +271,30 @@ function RecordModal({ record, onClose, onSaved }) {
                   </button>
                 </div>
               )}
+              {selectedPrimaryPreview && (
+                <div className="relative rounded-lg border border-blue-200 bg-blue-50 p-2">
+                  <img src={selectedPrimaryPreview} alt={form.image?.name || "New primary"} className="h-24 w-full object-contain" />
+                  <button type="button" onClick={() => update("image", null)} className="absolute right-2 top-2 rounded-full bg-red-600 p-1 text-white">
+                    <FiX />
+                  </button>
+                  <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-blue-700">New Primary</p>
+                </div>
+              )}
               {form.existingImages.map((image) => (
                 <div key={image.url} className="relative rounded-lg border border-slate-200 bg-slate-50 p-2">
                   <img src={image.url} alt={image.altText || "Gallery"} className="h-24 w-full object-contain" />
                   <button type="button" onClick={() => removeExistingGalleryImage(image.url)} className="absolute right-2 top-2 rounded-full bg-red-600 p-1 text-white">
                     <FiX />
                   </button>
+                </div>
+              ))}
+              {selectedGalleryPreviews.map((preview, index) => (
+                <div key={`${preview.file.name}-${index}`} className="relative rounded-lg border border-emerald-200 bg-emerald-50 p-2">
+                  <img src={preview.url} alt={preview.file.name} className="h-24 w-full object-contain" />
+                  <button type="button" onClick={() => removeNewGalleryImage(index)} className="absolute right-2 top-2 rounded-full bg-red-600 p-1 text-white">
+                    <FiX />
+                  </button>
+                  <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-emerald-700">New Gallery</p>
                 </div>
               ))}
             </div>

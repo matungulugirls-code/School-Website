@@ -6,6 +6,9 @@ export const metadata = {
   description: "Alumni galleries, Board of Management, PTA members, and principal leadership at Matungulu Girls School.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const SECTION_META = {
   ALUMNI: {
     title: "Alumni Gallery",
@@ -35,9 +38,39 @@ const SECTION_META = {
 };
 
 const orderedSections = ["ALUMNI", "BOM", "PTA", "CURRENT_PRINCIPAL", "PAST_PRINCIPAL"];
+const LEGACY_CATEGORY_MAP = {
+  PRINCIPAL_CURRENT: "CURRENT_PRINCIPAL",
+  PRINCIPAL_PREVIOUS: "PAST_PRINCIPAL",
+};
+
+const normalizeCategoryType = (value) => {
+  const category = value?.toString?.().trim?.() || "ALUMNI";
+  return LEGACY_CATEGORY_MAP[category] || category;
+};
+
+const normalizeProfileImages = (record) => {
+  const related = Array.isArray(record?.images)
+    ? record.images.map((image) => ({
+        url: image?.url || image,
+        altText: image?.altText || record?.name || "Profile image",
+        caption: image?.caption || "",
+      }))
+    : [];
+
+  const legacy = record?.image
+    ? [{ url: record.image, altText: record?.name || "Profile image", caption: "" }]
+    : [];
+
+  const seen = new Set();
+  return [...related, ...legacy].filter((image) => {
+    if (!image?.url || seen.has(image.url)) return false;
+    seen.add(image.url);
+    return true;
+  });
+};
 
 function RecordCard({ record, section }) {
-  const images = Array.isArray(record.images) ? record.images.filter((image) => image?.url) : [];
+  const images = normalizeProfileImages(record);
   const primaryImage = record.image || images[0]?.url;
 
   return (
@@ -60,7 +93,7 @@ function RecordCard({ record, section }) {
         {record.description && (
           <p className="mt-4 text-sm leading-7 text-slate-600">{record.description}</p>
         )}
-        {images.length > 1 && (
+        {images.length > 0 && (
           <div className="mt-5 grid grid-cols-3 gap-2">
             {images.slice(0, 6).map((image, index) => (
               <div key={`${image.url}-${index}`} className="flex aspect-square items-center justify-center rounded-lg bg-emerald-50">
@@ -82,8 +115,9 @@ export default async function AlumniPage() {
   });
 
   const grouped = records.reduce((acc, record) => {
-    if (!acc[record.categoryType]) acc[record.categoryType] = [];
-    acc[record.categoryType].push(record);
+    const categoryType = normalizeCategoryType(record.categoryType);
+    if (!acc[categoryType]) acc[categoryType] = [];
+    acc[categoryType].push({ ...record, categoryType });
     return acc;
   }, {});
 
