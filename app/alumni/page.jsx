@@ -1,5 +1,6 @@
 import { prisma } from "../../libs/prisma";
 import { FiAward, FiBriefcase, FiUsers, FiStar } from "react-icons/fi";
+import AlumniGalleryCard from "./alumni-gallery-card";
 
 export const metadata = {
   title: "Alumni & Governance | Matungulu Girls School",
@@ -69,43 +70,15 @@ const normalizeProfileImages = (record) => {
   });
 };
 
-function RecordCard({ record, section }) {
-  const images = normalizeProfileImages(record);
-  const primaryImage = record.image || images[0]?.url;
-
-  return (
-    <article className="overflow-hidden rounded-lg border border-emerald-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-      {primaryImage ? (
-        <div className="flex h-72 items-center justify-center bg-emerald-50">
-          <img src={primaryImage} alt={record.name} className="h-full w-full object-contain" />
-        </div>
-      ) : (
-        <div className="flex h-72 items-center justify-center bg-emerald-50">
-          <FiUsers className="text-5xl text-emerald-300" />
-        </div>
-      )}
-      <div className="p-5">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700">{section.eyebrow}</p>
-        <h2 className="mt-2 text-xl font-black text-slate-950">{record.name}</h2>
-        {record.position && (
-          <p className="mt-1 text-xs font-black uppercase tracking-widest text-emerald-600">{record.position}</p>
-        )}
-        {record.description && (
-          <p className="mt-4 text-sm leading-7 text-slate-600">{record.description}</p>
-        )}
-        {images.length > 0 && (
-          <div className="mt-5 grid grid-cols-3 gap-2">
-            {images.slice(0, 6).map((image, index) => (
-              <div key={`${image.url}-${index}`} className="flex aspect-square items-center justify-center rounded-lg bg-emerald-50">
-                <img src={image.url} alt={image.altText || record.name} className="h-full w-full object-contain" />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </article>
-  );
-}
+const normalizeAchievements = (record) => {
+  if (!Array.isArray(record?.achievements)) return [];
+  return record.achievements
+    .map((achievement) => {
+      if (typeof achievement === "string") return achievement;
+      return achievement?.title || achievement?.content || achievement?.label || "";
+    })
+    .filter(Boolean);
+};
 
 export default async function AlumniPage() {
   const records = await prisma.communityProfile.findMany({
@@ -122,8 +95,8 @@ export default async function AlumniPage() {
   }, {});
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-slate-50 text-slate-900">
-      <section className="border-b border-emerald-200 bg-white/80 backdrop-blur-sm">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <section className="border-b border-slate-200 bg-white/90 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-700">Matungulu Girls</p>
           <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">
@@ -136,7 +109,7 @@ export default async function AlumniPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl space-y-12 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-12 px-4 py-10 sm:px-6 lg:px-8">
         {orderedSections.map((sectionKey) => {
           const section = SECTION_META[sectionKey];
           const sectionRecords = grouped[sectionKey] || [];
@@ -154,10 +127,27 @@ export default async function AlumniPage() {
                   <h2 className="text-2xl font-black text-slate-950">{section.title}</h2>
                 </div>
               </div>
-              <div className={`grid gap-6 ${sectionKey === "CURRENT_PRINCIPAL" ? "lg:grid-cols-1" : "md:grid-cols-2 xl:grid-cols-3"}`}>
-                {sectionRecords.map((record) => (
-                  <RecordCard key={record.id} record={record} section={section} />
-                ))}
+              <div className="grid gap-5 rounded-2xl bg-white p-3 shadow-sm sm:p-4">
+                {sectionRecords.map((record) => {
+                  const plainRecord = {
+                    id: record.id,
+                    name: record.name,
+                    position: record.position,
+                    description: record.description,
+                    yearsServed: record.yearsServed,
+                    image: record.image,
+                    achievements: normalizeAchievements(record),
+                  };
+
+                  return (
+                    <AlumniGalleryCard
+                      key={record.id}
+                      record={plainRecord}
+                      images={normalizeProfileImages(record)}
+                      eyebrow={section.eyebrow}
+                    />
+                  );
+                })}
               </div>
             </section>
           );
