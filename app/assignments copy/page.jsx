@@ -7,6 +7,8 @@ export const metadata = {
   description: "Download current assignments from A.I.C Katwanyaa Senior School.",
 };
 
+export const dynamic = "force-dynamic";
+
 const fileFromUrl = (url) => ({
   url,
   name: cleanGeneratedFileName(url),

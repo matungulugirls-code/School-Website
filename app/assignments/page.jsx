@@ -4,10 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import {
   FiCalendar,
   FiDownload,
+  FiEye,
   FiFileText,
   FiRefreshCw,
   FiSearch,
   FiArchive,
+  FiX,
 } from "react-icons/fi";
 
 const cleanFileName = (value = "") => {
@@ -18,11 +20,25 @@ const cleanFileName = (value = "") => {
 
 const getAssignmentFiles = (assignment) => {
   if (Array.isArray(assignment.files) && assignment.files.length > 0) {
-    return assignment.files.map((file) => ({
-      url: file.url,
-      name: cleanFileName(file.name || file.fileName || file.url),
-      fileType: file.fileType || "File",
-    }));
+    return assignment.files
+      .map((file) => {
+        if (typeof file === "string") {
+          return {
+            url: file,
+            name: cleanFileName(file),
+            fileType: "File",
+          };
+        }
+
+        return file?.url
+          ? {
+              url: file.url,
+              name: cleanFileName(file.name || file.fileName || file.url),
+              fileType: file.fileType || "File",
+            }
+          : null;
+      })
+      .filter(Boolean);
   }
 
   return [...(assignment.assignmentFiles || []), ...(assignment.attachments || [])]
@@ -32,6 +48,11 @@ const getAssignmentFiles = (assignment) => {
       name: cleanFileName(url),
       fileType: "File",
     }));
+};
+
+const truncateText = (value = "", length = 120) => {
+  if (!value) return "No description provided.";
+  return value.length > length ? `${value.slice(0, length).trim()}...` : value;
 };
 
 const formatDate = (value) => {
@@ -50,6 +71,7 @@ export default function AssignmentsClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
 
   const fetchAssignments = async () => {
     setLoading(true);
@@ -209,7 +231,7 @@ export default function AssignmentsClient() {
                           </div>
                         </td>
                         <td className="max-w-md px-5 py-5 text-sm font-medium leading-6 text-slate-600">
-                          {assignment.description || "No description provided."}
+                          {truncateText(assignment.description)}
                         </td>
                         <td className="px-5 py-5">
                           <div className="inline-flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2 text-sm font-bold text-slate-700">
@@ -236,7 +258,16 @@ export default function AssignmentsClient() {
                           </div>
                         </td>
                         <td className="px-5 py-5 text-right">
-                          {files.length > 1 ? (
+                          <div className="flex flex-col items-stretch gap-2 sm:items-end">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedAssignment(assignment)}
+                              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                            >
+                              <FiEye />
+                              View All
+                            </button>
+                            {files.length > 1 ? (
                             <button
                               type="button"
                               onClick={() => downloadAll(files)}
@@ -257,6 +288,7 @@ export default function AssignmentsClient() {
                           ) : (
                             <span className="text-sm font-bold text-slate-400">Unavailable</span>
                           )}
+                          </div>
                         </td>
                       </tr>
                     );
@@ -290,7 +322,7 @@ export default function AssignmentsClient() {
                       </div>
                     </div>
                     <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
-                      {assignment.description || "No description provided."}
+                      {truncateText(assignment.description)}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {files.map((file) => (
@@ -300,6 +332,15 @@ export default function AssignmentsClient() {
                       ))}
                     </div>
                     <div className="mt-4">
+                      <div className="grid gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedAssignment(assignment)}
+                          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-700"
+                        >
+                          <FiEye />
+                          View All
+                        </button>
                       {files.length > 1 ? (
                         <button
                           type="button"
@@ -319,6 +360,7 @@ export default function AssignmentsClient() {
                           Download
                         </button>
                       ) : null}
+                      </div>
                     </div>
                   </article>
                 );
@@ -327,6 +369,84 @@ export default function AssignmentsClient() {
           </div>
         </div>
       </section>
+
+      {selectedAssignment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-slate-200 p-5">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-700">
+                  {selectedAssignment.subject || "Assignment"}
+                </p>
+                <h2 className="mt-2 text-2xl font-black text-slate-950">{selectedAssignment.title}</h2>
+                <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">
+                  {[selectedAssignment.className, selectedAssignment.teacher, formatDate(selectedAssignment.dateAssigned || selectedAssignment.createdAt)].filter(Boolean).join(" / ")}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedAssignment(null)}
+                className="rounded-xl bg-slate-100 p-2 text-slate-600 transition hover:bg-slate-200"
+                aria-label="Close details"
+              >
+                <FiX />
+              </button>
+            </div>
+
+            <div className="space-y-5 p-5">
+              <div>
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Description</h3>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-700">
+                  {selectedAssignment.description || "No description provided."}
+                </p>
+              </div>
+
+              {selectedAssignment.instructions && (
+                <div>
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Instructions</h3>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-700">
+                    {selectedAssignment.instructions}
+                  </p>
+                </div>
+              )}
+
+              <div>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-500">Files</h3>
+                  {getAssignmentFiles(selectedAssignment).length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => downloadAll(getAssignmentFiles(selectedAssignment))}
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-3 py-2 text-xs font-black uppercase tracking-widest text-white"
+                    >
+                      <FiArchive /> Download All
+                    </button>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  {getAssignmentFiles(selectedAssignment).length > 0 ? (
+                    getAssignmentFiles(selectedAssignment).map((file, index) => (
+                      <button
+                        key={`${file.url}-${index}`}
+                        type="button"
+                        onClick={() => downloadFile(file)}
+                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 px-4 py-3 text-left text-sm font-bold text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                      >
+                        <span className="truncate">{file.name}</span>
+                        <FiDownload className="shrink-0" />
+                      </button>
+                    ))
+                  ) : (
+                    <div className="rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-500">
+                      No files available.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
