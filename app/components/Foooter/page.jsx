@@ -39,6 +39,7 @@ import {
   SiYoutube,
   SiLinkedin,
   SiWhatsapp,
+  SiGmail,
   SiInstagram,
 } from 'react-icons/si';
 import { FaLinkedin, FaTiktok, FaGraduationCap, FaChalkboardTeacher, FaFemale } from 'react-icons/fa';
@@ -75,29 +76,24 @@ const RESOURCES = [
 const SOCIAL_LINKS = [
   {
     icon: SiFacebook,
-    href: 'https://facebook.com/matungulugirlshs',
+    href: 'https://www.facebook.com/groups/53636547389/',
     label: 'Facebook',
     color: '#1877F2',
   },
 
   {
-    icon: FaLinkedin,
-    href: 'https://linkedin.com/school/matungulugirlshs',
-    label: 'LinkedIn',
-    color: '#0A66C2',
-  },
-  {
     icon: SiYoutube,
-    href: 'https://youtube.com/matungulugirlshs',
+    href: 'FaLinkedin',
     label: 'YouTube',
     color: '#FF0000',
   },
-  {
-    icon: SiWhatsapp,
-    href: 'https://wa.me/254720123456',
-    label: 'WhatsApp',
-    color: '#25D366',
-  },
+
+{
+  icon: SiGmail,
+  href: 'mailto:matungulugirls@gmail.com',
+  label: 'Email',
+  color: '#EA4335',
+},
 ];
 
 const CONTACT_INFO = [
@@ -124,12 +120,6 @@ const CONTACT_INFO = [
     text: 'matungulugirls@gmial.com',
     href: 'mailto:matungulugirls@gmial.com',
     detail: 'General Inquiries',
-  },
-  {
-    icon: FiMail,
-    text: 'admissions@matungulugirls.sc.ke',
-    href: 'mailto:admissions@matungulugirls.sc.ke',
-    detail: 'Admissions Office',
   },
   {
     icon: FiClock,
@@ -197,7 +187,7 @@ const BrandSection = () => (
         <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-100 to-teal-100 bg-clip-text text-transparent">
           Matungulu Girls
         </h3>
-        <p className="text-emerald-200/80 text-sm">Senior School</p>
+        <p className="text-emerald-200/80 text-sm">School</p>
         <p className="text-white/60 text-xs mt-1">Est. 1966</p>
       </div>
     </div>
